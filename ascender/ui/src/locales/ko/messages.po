@@ -219,7 +219,7 @@ msgstr "PagerDuty 하위 도메인"
 #: components/SelectedList/DraggableSelectedList.tsx:135
 #: components/SelectedList/DraggableSelectedList.tsx:166
 msgid "Dragging cancelled. The list is unchanged."
-msgstr ""
+msgstr "드래그가 취소되었습니다. 목록은 변경되지 않았습니다."
 
 #: components/HealthCheckButton/HealthCheckButton.tsx:49
 #: components/HealthCheckButton/HealthCheckButton.tsx:63
@@ -277,7 +277,7 @@ msgstr "마지막 작업 업데이트를 로드할 수 없음"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:92
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
 msgid "(Prompt on launch)"
 msgstr "(실행 시 프롬프트)"
 
@@ -592,7 +592,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:290
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:291
 msgid "Options"
 msgstr "옵션"
 
@@ -753,7 +753,7 @@ msgstr "반복 빈도"
 msgid "File Difference"
 msgstr "파일 차이점"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:40
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:56
 msgid "Relaunch from canceled node"
 msgstr "취소된 노드에서 다시 시작"
 
@@ -903,6 +903,10 @@ msgstr "Hipchat"
 msgid "Refresh Token"
 msgstr "토큰 새로 고침"
 
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:146
+msgid "These are the variables the workflow ran with. Whatever is left here replaces them for the nodes that run again; nodes carried forward keep the results they already had."
+msgstr "워크플로우가 실행될 때 사용된 변수입니다. 여기에 남겨진 내용이 다시 실행되는 노드에서 해당 변수를 대체합니다. 그대로 이어지는 노드는 이미 얻은 결과를 유지합니다."
+
 #: screens/Inventory/Inventories.tsx:110
 msgid "Host details"
 msgstr "호스트 세부 정보"
@@ -920,7 +924,7 @@ msgstr "호스트에서 그룹을 분리하시겠습니까?"
 msgid "Destination SMS number(s)"
 msgstr "대상 SMS 번호"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:226
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:227
 msgid "Source control branch"
 msgstr "소스 제어 분기"
 
@@ -965,7 +969,7 @@ msgstr "CPU {0}"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:12
 msgid "Optional labels that describe this workflow job template, such as 'dev' or 'test'. Labels can be used to group and filter workflow job templates and completed jobs."
-msgstr ""
+msgstr "이 워크플로우 작업 템플릿을 설명하는 선택적 레이블입니다(예: 'dev' 또는 'test'). 레이블을 사용하여 워크플로우 작업 템플릿과 완료된 작업을 그룹화하고 필터링할 수 있습니다."
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:152
 msgid "Elapsed Time"
@@ -1042,7 +1046,7 @@ msgstr "호스트를 찾을 수 없습니다."
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:384
 msgid "Matrix Options"
-msgstr ""
+msgstr "Matrix 옵션"
 
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:44
 msgid "1 (Info)"
@@ -1133,7 +1137,7 @@ msgstr "최대 재시도 횟수"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:10
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
-msgstr ""
+msgstr "워크플로우에 의해 관리되거나 영향을 받는 호스트 목록을 추가로 제한하는 호스트 패턴을 제공합니다. 여러 패턴이 허용됩니다. 패턴에 대한 자세한 정보와 예제는 Ansible 설명서를 참조하십시오."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:65
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:82
@@ -1164,7 +1168,7 @@ msgstr "완료"
 #. placeholder {0}: event.currentTarget.id
 #: components/SelectedList/DraggableSelectedList.tsx:101
 msgid "Dragging started for {0}."
-msgstr ""
+msgstr "{0} 드래그를 시작했습니다."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:43
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:127
@@ -1186,7 +1190,7 @@ msgid "Select the inventory that this host will belong to."
 msgstr "이 호스트가 속할 인벤토리를 선택합니다."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:25
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
 msgid "Select a webhook service."
 msgstr "webhook 서비스를 선택합니다."
 
@@ -1208,7 +1212,7 @@ msgid "View all settings"
 msgstr "모든 설정 보기"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:27
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
 msgid "Webhook services can use this as a shared secret."
 msgstr "webhook 서비스는 이를 공유 시크릿으로 사용할 수 있습니다."
 
@@ -1362,7 +1366,7 @@ msgstr "실패한 작업으로 필터링"
 msgid "Playbook Started"
 msgstr "플레이북 시작됨"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:272
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:279
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 워크플로우 작업 템플릿은 현재 다른 리소스에서 사용되고 있습니다. 삭제하시겠습니까?"
 
@@ -1410,7 +1414,7 @@ msgstr "이메일"
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
 msgid "Job Type"
 msgstr "작업 유형"
 
@@ -1484,7 +1488,7 @@ msgstr "기존 그룹 추가"
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Failed node"
 msgstr "실패한 노드"
 
@@ -1603,7 +1607,7 @@ msgstr "복사됨"
 msgid "Failed to cancel one or more jobs."
 msgstr "하나 이상의 작업을 취소하지 못했습니다."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:141
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:142
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.tsx:75
 msgid "Total Nodes"
 msgstr "총 노드"
@@ -1821,14 +1825,14 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: screens/Team/TeamList/TeamListItem.tsx:42
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:178
 #: screens/Template/shared/JobTemplateForm.tsx:329
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:158
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyListItem.tsx:50
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:290
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:113
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:120
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:75
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
@@ -1872,7 +1876,7 @@ msgstr "Ctrl IQ, Inc."
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:375
 msgid "Destination rooms"
-msgstr ""
+msgstr "대상 룸"
 
 #: screens/Template/TemplateSurvey.tsx:157
 msgid "Failed to update survey."
@@ -2039,7 +2043,7 @@ msgstr "사용자 이름"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:16
 msgid "Enable webhook for this workflow job template."
-msgstr ""
+msgstr "이 워크플로우 작업 템플릿에 대한 webhook을 활성화합니다."
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
 #~ msgid "The organization that owns this workflow job template."
@@ -2078,8 +2082,8 @@ msgstr "항목 실패"
 msgid "Team Roles"
 msgstr "팀 역할"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:91
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:117
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "워크플로우 다시 시작"
 
@@ -2132,7 +2136,7 @@ msgstr "기타 프롬프트"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "조건이 평가되기 전에 부모 노드 결과가 필요합니다."
 
-#: components/JobList/JobListItem.tsx:242
+#: components/JobList/JobListItem.tsx:244
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2213,7 +2217,7 @@ msgstr "페더레이션 인벤토리 세부 정보 보기"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:135
 #: screens/Template/shared/JobTemplateForm.tsx:695
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:63
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
 msgid "Concurrent Jobs"
 msgstr "동시 작업"
 
@@ -2396,7 +2400,7 @@ msgstr "이 구성된 인벤토리 입력은 \n"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:200
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
-msgstr ""
+msgstr "활성화하면 이 인벤토리에 대해 작업이 실행 중인 동안에도 호스트를 삭제할 수 있습니다. 기본적으로 실행 중인 작업이 끝날 때까지 해당 삭제는 거부됩니다."
 
 #: screens/Project/ProjectList/ProjectListItem.tsx:120
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
@@ -2552,7 +2556,7 @@ msgstr "사용자 세부 정보"
 msgid "Delete Execution Environment"
 msgstr "실행 환경 삭제"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:368
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "작업 분할"
@@ -2865,7 +2869,7 @@ msgstr "이 조직 내의 작업에 사용될 실행 환경입니다. 프로젝�
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:315
 msgid "Send HTML Formatted Body"
-msgstr ""
+msgstr "HTML 형식 본문 보내기"
 
 #: components/NotificationList/NotificationList.tsx:234
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:130
@@ -3035,7 +3039,7 @@ msgstr "워크플로우 작업 세부 정보"
 msgid "Azure AD settings"
 msgstr "Azure AD 설정"
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3104,7 +3108,7 @@ msgstr "{0} 을/를 거부하지 못했습니다."
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:750
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:320
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
 msgid "Webhook details"
 msgstr "Webhook 세부 정보"
 
@@ -3386,7 +3390,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:528
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:274
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
 #: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
@@ -3434,8 +3438,8 @@ msgstr "읽기"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:293
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:296
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:294
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:297
 msgid "Enable Webhook"
 msgstr "Webhook 활성화"
 
@@ -3533,7 +3537,7 @@ msgstr "GitHub 팀"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:189
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
 #: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
@@ -3643,6 +3647,8 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
@@ -3888,7 +3894,7 @@ msgstr "비활성화됨"
 msgid "Default Execution Environment"
 msgstr "기본 실행 환경"
 
-#: components/JobList/JobListItem.tsx:290
+#: components/JobList/JobListItem.tsx:292
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3929,7 +3935,7 @@ msgstr "워크플로우 작업 템플릿"
 #~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 #~ msgstr "잘못된 파일 형식입니다. 유효한 Red Hat 서브스크립션 목록을 업로드하십시오."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:121
 msgid "Toggle Legend"
 msgstr "범례 전환"
 
@@ -4029,7 +4035,7 @@ msgstr "프로젝트에서 소싱"
 msgid "Destination Channels"
 msgstr "대상 채널"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:285
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:292
 msgid "Failed to delete workflow job template."
 msgstr "워크플로 작업 템플릿을 삭제하지 못했습니다."
 
@@ -4133,8 +4139,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4151,8 +4157,8 @@ msgstr "인증 정보 삭제"
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:497
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:499
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:246
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
 #: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
@@ -4284,6 +4290,10 @@ msgstr "{itemsUnableToDisassociate}과 같이 연결을 해제할 수 있는 권
 msgid "Failed to update capacity adjustment."
 msgstr "크기 조정을 업데이트하지 못했습니다."
 
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:69
+msgid "Overwriting Variables on Relaunch"
+msgstr "다시 시작 시 변수 덮어쓰기"
+
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:74
 msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
@@ -4367,7 +4377,7 @@ msgstr "중첩된 그룹 이름 필터링"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
-msgstr ""
+msgstr "사용 중 삭제 허용"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:784
 #: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:786
@@ -4481,7 +4491,7 @@ msgid "Refresh project revision"
 msgstr "프로젝트 버전 새로 고침"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:28
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "선택적으로 상태 업데이트를 webhook 서비스로 다시 보내는 데 사용할 인증 정보를 선택합니다."
 
@@ -4618,7 +4628,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:537
 #: screens/Template/TemplateSurvey.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:282
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
@@ -4668,7 +4678,7 @@ msgid "Clean"
 msgstr "정리"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:26
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
 msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
 msgstr "webhook 서비스는 이 URL에 POST 요청을 하여 이 워크플로 작업 템플릿으로 작업을 시작할 수 있습니다."
 
@@ -4768,7 +4778,7 @@ msgstr "초기자"
 msgid "Delete this node"
 msgstr "이 노드 삭제"
 
-#: components/JobList/JobListItem.tsx:264
+#: components/JobList/JobListItem.tsx:266
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "소스 워크플로 작업"
@@ -4922,8 +4932,8 @@ msgstr "실행 환경"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "시작 시 작업 유형을 입력하라는 메시지를 표시합니다."
 
-#: components/JobList/JobListItem.tsx:230
-#: components/JobList/JobListItem.tsx:238
+#: components/JobList/JobListItem.tsx:232
+#: components/JobList/JobListItem.tsx:240
 msgid "Schedule"
 msgstr "스케줄"
 
@@ -4963,6 +4973,7 @@ msgstr "삭제할 질문을 선택"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:148
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
@@ -4981,8 +4992,8 @@ msgstr "삭제할 질문을 선택"
 #: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:232
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:341
 msgid "Variables"
 msgstr "변수"
@@ -5125,7 +5136,7 @@ msgstr "일"
 msgid "Collapse"
 msgstr "접기"
 
-#: components/JobList/JobListItem.tsx:335
+#: components/JobList/JobListItem.tsx:337
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5142,8 +5153,8 @@ msgstr "접기"
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:317
 msgid "Labels"
 msgstr "레이블"
@@ -5168,7 +5179,7 @@ msgstr "상태 선택"
 msgid "Month"
 msgstr "월"
 
-#: components/JobList/JobListItem.tsx:311
+#: components/JobList/JobListItem.tsx:313
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5212,7 +5223,7 @@ msgstr "새 인스턴스가 온라인 상태가 될 때 이 그룹에 자동으�
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
 msgid "Job Tags"
 msgstr "작업 태그"
 
@@ -5223,7 +5234,7 @@ msgstr "일부 또는 모든 인벤토리 소스를 동기화하지 못했습니
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:304
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:359
 msgid "Homeserver URL"
-msgstr ""
+msgstr "홈서버 URL"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:341
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:424
@@ -5241,8 +5252,8 @@ msgstr "승인할 행 선택"
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:223
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
 msgid "Delete Job"
 msgstr "작업 삭제"
 
@@ -5487,7 +5498,7 @@ msgstr "다음"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
 #: screens/Template/shared/JobTemplateForm.tsx:489
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:253
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:254
 msgid "Create"
 msgstr "만들기"
 
@@ -5703,6 +5714,11 @@ msgstr "클릭하여 설문조사 질문의 순서를 다시 정렬합니다."
 #~ msgid "Subscription Details"
 #~ msgstr "서브스크립션 세부 정보"
 
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:108
+msgid "Relaunch from canceled node with new variables"
+msgstr "취소된 노드에서 새 변수로 다시 시작"
+
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
@@ -5798,7 +5814,7 @@ msgstr "테스트 알림"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
 msgid "Enabled Options"
 msgstr "활성화된 옵션"
 
@@ -5821,7 +5837,7 @@ msgid "This step contains errors"
 msgstr "이 단계에는 오류가 포함되어 있습니다."
 
 #: screens/Template/shared/JobTemplateForm.tsx:434
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:237
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:238
 msgid "source control branch"
 msgstr "소스 제어 분기"
 
@@ -5859,7 +5875,7 @@ msgstr "인스턴스 그룹"
 #: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
 msgid "Skip Tags"
 msgstr "태그 건너뛰기"
 
@@ -5951,7 +5967,7 @@ msgstr "캐노티컬"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:156
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:154
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:146
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
 msgstr "경과됨"
@@ -6218,6 +6234,11 @@ msgstr "이 작업 템플릿이 실행될 인스턴스 그룹을 선택합니다
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "저장 시 새 webhook 키를 생성하려면 비워 둡니다"
 
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:109
+msgid "Relaunch from failed node with new variables"
+msgstr "실패한 노드에서 새 변수로 다시 시작"
+
 #: screens/User/shared/UserForm.tsx:55
 #: screens/User/UserDetail/UserDetail.tsx:60
 #: screens/User/UserList/UserListItem.tsx:36
@@ -6384,7 +6405,7 @@ msgstr "참조"
 #: components/SelectedList/DraggableSelectedList.tsx:125
 #: components/SelectedList/DraggableSelectedList.tsx:150
 msgid "Dragging finished."
-msgstr ""
+msgstr "드래그가 완료되었습니다."
 
 #: util/getRelatedResourceDeleteDetails.ts:103
 msgid "Credential Input Sources"
@@ -6411,8 +6432,8 @@ msgstr "프로비저닝 콜백: 프로비저닝 콜백 URL 생성을 활성화�
 
 #: components/JobList/JobListItem.tsx:159
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:199
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
 msgid "Relaunch Job"
 msgstr "작업 다시 시작"
 
@@ -6474,7 +6495,7 @@ msgstr "세부 정보 탭"
 
 #: components/SelectedList/DraggableSelectedList.tsx:220
 msgid "Reorder {label}"
-msgstr ""
+msgstr "{label} 순서 변경"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:51
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
@@ -6495,7 +6516,7 @@ msgstr ""
 msgid "Credential"
 msgstr "인증 정보"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
 msgid "First node"
 msgstr "첫 번째 노드"
 
@@ -6504,7 +6525,7 @@ msgstr "첫 번째 노드"
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# 초} other {# 초}}"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:184
 msgid "Webhook Credentials"
 msgstr "Webhook 인증 정보"
 
@@ -6534,7 +6555,7 @@ msgstr "{scm_update_cache_timeout, plural, one {# 초} other {# 초}}"
 #. placeholder {0}: workflowTemplate.name
 #: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:81
 msgid "This workflow ({0}) sets its own limit, which is used in place of this node's limit when the workflow runs."
-msgstr ""
+msgstr "이 워크플로우({0})는 자체 제한을 설정하며, 워크플로우가 실행될 때 이 노드의 제한 대신 사용됩니다."
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:79
 msgid "Toggle schedule"
@@ -6551,7 +6572,7 @@ msgstr "날짜 검색 입력"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:309
 msgid "Destination Rooms"
-msgstr ""
+msgstr "대상 룸"
 
 #: screens/Host/HostDetail/HostDetail.tsx:123
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:116
@@ -6611,7 +6632,7 @@ msgstr "시간"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
 msgid "Send HTML formatted body"
-msgstr ""
+msgstr "HTML 형식 본문 보내기"
 
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
@@ -6769,7 +6790,7 @@ msgstr "인벤토리 소스"
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "활성화하면 이 작업 템플릿의 동시 실행이 허용됩니다."
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:312
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
 msgstr "동시 작업 활성화"
 
@@ -6833,7 +6854,7 @@ msgstr "호스트로 돌아가기"
 
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.tsx:29
 msgid "Credential to authenticate with a protected container registry."
-msgstr ""
+msgstr "보호된 컨테이너 레지스트리에 인증하기 위한 인증 정보입니다."
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:209
 msgid "Context"
@@ -7064,7 +7085,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Playbook 디렉토리 선택"
 
-#: components/JobList/JobListItem.tsx:252
+#: components/JobList/JobListItem.tsx:254
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7415,8 +7436,8 @@ msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWee
 msgid "Failed Host Count"
 msgstr "실패한 호스트 수"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:47
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:51
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
 msgid "Relaunch from:"
 msgstr "다시 시작 위치:"
 
@@ -7514,9 +7535,9 @@ msgstr "동기화"
 #: screens/Team/TeamList/TeamList.tsx:120
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:180
 #: screens/Template/shared/JobTemplateForm.tsx:337
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:166
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:114
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
@@ -7543,7 +7564,7 @@ msgstr "선택한 리소스에 적용할 역할을 선택합니다. 선택한 �
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:317
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:164
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
 msgid "Webhook URL"
 msgstr "Webhook URL"
 
@@ -7644,7 +7665,7 @@ msgstr "GitHub Enterprise로 로그인"
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:179
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:180
 #: screens/Template/Survey/SurveyQuestionForm.tsx:31
 #: screens/User/shared/UserForm.tsx:202
 #: util/validators.ts:237
@@ -7758,7 +7779,7 @@ msgstr "False"
 
 #: components/SelectedList/DraggableSelectedList.tsx:260
 msgid "Press space or enter to begin dragging, and use the arrow keys to move the row up or down. Press space or enter again to confirm, or escape to cancel."
-msgstr ""
+msgstr "스페이스 또는 Enter 키를 눌러 드래그를 시작하고, 화살표 키로 행을 위아래로 이동합니다. 스페이스 또는 Enter 키를 다시 누르면 확인되고, Esc 키를 누르면 취소됩니다."
 
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:422
 #: screens/Instances/InstanceList/InstanceList.tsx:277
@@ -7851,7 +7872,7 @@ msgstr "동시 작업: 활성화하면 이 작업 템플릿의 동시 실행이 
 msgid "The base URL of the Matrix homeserver's client API,\n"
 "      for example https://matrix.example.org. The /_matrix/client/v3 paths\n"
 "      are added automatically."
-msgstr ""
+msgstr "Matrix 홈서버 클라이언트 API의 기본 URL입니다(예: https://matrix.example.org). /_matrix/client/v3 경로는 자동으로 추가됩니다."
 
 #: screens/Job/JobOutput/JobOutputSearch.tsx:139
 msgid "Task Started"
@@ -7930,7 +7951,7 @@ msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8006,7 +8027,7 @@ msgstr "암호 확인"
 msgid "Personal access token"
 msgstr "개인 액세스 토큰"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
 msgid "Relaunch from first node"
 msgstr "첫 번째 노드에서 다시 시작"
 
@@ -8052,6 +8073,10 @@ msgstr "사용자 토큰"
 msgid "View RADIUS settings"
 msgstr "RADIUS 설정 보기"
 
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:319
+msgid "Allow Overwriting Variables on Relaunch"
+msgstr "다시 시작 시 변수 덮어쓰기 허용"
+
 #: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
@@ -8083,7 +8108,7 @@ msgstr "시스템 팩트를 채우려면 `gather_facts: true`가\n"
 "            어렵습니다. 실제 팩트는 시스템마다\n"
 "            다릅니다."
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "작업 분할 부모"
@@ -8233,7 +8258,7 @@ msgstr "피어가 제거되었습니다. 변경 사항을 적용하려면 {0} �
 
 #: components/SelectedList/DraggableSelectedList.tsx:195
 msgid "Draggable list to reorder and remove selected items."
-msgstr ""
+msgstr "선택한 항목의 순서를 변경하고 제거할 수 있는 드래그 가능 목록입니다."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:206
 msgid "The last {weekday} of {month}"
@@ -8297,6 +8322,10 @@ msgstr "작업"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:192
 msgid "Workflow Jobs ({total})"
 msgstr "워크플로우 작업 ({total})"
+
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:100
+msgid "Variables must be a mapping of names to values."
+msgstr "변수는 이름과 값의 매핑이어야 합니다."
 
 #: components/Search/AdvancedSearch.tsx:310
 msgid "Set type disabled for related search field fuzzy searches"
@@ -8750,7 +8779,7 @@ msgstr "모든 호스트 다시 시작"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:17
 msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
-msgstr ""
+msgstr "활성화하면 이 워크플로우 작업 템플릿의 동시 실행이 허용됩니다."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:43
 msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
@@ -8945,7 +8974,7 @@ msgstr "지난 한 달"
 msgid "Execution Environment"
 msgstr "실행 환경"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:268
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:275
 msgid "Delete Workflow Job Template"
 msgstr "워크플로우 작업 템플릿 삭제"
 
@@ -9149,7 +9178,7 @@ msgstr "명령"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:368
 msgid "Access token"
-msgstr ""
+msgstr "액세스 토큰"
 
 #: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:57
@@ -9291,7 +9320,7 @@ msgstr "일반 OIDC 설정"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
-msgstr ""
+msgstr "사용 중 삭제 허용: 활성화하면 이 인벤토리에 대해 작업이 실행 중인 동안에도 호스트를 삭제할 수 있습니다."
 
 #: components/DataListToolbar/DataListToolbar.tsx:123
 #: screens/Job/JobOutput/JobOutputSearch.tsx:146
@@ -9347,7 +9376,7 @@ msgstr "포크"
 #. placeholder {0}: resource?.name ?? ''
 #: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:83
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
-msgstr ""
+msgstr "이 제한은 이 워크플로우({0}) 내에서 제한을 입력받는 모든 워크플로우 노드에 각 노드에 설정된 제한 대신 적용됩니다."
 
 #: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
@@ -9400,7 +9429,7 @@ msgstr "알림을 전환하지 못했습니다."
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:324
 #: screens/Template/shared/WebhookSubForm.tsx:205
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:170
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook Key"
 msgstr "Webhook 키"
 
@@ -9503,7 +9532,7 @@ msgstr "콜백 URL 프로비저닝"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:194
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
 msgid "Modified"
 msgstr "수정됨"
@@ -9527,6 +9556,10 @@ msgstr "{sessionCountdown, plural, one {You will be logged out in # second due t
 #: screens/Template/shared/JobTemplate.helptext.tsx:35
 msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "활성화하면 작업 템플릿이 실행할 기본 설정 인스턴스 그룹 목록에 인벤토리 또는 조직 인스턴스 그룹을 추가하지 못하게 합니다. 참고: 이 설정이 활성화되어 있고 빈 목록을 제공한 경우 전역 인스턴스 그룹이 적용됩니다."
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:60
+msgid "Failed node, new variables"
+msgstr "실패한 노드, 새 변수"
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:215
 #: screens/User/UserRoles/UserRolesList.tsx:209
@@ -9670,7 +9703,7 @@ msgstr "인벤토리를 선택해야 함"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:135
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
 msgid "Source Control Branch"
 msgstr "소스 제어 분기"
@@ -9698,7 +9731,7 @@ msgstr "설정"
 
 #: components/SelectedList/DraggableSelectedList.tsx:158
 msgid "Dragging started for {name}. Use the arrow keys to move it."
-msgstr ""
+msgstr "{name} 드래그를 시작했습니다. 화살표 키로 이동하세요."
 
 #: screens/CredentialType/CredentialType.tsx:62
 msgid "Back to credential types"
@@ -9756,7 +9789,7 @@ msgstr "선택하지 않으면 병합이 수행되어 로컬 변수와 외부 �
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:163
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Job Cancel Error"
 msgstr "작업 취소 오류"
 
@@ -9807,7 +9840,7 @@ msgstr "전체 노드 리소스 오브젝트를 검색하지 못했습니다."
 msgid "Pending"
 msgstr "보류 중"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:130
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:131
 msgid "Toggle Tools"
 msgstr "툴 전환"
 
@@ -9853,7 +9886,7 @@ msgstr "툴 전환"
 #: screens/Team/TeamList/TeamListItem.tsx:47
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:192
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:203
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:122
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
 #: screens/User/UserTeams/UserTeamList.tsx:187
@@ -9973,7 +10006,7 @@ msgstr "검색 취소"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10065,9 +10098,13 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 msgid "Last Name"
 msgstr "성"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+msgid "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."
+msgstr "활성화하면 실패한 노드에서 다시 시작할 때 원래 실행에서 사용한 변수를 덮어쓰는 변수를 지정할 수 있습니다. 이전 노드가 남긴 값을 워크플로우가 계속 진행되기 전에 수정해야 할 때 유용합니다."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:61
 msgid "Add a node between these two"
-msgstr ""
+msgstr "두 노드 사이에 노드 추가"
 
 #: components/AppContainer/AppContainer.tsx:105
 msgid "Navigation"
@@ -10145,7 +10182,7 @@ msgstr "이름"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:141
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:66
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
 msgid "Webhooks"
 msgstr "Webhook"
 
@@ -10362,7 +10399,7 @@ msgstr "예:"
 #: components/NotificationList/NotificationList.tsx:241
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:137
 msgid "Matrix"
-msgstr ""
+msgstr "Matrix"
 
 #: screens/Project/shared/ProjectSubForms/SvnSubForm.tsx:31
 msgid "Revision #"
@@ -10454,7 +10491,7 @@ msgid "Select Teams"
 msgstr "팀 선택"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
 msgid "Elapsed time that the job ran"
 msgstr "작업이 실행되는 데 경과된 시간"
 
@@ -10480,7 +10517,7 @@ msgstr "프로젝트 복사"
 #~ msgid "Prompt for verbosity on launch."
 #~ msgstr "시작 시 상세 정보 수준을 입력하라는 메시지를 표시합니다."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:41
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
 msgid "Relaunch from failed node"
 msgstr "실패한 노드에서 다시 시작"
 
@@ -10563,7 +10600,7 @@ msgstr "링크 삭제 확인"
 msgid "This field must be at least {0} characters"
 msgstr "이 필드는 최소 {0}자 이상이어야 합니다"
 
-#: components/JobList/JobListItem.tsx:218
+#: components/JobList/JobListItem.tsx:220
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10664,13 +10701,13 @@ msgstr "계정 토큰"
 msgid "Edit Login redirect override URL"
 msgstr "로그인 리디렉션 덮어쓰기 URL 편집"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:27
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:28
 msgid "Webhooks: Enable webhook for this workflow job template."
-msgstr ""
+msgstr "Webhook: 이 워크플로우 작업 템플릿에 대한 webhook을 활성화합니다."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:25
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:26
 msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
-msgstr ""
+msgstr "동시 작업: 활성화하면 이 워크플로우 작업 템플릿의 동시 실행이 허용됩니다."
 
 #: screens/Setting/SettingList.tsx:107
 #: screens/Setting/Settings.tsx:118
@@ -10786,7 +10823,7 @@ msgstr "작업 유형 선택"
 #: components/JobList/JobListItem.tsx:145
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Cancel {0}"
 msgstr "취소 {0}"
 
@@ -10820,12 +10857,12 @@ msgstr "총 재고 소스"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "워크플로우에서 관리하거나 영향을 받는 호스트 목록을 추가로 제한할 호스트 패턴을 제공합니다."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Canceled node"
 msgstr "취소된 노드"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:107
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:111
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:108
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:112
 msgid "Edit workflow"
 msgstr "워크플로우 편집"
 
@@ -10950,11 +10987,11 @@ msgstr "오류 메시지"
 #. placeholder {0}: to + 1
 #: components/SelectedList/DraggableSelectedList.tsx:116
 msgid "{draggedName} is now at position {0}."
-msgstr ""
+msgstr "{draggedName}이(가) 이제 {0}번 위치에 있습니다."
 
 #: util/validators.ts:43
 msgid "Invalid date format"
-msgstr ""
+msgstr "잘못된 날짜 형식"
 
 #: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
@@ -10976,7 +11013,7 @@ msgstr "유효하지 않은 이메일 주소입니다"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:117
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:124
 msgid "Activity"
 msgstr "활동"
 
@@ -11071,7 +11108,7 @@ msgstr "GitHub로 로그인"
 
 #: components/CodeEditor/CodeEditor.tsx:263
 msgid "Code editor"
-msgstr ""
+msgstr "코드 편집기"
 
 #: util/validators.ts:66
 msgid "Invalid time format"
@@ -11321,7 +11358,7 @@ msgstr "알림 시간 초과"
 
 #: util/dates.ts:93
 msgid "Unrecognized day string"
-msgstr ""
+msgstr "인식할 수 없는 요일 문자열"
 
 #: screens/Project/shared/Project.helptext.tsx:12
 msgid "Change PROJECTS_ROOT when deploying {brandName} to change this location."
@@ -11521,8 +11558,8 @@ msgstr "이 목록을 채우려면 작업을 실행하십시오."
 #: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:153
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:282
 msgid "Limit"
 msgstr "제한"
@@ -11553,13 +11590,15 @@ msgstr "이 프로젝트는 현재 다른 리소스에서 사용되고 있습니
 msgid "Associate"
 msgstr "연결"
 
-#: components/JobList/JobListItem.tsx:197
+#: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch"
 msgstr "다시 시작"
 
@@ -11590,6 +11629,10 @@ msgstr "역할 연결 오류"
 #: util/getRelatedResourceDeleteDetails.ts:291
 msgid "Workflow Job Template Nodes"
 msgstr "워크플로우 작업 템플릿 노드"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:59
+msgid "Canceled node, new variables"
+msgstr "취소된 노드, 새 변수"
 
 #: components/Lookup/HostFilterLookup.tsx:147
 #~ msgid "Insights system ID"
@@ -11658,7 +11701,7 @@ msgstr "호스트 재시도"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:309
 #: screens/Template/shared/WebhookSubForm.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:158
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
 msgid "Webhook Service"
 msgstr "Webhook 서비스"
 
@@ -11750,12 +11793,12 @@ msgstr "6월"
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:503
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:512
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:250
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:259
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
 msgid "Launch"
 msgstr "시작"
 
-#: components/JobList/JobListItem.tsx:359
+#: components/JobList/JobListItem.tsx:361
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "설명"
@@ -11838,7 +11881,7 @@ msgstr "오류 메시지 본문"
 #: components/JobList/JobListItem.tsx:146
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
 msgid "Failed to cancel {0}"
 msgstr "{0} 취소 실패"
 
@@ -11975,7 +12018,7 @@ msgstr "예인 경우 잘못된 항목을 치명적인 오류로 처리하고, �
 msgid "One room per line, as a room ID (!abcdef:example.org) or\n"
 "      a room alias (#automation:example.org). The user the access token\n"
 "      belongs to must already be a member of every room."
-msgstr ""
+msgstr "한 줄에 룸 하나씩, 룸 ID(!abcdef:example.org) 또는 룸 별칭(#automation:example.org) 형식으로 입력합니다. 액세스 토큰의 소유 사용자는 모든 룸에 이미 참여해 있어야 합니다."
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:79
 msgid "Running jobs"
@@ -11999,7 +12042,7 @@ msgid "Toggle notification start"
 msgstr "알림 시작 전환"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:274
+#: components/JobList/JobListItem.tsx:276
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12031,7 +12074,7 @@ msgstr "알림 시작 전환"
 #: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
 msgid "Inventory"
@@ -12040,7 +12083,7 @@ msgstr "인벤토리"
 #. placeholder {0}: to + 1
 #: components/SelectedList/DraggableSelectedList.tsx:178
 msgid "{name} is now at position {0}."
-msgstr ""
+msgstr "{name}이(가) 이제 {0}번 위치에 있습니다."
 
 #: util/validators.ts:100
 msgid "This field must be a number and have a value between {min} and {max}"
@@ -12096,7 +12139,7 @@ msgstr "주"
 msgid "Send the message body as HTML (org.matrix.custom.html)\n"
 "      alongside the plain-text message, so the job link is clickable.\n"
 "      Clients that cannot render HTML fall back to the plain text."
-msgstr ""
+msgstr "메시지 본문을 일반 텍스트 메시지와 함께 HTML(org.matrix.custom.html)로 보내 작업 링크를 클릭할 수 있게 합니다. HTML을 표시할 수 없는 클라이언트는 일반 텍스트로 대체됩니다."
 
 #: components/NotificationList/NotificationListItem.tsx:103
 #: components/StatusLabel/StatusLabel.tsx:52

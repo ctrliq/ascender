@@ -219,7 +219,7 @@ msgstr "Subdomein Pagerduty"
 #: components/SelectedList/DraggableSelectedList.tsx:135
 #: components/SelectedList/DraggableSelectedList.tsx:166
 msgid "Dragging cancelled. The list is unchanged."
-msgstr ""
+msgstr "Slepen geannuleerd. De lijst is ongewijzigd."
 
 #: components/HealthCheckButton/HealthCheckButton.tsx:49
 #: components/HealthCheckButton/HealthCheckButton.tsx:63
@@ -277,7 +277,7 @@ msgstr "Kan laatste taakupdate niet laden"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:92
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
 msgid "(Prompt on launch)"
 msgstr "(Melding bij opstarten)"
 
@@ -592,7 +592,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:290
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:291
 msgid "Options"
 msgstr "Opties"
 
@@ -753,7 +753,7 @@ msgstr "Frequentie herhalen"
 msgid "File Difference"
 msgstr "Bestandsverschil"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:40
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:56
 msgid "Relaunch from canceled node"
 msgstr "Opnieuw starten vanaf geannuleerd knooppunt"
 
@@ -903,6 +903,10 @@ msgstr "Hipchat"
 msgid "Refresh Token"
 msgstr "Token verversen"
 
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:146
+msgid "These are the variables the workflow ran with. Whatever is left here replaces them for the nodes that run again; nodes carried forward keep the results they already had."
+msgstr "Dit zijn de variabelen waarmee de workflow is uitgevoerd. Wat hier overblijft vervangt ze voor de knooppunten die opnieuw worden uitgevoerd; overgenomen knooppunten behouden de resultaten die ze al hadden."
+
 #: screens/Inventory/Inventories.tsx:110
 msgid "Host details"
 msgstr "Hostdetails"
@@ -920,7 +924,7 @@ msgstr "Groep van host loskoppelen?"
 msgid "Destination SMS number(s)"
 msgstr "Sms-nummer(s) bestemming"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:226
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:227
 msgid "Source control branch"
 msgstr "Vertakking broncontrole"
 
@@ -965,7 +969,7 @@ msgstr "CPU {0}"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:12
 msgid "Optional labels that describe this workflow job template, such as 'dev' or 'test'. Labels can be used to group and filter workflow job templates and completed jobs."
-msgstr ""
+msgstr "Optionele labels die dit workflowtaaksjabloon beschrijven, zoals 'dev' of 'test'. Labels kunnen worden gebruikt om workflowtaaksjablonen en voltooide taken te groeperen en te filteren."
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:152
 msgid "Elapsed Time"
@@ -1042,7 +1046,7 @@ msgstr "Host niet gevonden."
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:384
 msgid "Matrix Options"
-msgstr ""
+msgstr "Matrix-opties"
 
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:44
 msgid "1 (Info)"
@@ -1133,7 +1137,7 @@ msgstr "Max. pogingen"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:10
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
-msgstr ""
+msgstr "Geef een hostpatroon op om de lijst met hosts die door de workflow worden beheerd of beïnvloed verder te beperken. Meerdere patronen zijn toegestaan. Raadpleeg de Ansible-documentatie voor meer informatie en voorbeelden over patronen."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:65
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:82
@@ -1164,7 +1168,7 @@ msgstr "Voltooid"
 #. placeholder {0}: event.currentTarget.id
 #: components/SelectedList/DraggableSelectedList.tsx:101
 msgid "Dragging started for {0}."
-msgstr ""
+msgstr "Slepen gestart voor {0}."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:43
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:127
@@ -1186,7 +1190,7 @@ msgid "Select the inventory that this host will belong to."
 msgstr "Selecteer de inventaris waartoe deze host zal behoren."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:25
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
 msgid "Select a webhook service."
 msgstr "Selecteer een webhook-service."
 
@@ -1208,7 +1212,7 @@ msgid "View all settings"
 msgstr "Alle instellingen weergeven"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:27
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
 msgid "Webhook services can use this as a shared secret."
 msgstr "Webhook-services kunnen dit gebruiken als een gedeeld geheim."
 
@@ -1362,7 +1366,7 @@ msgstr "Filteren op mislukte opdrachten"
 msgid "Playbook Started"
 msgstr "Draaiboek gestart"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:272
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:279
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Deze sjabloon voor workflowtaken wordt momenteel gebruikt door andere bronnen. Weet u zeker dat u hem wilt verwijderen?"
 
@@ -1410,7 +1414,7 @@ msgstr "E-mail"
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
 msgid "Job Type"
 msgstr "Soort taak"
 
@@ -1484,7 +1488,7 @@ msgstr "Bestaande groep toevoegen"
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Failed node"
 msgstr "Mislukt knooppunt"
 
@@ -1603,7 +1607,7 @@ msgstr "Gekopieerd"
 msgid "Failed to cancel one or more jobs."
 msgstr "Kan een of meer taken niet annuleren."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:141
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:142
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.tsx:75
 msgid "Total Nodes"
 msgstr "Totaalaantal knooppunten"
@@ -1821,14 +1825,14 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: screens/Team/TeamList/TeamListItem.tsx:42
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:178
 #: screens/Template/shared/JobTemplateForm.tsx:329
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:158
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyListItem.tsx:50
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:290
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:113
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:120
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:75
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
@@ -1872,7 +1876,7 @@ msgstr "Ctrl IQ, Inc."
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:375
 msgid "Destination rooms"
-msgstr ""
+msgstr "Bestemmingskamers"
 
 #: screens/Template/TemplateSurvey.tsx:157
 msgid "Failed to update survey."
@@ -2039,7 +2043,7 @@ msgstr "Gebruikersnaam"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:16
 msgid "Enable webhook for this workflow job template."
-msgstr ""
+msgstr "Webhook inschakelen voor dit workflowtaaksjabloon."
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
 #~ msgid "The organization that owns this workflow job template."
@@ -2078,8 +2082,8 @@ msgstr "Item mislukt"
 msgid "Team Roles"
 msgstr "Teamrollen"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:91
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:117
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "werkstroom opnieuw starten"
 
@@ -2132,7 +2136,7 @@ msgstr "Overige meldingen"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Uitkomst van bovenliggend knooppunt vereist voordat de voorwaarde wordt geëvalueerd."
 
-#: components/JobList/JobListItem.tsx:242
+#: components/JobList/JobListItem.tsx:244
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2213,7 +2217,7 @@ msgstr "Details van gefedereerde inventaris weergeven"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:135
 #: screens/Template/shared/JobTemplateForm.tsx:695
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:63
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
 msgid "Concurrent Jobs"
 msgstr "Gelijktijdige taken"
 
@@ -2396,7 +2400,7 @@ msgstr "Deze samengestelde inventarisinvoer \n"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:200
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
-msgstr ""
+msgstr "Indien ingeschakeld, kunnen hosts uit deze inventaris worden verwijderd terwijl er taken op worden uitgevoerd. Standaard worden die verwijderingen geweigerd totdat de lopende taken zijn voltooid."
 
 #: screens/Project/ProjectList/ProjectListItem.tsx:120
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
@@ -2552,7 +2556,7 @@ msgstr "Gebruikersdetails"
 msgid "Delete Execution Environment"
 msgstr "Uitvoeringsomgeving verwijderen"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:368
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "Taken verdelen"
@@ -2865,7 +2869,7 @@ msgstr "De uitvoeringsomgeving die wordt gebruikt voor taken binnen deze organis
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:315
 msgid "Send HTML Formatted Body"
-msgstr ""
+msgstr "HTML-opgemaakte inhoud verzenden"
 
 #: components/NotificationList/NotificationList.tsx:234
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:130
@@ -3035,7 +3039,7 @@ msgstr "Taakdetails weergeven"
 msgid "Azure AD settings"
 msgstr "Azure AD-instellingen"
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3104,7 +3108,7 @@ msgstr "Kan {0} niet verwijderen."
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:750
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:320
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
 msgid "Webhook details"
 msgstr "Webhookdetails"
 
@@ -3386,7 +3390,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:528
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:274
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
 #: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
@@ -3434,8 +3438,8 @@ msgstr "Lezen"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:293
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:296
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:294
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:297
 msgid "Enable Webhook"
 msgstr "Webhook inschakelen"
 
@@ -3533,7 +3537,7 @@ msgstr "GitHub-team"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:189
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
 #: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
@@ -3643,6 +3647,8 @@ msgstr "Deze actie ontkoppelt alle rollen voor deze gebruiker van de geselecteer
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
@@ -3888,7 +3894,7 @@ msgstr "Uitgeschakeld"
 msgid "Default Execution Environment"
 msgstr "Standaarduitvoeringsomgeving"
 
-#: components/JobList/JobListItem.tsx:290
+#: components/JobList/JobListItem.tsx:292
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3929,7 +3935,7 @@ msgstr "Workflowtaaksjablonen"
 #~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 #~ msgstr "Ongeldige bestandsindeling. Upload een geldig Red Hat-abonnementsmanifest."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:121
 msgid "Toggle Legend"
 msgstr "Legenda wisselen"
 
@@ -4029,7 +4035,7 @@ msgstr "Afkomstig uit een project"
 msgid "Destination Channels"
 msgstr "Bestemmingskanalen"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:285
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:292
 msgid "Failed to delete workflow job template."
 msgstr "Kan workflow-taaksjabloon niet verwijderen."
 
@@ -4133,8 +4139,8 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4151,8 +4157,8 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:497
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:499
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:246
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
 #: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
@@ -4284,6 +4290,10 @@ msgstr "U hebt geen machtiging om het volgende te ontkoppelen: {itemsUnableToDis
 msgid "Failed to update capacity adjustment."
 msgstr "Kan de capaciteitsaanpassing niet bijwerken."
 
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:69
+msgid "Overwriting Variables on Relaunch"
+msgstr "Variabelen overschrijven bij opnieuw starten"
+
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:74
 msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
@@ -4367,7 +4377,7 @@ msgstr "Filter op geneste groepsnaam"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
-msgstr ""
+msgstr "Verwijderen toestaan tijdens gebruik"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:784
 #: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:786
@@ -4481,7 +4491,7 @@ msgid "Refresh project revision"
 msgstr "Herziening vernieuwing project"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:28
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "Selecteer optioneel de toegangsgegevens die moeten worden gebruikt om statusupdates terug te sturen naar de webhook-service."
 
@@ -4618,7 +4628,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:537
 #: screens/Template/TemplateSurvey.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:282
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
@@ -4668,7 +4678,7 @@ msgid "Clean"
 msgstr "Opschonen"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:26
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
 msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
 msgstr "Webhook-services kunnen taken starten met dit workflow-taaksjabloon door een POST-verzoek naar deze URL te sturen."
 
@@ -4768,7 +4778,7 @@ msgstr "Gestart door"
 msgid "Delete this node"
 msgstr "Dit knooppunt verwijderen"
 
-#: components/JobList/JobListItem.tsx:264
+#: components/JobList/JobListItem.tsx:266
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "Taak bronworkflow"
@@ -4922,8 +4932,8 @@ msgstr "Uitvoeringsomgevingen"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Vraag om taaktype bij opstarten."
 
-#: components/JobList/JobListItem.tsx:230
-#: components/JobList/JobListItem.tsx:238
+#: components/JobList/JobListItem.tsx:232
+#: components/JobList/JobListItem.tsx:240
 msgid "Schedule"
 msgstr "Schema"
 
@@ -4963,6 +4973,7 @@ msgstr "Selecteer een vraag om te verwijderen"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:148
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
@@ -4981,8 +4992,8 @@ msgstr "Selecteer een vraag om te verwijderen"
 #: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:232
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:341
 msgid "Variables"
 msgstr "Variabelen"
@@ -5125,7 +5136,7 @@ msgstr "Dag"
 msgid "Collapse"
 msgstr "Samenvouwen"
 
-#: components/JobList/JobListItem.tsx:335
+#: components/JobList/JobListItem.tsx:337
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5142,8 +5153,8 @@ msgstr "Samenvouwen"
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:317
 msgid "Labels"
 msgstr "Labels"
@@ -5168,7 +5179,7 @@ msgstr "Status selecteren"
 msgid "Month"
 msgstr "Maand"
 
-#: components/JobList/JobListItem.tsx:311
+#: components/JobList/JobListItem.tsx:313
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5212,7 +5223,7 @@ msgstr "Minimumaantal instanties dat automatisch\n"
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
 msgid "Job Tags"
 msgstr "Taaktags"
 
@@ -5223,7 +5234,7 @@ msgstr "Kan sommige of alle inventarisbronnen niet synchroniseren."
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:304
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:359
 msgid "Homeserver URL"
-msgstr ""
+msgstr "Homeserver-URL"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:341
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:424
@@ -5241,8 +5252,8 @@ msgstr "Selecteer een rij om goed te keuren"
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:223
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
 msgid "Delete Job"
 msgstr "Taak verwijderen"
 
@@ -5487,7 +5498,7 @@ msgstr "Volgende"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
 #: screens/Template/shared/JobTemplateForm.tsx:489
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:253
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:254
 msgid "Create"
 msgstr "Maken"
 
@@ -5703,6 +5714,11 @@ msgstr "Klik op om de volgorde van de enquêtevragen te wijzigen"
 #~ msgid "Subscription Details"
 #~ msgstr "Details abonnement"
 
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:108
+msgid "Relaunch from canceled node with new variables"
+msgstr "Opnieuw starten vanaf geannuleerd knooppunt met nieuwe variabelen"
+
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
 "        UI.  Please use the API to manage this schedule."
@@ -5798,7 +5814,7 @@ msgstr "Testbericht"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
 msgid "Enabled Options"
 msgstr "Ingeschakelde opties"
 
@@ -5821,7 +5837,7 @@ msgid "This step contains errors"
 msgstr "Deze stap bevat fouten"
 
 #: screens/Template/shared/JobTemplateForm.tsx:434
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:237
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:238
 msgid "source control branch"
 msgstr "Broncontrolevertakking"
 
@@ -5859,7 +5875,7 @@ msgstr "Instantiegroepen"
 #: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
 msgid "Skip Tags"
 msgstr "Tags overslaan"
 
@@ -5951,7 +5967,7 @@ msgstr "Canonical"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:156
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:154
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:146
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
 msgstr "Verlopen"
@@ -6218,6 +6234,11 @@ msgstr "Selecteer de instantiegroepen waarop dit taaksjabloon moet worden uitgev
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "Laat leeg om bij het opslaan een nieuwe webhook-sleutel te genereren"
 
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:109
+msgid "Relaunch from failed node with new variables"
+msgstr "Opnieuw starten vanaf mislukt knooppunt met nieuwe variabelen"
+
 #: screens/User/shared/UserForm.tsx:55
 #: screens/User/UserDetail/UserDetail.tsx:60
 #: screens/User/UserList/UserListItem.tsx:36
@@ -6384,7 +6405,7 @@ msgstr "Raadpleeg de"
 #: components/SelectedList/DraggableSelectedList.tsx:125
 #: components/SelectedList/DraggableSelectedList.tsx:150
 msgid "Dragging finished."
-msgstr ""
+msgstr "Slepen voltooid."
 
 #: util/getRelatedResourceDeleteDetails.ts:103
 msgid "Credential Input Sources"
@@ -6411,8 +6432,8 @@ msgstr "Provisioning-callbacks: schakelt het maken van een provisioning-callback
 
 #: components/JobList/JobListItem.tsx:159
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:199
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
 msgid "Relaunch Job"
 msgstr "Taak opnieuw starten"
 
@@ -6474,7 +6495,7 @@ msgstr "Tabblad Details"
 
 #: components/SelectedList/DraggableSelectedList.tsx:220
 msgid "Reorder {label}"
-msgstr ""
+msgstr "{label} opnieuw ordenen"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:51
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
@@ -6495,7 +6516,7 @@ msgstr ""
 msgid "Credential"
 msgstr "Toegangsgegeven"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
 msgid "First node"
 msgstr "Eerste knooppunt"
 
@@ -6504,7 +6525,7 @@ msgstr "Eerste knooppunt"
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:184
 msgid "Webhook Credentials"
 msgstr "Toegangsgegevens Webhook"
 
@@ -6534,7 +6555,7 @@ msgstr "{scm_update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 #. placeholder {0}: workflowTemplate.name
 #: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:81
 msgid "This workflow ({0}) sets its own limit, which is used in place of this node's limit when the workflow runs."
-msgstr ""
+msgstr "Deze workflow ({0}) stelt een eigen limiet in, die in plaats van de limiet van dit knooppunt wordt gebruikt wanneer de workflow wordt uitgevoerd."
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:79
 msgid "Toggle schedule"
@@ -6551,7 +6572,7 @@ msgstr "Datumzoekinvoer"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:309
 msgid "Destination Rooms"
-msgstr ""
+msgstr "Bestemmingskamers"
 
 #: screens/Host/HostDetail/HostDetail.tsx:123
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:116
@@ -6611,7 +6632,7 @@ msgstr "Tijd"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
 msgid "Send HTML formatted body"
-msgstr ""
+msgstr "HTML-opgemaakte inhoud verzenden"
 
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
@@ -6769,7 +6790,7 @@ msgstr "Inventarisbronnen"
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "Indien ingeschakeld, zijn gelijktijdige uitvoeringen van dit taaksjabloon toegestaan."
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:312
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
 msgstr "Gelijktijdige taken inschakelen"
 
@@ -6833,7 +6854,7 @@ msgstr "Terug naar hosts"
 
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.tsx:29
 msgid "Credential to authenticate with a protected container registry."
-msgstr ""
+msgstr "Toegangsgegevens om te verifiëren bij een beveiligd containerregister."
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:209
 msgid "Context"
@@ -7064,7 +7085,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Kies een draaiboekmap"
 
-#: components/JobList/JobListItem.tsx:252
+#: components/JobList/JobListItem.tsx:254
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7415,8 +7436,8 @@ msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWee
 msgid "Failed Host Count"
 msgstr "Aantal mislukte hosts"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:47
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:51
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
 msgid "Relaunch from:"
 msgstr "Opnieuw starten vanaf:"
 
@@ -7514,9 +7535,9 @@ msgstr "Synchroniseren"
 #: screens/Team/TeamList/TeamList.tsx:120
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:180
 #: screens/Template/shared/JobTemplateForm.tsx:337
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:166
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:114
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
@@ -7543,7 +7564,7 @@ msgstr "Kies de rollen die op de geselecteerde bronnen moeten worden toegepast. 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:317
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:164
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
 msgid "Webhook URL"
 msgstr "Webhook-URL"
 
@@ -7644,7 +7665,7 @@ msgstr "Aanmelden met GitHub Enterprise"
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:179
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:180
 #: screens/Template/Survey/SurveyQuestionForm.tsx:31
 #: screens/User/shared/UserForm.tsx:202
 #: util/validators.ts:237
@@ -7758,7 +7779,7 @@ msgstr "False"
 
 #: components/SelectedList/DraggableSelectedList.tsx:260
 msgid "Press space or enter to begin dragging, and use the arrow keys to move the row up or down. Press space or enter again to confirm, or escape to cancel."
-msgstr ""
+msgstr "Druk op spatie of Enter om te beginnen met slepen en gebruik de pijltjestoetsen om de rij omhoog of omlaag te verplaatsen. Druk nogmaals op spatie of Enter om te bevestigen, of op Escape om te annuleren."
 
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:422
 #: screens/Instances/InstanceList/InstanceList.tsx:277
@@ -7851,7 +7872,7 @@ msgstr "Gelijktijdige taken: indien ingeschakeld, zijn gelijktijdige uitvoeringe
 msgid "The base URL of the Matrix homeserver's client API,\n"
 "      for example https://matrix.example.org. The /_matrix/client/v3 paths\n"
 "      are added automatically."
-msgstr ""
+msgstr "De basis-URL van de client-API van de Matrix-homeserver, bijvoorbeeld https://matrix.example.org. De paden /_matrix/client/v3 worden automatisch toegevoegd."
 
 #: screens/Job/JobOutput/JobOutputSearch.tsx:139
 msgid "Task Started"
@@ -7930,7 +7951,7 @@ msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere res
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8006,7 +8027,7 @@ msgstr "Wachtwoord bevestigen"
 msgid "Personal access token"
 msgstr "Persoonlijke toegangstoken"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
 msgid "Relaunch from first node"
 msgstr "Opnieuw starten vanaf eerste knooppunt"
 
@@ -8052,6 +8073,10 @@ msgstr "Gebruikerstokens"
 msgid "View RADIUS settings"
 msgstr "RADIUS-instellingen weergeven"
 
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:319
+msgid "Allow Overwriting Variables on Relaunch"
+msgstr "Variabelen overschrijven bij opnieuw starten toestaan"
+
 #: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
@@ -8083,7 +8108,7 @@ msgstr "Het is moeilijk om een specificatie te geven voor\n"
 "            de inventaris met `gather_facts: true`. De\n"
 "            werkelijke facts verschillen van systeem tot systeem."
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "Ouder taken verdelen"
@@ -8233,7 +8258,7 @@ msgstr "Peer verwijderd. Zorg ervoor dat u de installatiebundel voor {0} opnieuw
 
 #: components/SelectedList/DraggableSelectedList.tsx:195
 msgid "Draggable list to reorder and remove selected items."
-msgstr ""
+msgstr "Versleepbare lijst om geselecteerde items opnieuw te ordenen en te verwijderen."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:206
 msgid "The last {weekday} of {month}"
@@ -8297,6 +8322,10 @@ msgstr "Taak"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:192
 msgid "Workflow Jobs ({total})"
 msgstr "Workflowtaken ({total})"
+
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:100
+msgid "Variables must be a mapping of names to values."
+msgstr "Variabelen moeten een toewijzing van namen aan waarden zijn."
 
 #: components/Search/AdvancedSearch.tsx:310
 msgid "Set type disabled for related search field fuzzy searches"
@@ -8750,7 +8779,7 @@ msgstr "Alle hosts opnieuw starten"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:17
 msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
-msgstr ""
+msgstr "Indien ingeschakeld, zijn gelijktijdige uitvoeringen van dit workflowtaaksjabloon toegestaan."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:43
 msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
@@ -8945,7 +8974,7 @@ msgstr "Afgelopen maand"
 msgid "Execution Environment"
 msgstr "Uitvoeringsomgeving"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:268
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:275
 msgid "Delete Workflow Job Template"
 msgstr "Workflow-taaksjabloon verwijderen"
 
@@ -9149,7 +9178,7 @@ msgstr "Opdracht"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:368
 msgid "Access token"
-msgstr ""
+msgstr "Toegangstoken"
 
 #: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:57
@@ -9291,7 +9320,7 @@ msgstr "Algemene OIDC-instellingen"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
-msgstr ""
+msgstr "Verwijderen toestaan tijdens gebruik: indien ingeschakeld, kunnen hosts uit deze inventaris worden verwijderd terwijl er taken op worden uitgevoerd."
 
 #: components/DataListToolbar/DataListToolbar.tsx:123
 #: screens/Job/JobOutput/JobOutputSearch.tsx:146
@@ -9347,7 +9376,7 @@ msgstr "Vorken"
 #. placeholder {0}: resource?.name ?? ''
 #: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:83
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
-msgstr ""
+msgstr "Deze limiet wordt toegepast op alle workflowknooppunten in deze workflow ({0}) die om een limiet vragen, in plaats van de limiet die op elk knooppunt is ingesteld."
 
 #: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
@@ -9400,7 +9429,7 @@ msgstr "Kan niet van bericht wisselen."
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:324
 #: screens/Template/shared/WebhookSubForm.tsx:205
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:170
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook Key"
 msgstr "Webhooksleutel"
 
@@ -9503,7 +9532,7 @@ msgstr "Provisioning terugkoppelings-URL"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:194
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
 msgid "Modified"
 msgstr "Gewijzigd"
@@ -9527,6 +9556,10 @@ msgstr "{sessionCountdown, plural, one {You will be logged out in # second due t
 #: screens/Template/shared/JobTemplate.helptext.tsx:35
 msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Indien ingeschakeld, voorkomt het taaksjabloon dat inventaris- of organisatie-instantiegroepen worden toegevoegd aan de lijst met voorkeursinstantiegroepen om op uit te voeren. Opmerking: als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:60
+msgid "Failed node, new variables"
+msgstr "Mislukt knooppunt, nieuwe variabelen"
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:215
 #: screens/User/UserRoles/UserRolesList.tsx:209
@@ -9670,7 +9703,7 @@ msgstr "Er moet een inventaris worden gekozen"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:135
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
 msgid "Source Control Branch"
 msgstr "Vertakking broncontrole"
@@ -9698,7 +9731,7 @@ msgstr "Instellingen"
 
 #: components/SelectedList/DraggableSelectedList.tsx:158
 msgid "Dragging started for {name}. Use the arrow keys to move it."
-msgstr ""
+msgstr "Slepen gestart voor {name}. Gebruik de pijltjestoetsen om het te verplaatsen."
 
 #: screens/CredentialType/CredentialType.tsx:62
 msgid "Back to credential types"
@@ -9756,7 +9789,7 @@ msgstr "Indien niet aangevinkt, wordt een samenvoeging uitgevoerd, waarbij lokal
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:163
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Job Cancel Error"
 msgstr "Fout bij annuleren taak"
 
@@ -9807,7 +9840,7 @@ msgstr "Kan geen volledig bronobject van knooppunt ophalen."
 msgid "Pending"
 msgstr "In afwachting"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:130
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:131
 msgid "Toggle Tools"
 msgstr "Gereedschap wisselen"
 
@@ -9853,7 +9886,7 @@ msgstr "Gereedschap wisselen"
 #: screens/Team/TeamList/TeamListItem.tsx:47
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:192
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:203
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:122
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
 #: screens/User/UserTeams/UserTeamList.tsx:187
@@ -9973,7 +10006,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10065,9 +10098,13 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 msgid "Last Name"
 msgstr "Achternaam"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+msgid "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."
+msgstr "Indien ingeschakeld, kunnen bij opnieuw starten vanaf het mislukte knooppunt variabelen worden opgegeven die de variabelen van de oorspronkelijke uitvoering overschrijven. Handig wanneer een eerder knooppunt een waarde heeft achtergelaten die moet worden gecorrigeerd voordat de workflow verder kan."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:61
 msgid "Add a node between these two"
-msgstr ""
+msgstr "Een knooppunt toevoegen tussen deze twee"
 
 #: components/AppContainer/AppContainer.tsx:105
 msgid "Navigation"
@@ -10145,7 +10182,7 @@ msgstr "Voornaam"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:141
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:66
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -10362,7 +10399,7 @@ msgstr "Voorbeelden:"
 #: components/NotificationList/NotificationList.tsx:241
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:137
 msgid "Matrix"
-msgstr ""
+msgstr "Matrix"
 
 #: screens/Project/shared/ProjectSubForms/SvnSubForm.tsx:31
 msgid "Revision #"
@@ -10454,7 +10491,7 @@ msgid "Select Teams"
 msgstr "Teams selecteren"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
 msgid "Elapsed time that the job ran"
 msgstr "Verstreken tijd in seconden dat de taak is uitgevoerd"
 
@@ -10480,7 +10517,7 @@ msgstr "Project kopiëren"
 #~ msgid "Prompt for verbosity on launch."
 #~ msgstr "Vraag om uitgebreidheid bij opstarten."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:41
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
 msgid "Relaunch from failed node"
 msgstr "Opnieuw starten vanaf mislukt knooppunt"
 
@@ -10563,7 +10600,7 @@ msgstr "Link verwijderen bevestigen"
 msgid "This field must be at least {0} characters"
 msgstr "Dit veld moet minimaal {0} tekens bevatten"
 
-#: components/JobList/JobListItem.tsx:218
+#: components/JobList/JobListItem.tsx:220
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10664,13 +10701,13 @@ msgstr "Accounttoken"
 msgid "Edit Login redirect override URL"
 msgstr "Login doorverwijzen URL overschrijven bewerken"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:27
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:28
 msgid "Webhooks: Enable webhook for this workflow job template."
-msgstr ""
+msgstr "Webhooks: webhook inschakelen voor dit workflowtaaksjabloon."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:25
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:26
 msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
-msgstr ""
+msgstr "Gelijktijdige taken: indien ingeschakeld, zijn gelijktijdige uitvoeringen van dit workflowtaaksjabloon toegestaan."
 
 #: screens/Setting/SettingList.tsx:107
 #: screens/Setting/Settings.tsx:118
@@ -10786,7 +10823,7 @@ msgstr "Kies een soort taak"
 #: components/JobList/JobListItem.tsx:145
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Cancel {0}"
 msgstr "Annuleren {0}"
 
@@ -10820,12 +10857,12 @@ msgstr "Totale inventarisbronnen"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "Geef een hostpatroon op om de lijst met hosts die door de workflow worden beheerd of beïnvloed verder te beperken."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Canceled node"
 msgstr "Geannuleerd knooppunt"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:107
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:111
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:108
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:112
 msgid "Edit workflow"
 msgstr "Workflow bewerken"
 
@@ -10950,11 +10987,11 @@ msgstr "Foutbericht"
 #. placeholder {0}: to + 1
 #: components/SelectedList/DraggableSelectedList.tsx:116
 msgid "{draggedName} is now at position {0}."
-msgstr ""
+msgstr "{draggedName} staat nu op positie {0}."
 
 #: util/validators.ts:43
 msgid "Invalid date format"
-msgstr ""
+msgstr "Ongeldige datumnotatie"
 
 #: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
@@ -10976,7 +11013,7 @@ msgstr "Ongeldig e-mailadres"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:117
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:124
 msgid "Activity"
 msgstr "Activiteit"
 
@@ -11071,7 +11108,7 @@ msgstr "Aanmelden met GitHub"
 
 #: components/CodeEditor/CodeEditor.tsx:263
 msgid "Code editor"
-msgstr ""
+msgstr "Code-editor"
 
 #: util/validators.ts:66
 msgid "Invalid time format"
@@ -11321,7 +11358,7 @@ msgstr "Time-out voor bericht"
 
 #: util/dates.ts:93
 msgid "Unrecognized day string"
-msgstr ""
+msgstr "Onbekende weekdagtekenreeks"
 
 #: screens/Project/shared/Project.helptext.tsx:12
 msgid "Change PROJECTS_ROOT when deploying {brandName} to change this location."
@@ -11521,8 +11558,8 @@ msgstr "Voer een taak uit om deze lijst te vullen."
 #: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:153
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:282
 msgid "Limit"
 msgstr "Limiet"
@@ -11553,13 +11590,15 @@ msgstr "Dit project wordt momenteel gebruikt door andere resources. Weet u zeker
 msgid "Associate"
 msgstr "Associëren"
 
-#: components/JobList/JobListItem.tsx:197
+#: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch"
 msgstr "Opnieuw starten"
 
@@ -11590,6 +11629,10 @@ msgstr "Fout in geassocieerde rol"
 #: util/getRelatedResourceDeleteDetails.ts:291
 msgid "Workflow Job Template Nodes"
 msgstr "Workflowtaaksjabloonnodes"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:59
+msgid "Canceled node, new variables"
+msgstr "Geannuleerd knooppunt, nieuwe variabelen"
 
 #: components/Lookup/HostFilterLookup.tsx:147
 #~ msgid "Insights system ID"
@@ -11658,7 +11701,7 @@ msgstr "Host opnieuw proberen"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:309
 #: screens/Template/shared/WebhookSubForm.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:158
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
 msgid "Webhook Service"
 msgstr "Webhookservice"
 
@@ -11750,12 +11793,12 @@ msgstr "Juni"
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:503
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:512
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:250
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:259
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
 msgid "Launch"
 msgstr "Starten"
 
-#: components/JobList/JobListItem.tsx:359
+#: components/JobList/JobListItem.tsx:361
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Uitleg"
@@ -11838,7 +11881,7 @@ msgstr "Foutbericht body"
 #: components/JobList/JobListItem.tsx:146
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
 msgid "Failed to cancel {0}"
 msgstr "Kan {0} niet annuleren"
 
@@ -11975,7 +12018,7 @@ msgstr "Zo ja, maak ongeldige vermeldingen een fatale fout, anders overslaan en\
 msgid "One room per line, as a room ID (!abcdef:example.org) or\n"
 "      a room alias (#automation:example.org). The user the access token\n"
 "      belongs to must already be a member of every room."
-msgstr ""
+msgstr "Eén kamer per regel, als kamer-ID (!abcdef:example.org) of kameralias (#automation:example.org). De gebruiker van wie het toegangstoken is, moet al lid zijn van elke kamer."
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:79
 msgid "Running jobs"
@@ -11999,7 +12042,7 @@ msgid "Toggle notification start"
 msgstr "Berichtstart wisselen"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:274
+#: components/JobList/JobListItem.tsx:276
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12031,7 +12074,7 @@ msgstr "Berichtstart wisselen"
 #: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
 msgid "Inventory"
@@ -12040,7 +12083,7 @@ msgstr "Inventaris"
 #. placeholder {0}: to + 1
 #: components/SelectedList/DraggableSelectedList.tsx:178
 msgid "{name} is now at position {0}."
-msgstr ""
+msgstr "{name} staat nu op positie {0}."
 
 #: util/validators.ts:100
 msgid "This field must be a number and have a value between {min} and {max}"
@@ -12096,7 +12139,7 @@ msgstr "Week"
 msgid "Send the message body as HTML (org.matrix.custom.html)\n"
 "      alongside the plain-text message, so the job link is clickable.\n"
 "      Clients that cannot render HTML fall back to the plain text."
-msgstr ""
+msgstr "De berichtinhoud als HTML (org.matrix.custom.html) verzenden naast het bericht in platte tekst, zodat de taaklink klikbaar is. Clients die geen HTML kunnen weergeven, vallen terug op de platte tekst."
 
 #: components/NotificationList/NotificationListItem.tsx:103
 #: components/StatusLabel/StatusLabel.tsx:52

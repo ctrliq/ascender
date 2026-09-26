@@ -125,6 +125,11 @@ class MatrixBackend(AscenderBaseEmailBackend, CustomNotificationBase):
             return {}
         return details if isinstance(details, dict) else {}
 
+    @staticmethod
+    def _accepted(resp):
+        """Whether the homeserver accepted the request: only a 2xx answer is, a 1xx or 3xx is not."""
+        return 200 <= resp.status_code < 300
+
     def _describe_failure(self, what, resp):
         details = self._error_details(resp)
         reason = ' '.join(str(details[key]) for key in ('errcode', 'error') if details.get(key))
@@ -139,7 +144,7 @@ class MatrixBackend(AscenderBaseEmailBackend, CustomNotificationBase):
         if not room.startswith('#'):
             return room
         resp = self._request('GET', '/directory/room/{}'.format(quote(room, safe='')))
-        if resp.status_code >= 400:
+        if not self._accepted(resp):
             raise Exception(self._describe_failure(_("resolving room alias {}").format(room), resp))
         room_id = self._error_details(resp).get('room_id')
         if not room_id:
@@ -160,7 +165,7 @@ class MatrixBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                         resolved[room] = self._resolve_room(room)
                     path = '/rooms/{}/send/m.room.message/{}'.format(quote(resolved[room], safe=''), uuid.uuid4().hex)
                     resp = self._request('PUT', path, json=content)
-                    if resp.status_code >= 400:
+                    if not self._accepted(resp):
                         raise Exception(self._describe_failure(_("sending notification to room {}").format(room), resp))
                     sent_messages += 1
                 except Exception as e:

@@ -149,7 +149,7 @@ The other options of note are:
 - ID of the Dashboard: When you created an API Key for the Grafana account, you can set up a dashboard with its own unique ID. 
 - ID of the Panel: If you added panels and graphs to your Grafana interface, you can specify its ID here. 
 - Tags for the Annotation: Enter keywords that help identify the type(s) of events(s) of the notification you are configuring.
-- Disable SSL Verification: SSL verification is on by default, but you can choose to turn off verification the authenticity of the target's certificate. Environments that use internal or private CA's should select this option to disable verification.
+- Disable SSL Verification: SSL verification is on by default, but you can choose to turn off verification the authenticity of the target's certificate. Environments that use internal or private CAs should select this option to disable verification.
 
 .. image:: ../common/images/notification-template-grafana.png
    :alt: Grafana notification template
@@ -182,7 +182,7 @@ The Matrix notification type sends messages into `Matrix <https://matrix.org>`_ 
 - Access Token (required): The access token of the sending user. It is stored encrypted.
 - Destination Rooms (required): One room per line, as a room ID (``!abcdef:example.org``) or a room alias (``#automation:example.org``).
 - Send HTML Formatted Body: Selected by default. The notification message is always sent as plain text. With this option on, the notification body is also sent as HTML (``org.matrix.custom.html``), so the link back to the job is clickable in clients that render HTML; other clients show the plain text.
-- Disable SSL Verification: Turns off verification of the authenticity of the homeserver's certificate. Environments that use internal or private CA's should select this option to disable verification.
+- Disable SSL Verification: Turns off verification of the authenticity of the homeserver's certificate. Environments that use internal or private CAs should select this option to disable verification.
 
 When you :ref:`customize the messages <ug_custom_notifications>` for a Matrix notification, the *message* is the plain-text version and the *body* is the HTML version of the same notification.
 
@@ -196,7 +196,7 @@ The Mattermost notification type provides a simple interface to Mattermost's mes
 - Username
 - Channel
 - Icon URL: specifies the icon to display for this notification
-- Disable SSL Verification: Turns off verification of the authenticity of the target's certificate. Environments that use internal or private CA's should select this option to disable verification.
+- Disable SSL Verification: Turns off verification of the authenticity of the target's certificate. Environments that use internal or private CAs should select this option to disable verification.
 
 .. image:: ../common/images/notification-template-mattermost.png
    :alt: Mattermost notification template
@@ -226,7 +226,7 @@ The Rocket.Chat notification type provides an interface to Rocket.Chat's collabo
 - Target URL (required): The full URL that will be POSTed to
 - Username
 - Icon URL: specifies the icon to display for this notification
-- Disable SSL Verification: Turns off verification of the authenticity of the target's certificate. Environments that use internal or private CA's should select this option to disable verification.
+- Disable SSL Verification: Turns off verification of the authenticity of the target's certificate. Environments that use internal or private CAs should select this option to disable verification.
 
 .. image:: ../common/images/notification-template-rocketchat.png
    :alt: Rocket.Chat notification template
