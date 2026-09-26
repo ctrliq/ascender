@@ -498,7 +498,7 @@ def test_send_messages_redirect_strips_credentials_on_host_change():
         assert sent_messages == 1
 
 
-@pytest.mark.parametrize('location', ['http://[bad/', 'http://[zz]/', 'http://example.com:xx/'])
+@pytest.mark.parametrize('location', ['http://[bad/', 'http://[zz]/', 'http://example.com:xx/', 'http://example.com:0/'])
 def test_send_messages_redirect_strips_credentials_on_malformed_location(location):
     safe_headers = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
     with (
