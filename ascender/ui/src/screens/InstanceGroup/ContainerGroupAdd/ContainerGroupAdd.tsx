@@ -34,7 +34,8 @@ function ContainerGroupAdd() {
         max_concurrent_jobs: values.max_concurrent_jobs
           ? values.max_concurrent_jobs
           : 0,
-        credential: values?.credential?.id,
+        credential: values.mesh_node ? null : values?.credential?.id,
+        mesh_node: values.mesh_node ? values.mesh_node.id : null,
         pod_spec_override: values.override
           ? getPodSpecValue(values.pod_spec_override)
           : null,

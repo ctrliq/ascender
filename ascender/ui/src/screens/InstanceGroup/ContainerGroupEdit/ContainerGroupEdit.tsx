@@ -49,7 +49,9 @@ function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
     try {
       await InstanceGroupsAPI.update(instanceGroup.id, {
         name: values.name,
-        credential: values.credential ? values.credential.id : null,
+        credential:
+          values.credential && !values.mesh_node ? values.credential.id : null,
+        mesh_node: values.mesh_node ? values.mesh_node.id : null,
         pod_spec_override: values.override ? values.pod_spec_override : null,
         max_forks: values.max_forks ? values.max_forks : 0,
         max_concurrent_jobs: values.max_concurrent_jobs

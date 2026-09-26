@@ -19,6 +19,7 @@ import {
   SubFormLayout,
 } from 'components/FormLayout';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
+import MeshNodeLookup from 'components/Lookup/MeshNodeLookup';
 import { VariablesField } from 'components/CodeEditor';
 
 export interface ContainerGroupFormFieldsProps {
@@ -35,7 +36,21 @@ function ContainerGroupFormFields({
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
 
+  const [meshNodeField] = useField<SummaryFieldRef | null>('mesh_node');
   const [overrideField] = useField('override');
+
+  // A group behind a mesh node runs its pods with that node's service
+  // account, so it takes no credential of its own.
+  const handleMeshNodeUpdate = useCallback(
+    (value: SummaryFieldRef | null) => {
+      setFieldValue('mesh_node', value);
+      setFieldTouched('mesh_node', true, false);
+      if (value) {
+        setFieldValue('credential', null);
+      }
+    },
+    [setFieldValue, setFieldTouched]
+  );
 
   const handleCredentialUpdate = useCallback(
     (value: SummaryFieldRef | null) => {
@@ -55,17 +70,26 @@ function ContainerGroupFormFields({
         validate={required(null)}
         isRequired
       />
-      <CredentialLookup
-        label={t`Credential`}
-        credentialTypeKind="kubernetes"
-        helperTextInvalid={credentialMeta.error}
-        isValid={!credentialMeta.touched || !credentialMeta.error}
-        onBlur={() => credentialHelpers.setTouched(true)}
-        onChange={handleCredentialUpdate}
-        value={credentialField.value}
-        tooltip={t`Credential to authenticate with Kubernetes or OpenShift. Must be of type "Kubernetes/OpenShift API Bearer Token". If left blank, the underlying Pod's service account will be used.`}
-        autoPopulate={!instanceGroup?.id}
+      <MeshNodeLookup
+        id="container-group-mesh-node"
+        label={t`Mesh node`}
+        tooltip={t`Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster.`}
+        onChange={handleMeshNodeUpdate}
+        value={meshNodeField.value}
       />
+      {!meshNodeField.value && (
+        <CredentialLookup
+          label={t`Credential`}
+          credentialTypeKind="kubernetes"
+          helperTextInvalid={credentialMeta.error}
+          isValid={!credentialMeta.touched || !credentialMeta.error}
+          onBlur={() => credentialHelpers.setTouched(true)}
+          onChange={handleCredentialUpdate}
+          value={credentialField.value}
+          tooltip={t`Credential to authenticate with Kubernetes or OpenShift. Must be of type "Kubernetes/OpenShift API Bearer Token". If left blank, the underlying Pod's service account will be used.`}
+          autoPopulate={!instanceGroup?.id}
+        />
+      )}
       <FormField
         id="instance-group-max-concurrent-jobs"
         label={t`Max concurrent jobs`}
@@ -118,6 +142,8 @@ export interface ContainerGroupFormValues {
   max_concurrent_jobs: number;
   max_forks: number;
   credential?: SummaryFieldRef | null;
+  /** The hop node that runs the pods, shown by its hostname. */
+  mesh_node?: SummaryFieldRef | null;
   /** The pod spec as the editor holds it, which is yaml rather than json. */
   pod_spec_override?: string | null;
   /** Whether the form is overriding the default pod spec at all. */
@@ -149,6 +175,12 @@ function ContainerGroupForm({
     max_concurrent_jobs: instanceGroup.max_concurrent_jobs || 0,
     max_forks: instanceGroup.max_forks || 0,
     credential: instanceGroup?.summary_fields?.credential,
+    mesh_node: instanceGroup?.summary_fields?.mesh_node
+      ? {
+          ...instanceGroup.summary_fields.mesh_node,
+          name: instanceGroup.summary_fields.mesh_node.hostname,
+        }
+      : null,
     pod_spec_override: isCheckboxChecked
       ? instanceGroup?.pod_spec_override
       : jsonToYaml(JSON.stringify(initialPodSpec)),

@@ -146,7 +146,7 @@ msgstr "已拒绝 - {0}。请参阅活动流以获取更多信息。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:72
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:89
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:85
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:109
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "此组上同时运行的所有作业允许的最大分叉数。\n"
@@ -418,7 +418,7 @@ msgid "Timed out"
 msgstr "超时"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "选择 {0}"
 
@@ -494,7 +494,7 @@ msgstr "解析该文件时出错。请检查文件格式然后重试。"
 msgid "This field must not exceed {max} characters"
 msgstr "此字段不得超过 {max} 个字符"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:134
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:150
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:138
 msgid "Delete instance group"
 msgstr "删除实例组"
@@ -587,7 +587,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: components/NotificationList/NotificationList.tsx:265
 #: components/NotificationList/NotificationListItem.tsx:64
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
@@ -874,7 +874,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "查找模式"
 
@@ -1141,7 +1141,7 @@ msgstr "提供主机模式以进一步限制将由工作流管理或影响的主
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:65
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:82
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:100
 msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "此组上同时运行的最大作业数。\n"
@@ -1585,6 +1585,10 @@ msgstr "令牌"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "为此联邦库存选择源库存。启动作业时，主机将自动路由到每个源库存的实例组。"
 
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
+msgstr ""
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:367
 msgid "API Service/Integration Key"
 msgstr "API 服务/集成密钥"
@@ -1744,7 +1748,7 @@ msgstr "创建新联邦库存"
 #: screens/InstanceGroup/Instances/InstanceList.tsx:331
 #: screens/InstanceGroup/Instances/InstanceList.tsx:365
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:138
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:53
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:68
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:19
 #: screens/Instances/InstanceList/InstanceList.tsx:170
 #: screens/Instances/InstanceList/InstanceList.tsx:187
@@ -2024,7 +2028,7 @@ msgstr "密钥"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2198,7 +2202,7 @@ msgstr "字段与给出的正则表达式匹配。"
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2433,7 +2437,7 @@ msgid "Management job launch error"
 msgstr "管理作业启动错误"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "搜索"
 
@@ -2504,7 +2508,7 @@ msgstr "{0}（已删除）"
 msgid "The inventory that this host belongs to."
 msgstr "此主机要属于的清单。"
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "登录"
 
@@ -3001,12 +3005,12 @@ msgstr "{0, plural, one {请输入有效的电话号码。} other {请输入有�
 msgid "Facts"
 msgstr "事实"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "或"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3368,7 +3372,7 @@ msgstr "小于或等于比较。"
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:156
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
@@ -3521,7 +3525,7 @@ msgstr "GitHub Team"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
 #: screens/Host/HostDetail/HostDetail.tsx:95
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
@@ -3589,6 +3593,10 @@ msgstr "周日"
 msgid "Job status graph tab"
 msgstr "作业状态图标签页"
 
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+msgid "Hop node of the receptor mesh that runs the pods of this group in its own cluster"
+msgstr ""
+
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:103
 #: screens/Application/shared/ApplicationForm.tsx:127
 msgid "Redirect URIs"
@@ -3613,7 +3621,7 @@ msgstr "8 月"
 msgid "View smart inventory host details"
 msgstr "查看智能清单主机详情"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "使用 Google 登录"
 
@@ -3651,7 +3659,7 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -4070,7 +4078,7 @@ msgstr "之前"
 msgid "View node details"
 msgstr "查看节点详情"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:106
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:130
 msgid "Custom pod spec"
 msgstr "自定义 pod 规格"
 
@@ -4107,7 +4115,7 @@ msgstr "删除凭证"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
 #: screens/Host/HostDetail/HostDetail.tsx:117
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
@@ -4254,7 +4262,7 @@ msgstr "未找到构建的库存。"
 msgid "Edit Question"
 msgstr "编辑问题"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:111
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:127
 msgid "Custom Kubernetes or OpenShift Pod specification."
 msgstr "自定义 Kubernetes 或 OpenShift Pod 的规格。"
 
@@ -4525,7 +4533,7 @@ msgstr "删除同行？"
 msgid "Search text input"
 msgstr "搜索文本输入"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "未找到该值。请输入或选择一个有效值。"
 
@@ -4744,7 +4752,7 @@ msgstr "切换主机失败。"
 msgid "denied"
 msgstr "拒绝"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "使用 GitHub Enterprise Organizations 登录"
 
@@ -5073,7 +5081,7 @@ msgstr "文本区"
 msgid "View User Interface settings"
 msgstr "查看用户界面设置"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "使用 GitHub Teams 登录"
 
@@ -5101,6 +5109,8 @@ msgstr "查看所有实例。"
 #~ msgid "Subscription Management"
 #~ msgstr "订阅管理"
 
+#: components/Lookup/MeshNodeLookup.tsx:131
+#: components/Lookup/MeshNodeLookup.tsx:138
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
 #: screens/HostMetrics/HostMetrics.tsx:81
@@ -6245,7 +6255,7 @@ msgstr "使用新变量从失败的节点重新启动"
 msgid "System Auditor"
 msgstr "系统审核员"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:154
 msgid "This container group is currently being by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在此容器组中。确定要删除它吗？"
 
@@ -6501,8 +6511,8 @@ msgstr "重新排序 {label}"
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:109
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:139
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:59
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:94
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:318
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:46
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.tsx:47
@@ -6590,7 +6600,7 @@ msgstr "查看作业设置"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
 #: screens/Host/HostDetail/HostDetail.tsx:113
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:122
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:357
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
@@ -7402,7 +7412,7 @@ msgstr "退出"
 msgid "sec"
 msgstr "秒"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "使用 {label} 登陆"
 
@@ -7588,7 +7598,7 @@ msgstr "当天或之后"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:63
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:80
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:71
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:95
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:45
 msgid "Max concurrent jobs"
 msgstr "最大并发作业数"
@@ -7633,7 +7643,7 @@ msgstr "编辑团队"
 msgid "User Interface"
 msgstr "用户界面"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "使用 GitHub Enterprise 登录"
 
@@ -7681,7 +7691,7 @@ msgstr "永不过期"
 msgid "View job {0}"
 msgstr "查看作业 {0}"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "使用 SAML {samlIDP} 登陆"
 
@@ -7794,7 +7804,7 @@ msgstr "开头不区分大小写的版本。"
 msgid "Unsaved changes modal"
 msgstr "未保存的修改 modal"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "使用 GitHub Enterprise Teams 登录"
 
@@ -7828,7 +7838,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 设置"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "使用 GitHub Organizations 登录"
 
@@ -7882,7 +7892,7 @@ msgstr "任务已启动"
 msgid "End date/time"
 msgstr "结束日期/时间"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:95
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "使用 Kubernetes 或 OpenShift 进行身份验证的凭证"
 
@@ -8146,8 +8156,8 @@ msgstr "返回到源"
 msgid "Are you sure you want to remove the node below:"
 msgstr "您确定要删除以下节点："
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:92
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:93
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:116
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:117
 msgid "Customize pod specification"
 msgstr "自定义 Pod 规格"
 
@@ -8246,6 +8256,13 @@ msgstr "运行于"
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "显示描述"
+
+#: components/Lookup/MeshNodeLookup.tsx:113
+#: components/Lookup/MeshNodeLookup.tsx:127
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:75
+msgid "Mesh node"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:104
 msgid "Amazon EC2"
@@ -8443,7 +8460,7 @@ msgstr "注：选择它们的顺序设定执行优先级。选择多个来启用
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "不允许在启动时需要密码的凭证。请删除以下凭证或将其替换为相同类型的凭证以继续: {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "使用 OIDC 登陆"
 
@@ -8619,7 +8636,7 @@ msgstr "编辑清单"
 msgid "Failed to user token."
 msgstr "用户令牌失败。"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "使用 SAML 登陆"
 
@@ -8713,7 +8730,7 @@ msgstr "回答变量名称"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "选择"
@@ -8773,7 +8790,7 @@ msgstr "工作流文档"
 msgid "January"
 msgstr "1 月"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "使用 Azure AD 登陆"
 
@@ -9096,7 +9113,7 @@ msgstr "使用自定义消息来更改作业启动、成功或失败时\n"
 "                发送的通知内容。使用\n"
 "                花括号来访问有关作业的信息："
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:104
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:120
 msgid "Pod spec override"
 msgstr "Pod 规格覆写"
 
@@ -9148,7 +9165,7 @@ msgstr "更新选项"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
 #: screens/Host/HostDetail/HostDetail.tsx:98
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
@@ -9191,7 +9208,7 @@ msgstr "访问令牌"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:148
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
 #: screens/Job/JobOutput/JobOutputSearch.tsx:114
@@ -9899,7 +9916,7 @@ msgstr "切换工具"
 msgid "Organization"
 msgstr "机构（Organization）"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "您的会话已过期。请登录以继续使用会话过期前所在的位置。"
 
@@ -9949,7 +9966,7 @@ msgstr "作业运行时会禁用搜索"
 msgid "Third"
 msgstr "第三"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "使用 Azure AD Tenant 登录"
 
@@ -9962,7 +9979,7 @@ msgstr "Azure AD 默认"
 msgid "Case-insensitive version of endswith."
 msgstr "结尾不区分大小写的版本。"
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "取消查找"
 
@@ -10358,7 +10375,7 @@ msgstr "当前页"
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "执行 playbook 时要使用的并行或同时进程的数量。空值或小于 1 的值将使用 Ansible 默认值，通常为 5。可以通过更改以下内容来覆盖默认的 forks 数量"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:103
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:127
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "用于传递自定义 Kubernetes 或 OpenShift Pod 规格的字段。"
 
@@ -10391,7 +10408,7 @@ msgstr "根据客户端设备的安全程度设置为 Public 或 Confidential。
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:70
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:87
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:80
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:104
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:54
 msgid "Max forks"
 msgstr "最大分叉数"
@@ -11106,7 +11123,7 @@ msgstr "删除一个或多个清单源失败。"
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "如果指定，则在查看工作流时此字段将显示在节点上，而不是资源名称"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "使用 GitHub 登陆"
 
@@ -11807,7 +11824,7 @@ msgstr "启动"
 msgid "Explanation"
 msgstr "解释"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:66
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:89
 msgid "Credential to authenticate with Kubernetes or OpenShift. Must be of type \"Kubernetes/OpenShift API Bearer Token\". If left blank, the underlying Pod's service account will be used."
 msgstr "与 Kubernetes 或 OpenShift 进行身份验证的凭证。必须为“Kubernetes/OpenShift API Bearer Token”类型。如果留空，底层 Pod 的服务帐户会被使用。"
 

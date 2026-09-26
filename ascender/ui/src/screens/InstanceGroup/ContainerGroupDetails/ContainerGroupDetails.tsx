@@ -73,6 +73,22 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
           Zero means no limit will be enforced.`}
           content={instanceGroup.max_forks}
         />
+        {instanceGroup.summary_fields.mesh_node && (
+          <Detail
+            label={t`Mesh node`}
+            helpText={t`Hop node of the receptor mesh that runs the pods of this group in its own cluster`}
+            value={
+              <Link
+                to={`/instances/${instanceGroup.summary_fields.mesh_node.id}/details`}
+              >
+                <Label variant="outline" color="blue">
+                  {instanceGroup.summary_fields.mesh_node.hostname}
+                </Label>
+              </Link>
+            }
+            dataCy="container-group-mesh-node"
+          />
+        )}
         {instanceGroup.summary_fields.credential && (
           <Detail
             label={t`Credential`}

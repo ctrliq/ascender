@@ -146,7 +146,7 @@ msgstr "Refusé - {0}. Consultez le Flux d’activité pour plus d’information
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:72
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:89
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:85
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:109
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "Nombre maximum de forks autorisés pour l'ensemble des jobs exécutés simultanément sur ce groupe.\n"
@@ -418,7 +418,7 @@ msgid "Timed out"
 msgstr "Expiré"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "Sélectionnez {0}"
 
@@ -494,7 +494,7 @@ msgstr "Il y a eu une erreur dans l'analyse du fichier. Veuillez vérifier le fo
 msgid "This field must not exceed {max} characters"
 msgstr "Ce champ ne doit pas dépasser {max} caractères"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:134
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:150
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:138
 msgid "Delete instance group"
 msgstr "Supprimer un groupe d'instances"
@@ -587,7 +587,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: components/NotificationList/NotificationList.tsx:265
 #: components/NotificationList/NotificationListItem.tsx:64
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
@@ -874,7 +874,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "Recherche modale"
 
@@ -1141,7 +1141,7 @@ msgstr "Fournissez un modèle d'hôte pour restreindre davantage la liste des h�
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:65
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:82
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:100
 msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "Nombre maximum de jobs à exécuter simultanément sur ce groupe.\n"
@@ -1585,6 +1585,10 @@ msgstr "Jetons"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "Sélectionnez les inventaires sources pour cet inventaire fédéré. Lorsqu'un job est lancé, les hôtes seront acheminés automatiquement vers le groupe d'instances de chaque inventaire source."
 
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
+msgstr ""
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:367
 msgid "API Service/Integration Key"
 msgstr "Service API/Clé d’intégration"
@@ -1744,7 +1748,7 @@ msgstr "Créer un nouvel inventaire fédéré"
 #: screens/InstanceGroup/Instances/InstanceList.tsx:331
 #: screens/InstanceGroup/Instances/InstanceList.tsx:365
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:138
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:53
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:68
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:19
 #: screens/Instances/InstanceList/InstanceList.tsx:170
 #: screens/Instances/InstanceList/InstanceList.tsx:187
@@ -2024,7 +2028,7 @@ msgstr "Clé"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2198,7 +2202,7 @@ msgstr "Le champ correspond à l'expression régulière donnée."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2433,7 +2437,7 @@ msgid "Management job launch error"
 msgstr "Erreur de lancement d'un job de gestion"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "Rechercher"
 
@@ -2504,7 +2508,7 @@ msgstr "{0} (supprimé)"
 msgid "The inventory that this host belongs to."
 msgstr "Inventaire auquel cet hôte appartiendra."
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "Connexion"
 
@@ -3001,12 +3005,12 @@ msgstr "{0, plural, one {Veuillez saisir un numéro de téléphone valide.} othe
 msgid "Facts"
 msgstr "Facts"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "ou"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3368,7 +3372,7 @@ msgstr "Moins ou égal à la comparaison."
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:156
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
@@ -3521,7 +3525,7 @@ msgstr "GitHub Team"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
 #: screens/Host/HostDetail/HostDetail.tsx:95
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
@@ -3589,6 +3593,10 @@ msgstr "Dim."
 msgid "Job status graph tab"
 msgstr "Onglet Graphique de l'état des Jobs"
 
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+msgid "Hop node of the receptor mesh that runs the pods of this group in its own cluster"
+msgstr ""
+
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:103
 #: screens/Application/shared/ApplicationForm.tsx:127
 msgid "Redirect URIs"
@@ -3613,7 +3621,7 @@ msgstr "Août"
 msgid "View smart inventory host details"
 msgstr "Voir les détails de l'hôte de l'inventaire smart"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "Connectez-vous avec Google"
 
@@ -3651,7 +3659,7 @@ msgstr "Cette action permettra de dissocier tous les rôles de cet utilisateur d
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -4070,7 +4078,7 @@ msgstr "Avant"
 msgid "View node details"
 msgstr "Voir les détails de nœuds"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:106
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:130
 msgid "Custom pod spec"
 msgstr "Spécifications des pods personnalisés"
 
@@ -4107,7 +4115,7 @@ msgstr "Supprimer les informations d’identification"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
 #: screens/Host/HostDetail/HostDetail.tsx:117
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
@@ -4254,7 +4262,7 @@ msgstr "Inventaire construit introuvable."
 msgid "Edit Question"
 msgstr "Modifier la question"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:111
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:127
 msgid "Custom Kubernetes or OpenShift Pod specification."
 msgstr "Spécification pod Kubernetes ou OpenShift personnalisée."
 
@@ -4525,7 +4533,7 @@ msgstr "Supprimer des pairs ?"
 msgid "Search text input"
 msgstr "Saisie de texte de recherche"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "Cette valeur n’a pas été trouvée. Veuillez entrer ou sélectionner une valeur valide."
 
@@ -4744,7 +4752,7 @@ msgstr "Impossible de changer d'hôte."
 msgid "denied"
 msgstr "refusé"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Connectez-vous avec GitHub Enterprise Organizations"
 
@@ -5073,7 +5081,7 @@ msgstr "Zone de texte"
 msgid "View User Interface settings"
 msgstr "Voir les paramètres de l'interface utilisateur"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "Connectez-vous avec GitHub Teams"
 
@@ -5101,6 +5109,8 @@ msgstr "Afficher toutes les instances."
 #~ msgid "Subscription Management"
 #~ msgstr "Gestion des abonnements"
 
+#: components/Lookup/MeshNodeLookup.tsx:131
+#: components/Lookup/MeshNodeLookup.tsx:138
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
 #: screens/HostMetrics/HostMetrics.tsx:81
@@ -6245,7 +6255,7 @@ msgstr "Relancer à partir du nœud défaillant avec de nouvelles variables"
 msgid "System Auditor"
 msgstr "Auditeur système"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:154
 msgid "This container group is currently being by other resources. Are you sure you want to delete it?"
 msgstr "Ce groupe de conteneurs est actuellement utilisé par d'autres ressources. Êtes-vous sûr de vouloir le supprimer ?"
 
@@ -6501,8 +6511,8 @@ msgstr "Réorganiser {label}"
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:109
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:139
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:59
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:94
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:318
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:46
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.tsx:47
@@ -6590,7 +6600,7 @@ msgstr "Voir les paramètres des Jobs"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
 #: screens/Host/HostDetail/HostDetail.tsx:113
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:122
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:357
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
@@ -7402,7 +7412,7 @@ msgstr "Déconnexion"
 msgid "sec"
 msgstr "sec"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "Connectez-vous avec {label}"
 
@@ -7588,7 +7598,7 @@ msgstr "Le ou après"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:63
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:80
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:71
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:95
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:45
 msgid "Max concurrent jobs"
 msgstr "Jobs Simultanées"
@@ -7633,7 +7643,7 @@ msgstr "Modifier l’équipe"
 msgid "User Interface"
 msgstr "Interface utilisateur"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "Connectez-vous à GitHub Enterprise"
 
@@ -7681,7 +7691,7 @@ msgstr "N’expire jamais"
 msgid "View job {0}"
 msgstr "Voir Job {0}"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Connectez-vous avec SAML {samlIDP}"
 
@@ -7794,7 +7804,7 @@ msgstr "Version non sensible à la casse de startswith."
 msgid "Unsaved changes modal"
 msgstr "Annuler les modifications non enregistrées"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Connectez-vous avec GitHub Enterprise Teams"
 
@@ -7828,7 +7838,7 @@ msgstr "URL Grafana"
 msgid "GitHub settings"
 msgstr "Paramètres de GitHub"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "Connectez-vous avec GitHub Organizations"
 
@@ -7882,7 +7892,7 @@ msgstr "Tâche démarrée"
 msgid "End date/time"
 msgstr "Date/Heure de fin"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:95
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Identifiant pour l'authentification avec Kubernetes ou OpenShift"
 
@@ -8146,8 +8156,8 @@ msgstr "Retour aux sources"
 msgid "Are you sure you want to remove the node below:"
 msgstr "Êtes-vous sûr de vouloir supprimer le nœud ci-dessous :"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:92
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:93
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:116
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:117
 msgid "Customize pod specification"
 msgstr "Personnaliser les spécifications du pod"
 
@@ -8246,6 +8256,13 @@ msgstr "Continuer"
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "Afficher la description"
+
+#: components/Lookup/MeshNodeLookup.tsx:113
+#: components/Lookup/MeshNodeLookup.tsx:127
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:75
+msgid "Mesh node"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:104
 msgid "Amazon EC2"
@@ -8443,7 +8460,7 @@ msgstr "Remarque : L'ordre dans lequel ces éléments sont sélectionnés défin
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "Les informations d’identification qui nécessitent des mots de passe au lancement ne sont pas autorisées. Veuillez supprimer ou remplacer les informations d’identification suivantes par une du même type afin de continuer : {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "Connectez-vous avec OIDC"
 
@@ -8619,7 +8636,7 @@ msgstr "Modifier l'inventaire"
 msgid "Failed to user token."
 msgstr "Échec du jeton d'utilisateur."
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "Connectez-vous avec SAML"
 
@@ -8713,7 +8730,7 @@ msgstr "Nom de variable de réponse"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "Sélectionner"
@@ -8773,7 +8790,7 @@ msgstr "Documentation de flux de travail"
 msgid "January"
 msgstr "Janvier"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "Connectez-vous avec Azure AD"
 
@@ -9096,7 +9113,7 @@ msgstr "Utilisez des messages personnalisés pour modifier le contenu des\n"
 "                notifications envoyées lorsqu'un job démarre, réussit ou échoue. Utilisez\n"
 "                des accolades pour accéder aux informations sur le job :"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:104
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:120
 msgid "Pod spec override"
 msgstr "Remplacement des spécifications du pod"
 
@@ -9148,7 +9165,7 @@ msgstr "Mettre à jour les options"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
 #: screens/Host/HostDetail/HostDetail.tsx:98
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
@@ -9191,7 +9208,7 @@ msgstr "Jeton d'accès"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:148
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
 #: screens/Job/JobOutput/JobOutputSearch.tsx:114
@@ -9899,7 +9916,7 @@ msgstr "Basculer les outils"
 msgid "Organization"
 msgstr "Organisation"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Votre session a expiré. Veuillez vous connecter pour continuer là où vous vous êtes arrêté."
 
@@ -9949,7 +9966,7 @@ msgstr "La recherche est désactivée pendant que le job est en cours"
 msgid "Third"
 msgstr "Troisième"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "Connectez-vous avec Azure AD Tenant"
 
@@ -9962,7 +9979,7 @@ msgstr "Azure AD (Par défaut)"
 msgid "Case-insensitive version of endswith."
 msgstr "Version non sensible à la casse de endswith."
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "Annuler la recherche"
 
@@ -10358,7 +10375,7 @@ msgstr "Page actuelle"
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "Le nombre de processus parallèles ou simultanés à utiliser lors de l'exécution du playbook. Une valeur vide, ou une valeur inférieure à 1, utilisera la valeur par défaut d'Ansible, qui est généralement 5. Le nombre de forks par défaut peut être remplacé en modifiant"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:103
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:127
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "Champ permettant de passer une spécification de pod Kubernetes ou OpenShift personnalisée."
 
@@ -10391,7 +10408,7 @@ msgstr "Définissez sur Public ou Confidentiel selon le niveau de sécurité de 
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:70
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:87
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:80
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:104
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:54
 msgid "Max forks"
 msgstr "Fourches max"
@@ -11106,7 +11123,7 @@ msgstr "N'a pas réussi à supprimer une ou plusieurs sources d'inventaire."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "S'il est spécifié, ce champ sera affiché sur le nœud au lieu du nom de la ressource lors de la visualisation du flux de travail"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "Connectez-vous à GitHub"
 
@@ -11807,7 +11824,7 @@ msgstr "Lancer"
 msgid "Explanation"
 msgstr "Explication"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:66
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:89
 msgid "Credential to authenticate with Kubernetes or OpenShift. Must be of type \"Kubernetes/OpenShift API Bearer Token\". If left blank, the underlying Pod's service account will be used."
 msgstr "Jeton pour s'authentifier auprès de Kubernetes ou OpenShift. Doit être de type \"Kubernetes/OpenShift API Bearer Token\". S'il est laissé vide, le compte de service du Pod sous-jacent sera utilisé."
 

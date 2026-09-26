@@ -146,7 +146,7 @@ msgstr "거부됨 - {0}. 자세한 내용은 활동 스트림을 참조하십시
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:72
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:89
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:85
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:109
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "이 그룹에서 동시에 실행되는 모든 작업에서 허용되는 최대 포크 수입니다.\n"
@@ -418,7 +418,7 @@ msgid "Timed out"
 msgstr "시간 초과"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "{0} 선택"
 
@@ -494,7 +494,7 @@ msgstr "파일을 구문 분석하는 동안 오류가 발생했습니다. 파�
 msgid "This field must not exceed {max} characters"
 msgstr "이 필드는 {max}자를 초과할 수 없습니다"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:134
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:150
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:138
 msgid "Delete instance group"
 msgstr "인스턴스 그룹 삭제"
@@ -587,7 +587,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: components/NotificationList/NotificationList.tsx:265
 #: components/NotificationList/NotificationListItem.tsx:64
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
@@ -874,7 +874,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "검색 모달"
 
@@ -1141,7 +1141,7 @@ msgstr "워크플로우에 의해 관리되거나 영향을 받는 호스트 목
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:65
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:82
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:100
 msgid "Maximum number of jobs to run concurrently on this group.\n"
 "          Zero means no limit will be enforced."
 msgstr "이 그룹에서 동시에 실행할 최대 작업 수입니다.\n"
@@ -1585,6 +1585,10 @@ msgstr "토큰"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "이 페더레이션 인벤토리의 소스 인벤토리를 선택합니다. 작업이 시작되면 호스트가 각 소스 인벤토리의 인스턴스 그룹으로 자동으로 라우팅됩니다."
 
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
+msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
+msgstr ""
+
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:367
 msgid "API Service/Integration Key"
 msgstr "API 서비스/통합 키"
@@ -1744,7 +1748,7 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: screens/InstanceGroup/Instances/InstanceList.tsx:331
 #: screens/InstanceGroup/Instances/InstanceList.tsx:365
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:138
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:53
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:68
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:19
 #: screens/Instances/InstanceList/InstanceList.tsx:170
 #: screens/Instances/InstanceList/InstanceList.tsx:187
@@ -2024,7 +2028,7 @@ msgstr "키"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2198,7 +2202,7 @@ msgstr "필드는 지정된 정규식과 일치합니다."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2433,7 +2437,7 @@ msgid "Management job launch error"
 msgstr "관리 작업 시작 오류"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "검색"
 
@@ -2504,7 +2508,7 @@ msgstr "{0} (삭제됨)"
 msgid "The inventory that this host belongs to."
 msgstr "이 호스트가 속할 인벤토리입니다."
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "로그인"
 
@@ -3001,12 +3005,12 @@ msgstr "{0, plural, one {유효한 전화번호를 입력하십시오.} other {�
 msgid "Facts"
 msgstr "팩트"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "또는"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3368,7 +3372,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:156
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
@@ -3521,7 +3525,7 @@ msgstr "GitHub 팀"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
 #: screens/Host/HostDetail/HostDetail.tsx:95
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
@@ -3589,6 +3593,10 @@ msgstr "일요일"
 msgid "Job status graph tab"
 msgstr "작업 상태 그래프 탭"
 
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+msgid "Hop node of the receptor mesh that runs the pods of this group in its own cluster"
+msgstr ""
+
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:103
 #: screens/Application/shared/ApplicationForm.tsx:127
 msgid "Redirect URIs"
@@ -3613,7 +3621,7 @@ msgstr "8월"
 msgid "View smart inventory host details"
 msgstr "스마트 인벤토리 호스트 세부 정보 보기"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "Google로 로그인"
 
@@ -3651,7 +3659,7 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -4070,7 +4078,7 @@ msgstr "이전"
 msgid "View node details"
 msgstr "노드 세부 정보 보기"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:106
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:130
 msgid "Custom pod spec"
 msgstr "사용자 정의 Pod 사양"
 
@@ -4107,7 +4115,7 @@ msgstr "인증 정보 삭제"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
 #: screens/Host/HostDetail/HostDetail.tsx:117
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
@@ -4254,7 +4262,7 @@ msgstr "건설된 인벤토리를 찾을 수 없습니다."
 msgid "Edit Question"
 msgstr "질문 편집"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:111
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:127
 msgid "Custom Kubernetes or OpenShift Pod specification."
 msgstr "사용자 정의 Kubernetes 또는 OpenShift Pod 사양"
 
@@ -4525,7 +4533,7 @@ msgstr "동료를 제거하시겠습니까?"
 msgid "Search text input"
 msgstr "검색 텍스트 입력"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "이 값을 찾을 수 없습니다. 유효한 값을 입력하거나 선택하십시오."
 
@@ -4744,7 +4752,7 @@ msgstr "호스트를 전환하지 못했습니다."
 msgid "denied"
 msgstr "거부됨"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
@@ -5073,7 +5081,7 @@ msgstr "텍스트 영역"
 msgid "View User Interface settings"
 msgstr "사용자 인터페이스 설정 보기"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub 팀으로 로그인"
 
@@ -5101,6 +5109,8 @@ msgstr "모든 인스턴스 보기."
 #~ msgid "Subscription Management"
 #~ msgstr "서브스크립션 관리"
 
+#: components/Lookup/MeshNodeLookup.tsx:131
+#: components/Lookup/MeshNodeLookup.tsx:138
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
 #: screens/HostMetrics/HostMetrics.tsx:81
@@ -6245,7 +6255,7 @@ msgstr "실패한 노드에서 새 변수로 다시 시작"
 msgid "System Auditor"
 msgstr "시스템 감사"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:154
 msgid "This container group is currently being by other resources. Are you sure you want to delete it?"
 msgstr "현재 이 컨테이너 그룹에 다른 리소스가 있습니다. 삭제하시겠습니까?"
 
@@ -6501,8 +6511,8 @@ msgstr "{label} 순서 변경"
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:109
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:139
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:59
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:94
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:318
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:46
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.tsx:47
@@ -6590,7 +6600,7 @@ msgstr "작업 설정 보기"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
 #: screens/Host/HostDetail/HostDetail.tsx:113
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:122
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:357
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
@@ -7402,7 +7412,7 @@ msgstr "로그 아웃"
 msgid "sec"
 msgstr "초"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "{label}(으)로 로그인"
 
@@ -7588,7 +7598,7 @@ msgstr "해당일 또는 이후"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:63
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:80
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:71
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:95
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:45
 msgid "Max concurrent jobs"
 msgstr "최대 동시 작업 수"
@@ -7633,7 +7643,7 @@ msgstr "팀 편집"
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise로 로그인"
 
@@ -7681,7 +7691,7 @@ msgstr "만료되지 않음"
 msgid "View job {0}"
 msgstr "작업 {0} 보기 "
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP}으로 로그인"
 
@@ -7794,7 +7804,7 @@ msgstr "처음에 대소문자를 구분하지 않는 버전입니다."
 msgid "Unsaved changes modal"
 msgstr "저장되지 않은 변경 사항 모달"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
@@ -7828,7 +7838,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 설정"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 조직으로 로그인"
 
@@ -7882,7 +7892,7 @@ msgstr "호스트 시작됨"
 msgid "End date/time"
 msgstr "종료일/시간"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:95
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Kubernetes 또는 OpenShift로 인증하는 인증 정보"
 
@@ -8146,8 +8156,8 @@ msgstr "출처로 돌아가기"
 msgid "Are you sure you want to remove the node below:"
 msgstr "아래 노드를 삭제하시겠습니까."
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:92
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:93
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:116
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:117
 msgid "Customize pod specification"
 msgstr "Pod 사양 사용자 정의"
 
@@ -8246,6 +8256,13 @@ msgstr "실행"
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "설명 표시"
+
+#: components/Lookup/MeshNodeLookup.tsx:113
+#: components/Lookup/MeshNodeLookup.tsx:127
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:75
+msgid "Mesh node"
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:104
 msgid "Amazon EC2"
@@ -8443,7 +8460,7 @@ msgstr "참고: 선택한 순서에 따라 실행 우선 순위가 설정됩니�
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "실행 시 암호가 필요한 인증 정보는 허용되지 않습니다. 계속하려면 다음 인증 정보를 제거하거나 동일한 유형의 인증 정보로 교체하십시오: {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "OIDC로 로그인"
 
@@ -8619,7 +8636,7 @@ msgstr "인벤토리 편집"
 msgid "Failed to user token."
 msgstr "사용자 토큰에 실패했습니다."
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "SAML으로 로그인"
 
@@ -8713,7 +8730,7 @@ msgstr "응답 변수 이름"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "선택"
@@ -8773,7 +8790,7 @@ msgstr "워크플로우 문서"
 msgid "January"
 msgstr "1월"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "Azure AD로 로그인"
 
@@ -9096,7 +9113,7 @@ msgstr "작업이 시작, 성공 또는 실패할 때 전송되는\n"
 "                알림의 내용을 변경하려면 사용자 정의 메시지를 사용합니다. 작업에 대한\n"
 "                정보에 액세스하려면 중괄호를 사용합니다:"
 
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:104
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:120
 msgid "Pod spec override"
 msgstr "Pod 사양 덮어쓰기"
 
@@ -9148,7 +9165,7 @@ msgstr "업데이트 옵션"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
 #: screens/Host/HostDetail/HostDetail.tsx:98
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
@@ -9191,7 +9208,7 @@ msgstr "액세스 토큰"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
-#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:148
+#: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
 #: screens/Job/JobOutput/JobOutputSearch.tsx:114
@@ -9899,7 +9916,7 @@ msgstr "툴 전환"
 msgid "Organization"
 msgstr "조직"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "세션이 만료되었습니다. 세션이 만료되기 전의 위치에서 계속하려면 로그인하십시오."
 
@@ -9949,7 +9966,7 @@ msgstr "작업이 실행되는 동안 검색이 비활성화됩니다."
 msgid "Third"
 msgstr "세 번째"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "Azure AD Tenant로 로그인"
 
@@ -9962,7 +9979,7 @@ msgstr "Azure AD 기본값"
 msgid "Case-insensitive version of endswith."
 msgstr "마지막에 대소문자를 구분하지 않는 버전입니다."
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "검색 취소"
 
@@ -10358,7 +10375,7 @@ msgstr "현재 페이지"
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "playbook을 실행하는 동안 사용할 병렬 또는 동시 프로세스 수입니다. 빈 값 또는 1보다 작은 값은 일반적으로 5인 Ansible 기본값을 사용합니다. 기본 포크 수는 다음을 변경하여 재정의할 수 있습니다"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:103
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:127
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "사용자 정의 Kubernetes 또는 OpenShift Pod 사양을 전달하는 필드입니다."
 
@@ -10391,7 +10408,7 @@ msgstr "클라이언트 장치의 보안 수준에 따라 Public 또는 Confiden
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:70
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:87
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:80
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:104
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:54
 msgid "Max forks"
 msgstr "최대 포크"
@@ -11106,7 +11123,7 @@ msgstr "하나 이상의 인벤토리 소스를 삭제하지 못했습니다."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "지정된 경우 이 필드는 워크플로우를 볼 때 리소스 이름 대신 노드에 표시됩니다."
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "GitHub로 로그인"
 
@@ -11807,7 +11824,7 @@ msgstr "시작"
 msgid "Explanation"
 msgstr "설명"
 
-#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:66
+#: screens/InstanceGroup/shared/ContainerGroupForm.tsx:89
 msgid "Credential to authenticate with Kubernetes or OpenShift. Must be of type \"Kubernetes/OpenShift API Bearer Token\". If left blank, the underlying Pod's service account will be used."
 msgstr "Kubernetes 또는 OpenShift로 인증하는 인증 정보입니다. \"Kubernetes/OpenShift API Bearer Token\" 유형이어야 합니다. 정보를 입력하지 않는 경우 기본 Pod의 서비스 계정이 사용됩니다."
 

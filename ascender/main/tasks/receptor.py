@@ -332,9 +332,12 @@ class AWXReceptorJob:
 
         # Prepare the submit_work kwargs before creating threads, because references to settings are not thread-safe
         work_submit_kw = dict(worktype=self.work_type, params=self.receptor_params, signwork=self.sign_work)
-        if self.work_type == 'ansible-runner':
-            work_submit_kw['node'] = self.task.instance.execution_node
+        if self.work_type == 'ansible-runner' or self.mesh_node:
+            work_submit_kw['node'] = self.mesh_node or self.task.instance.execution_node
             use_stream_tls = get_conn_type(work_submit_kw['node'], receptor_ctl).name == "STREAMTLS"
+            if self.mesh_node and not use_stream_tls:
+                # Receptor refuses to send the pod spec, a secret_ param, over a connection without TLS
+                raise RuntimeError(f'Mesh node {self.mesh_node} must serve its control service over TLS to run the pods of a container group.')
             work_submit_kw['tlsclient'] = get_tls_client(self.config_data, use_stream_tls)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
@@ -495,14 +498,24 @@ class AWXReceptorJob:
 
     @property
     def sign_work(self):
-        if self.work_type in ('ansible-runner', 'local'):
+        if self.work_type in ('ansible-runner', 'local') or self.mesh_node:
             return work_signing_enabled(self.config_data)
         return False
 
     @property
+    def mesh_node(self):
+        """Hostname of the hop node that runs the pod of a container group in its own cluster, if any."""
+        if self.task and self.task.instance.is_container_group_task:
+            mesh_node = self.task.instance.instance_group.mesh_node
+            if mesh_node:
+                return mesh_node.hostname
+        return None
+
+    @property
     def work_type(self):
         if self.task.instance.is_container_group_task:
-            if self.credential:
+            # A mesh node authenticates with the service account it runs under, never with a credential of ours
+            if self.credential and not self.mesh_node:
                 return 'kubernetes-runtime-auth'
             return 'kubernetes-incluster-auth'
         if self.task.instance.execution_node == settings.CLUSTER_HOST_ID or self.task.instance.execution_node == self.task.instance.controller_node:
@@ -523,6 +536,13 @@ class AWXReceptorJob:
         # This allows user to only provide elements they want to override, and for us to still provide any
         # defaults they don't want to change
         pod_spec = deepmerge(default_pod_spec, pod_spec_override)
+
+        # The default namespace belongs to this cluster and means nothing on the one behind a mesh
+        # node, so drop it and let the namespace configured on that node's receptor apply. An override
+        # still carrying the default is treated the same, since the UI seeds its editor with it.
+        override_namespace = (pod_spec_override.get('metadata') or {}).get('namespace')
+        if self.mesh_node and override_namespace in (None, '', settings.ASCENDER_CONTAINER_GROUP_DEFAULT_NAMESPACE):
+            pod_spec['metadata'].pop('namespace', None)
 
         pod_spec['spec']['containers'][0]['image'] = ee.image
         pod_spec['spec']['containers'][0]['args'] = ['ansible-runner', 'worker', '--private-data-dir=/runner']
@@ -581,8 +601,10 @@ class AWXReceptorJob:
             else:
                 pod_spec['spec']['containers'][0]['volumeMounts'] = spec_volume_mounts
 
-        if self.task and self.task.instance.is_container_group_task:
-            # If EE credential is passed, create an imagePullSecret
+        if self.task and self.task.instance.is_container_group_task and not self.mesh_node:
+            # If EE credential is passed, create an imagePullSecret.
+            # We cannot reach the API of the cluster behind a mesh node, so there the pull secret has to
+            # exist already and be named in the pod spec override.
             if self.task.instance.execution_environment and self.task.instance.execution_environment.credential:
                 # Create pull secret in k8s cluster based on ee cred
                 from ascender.main.scheduler.kubernetes import PodManager  # prevent circular import

@@ -51,6 +51,11 @@ class TaskManagerInstanceGroup:
         self.instance_hostnames = tuple([instance.hostname for instance in _instances if instance.hostname in task_manager_instances])
         self.max_concurrent_jobs = obj.max_concurrent_jobs
         self.max_forks = obj.max_forks
+        # A container group can hand its pods to a hop node of the mesh instead of this cluster's API.
+        # The node has to be up for the group to take work, the same way an instance group needs instances.
+        mesh_node = obj.mesh_node if obj.is_container_group and obj.mesh_node_id else None
+        self.mesh_node_hostname = mesh_node.hostname if mesh_node else None
+        self.mesh_node_ready = bool(mesh_node and mesh_node.enabled and mesh_node.node_state == Instance.States.READY)
         self.control_task_impact = kwargs.get('control_task_impact', settings.ASCENDER_CONTROL_NODE_TASK_IMPACT)
 
     def consume_capacity(self, task):
@@ -101,6 +106,10 @@ class TaskManagerInstanceGroup:
         task_impact = self.control_task_impact if control_impact else task.task_impact
         job_impact = 0 if control_impact else 1
         task_string = f"task {task.log_format} with impact of {task_impact}" if task else f"control task with impact of {task_impact}"
+
+        if self.mesh_node_hostname and not self.mesh_node_ready:
+            logger.debug(f"{task_string} cannot run on instance group {self.name} because mesh node {self.mesh_node_hostname} is not ready")
+            return False
 
         # We only want to loop over instances if self.max_concurrent_jobs is set
         if self.max_concurrent_jobs == 0:
@@ -178,8 +187,19 @@ class TaskManagerInstanceGroups:
             self.pk_ig_map = {ig.pk: ig for ig in instance_groups}
         else:
             if instance_groups_queryset is None:
-                instance_groups_queryset = InstanceGroup.objects.prefetch_related('instances').only(
-                    'name', 'instances', 'max_concurrent_jobs', 'max_forks', 'is_container_group'
+                instance_groups_queryset = (
+                    InstanceGroup.objects.prefetch_related('instances')
+                    .select_related('mesh_node')
+                    .only(
+                        'name',
+                        'instances',
+                        'max_concurrent_jobs',
+                        'max_forks',
+                        'is_container_group',
+                        'mesh_node__hostname',
+                        'mesh_node__node_state',
+                        'mesh_node__enabled',
+                    )
                 )
             for instance_group in instance_groups_queryset:
                 if instance_group.name == self.controlplane_ig_name:

@@ -3,7 +3,7 @@ import yaml
 from unittest import mock
 
 from ascender.api.versioning import reverse
-from ascender.main.models import Instance, ReceptorAddress
+from ascender.main.models import Instance, InstanceGroup, ReceptorAddress
 from ascender.api.views.instance_install_bundle import generate_group_vars_all_yml
 
 
@@ -376,6 +376,17 @@ class TestPeers:
             expect=400,
         )
         assert "Can only change instances to the 'deprovisioning' state." in str(resp.data)
+
+    def test_cannot_deprovision_a_node_in_use_by_a_container_group(self, admin_user, patch):
+        hop = Instance.objects.create(hostname='hop', node_type='hop', node_state='installed')
+        group = InstanceGroup.objects.create(name='remote', is_container_group=True, mesh_node=hop)
+        url = reverse('api:instance_detail', kwargs={'pk': hop.pk})
+        resp = patch(url=url, data={"node_state": "deprovisioning"}, user=admin_user, expect=400)
+        assert 'Cannot deprovision a node that runs the pods of these container groups: remote.' in str(resp.data)
+
+        group.mesh_node = None
+        group.save()
+        patch(url=url, data={"node_state": "deprovisioning"}, user=admin_user, expect=200)
 
     def test_changing_managed_node_state(self, admin_user, patch):
         """
