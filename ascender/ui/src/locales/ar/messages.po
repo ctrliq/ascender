@@ -524,7 +524,7 @@ msgstr "حدث"
 msgid "Repeat Frequency"
 msgstr "تكرار التردد"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "المتغيرات المستخدمة لتكوين ملحق المخزون المُنشأ. للحصول على وصف مفصل لكيفية تكوين هذا الملحق، انظر"
 
@@ -724,8 +724,8 @@ msgstr "مقاييس المضيف"
 msgid "Create new credential Type"
 msgstr "إنشاء نوع بيانات اعتماد جديد"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "إذا كنت تريد أن يتم تحديث مصدر المخزون عند الإطلاق، انقر على تحديث عند الإطلاق، وانتقل أيضًا إلى "
 
@@ -743,7 +743,7 @@ msgid "Start Time"
 msgstr "وقت البدء"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "يجب أن تكون المتغيرات بصيغة JSON أو YAML. استخدم زر الاختيار للتبديل بينهما."
 
@@ -985,7 +985,7 @@ msgstr "{interval, plural, one {# سنة} other {# سنوات}}"
 msgid "Inventory Source Sync"
 msgstr "مزامنة مصدر المخزون"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "ملحقات المخزون"
 
@@ -1055,7 +1055,7 @@ msgstr "1 (معلومات)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "تعيين المثيل مُفعّلاً أو مُعطّلاً. إذا كان مُعطّلاً، فلن يتم تعيين المهام لهذا المثيل."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "وانقر على تحديث المراجعة عند الإطلاق."
 
@@ -1554,8 +1554,8 @@ msgstr "فشل حذف مهمة واحدة أو أكثر."
 msgid "Run Command"
 msgstr "تشغيل الأمر"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "دليل تكوين الملحق."
 
@@ -2076,8 +2076,8 @@ msgstr "فشل العنصر"
 msgid "Team Roles"
 msgstr "أدوار الفريق"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "إعادة إطلاق سير العمل"
 
@@ -2392,7 +2392,7 @@ msgstr "يُنشئ إدخال المخزون المُنشأ هذا \n"
 "            الحد (نمط المضيف) لإرجاع المضيفين الموجودين فقط \n"
 "            في تقاطع هاتين المجموعتين."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr ""
 
@@ -2571,7 +2571,7 @@ msgstr "تمكين تتبع نظام السجل للحقائق بشكل فردي
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "لا يمكن تحديد قوالب المهام ذات بيانات الاعتماد التي تطالب بكلمات مرور عند إنشاء العقد أو تحريرها"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "إذا كان مُفعّلاً، فسيمنع المخزون إضافة أي مجموعات مثيلات مؤسسة إلى قائمة مجموعات المثيلات المفضلة لتشغيل قوالب المهام المرتبطة عليها. ملاحظة: إذا كان هذا الإعداد مُفعّلاً وقدمت قائمة فارغة، فسيتم تطبيق مجموعات المثيلات العامة."
 
@@ -4128,8 +4128,8 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4186,7 +4186,7 @@ msgstr "لم يتم تحديد مهلة"
 msgid "On Timeout"
 msgstr "عند انتهاء المهلة"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "منع الرجوع إلى مجموعة المثيلات: إذا كان مُفعّلاً، فسيمنع المخزون إضافة أي مجموعات مثيلات مؤسسة إلى قائمة مجموعات المثيلات المفضلة لتشغيل قوالب المهام المرتبطة عليها."
 
@@ -4752,7 +4752,7 @@ msgstr "قوالب الإشعارات"
 msgid "Start message body"
 msgstr "نص رسالة البدء"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "الفرع المراد استخدامه عند مزامنة المخزون. يُستخدم افتراضي المشروع إذا كان فارغًا. مسموح به فقط إذا تم تعيين حقل allow_override للمشروع على true."
 
@@ -5044,7 +5044,7 @@ msgstr "عند انتهاء المهلة"
 msgid "Create New Team"
 msgstr "إنشاء فريق جديد"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "في التوثيق و"
 
@@ -6182,7 +6182,7 @@ msgid "Resource deleted"
 msgstr "تم حذف المورد"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6336,7 +6336,7 @@ msgstr "تبديل المثيل"
 msgid "Back to Inventories"
 msgstr "العودة إلى المخزونات"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "بعد كل تحديث للمشروع تتغير فيه مراجعة SCM، قم بتحديث المخزون من المصدر المحدد قبل تنفيذ مهام المهمة. هذا مخصص للمحتوى الثابت، مثل تنسيق ملف .ini لمخزون Ansible."
 
@@ -7168,7 +7168,7 @@ msgstr "يجب أن يكون هذا الحقل رقمًا وأن تكون قيم
 msgid "All"
 msgstr "الكل"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "المخزون المُنشأ"
 
@@ -7912,7 +7912,7 @@ msgstr "{0, plural, one {يتم استخدام هذا المثيل حاليًا 
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8323,7 +8323,7 @@ msgstr "لا يوجد مضيفون متبقون"
 msgid "ID of the dashboard (optional)"
 msgstr "معرّف لوحة المعلومات (اختياري)"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "استرجاع الحالة المُفعّلة من dict متغيرات المضيف المحدد. يمكن تحديد المتغير المُفعّل باستخدام تدوين النقطة، مثل: 'foo.bar'"
 
@@ -8522,6 +8522,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "تتضمن الأمثلة:"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr ""
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8702,7 +8706,7 @@ msgstr "اسم IRC المستعار"
 #~ msgid "Expires on"
 #~ msgstr "ينتهي في"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "في كل مرة تعمل فيها مهمة باستخدام هذا المخزون، قم بتحديث المخزون من المصدر المحدد قبل تنفيذ مهام المهمة."
 
@@ -8980,7 +8984,7 @@ msgstr "فشل حذف مستخدم واحد أو أكثر."
 msgid "On Success"
 msgstr "عند النجاح"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "ملف المخزون المراد مزامنته بواسطة هذا المصدر. يمكنك التحديد من القائمة المنسدلة أو إدخال ملف داخل الإدخال."
 
@@ -9275,7 +9279,7 @@ msgstr "نص رسالة رفض سير العمل"
 msgid "Generic OIDC settings"
 msgstr "إعدادات OIDC العامة"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr ""
 
@@ -9737,7 +9741,7 @@ msgstr "عدد العمليات المتوازية أو المتزامنة ال�
 msgid "View all Workflow Approvals."
 msgstr "عرض جميع موافقات سير العمل."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "عند عدم التحديد، سيتم إجراء دمج، يجمع بين المتغيرات المحلية وتلك الموجودة في المصدر الخارجي."
 
@@ -9963,7 +9967,7 @@ msgstr "إلغاء البحث"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10071,7 +10075,7 @@ msgstr "التنقل"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "إذا كان مُفعّلاً، فستقترن عقد التحكم بهذا المثيل تلقائيًا. إذا كان مُعطّلاً، فسيتصل المثيل بالأقران المرتبطين فقط."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "وانقر على تحديث المراجعة عند الإطلاق"
 
@@ -10278,7 +10282,7 @@ msgstr "تحرير التفاصيل"
 msgid "Deleted"
 msgstr "محذوف"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "يتم تجاهل هذا الحقل ما لم يتم تعيين متغير مُفعّل. إذا كان المتغير المُفعّل يطابق هذه القيمة، فسيتم تمكين المضيف عند الاستيراد."
 
@@ -11074,7 +11078,7 @@ msgstr "مشروع غير معروف"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "الشروط المسبقة لتشغيل هذه العقدة عند وجود عدة عقد أصلية. راجع"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "المتغيرات المستخدمة لتكوين مصدر المخزون. للحصول على وصف مفصل لكيفية تكوين هذا الملحق، انظر"
 
@@ -11140,7 +11144,7 @@ msgstr "تحديد مفتاح بسيط"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "لقد قمت بالأتمتة على عدد من المضيفين أكثر مما يسمح به اشتراكك."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "تعبير نمطي حيث سيتم استيراد أسماء المضيفين المطابقة فقط. يتم تطبيق المرشح كخطوة معالجة لاحقة بعد تطبيق أي مرشحات ملحق مخزون."
 
@@ -11430,7 +11434,7 @@ msgstr "فشل التوفير"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "ما إذا كانت عقدة الموافقة تتم الموافقة عليها أو رفضها تلقائيًا عند انتهاء المهلة."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "الوقت بالثواني لاعتبار مزامنة المخزون حالية. أثناء تشغيل المهام والاستدعاءات، سيقوم نظام المهام بتقييم الطابع الزمني لأحدث مزامنة. إذا كان أقدم من مهلة ذاكرة التخزين المؤقت، فلا يُعتبر حاليًا، وسيتم إجراء مزامنة مخزون جديدة."
 
@@ -11544,7 +11548,7 @@ msgstr "ربط"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622

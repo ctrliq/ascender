@@ -891,7 +891,7 @@ This opens the Create Source window.
 
     When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process.
 
-  -  **Overwrite Variables**: If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source. When not checked, a merge will be performed, combining local variables with those found on the external source.
+  -  **Overwrite Variables**: If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source. Inventory variables this source added on an earlier sync (for example from a ``group_vars/all.yml`` file) are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them. When not checked, a merge will be performed, combining local variables with those found on the external source.
 
   -  **Update on Launch**: Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks. To avoid job overflows if jobs are spawned faster than the inventory can sync, selecting this allows you to configure a **Cache Timeout** to cache prior inventory syncs for a certain number of seconds.
 

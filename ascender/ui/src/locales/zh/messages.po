@@ -522,7 +522,7 @@ msgstr "事件"
 msgid "Repeat Frequency"
 msgstr "重复频率"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "用于配置构建的清单插件的变量。有关如何配置此插件的详细说明，请参阅"
 
@@ -722,8 +722,8 @@ msgstr "指标"
 msgid "Create new credential Type"
 msgstr "创建新凭证类型"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "如果您希望清单源在启动时更新，请点击「启动时更新」，并转到 "
 
@@ -741,7 +741,7 @@ msgid "Start Time"
 msgstr "开始时间"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "变量需要是 JSON 或 YAML 语法格式。使用单选按钮在两者之间切换。"
 
@@ -983,7 +983,7 @@ msgstr "{interval, plural, one {# 年} other {# 年}}"
 msgid "Inventory Source Sync"
 msgstr "清单源同步"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "清单插件."
 
@@ -1053,7 +1053,7 @@ msgstr "1（信息）"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "设置实例被启用或禁用。如果禁用，则不会将作业分配给此实例。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "然后单击启动时更新修订版本。"
 
@@ -1552,8 +1552,8 @@ msgstr "删除一个或多个作业失败。"
 msgid "Run Command"
 msgstr "运行命令"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "插件配置指南。"
 
@@ -2074,8 +2074,8 @@ msgstr "项故障"
 msgid "Team Roles"
 msgstr "团队角色"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "重新启动工作流"
 
@@ -2390,7 +2390,7 @@ msgstr "此构建的库存输入 \n"
 "            限制（主机模式）仅返回位于这两个组 \n"
 "            交集中的主机。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr ""
 
@@ -2569,7 +2569,7 @@ msgstr "单独启用日志系统跟踪事实"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "在创建或编辑节点时无法选择具有提示密码凭证的作业模板"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "如果启用，则该清单将阻止将任何机构实例组添加到运行相关作业模板的首选实例组列表中。注：如果启用了此设置，且提供了空列表，则会应用全局实例组。"
 
@@ -4125,8 +4125,8 @@ msgstr "删除凭证"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4183,7 +4183,7 @@ msgstr "未指定超时"
 msgid "On Timeout"
 msgstr "超时时"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "防止实例组 Fallback：如果启用，则该清单将阻止将任何机构实例组添加到运行相关作业模板的首选实例组列表中。"
 
@@ -4749,7 +4749,7 @@ msgstr "通知模板"
 msgid "Start message body"
 msgstr "开始消息正文"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "用于库存同步的分支。如果为空，则使用项目默认值。仅当项目allow_override字段设置为true时才允许。"
 
@@ -5041,7 +5041,7 @@ msgstr "超时时"
 msgid "Create New Team"
 msgstr "创建新团队"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "在文档和"
 
@@ -6179,7 +6179,7 @@ msgid "Resource deleted"
 msgstr "资源已删除"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML："
 
@@ -6333,7 +6333,7 @@ msgstr "切换实例"
 msgid "Back to Inventories"
 msgstr "返回到清单"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "在每个 SCM 修订版更改带来的工程项目更新后, 在执行作业任务之前, 请刷新所选源的资源清单。这适用于静态内容, 例如使用 .ini 文件格式的 Ansible 资源清单。"
 
@@ -7165,7 +7165,7 @@ msgstr "此字段必须是数字，且值大于 {min}"
 msgid "All"
 msgstr "所有"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "已建库存"
 
@@ -7909,7 +7909,7 @@ msgstr "{0, plural, one {此实例当前正被其他资源使用。确定要删�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8319,7 +8319,7 @@ msgstr "没有剩余主机"
 msgid "ID of the dashboard (optional)"
 msgstr "仪表盘 ID（可选）"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "从给定的主机变量字典中检索启用状态。启用的变量可以使用点符号指定，例如： 'foo.bar'"
 
@@ -8518,6 +8518,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "示例包括："
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr ""
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8698,7 +8702,7 @@ msgstr "IRC Nick"
 #~ msgid "Expires on"
 #~ msgstr "过期于"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "每次使用此清单运行作业时，请在执行作业任务之前刷新选定来源的清单。"
 
@@ -8976,7 +8980,7 @@ msgstr "删除一个或多个用户失败。"
 msgid "On Success"
 msgstr "成功时"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "要由此源同步的库存文件。您可以从下拉列表中进行选择，也可以在输入内容中输入文件。"
 
@@ -9271,7 +9275,7 @@ msgstr "工作流拒绝的消息正文"
 msgid "Generic OIDC settings"
 msgstr "通用 OIDC 设置"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr ""
 
@@ -9733,7 +9737,7 @@ msgstr "执行 playbook 时使用的并行或同步进程数量。如果不输�
 msgid "View all Workflow Approvals."
 msgstr "查看所有工作流批准。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "未选中时，将执行合并，将局部变量与外部源上的局部变量相结合。"
 
@@ -9959,7 +9963,7 @@ msgstr "取消查找"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10067,7 +10071,7 @@ msgstr "导航"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "如果启用，控制节点将自动对等到此实例。如果禁用，实例将仅连接到关联的对等点。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "点 Update Revision on Launch"
 
@@ -10274,7 +10278,7 @@ msgstr "编辑详情"
 msgid "Deleted"
 msgstr "已删除"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "除非设置了启用的变量，否则此字段会被忽略。如果启用的变量与这个值匹配，则会在导入时启用主机。"
 
@@ -11070,7 +11074,7 @@ msgstr "未知的工程ID"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "在有多个父对象时运行此节点的先决条件。请参阅"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "用于配置库存源的变量。有关如何配置此插件的详细说明，请参阅"
 
@@ -11136,7 +11140,7 @@ msgstr "简单键选择"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "您已自动针对的主机数量大于订阅所允许的数量。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "仅导入主机名与这个正则表达式匹配的主机。该过滤器在应用任何清单插件过滤器后作为后步骤使用。"
 
@@ -11426,7 +11430,7 @@ msgstr "置备失败"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "超时到期时是否自动批准或拒绝批准节点。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "将库存同步视为最新的时间（以秒为单位）。在作业运行和回调期间，任务系统将评估最新同步的时间戳。如果它早于缓存超时，则不视为当前，并将执行新的库存同步。"
 
@@ -11540,7 +11544,7 @@ msgstr "关联"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622

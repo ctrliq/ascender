@@ -522,7 +522,7 @@ msgstr "Event"
 msgid "Repeat Frequency"
 msgstr "Repeat Frequency"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 
@@ -722,8 +722,8 @@ msgstr "Host Metrics"
 msgid "Create new credential Type"
 msgstr "Create new credential Type"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 
@@ -741,7 +741,7 @@ msgid "Start Time"
 msgstr "Start Time"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 
@@ -983,7 +983,7 @@ msgstr "{interval, plural, one {# year} other {# years}}"
 msgid "Inventory Source Sync"
 msgstr "Inventory Source Sync"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "Inventory Plugins"
 
@@ -1053,7 +1053,7 @@ msgstr "1 (Info)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "and click on Update Revision on Launch."
 
@@ -1552,8 +1552,8 @@ msgstr "Failed to delete one or more jobs."
 msgid "Run Command"
 msgstr "Run Command"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "plugin configuration guide."
 
@@ -2074,8 +2074,8 @@ msgstr "Item Failed"
 msgid "Team Roles"
 msgstr "Team Roles"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "relaunch workflow"
 
@@ -2390,7 +2390,7 @@ msgstr "This constructed inventory input \n"
 "            the limit (host pattern) to only return hosts that \n"
 "            are in the intersection of those two groups."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 
@@ -2569,7 +2569,7 @@ msgstr "Enable log system tracking facts individually"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 
@@ -4126,8 +4126,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4184,7 +4184,7 @@ msgstr "No timeout specified"
 msgid "On Timeout"
 msgstr "On Timeout"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 
@@ -4750,7 +4750,7 @@ msgstr "Notification Templates"
 msgid "Start message body"
 msgstr "Start message body"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 
@@ -5042,7 +5042,7 @@ msgstr "On timeout"
 msgid "Create New Team"
 msgstr "Create New Team"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "in the documentation and the"
 
@@ -6180,7 +6180,7 @@ msgid "Resource deleted"
 msgstr "Resource deleted"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6334,7 +6334,7 @@ msgstr "Toggle instance"
 msgid "Back to Inventories"
 msgstr "Back to Inventories"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 
@@ -7166,7 +7166,7 @@ msgstr "This field must be a number and have a value greater than {min}"
 msgid "All"
 msgstr "All"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "constructed inventory"
 
@@ -7910,7 +7910,7 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8321,7 +8321,7 @@ msgstr "No Hosts Remaining"
 msgid "ID of the dashboard (optional)"
 msgstr "ID of the dashboard (optional)"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 
@@ -8520,6 +8520,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "Examples include:"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8700,7 +8704,7 @@ msgstr "IRC Nick"
 #~ msgid "Expires on"
 #~ msgstr "Expires on"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 
@@ -8978,7 +8982,7 @@ msgstr "Failed to delete one or more users."
 msgid "On Success"
 msgstr "On Success"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 
@@ -9273,7 +9277,7 @@ msgstr "Workflow denied message body"
 msgid "Generic OIDC settings"
 msgstr "Generic OIDC settings"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 
@@ -9735,7 +9739,7 @@ msgstr "The number of parallel or simultaneous processes to use while executing 
 msgid "View all Workflow Approvals."
 msgstr "View all Workflow Approvals."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "When not checked, a merge will be performed, combining local variables with those found on the external source."
 
@@ -9961,7 +9965,7 @@ msgstr "Cancel lookup"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10069,7 +10073,7 @@ msgstr "Navigation"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "and click on Update Revision on Launch"
 
@@ -10276,7 +10280,7 @@ msgstr "Edit details"
 msgid "Deleted"
 msgstr "Deleted"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 
@@ -11072,7 +11076,7 @@ msgstr "Unknown Project"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "Preconditions for running this node when there are multiple parents. Refer to the"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 
@@ -11138,7 +11142,7 @@ msgstr "Simple key select"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "You have automated against more hosts than your subscription allows."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 
@@ -11428,7 +11432,7 @@ msgstr "Provisioning fail"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "Whether the approval node is automatically approved or denied when the timeout expires."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 
@@ -11542,7 +11546,7 @@ msgstr "Associate"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
