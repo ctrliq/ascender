@@ -469,8 +469,9 @@ class Command(BaseCommand):
         # Merged rather than replaced so variables from users and other sources survive; with
         # overwrite_vars, only variables this source previously wrote are removed. See ansible/awx#11623.
         source_variables = self.all_group.variables
+        # Reread under the perform_update lock; the cached inventory and source may predate a concurrent sync.
+        self.inventory.refresh_from_db(fields=['variables'])
         original_variables = self.inventory.variables_dict
-        # Read under the perform_update lock rather than trusting a possibly stale cached source.
         previous = InventorySource.objects.filter(pk=self.inventory_source.pk).values_list('managed_inventory_variables', flat=True).first() or {}
 
         if self.inventory.kind == 'constructed' and self.inventory_source.overwrite_vars:

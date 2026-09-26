@@ -408,6 +408,16 @@ class TestInventoryVariablesOverwrite:
         assert self.sync(src_a, {}) == {'shared': 1}
         assert self.sync(src_b, {}) == {}
 
+    def test_stale_inventory_does_not_drop_concurrent_writes(self, inventory):
+        src_a = InventorySource.objects.create(inventory=inventory, name='a', source='ec2', overwrite_vars=True)
+        src_b = InventorySource.objects.create(inventory=inventory, name='b', source='ec2', overwrite_vars=True)
+        update_b = src_b.create_unified_job()
+        assert update_b.inventory.variables_dict == {}
+        self.sync(src_a, {'a': 1})
+        inventory_import.Command().perform_update(dict(overwrite_vars=True), all_vars_data({'b': 2}), update_b)
+        inventory.refresh_from_db()
+        assert inventory.variables_dict == {'a': 1, 'b': 2}
+
     def test_untracked_variables_kept_on_first_sync(self, inventory):
         inventory.variables = '{"legacy": 1}'
         inventory.save()
