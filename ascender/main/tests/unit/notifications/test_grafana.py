@@ -33,6 +33,7 @@ def test_send_messages():
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'time': 60000},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -64,6 +65,7 @@ def test_send_messages_with_no_verify_ssl():
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'time': 60000},
             verify=False,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -96,6 +98,7 @@ def test_send_messages_with_dashboardid(dashboardId):
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'time': 60000, 'dashboardId': dashboardId},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -128,6 +131,7 @@ def test_send_messages_with_panelid(panelId):
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'panelId': int(panelId), 'time': 60000},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -159,6 +163,7 @@ def test_send_messages_with_bothids():
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'panelId': 42, 'time': 60000, 'dashboardId': 42},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -190,6 +195,7 @@ def test_send_messages_with_emptyids():
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'time': 60000},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
@@ -221,6 +227,7 @@ def test_send_messages_with_tags():
             headers={'Content-Type': 'application/json', 'Authorization': 'Bearer testapikey'},
             json={'tags': ['ansible'], 'text': 'test subject', 'isRegion': True, 'timeEnd': 120000, 'time': 60000},
             verify=True,
+            allow_redirects=False,
             timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1

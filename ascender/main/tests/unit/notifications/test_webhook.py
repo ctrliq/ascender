@@ -413,9 +413,10 @@ def test_send_messages_logs_base64_encoded_urls_in_redirects():
         )
         backend.send_messages([message])
 
-        # Should log the redirect warning
-        logger_mock.warning.assert_called_once()
-        warning_msg = logger_mock.warning.call_args[0][0]
+        # Should log the redirect warning, then the cross-origin credential strip warning
+        assert logger_mock.warning.call_count == 2
+        warning_msg = logger_mock.warning.call_args_list[0][0][0]
+        assert logger_mock.warning.call_args_list[1][0][0] == "Redirect changed origin; stripping credentials"
 
         # The dangerous URL should NOT appear in raw form in the log
         assert '\n' not in warning_msg, "Raw newline should not be in log message (log injection risk)"
@@ -470,3 +471,66 @@ def test_send_messages_logs_base64_encoded_urls_on_max_retries():
 
         encoded_dangerous_url = base64.b64encode(dangerous_url_final.encode('utf-8')).decode('ascii')
         assert encoded_dangerous_url in error_msg, "Base64-encoded final URL should be in log message"
+
+
+def test_send_messages_redirect_strips_credentials_on_host_change():
+    safe_headers = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
+    with (
+        mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
+    ):
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://other-host.com/hook"}),
+            mock.Mock(status_code=200),
+        ]
+        version_mock.return_value = safe_headers
+        backend = webhook_backend.WebhookBackend('POST', {'Authorization': 'Bearer secret-token'}, username='user', password='secret')
+        message = EmailMessage('test subject', {'text': 'test body'}, [], ['http://example.com'])
+        sent_messages = backend.send_messages([message])
+        assert requests_mock.post.call_count == 2
+        first_call = requests_mock.post.call_args_list[0]
+        assert first_call.kwargs['auth'] == ('user', 'secret')
+        assert 'Authorization' in first_call.kwargs['headers']
+        second_call = requests_mock.post.call_args_list[1]
+        assert second_call.kwargs['auth'] is None
+        assert second_call.kwargs['headers'] == safe_headers
+        assert sent_messages == 1
+
+
+def test_send_messages_redirect_strips_credentials_on_scheme_downgrade():
+    safe_headers = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
+    with (
+        mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
+    ):
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://example.com/hook"}),
+            mock.Mock(status_code=200),
+        ]
+        version_mock.return_value = safe_headers
+        backend = webhook_backend.WebhookBackend('POST', None, username='user', password='secret')
+        message = EmailMessage('test subject', {'text': 'test body'}, [], ['https://example.com'])
+        sent_messages = backend.send_messages([message])
+        assert requests_mock.post.call_count == 2
+        second_call = requests_mock.post.call_args_list[1]
+        assert second_call.kwargs['auth'] is None
+        assert sent_messages == 1
+
+
+def test_send_messages_redirect_keeps_auth_on_same_origin():
+    with (
+        mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
+    ):
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": "http://example.com/new-path"}),
+            mock.Mock(status_code=200),
+        ]
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, username='user', password='secret')
+        message = EmailMessage('test subject', {'text': 'test body'}, [], ['http://example.com'])
+        sent_messages = backend.send_messages([message])
+        assert requests_mock.post.call_count == 2
+        for call in requests_mock.post.call_args_list:
+            assert call.kwargs['auth'] == ('user', 'secret')
+        assert sent_messages == 1
