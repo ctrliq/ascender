@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from unittest import mock
 from django.conf import settings
 from django.core.mail.message import EmailMessage
@@ -491,6 +492,28 @@ def test_send_messages_redirect_strips_credentials_on_host_change():
         first_call = requests_mock.post.call_args_list[0]
         assert first_call.kwargs['auth'] == ('user', 'secret')
         assert 'Authorization' in first_call.kwargs['headers']
+        second_call = requests_mock.post.call_args_list[1]
+        assert second_call.kwargs['auth'] is None
+        assert second_call.kwargs['headers'] == safe_headers
+        assert sent_messages == 1
+
+
+@pytest.mark.parametrize('location', ['http://[bad/', 'http://[zz]/', 'http://example.com:xx/'])
+def test_send_messages_redirect_strips_credentials_on_malformed_location(location):
+    safe_headers = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
+    with (
+        mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
+    ):
+        requests_mock.post.side_effect = [
+            mock.Mock(status_code=301, headers={"Location": location}),
+            mock.Mock(status_code=200),
+        ]
+        version_mock.return_value = safe_headers
+        backend = webhook_backend.WebhookBackend('POST', {'Authorization': 'Bearer secret-token'}, username='user', password='secret')
+        message = EmailMessage('test subject', {'text': 'test body'}, [], ['http://example.com'])
+        sent_messages = backend.send_messages([message])
+        assert requests_mock.post.call_count == 2
         second_call = requests_mock.post.call_args_list[1]
         assert second_call.kwargs['auth'] is None
         assert second_call.kwargs['headers'] == safe_headers

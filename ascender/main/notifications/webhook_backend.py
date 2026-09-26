@@ -89,14 +89,14 @@ class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
             err = None
 
             def _origin(value):
-                parsed = urlparse(value)
-                scheme = parsed.scheme.lower()
                 try:
+                    parsed = urlparse(value)
+                    scheme = parsed.scheme.lower()
                     port = parsed.port or {"http": 80, "https": 443}.get(scheme)
+                    return scheme, parsed.hostname, port
                 except ValueError:
-                    # unparseable port; never treat as the same origin
+                    # malformed URL; never treat as the same origin
                     return None
-                return scheme, parsed.hostname, port
 
             original_origin = _origin(url)
 
