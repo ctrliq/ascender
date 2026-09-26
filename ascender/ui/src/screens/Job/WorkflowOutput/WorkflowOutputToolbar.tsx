@@ -18,6 +18,7 @@ import {
 } from '@patternfly/react-icons';
 import StatusLabel from 'components/StatusLabel';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
+import { canOverwriteRelaunchVars } from 'util/jobs';
 import JobCancelButton from 'components/JobCancelButton';
 import DeleteButton from 'components/DeleteButton';
 import {
@@ -188,6 +189,8 @@ function WorkflowOutputToolbar({
                       id="workflow-output-relaunch"
                       ouiaId="workflow-output-relaunch"
                       status={job.status}
+                      canOverwriteVars={canOverwriteRelaunchVars(job)}
+                      jobId={job.id}
                     />
                   </span>
                 </Tooltip>

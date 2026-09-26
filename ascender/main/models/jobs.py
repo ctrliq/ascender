@@ -1150,15 +1150,17 @@ class JobLaunchConfig(LaunchTimeConfig):
         """
         return self._has_user_prompts(template, only_unprompted=False)
 
-    def has_unprompted(self, template):
+    def has_unprompted(self, template, ignore_variables=False):
         """
         returns True if the template has set ask_ fields to False after
         launching with those prompts
         """
-        return self._has_user_prompts(template, only_unprompted=True)
+        return self._has_user_prompts(template, only_unprompted=True, ignore_variables=ignore_variables)
 
-    def _has_user_prompts(self, template, only_unprompted=True):
+    def _has_user_prompts(self, template, only_unprompted=True, ignore_variables=False):
         prompts = self.prompts_dict()
+        if ignore_variables:
+            prompts.pop('extra_vars', None)
         ask_mapping = template.get_ask_mapping()
         if template.survey_enabled and (not template.ask_variables_on_launch):
             ask_mapping.pop('extra_vars')

@@ -11185,6 +11185,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -13243,6 +13249,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -14184,6 +14195,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -16213,6 +16230,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -19026,6 +19049,11 @@ export interface components {
       extra_vars: string | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19126,6 +19154,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19162,6 +19195,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19367,6 +19405,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19697,6 +19740,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */

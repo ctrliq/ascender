@@ -35,7 +35,16 @@ from ascender.dab.lib.utils.models import get_all_field_names
 from ascender.dab.lib.utils.requests import get_remote_host
 
 # Ascender
-from ascender.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate
+from ascender.main.models import (
+    UnifiedJob,
+    UnifiedJobTemplate,
+    User,
+    Role,
+    Credential,
+    WorkflowJobTemplateNode,
+    WorkflowApprovalTemplate,
+    ROLE_SINGLETONS_HIDDEN_FROM_RESOURCE_ACCESS_LISTS,
+)
 from ascender.main.access import optimize_queryset
 from ascender.main.utils import camelcase_to_underscore, get_search_fields, getattrd, get_object_or_400, decrypt_field, get_ascender_version
 from ascender.main.utils.licensing import server_product_name
@@ -807,6 +816,15 @@ class ResourceAccessList(ParentMixin, ListAPIView):
         ancestors = set()
         for r in roles:
             ancestors.update(set(r.ancestors.all()))
+        if settings.ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS:
+            # The system-wide singleton roles are ancestors of every resource,
+            # so they put every System Administrator and System Auditor in the
+            # list. When the setting is on, drop them: a user belongs in an
+            # access list through the roles they actually hold on the resource,
+            # not through a system-wide role. Must match the serializer's
+            # exclude set exactly; both read ROLE_SINGLETONS_HIDDEN_FROM_RESOURCE_ACCESS_LISTS
+            # so the two layers can never silently diverge.
+            ancestors = {a for a in ancestors if a.singleton_name not in ROLE_SINGLETONS_HIDDEN_FROM_RESOURCE_ACCESS_LISTS}
         return User.objects.filter(roles__in=list(ancestors)).distinct()
 
 
