@@ -571,6 +571,17 @@ To configure OIDC in Ascender:
 - **OIDC Secret**: Client Secret from your IdP.
 - **OIDC Provider URL**: URL for your OIDC provider.
 - **Verify OIDC Provider Certificate**: Use the toggle to enable/disable the OIDC provider SSL certificate verification.
+- **OIDC Username Claim**: The claim a new user's username is taken from. Defaults to ``preferred_username``.
+- **Strip the Domain from OIDC Usernames**: Use the toggle to keep only the part before the ``@`` of the username claim when a user is created, so ``fernando.roca@example.com`` becomes ``fernando.roca``.
+- **OIDC Groups Claim**: The claim holding the user's groups. Defaults to ``groups``. A nested claim can be named by its dotted path, such as ``realm_access.roles`` for Keycloak realm roles.
+- **OIDC Additional Scopes**: Scopes to request on top of ``openid``, ``profile`` and ``email``, for example ``groups``.
+- **OIDC Login Rule**: Optional. A trigger rule a user must match to log in through OIDC at all.
+- **OIDC Organization Map** and **OIDC Team Map**: Optional. Which organizations and teams OIDC users belong to, based on their groups and claims. When they are not set, the shared social auth maps apply.
+- **OIDC User Flags**: Optional. Trigger rules that make an OIDC user a superuser or a system auditor.
+- **Log Out of the OIDC Provider**: Use the toggle to also end the user's session at the provider when they log out of Ascender.
+- **OIDC Post Logout Redirect URL**: Where the provider sends the browser after that logout. Defaults to the Base URL of Ascender.
+
+Register the **OIDC Callback URL** shown on the settings page as a redirect URI of the client at your IdP.
 
 The example below shows specific values associated to GitHub as the generic IdP:
 
@@ -582,7 +593,7 @@ The example below shows specific values associated to GitHub as the generic IdP:
 
 .. note::
 
-    There is currently no support for team and organization mappings for OIDC at this time. The OIDC adapter does authentication only and not authorization. In other words, it is only capable of authenticating whether this user is who they say they are, not authorizing what this user is allowed to do. Configuring generic OIDC creates the UserID appended with an ID/key to differentiate the same user ID originating from two different sources and therefore, considered different users. So one will get an ID of just the user name and the second will be the ``username-<random number>``.
+    The rules and maps use the same trigger syntax as the LDAP organization and team maps. See ``docs/auth/oidc.md`` in the Ascender repository for examples with Keycloak and Entra ID. Configuring generic OIDC creates the UserID appended with an ID/key to differentiate the same user ID originating from two different sources and therefore, considered different users. So one will get an ID of just the user name and the second will be the ``username-<random number>``.
 
 5. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the OIDC logo to indicate it as a alternate method of logging into Ascender.
 

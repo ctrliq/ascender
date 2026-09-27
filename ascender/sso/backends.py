@@ -36,9 +36,8 @@ from social_core.backends.saml import SAMLAuth as BaseSAMLAuth
 from social_core.backends.saml import SAMLIdentityProvider as BaseSAMLIdentityProvider
 
 # Ansible Tower
-from ascender.dab.authentication.utils.claims import TriggerResult, process_groups, process_user_attributes
 from ascender.sso.models import UserEnterpriseAuth
-from ascender.sso.validators import validate_ldap_trigger_rule
+from ascender.sso.triggers import resolve_membership
 from ascender.sso.common import create_org_and_teams, reconcile_users_org_team_mappings
 
 logger = logging.getLogger('ascender.sso.backends')
@@ -411,11 +410,6 @@ def _update_m2m_from_groups(ldap_user, opts, remove=True):
     return None
 
 
-#: A trigger rule that could not be evaluated, as distinct from one that did not
-#: match: the first has no opinion, the second is an answer.
-UNUSABLE_RULE = object()
-
-
 def _ldap_user_attributes(ldap_user):
     """
     The LDAP entry to match a rule against, as attribute name to list of values.
@@ -440,50 +434,30 @@ def _ldap_user_group_dns(ldap_user):
 
 
 def _lowercase_group_dns(trigger):
-    """The group DNs a trigger names, folded the way is_member_of folds them."""
-    return {operator: [str(group_dn).lower() for group_dn in dns] if isinstance(dns, list) else dns for operator, dns in trigger.items()}
-
-
-def _update_m2m_from_triggers(ldap_user, triggers, map_id):
     """
-    Evaluate an AAP style trigger rule against the LDAP user.
+    The group DNs a trigger names, folded the way is_member_of folds them.
 
-    Returns:
-        True - the rule matched
-        False - the rule explicitly denied the user
-        None - the rule does not apply to this user
-        UNUSABLE_RULE - the rule cannot be evaluated at all
+    Only strings are folded.  Anything else is left for validation to refuse,
+    which it could not do if a None had already become the string "none".
     """
-    # These maps can be written to a settings file as well as saved through the
-    # API, so a rule reaching here may never have been validated.
-    errors = validate_ldap_trigger_rule(triggers)
-    if errors:
-        logger.warning(
-            "The trigger rule in mapping {} will be ignored: {}".format(map_id, '; '.join('{}: {}'.format(key, errors[key]) for key in sorted(errors)))
-        )
-        return UNUSABLE_RULE
+    return {
+        operator: [group_dn.lower() if isinstance(group_dn, str) else group_dn for group_dn in dns] if isinstance(dns, list) else dns
+        for operator, dns in trigger.items()
+    }
 
-    tracking_id = str(uuid.uuid4())
-    trigger_result = TriggerResult.SKIP
-    for trigger_type, trigger in triggers.items():
-        if trigger_type == 'groups':
-            # django-auth-ldap holds DNs in their normal form, which is lower
-            # case, and is_member_of folds whatever a map names before comparing.
-            # So do the same here: a group DN written the way the directory
-            # prints it has always worked in these maps and has to keep working.
-            trigger_result = process_groups(_lowercase_group_dns(trigger), _ldap_user_group_dns(ldap_user), map_id, tracking_id)
-        elif trigger_type == 'attributes':
-            trigger_result = process_user_attributes(trigger, _ldap_user_attributes(ldap_user), map_id, tracking_id)
-        elif trigger_type == 'always':
-            trigger_result = TriggerResult.ALLOW
-        elif trigger_type == 'never':
-            trigger_result = TriggerResult.DENY
 
-    if trigger_result is TriggerResult.ALLOW:
-        return True
-    if trigger_result is TriggerResult.DENY:
-        return False
-    return None
+def _ldap_triggers(triggers):
+    """
+    The rule with its group DNs folded to lower case.
+
+    django-auth-ldap holds DNs in their normal form, which is lower case, and
+    is_member_of folds whatever a map names before comparing.  So do the same
+    here: a group DN written the way the directory prints it has always worked
+    in these maps and has to keep working.
+    """
+    if isinstance(triggers, dict) and isinstance(triggers.get('groups'), dict):
+        return dict(triggers, groups=_lowercase_group_dns(triggers['groups']))
+    return triggers
 
 
 def _update_m2m_from_map(ldap_user, opts, remove=True, triggers=None, map_id=''):
@@ -494,25 +468,14 @@ def _update_m2m_from_map(ldap_user, opts, remove=True, triggers=None, map_id='')
     every existing configuration uses.  With one, the rule is evaluated first and
     the group DN options are the fallback for a user the rule says nothing about.
     """
-    if not triggers:
-        return _update_m2m_from_groups(ldap_user, opts, remove)
-
-    state = _update_m2m_from_triggers(ldap_user, triggers, map_id)
-    if state is UNUSABLE_RULE:
-        # A rule nobody can evaluate decides nothing.  Anything else here, the
-        # revoke below included, would turn one typo into every user in the
-        # directory losing the role.
-        return _update_m2m_from_groups(ldap_user, opts, remove)
-    if state is not None:
-        return state
-
-    # The rule did not apply to this user.  Fall back to the group DNs, and if
-    # those say nothing either then remove behaves like an AAP revoke: a rule
-    # the user does not meet costs them the membership.
-    state = _update_m2m_from_groups(ldap_user, opts, remove)
-    if state is None and remove:
-        return False
-    return state
+    return resolve_membership(
+        _ldap_triggers(triggers),
+        lambda: _ldap_user_group_dns(ldap_user),
+        lambda: _ldap_user_attributes(ldap_user),
+        map_id,
+        lambda: _update_m2m_from_groups(ldap_user, opts, remove),
+        remove,
+    )
 
 
 @receiver(populate_user, dispatch_uid='populate-ldap-user')

@@ -234,6 +234,25 @@ def test__update_m2m_from_map(opts, remove, triggers, expected_result):
     assert expected_result == _update_m2m_from_map(ldap_user, opts, remove, triggers, 'test map')
 
 
+@pytest.mark.parametrize(
+    'bad_entry',
+    [None, 123, ['CN=x,DC=example,DC=com']],
+)
+@pytest.mark.parametrize('operator', ['has_or', 'has_not'])
+@pytest.mark.django_db
+def test__update_m2m_from_map_refuses_a_group_that_is_not_a_dn(bad_entry, operator):
+    """
+    A rule from a settings file can carry a None where a DN was meant.  Folding
+    DNs to lower case must not turn that into the string "none", which would
+    validate and then match everyone (has_not) or no one (has_or, revoking).
+    """
+    ldap_user = MockTriggerUser(group_dns=[GROUP_DN], attrs=ATTRS)
+    triggers = {'groups': {operator: [bad_entry]}}
+    # The rule is ignored, so the answer is whatever the group DN options say.
+    assert _update_m2m_from_map(ldap_user, None, True, triggers, 'test map') is None
+    assert _update_m2m_from_map(ldap_user, [GROUP_DN], True, triggers, 'test map') is True
+
+
 @pytest.mark.django_db
 def test__update_m2m_from_map_does_not_consume_the_rule():
     """

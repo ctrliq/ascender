@@ -660,6 +660,8 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
+    'ascender.sso.oidc.check_login_allowed',
+    'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.social_auth.associate_by_email',
@@ -671,7 +673,7 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'social_core.pipeline.user.user_details',
     'ascender.sso.social_base_pipeline.prevent_inactive_login',
 )
-SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.social_pipeline.update_user_org_team_mappings',)
+SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.social_pipeline.update_user_org_team_mappings', 'ascender.sso.oidc.update_user_flags')
 SOCIAL_AUTH_SAML_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.saml_pipeline.populate_user', 'ascender.sso.saml_pipeline.update_user_flags')
 SAML_AUTO_CREATE_OBJECTS = True
 

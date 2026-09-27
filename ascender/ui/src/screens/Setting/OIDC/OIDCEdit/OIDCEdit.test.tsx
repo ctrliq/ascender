@@ -27,6 +27,23 @@ describe('<OIDCEdit />', () => {
         SOCIAL_AUTH_OIDC_SECRET: '$encrypted$',
         SOCIAL_AUTH_OIDC_OIDC_ENDPOINT: 'https://example.com',
         SOCIAL_AUTH_OIDC_VERIFY_SSL: true,
+        SOCIAL_AUTH_OIDC_CALLBACK_URL:
+          'https://ascender.example.com/sso/complete/oidc/',
+        SOCIAL_AUTH_OIDC_SCOPE: ['groups'],
+        SOCIAL_AUTH_OIDC_USERNAME_KEY: 'preferred_username',
+        SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: false,
+        SOCIAL_AUTH_OIDC_GROUPS_CLAIM: 'groups',
+        SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS: null,
+        SOCIAL_AUTH_OIDC_ORGANIZATION_MAP: null,
+        SOCIAL_AUTH_OIDC_TEAM_MAP: {
+          Operators: {
+            organization: 'Default',
+            triggers: { groups: { has_or: ['ops'] } },
+          },
+        },
+        SOCIAL_AUTH_OIDC_USER_FLAGS: null,
+        SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: false,
+        SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL: '',
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
@@ -63,6 +80,22 @@ describe('<OIDCEdit />', () => {
     expect(screen.getByText('OIDC Provider URL')).toBeInTheDocument();
     expect(
       screen.getByText('Verify OIDC Provider Certificate')
+    ).toBeInTheDocument();
+    expect(screen.getByText('OIDC Username Claim')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Groups Claim')).toBeInTheDocument();
+    expect(
+      screen.getByText('Strip the Domain from OIDC Usernames')
+    ).toBeInTheDocument();
+    expect(screen.getByText('OIDC Additional Scopes')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Login Rule')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Organization Map')).toBeInTheDocument();
+    expect(screen.getByText('OIDC Team Map')).toBeInTheDocument();
+    expect(screen.getByText('OIDC User Flags')).toBeInTheDocument();
+    expect(
+      screen.getByText('Log Out of the OIDC Provider')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('OIDC Post Logout Redirect URL')
     ).toBeInTheDocument();
   });
 
@@ -105,6 +138,21 @@ describe('<OIDCEdit />', () => {
       SOCIAL_AUTH_OIDC_SECRET: '',
       SOCIAL_AUTH_OIDC_OIDC_ENDPOINT: 'https://example.com',
       SOCIAL_AUTH_OIDC_VERIFY_SSL: true,
+      SOCIAL_AUTH_OIDC_SCOPE: ['groups'],
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: 'preferred_username',
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: false,
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: 'groups',
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS: null,
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP: null,
+      SOCIAL_AUTH_OIDC_TEAM_MAP: {
+        Operators: {
+          organization: 'Default',
+          triggers: { groups: { has_or: ['ops'] } },
+        },
+      },
+      SOCIAL_AUTH_OIDC_USER_FLAGS: null,
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: false,
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL: '',
     });
   });
 

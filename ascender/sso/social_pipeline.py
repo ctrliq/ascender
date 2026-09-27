@@ -5,10 +5,13 @@
 import re
 import logging
 
+from django.conf import settings
+
 from ascender.sso.common import (
     create_org_and_teams,
     reconcile_users_org_team_mappings,
 )
+from ascender.sso.oidc import OIDCIdentity, is_oidc
 
 logger = logging.getLogger('ascender.sso.social_pipeline')
 
@@ -47,7 +50,20 @@ def _update_m2m_from_expression(user, opts, remove=True):
     return None
 
 
-def _compute_org_desired_states(org_map, user):
+def _update_m2m_from_map(user, opts, remove, triggers, identity, map_id):
+    """
+    Evaluate one role of one map entry.
+
+    Only an OIDC login has claims for a trigger rule to match against, so for
+    every other backend, and for an entry without a rule, this is exactly
+    _update_m2m_from_expression.
+    """
+    if not triggers or identity is None:
+        return _update_m2m_from_expression(user, opts, remove)
+    return identity.resolve(triggers, map_id, lambda: _update_m2m_from_expression(user, opts, remove), remove)
+
+
+def _compute_org_desired_states(org_map, user, identity=None):
     """
     Resolve the mapped organization names (honoring organization_alias) and
     evaluate each organization's admins/users expressions into a desired state.
@@ -83,10 +99,13 @@ def _compute_org_desired_states(org_map, user):
                 )
             )
 
-            state = _update_m2m_from_expression(
+            state = _update_m2m_from_map(
                 user,
                 opts,
                 role_remove,
+                org_opts.get('triggers_{}'.format(expression_name)),
+                identity,
+                'organization {} {}'.format(org_name, expression_name),
             )
 
             # Multiple ORGANIZATION_MAP entries may resolve to the same
@@ -100,7 +119,7 @@ def _compute_org_desired_states(org_map, user):
     return orgs_list, desired_org_states
 
 
-def _compute_team_desired_states(team_map_settings, user):
+def _compute_team_desired_states(team_map_settings, user, identity=None):
     """
     Resolve the mapped teams (declaring the organizations they belong to) and
     evaluate each team's users expression into a desired state.
@@ -130,10 +149,13 @@ def _compute_team_desired_states(team_map_settings, user):
         users_opts = team_opts.get('users', None)
         remove = bool(team_opts.get('remove', True))
 
-        state = _update_m2m_from_expression(
+        state = _update_m2m_from_map(
             user,
             users_opts,
             remove,
+            team_opts.get('triggers'),
+            identity,
+            'team {}'.format(team_name),
         )
 
         if state is not None:
@@ -147,7 +169,21 @@ def _compute_team_desired_states(team_map_settings, user):
     return team_map, desired_team_states
 
 
-def _update_user_memberships(backend, user, *, manage_orgs=True, manage_teams=True):
+def _backend_map(backend, name):
+    """
+    The org or team map that applies to logins through backend.
+
+    OIDC used to have no maps of its own and read the shared SOCIAL_AUTH_ ones.
+    Now that it has, an unset OIDC map still falls back to the shared one, so a
+    configuration written before keeps working.
+    """
+    value = backend.setting(name)
+    if value is None and is_oidc(backend):
+        value = getattr(settings, 'SOCIAL_AUTH_{}'.format(name), None)
+    return value or {}
+
+
+def _update_user_memberships(backend, user, *, response=None, manage_orgs=True, manage_teams=True):
     """
     Compute the desired organization/team membership state in memory and
     reconcile all memberships in bulk.
@@ -157,17 +193,18 @@ def _update_user_memberships(backend, user, *, manage_orgs=True, manage_teams=Tr
     manage_orgs/manage_teams so the merged default step and the legacy
     per-domain entry points share one implementation.
     """
-    org_map = backend.setting('ORGANIZATION_MAP') or {}
-    team_map_settings = backend.setting('TEAM_MAP') or {}
+    org_map = _backend_map(backend, 'ORGANIZATION_MAP')
+    team_map_settings = _backend_map(backend, 'TEAM_MAP')
+    identity = OIDCIdentity(backend, response) if is_oidc(backend) else None
 
     orgs_list = []
     desired_org_states = {}
     team_map = {}
     desired_team_states = {}
     if manage_orgs:
-        orgs_list, desired_org_states = _compute_org_desired_states(org_map, user)
+        orgs_list, desired_org_states = _compute_org_desired_states(org_map, user, identity)
     if manage_teams:
-        team_map, desired_team_states = _compute_team_desired_states(team_map_settings, user)
+        team_map, desired_team_states = _compute_team_desired_states(team_map_settings, user, identity)
 
     # Ensure mapped organizations and teams exist.
     create_org_and_teams(
@@ -190,7 +227,7 @@ def update_user_org_team_mappings(backend, details, user=None, *args, **kwargs):
     if not user:
         return
 
-    _update_user_memberships(backend, user)
+    _update_user_memberships(backend, user, response=kwargs.get('response'))
 
 
 # Kept for compatibility: a custom SOCIAL_AUTH_PIPELINE configured in
@@ -212,7 +249,7 @@ def update_user_orgs(backend, details, user=None, *args, **kwargs):
     if not user:
         return
 
-    _update_user_memberships(backend, user, manage_teams=False)
+    _update_user_memberships(backend, user, response=kwargs.get('response'), manage_teams=False)
 
 
 def update_user_teams(backend, details, user=None, *args, **kwargs):
@@ -223,4 +260,4 @@ def update_user_teams(backend, details, user=None, *args, **kwargs):
     if not user:
         return
 
-    _update_user_memberships(backend, user, manage_orgs=False)
+    _update_user_memberships(backend, user, response=kwargs.get('response'), manage_orgs=False)

@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { RootAPI } from 'api';
+import * as navigation from 'util/navigation';
 import { cachedOptions } from '../api/optionsCache';
 import queryClient from '../queryClient';
 
@@ -59,6 +60,54 @@ describe('SessionProvider', () => {
 
     await cachedOptions(['options', '/api/v2/job_templates/'], fetch);
     expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  // An OIDC session can be ended at the provider too, and the server says
+  // where to send the browser for that instead of redirecting on its own.
+  test('goes on to the provider when the server hands back a logout url', async () => {
+    const user = userEvent.setup();
+    const replace = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+    (RootAPI.logout as ReturnType<typeof vi.fn>).mockResolvedValue({
+      data: { logout_url: 'https://idp.example.com/logout?client_id=x' },
+    });
+
+    render(
+      <MemoryRouter>
+        <SessionProvider>
+          <LogoutButton />
+        </SessionProvider>
+      </MemoryRouter>
+    );
+    await user.click(await screen.findByRole('button', { name: 'Logout' }));
+
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith(
+        'https://idp.example.com/logout?client_id=x'
+      )
+    );
+    replace.mockRestore();
+  });
+
+  test('stays here when there is no provider to log out of', async () => {
+    const user = userEvent.setup();
+    const replace = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+
+    render(
+      <MemoryRouter>
+        <SessionProvider>
+          <LogoutButton />
+        </SessionProvider>
+      </MemoryRouter>
+    );
+    await user.click(await screen.findByRole('button', { name: 'Logout' }));
+    await waitFor(() => expect(RootAPI.logout).toHaveBeenCalled());
+
+    expect(replace).not.toHaveBeenCalled();
+    replace.mockRestore();
   });
 
   // The cached theme mirrors the account's and is what the next sign-in

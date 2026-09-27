@@ -9,6 +9,7 @@ When a user wants to log into Ascender, she can explicitly choose some of the su
 * Github Enterprise Organization OAuth2
 * Github Enterprise Team OAuth2
 * Microsoft Azure Active Directory (AD) OAuth2
+* Generic OpenID Connect (OIDC), see [oidc.md](oidc.md)
 
 On the other hand, the other authentication methods use the same types of login info (username and password), but authenticate using external auth systems rather than Ascender's own database. If some of these methods are enabled, Ascender will try authenticating using the enabled methods *before Ascender's own authentication method*. The order of precedence is:
 * LDAP
