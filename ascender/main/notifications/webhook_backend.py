@@ -4,6 +4,8 @@
 import base64
 import json
 import logging
+from urllib.parse import urlparse
+
 import requests
 
 from ascender.settings.typed import settings
@@ -86,6 +88,20 @@ class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
 
             err = None
 
+            def _origin(value):
+                try:
+                    parsed = urlparse(value)
+                    scheme = parsed.scheme.lower()
+                    port = parsed.port
+                    if port is None:
+                        port = {"http": 80, "https": 443}.get(scheme)
+                    return scheme, parsed.hostname, port
+                except ValueError:
+                    # malformed URL; never treat as the same origin
+                    return None
+
+            original_origin = _origin(url)
+
             for retries in range(self.MAX_RETRIES):
                 # Sometimes we hit redirect URLs. We must account for this. We still extract the redirect URL from the response headers and try again. Max retires == 5
                 resp = chosen_method(
@@ -118,6 +134,15 @@ class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                 if url is None:
                     err = f"Webhook notification received redirect to a blank URL from {url_log_safe}. Response headers={resp.headers}"
                     break
+
+                redirect_origin = _origin(url)
+                if redirect_origin is None:
+                    err = f"Webhook notification received redirect to an invalid URL {url_next_log_safe} from {url_log_safe}"
+                    break
+                if redirect_origin != original_origin:
+                    logger.warning("Redirect changed origin; stripping credentials")
+                    auth = None
+                    headers = get_ascender_http_client_headers()
             else:
                 # no break condition in the loop encountered; therefore we have hit the maximum number of retries
                 url_log_safe = base64.b64encode(url.encode('utf-8')).decode('ascii')
