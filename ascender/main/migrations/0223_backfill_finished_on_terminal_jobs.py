@@ -33,7 +33,7 @@ def backfill_finished(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('main', '0220_workflow_allow_overwrite_flow_vars_on_relaunch'),
+        ('main', '0222_inventory_source_managed_inventory_variables'),
     ]
 
     operations = [
