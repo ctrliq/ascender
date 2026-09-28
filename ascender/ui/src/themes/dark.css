@@ -691,7 +691,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-form-control--disabled--BackgroundColor: var(--pf-v6-global--BorderColor--200);
     --pf-v6-c-form-control--BorderColor: var(--pf-v6-global--BorderColor--100);
     --pf-v6-c-form-control--Color: var(--pf-v6-global--Color--100);
-    --pf-v6-c-form-control--PlaceholderColor: var(--pf-v6-global--disabled-color--100);
+    --pf-v6-c-form-control--m-placeholder--Color: var(--pf-v6-global--disabled-color--100);
     --pf-v6-c-form-control--BorderTopColor: var(--pf-v6-global--BorderColor--100);
     --pf-v6-c-form-control--BorderRightColor: var(--pf-v6-global--BorderColor--100);
     --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
