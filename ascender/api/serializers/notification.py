@@ -227,6 +227,8 @@ class NotificationTemplateSerializer(BaseSerializer):
                 password_fields_to_forward.append(field)
             if field == "http_method" and field_val.lower() not in ['put', 'post']:
                 error_list.append(_("HTTP method must be either 'POST' or 'PUT'."))
+            if field == "homeserver_url" and not field_val.strip().lower().startswith(('http://', 'https://')):
+                error_list.append(_("Homeserver URL must start with 'http://' or 'https://'."))
         if missing_fields:
             error_list.append(_("Missing required fields for Notification Configuration: {}.").format(missing_fields))
         if incorrect_type_fields:
@@ -288,6 +290,6 @@ class NotificationSerializer(BaseSerializer):
 
         if obj.notification_type == 'webhook':
             ret.pop('subject')
-        if obj.notification_type not in ('email', 'webhook', 'pagerduty'):
+        if obj.notification_type not in ('email', 'webhook', 'pagerduty', 'matrix'):
             ret.pop('body')
         return ret
