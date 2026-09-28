@@ -245,3 +245,52 @@ def test_update_notification_template(admin, notification_template):
     subevents = sorted(notification_template.messages["workflow_approval"].keys())
     assert subevents == ["approved", "running"]
     assert notification_template.messages['workflow_approval'] == workflow_approval_message
+
+
+@pytest.mark.django_db
+def test_matrix_template_hides_token_and_fills_defaults(get, post, user, organization):
+    u = user('admin-poster', True)
+    response = post(
+        reverse('api:notification_template_list'),
+        dict(
+            name="test-matrix",
+            organization=organization.id,
+            notification_type="matrix",
+            notification_configuration=dict(homeserver_url="https://matrix.example.org", access_token="shouldhide", rooms=["#automation:example.org"]),
+        ),
+        u,
+        expect=201,
+    )
+    nt = NotificationTemplate.objects.get(id=response.data['id'])
+    assert nt.notification_configuration['access_token'].startswith('$encrypted$')
+
+    response = get(reverse('api:notification_template_detail', kwargs={'pk': nt.id}), u)
+    configuration = response.data['notification_configuration']
+    assert configuration['access_token'] == "$encrypted$"
+    assert configuration['use_html'] is True
+    assert configuration['disable_ssl_verification'] is False
+
+    def assert_send(self, messages):
+        assert self.access_token == "shouldhide"
+        assert messages[0].recipients() == ["#automation:example.org"]
+        return 1
+
+    with mock.patch.object(nt.notification_class, "send_messages", assert_send):
+        assert nt.send("Test", "<b>Test</b>") == 1
+
+
+@pytest.mark.django_db
+def test_matrix_template_rejects_bad_homeserver_url(post, user, organization):
+    u = user('admin-poster', True)
+    response = post(
+        reverse('api:notification_template_list'),
+        dict(
+            name="test-matrix",
+            organization=organization.id,
+            notification_type="matrix",
+            notification_configuration=dict(homeserver_url="matrix.example.org", access_token="token", rooms=["!room:example.org"]),
+        ),
+        u,
+        expect=400,
+    )
+    assert "Homeserver URL must start with 'http://' or 'https://'." in str(response.data)

@@ -1,4 +1,10 @@
-import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react';
+import React, {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   HashRouter,
   Routes,
@@ -8,7 +14,8 @@ import {
   useNavigate,
 } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
-import locationReplace from 'util/navigation';
+import locationReplace, { isHttpUrl } from 'util/navigation';
+import { isSocialLoginUrl, submitSocialLoginForm } from 'util/socialLogin';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -119,7 +126,44 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   });
 
-  if (isAuthenticated(document.cookie)) {
+  const authenticated = isAuthenticated(document.cookie);
+  // The override is an admin-typed string handed to window.location for
+  // every visitor. One with a scheme the browser would run rather than
+  // fetch (javascript:, data:) is ignored, and the visitor gets the login
+  // page. The server refuses to store such a value and drops one it finds
+  // already stored, so this is the browser's own last line.
+  const redirectTo =
+    !authenticated &&
+    loginRedirectOverride &&
+    isHttpUrl(loginRedirectOverride) &&
+    !window.location.href.includes('/login') &&
+    !isUserBeingLoggedOut
+      ? loginRedirectOverride
+      : null;
+  const requestedPath = `${location.pathname}${location.search}`;
+
+  // Leaving the page is a side effect, and one that must happen once:
+  // React re-renders this component while the browser is still unloading,
+  // and StrictMode mounts it twice in development.
+  const hasLeft = useRef(false);
+  useEffect(() => {
+    if (!redirectTo || hasLeft.current) {
+      return;
+    }
+    hasLeft.current = true;
+    if (isSocialLoginUrl(redirectTo)) {
+      // The override points at social-auth's login-initiation view, which
+      // only accepts POST (see util/socialLogin). Save where the user was
+      // heading, as the login page's own provider buttons do, so the app
+      // can put them back there when the provider returns them.
+      window.sessionStorage.setItem(SESSION_REDIRECT_URL, requestedPath);
+      submitSocialLoginForm(redirectTo);
+    } else {
+      locationReplace(redirectTo);
+    }
+  }, [redirectTo, requestedPath]);
+
+  if (authenticated) {
     return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         {children}
@@ -127,12 +171,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (
-    loginRedirectOverride &&
-    !window.location.href.includes('/login') &&
-    !isUserBeingLoggedOut
-  ) {
-    locationReplace(loginRedirectOverride);
+  if (redirectTo) {
     return null;
   }
   return <Navigate to="/login" replace />;

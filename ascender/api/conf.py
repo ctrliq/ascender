@@ -9,6 +9,7 @@ from ascender.conf import fields, register, register_validate
 from ascender.api.fields import OAuth2ProviderField
 from oauth2_provider.settings import oauth2_settings
 from ascender.sso.common import is_remote_auth_enabled
+from ascender.main.validators import validate_login_redirect_url
 
 register(
     'SESSION_COOKIE_AGE',
@@ -90,6 +91,7 @@ register(
     allow_blank=True,
     required=False,
     default='',
+    validators=[validate_login_redirect_url],
     label=_('Login redirect override URL'),
     help_text=_('URL to which unauthorized users will be redirected to log in.  If blank, users will be sent to the login page.'),
     category=_('Authentication'),

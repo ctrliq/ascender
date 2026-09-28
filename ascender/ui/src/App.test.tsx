@@ -7,6 +7,8 @@ import * as auth from 'util/auth';
 import type { SessionValue } from 'contexts/Session';
 import type { ResponseOf } from '../testUtils/responseOf';
 import { renderWithContexts } from '../testUtils/rtlContexts';
+import { createMemoryHistory } from '../testUtils/historyShim';
+import { SESSION_REDIRECT_URL } from './constants';
 import App, { ProtectedRoute } from './App';
 
 vi.mock('./api');
@@ -78,14 +80,19 @@ describe('<App />', () => {
     const replaceSpy = vi
       .spyOn(navigation, 'default')
       .mockImplementation(() => {});
+    const submit = vi
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
 
     expect(replaceSpy).not.toHaveBeenCalled();
 
+    // An override that is not social-auth's login view (here an external
+    // portal) is a plain navigation, and never receives the CSRF token.
     const contextValues = {
       setAuthRedirectTo: vi.fn(),
       isSessionExpired: false,
       isUserBeingLoggedOut: false,
-      loginRedirectOverride: '/sso/test',
+      loginRedirectOverride: 'https://portal.example.com/login',
     };
     vi.spyOn(SessionContext, 'useSession').mockImplementation(
       () => contextValues as unknown as SessionValue
@@ -97,7 +104,113 @@ describe('<App />', () => {
       </ProtectedRoute>
     );
 
-    await waitFor(() => expect(replaceSpy).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(replaceSpy).toHaveBeenCalledWith(
+        'https://portal.example.com/login'
+      )
+    );
+    expect(replaceSpy).toHaveBeenCalledTimes(1);
+    expect(submit).not.toHaveBeenCalled();
+    expect(document.querySelector('form[action^="https://portal"]')).toBeNull();
+  });
+
+  test('login override to a social-auth login URL is POSTed', async () => {
+    // social-auth-app-django 6.x answers a GET on /sso/login/<backend>/
+    // with 405, so this override has to leave the page with a CSRF form.
+    const replaceSpy = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+    const submit = vi
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
+    document.cookie = 'csrftoken=TESTTOKEN';
+    window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
+
+    const contextValues = {
+      setAuthRedirectTo: vi.fn(),
+      isSessionExpired: false,
+      isUserBeingLoggedOut: false,
+      loginRedirectOverride: '/sso/login/saml/?idp=corp',
+    };
+    vi.spyOn(SessionContext, 'useSession').mockImplementation(
+      () => contextValues as unknown as SessionValue
+    );
+
+    renderWithContexts(
+      <ProtectedRoute>
+        <div>foo</div>
+      </ProtectedRoute>,
+      {
+        context: {
+          router: {
+            history: createMemoryHistory({
+              initialEntries: ['/jobs/playbook/42?tab=output'],
+            }),
+          },
+        },
+      }
+    );
+
+    await waitFor(() => expect(submit).toHaveBeenCalledTimes(1));
+    const form = document.querySelector(
+      'form[action="/sso/login/saml/?idp=corp"]'
+    ) as HTMLFormElement;
+    expect(form).not.toBeNull();
+    expect(form.method).toEqual('post');
+    expect(
+      (
+        form.querySelector(
+          'input[name="csrfmiddlewaretoken"]'
+        ) as HTMLInputElement
+      ).value
+    ).toEqual('TESTTOKEN');
+    expect(replaceSpy).not.toHaveBeenCalled();
+    // The provider round trip unloads the page, so where the user was
+    // heading is kept the way the login page's own provider buttons keep it.
+    expect(window.sessionStorage.getItem(SESSION_REDIRECT_URL)).toEqual(
+      '/jobs/playbook/42?tab=output'
+    );
+
+    form.remove();
+    window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
+    document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  });
+
+  test('login override with a script scheme is ignored', async () => {
+    // An admin-typed javascript: URL would run in every unauthenticated
+    // visitor's browser. The API refuses to store one; a stored one is not
+    // followed, and the visitor lands on the login page instead.
+    const replaceSpy = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+    const submit = vi
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
+
+    const contextValues = {
+      setAuthRedirectTo: vi.fn(),
+      isSessionExpired: false,
+      isUserBeingLoggedOut: false,
+      // The literal is the very value under test.
+      // eslint-disable-next-line no-script-url
+      loginRedirectOverride: 'javascript:alert(document.cookie)',
+    };
+    vi.spyOn(SessionContext, 'useSession').mockImplementation(
+      () => contextValues as unknown as SessionValue
+    );
+
+    const history = createMemoryHistory({ initialEntries: ['/jobs'] });
+    renderWithContexts(
+      <ProtectedRoute>
+        <div>foo</div>
+      </ProtectedRoute>,
+      { context: { router: { history } } }
+    );
+
+    await waitFor(() => expect(history.location.pathname).toEqual('/login'));
+    expect(replaceSpy).not.toHaveBeenCalled();
+    expect(submit).not.toHaveBeenCalled();
+    expect(screen.queryByText('foo')).not.toBeInTheDocument();
   });
 
   test('renders children when authenticated', async () => {

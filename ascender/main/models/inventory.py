@@ -1151,6 +1151,13 @@ class InventorySource(UnifiedJobTemplate, InventorySourceOptions, RelatedJobsMix
         default=0,
     )
 
+    managed_inventory_variables = models.JSONField(
+        default=dict,
+        blank=True,
+        editable=False,
+        help_text=_('Inventory variable names written by the last sync of this source, mapped to a hash of the value written.'),
+    )
+
     @classmethod
     def _get_unified_job_class(cls):
         return InventoryUpdate

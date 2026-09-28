@@ -5,6 +5,7 @@ from ascender.main.validators import (
     validate_ssh_private_key,
     vars_validate_or_raise,
     validate_container_image_name,
+    validate_login_redirect_url,
 )
 from ascender.main.tests.data.ssh import (
     TEST_SSH_RSA1_KEY_DATA,
@@ -219,3 +220,44 @@ def test_valid_container_image_name(image_name, is_valid):
     else:
         with pytest.raises(ValidationError):
             validate_container_image_name(image_name)
+
+
+@pytest.mark.parametrize(
+    'value',
+    [
+        '',
+        '/sso/login/saml/?idp=corp',
+        'sso/login/saml/',
+        '//sso.example.com/login',
+        'https://idp.example.com/realms/corp/protocol/saml',
+        'HTTPS://idp.example.com/',
+        'http://keycloak/realms/corp',
+    ],
+)
+def test_login_redirect_url_accepts_paths_and_http(value):
+    validate_login_redirect_url(value)
+
+
+@pytest.mark.parametrize(
+    'value',
+    [
+        'javascript:alert(1)',
+        'JavaScript:alert(1)',
+        ' javascript:alert(1)',
+        'java\tscript:alert(1)',
+        'java\nscript:alert(1)',
+        'data:text/html,<script>alert(1)</script>',
+        'vbscript:msgbox(1)',
+        'mailto:someone@example.com',
+        'ftp://files.example.com/',
+        # urlsplit raises ValueError on these; that must surface as a field
+        # error, not a 500 from the settings API.
+        '//[::1',
+        'http://[::1',
+        'http://[::1]]/x',
+        'http://[1:2:3:4:5:6:7:8:9]/',
+    ],
+)
+def test_login_redirect_url_rejects_other_schemes(value):
+    with pytest.raises(ValidationError):
+        validate_login_redirect_url(value)

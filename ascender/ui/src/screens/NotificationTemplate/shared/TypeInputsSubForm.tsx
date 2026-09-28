@@ -39,6 +39,7 @@ const TypeFields = {
   email: EmailFields,
   grafana: GrafanaFields,
   irc: IRCFields,
+  matrix: MatrixFields,
   mattermost: MattermostFields,
   pagerduty: PagerdutyFields,
   rocketchat: RocketChatFields,
@@ -334,6 +335,68 @@ function IRCFields({ isEdit = false }) {
         label={t`Disable SSL verification`}
         name="notification_configuration.use_ssl"
       />
+    </>
+  );
+}
+
+function MatrixFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = {
+    matrixHomeserver: t`The base URL of the Matrix homeserver's client API,
+      for example https://matrix.example.org. The /_matrix/client/v3 paths
+      are added automatically.`,
+    matrixRooms: t`One room per line, as a room ID (!abcdef:example.org) or
+      a room alias (#automation:example.org). The user the access token
+      belongs to must already be a member of every room.`,
+    matrixHtml: t`Send the message body as HTML (org.matrix.custom.html)
+      alongside the plain-text message, so the job link is clickable.
+      Clients that cannot render HTML fall back to the plain text.`,
+  };
+  return (
+    <>
+      <FormField
+        id="matrix-homeserver-url"
+        label={t`Homeserver URL`}
+        name="notification_configuration.homeserver_url"
+        type="text"
+        validate={combine([required(null), url()])}
+        isRequired
+        tooltip={helpText.matrixHomeserver}
+      />
+      <SecretPasswordField
+        id="matrix-access-token"
+        label={t`Access token`}
+        name="notification_configuration.access_token"
+        isEdit={isEdit}
+        isRequiredOnCreate
+      />
+      <ArrayTextField
+        id="matrix-rooms"
+        label={t`Destination rooms`}
+        name="notification_configuration.rooms"
+        type="textarea"
+        validate={required(null)}
+        isRequired
+        tooltip={helpText.matrixRooms}
+      />
+      <FormGroup
+        fieldId="matrix-options"
+        label={t`Matrix Options`}
+        labelHelp={<Popover content={helpText.matrixHtml} />}
+      >
+        <FormCheckboxLayout>
+          <CheckboxField
+            id="matrix-use-html"
+            name="notification_configuration.use_html"
+            label={t`Send HTML formatted body`}
+          />
+          <CheckboxField
+            id="matrix-ssl"
+            name="notification_configuration.disable_ssl_verification"
+            label={t`Disable SSL verification`}
+          />
+        </FormCheckboxLayout>
+      </FormGroup>
     </>
   );
 }

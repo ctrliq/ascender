@@ -3,6 +3,7 @@ export const NOTIFICATION_TYPES = {
   email: 'Email',
   grafana: 'Grafana',
   irc: 'IRC',
+  matrix: 'Matrix',
   mattermost: 'Mattermost',
   pagerduty: 'Pagerduty',
   rocketchat: 'Rocket.Chat',
