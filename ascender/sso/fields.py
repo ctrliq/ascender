@@ -272,9 +272,7 @@ class AuthenticationBackendsField(fields.StringListField):
             if backend not in backends:
                 continue
             optional_settings = self.WORKLOAD_IDENTITY_OPTIONAL_SETTINGS.get(backend, [])
-            effectively_required = [
-                rs for rs in required_settings if not (rs in optional_settings and self._client_assertion_available(backend))
-            ]
+            effectively_required = [rs for rs in required_settings if not (rs in optional_settings and self._client_assertion_available(backend))]
             if all([getattr(settings, rs, None) for rs in effectively_required]):
                 continue
             backends = [x for x in backends if x != backend]
