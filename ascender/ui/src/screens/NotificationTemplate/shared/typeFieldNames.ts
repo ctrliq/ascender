@@ -19,6 +19,13 @@ const typeFieldNames = {
     'grafana_no_verify_ssl',
   ],
   irc: ['password', 'port', 'server', 'nickname', 'targets', 'use_ssl'],
+  matrix: [
+    'homeserver_url',
+    'access_token',
+    'rooms',
+    'use_html',
+    'disable_ssl_verification',
+  ],
   mattermost: [
     'mattermost_url',
     'mattermost_username',
@@ -51,6 +58,11 @@ const initialConfigValues: Record<string, boolean | string> = {};
 Object.keys(typeFieldNames).forEach((key) => {
   typeFieldNames[key as keyof typeof typeFieldNames].forEach(
     (fieldName: string) => {
+      // A new Matrix template sends the HTML body until told otherwise.
+      if (fieldName === 'use_html') {
+        initialConfigValues[fieldName] = true;
+        return;
+      }
       const isBoolean = fieldName.includes('_ssl') || fieldName === 'use_tls';
       initialConfigValues[fieldName] = isBoolean ? false : '';
     }

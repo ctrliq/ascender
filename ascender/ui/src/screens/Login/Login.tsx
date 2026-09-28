@@ -30,7 +30,7 @@ import {
 } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
-import { getCookie } from 'api/Base';
+import { submitSocialLoginForm } from 'util/socialLogin';
 import { useSession } from 'contexts/Session';
 import { applyTheme, getSavedThemeId, clearSessionTheme } from 'themeRegistry';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -201,16 +201,7 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
     // default stays in sessionStorage for the app to paint with when the
     // provider sends the browser back.
     applyTheme(getSavedThemeId());
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = loginUrl ?? '';
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'csrfmiddlewaretoken';
-    input.value = getCookie('csrftoken') ?? '';
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
+    submitSocialLoginForm(loginUrl ?? '');
   };
 
   const socialAuthProviders = {

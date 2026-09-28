@@ -334,5 +334,41 @@
         "body": null
       }
     }
+  },
+  "matrix": {
+    "started": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": "<strong>{{ job_friendly_name }} #{{ job.id }}</strong> '{{ job.name | e }}' {{ job.status }}: <a href=\"{{ url }}\">{{ url }}</a>"
+    },
+    "success": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": "<strong>{{ job_friendly_name }} #{{ job.id }}</strong> '{{ job.name | e }}' {{ job.status }}: <a href=\"{{ url }}\">{{ url }}</a>"
+    },
+    "error": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": "<strong>{{ job_friendly_name }} #{{ job.id }}</strong> '{{ job.name | e }}' {{ job.status }}: <a href=\"{{ url }}\">{{ url }}</a>"
+    },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
+      "body": "<strong>{{ job_friendly_name }} #{{ job.id }}</strong> '{{ job.name | e }}' reported changes: <a href=\"{{ url }}\">{{ url }}</a>"
+    },
+    "workflow_approval": {
+      "running": {
+        "message": "The approval node \"{{ approval_node_name }}\" needs review. This node can be viewed at: {{ workflow_url }}",
+        "body": "The approval node \"<strong>{{ approval_node_name | e }}</strong>\" needs review. This node can be viewed at: <a href=\"{{ workflow_url }}\">{{ workflow_url }}</a>{% if context_message %}<br><br>Context:<br>{{ context_message | e }}{% endif %}"
+      },
+      "approved": {
+        "message": "The approval node \"{{ approval_node_name }}\" was approved. {{ workflow_url }}",
+        "body": "The approval node \"<strong>{{ approval_node_name | e }}</strong>\" was approved. <a href=\"{{ workflow_url }}\">{{ workflow_url }}</a>"
+      },
+      "timed_out": {
+        "message": "The approval node \"{{ approval_node_name }}\" has timed out. {{ workflow_url }}",
+        "body": "The approval node \"<strong>{{ approval_node_name | e }}</strong>\" has timed out. <a href=\"{{ workflow_url }}\">{{ workflow_url }}</a>"
+      },
+      "denied": {
+        "message": "The approval node \"{{ approval_node_name }}\" was denied. {{ workflow_url }}",
+        "body": "The approval node \"<strong>{{ approval_node_name | e }}</strong>\" was denied. <a href=\"{{ workflow_url }}\">{{ workflow_url }}</a>"
+      }
+    }
   }
 }

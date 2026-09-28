@@ -238,6 +238,7 @@ function NotificationList({
               ['grafana', t`Grafana`],
               ['hipchat', t`Hipchat`],
               ['irc', t`IRC`],
+              ['matrix', t`Matrix`],
               ['mattermost', t`Mattermost`],
               ['pagerduty', t`Pagerduty`],
               ['rocketchat', t`Rocket.Chat`],
