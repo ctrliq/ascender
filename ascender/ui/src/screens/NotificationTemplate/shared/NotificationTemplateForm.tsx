@@ -142,6 +142,7 @@ function NotificationTemplateFormFields({
             { value: 'email', key: 'email', label: t`E-mail` },
             { value: 'grafana', key: 'grafana', label: 'Grafana' },
             { value: 'irc', key: 'irc', label: 'IRC' },
+            { value: 'matrix', key: 'matrix', label: 'Matrix' },
             { value: 'mattermost', key: 'mattermost', label: 'Mattermost' },
             { value: 'pagerduty', key: 'pagerduty', label: 'Pagerduty' },
             { value: 'rocketchat', key: 'rocketchat', label: 'Rocket.Chat' },

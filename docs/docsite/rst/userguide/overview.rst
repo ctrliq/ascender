@@ -120,6 +120,7 @@ Ascender allows you to easily keep track of the status of your automation. You c
 - Email
 - Grafana
 - IRC
+- Matrix
 - Mattermost
 - PagerDuty
 - Rocket.Chat
