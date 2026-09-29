@@ -12874,7 +12874,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -12908,7 +12908,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
@@ -15947,7 +15947,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -15986,7 +15986,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
@@ -17920,7 +17920,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -17954,7 +17954,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
