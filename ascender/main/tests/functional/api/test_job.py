@@ -255,3 +255,67 @@ class TestControllerNode:
 
         r = get(reverse('api:system_job_detail', kwargs={'pk': system_job.pk}), admin_user, expect=200)
         assert 'controller_node' not in r.data
+
+
+@pytest.mark.django_db
+class TestPreventRelaunch:
+    """A job template can turn relaunch off for the jobs it launches, which binds everyone."""
+
+    @pytest.fixture
+    def jt(self, inventory, project):
+        return JobTemplate.objects.create(name='one-shot', inventory=inventory, project=project, playbook='helloworld.yml', prevent_relaunch=True)
+
+    @pytest.fixture
+    def executor(self, jt):
+        user = User.objects.create(username='jt-executor')
+        jt.execute_role.members.add(user)
+        return user
+
+    def test_relaunch_refused(self, jt, executor, admin_user, get, post):
+        with impersonate(executor):
+            job = jt.create_unified_job()
+        for user in (executor, admin_user):
+            r = get(job.get_absolute_url(), user, expect=200)
+            assert r.data['summary_fields']['user_capabilities']['start'] is False
+            assert r.data['summary_fields']['job_template']['prevent_relaunch'] is True
+            r = post(reverse('api:job_relaunch', kwargs={'pk': job.pk}), {}, user, expect=403)
+            assert 'Relaunch is disabled' in r.data['detail']
+        assert Job.objects.count() == 1
+
+    def test_relaunch_on_failed_hosts_refused(self, jt, inventory, admin_user, post):
+        host = inventory.hosts.create(name='host1')
+        job = jt.create_unified_job(_eager_fields={'status': 'failed'})
+        job.job_events.create(event='playbook_on_stats')
+        job.job_host_summaries.create(host=host, failed=True, failures=1, host_name=host.name)
+        post(reverse('api:job_relaunch', kwargs={'pk': job.pk}), {'hosts': 'failed'}, admin_user, expect=403)
+
+    def test_flag_is_read_at_relaunch_time(self, jt, executor, get, post):
+        with impersonate(executor):
+            job = jt.create_unified_job()
+        jt.prevent_relaunch = False
+        jt.save(update_fields=['prevent_relaunch'])
+        r = get(job.get_absolute_url(), executor, expect=200)
+        assert r.data['summary_fields']['user_capabilities']['start'] is True
+        post(reverse('api:job_relaunch', kwargs={'pk': job.pk}), {}, executor, expect=201)
+
+    def test_template_can_still_be_launched(self, jt, executor, get, post):
+        r = get(jt.get_absolute_url(), executor, expect=200)
+        assert r.data['summary_fields']['user_capabilities']['start'] is True
+        post(reverse('api:job_template_launch', kwargs={'pk': jt.pk}), {}, executor, expect=201)
+
+    def test_sliced_job_relaunch_refused(self, admin_user, project, get, post, slice_job_factory):
+        workflow_job = slice_job_factory(3, jt_kwargs={'project': project, 'prevent_relaunch': True}, spawn=True)
+        r = get(workflow_job.get_absolute_url(), admin_user, expect=200)
+        assert r.data['summary_fields']['user_capabilities']['start'] is False
+        r = post(reverse('api:workflow_job_relaunch', kwargs={'pk': workflow_job.pk}), {}, admin_user, expect=403)
+        assert 'Relaunch is disabled' in r.data['detail']
+        # each slice is a job of the same template
+        slice_job = workflow_job.workflow_nodes.first().job
+        post(reverse('api:job_relaunch', kwargs={'pk': slice_job.pk}), {}, admin_user, expect=403)
+
+    def test_field_is_editable_and_copied(self, jt, admin_user, patch, post):
+        r = patch(jt.get_absolute_url(), {'prevent_relaunch': False}, admin_user, expect=200)
+        assert r.data['prevent_relaunch'] is False
+        patch(jt.get_absolute_url(), {'prevent_relaunch': True}, admin_user, expect=200)
+        r = post(reverse('api:job_template_copy', kwargs={'pk': jt.pk}), {'name': 'one-shot copy'}, admin_user, expect=201)
+        assert JobTemplate.objects.get(pk=r.data['id']).prevent_relaunch is True

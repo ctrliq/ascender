@@ -25,6 +25,7 @@ from ascender.api.generics import (
     SubListAPIView,
 )
 from ascender.main import models
+from ascender.main.access import relaunch_prevented
 from ascender.api import serializers
 from ascender.main.constants import ACTIVE_STATES
 from ascender.api.views.mixin import UnifiedJobDeletionMixin, NoTruncateMixin, UnifiedJobIncludeMixin
@@ -123,6 +124,8 @@ class JobRelaunch(RetrieveAPIView):
 
     def check_object_permissions(self, request, obj):
         if request.method == 'POST' and obj:
+            if relaunch_prevented(obj):
+                self.permission_denied(request, message=_('Relaunch is disabled on the job template of this job.'))
             relaunch_perm, messages = request.user.can_access_with_errors(self.model, 'start', obj)
             if not relaunch_perm and 'detail' in messages:
                 self.permission_denied(request, message=messages['detail'])

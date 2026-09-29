@@ -1,4 +1,4 @@
-import { getJobModel, isJobRunning } from './jobs';
+import { canOfferCancel, getJobModel, isJobRunning } from './jobs';
 
 describe('isJobRunning', () => {
   test('should return true for new', () => {
@@ -41,5 +41,29 @@ describe('getJobModel', () => {
       baseUrls.push(getJobModel(type).baseUrl);
     });
     expect(new Set(baseUrls).size).toBe(baseUrls.length - 1);
+  });
+});
+
+describe('canOfferCancel', () => {
+  test('follows the start capability', () => {
+    expect(
+      canOfferCancel({ summary_fields: { user_capabilities: { start: true } } })
+    ).toBe(true);
+    expect(
+      canOfferCancel({
+        summary_fields: { user_capabilities: { start: false } },
+      })
+    ).toBe(false);
+    expect(canOfferCancel({})).toBe(false);
+  });
+  test('is offered when relaunch prevention took the start capability away', () => {
+    expect(
+      canOfferCancel({
+        summary_fields: {
+          user_capabilities: { start: false },
+          job_template: { prevent_relaunch: true },
+        },
+      })
+    ).toBe(true);
   });
 });

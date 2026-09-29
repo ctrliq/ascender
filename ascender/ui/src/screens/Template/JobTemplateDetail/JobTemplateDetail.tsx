@@ -70,6 +70,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
     related: { webhook_receiver },
     webhook_key,
     prevent_instance_group_fallback,
+    prevent_relaunch,
   } = template;
   const { id: templateId } = useParams() as { id: string };
   const navigate = useNavigate();
@@ -117,7 +118,8 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
     allow_simultaneous ||
     use_fact_cache ||
     webhook_service ||
-    prevent_instance_group_fallback;
+    prevent_instance_group_fallback ||
+    prevent_relaunch;
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
@@ -144,6 +146,9 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
         <Content component={ContentVariants.li}>
           {t`Prevent Instance Group Fallback`}
         </Content>
+      )}
+      {prevent_relaunch && (
+        <Content component={ContentVariants.li}>{t`Prevent Relaunch`}</Content>
       )}
     </Content>
   );

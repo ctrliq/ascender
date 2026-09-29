@@ -200,6 +200,16 @@ def check_superuser(func):
     return wrapper
 
 
+def relaunch_prevented(job):
+    """
+    Whether the job template behind this job turned relaunch off. A sliced
+    workflow job counts too, since relaunching it runs every slice again.
+    This binds superusers as well: clearing the template's flag is the way back.
+    """
+    job_template = getattr(job, 'job_template', None)
+    return bool(job_template and job_template.prevent_relaunch)
+
+
 def consumer_access(group_name):
     """
     consumer_access returns the proper Access class based on group_name
@@ -1775,6 +1785,8 @@ class JobAccess(BaseAccess):
 
     def get_method_capability(self, method, obj, parent_obj):
         if method == 'start':
+            if relaunch_prevented(obj):
+                return False
             # Return simplistic permission, will perform detailed check on POST
             if not obj.job_template:
                 return True
@@ -2148,6 +2160,8 @@ class WorkflowJobAccess(BaseAccess):
 
     def get_method_capability(self, method, obj, parent_obj):
         if method == 'start':
+            if relaunch_prevented(obj):
+                return False
             # Return simplistic permission, will perform detailed check on POST
             if not obj.workflow_job_template:
                 return self.user.is_superuser

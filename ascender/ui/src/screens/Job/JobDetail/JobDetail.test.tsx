@@ -413,6 +413,31 @@ describe('<JobDetail />', () => {
     ).toBeInTheDocument();
   });
 
+  test('hides relaunch but keeps cancel when the template prevents relaunch', () => {
+    renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          status: 'running',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            job_template: {
+              ...mockJobData.summary_fields.job_template,
+              prevent_relaunch: true,
+            },
+            user_capabilities: { start: false, delete: false },
+          } as SummaryFields,
+        }}
+      />
+    );
+    expect(
+      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Relaunch' })
+    ).not.toBeInTheDocument();
+  });
+
   test('should render workflow job details', () => {
     const workFlowJob = {
       id: 15,

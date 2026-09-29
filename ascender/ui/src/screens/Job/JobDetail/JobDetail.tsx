@@ -26,7 +26,7 @@ import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import { getVerbosityLabel } from 'components/VerbositySelectField';
-import { getJobModel, isJobRunning } from 'util/jobs';
+import { canOfferCancel, getJobModel, isJobRunning } from 'util/jobs';
 import { formatDateString } from 'util/dates';
 import getJobHelpText from '../Job.helptext';
 import './JobDetail.css';
@@ -635,7 +635,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         {isJobRunning(job.status) &&
           (job.type === 'system_job'
             ? me?.is_superuser
-            : job?.summary_fields?.user_capabilities?.start) && (
+            : canOfferCancel(job)) && (
             <JobCancelButton
               job={job}
               errorTitle={t`Job Cancel Error`}

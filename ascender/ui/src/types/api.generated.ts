@@ -8889,6 +8889,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     /** @description Provide recent jobs and survey details in summary_fields */
     JobTemplateRequest: {
@@ -9017,6 +9022,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     /**
      * @description * `new` - New
@@ -10917,6 +10927,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     PatchedLabelRequest: {
       name?: string | null;

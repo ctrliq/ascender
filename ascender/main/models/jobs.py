@@ -248,7 +248,7 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
     playbook) to an inventory source with a given credential.
     """
 
-    FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials', 'survey_spec', 'prevent_instance_group_fallback']
+    FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials', 'survey_spec', 'prevent_instance_group_fallback', 'prevent_relaunch']
     FIELDS_TO_DISCARD_AT_COPY = ['vault_credential', 'credential', 'webhook_key']
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
 
@@ -326,6 +326,14 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             "instance groups to the list of preferred instances groups to run on."
             "If this setting is enabled and you provided an empty list, the global instance "
             "groups will be applied."
+        ),
+    )
+    prevent_relaunch = models.BooleanField(
+        default=False,
+        help_text=_(
+            "If enabled, jobs launched from this job template cannot be relaunched, by anyone. "
+            "The template itself can still be launched. Checked at relaunch time, so turning it off "
+            "makes earlier jobs relaunchable again."
         ),
     )
     notification_templates_changed = models.ManyToManyField(

@@ -707,6 +707,12 @@ function JobTemplateForm({
                     label={t`Prevent Instance Group Fallback`}
                     tooltip={helpText.preventInstanceGroupFallback}
                   />
+                  <CheckboxField
+                    id="option-prevent-relaunch"
+                    name="prevent_relaunch"
+                    label={t`Prevent Relaunch`}
+                    tooltip={helpText.preventRelaunch}
+                  />
                 </FormCheckboxLayout>
               </FormGroup>
             </FormFullWidthLayout>
@@ -821,6 +827,7 @@ const FormikApp = withForm<JobTemplateFormProps, JobTemplateFormValues>({
       playbook: template.playbook || '',
       prevent_instance_group_fallback:
         template.prevent_instance_group_fallback || false,
+      prevent_relaunch: template.prevent_relaunch || false,
       project: summary_fields?.project || null,
       scm_branch: template.scm_branch || '',
       skip_tags: template.skip_tags || '',
