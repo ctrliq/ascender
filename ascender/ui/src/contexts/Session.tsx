@@ -10,7 +10,7 @@ import { Navigate, useLocation, useNavigationType } from 'react-router';
 import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';
-import locationReplace from 'util/navigation';
+import locationReplace, { isHttpUrl } from 'util/navigation';
 import useRequest from 'hooks/useRequest';
 import queryClient from '../queryClient';
 import { clearOptionsCache } from '../api/optionsCache';
@@ -166,8 +166,10 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
     clearInterval(sessionIntervalId.current);
     // Only a logout the user asked for goes on to the provider. One forced by
     // the idle timeout would end their single sign on everywhere else too.
+    // The server only hands back http(s) addresses, but a javascript: one
+    // would run here rather than navigate, so that is checked again.
     const logoutUrl = response?.data?.logout_url;
-    if (logoutUrl && !isSessionExpired.current) {
+    if (logoutUrl && isHttpUrl(logoutUrl) && !isSessionExpired.current) {
       locationReplace(logoutUrl);
       return null;
     }

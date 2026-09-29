@@ -23,6 +23,23 @@ function LogoutButton() {
   );
 }
 
+// What the idle timeout does once its countdown runs out, without waiting
+// the countdown out.
+function ExpireButton() {
+  const { logout, isSessionExpired } = useSession();
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        (isSessionExpired as React.MutableRefObject<boolean>).current = true;
+        logout();
+      }}
+    >
+      Expire
+    </button>
+  );
+}
+
 describe('SessionProvider', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -87,6 +104,56 @@ describe('SessionProvider', () => {
         'https://idp.example.com/logout?client_id=x'
       )
     );
+    replace.mockRestore();
+  });
+
+  // Ending the session at the provider would log the user out of every other
+  // application sharing it, which an idle tab has no business doing.
+  test('does not go on to the provider when the session expired', async () => {
+    const user = userEvent.setup();
+    const replace = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+    (RootAPI.logout as ReturnType<typeof vi.fn>).mockResolvedValue({
+      data: { logout_url: 'https://idp.example.com/logout?client_id=x' },
+    });
+
+    render(
+      <MemoryRouter>
+        <SessionProvider>
+          <ExpireButton />
+        </SessionProvider>
+      </MemoryRouter>
+    );
+    await user.click(await screen.findByRole('button', { name: 'Expire' }));
+    await waitFor(() => expect(RootAPI.logout).toHaveBeenCalled());
+
+    expect(replace).not.toHaveBeenCalled();
+    replace.mockRestore();
+  });
+
+  test('does not follow a logout url that is not a web address', async () => {
+    const user = userEvent.setup();
+    const replace = vi
+      .spyOn(navigation, 'default')
+      .mockImplementation(() => {});
+    (RootAPI.logout as ReturnType<typeof vi.fn>).mockResolvedValue({
+      // The literal is the very value under test.
+      // eslint-disable-next-line no-script-url
+      data: { logout_url: 'javascript:alert(1)' },
+    });
+
+    render(
+      <MemoryRouter>
+        <SessionProvider>
+          <LogoutButton />
+        </SessionProvider>
+      </MemoryRouter>
+    );
+    await user.click(await screen.findByRole('button', { name: 'Logout' }));
+    await waitFor(() => expect(RootAPI.logout).toHaveBeenCalled());
+
+    expect(replace).not.toHaveBeenCalled();
     replace.mockRestore();
   });
 

@@ -17,6 +17,7 @@ from social_core.backends.open_id_connect import OpenIdConnectAuth
 from social_core.exceptions import AuthForbidden
 from social_django.utils import load_strategy
 
+from ascender.main.constants import ASCENDER_URL_BASE_PLACEHOLDER
 from ascender.sso.triggers import UNUSABLE_RULE, evaluate_trigger_rule, resolve_membership
 
 logger = logging.getLogger('ascender.sso.oidc')
@@ -235,16 +236,12 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
         user.save(update_fields=['is_superuser'])
 
 
-#: What ASCENDER_URL_BASE says until someone sets it.
-UNSET_URL_BASE = 'https://ascenderhost'
-
-
 def _post_logout_redirect_url(request):
     url = getattr(settings, 'SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL', '')
     if url:
         return url
-    base = getattr(settings, 'ASCENDER_URL_BASE', '') or UNSET_URL_BASE
-    if base.rstrip('/') == UNSET_URL_BASE:
+    base = getattr(settings, 'ASCENDER_URL_BASE', '')
+    if not base or base.rstrip('/') == ASCENDER_URL_BASE_PLACEHOLDER:
         # No provider would accept the placeholder, and the user would be left
         # on its error page, so come back to where the logout was asked from.
         return request.build_absolute_uri('/')
@@ -277,7 +274,13 @@ def idp_logout_url(request):
         logger.warning("The OIDC provider does not advertise an end_session_endpoint, %s is only logged out of Ascender", user.username)
         return None
     # The browser is sent wherever this points, so it has to be a web address.
-    if urlsplit(end_session_endpoint).scheme not in ('https', 'http'):
+    # A discovery document is the provider's to get wrong, and whatever it says
+    # must not stop the local logout from happening.
+    try:
+        endpoint = urlsplit(end_session_endpoint) if isinstance(end_session_endpoint, str) else None
+    except ValueError:
+        endpoint = None
+    if endpoint is None or endpoint.scheme not in ('https', 'http') or not endpoint.netloc:
         logger.warning("The OIDC provider's end_session_endpoint is not an http(s) URL, %s is only logged out of Ascender", user.username)
         return None
 

@@ -14,6 +14,7 @@ from datetime import timedelta
 
 # python-ldap
 import ldap
+from ascender.main import constants
 from ascender.settings.environment import environment_setting
 
 DEBUG = True
@@ -970,7 +971,7 @@ ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
-ASCENDER_URL_BASE = "https://ascenderhost"
+ASCENDER_URL_BASE = constants.ASCENDER_URL_BASE_PLACEHOLDER
 
 
 # Settings related to external logger configuration

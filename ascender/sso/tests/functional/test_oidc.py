@@ -346,6 +346,15 @@ class TestLogoutFromProvider:
         assert response.status_code == 302
         assert response['Location'] == '/api/'
 
+    # A discovery document is the provider's to get wrong, and the user still
+    # has to come out of it logged out here rather than with a 500.
+    @pytest.mark.parametrize('endpoint', [['https://idp.example.com/logout'], {'url': 'x'}, 42, True, 'https:///logout', 'https://[::1/logout'])
+    def test_a_malformed_end_session_endpoint_is_only_logged_out_here(self, rf, user, social, endpoint):
+        request, response = self.logout(rf, user, 'application/json', oidc_config={'end_session_endpoint': endpoint})
+        assert response.status_code == 302
+        assert response['Location'] == '/api/'
+        assert not request.user.is_authenticated
+
     def test_an_unreachable_provider_is_only_logged_out_here(self, rf, user, social):
         request, response = self.logout(rf, user, 'application/json', side_effect=ConnectionError)
         assert response.status_code == 302
