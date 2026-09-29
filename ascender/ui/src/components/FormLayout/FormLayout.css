@@ -26,18 +26,21 @@
   grid-gap: var(--pf-v6-c-form--GridGap);
 }
 
+/* Spacing between the checkboxes, and nothing hanging off the end.
+   
+   This used to give every child a trailing margin and pull the same amount
+   back off the container, which is how gutters were done before gap existed.
+   The pull back is a negative margin, so the container's own box grew by it:
+   on a template form it reached six pixels past the card, and a card set to
+   overflow: auto answered with a horizontal scrollbar and a vertical one to
+   match. Gap spaces the children without putting a margin after the last one,
+   so there is nothing to cancel. */
 .ascender-form-checkbox-layout {
   display: flex;
   justify-content: flex-start;
-  flex-wrap: wrap;
-  margin-bottom: -10px;
-  margin-right: -30px !important;
-}
-
-.ascender-form-checkbox-layout > * {
-  margin-bottom: 10px;
-  margin-right: 30px;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 30px;
 }
 
 .ascender-sub-form-layout {

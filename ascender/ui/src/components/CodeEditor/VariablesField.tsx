@@ -14,9 +14,18 @@ import type { VariablesMode } from './constants';
 import { CheckboxField } from '../FormField';
 import MultiButtonToggle from '../MultiButtonToggle';
 import CodeEditor from './CodeEditor';
+import {
+  EditorActions,
+  fittedHeight,
+  HeightModal,
+  useEditorRows,
+} from './EditorActions';
 import Popover from '../Popover';
 import { JSON_MODE, YAML_MODE } from './constants';
 import './VariablesField.css';
+
+/** The height the box never goes below, and what collapsing returns it to. */
+const MIN_ROWS = 4;
 
 const defaultValidators: Record<
   string,
@@ -195,6 +204,12 @@ function VariablesFieldInternals({
 }: VariablesFieldInternalsProps) {
   const { t } = useLingui();
   const [field, meta, helpers] = useField(name);
+  // Fitted to the value, collapsing to the same four rows the box already uses
+  // as its floor. Both controls only do something once the value is longer than
+  // that: below it the box is already showing everything it has.
+  const height = useEditorRows(MIN_ROWS, 'auto', true);
+  const lineCount = (field.value ?? '').split('\n').length;
+  const isSizeable = lineCount > MIN_ROWS;
 
   useEffect(() => {
     if (mode === YAML_MODE) {
@@ -237,12 +252,21 @@ function VariablesFieldInternals({
               name={name}
             />
           </SplitItem>
+          <EditorActions
+            dataCy={id}
+            copyValue={field.value ?? ''}
+            controls={id}
+            isCollapsed={height.isCollapsed}
+            isSizeable={isSizeable}
+            onToggleCollapse={height.toggleCollapse}
+            onSetHeight={height.openModal}
+          />
         </Split>
         {promptId && (
           <CheckboxField
             className="ascender-variables-field__styled-checkbox-field"
             id="template-ask-variables-on-launch"
-            label={t`Prompt on launch`}
+            label={t`Prompt on Launch`}
             name="ask_variables_on_launch"
           />
         )}
@@ -253,12 +277,24 @@ function VariablesFieldInternals({
         readOnly={readOnly}
         {...field}
         onChange={handleChange}
-        rows="auto"
-        minRows={4}
+        rows={isSizeable ? height.rows : 'auto'}
+        minRows={MIN_ROWS}
         onFocus={() => setShouldValidate(false)}
         onBlur={() => setShouldValidate(true)}
         hasErrors={!!meta.error}
       />
+      {height.isModalOpen && (
+        <HeightModal
+          dataCy={id}
+          value={
+            typeof height.rows === 'number'
+              ? height.rows
+              : fittedHeight(lineCount)
+          }
+          onCancel={height.closeModal}
+          onSave={height.chooseRows}
+        />
+      )}
     </div>
   );
 }

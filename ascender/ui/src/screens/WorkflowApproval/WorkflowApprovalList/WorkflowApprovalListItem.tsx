@@ -12,6 +12,7 @@ import {
   getPendingLabel,
   getStatus,
   getTooltip,
+  isWorkflowDeleted,
 } from '../shared/WorkflowApprovalUtils';
 import WorkflowApprovalButton from '../shared/WorkflowApprovalButton';
 import WorkflowDenyButton from '../shared/WorkflowDenyButton';
@@ -41,7 +42,28 @@ function WorkflowApprovalListItem({
     workflowApproval.status === 'canceled';
   const labelId = `check-action-${workflowApproval.id}`;
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
+  // The workflow is gone, so there is nothing for a vote or a cancel to reach.
+  const workflowIsDeleted = isWorkflowDeleted(workflowApproval);
   const status = getStatus(workflowApproval);
+  // The api says no once the approval has been acted on as well, so this only
+  // stands for missing permission while it is still waiting on a vote. The
+  // details page and the toolbar buttons hold back on the same field.
+  const isNotPermitted =
+    !hasBeenActedOn && !workflowApproval.can_approve_or_deny;
+  const reasonUnavailable =
+    (hasBeenActedOn && t`This workflow has already been acted on`) ||
+    (workflowIsDeleted && t`This workflow has been deleted`) ||
+    (isNotPermitted &&
+      t`You do not have permission to act on this workflow approval`);
+  // Canceling the workflow is a right on the workflow job, its creator or an
+  // admin of its template, which the api reports apart from the approver role
+  // that approve and deny read.
+  const cannotCancelWorkflow = !workflowApproval.can_cancel_workflow;
+  const reasonCannotCancel =
+    (hasBeenActedOn && t`This workflow has already been acted on`) ||
+    (workflowIsDeleted && t`This workflow has been deleted`) ||
+    (cannotCancelWorkflow &&
+      t`You do not have permission to cancel this workflow`);
   // Toast handler for approve/deny actions (PatternFly style)
   const handleToast = (id: number, message: string) => {
     addToast({
@@ -72,16 +94,16 @@ function WorkflowApprovalListItem({
           )}
         </Link>
       </Td>
-      <Td>
+      <Td dataLabel={t`Workflow`}>
         {workflowJob && workflowJob?.id ? (
-          <Link to={`/jobs/workflow/${workflowJob?.id}`}>
+          <Link to={`/runs/workflow/${workflowJob?.id}`}>
             {`${workflowJob?.id} - ${workflowJob?.name}`}
           </Link>
         ) : (
           t`Deleted`
         )}
       </Td>
-      <Td dataLabel={t`Started`}>
+      <Td dataLabel={t`Started`} modifier="nowrap">
         {formatDateString(workflowApproval.started)}
       </Td>
       <Td dataLabel={t`Status`}>
@@ -97,40 +119,37 @@ function WorkflowApprovalListItem({
         )}
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
-        <ActionItem
-          visible
-          tooltip={
-            hasBeenActedOn ? t`This has already been acted on` : t`Approve`
-          }
-        >
+        {/* Plain Approve and Deny, the words the buttons' own labels, the
+            toolbar and the details page use: the action is on the approval,
+            and the workflow only carries on because of it. */}
+        <ActionItem visible tooltip={reasonUnavailable || t`Approve`}>
           <WorkflowApprovalButton
             workflowApproval={workflowApproval}
             onHandleToast={handleToast}
+            isDisabled={isNotPermitted}
           />
         </ActionItem>
-        <ActionItem
-          visible
-          tooltip={hasBeenActedOn ? t`This has already been acted on` : t`Deny`}
-        >
+        <ActionItem visible tooltip={reasonUnavailable || t`Deny`}>
           <WorkflowDenyButton
             workflowApproval={workflowApproval}
             onHandleToast={handleToast}
+            isDisabled={isNotPermitted}
           />
         </ActionItem>
         <ActionItem visible>
           <JobCancelButton
-            title={t`Cancel Workflow`}
+            title={t`Cancel Workflow Job`}
             showIconButton
             job={{
               ...workflowApproval.summary_fields.source_workflow_job,
               type: 'workflow_job',
             }}
-            buttonText={t`Cancel Workflow`}
-            isDisabled={hasBeenActedOn}
-            tooltip={
-              hasBeenActedOn ? t`This has already been acted on` : t`Cancel`
+            buttonText={t`Cancel Workflow Job`}
+            isDisabled={
+              hasBeenActedOn || workflowIsDeleted || cannotCancelWorkflow
             }
-            cancelationMessage={t`This will cancel all subsequent nodes in this workflow`}
+            tooltip={reasonCannotCancel || t`Cancel Workflow Job`}
+            cancelationMessage={t`This will cancel all subsequent nodes in this workflow.`}
           />
         </ActionItem>
       </ActionsTd>

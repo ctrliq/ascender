@@ -63,20 +63,23 @@ function ContainerGroup({ setBreadcrumb }: ContainerGroupProps) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to instance groups`}
+          {t`Back to Container Groups`}
         </>
       ),
-      link: '/instance_groups',
+      // Container groups have a list of their own; the instance groups list
+      // filters them out, so going back there would not find this one.
+      link: '/container_groups',
       id: 99,
+      persistentFilterKey: 'containerGroups',
     },
     {
       name: t`Details`,
-      link: `/instance_groups/container_group/${id}/details`,
+      link: `/container_groups/${id}/details`,
       id: 0,
     },
     {
-      name: t`Jobs`,
-      link: `/instance_groups/container_group/${id}/jobs`,
+      name: t`Runs`,
+      link: `/container_groups/${id}/runs`,
       id: 1,
     },
   ];
@@ -88,9 +91,10 @@ function ContainerGroup({ setBreadcrumb }: ContainerGroupProps) {
           <ContentError error={contentError}>
             {(contentError as DetailedError).response?.status === 404 && (
               <span>
-                {t`Container group not found.`}
-
-                <Link to="/instance_groups">{t`View all instance groups`}</Link>
+                {t`Container group not found.`}{' '}
+                <Link to="/container_groups">
+                  {t`View all container groups`}
+                </Link>
               </span>
             )}
           </ContentError>
@@ -99,17 +103,44 @@ function ContainerGroup({ setBreadcrumb }: ContainerGroupProps) {
     );
   }
 
+  /*
+   * An instance group reached at a container group address, by a hand-typed
+   * or stale link. Drawn here it would read as a container group, and its
+   * edit form would save it as one. Send it to the instance group screen,
+   * keeping the tab both screens have, as that screen does the other way.
+   */
+  if (instanceGroup && !instanceGroup.is_container_group) {
+    const tab = pathname.split('/')[3] ?? '';
+    const keptTab = ['details', 'edit', 'runs', 'jobs'].includes(tab)
+      ? `/${tab}`
+      : '';
+    return <Navigate replace to={`/instance_groups/${id}${keptTab}`} />;
+  }
+
   let cardHeader: React.ReactNode = <RoutedTabs tabsArray={tabsArray} />;
   if (pathname.endsWith('edit')) {
     cardHeader = null;
+  }
+
+  /*
+   * One loading animation, in the place the content will be. Drawn inside the
+   * card it made the page arrive in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the instanceGroup rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  if (isLoading && !instanceGroup) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
   }
 
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
-        {isLoading && <ContentLoading />}
-        {!isLoading && instanceGroup && (
+        {instanceGroup && (
           <Routes>
             <Route index element={<Navigate to="details" replace />} />
             <Route
@@ -120,12 +151,17 @@ function ContainerGroup({ setBreadcrumb }: ContainerGroupProps) {
               path="details"
               element={<ContainerGroupDetails instanceGroup={instanceGroup} />}
             />
+            {/* The tab's address before the rail called these runs. */}
+            <Route path="jobs" element={<Navigate to="../runs" replace />} />
             <Route
-              path="jobs"
+              path="runs"
               element={
                 <JobList
                   showTypeColumn
                   defaultParams={{ instance_group: instanceGroup.id }}
+                  // Nothing is launched from a group, so the generic Run
+                  // menu has no place here.
+                  runControl={false}
                 />
               }
             />
@@ -133,8 +169,8 @@ function ContainerGroup({ setBreadcrumb }: ContainerGroupProps) {
               path="*"
               element={
                 <ContentError isNotFound>
-                  <Link to="/instance_groups">
-                    {t`View all instance groups`}
+                  <Link to="/container_groups">
+                    {t`View all container groups`}
                   </Link>
                 </ContentError>
               }

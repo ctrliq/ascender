@@ -36,6 +36,7 @@ const mockInstance = {
 
 // The PF Switch renders a hidden checkbox input with the aria-label
 const getToggle = () => screen.getByRole('switch', { name: 'Toggle instance' });
+const switchLabel = () => document.querySelector('.pf-v6-c-switch__label');
 
 describe('<InstanceToggle>', () => {
   const onToggle = vi.fn();
@@ -54,12 +55,15 @@ describe('<InstanceToggle>', () => {
       />
     );
     expect(getToggle()).toBeChecked();
+    expect(switchLabel()).toHaveTextContent('On');
 
     await user.click(getToggle());
     expect(InstancesAPI.update).toHaveBeenCalledWith(1, {
       enabled: false,
     });
     await waitFor(() => expect(getToggle()).not.toBeChecked());
+    // The label follows the state rather than always reading On.
+    expect(switchLabel()).toHaveTextContent('Off');
     expect(onToggle).toHaveBeenCalledWith(false);
     expect(fetchInstances).toHaveBeenCalledTimes(1);
   });

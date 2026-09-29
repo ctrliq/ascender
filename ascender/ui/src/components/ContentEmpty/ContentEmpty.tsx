@@ -22,7 +22,7 @@ const ContentEmpty = ({
     <EmptyState
       headingLevel="h3"
       icon={icon as React.ComponentType}
-      titleText={<>{title || t`No items found.`}</>}
+      titleText={<>{title || t`No Items Found`}</>}
       variant="full"
       className={className}
     >

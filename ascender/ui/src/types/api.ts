@@ -30,6 +30,11 @@ export interface UserCapabilities {
   schedule?: boolean;
   copy?: boolean;
   adhoc?: boolean;
+  /**
+   * Runs only: whether a cancel request from this user would be accepted now,
+   * which the api works out from the run's status as well as the user's role.
+   */
+  cancel?: boolean;
   [key: string]: boolean | undefined;
 }
 
@@ -381,17 +386,19 @@ export type NotificationTemplate = Omit<
 };
 export type WorkflowApproval = Omit<
   WithNested<Schemas['WorkflowApproval']>,
-  'user_has_voted' | 'can_approve_or_deny'
+  'user_has_voted' | 'can_approve_or_deny' | 'can_cancel_workflow'
 > & {
   /** Inlined from the approval template this was created from. */
   timeout?: number;
   /**
-   * Both are SerializerMethodFields, which the schema describes as strings:
-   * whether the current user has already voted on this one, and whether they
-   * are allowed to.
+   * SerializerMethodFields, which the schema describes as strings: whether
+   * the current user has already voted on this one, whether they are allowed
+   * to, and whether they may cancel the workflow it waits in, which is a right
+   * on the workflow job rather than the approver role.
    */
   user_has_voted?: boolean;
   can_approve_or_deny?: boolean;
+  can_cancel_workflow?: boolean;
 };
 export type OAuth2Application = WithNested<Schemas['OAuth2Application']>;
 export type OAuth2Token = WithNested<Schemas['OAuth2Token']>;

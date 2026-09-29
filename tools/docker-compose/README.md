@@ -260,7 +260,6 @@ $ make docker-compose
 - [Start with Minikube](#start-with-minikube)
 - [SAML and OIDC Integration](#saml-and-oidc-integration)
 - [OpenLDAP Integration](#openldap-integration)
-- [tacacs+ Integration](#tacacs+-integration)
 
 ### Start a Shell
 
@@ -456,30 +455,6 @@ Once the playbook is done running LDAP should now be setup in your development e
 
 The first account is a normal user. The second account will be a super user in Ascender. The third account will be a system auditor in Ascender. The fourth account is an org admin. All users belong to an org called "LDAP Organization". To log in with one of these users go to the Ascender login screen enter the username/password.
 
-
-### - tacacs+ Integration
-
-tacacs+ is an networking protocol that provides external authentication which can be used with Ascender. This section describes how to build a reference tacacs+ instance and plumb it with your Ascender for testing purposes.
-
-First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
-
-Anytime you want to run a tacacs+ instance alongside Ascender we can start docker-compose with the TACACS option to get a containerized instance with the command:
-```bash
-TACACS=true make docker-compose
-```
-
-Once the containers come up a new port (49) should be exposed and the tacacs+ server should be running on those ports.
-
-Now we are ready to configure and plumb tacacs+ with Ascender. To do this we have provided a playbook which will:
-* Backup and configure the tacacsplus adapter in Ascender. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
-
-```bash
-export CONTROLLER_USERNAME=<your username>
-export CONTROLLER_PASSWORD=<your password>
-ansible-playbook tools/docker-compose/ansible/plumb_tacacs.yml
-```
-
-Once the playbook is done running tacacs+ should now be setup in your development environment. This server has the accounts listed on https://hub.docker.com/r/dchidell/docker-tacacs
 
 ### HashiVault Integration
 

@@ -2,8 +2,7 @@
 
 .ascender-job-event-line {
   display: flex;
-}
-
-.ascender-job-event-line--clickable:hover {
-  cursor: pointer;
+  /* Where the text's own right padding was, so a wrapped line breaks where it
+     did: held here, the space after a line is not part of what it offers. */
+  padding-inline-end: 15px;
 }

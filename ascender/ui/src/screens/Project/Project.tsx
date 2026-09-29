@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Link,
@@ -21,8 +21,12 @@ import NotificationList from 'components/NotificationList';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import { Schedules } from 'components/Schedule';
 import RelatedTemplateList from 'components/RelatedTemplateList';
+import JobList from 'components/JobList';
 import { OrganizationsAPI, ProjectsAPI } from 'api';
 import type { QSParams } from 'util/qs';
+import ProjectSyncButton from './shared/ProjectSyncButton';
+import { readProjectFormOptions } from './shared/projectFormOptions';
+import type { ProjectFormOptions } from './shared/projectFormOptions';
 import ProjectDetail from './ProjectDetail';
 import ProjectEdit from './ProjectEdit';
 
@@ -78,6 +82,34 @@ function Project({ setBreadcrumb }: ProjectProps) {
     fetchProjectAndRoles();
   }, [fetchProjectAndRoles, location.pathname]);
 
+  /*
+   * What the edit form needs before it can draw, none of it about this
+   * project, so it is read once rather than again on every tab change, and
+   * only for someone who can edit or who has opened the edit route. Read
+   * alongside the project it was asked for again on every change of tab, and
+   * a failure to read it replaced the whole page with an error although only
+   * the form needs it; now only the edit route waits on it or reports it.
+   */
+  const isEditRoute = location.pathname.endsWith('/edit');
+  const needsFormOptions =
+    isEditRoute || Boolean(project?.summary_fields?.user_capabilities?.edit);
+  const {
+    request: fetchFormOptions,
+    result: formOptions,
+    error: formOptionsError,
+  } = useRequest(
+    useCallback(() => readProjectFormOptions(), []),
+    null as ProjectFormOptions | null
+  );
+  const hasRequestedFormOptions = useRef(false);
+
+  useEffect(() => {
+    if (needsFormOptions && !hasRequestedFormOptions.current) {
+      hasRequestedFormOptions.current = true;
+      fetchFormOptions();
+    }
+  }, [needsFormOptions, fetchFormOptions]);
+
   useEffect(() => {
     if (project) {
       setBreadcrumb(project);
@@ -109,11 +141,18 @@ function Project({ setBreadcrumb }: ProjectProps) {
     },
     { name: t`Details`, link: `/projects/${id}/details` },
     { name: t`Access`, link: `/projects/${id}/access` },
-    {
-      name: t`Job Templates`,
-      link: `/projects/${id}/job_templates`,
-    },
   ];
+
+  /*
+   * In the order every object's tabs come in: its own tabs first, here Job
+   * Templates, the templates that use the project, then Notifications and
+   * Schedules, and Runs last, so the tabs a project shares with a template
+   * or an inventory sit in the same place on each.
+   */
+  tabsArray.push({
+    name: t`Job Templates`,
+    link: `/projects/${id}/job_templates`,
+  });
 
   if (canSeeNotificationsTab) {
     tabsArray.push({
@@ -121,11 +160,18 @@ function Project({ setBreadcrumb }: ProjectProps) {
       link: `/projects/${id}/notifications`,
     });
   }
+  /* A manual project is never updated, so it has no schedules and no runs. */
   if (project?.scm_type) {
-    tabsArray.push({
-      name: t`Schedules`,
-      link: `/projects/${id}/schedules`,
-    });
+    tabsArray.push(
+      {
+        name: t`Schedules`,
+        link: `/projects/${id}/schedules`,
+      },
+      {
+        name: t`Runs`,
+        link: `/projects/${id}/runs`,
+      }
+    );
   }
 
   // Ids come from position rather than from the literals, since which tabs
@@ -149,20 +195,41 @@ function Project({ setBreadcrumb }: ProjectProps) {
     );
   }
 
+  // The edit route waits on what the form draws with, and alone reports it.
+  let editElement: React.ReactNode = <ContentLoading />;
+  if (formOptionsError) {
+    editElement = <ContentError error={formOptionsError} />;
+  } else if (project && formOptions) {
+    editElement = <ProjectEdit project={project} formOptions={formOptions} />;
+  }
+
   const showCardHeader = !(
     location.pathname.endsWith('edit') ||
     location.pathname.includes('schedules/')
   );
 
+  /*
+   * One loading animation, in the place the content will be. Drawn inside the
+   * card it made the page arrive in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the project rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  if (hasContentLoading && !project) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
-        {hasContentLoading && <ContentLoading />}
-        {!hasContentLoading && project && (
+        {project && (
           <Routes>
             <Route index element={<Navigate to="details" replace />} />
-            <Route path="edit" element={<ProjectEdit project={project} />} />
+            <Route path="edit" element={editElement} />
             <Route
               path="details"
               element={<ProjectDetail project={project} />}
@@ -207,6 +274,42 @@ function Project({ setBreadcrumb }: ProjectProps) {
                     apiModel={ProjectsAPI}
                     loadSchedules={loadSchedules}
                     loadScheduleOptions={loadScheduleOptions}
+                  />
+                }
+              />
+            )}
+            {project?.scm_type && (
+              <Route
+                path="runs"
+                element={
+                  /*
+                   * Every update, including the ones a job launch started for
+                   * itself, which are most of a project's history.
+                   */
+                  <JobList
+                    defaultParams={{ unified_job_template: project.id }}
+                    includeDependencySyncs
+                    // Sync, as on the project's details, for whoever may.
+                    runControl={
+                      project.summary_fields?.user_capabilities?.start ? (
+                        <ProjectSyncButton
+                          projectId={project.id}
+                          // The job in flight when there is one, as on the
+                          // details, so a running sync is not offered again.
+                          lastJobStatus={
+                            (
+                              project.summary_fields?.current_job ??
+                              project.summary_fields?.last_job
+                            )?.status ?? null
+                          }
+                          label={t`Run`}
+                          tooltip={t`Sync Project`}
+                        />
+                      ) : (
+                        // false, not null: null would bring back the general Run menu.
+                        false
+                      )
+                    }
                   />
                 }
               />

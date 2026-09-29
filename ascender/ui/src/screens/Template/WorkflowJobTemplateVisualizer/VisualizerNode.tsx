@@ -37,8 +37,25 @@ export interface VisualizerNodeProps {
   readOnly: boolean;
   updateHelpText: (helpText: React.ReactNode) => void;
   updateNodeHelp: (node: WorkflowNode | null) => void;
+  /**
+   * Asks the graph to draw this node last. Svg has no z-index and paints in
+   * document order, so a node's action menu is covered by every node after it.
+   */
+  onRaise?: (node: WorkflowNode | null) => void;
   [key: string]: unknown;
 }
+
+/**
+ * A node's resting edge, and the fill of the ALL badge that sits on it. A theme
+ * that paints PatternFly's border colour too pale for the badge's white text
+ * says so; the rest keep the colour both have always used.
+ */
+const NODE_BORDER_COLOR =
+  'var(--ascender-workflow-node-border, var(--pf-t--global--border--color--default))';
+
+/** What the badge writes in over that resting fill, white being the default. */
+const CONVERGENCE_TEXT_COLOR =
+  'var(--ascender-workflow-converge-color, #ffffff)';
 
 function VisualizerNode({
   node,
@@ -46,6 +63,7 @@ function VisualizerNode({
   readOnly,
   updateHelpText,
   updateNodeHelp,
+  onRaise = () => {},
 }: VisualizerNodeProps) {
   const { t } = useLingui();
   const ref = useRef<SVGGElement | null>(null);
@@ -166,10 +184,11 @@ function VisualizerNode({
   };
 
   const handleNodeMouseEnter = () => {
-    // Re-appending the group is what raises it above its siblings, since svg
-    // has no z-index and paints in document order.
-    const group = ref.current;
-    group?.parentNode?.appendChild(group);
+    // Raising is the graph's to do. Re-appending the group here moved it behind
+    // React's back, and the render that setHovering below schedules put it back
+    // where it was, so the menu this opens was covered again as soon as it
+    // appeared.
+    onRaise(node);
     setHovering(true);
     if (addingLink) {
       updateHelpText(
@@ -182,6 +201,7 @@ function VisualizerNode({
   };
 
   const handleNodeMouseLeave = () => {
+    onRaise(null);
     setHovering(false);
     if (addingLink) {
       updateHelpText(null);
@@ -213,11 +233,11 @@ function VisualizerNode({
 
   const viewDetailsAction = (
     <WorkflowActionTooltipItem
-      label={t`View node details`}
+      label={t`View Node Details`}
       id="node-details"
       key="details"
       onClick={handleViewClick}
-      onMouseEnter={() => updateHelpText(t`View node details`)}
+      onMouseEnter={() => updateHelpText(t`View Node Details`)}
       onMouseLeave={() => updateHelpText(null)}
     >
       <InfoIcon />
@@ -228,7 +248,7 @@ function VisualizerNode({
     ? [viewDetailsAction]
     : [
         <WorkflowActionTooltipItem
-          label={t`Add a new node`}
+          label={t`Add Node`}
           id="node-add"
           key="add"
           onClick={() => {
@@ -236,24 +256,24 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'START_ADD_NODE', sourceNodeId: node.id });
           }}
-          onMouseEnter={() => updateHelpText(t`Add a new node`)}
+          onMouseEnter={() => updateHelpText(t`Add Node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
           <PlusIcon />
         </WorkflowActionTooltipItem>,
         viewDetailsAction,
         <WorkflowActionTooltipItem
-          label={t`Edit this node`}
+          label={t`Edit Node`}
           id="node-edit"
           key="edit"
           onClick={handleEditClick}
-          onMouseEnter={() => updateHelpText(t`Edit this node`)}
+          onMouseEnter={() => updateHelpText(t`Edit Node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
           <PencilAltIcon />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
-          label={t`Link to an available node`}
+          label={t`Link to Node`}
           id="node-link"
           key="link"
           onClick={() => {
@@ -261,13 +281,13 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'SELECT_SOURCE_FOR_LINKING', node });
           }}
-          onMouseEnter={() => updateHelpText(t`Link to an available node`)}
+          onMouseEnter={() => updateHelpText(t`Link to Node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
           <LinkIcon />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
-          label={t`Delete this node`}
+          label={t`Delete Node`}
           id="node-delete"
           key="delete"
           onClick={() => {
@@ -275,7 +295,7 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'SET_NODE_TO_DELETE', value: node });
           }}
-          onMouseEnter={() => updateHelpText(t`Delete this node`)}
+          onMouseEnter={() => updateHelpText(t`Delete Node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
           <TrashAltIcon />
@@ -312,11 +332,11 @@ function VisualizerNode({
                 fill:
                   hovering && addingLink && !node.isInvalidLinkTarget
                     ? 'var(--pf-t--global--color--brand--default)'
-                    : 'var(--pf-t--global--border--color--default)',
+                    : NODE_BORDER_COLOR,
                 stroke:
                   hovering && addingLink && !node.isInvalidLinkTarget
                     ? 'var(--pf-t--global--color--brand--default)'
-                    : 'var(--pf-t--global--border--color--default)',
+                    : NODE_BORDER_COLOR,
               }}
               height={wfConstants.nodeH / 4}
               rx={2}
@@ -335,6 +355,12 @@ function VisualizerNode({
               <p
                 className="ascender-visualizer-node__convergence-label"
                 data-cy="convergence-label"
+                style={{
+                  color:
+                    hovering && addingLink && !node.isInvalidLinkTarget
+                      ? '#ffffff'
+                      : CONVERGENCE_TEXT_COLOR,
+                }}
               >
                 {t`ALL`}
               </p>
@@ -347,7 +373,7 @@ function VisualizerNode({
             stroke:
               hovering && addingLink && !node.isInvalidLinkTarget
                 ? 'var(--pf-t--global--color--brand--default)'
-                : 'var(--pf-t--global--border--color--default)',
+                : NODE_BORDER_COLOR,
           }}
           height={wfConstants.nodeH}
           rx="2"

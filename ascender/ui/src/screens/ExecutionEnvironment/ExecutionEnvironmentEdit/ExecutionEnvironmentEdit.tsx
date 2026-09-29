@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment } from 'types/api';
+import type { ExecutionEnvironment, OptionsResponse } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -9,12 +9,18 @@ import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
 import type { ExecutionEnvironmentFormValues } from '../shared/ExecutionEnvironmentForm';
 
 export interface ExecutionEnvironmentEditProps {
+  /**
+   * What the form draws with, read by the screen above rather than by the
+   * form, so the page has one loading state rather than two.
+   */
+  formOptions: OptionsResponse;
   executionEnvironment: ExecutionEnvironment;
   [key: string]: unknown;
 }
 
 function ExecutionEnvironmentEdit({
   executionEnvironment,
+  formOptions,
 }: ExecutionEnvironmentEditProps) {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<unknown>(null);
@@ -41,6 +47,7 @@ function ExecutionEnvironmentEdit({
       <Config>
         {({ me }) => (
           <ExecutionEnvironmentForm
+            options={formOptions}
             executionEnvironment={executionEnvironment}
             onSubmit={handleSubmit}
             submitError={submitError}

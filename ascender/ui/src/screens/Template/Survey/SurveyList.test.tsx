@@ -161,12 +161,8 @@ describe('<SurveyList />', () => {
     expect(
       screen.getByRole('switch', { name: 'Survey Toggle' })
     ).toBeDisabled();
-    // Add and Delete toolbar buttons are disabled without edit permission.
-    // The Add control is a PF Button rendered as a link (aria-disabled).
-    expect(screen.getByRole('link', { name: 'Add' })).toHaveAttribute(
-      'aria-disabled',
-      'true'
-    );
+    // Without edit permission Add is left out and Delete is disabled.
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 });
@@ -186,7 +182,7 @@ describe('Survey with no questions', () => {
     );
 
     expect(
-      await screen.findByText('No survey questions found.')
+      await screen.findByText('No Survey Questions Found')
     ).toBeInTheDocument();
     expect(screen.queryByText('Foo')).not.toBeInTheDocument();
   });

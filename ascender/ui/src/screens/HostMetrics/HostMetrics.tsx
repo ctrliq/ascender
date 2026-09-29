@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import { HostMetricsAPI } from 'api';
-import useRequest from 'hooks/useRequest';
+import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import AlertModal from 'components/AlertModal';
+import ErrorDetail from 'components/ErrorDetail';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -12,6 +14,7 @@ import { getQSConfig, parseQueryString } from 'util/qs';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLocation } from 'react-router';
 import useSelected from 'hooks/useSelected';
+import { useConfig } from 'contexts/Config';
 import HostMetricsListItem from './HostMetricsListItem';
 import HostMetricsDeleteButton from './HostMetricsDeleteButton';
 
@@ -24,6 +27,10 @@ const QS_CONFIG = getQSConfig('host_metrics', {
 
 function HostMetrics() {
   const { t } = useLingui();
+  // A system auditor reads host metrics but the api takes the soft delete
+  // from a superuser alone, so only a superuser is offered it.
+  const { me } = useConfig();
+  const canSoftDelete = Boolean(me?.is_superuser);
   const location = useLocation();
 
   const [breadcrumbConfig] = useState({
@@ -53,6 +60,34 @@ function HostMetrics() {
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(results);
 
+  // A failed soft delete used to reject unseen, leaving the rows as they
+  // were with nothing said. This keeps the error to show, and steps back a
+  // page when the last rows of one are gone, as other lists do.
+  const {
+    isLoading: isDeleteLoading,
+    deleteItems: deleteHostMetrics,
+    deletionError,
+    clearDeletionError,
+  } = useDeleteItems(
+    useCallback(
+      () =>
+        Promise.all(
+          selected.map((hostMetric) => HostMetricsAPI.destroy(hostMetric.id))
+        ),
+      [selected]
+    ),
+    {
+      qsConfig: QS_CONFIG,
+      allItemsSelected: isAllSelected,
+      fetchItems: readHostMetrics,
+    }
+  );
+
+  const handleDelete = async () => {
+    await deleteHostMetrics();
+    clearSelected();
+  };
+
   return (
     <>
       <ScreenHeader streamType="none" breadcrumbConfig={breadcrumbConfig} />
@@ -60,7 +95,7 @@ function HostMetrics() {
         <Card>
           <PaginatedTable
             contentError={error}
-            hasContentLoading={isLoading}
+            hasContentLoading={isLoading || isDeleteLoading}
             items={results}
             itemCount={count}
             pluralizedItemName={t`Host Metrics`}
@@ -73,6 +108,7 @@ function HostMetrics() {
                 )}
                 onSelect={() => handleSelect(item)}
                 rowIndex={index}
+                isSelectable={canSoftDelete}
               />
             )}
             qsConfig={QS_CONFIG}
@@ -91,40 +127,37 @@ function HostMetrics() {
                 advancedSearchDisabled
                 fillWidth
                 isAllSelected={isAllSelected}
-                onSelectAll={selectAll}
-                additionalControls={[
-                  <HostMetricsDeleteButton
-                    key="delete"
-                    onDelete={() =>
-                      Promise.all(
-                        selected.map((hostMetric) =>
-                          HostMetricsAPI.destroy(hostMetric.id)
-                        )
-                      ).then(() => {
-                        readHostMetrics();
-                        clearSelected();
-                      })
-                    }
-                    itemsToDelete={selected}
-                    pluralizedItemName={t`Host Metrics`}
-                  />,
-                ]}
+                // A selection is only ever for the soft delete, so a viewer
+                // who is not offered it has no checkboxes to tick either.
+                onSelectAll={canSoftDelete ? selectAll : undefined}
+                additionalControls={
+                  canSoftDelete
+                    ? [
+                        <HostMetricsDeleteButton
+                          key="delete"
+                          onDelete={handleDelete}
+                          itemsToDelete={selected}
+                          pluralizedItemName={t`Host Metrics`}
+                        />,
+                      ]
+                    : []
+                }
               />
             )}
             headerRow={
-              <HeaderRow qsConfig={QS_CONFIG}>
+              <HeaderRow qsConfig={QS_CONFIG} isSelectable={canSoftDelete}>
                 <HeaderCell sortKey="hostname">{t`Hostname`}</HeaderCell>
                 <HeaderCell
                   sortKey="first_automation"
                   tooltip={t`When was the host first automated`}
                 >
-                  {t`First automated`}
+                  {t`First Automated`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="last_automation"
                   tooltip={t`When was the host last automated`}
                 >
-                  {t`Last automated`}
+                  {t`Last Automated`}
                 </HeaderCell>
                 <HeaderCell
                   sortKey="automated_counter"
@@ -143,6 +176,16 @@ function HostMetrics() {
           />
         </Card>
       </PageSection>
+      <AlertModal
+        isOpen={Boolean(deletionError)}
+        variant="error"
+        aria-label={t`Deletion Error`}
+        title={t`Error!`}
+        onClose={clearDeletionError}
+      >
+        {t`Failed to soft delete one or more host metrics.`}
+        <ErrorDetail error={deletionError} />
+      </AlertModal>
     </>
   );
 }

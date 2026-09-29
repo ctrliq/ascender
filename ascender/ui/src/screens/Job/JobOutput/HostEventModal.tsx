@@ -9,7 +9,50 @@ import StatusLabel from '../../../components/StatusLabel';
 import { DetailList, Detail } from '../../../components/DetailList';
 import ContentEmpty from '../../../components/ContentEmpty';
 import CodeEditor from '../../../components/CodeEditor';
+import { LINE_HEIGHT, PADDING_TOP } from '../../../components/CodeEditor/theme';
 import type { JobEvent } from './useJobEvents';
+
+/**
+ * What the modal holds besides the editor: the forty eight pixels PatternFly
+ * keeps it off the window by, its header, the tab bar under it and the padding
+ * of its body. Measured rather than derived, since the parts are PatternFly's
+ * own and it states none of them in a variable this can read.
+ */
+const MODAL_CHROME = 185;
+
+/** The fewest rows worth showing, so a short result still reads as an editor. */
+const MIN_ROWS = 6;
+
+/**
+ * How many rows of editor the window has room for.
+ *
+ * The editors used to be twenty rows whatever the window was: a short result
+ * left most of the box empty, a tall window wasted the room it had, and a short
+ * one pushed the box past the modal, which then scrolled its whole body, empty
+ * rows and all. Sizing the cap to the window puts the scrollbar back inside the
+ * editor, where it scrolls the document rather than the modal.
+ *
+ * Returns:
+ *     The number of rows that fit, never fewer than MIN_ROWS.
+ */
+function useEditorRows(): number {
+  const fitting = () =>
+    Math.max(
+      MIN_ROWS,
+      Math.floor(
+        (window.innerHeight - MODAL_CHROME - PADDING_TOP) / LINE_HEIGHT
+      )
+    );
+  const [rows, setRows] = useState(fitting);
+
+  useEffect(() => {
+    const onResize = () => setRows(fitting());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  return rows;
+}
 
 /**
  * What a module returned on one host, as ansible reports it.
@@ -123,6 +166,7 @@ function HostEventModal({
     setActiveTabKey(Number(tabIndex));
   };
 
+  const editorRows = useEditorRows();
   const jsonObj = processCodeEditorValue(hostEvent?.event_data?.res);
   const rawStdErr = hostEvent?.event_data?.res?.stderr;
   // A module is free to answer with the lines rather than the text, the way
@@ -189,7 +233,9 @@ function HostEventModal({
               readOnly
               value={JSON.stringify(jsonObj, null, 2)}
               onChange={() => {}}
-              rows={20}
+              rows="auto"
+              minRows={MIN_ROWS}
+              maxRows={editorRows}
               hasErrors={false}
             />
           ) : (
@@ -208,7 +254,9 @@ function HostEventModal({
               readOnly
               value={jsonToYaml(JSON.stringify(jsonObj))}
               onChange={() => {}}
-              rows={20}
+              rows="auto"
+              minRows={MIN_ROWS}
+              maxRows={editorRows}
               hasErrors={false}
             />
           ) : (
@@ -227,7 +275,9 @@ function HostEventModal({
               readOnly
               value={stdOut}
               onChange={() => {}}
-              rows={20}
+              rows="auto"
+              minRows={MIN_ROWS}
+              maxRows={editorRows}
               hasErrors={false}
             />
           </Tab>
@@ -245,7 +295,9 @@ function HostEventModal({
               onChange={() => {}}
               value={stdErr}
               hasErrors={false}
-              rows={20}
+              rows="auto"
+              minRows={MIN_ROWS}
+              maxRows={editorRows}
             />
           </Tab>
         ) : null}

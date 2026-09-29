@@ -91,10 +91,7 @@ describe('PromptDetail', () => {
       assertDetail('Show Changes', 'Off');
       assertDetail('Timeout', '1 min 40 sec');
       assertDetail('Forks', '1');
-      // ' Job Slicing' label has a leading space; getByText normalizes whitespace
-      expect(
-        screen.getByText('Job Slicing').nextElementSibling
-      ).toHaveTextContent('1');
+      assertDetail('Job Slicing', '1');
 
       // Variables renders the extra_vars through the (mocked) CodeEditor
       expect(screen.getByText('Variables')).toBeInTheDocument();
@@ -229,6 +226,54 @@ describe('PromptDetail', () => {
 
       // Instance Groups chip
       expect(screen.getByText('controlplane')).toBeInTheDocument();
+    });
+  });
+
+  describe('an approval node', () => {
+    const approval = {
+      id: 7,
+      name: 'Sign off',
+      type: 'workflow_approval_template',
+      description: '',
+      timeout: 90,
+      on_timeout: 'approve',
+      required_approvals: 2,
+      context_template: 'Build {{ build_id }}',
+    };
+
+    test('shows the settings the node form sets', () => {
+      renderWithContexts(
+        <PromptDetail
+          resource={
+            approval as unknown as Parameters<
+              typeof PromptDetail
+            >[0]['resource']
+          }
+          workflowNode={{ all_parents_must_converge: false }}
+        />
+      );
+      assertDetail('Timeout', '1 min 30 sec');
+      assertDetail('On Timeout', 'Approve');
+      assertDetail('Required Approvals', '2');
+      assertDetail('Context Template', 'Build {{ build_id }}');
+    });
+
+    test('leaves On Timeout out where the approval has no timeout', () => {
+      renderWithContexts(
+        <PromptDetail
+          resource={
+            {
+              ...approval,
+              timeout: 0,
+              context_template: '',
+            } as unknown as Parameters<typeof PromptDetail>[0]['resource']
+          }
+          workflowNode={{ all_parents_must_converge: false }}
+        />
+      );
+      expect(screen.queryByText('On Timeout')).not.toBeInTheDocument();
+      expect(screen.queryByText('Context Template')).not.toBeInTheDocument();
+      assertDetail('Required Approvals', '2');
     });
   });
 });

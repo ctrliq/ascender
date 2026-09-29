@@ -34,7 +34,6 @@ from ascender.sso.validators import (  # noqa
     validate_ldap_filter,
     validate_ldap_filter_with_user,
     validate_trigger_rule,
-    validate_tacacsplus_disallow_nonascii,
 )
 
 
@@ -147,7 +146,6 @@ class AuthenticationBackendsField(fields.StringListField):
             ('ascender.sso.backends.LDAPBackend3', ['AUTH_LDAP_3_SERVER_URI']),
             ('ascender.sso.backends.LDAPBackend4', ['AUTH_LDAP_4_SERVER_URI']),
             ('ascender.sso.backends.LDAPBackend5', ['AUTH_LDAP_5_SERVER_URI']),
-            ('ascender.sso.backends.RADIUSBackend', ['RADIUS_SERVER']),
             ('social_core.backends.google.GoogleOAuth2', ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', 'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET']),
             ('social_core.backends.github.GithubOAuth2', ['SOCIAL_AUTH_GITHUB_KEY', 'SOCIAL_AUTH_GITHUB_SECRET']),
             ('social_core.backends.open_id_connect.OpenIdConnectAuth', ['SOCIAL_AUTH_OIDC_KEY', 'SOCIAL_AUTH_OIDC_SECRET', 'SOCIAL_AUTH_OIDC_OIDC_ENDPOINT']),
@@ -203,6 +201,11 @@ class AuthenticationBackendsField(fields.StringListField):
                 ],
             ),
             ('django.contrib.auth.backends.ModelBackend', []),
+            ('ascender.main.backends.AscenderModelBackend', []),
+            # The old name of the local backend, which only loads sessions opened
+            # before the rename (see AWXModelBackend). It needs no settings; it is
+            # listed so the fallback in _default_from_required_settings, which
+            # takes the backends from this map, still lets those sessions load.
             ('ascender.main.backends.AWXModelBackend', []),
         ]
     )

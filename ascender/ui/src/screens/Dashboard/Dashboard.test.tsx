@@ -69,15 +69,22 @@ describe('<Dashboard />', () => {
   test('initially renders without crashing', async () => {
     renderWithContexts(<Dashboard />);
     expect(
-      await screen.findByRole('tab', { name: 'Job status graph tab' })
+      await screen.findByRole('tab', { name: 'Run Status graph tab' })
     ).toBeInTheDocument();
+  });
+
+  test('names the counts in Title Case', async () => {
+    renderWithContexts(<Dashboard />);
+    expect(await screen.findByText('Failed Hosts')).toBeInTheDocument();
+    expect(screen.getByText('Inventory Sync Failures')).toBeInTheDocument();
+    expect(screen.getByText('Project Sync Failures')).toBeInTheDocument();
   });
 
   test('renders dashboard graph by default', async () => {
     renderWithContexts(<Dashboard />);
-    // The Job status tab is active by default, so DashboardGraph mounts and
+    // The Run Status tab is active by default, so DashboardGraph mounts and
     // requests the default (all/month) job graph data.
-    await screen.findByRole('tab', { name: 'Job status graph tab' });
+    await screen.findByRole('tab', { name: 'Run Status graph tab' });
     expect(await screen.findByTestId('line-chart')).toBeInTheDocument();
     await waitFor(() =>
       expect(graphRequest).toHaveBeenCalledWith({

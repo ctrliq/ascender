@@ -48,9 +48,10 @@ describe('<UserRolesListItem/>', () => {
       </table>
     );
     const cells = screen.getAllByRole('cell');
-    expect(cells[0]).toHaveTextContent('template delete project');
-    expect(cells[1]).toHaveTextContent('Job Template');
-    expect(cells[2]).toHaveTextContent('Admin');
+    // The first cell is the row's tick box.
+    expect(cells[1]).toHaveTextContent('template delete project');
+    expect(cells[2]).toHaveTextContent('Job Template');
+    expect(cells[3]).toHaveTextContent('Admin');
   });
 
   test('should render deletable chip', () => {
@@ -65,7 +66,9 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: `Disassociate ${role.name}` })
+    ).toBeInTheDocument();
   });
 
   test('should render read only chip', () => {
@@ -82,7 +85,7 @@ describe('<UserRolesListItem/>', () => {
       </table>
     );
     expect(
-      screen.queryByRole('button', { name: /close/i })
+      screen.queryByRole('button', { name: /Disassociate/ })
     ).not.toBeInTheDocument();
   });
 
@@ -102,6 +105,6 @@ describe('<UserRolesListItem/>', () => {
         </tbody>
       </table>
     );
-    expect(screen.getAllByRole('cell')[0]).toHaveTextContent('System');
+    expect(screen.getAllByRole('cell')[1]).toHaveTextContent('System');
   });
 });

@@ -143,12 +143,12 @@ function ProjectLookup({
         fieldName={fieldName}
         validate={validate}
         required={required}
-        isLoading={isLoading}
         isDisabled={!canEdit}
         qsConfig={QS_CONFIG}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading}
             searchColumns={[
               {
                 name: t`Name`,

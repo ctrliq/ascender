@@ -217,12 +217,10 @@ def get_external_account(user):
 def is_remote_auth_enabled():
     from ascender.settings.typed import settings
 
-    # Append LDAP, Radius, TACACS+ and SAML options
+    # Append LDAP and SAML options
     settings_that_turn_on_remote_auth = [
         'AUTH_LDAP_SERVER_URI',
         'SOCIAL_AUTH_SAML_ENABLED_IDPS',
-        'RADIUS_SERVER',
-        'TACACSPLUS_HOST',
     ]
     # Also include any SOCAIL_AUTH_*KEY (except SAML)
     for social_auth_key in dir(settings):

@@ -1,14 +1,12 @@
 import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router';
-
+import { Link, useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import ResourceTabs from 'components/ResourceTabs';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
-import RoutedTabs from 'components/RoutedTabs';
 import { SettingsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { DetailList } from 'components/DetailList';
@@ -16,12 +14,18 @@ import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
 import { sortNestedDetails, pluck } from '../../shared/settingUtils';
+import { groupFromPath } from '../../shared/settingGroups';
+import { GROUPS } from '../groups';
 
 function LoggingDetail() {
+  // The address says which group is open, so a link into one lands on it, the
+  // edit form sends a reader back to the tab they edited, and the back button
+  // walks the tabs as it walks every other tab bar.
+  const { pathname } = useLocation();
+  const activeGroup = groupFromPath(GROUPS, pathname).id;
   const { me } = useConfig();
   const { GET: options = {} } = useSettings();
-  const { t } = useLingui();
-
+  const { t, i18n } = useLingui();
   const {
     isLoading,
     error,
@@ -62,43 +66,46 @@ function LoggingDetail() {
     request();
   }, [request]);
 
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`Details`,
-      link: `/settings/logging/details`,
-      id: 0,
-    },
-  ];
-
   return (
     <>
-      <RoutedTabs tabsArray={tabsArray} />
+      <ResourceTabs
+        aria-label={t`Logging tabs`}
+        ouiaId="logging-tabs"
+        tabs={GROUPS.map(({ id, label }) => ({
+          label: i18n._(label),
+          path: `/logging/${id}`,
+        }))}
+      />
       <CardBody>
         {isLoading && <ContentLoading />}
         {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && logging && (
           <DetailList>
-            {logging.map(([key, detail]) => (
-              <SettingDetail
-                key={key}
-                id={key}
-                helpText={detail?.help_text}
-                label={detail?.label}
-                type={detail?.type}
-                unit={detail?.unit}
-                value={detail?.value}
-              />
-            ))}
+            {/* In the tab's own order rather than the sorted one the request
+                returns, so a reader meets the username before the password and
+                the rest in the order the edit form asks for them. */}
+            {(GROUPS.find(({ id }) => id === activeGroup)?.keys ?? [])
+              .map(
+                (key) =>
+                  [key, logging.find(([id]) => id === key)?.[1]] as [
+                    string,
+                    SettingConfig | undefined,
+                  ]
+              )
+              .filter(([, detail]) => Boolean(detail))
+              .map(([key, detail]) => (
+                <SettingDetail
+                  key={key}
+                  id={key}
+                  helpText={detail?.help_text}
+                  label={detail?.label}
+                  type={detail?.type}
+                  unit={detail?.unit}
+                  // A choice reads as its label, HTTPS/HTTP rather than https.
+                  choices={detail?.choices as [string, string][] | undefined}
+                  value={detail?.value}
+                />
+              ))}
           </DetailList>
         )}
         {me?.is_superuser && (
@@ -107,7 +114,7 @@ function LoggingDetail() {
               ouiaId="logging-detail-edit-button"
               aria-label={t`Edit`}
               component={Link}
-              to="/settings/logging/edit"
+              to={`/logging/edit/${activeGroup}`}
             >
               {t`Edit`}
             </Button>

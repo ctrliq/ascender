@@ -1,4 +1,4 @@
-import type { ApiEntity } from 'types/api';
+import type { ApiEntity, Host } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -22,7 +22,7 @@ import PaginatedTable, {
 } from 'components/PaginatedTable';
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import type { QSParams } from 'util/qs';
 import InventoryHostGroupItem from './InventoryHostGroupItem';
 
@@ -32,7 +32,15 @@ const QS_CONFIG = getQSConfig('group', {
   order_by: 'name',
 });
 
-function InventoryHostGroupsList() {
+export interface InventoryHostGroupsListProps {
+  /**
+   * The host this list sits under, which a run with nothing ticked is aimed
+   * at rather than at the whole inventory.
+   */
+  host?: Host;
+}
+
+function InventoryHostGroupsList({ host }: InventoryHostGroupsListProps = {}) {
   const { t } = useLingui();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
@@ -158,6 +166,7 @@ function InventoryHostGroupsList() {
   return (
     <>
       <PaginatedTable
+        pluralizedItemName={t`Groups`}
         contentError={contentError}
         hasContentLoading={
           isLoading || isDisassociateLoading || isAdHocLaunchLoading
@@ -206,21 +215,23 @@ function InventoryHostGroupsList() {
             onSelectAll={selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
+              <RunSelectionMenu
+                key="run"
+                ouiaId="inventory-host-groups-list-run-menu"
+                items={selected}
+                inventoryId={invId}
+                moduleOptions={moduleOptions}
+                onLaunchLoading={setIsAdHocLaunchLoading}
+                canRunCommand={!isAdHocDisabled}
+                scope={host && { item: host, label: t`Run on Host` }}
+              />,
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Group`}
                       key="add"
                       onClick={() => setIsModalOpen(true)}
-                    />,
-                  ]
-                : []),
-              ...(!isAdHocDisabled
-                ? [
-                    <AdHocCommands
-                      adHocItems={selected}
-                      hasListItems={itemCount > 0}
-                      moduleOptions={moduleOptions}
-                      onLaunchLoading={setIsAdHocLaunchLoading}
                     />,
                   ]
                 : []),
@@ -228,17 +239,12 @@ function InventoryHostGroupsList() {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={t`Disassociate group from host?`}
-                modalNote={t`Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly.`}
+                modalTitle={t`Disassociate the host from these groups?`}
+                modalNote={t`Note that you may still see the group in the list after disassociating it if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly.`}
               />,
             ]}
           />
         )}
-        emptyStateControls={
-          canAdd ? (
-            <ToolbarAddButton key="add" onClick={() => setIsModalOpen(true)} />
-          ) : null
-        }
       />
       {isModalOpen && (
         <AssociateModal
@@ -248,7 +254,7 @@ function InventoryHostGroupsList() {
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Groups`}
+          title={t`Associate Groups`}
         />
       )}
       {error && (
@@ -259,7 +265,7 @@ function InventoryHostGroupsList() {
           variant="error"
         >
           {associateError
-            ? t`Failed to associate.`
+            ? t`Failed to associate one or more groups.`
             : t`Failed to disassociate one or more groups.`}
           <ErrorDetail error={error} />
         </AlertModal>

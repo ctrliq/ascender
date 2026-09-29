@@ -2,12 +2,13 @@ import type { SummaryFields } from 'types/api';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import { Button, DropdownItem } from '@patternfly/react-core';
 
 import { KebabifiedContext } from 'contexts/Kebabified';
 
 import AlertModal from '../AlertModal';
 import './DisassociateButton.css';
+import Tooltip from '../Tooltip';
 
 /** An item the list can disassociate, with what the button reads off it. */
 export interface DisassociableItem {
@@ -27,6 +28,14 @@ export interface DisassociateButtonProps {
   onDisassociate: () => void;
   verifyCannotDisassociate?: boolean;
   isProtectedInstanceGroup?: boolean;
+  /** What the button says, where a screen wants other than Disassociate. */
+  label?: string;
+  /**
+   * Why an item cannot be disassociated, or null when it can. A list whose
+   * rows are held back for a reason other than the viewer's rights says so
+   * here, in place of the permission check, and it is always consulted.
+   */
+  cannotDisassociateReason?: (item: DisassociableItem) => string | null;
   [key: string]: unknown;
 }
 
@@ -37,10 +46,13 @@ function DisassociateButton({
   onDisassociate,
   verifyCannotDisassociate = true,
   isProtectedInstanceGroup = false,
+  label,
+  cannotDisassociateReason,
 }: DisassociateButtonProps) {
   const { t } = useLingui();
+  const buttonLabel = label ?? t`Disassociate`;
   if (!modalTitle) {
-    modalTitle = t`Disassociate?`;
+    modalTitle = t`Disassociate from this list?`;
   }
   const [isOpen, setIsOpen] = useState(false);
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
@@ -66,13 +78,46 @@ function DisassociateButton({
     );
   }
 
-  const cannotDisassociate = itemsToDisassociate.some(
+  let cannotDisassociate = itemsToDisassociate.some(
     (i) => i.type === 'instance'
   )
     ? cannotDisassociateInstances
     : cannotDisassociateAllOthers;
+  if (cannotDisassociateReason) {
+    cannotDisassociate = (item: DisassociableItem) =>
+      cannotDisassociateReason(item) !== null;
+  }
+  const shouldVerify = verifyCannotDisassociate || !!cannotDisassociateReason;
+
+  function renderReasons() {
+    // One line per reason, naming the rows it holds back, so two rows held
+    // back for the same cause read as one sentence rather than two.
+    const reasons = new Map<string, string[]>();
+    itemsToDisassociate.forEach((item) => {
+      const reason = cannotDisassociateReason?.(item);
+      if (reason) {
+        reasons.set(reason, [
+          ...(reasons.get(reason) ?? []),
+          String(item.name ?? item.hostname),
+        ]);
+      }
+    });
+    return (
+      <div>
+        {[...reasons.entries()].map(([reason, names]) => (
+          <div key={reason}>{`${reason}: ${names.join(', ')}`}</div>
+        ))}
+      </div>
+    );
+  }
 
   function renderTooltip() {
+    if (
+      cannotDisassociateReason &&
+      itemsToDisassociate.some(cannotDisassociate)
+    ) {
+      return renderReasons();
+    }
     if (verifyCannotDisassociate) {
       const itemsUnableToDisassociate = itemsToDisassociate
         .filter(cannotDisassociate)
@@ -92,13 +137,13 @@ function DisassociateButton({
     }
 
     if (itemsToDisassociate.length) {
-      return t`Disassociate`;
+      return buttonLabel;
     }
     return t`Select a row to disassociate`;
   }
 
   let isDisabled = false;
-  if (verifyCannotDisassociate) {
+  if (shouldVerify) {
     isDisabled = itemsToDisassociate.some(cannotDisassociate);
   }
 
@@ -110,13 +155,13 @@ function DisassociateButton({
       {isKebabified ? (
         <DropdownItem
           key="add"
-          aria-label={t`disassociate`}
+          aria-label={buttonLabel}
           isDisabled={isDisabled || !itemsToDisassociate.length}
           component="button"
           ouiaId="disassociate-tooltip"
           onClick={() => setIsOpen(true)}
         >
-          {t`Disassociate`}
+          {buttonLabel}
         </DropdownItem>
       ) : (
         <Tooltip content={renderTooltip()} position="top">
@@ -124,11 +169,11 @@ function DisassociateButton({
             <Button
               ouiaId="disassociate-button"
               variant="secondary"
-              aria-label={t`Disassociate`}
+              aria-label={buttonLabel}
               onClick={() => setIsOpen(true)}
               isDisabled={isDisabled || !itemsToDisassociate.length}
             >
-              {t`Disassociate`}
+              {buttonLabel}
             </Button>
           </div>
         </Tooltip>
@@ -145,7 +190,7 @@ function DisassociateButton({
               ouiaId="disassociate-modal-confirm"
               key="disassociate"
               variant="danger"
-              aria-label={t`confirm disassociate`}
+              aria-label={t`Confirm Disassociate`}
               onClick={handleDisassociate}
             >
               {t`Disassociate`}
@@ -167,7 +212,9 @@ function DisassociateButton({
             </div>
           )}
 
-          <div>{t`This action will disassociate the following:`}</div>
+          {/* Disassociating takes the rows out of this list: what they stand
+              for stays where it is, which the reader is told before confirming. */}
+          <div>{t`This disassociates the following. They are not deleted themselves:`}</div>
 
           {itemsToDisassociate.map((item) => (
             <span key={item.id}>

@@ -10,12 +10,7 @@ import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ErrorDetail from 'components/ErrorDetail';
 import DeleteButton from 'components/DeleteButton';
-import {
-  Detail,
-  DetailList,
-  UserDateDetail,
-  DetailBadge,
-} from 'components/DetailList';
+import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { InstanceGroupsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
@@ -57,50 +52,53 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
           label={t`Type`}
           value={
             instanceGroup.is_container_group
-              ? t`Container group`
-              : t`Instance group`
+              ? t`Container Group`
+              : t`Instance Group`
           }
           dataCy="instance-group-type"
         />
-        <DetailBadge
-          label={t`Policy instance minimum`}
+        {/* The figures are plain values, as every other detail's are: a
+            grey badge made a count read as a tag, and the percentages here
+            are written the way the rest of the UI writes them. */}
+        <Detail
+          label={t`Policy Instance Minimum`}
           dataCy="instance-group-policy-instance-minimum"
           helpText={t`Minimum number of instances that will be automatically
           assigned to this group when new instances come online.`}
-          content={instanceGroup.policy_instance_minimum}
+          value={instanceGroup.policy_instance_minimum}
         />
-        <DetailBadge
-          label={t`Policy instance percentage`}
+        <Detail
+          label={t`Policy Instance Percentage`}
           helpText={t`Minimum percentage of all instances that will be automatically
           assigned to this group when new instances come online.`}
           dataCy="instance-group-policy-instance-percentage"
-          content={`${instanceGroup.policy_instance_percentage} %`}
+          value={`${instanceGroup.policy_instance_percentage}%`}
         />
-        <DetailBadge
-          label={t`Max concurrent jobs`}
+        <Detail
+          label={t`Max Concurrent Jobs`}
           dataCy="instance-group-max-concurrent-jobs"
           helpText={t`Maximum number of jobs to run concurrently on this group.
           Zero means no limit will be enforced.`}
-          content={instanceGroup.max_concurrent_jobs}
+          value={instanceGroup.max_concurrent_jobs}
         />
-        <DetailBadge
-          label={t`Max forks`}
+        <Detail
+          label={t`Max Forks`}
           dataCy="instance-group-max-forks"
           helpText={t`Maximum number of forks to allow across all jobs running concurrently on this group.
           Zero means no limit will be enforced.`}
-          content={instanceGroup.max_forks}
+          value={instanceGroup.max_forks}
         />
         {instanceGroup.capacity ? (
-          <DetailBadge
-            label={t`Used capacity`}
-            content={`${Math.round(
+          <Detail
+            label={t`Used Capacity`}
+            value={`${Math.round(
               100 - Number(instanceGroup.percent_capacity_remaining ?? 0)
-            )} %`}
+            )}%`}
             dataCy="instance-group-used-capacity"
           />
         ) : (
           <Detail
-            label={t`Used capacity`}
+            label={t`Used Capacity`}
             value={
               <span className="ascender-instance-group-details__unavailable">{t`Unavailable`}</span>
             }
@@ -123,7 +121,7 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
           instanceGroup.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="instance-group-detail-edit-button"
-              aria-label={t`edit`}
+              aria-label={t`Edit`}
               component={Link}
               to={`/instance_groups/${id}/edit`}
             >
@@ -135,11 +133,11 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
             <DeleteButton
               ouiaId="instance-group-detail-delete-button"
               name={name}
-              modalTitle={t`Delete instance group`}
+              modalTitle={t`Delete Instance Group`}
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={t`This instance group is currently being by other resources. Are you sure you want to delete it?`}
+              deleteMessage={t`This instance group is currently being used by other resources. Are you sure you want to delete it?`}
             >
               {t`Delete`}
             </DeleteButton>
@@ -149,7 +147,7 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={t`Error`}
+          title={t`Error!`}
           variant="error"
         >
           <ErrorDetail error={error} />

@@ -20,9 +20,10 @@ import Popover from '../Popover';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import OptionsList from '../OptionsList';
+import ADHOC_NAMESPACES from './namespaces';
 import './AdHocCredentialStep.css';
 
-const QS_CONFIG = getQSConfig('credentials', {
+const QS_CONFIG = getQSConfig(ADHOC_NAMESPACES.credential, {
   page: 1,
   page_size: 5,
   order_by: 'name',

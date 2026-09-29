@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-  Card,
   CardHeader,
   CardBody,
   MenuToggle,
@@ -29,23 +28,23 @@ function DashboardGraph() {
   const [jobStatusSelection, setJobStatusSelection] = useState('all');
 
   const periodLabelMap = {
-    month: t`Past month`,
-    two_weeks: t`Past two weeks`,
-    week: t`Past week`,
-    day: t`Past 24 hours`,
+    month: t`Past Month`,
+    two_weeks: t`Past Two Weeks`,
+    week: t`Past Week`,
+    day: t`Past 24 Hours`,
   };
 
   const jobTypeLabelMap = {
-    all: t`All job types`,
-    inv_sync: t`Inventory sync`,
-    scm_update: t`SCM update`,
-    playbook_run: t`Playbook run`,
+    all: t`All Job Types`,
+    inv_sync: t`Inventory Sync`,
+    scm_update: t`SCM Update`,
+    playbook_run: t`Playbook Run`,
   };
 
   const jobStatusLabelMap = {
-    all: t`All jobs`,
-    successful: t`Successful jobs`,
-    failed: t`Failed jobs`,
+    all: t`All Runs`,
+    successful: t`Successful Runs`,
+    failed: t`Failed Runs`,
   };
 
   const {
@@ -88,9 +87,7 @@ function DashboardGraph() {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -106,7 +103,7 @@ function DashboardGraph() {
               setIsPeriodDropdownOpen(false);
               setPeriodSelection(selection);
             }}
-            aria-label={t`Select period`}
+            aria-label={t`Select Period`}
             className="periodSelect"
             data-ouia-component-id="dashboard-period-select"
             toggle={(toggleRef) => (
@@ -117,15 +114,15 @@ function DashboardGraph() {
               >
                 {periodLabelMap[
                   periodSelection as keyof typeof periodLabelMap
-                ] || t`Select period`}
+                ] || t`Select Period`}
               </MenuToggle>
             )}
           >
             <SelectList>
-              <SelectOption value="month">{t`Past month`}</SelectOption>
-              <SelectOption value="two_weeks">{t`Past two weeks`}</SelectOption>
-              <SelectOption value="week">{t`Past week`}</SelectOption>
-              <SelectOption value="day">{t`Past 24 hours`}</SelectOption>
+              <SelectOption value="month">{t`Past Month`}</SelectOption>
+              <SelectOption value="two_weeks">{t`Past Two Weeks`}</SelectOption>
+              <SelectOption value="week">{t`Past Week`}</SelectOption>
+              <SelectOption value="day">{t`Past 24 Hours`}</SelectOption>
             </SelectList>
           </Select>
           <Select
@@ -135,7 +132,7 @@ function DashboardGraph() {
               setIsJobTypeDropdownOpen(false);
               setJobTypeSelection(selection);
             }}
-            aria-label={t`Select job type`}
+            aria-label={t`Select Job Type`}
             className="jobTypeSelect"
             data-ouia-component-id="dashboard-job-type-select"
             toggle={(toggleRef) => (
@@ -146,16 +143,16 @@ function DashboardGraph() {
               >
                 {jobTypeLabelMap[
                   jobTypeSelection as keyof typeof jobTypeLabelMap
-                ] || t`Select job type`}
+                ] || t`Select Job Type`}
               </MenuToggle>
             )}
           >
             <SelectList>
-              <SelectOption value="all">{t`All job types`}</SelectOption>
-              <SelectOption value="inv_sync">{t`Inventory sync`}</SelectOption>
-              <SelectOption value="scm_update">{t`SCM update`}</SelectOption>
+              <SelectOption value="all">{t`All Job Types`}</SelectOption>
+              <SelectOption value="inv_sync">{t`Inventory Sync`}</SelectOption>
+              <SelectOption value="scm_update">{t`SCM Update`}</SelectOption>
               <SelectOption value="playbook_run">
-                {t`Playbook run`}
+                {t`Playbook Run`}
               </SelectOption>
             </SelectList>
           </Select>
@@ -166,7 +163,7 @@ function DashboardGraph() {
               setIsJobStatusDropdownOpen(false);
               setJobStatusSelection(selection);
             }}
-            aria-label={t`Select status`}
+            aria-label={t`Select Status`}
             className="jobStatusSelect"
             toggle={(toggleRef) => (
               <MenuToggle
@@ -179,21 +176,21 @@ function DashboardGraph() {
               >
                 {jobStatusLabelMap[
                   jobStatusSelection as keyof typeof jobStatusLabelMap
-                ] || t`Select status`}
+                ] || t`Select Status`}
               </MenuToggle>
             )}
           >
             <SelectList>
-              <SelectOption value="all">{t`All jobs`}</SelectOption>
+              <SelectOption value="all">{t`All Runs`}</SelectOption>
               <SelectOption value="successful">
-                {t`Successful jobs`}
+                {t`Successful Runs`}
               </SelectOption>
-              <SelectOption value="failed">{t`Failed jobs`}</SelectOption>
+              <SelectOption value="failed">{t`Failed Runs`}</SelectOption>
             </SelectList>
           </Select>
         </div>
       </CardHeader>
-      <CardBody>
+      <CardBody className="ascender-dashboard-graph__card-body">
         <LineChart
           jobStatus={jobStatusSelection}
           height={220}

@@ -297,3 +297,23 @@ function parseFullQueryString(queryString = ''): QSParams {
     });
   return allParams;
 }
+
+/**
+ * The query string with everything a set of namespaces owns taken out.
+ *
+ * A list writes its page, its sort and its search into the address under its
+ * own namespace, which is what lets two lists share one address. A list
+ * inside a modal writes there too, and what it wrote outlives the modal: the
+ * next one opens filtered by a search nobody can see. Closing such a modal
+ * hands its namespaces here.
+ */
+export function removeNamespaces(search: string, namespaces: string[]): string {
+  const kept = new URLSearchParams();
+  new URLSearchParams(search).forEach((value, key) => {
+    if (namespaces.some((namespace) => key.startsWith(`${namespace}.`))) {
+      return;
+    }
+    kept.append(key, value);
+  });
+  return kept.toString();
+}

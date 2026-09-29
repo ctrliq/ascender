@@ -129,7 +129,6 @@ function PeersLookup({
         qsConfig={QS_CONFIG}
         multiple={multiple}
         required={required}
-        isLoading={isLoading}
         label={formLabel}
         renderItemChip={({ item, removeItem }) => (
           <Label
@@ -143,6 +142,7 @@ function PeersLookup({
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading}
             options={instances}
             optionCount={count}
             columns={columns}

@@ -31,7 +31,6 @@ function renderItem(
           onSelect={() => {}}
           onCopy={() => {}}
           fetchProjects={() => {}}
-          onRefreshRow={() => {}}
           rowIndex={0}
           project={baseProject}
           {...props}
@@ -85,6 +84,25 @@ describe('<ProjectsListItem />', () => {
         },
       },
     });
+    expect(
+      screen.queryByRole('button', { name: 'Sync Project' })
+    ).not.toBeInTheDocument();
+  });
+
+  // A new sync has not reached a node yet, and the api still lets it go.
+  test('cancel button shown for a sync not yet started', () => {
+    renderItem({
+      project: {
+        ...baseProject,
+        summary_fields: {
+          current_job: { id: 9001, status: 'new', finished: null },
+          user_capabilities: { start: true, edit: true },
+        },
+      } as unknown as Project,
+    });
+    expect(
+      screen.getByRole('button', { name: 'Cancel Project Sync' })
+    ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Sync Project' })
     ).not.toBeInTheDocument();
@@ -207,17 +225,39 @@ describe('<ProjectsListItem />', () => {
     expect(revisionCell).toHaveTextContent('osofej9');
   });
 
-  test('should indicate that the revision needs to be refreshed when project sync is done', () => {
+  /*
+   * The revision a running sync will write is not the one on the row, so the
+   * row says a sync is running rather than showing a revision about to go.
+   */
+  test('should say syncing over a revision the sync is replacing', () => {
     renderItem({
       project: {
         ...baseProject,
-        scm_revision: null as unknown as string,
+        scm_revision: 'osofej904r09a9sf0udfsajogsdfbh4e23489adf',
         summary_fields: {
-          current_job: {
-            id: 9001,
-            status: 'successful',
-            finished: '2021-06-01T18:43:53.332201Z',
-          },
+          current_job: { id: 9001, status: 'running', finished: null },
+          user_capabilities: { edit: true },
+        },
+      },
+    });
+    const revisionCell = document.querySelector('td[data-label="Revision"]');
+    expect(revisionCell).toHaveTextContent('Syncing');
+    expect(revisionCell).not.toHaveTextContent('osofej9');
+  });
+
+  /*
+   * Once the sync is over the row stops saying Syncing, whether or not the
+   * read that brings its new revision has arrived. A sync that ends in an
+   * error sends no finish time and brings no read, so waiting on one left the
+   * row saying Syncing for good.
+   */
+  test('stops saying syncing once the sync is over', () => {
+    renderItem({
+      project: {
+        ...baseProject,
+        scm_revision: 'osofej904r09a9sf0udfsajogsdfbh4e23489adf',
+        summary_fields: {
+          current_job: { id: 9001, status: 'error' },
           last_job: {
             id: 9000,
             status: 'successful',
@@ -227,13 +267,8 @@ describe('<ProjectsListItem />', () => {
       },
     });
     const revisionCell = document.querySelector('td[data-label="Revision"]');
-    expect(revisionCell).toHaveTextContent('Refresh for revision');
-    // the UndoIcon refresh button has no aria-label; query by its ouiaId
-    expect(
-      document.querySelector(
-        '[data-ouia-component-id="project-refresh-revision-1"]'
-      )
-    ).toBeInTheDocument();
+    expect(revisionCell).not.toHaveTextContent('Syncing');
+    expect(revisionCell).toHaveTextContent('osofej9');
   });
 
   test('should render expected details in expanded section', () => {
@@ -269,8 +304,8 @@ describe('<ProjectsListItem />', () => {
     assertDetail('Description', 'Project 1 description');
     assertDetail('Organization', 'Mock org');
     assertDetail('Default Execution Environment', 'Mock EE');
-    expect(screen.getByText('Last modified')).toBeInTheDocument();
-    expect(screen.getByText('Last used')).toBeInTheDocument();
+    expect(screen.getByText('Last Modified')).toBeInTheDocument();
+    expect(screen.getByText('Last Used')).toBeInTheDocument();
   });
 });
 

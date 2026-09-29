@@ -14,10 +14,6 @@ describe('<NotificationListItem canToggleNotifications />', () => {
     notification_type: 'slack',
   } as NotificationTemplate;
 
-  const typeLabels = {
-    slack: 'Slack',
-  };
-
   function setup(props = {}) {
     return renderWithContexts(
       <table>
@@ -27,7 +23,9 @@ describe('<NotificationListItem canToggleNotifications />', () => {
             toggleNotification={toggleNotification}
             detailUrl="/foo"
             canToggleNotifications
-            typeLabels={typeLabels}
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={0}
             {...props}
           />
         </tbody>

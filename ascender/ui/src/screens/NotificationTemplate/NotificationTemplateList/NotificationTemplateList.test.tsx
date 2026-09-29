@@ -17,7 +17,7 @@ const mockTemplates = {
       {
         name: 'Boston',
         id: 1,
-        url: '/notification_templates/1',
+        url: '/notifications/1',
         type: 'slack',
         summary_fields: {
           organization: { id: 1, name: 'Foo' },
@@ -28,7 +28,7 @@ const mockTemplates = {
       {
         name: 'Minneapolis',
         id: 2,
-        url: '/notification_templates/2',
+        url: '/notifications/2',
         summary_fields: {
           organization: { id: 2, name: 'Bar' },
           recent_notifications: [],
@@ -38,7 +38,7 @@ const mockTemplates = {
       {
         name: 'Philidelphia',
         id: 3,
-        url: '/notification_templates/3',
+        url: '/notifications/3',
         summary_fields: {
           organization: { id: 3, name: 'Test' },
           recent_notifications: [{ status: 'failed' }, { status: 'success' }],
@@ -69,6 +69,25 @@ describe('<NotificationTemplateList />', () => {
     expect(screen.getByText('Minneapolis')).toBeInTheDocument();
     expect(screen.getByText('Philidelphia')).toBeInTheDocument();
     expect(NotificationTemplatesAPI.read).toHaveBeenCalledTimes(1);
+  });
+
+  test('filters by the notification types the api offers', async () => {
+    const { user } = renderWithContexts(<NotificationTemplateList />);
+    await screen.findAllByRole('row');
+
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
+    await user.click(
+      await screen.findByRole('option', { name: 'Notification Type' })
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Filter By Notification Type' })
+    );
+    expect(
+      await screen.findByRole('checkbox', { name: 'Slack' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'Hipchat' })
+    ).not.toBeInTheDocument();
   });
 
   test('should select a row', async () => {

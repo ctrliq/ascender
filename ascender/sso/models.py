@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 class UserEnterpriseAuth(models.Model):
     """Enterprise Auth association model"""
 
-    PROVIDER_CHOICES = (('radius', _('RADIUS')), ('tacacs+', _('TACACS+')), ('saml', _('SAML')))
+    PROVIDER_CHOICES = (('saml', _('SAML')),)
 
     class Meta:
         unique_together = ('user', 'provider')

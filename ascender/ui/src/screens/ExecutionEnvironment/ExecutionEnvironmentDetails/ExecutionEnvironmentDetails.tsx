@@ -5,11 +5,11 @@ import { Link, useNavigate } from 'react-router';
 import { Button, Label } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
+import ErrorDetail from 'components/ErrorDetail';
 import { CardBody, CardActionsRow } from 'components/Card';
 import DeleteButton from 'components/DeleteButton';
 import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { toTitleCase } from 'util/strings';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import useExecutionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.helptext';
@@ -48,6 +48,23 @@ function ExecutionEnvironmentDetails({
   );
 
   const { error, dismissError } = useDismissableError(deleteError);
+
+  // An empty pull means the environment follows the default policy rather
+  // than any particular one, so it reads the same as it does in the list.
+  let pullLabel: string;
+  switch (pull) {
+    case 'always':
+      pullLabel = t`Always`;
+      break;
+    case 'missing':
+      pullLabel = t`Only if Missing`;
+      break;
+    case 'never':
+      pullLabel = t`Never`;
+      break;
+    default:
+      pullLabel = `(${t`Default`})`;
+  }
   const deleteDetailsRequests =
     relatedResourceDeleteRequests.executionEnvironment(executionEnvironment);
   return (
@@ -92,12 +109,12 @@ function ExecutionEnvironmentDetails({
 
         <Detail
           label={t`Pull`}
-          value={pull === '' ? t`Missing` : toTitleCase(pull)}
+          value={pullLabel}
           dataCy="execution-environment-pull"
         />
         {executionEnvironment.summary_fields.credential && (
           <Detail
-            label={t`Registry credential`}
+            label={t`Registry Credential`}
             value={
               <Label variant="outline" color="blue">
                 {executionEnvironment.summary_fields.credential.name}
@@ -122,7 +139,7 @@ function ExecutionEnvironmentDetails({
         {summary_fields.user_capabilities?.edit && (
           <Button
             ouiaId="execution-environment-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={t`Edit`}
             component={Link}
             to={`/execution_environments/${id}/edit`}
           >
@@ -131,7 +148,7 @@ function ExecutionEnvironmentDetails({
         )}
         {summary_fields.user_capabilities?.delete && (
           <DeleteButton
-            name={image}
+            name={name}
             modalTitle={t`Delete Execution Environment`}
             onConfirm={deleteExecutionEnvironment}
             isDisabled={isLoading}
@@ -148,9 +165,12 @@ function ExecutionEnvironmentDetails({
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={t`Error`}
+          title={t`Error!`}
           variant="error"
-        />
+        >
+          {t`Failed to delete execution environment.`}
+          <ErrorDetail error={error} />
+        </AlertModal>
       )}
     </CardBody>
   );

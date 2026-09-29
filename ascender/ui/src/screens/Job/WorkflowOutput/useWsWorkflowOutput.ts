@@ -48,7 +48,7 @@ export default function useWsWorkflowOutput(
       isMounted.current = false;
     };
   }, []);
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
   });
@@ -127,48 +127,48 @@ export default function useWsWorkflowOutput(
     hasInitializedRef.current = false;
   }, [workflowJobId]);
 
+  // Every message in the batch is applied, in order; the node updates are
+  // functional, so each lands on the nodes the one before it left.
   useEffect(
     () => {
-      // A null message is every render before the first one arrives, which
-      // the chain below used to fall through to its own early return.
-      if (!lastMessage) {
-        return;
-      }
-      if (
-        lastMessage.unified_job_id === workflowJobId &&
-        ['successful', 'failed', 'error', 'canceled'].includes(
-          lastMessage.status as string
-        )
-      ) {
-        refreshNodeObjects();
-      } else {
-        if (lastMessage.workflow_job_id !== workflowJobId) {
-          return;
-        }
-        if (
-          ['successful', 'failed', 'error', 'canceled'].includes(
-            lastMessage.status as string
-          )
-        ) {
-          refreshNodeObjects();
-        } else {
-          setNodes((prevNodes) => {
-            if (!prevNodes) {
-              return prevNodes;
-            }
-            const index = prevNodes.findIndex(
-              (node) =>
-                node?.originalNodeObject?.id === lastMessage.workflow_node_id
-            );
-            return index > -1
-              ? updateNode(prevNodes, index, lastMessage)
-              : prevNodes;
-          });
-        }
-      }
+      messages.forEach((message) => {
+        applyMessage(message);
+      });
     },
-    [lastMessage] // eslint-disable-line react-hooks/exhaustive-deps
+    [messages] // eslint-disable-line react-hooks/exhaustive-deps
   );
+
+  /**
+   * Puts one socket message on the graph.
+   *
+   * Args:
+   *   message: a job status change, for the workflow job or one of its nodes.
+   */
+  function applyMessage(message: WebsocketMessage) {
+    const isTerminal = ['successful', 'failed', 'error', 'canceled'].includes(
+      message.status as string
+    );
+    if (message.unified_job_id === workflowJobId && isTerminal) {
+      refreshNodeObjects();
+      return;
+    }
+    if (message.workflow_job_id !== workflowJobId) {
+      return;
+    }
+    if (isTerminal) {
+      refreshNodeObjects();
+      return;
+    }
+    setNodes((prevNodes) => {
+      if (!prevNodes) {
+        return prevNodes;
+      }
+      const index = prevNodes.findIndex(
+        (node) => node?.originalNodeObject?.id === message.workflow_node_id
+      );
+      return index > -1 ? updateNode(prevNodes, index, message) : prevNodes;
+    });
+  }
 
   return nodes;
 }

@@ -1,6 +1,7 @@
 import type { WorkflowJobTemplate } from 'types/api';
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -70,35 +71,35 @@ describe('VisualizerToolbar', () => {
   test('Should display action buttons', () => {
     renderToolbar();
     expect(
-      screen.getByRole('button', { name: 'Toggle legend' })
+      screen.getByRole('button', { name: 'Toggle Legend' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Toggle tools' })
+      screen.getByRole('button', { name: 'Toggle Tools' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Workflow documentation' })
+      screen.getByRole('link', { name: 'Workflow Documentation' })
     ).toBeInTheDocument();
     expect(document.querySelector('#visualizer-launch')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Delete all nodes' })
+      screen.getByRole('button', { name: 'Delete All Nodes' })
     ).toBeInTheDocument();
   });
 
   test('Toggle Legend button dispatches as expected', () => {
     renderToolbar();
-    fireEvent.click(screen.getByRole('button', { name: 'Toggle legend' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle Legend' }));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_LEGEND' });
   });
 
   test('Toggle Tools button dispatches as expected', () => {
     renderToolbar();
-    fireEvent.click(screen.getByRole('button', { name: 'Toggle tools' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle Tools' }));
     expect(dispatch).toHaveBeenCalledWith({ type: 'TOGGLE_TOOLS' });
   });
 
   test('Delete All button dispatches as expected', () => {
     renderToolbar();
-    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete All Nodes' }));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_SHOW_DELETE_ALL_NODES_MODAL',
       value: true,
@@ -153,7 +154,9 @@ describe('VisualizerToolbar', () => {
   test('Launch button should be disabled when there are unsaved changes', () => {
     renderToolbar();
     // totalNodes > 0 and no unsaved changes => enabled
-    expect(document.querySelector('#visualizer-launch')).not.toBeDisabled();
+    expect(document.querySelector('#visualizer-launch')).not.toHaveAttribute(
+      'aria-disabled'
+    );
 
     const oneNode = [
       {
@@ -179,7 +182,34 @@ describe('VisualizerToolbar', () => {
     );
     const launchButtons = document.querySelectorAll('#visualizer-launch');
     // the second render's launch button is the last one in the document
-    expect(launchButtons[launchButtons.length - 1]).toBeDisabled();
+    // Aria-disabled, so the tooltip can still say why.
+    expect(launchButtons[launchButtons.length - 1]).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+  });
+
+  test('Launch tooltip says to save first when there are unsaved changes', async () => {
+    const user = userEvent.setup();
+    renderWithContexts(
+      <WorkflowDispatchContext.Provider value={dispatch}>
+        <WorkflowStateContext.Provider
+          value={{ ...workflowContext, nodes } as unknown as WorkflowState}
+        >
+          <VisualizerToolbar
+            onClose={close}
+            onSave={save}
+            template={template}
+            hasUnsavedChanges
+            readOnly={false}
+          />
+        </WorkflowStateContext.Provider>
+      </WorkflowDispatchContext.Provider>
+    );
+    await user.hover(screen.getByRole('button', { name: 'Launch Workflow' }));
+    expect(
+      await screen.findByText('Save the Workflow to Launch It')
+    ).toBeInTheDocument();
   });
 
   test('Buttons should be hidden when user cannot edit workflow', () => {

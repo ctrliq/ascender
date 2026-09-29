@@ -117,4 +117,52 @@ describe('useWsInventorySources hook', () => {
       })
     );
   });
+
+  /*
+   * Two sources finishing in the same tick arrive before React renders
+   * either. Both rows have to show it, not just the second.
+   */
+  test('should update two sources whose messages arrive together', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const sources = [
+      { id: 3, status: 'running', summary_fields: {} },
+      { id: 4, status: 'running', summary_fields: {} },
+    ];
+    await act(async () => {
+      renderWithContexts(<Test sources={sources} />);
+    });
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(subscribeMessage);
+
+    act(() => {
+      mockServer.send(
+        JSON.stringify({
+          unified_job_id: 5,
+          inventory_source_id: 3,
+          type: 'job',
+          status: 'failed',
+          finished: 'first_time',
+        })
+      );
+      mockServer.send(
+        JSON.stringify({
+          unified_job_id: 6,
+          inventory_source_id: 4,
+          type: 'job',
+          status: 'successful',
+          finished: 'second_time',
+        })
+      );
+    });
+
+    await waitFor(() => {
+      const [first, second] = getResult();
+      expect(first.status).toEqual('failed');
+      expect(first.summary_fields.current_job.id).toEqual(5);
+      expect(second.status).toEqual('successful');
+      expect(second.summary_fields.current_job.id).toEqual(6);
+    });
+  });
 });

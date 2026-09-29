@@ -1,6 +1,7 @@
 import type { User } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { UsersAPI, RolesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -116,6 +117,21 @@ describe('<UserRolesList />', () => {
     expect(await screen.findByText('Credential Bar')).toBeInTheDocument();
   });
 
+  /*
+   * The search keys describe roles, so they come from the roles endpoint's
+   * OPTIONS rather than the users endpoint's.
+   */
+  test('reads the search keys from the user roles endpoint', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue(
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
+    );
+
+    renderWithContexts(<UserRolesList user={user} />);
+
+    await screen.findByText('Credential Bar');
+    expect(UsersAPI.readRoleOptions).toHaveBeenCalledWith(18);
+  });
+
   test('should create proper detailUrl', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
       roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
@@ -214,6 +230,33 @@ describe('<UserRolesList />', () => {
       screen.queryByRole('button', { name: 'Add resource roles' })
     ).not.toBeInTheDocument();
   });
+  test('offers to associate a role when the list is empty', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof UsersAPI.readRoles>);
+
+    renderWithContexts(<UserRolesList user={user} />);
+
+    expect(
+      await screen.findByText('Associate a role to list it here')
+    ).toBeInTheDocument();
+  });
+
+  test('describes the empty list without offering to associate', async () => {
+    vi.mocked(UsersAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof UsersAPI.readRoles>);
+
+    renderWithContexts(<UserRolesList user={user} />);
+
+    expect(
+      await screen.findByText('Roles this user holds appear here')
+    ).toBeInTheDocument();
+  });
+
   test('should open and close wizard', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
       roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
@@ -221,7 +264,7 @@ describe('<UserRolesList />', () => {
     const { user: events } = renderWithContexts(<UserRolesList user={user} />);
 
     await screen.findByText('Credential Bar');
-    await events.click(screen.getByRole('button', { name: 'Add' }));
+    await events.click(screen.getByRole('button', { name: 'Associate' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await events.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() => {
@@ -235,6 +278,88 @@ describe('<UserRolesList />', () => {
       });
     });
   });
+  test('removes the ticked roles from the toolbar', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue(
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
+    );
+    vi.mocked(RolesAPI.disassociateUserRole).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof RolesAPI.disassociateUserRole>
+    );
+
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />);
+    await screen.findByText('Credential Bar');
+
+    const ticks = screen.getAllByRole('checkbox', { name: /Select row/ });
+    await events.click(ticks[0] as HTMLElement);
+    await events.click(ticks[1] as HTMLElement);
+    await events.click(screen.getByRole('button', { name: 'Disassociate' }));
+    await events.click(
+      await screen.findByRole('button', { name: 'Confirm Disassociate' })
+    );
+
+    await waitFor(() =>
+      expect(RolesAPI.disassociateUserRole).toHaveBeenCalledTimes(2)
+    );
+    expect(RolesAPI.disassociateUserRole).toHaveBeenCalledWith(2, 18);
+  });
+
+  /*
+   * A tick kept across a new search could sit on a role the search hides, and
+   * the toolbar's Disassociate would still take it off.
+   */
+  test('clears the ticks when the search changes', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue(
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
+    );
+    const history = createMemoryHistory({
+      initialEntries: ['/users/18/roles'],
+    });
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />, {
+      context: { router: { history } },
+    });
+    await screen.findByText('Credential Bar');
+
+    const [tick] = screen.getAllByRole('checkbox', { name: /Select row/ });
+    await events.click(tick as HTMLElement);
+    expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
+
+    // The search box replaces the address rather than pushing one.
+    act(() => history.replace('/users/18/roles?roles.role_field__icontains=x'));
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Disassociate' })
+      ).toBeDisabled()
+    );
+  });
+
+  test('steps back a page when every role on it is taken off', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue(
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
+    );
+    vi.mocked(RolesAPI.disassociateUserRole).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof RolesAPI.disassociateUserRole>
+    );
+    const history = createMemoryHistory({
+      initialEntries: ['/users/18/roles?roles.page=2'],
+    });
+    const { user: events } = renderWithContexts(<UserRolesList user={user} />, {
+      context: { router: { history } },
+    });
+    await screen.findByText('Credential Bar');
+
+    await events.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await events.click(screen.getByRole('button', { name: 'Disassociate' }));
+    await events.click(
+      await screen.findByRole('button', { name: 'Confirm Disassociate' })
+    );
+
+    await waitFor(() =>
+      expect(history.location.search).not.toContain('roles.page=2')
+    );
+    expect(RolesAPI.disassociateUserRole).toHaveBeenCalledTimes(5);
+  });
+
   test('should render disassociate modal', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
       roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
@@ -244,17 +369,25 @@ describe('<UserRolesList />', () => {
 
     await screen.findByText('Credential Bar');
 
-    await events.click(screen.getByRole('button', { name: /Close Execute/ }));
-    expect(
-      await screen.findByRole('dialog', { name: /Disassociate role!/ })
-    ).toBeInTheDocument();
     await events.click(
-      screen.getByRole('button', { name: 'Confirm disassociate' })
+      screen.getByRole('button', { name: 'Disassociate Execute' })
+    );
+    expect(
+      await screen.findByRole('dialog', { name: /Disassociate Role\?/ })
+    ).toBeInTheDocument();
+    // The dialog names the side losing the role, the user, and the role with
+    // the resource it is on.
+    expect(
+      screen.getByText(/This disassociates the following role from the user:/)
+    ).toBeInTheDocument();
+    expect(screen.getByText('Credential Bar: Execute')).toBeInTheDocument();
+    await events.click(
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
     expect(RolesAPI.disassociateUserRole).toHaveBeenCalledWith(4, 18);
     await waitFor(() => {
       expect(
-        screen.queryByRole('dialog', { name: /Disassociate role!/ })
+        screen.queryByRole('dialog', { name: /Disassociate Role\?/ })
       ).not.toBeInTheDocument();
     });
   });
@@ -279,16 +412,52 @@ describe('<UserRolesList />', () => {
 
     await screen.findByText('Credential Bar');
 
-    await events.click(screen.getByRole('button', { name: /Close Execute/ }));
+    await events.click(
+      screen.getByRole('button', { name: 'Disassociate Execute' })
+    );
     expect(
-      await screen.findByRole('dialog', { name: /Disassociate role!/ })
+      await screen.findByRole('dialog', { name: /Disassociate Role\?/ })
     ).toBeInTheDocument();
     await events.click(
-      screen.getByRole('button', { name: 'Confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to disassociate role.')
+    ).toBeInTheDocument();
   });
-  test('user with sys admin privilege should show empty state', async () => {
+  /*
+   * The api names a role in the viewer's language, so whether the user is a
+   * system administrator is read off the account rather than off a role name.
+   */
+  test('a superuser shows the system administrator state in any language', async () => {
+    vi.mocked(UsersAPI.readRoles).mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 1,
+            name: 'Administrador del sistema',
+            type: 'role',
+            url: '/api/v2/roles/1/',
+            summary_fields: { user_capabilities: { unattach: true } },
+          },
+        ],
+        count: 1,
+      },
+    } as unknown as ResponseOf<typeof UsersAPI.readRoles>);
+
+    renderWithContexts(
+      <UserRolesList user={{ ...user, is_superuser: true } as User} />
+    );
+
+    expect(
+      await screen.findByText(
+        'System administrators have unrestricted access to all resources'
+      )
+    ).toBeInTheDocument();
+  });
+
+  test('lists the roles of a user who is not a superuser', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue({
       data: {
         results: [
@@ -312,6 +481,13 @@ describe('<UserRolesList />', () => {
 
     renderWithContexts(<UserRolesList user={user} />);
 
-    expect(await screen.findByText('System Administrator')).toBeInTheDocument();
+    expect(
+      await screen.findByText('template delete project')
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'System administrators have unrestricted access to all resources'
+      )
+    ).not.toBeInTheDocument();
   });
 });

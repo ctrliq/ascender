@@ -19,7 +19,31 @@ import {
   PlusIcon,
   MinusIcon,
 } from '@patternfly/react-icons';
+import { DEFAULT_NODE_STROKE_COLOR, NODE_TYPE_SYMBOL_KEY } from './constants';
 import './Legend.css';
+
+/*
+ * An enabled node and a disabled one differ on the canvas only in the ring
+ * round them: solid, or dashed five on at a radius of sixteen. The legend
+ * draws that ring at nine, so the dash is scaled to keep the same number of
+ * gaps, and in the neutral grey the canvas uses outside a node's state colour
+ * so it does not read as one of the states listed above it.
+ */
+function NodeRing({ isEnabled }: { isEnabled: boolean }) {
+  return (
+    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <circle
+        r="9"
+        cx="10"
+        cy="10"
+        fill="transparent"
+        stroke={DEFAULT_NODE_STROKE_COLOR}
+        strokeWidth="1.5px"
+        strokeDasharray={isEnabled ? undefined : '3'}
+      />
+    </svg>
+  );
+}
 
 function Legend() {
   const { t } = useLingui();
@@ -41,7 +65,7 @@ function Legend() {
         <Content
           className="ascender-legend__text"
           component={ContentVariants.small}
-        >{t`Node types`}</Content>
+        >{t`Node Types`}</Content>
       </Content>
       <PFDescriptionList
         className="ascender-legend__description-list"
@@ -51,11 +75,11 @@ function Legend() {
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
           <DescriptionListTerm>
             <PFButton className="ascender-legend__button" size="sm">
-              C
+              {NODE_TYPE_SYMBOL_KEY.control}
             </PFButton>
           </DescriptionListTerm>
           <PFDescriptionListDescription className="ascender-legend__description-list-description">
-            {t`Control node`}
+            {t`Control Node`}
           </PFDescriptionListDescription>
         </PFDescriptionListGroup>
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
@@ -65,11 +89,11 @@ function Legend() {
               variant="primary"
               size="sm"
             >
-              Ex
+              {NODE_TYPE_SYMBOL_KEY.execution}
             </PFButton>
           </DescriptionListTerm>
           <PFDescriptionListDescription className="ascender-legend__description-list-description">
-            {t`Execution node`}
+            {t`Execution Node`}
           </PFDescriptionListDescription>
         </PFDescriptionListGroup>
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
@@ -79,11 +103,11 @@ function Legend() {
               variant="primary"
               size="sm"
             >
-              Hy
+              {NODE_TYPE_SYMBOL_KEY.hybrid}
             </PFButton>
           </DescriptionListTerm>
           <PFDescriptionListDescription className="ascender-legend__description-list-description">
-            {t`Hybrid node`}
+            {t`Hybrid Node`}
           </PFDescriptionListDescription>
         </PFDescriptionListGroup>
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
@@ -93,17 +117,17 @@ function Legend() {
               variant="primary"
               size="sm"
             >
-              h
+              {NODE_TYPE_SYMBOL_KEY.hop}
             </PFButton>
           </DescriptionListTerm>
-          <PFDescriptionListDescription className="ascender-legend__description-list-description">{t`Hop node`}</PFDescriptionListDescription>
+          <PFDescriptionListDescription className="ascender-legend__description-list-description">{t`Hop Node`}</PFDescriptionListDescription>
         </PFDescriptionListGroup>
       </PFDescriptionList>
       <Content>
         <Content
           className="ascender-legend__text"
           component={ContentVariants.small}
-        >{t`Node state types`}</Content>
+        >{t`Node State Types`}</Content>
       </Content>
       <PFDescriptionList
         className="ascender-legend__description-list"
@@ -193,60 +217,13 @@ function Legend() {
         </PFDescriptionListGroup>
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
           <DescriptionListTerm>
-            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-              <circle
-                r="9"
-                cx="10"
-                cy="10"
-                fill="transparent"
-                strokeWidth="1px"
-                style={{
-                  stroke: 'var(--pf-t--global--border--color--default)',
-                }}
-              />
-              <text
-                x="10"
-                y="10"
-                textAnchor="middle"
-                dominantBaseline="central"
-                style={{ fill: 'var(--pf-t--global--text--color--100)' }}
-                fontSize="11px"
-                fontFamily="inherit"
-                fontWeight="400"
-              >
-                C
-              </text>
-            </svg>
+            <NodeRing isEnabled />
           </DescriptionListTerm>
           <PFDescriptionListDescription className="ascender-legend__description-list-description">{t`Enabled`}</PFDescriptionListDescription>
         </PFDescriptionListGroup>
         <PFDescriptionListGroup className="ascender-legend__description-list-group">
           <DescriptionListTerm>
-            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-              <circle
-                r="9"
-                cx="10"
-                cy="10"
-                fill="transparent"
-                strokeDasharray="5"
-                strokeWidth="1px"
-                style={{
-                  stroke: 'var(--pf-t--global--border--color--default)',
-                }}
-              />
-              <text
-                x="10"
-                y="10"
-                textAnchor="middle"
-                dominantBaseline="central"
-                style={{ fill: 'var(--pf-t--global--text--color--100)' }}
-                fontSize="11px"
-                fontFamily="inherit"
-                fontWeight="400"
-              >
-                C
-              </text>
-            </svg>
+            <NodeRing isEnabled={false} />
           </DescriptionListTerm>
           <PFDescriptionListDescription className="ascender-legend__description-list-description">{t`Disabled`}</PFDescriptionListDescription>
         </PFDescriptionListGroup>
@@ -255,7 +232,7 @@ function Legend() {
         <Content
           className="ascender-legend__text"
           component={ContentVariants.small}
-        >{t`Link state types`}</Content>
+        >{t`Link State Types`}</Content>
       </Content>
       <PFDescriptionList
         className="ascender-legend__description-list"

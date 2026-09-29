@@ -2,7 +2,12 @@
 
 .ascender-popover__button {
   padding: var(--pf-v6-global--spacer--xs);
+  /* The padding is what gives the icon a hit area. Cancelling it on every side
+     left the icon flush against the last letter of the label, so the left side
+     keeps its padding and only the other three are pulled back, which is what
+     stops the button adding height to the row or overhanging it. */
   margin: calc(-1 * var(--pf-v6-global--spacer--xs));
+  margin-left: 0;
   font-size: var(--pf-v6-global--FontSize--sm);
   line-height: 1;
   vertical-align: middle;
@@ -10,6 +15,15 @@
   border: none;
   cursor: pointer;
   color: var(--pf-v6-global--Color--200);
+}
+
+/* Centred on the middle of the line, the icon reads as low beside a label:
+   these labels are uppercase, and capitals have no descenders, so their visible
+   weight sits above the line's centre. A pixel up puts the icon on the middle
+   of the capitals instead. */
+.ascender-popover__button svg {
+  position: relative;
+  top: -1px;
 }
 
 .ascender-popover__button:hover {

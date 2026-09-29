@@ -221,6 +221,24 @@ describe('<SurveyListItem />', () => {
     );
   });
 
+  // The row is one question, so its pencil edits that question.
+  test('names the edit button for the question', () => {
+    renderAtSurveyRoute(
+      <SurveyListItem
+        rowIndex={0}
+        question={item}
+        isFirst
+        isLast
+        isChecked={false}
+        canEdit
+      />
+    );
+
+    expect(
+      screen.getByRole('link', { name: 'Edit Question' })
+    ).toBeInTheDocument();
+  });
+
   test('question name links to the edit form for that question', () => {
     renderAtSurveyRoute(
       <SurveyListItem
