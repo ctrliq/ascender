@@ -83,7 +83,7 @@ msgstr "आर्टिफ़ैक्ट कुंजी"
 msgid "day"
 msgstr "दिन"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:96
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:97
 msgid "Task Count"
 msgstr "कार्य संख्या"
 
@@ -242,7 +242,7 @@ msgid "SAML"
 msgstr "SAML"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:73
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:126
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:128
 #: screens/Template/shared/JobTemplateForm.tsx:655
 msgid "Privilege Escalation"
 msgstr "विशेषाधिकार वृद्धि"
@@ -278,7 +278,7 @@ msgstr "अंतिम जॉब अपडेट लोड करने मे�
 #~ msgstr "सदस्यता उपयोग"
 
 #: components/TemplateList/TemplateListItem.tsx:102
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:164
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
 msgid "(Prompt on launch)"
 msgstr "(लॉन्च पर संकेत)"
@@ -867,7 +867,7 @@ msgstr "वर्कफ़्लो टेम्पलेट जोड़ें"
 msgid "Back to Tokens"
 msgstr "टोकन पर वापस"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:51
+#: screens/Template/shared/JobTemplate.helptext.tsx:52
 msgid "Webhooks: Enable webhook for this template."
 msgstr "वेबहुक: इस टेम्पलेट के लिए वेबहुक सक्षम करें।"
 
@@ -973,7 +973,7 @@ msgstr "CPU {0}"
 msgid "Optional labels that describe this workflow job template, such as 'dev' or 'test'. Labels can be used to group and filter workflow job templates and completed jobs."
 msgstr "इस वर्कफ़्लो जॉब टेम्पलेट का वर्णन करने वाले वैकल्पिक लेबल, जैसे 'dev' या 'test'। लेबल का उपयोग वर्कफ़्लो जॉब टेम्पलेट और पूर्ण किए गए जॉब को समूहित और फ़िल्टर करने के लिए किया जा सकता है।"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:152
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:153
 msgid "Elapsed Time"
 msgstr "बीता हुआ समय"
 
@@ -1342,7 +1342,7 @@ msgstr "नोड प्रकार"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:82
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:138
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:526
-#: screens/Template/shared/JobTemplate.helptext.tsx:72
+#: screens/Template/shared/JobTemplate.helptext.tsx:76
 #: screens/Template/Survey/SurveyQuestionForm.tsx:312
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:312
 msgid "documentation"
@@ -1392,7 +1392,7 @@ msgstr "यह वर्कफ़्लो जॉब टेम्पलेट �
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:112
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:109
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:110
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
 msgstr "होस्ट्स"
@@ -1414,7 +1414,7 @@ msgstr "ई-मेल"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
 #: screens/Job/JobDetail/JobDetail.tsx:305
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
 msgid "Job Type"
@@ -1589,7 +1589,7 @@ msgstr "इस फ़ेडरेटेड इन्वेंटरी के �
 
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
 msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
-msgstr ""
+msgstr "receptor मेश का हॉप नोड जो इस समूह के पॉड को उस क्लस्टर में चलाता है जिसमें वह स्थित है, अपने स्वयं के सेवा खाते का उपयोग करके। कार्य मेश के माध्यम से उस तक पहुँचता है, इसलिए इस क्लस्टर को उस क्लस्टर तक किसी पहुँच की आवश्यकता नहीं है। इस क्लस्टर के API के माध्यम से पॉड चलाने के लिए रिक्त छोड़ें।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:367
 msgid "API Service/Integration Key"
@@ -1605,7 +1605,7 @@ msgstr "मिनट"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:225
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:226
 msgid "Copied"
 msgstr "कॉपी किया गया"
 
@@ -1829,7 +1829,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Team/TeamList/TeamList.tsx:115
 #: screens/Team/TeamList/TeamList.tsx:140
 #: screens/Team/TeamList/TeamListItem.tsx:42
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:178
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:183
 #: screens/Template/shared/JobTemplateForm.tsx:329
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
 #: screens/Template/Survey/SurveyList.tsx:119
@@ -1867,8 +1867,8 @@ msgid "Name"
 msgstr "नाम"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:167
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:295
-#: screens/Template/shared/JobTemplateForm.tsx:737
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:300
+#: screens/Template/shared/JobTemplateForm.tsx:743
 msgid "Host Config Key"
 msgstr "होस्ट कॉन्फ़िग कुंजी"
 
@@ -1902,7 +1902,7 @@ msgstr "विवरण।"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:211
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:37
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:136
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:137
 msgid "Failed"
 msgstr "विफल"
 
@@ -2221,7 +2221,7 @@ msgstr "फ़ेडरेटेड इन्वेंटरी विवरण 
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:82
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:135
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:137
 #: screens/Template/shared/JobTemplateForm.tsx:695
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
 msgid "Concurrent Jobs"
@@ -2326,7 +2326,7 @@ msgstr "छोड़ा गया"
 msgid "Restore initial value."
 msgstr "प्रारंभिक मान पुनर्स्थापित करें।"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:137
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:138
 msgid "Failed Hosts"
 msgstr "विफल होस्ट्स"
 
@@ -2361,7 +2361,7 @@ msgstr "जांच"
 msgid "View Instance Details"
 msgstr "इंस्टेंस विवरण देखें"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:118
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:119
 msgid "Unreachable Host Count"
 msgstr "अगम्य होस्ट संख्या"
 
@@ -2591,7 +2591,7 @@ msgstr "यदि सक्षम है, तो इन्वेंटरी स
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:84
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:140
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:528
-#: screens/Template/shared/JobTemplate.helptext.tsx:74
+#: screens/Template/shared/JobTemplate.helptext.tsx:78
 #: screens/Template/Survey/SurveyQuestionForm.tsx:314
 msgid "for more information."
 msgstr "अधिक जानकारी के लिए।"
@@ -2674,8 +2674,8 @@ msgstr "होस्ट फ़िल्टर संपादित करने
 #~ msgid "Red Hat Virtualization"
 #~ msgstr "Red Hat Virtualization"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:215
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:220
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:216
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:221
 msgid "Copy Output"
 msgstr "आउटपुट कॉपी करें"
 
@@ -2701,7 +2701,7 @@ msgstr "कोई परिणाम नहीं मिला"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:236
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:54
 #: screens/Setting/shared/SettingDetail.tsx:124
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:276
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
 #: screens/Template/shared/JobTemplateForm.tsx:606
 msgid "Off"
 msgstr "बंद"
@@ -2923,7 +2923,7 @@ msgstr "प्रति पंक्ति एक एनोटेशन टै�
 
 #: components/StatusLabel/StatusLabel.tsx:58
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:41
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:120
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:121
 msgid "Unreachable"
 msgstr "अगम्य"
 
@@ -3059,7 +3059,7 @@ msgid "True"
 msgstr "सत्य"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:85
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:138
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:140
 msgid "Fact Storage"
 msgstr "फ़ैक्ट स्टोरेज"
 
@@ -3113,7 +3113,7 @@ msgid "Failed to deny {0}."
 msgstr "{0} को अस्वीकार करने में विफल।"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
-#: screens/Template/shared/JobTemplateForm.tsx:750
+#: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
 msgid "Webhook details"
 msgstr "वेबहुक विवरण"
@@ -3184,7 +3184,7 @@ msgstr "वेरिएबल नामों के लिए सुझाय�
 "                अंडरस्कोर-पृथक है (उदाहरण के लिए, foo_bar, user_id, host_name,\n"
 "                आदि)। रिक्त स्थान वाले वेरिएबल नामों की अनुमति नहीं है।"
 
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:526
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:531
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह जॉब टेम्पलेट वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
@@ -3394,7 +3394,7 @@ msgstr "इससे कम या बराबर तुलना।"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:528
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
@@ -3543,7 +3543,7 @@ msgstr "GitHub Team"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
 #: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
@@ -3598,7 +3598,7 @@ msgstr "जॉब स्थिति ग्राफ़ टैब"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:79
 msgid "Hop node of the receptor mesh that runs the pods of this group in its own cluster"
-msgstr ""
+msgstr "receptor मेश का हॉप नोड जो इस समूह के पॉड को अपने स्वयं के क्लस्टर में चलाता है"
 
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:103
 #: screens/Application/shared/ApplicationForm.tsx:127
@@ -3712,7 +3712,7 @@ msgstr "इन्वेंटरी नहीं मिली।"
 msgid "Run health check"
 msgstr "हेल्थ चेक चलाएं"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:107
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:108
 msgid "Host Count"
 msgstr "होस्ट संख्या"
 
@@ -3781,7 +3781,7 @@ msgstr "एक या अधिक निष्पादन वातावर�
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:102
 #: components/PromptDetail/PromptDetail.tsx:419
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:528
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:286
 #: screens/Template/shared/JobTemplateForm.tsx:546
 msgid "Job Slicing"
 msgstr "जॉब स्लाइसिंग"
@@ -3916,8 +3916,8 @@ msgstr "डिफ़ॉल्ट निष्पादन वातावरण"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
 #: screens/Job/JobDetail/JobDetail.tsx:180
 #: screens/Job/JobDetail/JobDetail.tsx:214
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:232
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:227
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:237
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:43
 msgid "Project"
 msgstr "प्रोजेक्ट"
@@ -4020,7 +4020,7 @@ msgstr "स्थानीय समय क्षेत्र"
 msgid "Default Answer(s)"
 msgstr "डिफ़ॉल्ट उत्तर"
 
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:522
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:527
 msgid "Delete Job Template"
 msgstr "जॉब टेम्पलेट हटाएं"
 
@@ -4166,8 +4166,8 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:120
 #: screens/Team/TeamDetail/TeamDetail.tsx:62
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:497
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:499
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:502
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:504
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
@@ -4269,8 +4269,8 @@ msgstr "प्रश्न संपादित करें"
 msgid "Custom Kubernetes or OpenShift Pod specification."
 msgstr "कस्टम Kubernetes या OpenShift पॉड विनिर्देश।"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:232
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:238
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:233
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:239
 msgid "Download Output"
 msgstr "आउटपुट डाउनलोड करें"
 
@@ -4637,7 +4637,7 @@ msgstr "संगठन विवरण देखें"
 #: screens/Team/TeamList/TeamList.tsx:183
 #: screens/Team/TeamRoles/TeamRolesList.tsx:253
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:537
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:542
 #: screens/Template/TemplateSurvey.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
@@ -4846,6 +4846,11 @@ msgstr "प्रति पृष्ठ"
 #~ msgid "Upload a .zip file"
 #~ msgstr "एक .zip फ़ाइल अपलोड करें"
 
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:151
+#: screens/Template/shared/JobTemplateForm.tsx:713
+msgid "Prevent Relaunch"
+msgstr "पुनः लॉन्च रोकें"
+
 #: screens/Setting/SAML/SAML.tsx:26
 msgid "View SAML settings"
 msgstr "SAML सेटिंग्स देखें"
@@ -5001,7 +5006,7 @@ msgstr "हटाने के लिए एक प्रश्न चुने�
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
 #: screens/Job/JobDetail/JobDetail.tsx:589
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:489
 #: screens/Template/shared/JobTemplateForm.tsx:495
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
@@ -5048,11 +5053,11 @@ msgstr "{interval, plural, one {# घंटा} other {# घंटे}}"
 msgid "Edit User"
 msgstr "उपयोगकर्ता संपादित करें"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:98
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:99
 msgid "Tasks"
 msgstr "कार्य"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:121
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:122
 msgid "Unreachable Hosts"
 msgstr "अगम्य होस्ट्स"
 
@@ -5092,7 +5097,7 @@ msgstr "GitHub Teams से साइन इन करें"
 msgid "Inventory copied successfully"
 msgstr "इन्वेंटरी सफलतापूर्वक कॉपी की गई"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:36
+#: screens/Template/shared/JobTemplate.helptext.tsx:37
 msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 msgstr "यदि सक्षम है, तो यह एकत्रित तथ्यों को संग्रहीत करेगा ताकि उन्हें होस्ट स्तर पर देखा जा सके। तथ्य बने रहते हैं और रनटाइम पर फ़ैक्ट कैश में इंजेक्ट किए जाते हैं।"
 
@@ -5164,7 +5169,7 @@ msgstr "संक्षिप्त करें"
 #: screens/Inventory/shared/InventoryForm.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:404
 #: screens/Template/shared/JobTemplateForm.tsx:480
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
@@ -5209,7 +5214,7 @@ msgstr "माह"
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
 #: screens/Job/JobDetail/JobDetail.tsx:467
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:372
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:377
 #: screens/Template/shared/JobTemplateForm.tsx:465
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:54
 #: util/getRelatedResourceDeleteDetails.ts:120
@@ -5234,7 +5239,7 @@ msgstr "नए इंस्टेंस ऑनलाइन आने पर इ�
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
 #: screens/Job/JobDetail/JobDetail.tsx:516
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:438
 #: screens/Template/shared/JobTemplateForm.tsx:625
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
 msgid "Job Tags"
@@ -5263,8 +5268,8 @@ msgstr "अनुमोदित करने के लिए एक पंक�
 #~ msgstr "अद्वितीय होस्ट्स"
 
 #: screens/Job/JobDetail/JobDetail.tsx:650
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
 msgid "Delete Job"
@@ -5703,7 +5708,7 @@ msgstr "गंतव्य चैनल या उपयोगकर्ता"
 #~ msgid "Webhook service for this workflow job template."
 #~ msgstr "इस वर्कफ़्लो जॉब टेम्पलेट के लिए वेबहुक सेवा।"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:85
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:86
 msgid "Play Count"
 msgstr "प्ले संख्या"
 
@@ -5826,7 +5831,7 @@ msgstr "परीक्षण सूचना"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:135
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
 msgid "Enabled Options"
 msgstr "सक्षम विकल्प"
@@ -5875,7 +5880,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:429
 #: util/getRelatedResourceDeleteDetails.ts:316
 msgid "Instance Groups"
 msgstr "इंस्टेंस समूह"
@@ -5886,7 +5891,7 @@ msgstr "इंस्टेंस समूह"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
 #: screens/Job/JobDetail/JobDetail.tsx:543
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:464
 #: screens/Template/shared/JobTemplateForm.tsx:637
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
 msgid "Skip Tags"
@@ -5979,7 +5984,7 @@ msgid "Canonical"
 msgstr "कैनोनिकल"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:156
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:154
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
@@ -6034,7 +6039,7 @@ msgstr "संगठन"
 msgid "None (run once)"
 msgstr "कोई नहीं (एक बार चलाएं)"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:53
+#: screens/Template/shared/JobTemplate.helptext.tsx:54
 msgid "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
 msgstr "इंस्टेंस समूह फ़ॉलबैक रोकें: यदि सक्षम है, तो जॉब टेम्पलेट किसी भी इन्वेंटरी या संगठन इंस्टेंस समूह को चलाने के लिए पसंदीदा इंस्टेंस समूहों की सूची में जोड़ने से रोकेगा।"
 
@@ -6410,7 +6415,7 @@ msgstr "अपवाद"
 #~ msgid "Select a branch for the workflow."
 #~ msgstr "वर्कफ़्लो के लिए एक ब्रांच चुनें।"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:66
+#: screens/Template/shared/JobTemplate.helptext.tsx:70
 #: screens/Template/Survey/SurveyQuestionForm.tsx:304
 msgid "Refer to the"
 msgstr "देखें"
@@ -6439,12 +6444,12 @@ msgstr "हेल्थ चेक केवल निष्पादन नो�
 msgid "Visualizer"
 msgstr "विज़ुअलाइज़र"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:49
+#: screens/Template/shared/JobTemplate.helptext.tsx:50
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "प्रोविज़निंग कॉलबैक: प्रोविज़निंग कॉलबैक URL के निर्माण को सक्षम करता है। URL का उपयोग करके, एक होस्ट Ascender से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है।"
 
 #: components/JobList/JobListItem.tsx:159
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
 msgid "Relaunch Job"
@@ -6707,7 +6712,7 @@ msgid "Project not found."
 msgstr "प्रोजेक्ट नहीं मिला।"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:78
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:131
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:133
 #: screens/Template/shared/JobTemplateForm.tsx:659
 #: screens/Template/shared/JobTemplateForm.tsx:662
 msgid "Provisioning Callbacks"
@@ -7163,7 +7168,7 @@ msgstr "तिथि"
 #~ msgid "User and Automation Analytics"
 #~ msgstr "उपयोगकर्ता और Automation Analytics"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:46
+#: screens/Template/shared/JobTemplate.helptext.tsx:47
 msgid "Privilege escalation: If enabled, run this playbook as an administrator."
 msgstr "विशेषाधिकार वृद्धि: यदि सक्षम है, तो इस playbook को व्यवस्थापक के रूप में चलाएँ।"
 
@@ -7445,7 +7450,7 @@ msgstr "{0, selectordinal, one {पहला {dayOfWeek}} two {दूसरा {
 #~ msgid "Subscription selection modal"
 #~ msgstr "सदस्यता चयन मोडल"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:134
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:135
 msgid "Failed Host Count"
 msgstr "विफल होस्ट संख्या"
 
@@ -7546,7 +7551,7 @@ msgstr "सिंक करें"
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:180
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:337
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
@@ -7574,7 +7579,7 @@ msgstr "चयनित संसाधनों पर लागू करन�
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:295
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:317
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -7877,7 +7882,7 @@ msgstr "कभी अपडेट नहीं किया गया"
 msgid "Successful"
 msgstr "सफल"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:40
+#: screens/Template/shared/JobTemplate.helptext.tsx:41
 msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 msgstr "समवर्ती जॉब: यदि सक्षम है, तो इस जॉब टेम्पलेट के एक साथ चलने की अनुमति होगी।"
 
@@ -8056,6 +8061,10 @@ msgstr "पहला सभी संदर्भ लाता है। दू�
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:24
 msgid "Remove Team Access"
 msgstr "टीम पहुंच हटाएं"
+
+#: screens/Template/shared/JobTemplate.helptext.tsx:36
+msgid "If enabled, jobs launched from this job template cannot be relaunched, by anyone, including from the API. The template itself can still be launched. Turning this off makes earlier jobs relaunchable again."
+msgstr "यदि सक्षम है, तो इस जॉब टेम्पलेट से लॉन्च की गई जॉब को कोई भी पुनः लॉन्च नहीं कर सकता, API से भी नहीं। टेम्पलेट को अभी भी लॉन्च किया जा सकता है। इसे बंद करने से पिछली जॉब फिर से पुनः लॉन्च की जा सकती हैं।"
 
 #: screens/Setting/SettingList.tsx:27
 msgid "Authentication"
@@ -8266,7 +8275,7 @@ msgstr "विवरण दिखाएं"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:78
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:75
 msgid "Mesh node"
-msgstr ""
+msgstr "मेश नोड"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:104
 msgid "Amazon EC2"
@@ -8313,8 +8322,8 @@ msgstr "पैनल की ID (वैकल्पिक)"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:79
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:127
 #: screens/Inventory/shared/InventoryForm.tsx:105
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:145
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:345
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:147
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:350
 #: screens/Template/shared/JobTemplateForm.tsx:707
 msgid "Prevent Instance Group Fallback"
 msgstr "इंस्टेंस समूह फ़ॉलबैक रोकें"
@@ -8416,7 +8425,7 @@ msgstr ""
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:281
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:51
 #: screens/Job/JobDetail/JobDetail.tsx:369
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:263
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:268
 msgid "Verbosity"
 msgstr "वर्बोसिटी"
 
@@ -8443,7 +8452,7 @@ msgstr "सिंक त्रुटि"
 msgid "Create New Application"
 msgstr "नया एप्लिकेशन बनाएं"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:87
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:88
 msgid "Plays"
 msgstr "प्ले"
 
@@ -8583,7 +8592,7 @@ msgstr "उदाहरणों में शामिल हैं:"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:91
 msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
-msgstr ""
+msgstr "इस स्रोत द्वारा पिछले सिंक में जोड़े गए इन्वेंटरी वेरिएबल तब हटा दिए जाते हैं जब स्रोत उन्हें प्रदान करना बंद कर देता है, जब तक कि उन्हें तब से संपादित न किया गया हो या इस इन्वेंटरी का कोई अन्य स्रोत अभी भी उन्हें प्रदान न करता हो।"
 
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
@@ -8615,7 +8624,7 @@ msgstr "होस्ट्स"
 msgid "Capacity"
 msgstr "क्षमता"
 
-#: screens/Template/shared/JobTemplateForm.tsx:719
+#: screens/Template/shared/JobTemplateForm.tsx:725
 msgid "Provisioning Callback details"
 msgstr "प्रोविज़निंग कॉलबैक विवरण"
 
@@ -8806,7 +8815,7 @@ msgstr "सभी होस्ट्स पुनः लॉन्च करे�
 msgid "If enabled, simultaneous runs of this workflow job template will be allowed."
 msgstr "यदि सक्षम है, तो इस वर्कफ़्लो जॉब टेम्पलेट के एक साथ चलने की अनुमति होगी।"
 
-#: screens/Template/shared/JobTemplate.helptext.tsx:43
+#: screens/Template/shared/JobTemplate.helptext.tsx:44
 msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
 msgstr "फ़ैक्ट संग्रहण: यदि सक्षम है, तो यह एकत्रित तथ्यों को संग्रहीत करेगा ताकि उन्हें होस्ट स्तर पर देखा जा सके। तथ्य बने रहते हैं और रनटाइम पर फ़ैक्ट कैश में इंजेक्ट किए जाते हैं।"
 
@@ -8815,7 +8824,7 @@ msgid "Delete credential type"
 msgstr "क्रेडेंशियल प्रकार हटाएं"
 
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:284
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:310
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
 msgstr "GitHub"
@@ -9179,7 +9188,7 @@ msgstr "अपडेट विकल्प"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:72
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:242
@@ -9392,7 +9401,7 @@ msgstr "संबंधित समूह को अलग करें?"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
 #: screens/Job/JobDetail/JobDetail.tsx:427
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:256
 #: screens/Template/shared/JobTemplateForm.tsx:502
 #: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
@@ -9452,7 +9461,7 @@ msgstr "सूचना टॉगल करने में विफल।"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:181
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:324
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:329
 #: screens/Template/shared/WebhookSubForm.tsx:205
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook Key"
@@ -9497,6 +9506,10 @@ msgstr "टीम हटाने में विफल।"
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:24
 msgid "Remove User Access"
 msgstr "उपयोगकर्ता पहुंच हटाएं"
+
+#: screens/Template/shared/JobTemplate.helptext.tsx:57
+msgid "Prevent Relaunch: If enabled, jobs launched from this job template cannot be relaunched."
+msgstr "पुनः लॉन्च रोकें: यदि सक्षम है, तो इस जॉब टेम्पलेट से लॉन्च की गई जॉब को पुनः लॉन्च नहीं किया जा सकता।"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/DaysToKeepStep.tsx:29
 msgid "Days of data to be retained"
@@ -9550,8 +9563,8 @@ msgid "Remove Link"
 msgstr "लिंक हटाएं"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:170
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:300
-#: screens/Template/shared/JobTemplateForm.tsx:724
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:305
+#: screens/Template/shared/JobTemplateForm.tsx:730
 msgid "Provisioning Callback URL"
 msgstr "प्रोविज़निंग कॉलबैक URL"
 
@@ -9726,7 +9739,7 @@ msgstr "एक इन्वेंटरी चुनी जानी चाह�
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:345
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
@@ -9813,7 +9826,7 @@ msgstr "जब चेक नहीं किया जाता है, तो �
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Job Cancel Error"
 msgstr "जॉब रद्द करने में त्रुटि"
@@ -9909,8 +9922,8 @@ msgstr "टूल टॉगल करें"
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
 #: screens/Team/TeamList/TeamList.tsx:141
 #: screens/Team/TeamList/TeamListItem.tsx:47
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:192
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:203
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:197
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:208
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
@@ -10206,7 +10219,7 @@ msgstr "पहला नाम"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:141
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:143
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
 msgid "Webhooks"
 msgstr "वेबहुक"
@@ -10217,7 +10230,7 @@ msgid "{0, plural, one {The inventory will be in a pending status until the fina
 msgstr "{0, plural, one {अंतिम विलोपन संसाधित होने तक इन्वेंट्री लंबित स्थिति में रहेगी।} other {अंतिम विलोपन संसाधित होने तक इन्वेंट्रीज़ लंबित स्थिति में रहेंगी।}}"
 
 #: components/JobList/JobListItem.tsx:157
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:182
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "होस्ट पैरामीटर का उपयोग करके पुनः लॉन्च करें"
 
@@ -10375,7 +10388,7 @@ msgid "Current page"
 msgstr "वर्तमान पृष्ठ"
 
 #: screens/Job/Job.helptext.tsx:25
-#: screens/Template/shared/JobTemplate.helptext.tsx:59
+#: screens/Template/shared/JobTemplate.helptext.tsx:63
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "प्लेबुक निष्पादित करते समय उपयोग करने के लिए समानांतर या एक साथ चलने वाली प्रक्रियाओं की संख्या। एक खाली मान, या 1 से कम मान, Ansible डिफ़ॉल्ट का उपयोग करेगा जो आमतौर पर 5 होता है। डिफ़ॉल्ट फ़ोर्क्स की संख्या को निम्नलिखित में परिवर्तन करके ओवरराइट किया जा सकता है"
 
@@ -10515,13 +10528,13 @@ msgstr "मेट्रिक्स"
 msgid "Select Teams"
 msgstr "टीमें चुनें"
 
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:156
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
 msgid "Elapsed time that the job ran"
 msgstr "जॉब के चलने का बीता हुआ समय"
 
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:285
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:310
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
 msgstr "GitLab"
@@ -10787,7 +10800,7 @@ msgstr "कुल समूह"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:185
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:116
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:331
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:336
 #: screens/Template/shared/WebhookSubForm.tsx:245
 msgid "Webhook Credential"
 msgstr "वेबहुक क्रेडेंशियल"
@@ -10847,7 +10860,7 @@ msgstr "एक जॉब प्रकार चुनें"
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:145
 #: screens/Job/JobDetail/JobDetail.tsx:642
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Cancel {0}"
 msgstr "{0} रद्द करें"
@@ -11060,7 +11073,7 @@ msgid "Email Options"
 msgstr "ईमेल विकल्प"
 
 #: screens/Job/Job.helptext.tsx:27
-#: screens/Template/shared/JobTemplate.helptext.tsx:61
+#: screens/Template/shared/JobTemplate.helptext.tsx:65
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "कॉन्फ़िगरेशन फ़ाइल के बारे में विवरण के लिए Ansible दस्तावेज़ीकरण देखें।"
 
@@ -11106,7 +11119,7 @@ msgstr "जांचें कि दिए गए फ़ील्ड का म
 #: components/PromptDetail/PromptDetail.tsx:431
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:522
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:275
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:280
 #: screens/Template/shared/JobTemplateForm.tsx:599
 msgid "Show Changes"
 msgstr "परिवर्तन दिखाएं"
@@ -11183,7 +11196,7 @@ msgstr "GitHub Enterprise Organization"
 msgid "Choose a source"
 msgstr "एक स्रोत चुनें"
 
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:540
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:545
 msgid "Failed to delete job template."
 msgstr "जॉब टेम्पलेट हटाने में विफल।"
 
@@ -11228,7 +11241,7 @@ msgstr "इन्वेंटरी में होस्ट्स को ल�
 #: screens/Job/JobDetail/JobDetail.tsx:435
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:226
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:198
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:274
 #: screens/Template/shared/JobTemplateForm.tsx:577
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:193
 msgid "Timeout"
@@ -11422,7 +11435,7 @@ msgstr "होस्ट कितनी बार स्वचालित ह�
 #~ msgid "Expand input"
 #~ msgstr "इनपुट विस्तृत करें"
 
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:287
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
 msgid "Job Slice Pinned Hosts"
 msgstr "जॉब स्लाइस पिन किए गए होस्ट्स"
@@ -11581,7 +11594,7 @@ msgstr "इस सूची को भरने के लिए कृपया
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
 #: screens/Job/JobDetail/JobDetail.tsx:363
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:262
 #: screens/Template/shared/JobTemplateForm.tsx:522
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
@@ -11622,7 +11635,7 @@ msgstr "संबद्ध करें"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch"
 msgstr "पुनः लॉन्च करें"
@@ -11724,7 +11737,7 @@ msgstr "होस्ट पुनः प्रयास"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:309
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
 msgid "Webhook Service"
@@ -11746,7 +11759,7 @@ msgstr "प्रोविज़निंग कॉलबैक URL के न�
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:54
 #: screens/Setting/shared/SettingDetail.tsx:124
 #: screens/Setting/shared/SharedFields.tsx:178
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:276
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
 #: screens/Template/shared/JobTemplateForm.tsx:606
 msgid "On"
 msgstr "चालू"
@@ -11816,8 +11829,8 @@ msgstr "जून"
 #: components/LaunchPrompt/steps/usePreviewStep.tsx:38
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:64
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:503
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:512
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:508
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:517
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
 msgid "Launch"
@@ -11905,7 +11918,7 @@ msgstr "त्रुटि संदेश मुख्य भाग"
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:146
 #: screens/Job/JobDetail/JobDetail.tsx:643
-#: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
+#: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
 msgid "Failed to cancel {0}"
 msgstr "{0} रद्द करने में विफल"
@@ -11976,7 +11989,7 @@ msgstr "द्वारा बनाया गया (उपयोगकर्�
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:156
 #: screens/Job/JobDetail/JobDetail.tsx:357
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:250
 #: screens/Template/shared/JobTemplateForm.tsx:441
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:48
 msgid "Playbook"
@@ -12097,8 +12110,8 @@ msgstr "सूचना प्रारंभ टॉगल करें"
 #: screens/Job/JobDetail/JobDetail.tsx:107
 #: screens/Job/JobDetail/JobDetail.tsx:126
 #: screens/Job/JobDetail/JobDetail.tsx:133
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
-#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:212
+#: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
