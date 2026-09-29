@@ -32,7 +32,7 @@ msgstr "सर्वेक्षण प्रश्नों को पुनः
 msgid "Copy to clipboard"
 msgstr "क्लिपबोर्ड पर कॉपी करें"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:118
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:125
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr "निर्मित इन्वेंटरी प्लगइन के लिए इनपुट इन्वेंटरी चुनें।"
 
@@ -105,7 +105,7 @@ msgstr "रखने के लिए डेटा के दिन"
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {वर्ष} other {वर्ष}}"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:350
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:360
 msgid "Constructed Inventory Source Sync Error"
 msgstr "निर्मित इन्वेंटरी स्रोत सिंक त्रुटि"
 
@@ -210,7 +210,7 @@ msgstr "डिफ़ॉल्ट मान टॉगल करने के ल�
 msgid "RAM {0}"
 msgstr "RAM {0}"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:46
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:53
 msgid "The plugin parameter is required."
 msgstr "प्लगइन पैरामीटर आवश्यक है।"
 
@@ -365,7 +365,7 @@ msgstr "चेकआउट करने के लिए ब्रांच। �
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:74
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:182
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:93
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:238
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:136
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:216
@@ -420,7 +420,7 @@ msgid "Timed out"
 msgstr "समय समाप्त"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "{0} चुनें"
 
@@ -591,6 +591,7 @@ msgstr "{0, plural, one {आप निम्न जॉब को रद्द �
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
 #: screens/Instances/Shared/InstanceForm.tsx:106
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:177
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
@@ -610,7 +611,7 @@ msgstr "विफल होने के बाद इस नोड की ज�
 msgid "You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID."
 msgstr "आप समान वॉल्ट ID के साथ एकाधिक वॉल्ट क्रेडेंशियल्स नहीं चुन सकते। ऐसा करने पर समान वॉल्ट ID वाला दूसरा स्वचालित रूप से अचयनित हो जाएगा।"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:353
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:357
 msgid "Cancel Sync"
@@ -641,8 +642,8 @@ msgstr "GPG सार्वजनिक कुंजी"
 msgid "Source Control URL"
 msgstr "सोर्स कंट्रोल URL"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:316
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:171
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:326
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:191
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:182
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:269
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:339
@@ -853,9 +854,9 @@ msgid "You may apply a number of possible variables in the\n"
 msgstr "आप संदेश में कई संभावित वेरिएबल्स लागू कर सकते हैं।\n"
 "                अधिक जानकारी के लिए, देखें"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:377
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:387
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:208
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:214
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:224
 msgid "Failed to delete inventory."
 msgstr "इन्वेंटरी हटाने में विफल।"
 
@@ -876,7 +877,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "लुकअप मोडल"
 
@@ -1764,7 +1765,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:49
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:102
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:112
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
@@ -1789,7 +1790,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:72
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:82
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:89
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:65
 #: screens/Inventory/shared/InventoryForm.tsx:56
 #: screens/Inventory/shared/InventoryGroupForm.tsx:54
@@ -2026,7 +2027,7 @@ msgstr "कुंजी"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2200,7 +2201,7 @@ msgstr "फ़ील्ड दिए गए नियमित एक्सप�
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {यह क्रेडेंशियल प्रकार वर्तमान में कुछ क्रेडेंशियल्स द्वारा उपयोग किया जा रहा है और इसे हटाया नहीं जा सकता।} other {क्रेडेंशियल्स द्वारा उपयोग किए जा रहे क्रेडेंशियल प्रकार हटाए नहीं जा सकते। क्या आप फिर भी हटाना चाहते हैं?}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2435,7 +2436,7 @@ msgid "Management job launch error"
 msgstr "प्रबंधन जॉब लॉन्च त्रुटि"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "खोजें"
 
@@ -2484,7 +2485,7 @@ msgstr "सप्ताहांत का दिन"
 msgid "Execution environment copied successfully"
 msgstr "निष्पादन वातावरण सफलतापूर्वक कॉपी किया गया"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
 msgid "Cancel Constructed Inventory Source Sync"
 msgstr "निर्मित इन्वेंटरी स्रोत सिंक रद्द करें"
 
@@ -2506,7 +2507,7 @@ msgstr "{0} (हटाया गया)"
 msgid "The inventory that this host belongs to."
 msgstr "वह इन्वेंटरी जिससे यह होस्ट संबंधित है।"
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "लॉग इन करें"
 
@@ -2592,9 +2593,9 @@ msgstr "यदि सक्षम है, तो इन्वेंटरी स
 msgid "for more information."
 msgstr "अधिक जानकारी के लिए।"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:371
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:192
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:197
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:207
 msgid "Delete Inventory"
 msgstr "इन्वेंटरी हटाएं"
 
@@ -2690,6 +2691,10 @@ msgstr "आउटपुट कॉपी करें"
 msgid "No results found"
 msgstr "कोई परिणाम नहीं मिला"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:214
+msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish."
+msgstr ""
+
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
@@ -2705,6 +2710,10 @@ msgstr "बंद"
 #: screens/Inventory/Inventories.tsx:57
 msgid "Create new smart inventory"
 msgstr "नई स्मार्ट इन्वेंटरी बनाएं"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:204
+msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update."
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:664
 msgid "Delete Schedule"
@@ -2931,9 +2940,9 @@ msgstr "JSON या YAML सिंटैक्स का उपयोग कर�
 #~ msgid "Username / password"
 #~ msgstr "उपयोगकर्ता नाम / पासवर्ड"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:291
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:301
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:143
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:115
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:122
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:91
 msgid "Input Inventories"
 msgstr "इनपुट इन्वेंटरी"
@@ -3003,12 +3012,12 @@ msgstr "{0, plural, one {कृपया एक मान्य फ़ोन न
 msgid "Facts"
 msgstr "फ़ैक्ट्स"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "या"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3114,7 +3123,7 @@ msgstr "{0} को अस्वीकार करने में विफल�
 msgid "Webhook details"
 msgstr "वेबहुक विवरण"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:109
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:116
 #: screens/Inventory/shared/SmartInventoryForm.tsx:95
 msgid "Select the Instance Groups for this Inventory to run on."
 msgstr "इस इन्वेंटरी के चलने के लिए इंस्टेंस समूह चुनें।"
@@ -3273,7 +3282,7 @@ msgstr "{intervalValue, plural, one {घंटा} other {घंटे}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:68
 #: components/LaunchPrompt/steps/useSurveyStep.tsx:145
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:58
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:65
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:39
 #: screens/Template/shared/JobTemplateForm.tsx:240
 #: screens/User/shared/UserForm.tsx:131
@@ -3373,9 +3382,9 @@ msgstr "इससे कम या बराबर तुलना।"
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:376
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:202
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:212
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
@@ -3527,9 +3536,9 @@ msgstr "GitHub Team"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:334
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:174
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:184
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
@@ -3616,7 +3625,7 @@ msgstr "अगस्त"
 msgid "View smart inventory host details"
 msgstr "स्मार्ट इन्वेंटरी होस्ट विवरण देखें"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "Google से साइन इन करें"
 
@@ -3654,7 +3663,7 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -3997,6 +4006,14 @@ msgstr "नया सूचना टेम्पलेट बनाएं"
 msgid "None"
 msgstr "कोई नहीं"
 
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:267
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:269
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:94
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:183
+#: screens/Inventory/shared/InventoryForm.tsx:117
+msgid "Allow Jobs While Syncing"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
 #~ msgid "Automation Analytics"
@@ -4113,9 +4130,9 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:201
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
@@ -4200,7 +4217,7 @@ msgstr "कोई टाइमआउट निर्दिष्ट नहीं
 msgid "On Timeout"
 msgstr "टाइमआउट पर"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:208
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "इंस्टेंस समूह फ़ॉलबैक रोकें: यदि सक्षम है, तो इन्वेंटरी संबद्ध जॉब टेम्पलेट चलाने के लिए पसंदीदा इंस्टेंस समूहों की सूची में किसी भी संगठन इंस्टेंस समूह को जोड़ने से रोकेगी।"
 
@@ -4377,7 +4394,7 @@ msgstr "थीम"
 msgid "Filter on nested group name"
 msgstr "नेस्टेड समूह नाम पर फ़िल्टर करें"
 
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:89
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
 msgstr "उपयोग में रहते हुए हटाने की अनुमति दें"
@@ -4528,7 +4545,7 @@ msgstr "पीयर हटाएं?"
 msgid "Search text input"
 msgstr "खोज टेक्स्ट इनपुट"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "वह मान नहीं मिला। कृपया एक मान्य मान दर्ज करें या चुनें।"
 
@@ -4595,10 +4612,10 @@ msgstr "संगठन विवरण देखें"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:275
 #: screens/Instances/InstancePeers/InstancePeerList.tsx:343
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:114
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:384
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:211
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:221
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
@@ -4747,7 +4764,7 @@ msgstr "होस्ट टॉगल करने में विफल।"
 msgid "denied"
 msgstr "अस्वीकृत"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise Organizations से साइन इन करें"
 
@@ -4985,10 +5002,10 @@ msgstr "हटाने के लिए एक प्रश्न चुने�
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
 #: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:166
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:176
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
-#: screens/Inventory/shared/InventoryForm.tsx:120
+#: screens/Inventory/shared/InventoryForm.tsx:126
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
@@ -5076,7 +5093,7 @@ msgstr "टेक्स्ट क्षेत्र"
 msgid "View User Interface settings"
 msgstr "उपयोगकर्ता इंटरफ़ेस सेटिंग्स देखें"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub Teams से साइन इन करें"
 
@@ -5148,9 +5165,9 @@ msgstr "संक्षिप्त करें"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
 #: routeConfig.tsx:96
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:282
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:155
 #: screens/Inventory/shared/InventoryForm.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
@@ -5812,8 +5829,8 @@ msgstr "परीक्षण सूचना"
 #: components/PromptDetail/PromptProjectDetail.tsx:143
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:251
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:135
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
@@ -5862,7 +5879,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 #: screens/InstanceGroup/InstanceGroups.tsx:32
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:250
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:130
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
@@ -6845,7 +6862,7 @@ msgstr "सिस्टम प्रशासकों की सभी सं�
 msgid "Failure"
 msgstr "विफलता"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:352
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:362
 msgid "Failed to cancel Constructed Inventory Source Sync"
 msgstr "निर्मित इन्वेंटरी स्रोत सिंक रद्द करने में विफल"
 
@@ -7390,7 +7407,7 @@ msgstr "कोई जॉब्स नहीं"
 msgid "Application name"
 msgstr "एप्लिकेशन नाम"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:145
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:152
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:111
 msgid "Cache timeout (seconds)"
 msgstr "कैश टाइमआउट (सेकंड)"
@@ -7405,7 +7422,7 @@ msgstr "लॉग आउट"
 msgid "sec"
 msgstr "सेकंड"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "{label} से साइन इन करें"
 
@@ -7503,7 +7520,7 @@ msgstr "सिंक करें"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:106
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
@@ -7512,7 +7529,7 @@ msgstr "सिंक करें"
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:140
 #: screens/Inventory/InventoryList/InventoryList.tsx:213
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:232
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:90
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:97
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:63
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:73
 #: screens/Inventory/shared/InventoryForm.tsx:64
@@ -7636,7 +7653,7 @@ msgstr "टीम संपादित करें"
 msgid "User Interface"
 msgstr "उपयोगकर्ता इंटरफ़ेस"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise से साइन इन करें"
 
@@ -7649,7 +7666,7 @@ msgstr "GitHub Enterprise से साइन इन करें"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:107
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:54
@@ -7684,7 +7701,7 @@ msgstr "कभी समाप्त नहीं होता"
 msgid "View job {0}"
 msgstr "जॉब {0} देखें"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} से साइन इन करें"
 
@@ -7797,7 +7814,7 @@ msgstr "startswith का केस-असंवेदनशील संस्�
 msgid "Unsaved changes modal"
 msgstr "सहेजे न गए परिवर्तन मोडल"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise Teams से साइन इन करें"
 
@@ -7831,7 +7848,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub सेटिंग्स"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub Organizations से साइन इन करें"
 
@@ -8291,10 +8308,10 @@ msgstr "प्राधिकरण अनुदान प्रकार"
 msgid "ID of the panel (optional)"
 msgstr "पैनल की ID (वैकल्पिक)"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:257
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:259
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:79
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:127
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:258
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:260
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:137
 #: screens/Inventory/shared/InventoryForm.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:145
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:345
@@ -8447,7 +8464,7 @@ msgstr "नोट: इन्हें जिस क्रम में चुन
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "लॉन्च के समय पासवर्ड की आवश्यकता वाले क्रेडेंशियल की अनुमति नहीं है। आगे बढ़ने के लिए कृपया निम्नलिखित क्रेडेंशियल को हटाएँ या समान प्रकार के क्रेडेंशियल से बदलें: {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "OIDC से साइन इन करें"
 
@@ -8623,7 +8640,7 @@ msgstr "इन्वेंटरी संपादित करें"
 msgid "Failed to user token."
 msgstr "उपयोगकर्ता टोकन में विफल।"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "SAML से साइन इन करें"
 
@@ -8717,7 +8734,7 @@ msgstr "उत्तर वेरिएबल नाम"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "चुनें"
@@ -8777,7 +8794,7 @@ msgstr "वर्कफ़्लो दस्तावेज़ीकरण"
 msgid "January"
 msgstr "जनवरी"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "Azure AD से साइन इन करें"
 
@@ -8832,7 +8849,7 @@ msgstr "प्रोजेक्ट सिंक करने में वि�
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:210
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:109
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:126
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:125
 msgid "Total hosts"
 msgstr "कुल होस्ट्स"
@@ -9154,7 +9171,7 @@ msgstr "अपडेट विकल्प"
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:189
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:582
@@ -9326,7 +9343,7 @@ msgstr "वर्कफ़्लो अस्वीकृत संदेश म
 msgid "Generic OIDC settings"
 msgstr "जेनेरिक OIDC सेटिंग्स"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:210
+#: screens/Inventory/shared/Inventory.helptext.tsx:211
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "उपयोग में रहते हुए हटाने की अनुमति दें: यदि सक्षम है, तो इस इन्वेंटरी पर जॉब चलते समय इससे होस्ट हटाए जा सकते हैं।"
 
@@ -9538,7 +9555,7 @@ msgstr "लिंक हटाएं"
 msgid "Provisioning Callback URL"
 msgstr "प्रोविज़निंग कॉलबैक URL"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:339
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
@@ -9877,7 +9894,7 @@ msgstr "टूल टॉगल करें"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:119
 #: screens/Inventory/InventoryList/InventoryList.tsx:209
 #: screens/Inventory/InventoryList/InventoryList.tsx:239
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:139
@@ -9903,7 +9920,7 @@ msgstr "टूल टॉगल करें"
 msgid "Organization"
 msgstr "संगठन"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "आपका सत्र समाप्त हो गया है। जहां आपने छोड़ा था वहां से जारी रखने के लिए कृपया लॉग इन करें।"
 
@@ -9921,9 +9938,9 @@ msgstr "द्वारा बनाया गया (उपयोगकर्�
 msgid "Inventory sync failures"
 msgstr "इन्वेंटरी सिंक विफलताएं"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:364
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:195
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:200
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:210
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह इन्वेंटरी वर्तमान में अन्य संसाधनों द्वारा उपयोग की जा रही है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
@@ -9953,7 +9970,7 @@ msgstr "जॉब चलने के दौरान खोज अक्षम 
 msgid "Third"
 msgstr "तीसरा"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "Azure AD Tenant से साइन इन करें"
 
@@ -9966,7 +9983,7 @@ msgstr "Azure AD डिफ़ॉल्ट"
 msgid "Case-insensitive version of endswith."
 msgstr "endswith का केस-असंवेदनशील संस्करण।"
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "लुकअप रद्द करें"
 
@@ -11110,7 +11127,7 @@ msgstr "एक या अधिक इन्वेंटरी स्रोत �
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "यदि निर्दिष्ट किया गया है, तो वर्कफ़्लो देखते समय यह फ़ील्ड संसाधन नाम के बजाय नोड पर दिखाया जाएगा"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "GitHub से साइन इन करें"
 
@@ -11559,7 +11576,7 @@ msgstr "इस सूची को भरने के लिए कृपया
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:507
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:187
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:162
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:169
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
@@ -12074,7 +12091,7 @@ msgstr "सूचना प्रारंभ टॉगल करें"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:128
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:57
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
 #: screens/Job/JobDetail/JobDetail.tsx:107

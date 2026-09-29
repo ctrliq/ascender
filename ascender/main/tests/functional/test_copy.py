@@ -98,6 +98,7 @@ def test_inventory_copy(inventory, group_factory, post, get, alice, organization
     group_2_1.hosts.add(host)
     inventory.admin_role.members.add(alice)
     inventory.prevent_instance_group_fallback = True
+    inventory.allow_jobs_while_syncing = True
     inventory.save()
     assert get(reverse('api:inventory_copy', kwargs={'pk': inventory.pk}), alice, expect=200).data['can_copy'] is False
     inventory.organization.admin_role.members.add(alice)
@@ -115,6 +116,7 @@ def test_inventory_copy(inventory, group_factory, post, get, alice, organization
     assert inventory_copy.created_by == alice
     assert inventory_copy.name == 'new inv name'
     assert inventory_copy.prevent_instance_group_fallback == True
+    assert inventory_copy.allow_jobs_while_syncing is True
     assert set(group_1_1_copy.parents.all()) == set()
     assert set(group_2_1_copy.parents.all()) == set([group_1_1_copy])
     assert set(group_2_2_copy.parents.all()) == set([group_1_1_copy, group_2_1_copy])
