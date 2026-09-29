@@ -7659,6 +7659,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0
@@ -7690,6 +7692,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0
@@ -10602,6 +10606,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0

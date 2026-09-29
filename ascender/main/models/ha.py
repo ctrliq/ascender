@@ -432,6 +432,17 @@ class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin, ResourceMi
             default='',
         )
     )
+    # PROTECT rather than SET_NULL: losing the node would quietly turn the group back into a
+    # local container group and start running its pods on this cluster instead.
+    mesh_node = models.ForeignKey(
+        'Instance',
+        related_name='remote_container_groups',
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.PROTECT,
+        help_text=_("Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API."),
+    )
     admin_role = ImplicitRoleField(
         parent_role=[
             'singleton:' + ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,

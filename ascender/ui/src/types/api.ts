@@ -75,6 +75,8 @@ export interface SummaryFields {
   schedule?: SummaryFieldRef;
   execution_environment?: SummaryFieldRef & { image?: string };
   instance_group?: SummaryFieldRef;
+  /** The hop node a container group hands its pods to, if any. */
+  mesh_node?: SummaryFieldRef & { hostname?: string; node_state?: string };
   credential?: SummaryFieldRef;
   credentials?: SummaryFieldRef[];
   webhook_credential?: SummaryFieldRef & { kind?: string };

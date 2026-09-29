@@ -585,6 +585,7 @@ class InstanceGroupAccess(BaseAccess):
     """
 
     model = InstanceGroup
+    select_related = ('mesh_node',)
     prefetch_related = ('instances',)
 
     read_via = (InstanceGroup, '')
@@ -598,6 +599,10 @@ class InstanceGroupAccess(BaseAccess):
 
     @check_superuser
     def can_change(self, obj, data):
+        # The mesh node decides which cluster the pods run in, and the nodes of the mesh are
+        # only managed by system administrators, so only they may point a group at one.
+        if data and 'mesh_node' in data and get_pk_from_dict(data, 'mesh_node') != obj.mesh_node_id:
+            return False
         return self.can_admin(obj)
 
     @check_superuser

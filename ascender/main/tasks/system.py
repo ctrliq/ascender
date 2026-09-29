@@ -702,7 +702,9 @@ def awx_k8s_reaper():
 
     from ascender.main.scheduler.kubernetes import PodManager  # prevent circular import
 
-    for group in InstanceGroup.objects.filter(is_container_group=True).iterator():
+    # Groups that run their pods behind a mesh node are left out: we have no access to that cluster's API,
+    # and their pods go away when the work unit is cancelled or released through the mesh.
+    for group in InstanceGroup.objects.filter(is_container_group=True, mesh_node__isnull=True).iterator():
         logger.debug("Checking for orphaned k8s pods for {}.".format(group))
         pods = PodManager.list_active_jobs(group)
         time_cutoff = now() - timedelta(seconds=settings.K8S_POD_REAPER_GRACE_PERIOD)

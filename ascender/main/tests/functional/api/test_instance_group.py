@@ -329,3 +329,78 @@ def test_cannot_remove_controlplane_hybrid_instances(post, controlplane_instance
     url = reverse('api:instance_instance_groups_list', kwargs={'pk': instance.pk})
     r = post(url, {'disassociate': True, 'id': controlplane_instance_group.id}, admin_user, expect=400)
     assert 'Cannot disassociate hybrid instance' in str(r.data)
+
+
+@pytest.mark.django_db
+class TestMeshNode:
+    @pytest.fixture
+    def hop(self):
+        return Instance.objects.create(hostname='receptor.remote.example.com', node_type='hop', node_state='ready')
+
+    def test_container_group_runs_behind_a_hop(self, post, admin, hop):
+        url = reverse('api:instance_group_list')
+        resp = post(url, {'name': 'remote', 'is_container_group': True, 'mesh_node': hop.pk}, admin, expect=201)
+        assert resp.data['mesh_node'] == hop.pk
+        assert resp.data['summary_fields']['mesh_node'] == {'id': hop.pk, 'hostname': hop.hostname, 'node_state': 'ready'}
+        assert resp.data['related']['mesh_node'] == reverse('api:instance_detail', kwargs={'pk': hop.pk})
+
+    @pytest.mark.parametrize('node_type', ['control', 'hybrid', 'execution'])
+    def test_only_hop_nodes(self, post, admin, node_type_instance, node_type):
+        node = node_type_instance(hostname=node_type, node_type=node_type)
+        resp = post(reverse('api:instance_group_list'), {'name': 'remote', 'is_container_group': True, 'mesh_node': node.pk}, admin, expect=400)
+        assert 'Only hop nodes can run the pods of a container group.' in str(resp.data['mesh_node'])
+
+    def test_only_container_groups(self, post, patch, admin, hop, containerized_instance_group, instance_group):
+        resp = post(reverse('api:instance_group_list'), {'name': 'remote', 'mesh_node': hop.pk}, admin, expect=400)
+        assert 'Only container groups can run their pods on a mesh node.' in str(resp.data['mesh_node'])
+
+        resp = patch(reverse('api:instance_group_detail', kwargs={'pk': instance_group.pk}), {'mesh_node': hop.pk}, admin, expect=400)
+        assert 'Only container groups can run their pods on a mesh node.' in str(resp.data['mesh_node'])
+
+    def test_not_together_with_a_credential(self, post, patch, admin, hop, kube_credential, containerized_instance_group):
+        resp = post(
+            reverse('api:instance_group_list'),
+            {'name': 'remote', 'is_container_group': True, 'credential': kube_credential.pk, 'mesh_node': hop.pk},
+            admin,
+            expect=400,
+        )
+        assert 'cannot have a credential' in str(resp.data['mesh_node'])
+
+        # the group already has a credential, so adding the node alone is refused as well
+        resp = patch(reverse('api:instance_group_detail', kwargs={'pk': containerized_instance_group.pk}), {'mesh_node': hop.pk}, admin, expect=400)
+        assert 'cannot have a credential' in str(resp.data['mesh_node'])
+
+        # dropping the credential in the same request is fine
+        patch(
+            reverse('api:instance_group_detail', kwargs={'pk': containerized_instance_group.pk}),
+            {'mesh_node': hop.pk, 'credential': None},
+            admin,
+            expect=200,
+        )
+
+    def test_not_on_a_node_being_deprovisioned(self, post, admin, hop):
+        hop.node_state = 'deprovisioning'
+        hop.save()
+        resp = post(reverse('api:instance_group_list'), {'name': 'remote', 'is_container_group': True, 'mesh_node': hop.pk}, admin, expect=400)
+        assert 'Cannot run the pods of a container group on a node that is being deprovisioned.' in str(resp.data['mesh_node'])
+
+    def test_only_system_admins_move_a_group_to_a_node(self, patch, put, rando, hop):
+        other = Instance.objects.create(hostname='other.remote.example.com', node_type='hop', node_state='ready')
+        group = InstanceGroup.objects.create(name='remote', is_container_group=True, mesh_node=hop)
+        group.admin_role.members.add(rando)
+        url = reverse('api:instance_group_detail', kwargs={'pk': group.pk})
+
+        # the group's own admin can still edit it, as long as the node stays the same
+        patch(url, {'max_forks': 10}, rando, expect=200)
+        put(url, {'name': 'remote', 'is_container_group': True, 'mesh_node': hop.pk}, rando, expect=200)
+
+        patch(url, {'mesh_node': other.pk}, rando, expect=403)
+        patch(url, {'mesh_node': None}, rando, expect=403)
+        group.refresh_from_db()
+        assert group.mesh_node == hop
+
+    def test_group_cannot_stop_being_a_container_group(self, patch, admin, hop):
+        group = InstanceGroup.objects.create(name='remote', is_container_group=True, mesh_node=hop)
+        url = reverse('api:instance_group_detail', kwargs={'pk': group.pk})
+        patch(url, {'is_container_group': False}, admin, expect=400)
+        patch(url, {'is_container_group': False, 'mesh_node': None}, admin, expect=200)

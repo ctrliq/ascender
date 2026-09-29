@@ -35,6 +35,18 @@ vi.mock('../shared/ContainerGroupForm', () => ({
       >
         mock submit
       </button>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            ...mockInstanceGroupCreateData,
+            mesh_node: { id: 5, name: 'receptor.remote' },
+            override: false,
+          })
+        }
+      >
+        mock submit remote
+      </button>
       <button type="button" aria-label="Cancel" onClick={onCancel}>
         Cancel
       </button>
@@ -100,12 +112,31 @@ describe('<ContainerGroupAdd/>', () => {
       expect(InstanceGroupsAPI.create).toHaveBeenCalledWith({
         ...mockInstanceGroupCreateData,
         credential: 71,
+        mesh_node: null,
         is_container_group: true,
       })
     );
     expect(screen.queryByText('FormSubmitError')).not.toBeInTheDocument();
     expect(history.location.pathname).toBe(
       '/instance_groups/container_group/123/details'
+    );
+  });
+
+  test('a group behind a mesh node is sent without a credential', async () => {
+    const { user } = renderWithContexts(<ContainerGroupAdd />, {
+      context: { router: { history } },
+    });
+    await user.click(
+      await screen.findByRole('button', { name: 'mock submit remote' })
+    );
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          credential: null,
+          mesh_node: 5,
+          is_container_group: true,
+        })
+      )
     );
   });
 
