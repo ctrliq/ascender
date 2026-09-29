@@ -33,7 +33,7 @@ from ascender.sso.validators import (  # noqa
     validate_ldap_dn_with_user,
     validate_ldap_filter,
     validate_ldap_filter_with_user,
-    validate_ldap_trigger_rule,
+    validate_trigger_rule,
     validate_tacacsplus_disallow_nonascii,
 )
 
@@ -556,15 +556,15 @@ class LDAPDNMapField(fields.StringListBooleanField):
     child = LDAPDNField()
 
 
-class LDAPTriggersField(fields.DictField):
+class TriggerRuleField(fields.DictField):
     """
     An AAP style trigger rule, validated against the same trigger definition the
     platform's authenticator maps use.
     """
 
     def to_internal_value(self, data):
-        data = super(LDAPTriggersField, self).to_internal_value(data)
-        errors = validate_ldap_trigger_rule(data)
+        data = super(TriggerRuleField, self).to_internal_value(data)
+        errors = validate_trigger_rule(data)
         if errors:
             raise ValidationError([_('%(key)s: %(error)s') % {'key': key, 'error': errors[key]} for key in sorted(errors)])
         return data
@@ -577,9 +577,9 @@ class LDAPSingleOrganizationMapField(HybridDictField):
     remove_admins = fields.BooleanField(required=False)
     remove_users = fields.BooleanField(required=False)
     remove_auditors = fields.BooleanField(required=False)
-    triggers_admins = LDAPTriggersField(allow_null=True, required=False)
-    triggers_users = LDAPTriggersField(allow_null=True, required=False)
-    triggers_auditors = LDAPTriggersField(allow_null=True, required=False)
+    triggers_admins = TriggerRuleField(allow_null=True, required=False)
+    triggers_users = TriggerRuleField(allow_null=True, required=False)
+    triggers_auditors = TriggerRuleField(allow_null=True, required=False)
 
     child = _Forbidden()
 
@@ -592,7 +592,7 @@ class LDAPSingleTeamMapField(HybridDictField):
     organization = fields.CharField()
     users = LDAPDNMapField(allow_null=True, required=False)
     remove = fields.BooleanField(required=False)
-    triggers = LDAPTriggersField(allow_null=True, required=False)
+    triggers = TriggerRuleField(allow_null=True, required=False)
 
     child = _Forbidden()
 
@@ -687,6 +687,32 @@ class SocialSingleTeamMapField(HybridDictField):
 
 class SocialTeamMapField(fields.DictField):
     child = SocialSingleTeamMapField()
+
+
+class OIDCSingleOrganizationMapField(SocialSingleOrganizationMapField):
+    triggers_admins = TriggerRuleField(allow_null=True, required=False)
+    triggers_users = TriggerRuleField(allow_null=True, required=False)
+
+
+class OIDCOrganizationMapField(fields.DictField):
+    child = OIDCSingleOrganizationMapField()
+
+
+class OIDCSingleTeamMapField(SocialSingleTeamMapField):
+    triggers = TriggerRuleField(allow_null=True, required=False)
+
+
+class OIDCTeamMapField(fields.DictField):
+    child = OIDCSingleTeamMapField()
+
+
+class OIDCUserFlagsField(HybridDictField):
+    triggers_superuser = TriggerRuleField(allow_null=True, required=False)
+    triggers_system_auditor = TriggerRuleField(allow_null=True, required=False)
+    remove_superusers = fields.BooleanField(required=False)
+    remove_system_auditors = fields.BooleanField(required=False)
+
+    child = _Forbidden()
 
 
 class SAMLOrgInfoValueField(HybridDictField):

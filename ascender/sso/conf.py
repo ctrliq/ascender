@@ -26,6 +26,9 @@ from ascender.sso.fields import (
     LDAPTeamMapField,
     LDAPUserAttrMapField,
     LDAPUserFlagsField,
+    OIDCOrganizationMapField,
+    OIDCTeamMapField,
+    OIDCUserFlagsField,
     SAMLContactField,
     SAMLEnabledIdPsField,
     SAMLOrgAttrField,
@@ -35,6 +38,7 @@ from ascender.sso.fields import (
     SAMLUserFlagsAttrField,
     SocialOrganizationMapField,
     SocialTeamMapField,
+    TriggerRuleField,
 )
 from ascender.main.validators import validate_private_key, validate_certificate
 from ascender.sso.validators import validate_ldap_bind_dn, validate_tacacsplus_disallow_nonascii  # noqa
@@ -1349,6 +1353,202 @@ register(
     default=True,
     label=_('Verify OIDC Provider Certificate'),
     help_text=_('Verify the OIDC provider ssl certificate.'),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_CALLBACK_URL',
+    field_class=fields.CharField,
+    read_only=True,
+    default=SocialAuthCallbackURL('oidc'),
+    label=_('OIDC Callback URL'),
+    help_text=_('Register this URL as a valid redirect URI of the client at your OIDC provider.'),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    depends_on=['ASCENDER_URL_BASE'],
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_SCOPE',
+    field_class=fields.StringListField,
+    default=[],
+    label=_('OIDC Additional Scopes'),
+    help_text=_(
+        'Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    placeholder=['groups'],
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_USERNAME_KEY',
+    field_class=fields.CharField,
+    allow_blank=False,
+    default='preferred_username',
+    label=_('OIDC Username Claim'),
+    help_text=_('The claim a new user\'s username is taken from.'),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Strip the Domain from OIDC Usernames'),
+    help_text=_(
+        'Keep only the part before the @ of the username claim when an OIDC user '
+        'is created, so fernando.roca@example.com becomes fernando.roca. Existing '
+        'users keep their names. Two users whose addresses differ only in the '
+        'domain would get the same name, and the second gets a random suffix.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_GROUPS_CLAIM',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='groups',
+    label=_('OIDC Groups Claim'),
+    help_text=_(
+        'The claim holding the user\'s groups, which the groups triggers of the '
+        'maps and rules below match against. A nested claim can be named by its '
+        'dotted path, such as realm_access.roles.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS',
+    field_class=TriggerRuleField,
+    allow_null=True,
+    default=None,
+    label=_('OIDC Login Rule'),
+    help_text=_(
+        'A trigger rule a user has to match to log in through OIDC at all. Users '
+        'it turns away are refused before an account is created for them. Leave '
+        'it empty to let in everyone the provider authenticates.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    placeholder=collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-users', 'ascender-admins'])]))]),
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_ORGANIZATION_MAP',
+    field_class=OIDCOrganizationMapField,
+    allow_null=True,
+    default=None,
+    label=_('OIDC Organization Map'),
+    help_text=_(
+        'Mapping to organization admins/users from OIDC logins. On top of the '
+        'username and email expressions of the other social auth maps, a role may '
+        'be driven by a trigger rule, given as triggers_admins or triggers_users, '
+        'which matches on the user\'s groups and claims. When this is not set the '
+        'shared social auth organization map applies. Configuration details are '
+        'available in the documentation.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    placeholder=collections.OrderedDict(
+        [
+            (
+                'Default',
+                collections.OrderedDict(
+                    [
+                        ('triggers_admins', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-admins'])]))])),
+                        ('triggers_users', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-users'])]))])),
+                        ('remove_admins', True),
+                        ('remove_users', True),
+                    ]
+                ),
+            ),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_TEAM_MAP',
+    field_class=OIDCTeamMapField,
+    allow_null=True,
+    default=None,
+    label=_('OIDC Team Map'),
+    help_text=_(
+        'Mapping of team members (users) from OIDC logins. Membership may be '
+        'driven by a trigger rule, given as triggers, which matches on the user\'s '
+        'groups and claims. When this is not set the shared social auth team map '
+        'applies. Configuration details are available in the documentation.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    placeholder=collections.OrderedDict(
+        [
+            (
+                'Operators',
+                collections.OrderedDict(
+                    [
+                        ('organization', 'Default'),
+                        ('triggers', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-operators'])]))])),
+                        ('remove', True),
+                    ]
+                ),
+            ),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_USER_FLAGS',
+    field_class=OIDCUserFlagsField,
+    allow_null=True,
+    default=None,
+    label=_('OIDC User Flags'),
+    help_text=_(
+        'Trigger rules that make an OIDC user a superuser (triggers_superuser) or '
+        'a system auditor (triggers_system_auditor). A user who stops matching '
+        'loses the flag at their next login unless remove_superusers or '
+        'remove_system_auditors is false. A flag without a rule is left alone.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+    placeholder=collections.OrderedDict(
+        [
+            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-superusers'])]))])),
+            ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-auditors'])]))])),
+            ('remove_superusers', True),
+            ('remove_system_auditors', True),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Log Out of the OIDC Provider'),
+    help_text=_(
+        'When a user who logged in through OIDC logs out of Ascender, also end '
+        'their session at the provider, through its end_session_endpoint. The '
+        'provider has to allow the post logout redirect URL below.'
+    ),
+    category=_('Generic OIDC'),
+    category_slug='oidc',
+)
+
+register(
+    'SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL',
+    field_class=fields.URLField,
+    schemes=('http', 'https'),
+    allow_plain_hostname=True,
+    allow_blank=True,
+    default='',
+    label=_('OIDC Post Logout Redirect URL'),
+    help_text=_('Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.'),
     category=_('Generic OIDC'),
     category_slug='oidc',
 )

@@ -62,8 +62,11 @@ class Root extends Base<ApiRoot> {
     return response;
   }
 
+  // An OIDC session can also be ended at the provider. When the server is set
+  // up to do that it answers with where to send the browser, instead of the
+  // redirect it answers every other logout with.
   logout() {
-    return this.http.post(`${this.baseUrl}logout/`);
+    return this.http.post<{ logout_url?: string }>(`${this.baseUrl}logout/`);
   }
 
   readAssetVariables() {

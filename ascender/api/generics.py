@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldDoesNotExist
 from django.db import connection, transaction
 from django.db.models.fields.related import OneToOneRel
-from django.http import QueryDict
+from django.http import HttpResponseRedirect, JsonResponse, QueryDict
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
@@ -53,6 +53,7 @@ from ascender.api.serializers import ResourceAccessListElementSerializer, CopySe
 from ascender.api.versioning import URLPathVersioning
 from ascender.api.metadata import SublistAttachDetatchMetadata, Metadata
 from ascender.conf import settings_registry
+from ascender.sso.oidc import idp_logout_url as idp_logout_url_for
 
 __all__ = [
     'APIView',
@@ -118,7 +119,17 @@ class LoggedLoginView(auth_views.LoginView):
 class LoggedLogoutView(auth_views.LogoutView):
     def dispatch(self, request, *args, **kwargs):
         original_user = getattr(request, 'user', None)
+        # Read before the session is flushed, which is where it comes from.
+        idp_logout_url = idp_logout_url_for(request) if request.method == 'POST' else None
         ret = super(LoggedLogoutView, self).dispatch(request, *args, **kwargs)
+        if idp_logout_url:
+            # A browser posting a form is sent on to the provider.  The UI posts
+            # from script, where a redirect would be followed out of sight, so
+            # it is handed the URL to go to instead.
+            if 'text/html' in request.META.get('HTTP_ACCEPT', ''):
+                ret = HttpResponseRedirect(idp_logout_url)
+            else:
+                ret = JsonResponse({'logout_url': idp_logout_url})
         current_user = getattr(request, 'user', None)
         ret.set_cookie('userLoggedIn', 'false', secure=getattr(settings, 'SESSION_COOKIE_SECURE', False))
         if (not current_user or not getattr(current_user, 'pk', True)) and current_user != original_user:

@@ -26,6 +26,7 @@ from rest_framework.request import clone_request
 
 # Ascender
 from ascender.api.fields import ChoiceNullField
+from ascender.main.constants import ASCENDER_URL_BASE_PLACEHOLDER
 from ascender.main.fields import ImplicitRoleField
 from ascender.main.models import NotificationTemplate
 from ascender.main.utils.execution_environments import get_default_pod_spec
@@ -104,7 +105,7 @@ class Metadata(metadata.SimpleMetadata):
             default = field.get_default()
             if type(default) is UUID:
                 default = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-            if field.field_name == 'ASCENDER_URL_BASE' and default == 'https://ascenderhost':
+            if field.field_name == 'ASCENDER_URL_BASE' and default == ASCENDER_URL_BASE_PLACEHOLDER:
                 default = '{}://{}'.format(self.request.scheme, self.request.get_host())
             field_info['default'] = default
         except serializers.SkipField:

@@ -10,7 +10,12 @@ from ascender.sso.fields import (
     LDAPGroupTypeParamsField,
     LDAPServerURIField,
     LDAPSingleTeamMapField,
-    LDAPTriggersField,
+    OIDCOrganizationMapField,
+    OIDCTeamMapField,
+    OIDCUserFlagsField,
+    SocialOrganizationMapField,
+    SocialTeamMapField,
+    TriggerRuleField,
 )
 
 
@@ -243,7 +248,7 @@ class TestLDAPServerURIField:
                 field.run_validators(ldap_uri)
 
 
-class TestLDAPTriggersField:
+class TestTriggerRuleField:
     @pytest.mark.parametrize(
         "data",
         [
@@ -259,7 +264,7 @@ class TestLDAPTriggersField:
         ],
     )
     def test_internal_value_valid(self, data):
-        assert LDAPTriggersField().to_internal_value(data) == data
+        assert TriggerRuleField().to_internal_value(data) == data
 
     @pytest.mark.parametrize(
         "data, expected_message",
@@ -273,7 +278,7 @@ class TestLDAPTriggersField:
         ],
     )
     def test_internal_value_invalid(self, data, expected_message):
-        field = LDAPTriggersField()
+        field = TriggerRuleField()
         with pytest.raises(ValidationError) as excinfo:
             field.to_internal_value(data)
         assert expected_message in str(excinfo.value)
@@ -303,7 +308,7 @@ class TestLDAPTriggersField:
         ],
     )
     def test_a_rule_that_would_only_be_half_applied_is_refused(self, data, expected_message):
-        field = LDAPTriggersField()
+        field = TriggerRuleField()
         with pytest.raises(ValidationError) as excinfo:
             field.to_internal_value(data)
         assert expected_message in str(excinfo.value)
@@ -322,7 +327,7 @@ class TestLDAPTriggersField:
         ],
     )
     def test_a_rule_that_could_not_work_is_refused(self, data, expected_message):
-        field = LDAPTriggersField()
+        field = TriggerRuleField()
         with pytest.raises(ValidationError) as excinfo:
             field.to_internal_value(data)
         assert expected_message in str(excinfo.value)
@@ -347,7 +352,7 @@ class TestLDAPTriggersField:
         ],
     )
     def test_an_operand_that_constrains_nothing_is_refused(self, data, expected_message):
-        field = LDAPTriggersField()
+        field = TriggerRuleField()
         with pytest.raises(ValidationError) as excinfo:
             field.to_internal_value(data)
         assert expected_message in str(excinfo.value)
@@ -355,11 +360,11 @@ class TestLDAPTriggersField:
     def test_an_attribute_with_no_operator_still_asks_whether_it_is_there(self):
         """An empty condition is the documented way of matching on presence."""
         data = {'attributes': {'department': {}}}
-        assert LDAPTriggersField().to_internal_value(data) == data
+        assert TriggerRuleField().to_internal_value(data) == data
 
     def test_a_valid_pattern_is_accepted(self):
         data = {'attributes': {'mail': {'matches': r'^.*@example\.com$'}}}
-        assert LDAPTriggersField().to_internal_value(data) == data
+        assert TriggerRuleField().to_internal_value(data) == data
 
     def test_a_rule_survives_being_read_back(self):
         """What the settings API hands the UI has to be what was saved."""
@@ -402,3 +407,56 @@ class TestLDAPTriggersField:
         field = LDAPSingleTeamMapField()
         with pytest.raises(ValidationError):
             field.to_internal_value({'organization': 'Test Org', 'users': ['someone@example.com']})
+
+
+class TestOIDCMapFields:
+    RULE = {'groups': {'has_or': ['ascender-admins']}}
+
+    def test_an_org_map_takes_rules_beside_its_expressions(self):
+        data = {'Default': {'triggers_admins': self.RULE, 'triggers_users': {'always': {}}, 'users': ['alice@example.com'], 'remove_users': True}}
+        assert OIDCOrganizationMapField().to_internal_value(data) == data
+
+    def test_a_team_map_takes_a_rule(self):
+        data = {'Operators': {'organization': 'Default', 'triggers': self.RULE, 'remove': False}}
+        assert OIDCTeamMapField().to_internal_value(data) == data
+
+    def test_a_bad_rule_is_refused_when_saved(self):
+        with pytest.raises(ValidationError) as excinfo:
+            OIDCTeamMapField().to_internal_value({'Operators': {'organization': 'Default', 'triggers': {'groups': {'has_or': []}}}})
+        assert 'triggers.groups.has_or' in str(excinfo.value)
+
+    def test_auditors_are_not_a_social_role(self):
+        # The social maps manage admins and users only, and the OIDC ones are
+        # the same maps with rules added, so a rule for auditors would never run.
+        with pytest.raises(ValidationError):
+            OIDCOrganizationMapField().to_internal_value({'Default': {'triggers_auditors': self.RULE}})
+
+    def test_the_shared_social_maps_take_no_rules(self):
+        # Only an OIDC login has claims to match a rule against.
+        with pytest.raises(ValidationError):
+            SocialOrganizationMapField().to_internal_value({'Default': {'triggers_users': self.RULE}})
+        with pytest.raises(ValidationError):
+            SocialTeamMapField().to_internal_value({'Operators': {'organization': 'Default', 'triggers': self.RULE}})
+
+
+class TestOIDCUserFlagsField:
+    def test_valid(self):
+        data = {
+            'triggers_superuser': {'groups': {'has_or': ['ascender-superusers']}},
+            'triggers_system_auditor': {'attributes': {'department': {'equals': 'Audit'}}},
+            'remove_superusers': False,
+            'remove_system_auditors': True,
+        }
+        assert OIDCUserFlagsField().to_internal_value(data) == data
+
+    @pytest.mark.parametrize(
+        "data",
+        [
+            {'is_superuser': ['ascender-superusers']},
+            {'triggers_superuser': {'groups': {'has_or': []}}},
+            {'triggers_superuser': {'always': {}, 'never': {}}},
+        ],
+    )
+    def test_invalid(self, data):
+        with pytest.raises(ValidationError):
+            OIDCUserFlagsField().to_internal_value(data)

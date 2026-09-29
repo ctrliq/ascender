@@ -12970,6 +12970,73 @@ export interface components {
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
       /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
+      /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
        * @default true
@@ -16048,6 +16115,78 @@ export interface components {
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
       /**
+       * OIDC Callback URL
+       * @description Register this URL as a valid redirect URI of the client at your OIDC provider.
+       */
+      readonly SOCIAL_AUTH_OIDC_CALLBACK_URL: string;
+      /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
+      /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
        * @default true
@@ -18015,6 +18154,73 @@ export interface components {
        * @default true
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
+      /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
       /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
