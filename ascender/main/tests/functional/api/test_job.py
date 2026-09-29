@@ -319,3 +319,26 @@ class TestPreventRelaunch:
         patch(jt.get_absolute_url(), {'prevent_relaunch': True}, admin_user, expect=200)
         r = post(reverse('api:job_template_copy', kwargs={'pk': jt.pk}), {'name': 'one-shot copy'}, admin_user, expect=201)
         assert JobTemplate.objects.get(pk=r.data['id']).prevent_relaunch is True
+
+    @pytest.mark.parametrize('prevent', [True, False])
+    def test_deleted_template_keeps_protection(self, jt, organization, admin_user, post, prevent):
+        jt.organization = organization
+        jt.prevent_relaunch = prevent
+        jt.save()
+        job = jt.create_unified_job()
+        org_executor = User.objects.create(username='org-executor')
+        organization.execute_role.members.add(org_executor)
+        # a queryset delete goes through the same pre_delete signal as the API
+        JobTemplate.objects.filter(pk=jt.pk).delete()
+        job.refresh_from_db()
+        assert job.job_template is None
+        assert job.prevent_relaunch is prevent
+        # an orphan is relaunchable by superusers and org executors unless its template prevented relaunch
+        for user in (org_executor, admin_user):
+            post(reverse('api:job_relaunch', kwargs={'pk': job.pk}), {}, user, expect=403 if prevent else 201)
+
+    def test_template_delete_via_api(self, jt, admin_user, delete, get):
+        job = jt.create_unified_job(_eager_fields={'status': 'successful', 'finished': timezone.now() - datetime.timedelta(minutes=5)})
+        delete(jt.get_absolute_url(), admin_user, expect=204)
+        r = get(job.get_absolute_url(), admin_user, expect=200)
+        assert r.data['summary_fields']['user_capabilities']['start'] is False

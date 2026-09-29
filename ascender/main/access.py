@@ -205,9 +205,12 @@ def relaunch_prevented(job):
     Whether the job template behind this job turned relaunch off. A sliced
     workflow job counts too, since relaunching it runs every slice again.
     This binds superusers as well: clearing the template's flag is the way back.
+    Once the template is deleted, the job keeps the protection it had then.
     """
     job_template = getattr(job, 'job_template', None)
-    return bool(job_template and job_template.prevent_relaunch)
+    if job_template is not None:
+        return job_template.prevent_relaunch
+    return getattr(job, 'prevent_relaunch', False)
 
 
 def consumer_access(group_name):

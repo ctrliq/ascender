@@ -19,4 +19,13 @@ class Migration(migrations.Migration):
                 ),
             ),
         ),
+        migrations.AddField(
+            model_name='job',
+            name='prevent_relaunch',
+            field=models.BooleanField(
+                default=False,
+                editable=False,
+                help_text='Set when the job template was deleted while it prevented relaunch, so the orphaned job stays protected.',
+            ),
+        ),
     ]

@@ -682,6 +682,11 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         default=None,
         on_delete=models.SET_NULL,
     )
+    prevent_relaunch = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text=_("Set when the job template was deleted while it prevented relaunch, so the orphaned job stays protected."),
+    )
     hosts = models.ManyToManyField('Host', related_name='jobs', editable=False, through='JobHostSummary', through_fields=('job', 'host'))
     artifacts = JSONBlob(
         default=dict,
