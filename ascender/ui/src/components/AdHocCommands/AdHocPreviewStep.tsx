@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Tooltip } from '@patternfly/react-core';
+
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import { getVerbosityLabel } from '../VerbositySelectField';
 import { toTitleCase } from '../../util/strings';
@@ -9,6 +9,7 @@ import { jsonToYaml } from '../../util/yaml';
 import { DetailList, Detail } from '../DetailList';
 import type { AdHocValues } from './types';
 import './AdHocPreviewStep.css';
+import Tooltip from '../Tooltip';
 
 export interface AdHocPreviewStepProps {
   hasErrors: boolean;
@@ -28,7 +29,6 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
         <div className="ascender-ad-hoc-preview-step__error-message-wrapper">
           {t`Some of the previous step(s) have errors`}
           <Tooltip
-            position="right"
             content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
@@ -65,7 +65,6 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
         {extra_vars && (
           <VariablesDetail
             value={jsonToYaml(JSON.stringify(extra_vars))}
-            rows={4}
             label={t`Variables`}
             name="extra_vars"
           />

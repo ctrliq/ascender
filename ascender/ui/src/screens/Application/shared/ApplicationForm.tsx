@@ -93,7 +93,7 @@ function ApplicationFormFields({
       <FormGroup
         fieldId="authType"
         isRequired
-        label={t`Authorization grant type`}
+        label={t`Authorization Grant Type`}
         labelHelp={
           <Popover
             content={applicationHelpTextStrings.authorizationGrantType}
@@ -107,7 +107,15 @@ function ApplicationFormFields({
           }
           isDisabled={pathname.endsWith('edit')}
           id="authType"
-          data={[{ label: '', key: 1, value: '' }, ...authorizationOptions]}
+          data={[
+            {
+              label: t`Choose an authorization grant type`,
+              key: '',
+              value: '',
+              isDisabled: true,
+            },
+            ...authorizationOptions,
+          ]}
           onChange={(event, value) => {
             authorizationTypeHelpers.setValue(value);
           }}
@@ -140,14 +148,22 @@ function ApplicationFormFields({
       <FormGroup
         fieldId="clientType"
         isRequired
-        label={t`Client type`}
+        label={t`Client Type`}
         labelHelp={<Popover content={applicationHelpTextStrings.clientType} />}
       >
         <AnsibleSelect
           {...clientTypeField}
           isValid={!clientTypeMeta.touched || !clientTypeMeta.error}
           id="clientType"
-          data={[{ label: '', key: 1, value: '' }, ...clientTypeOptions]}
+          data={[
+            {
+              label: t`Choose a client type`,
+              key: '',
+              value: '',
+              isDisabled: true,
+            },
+            ...clientTypeOptions,
+          ]}
           onChange={(event, value) => {
             clientTypeHelpers.setValue(value);
           }}

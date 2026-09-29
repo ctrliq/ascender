@@ -138,4 +138,64 @@ describe('useWsInventorySourceDetails', () => {
 
     vi.clearAllMocks();
   });
+
+  test('ignores an update belonging to another source', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const inventorySource = {
+      id: 1,
+      summary_fields: {
+        current_job: { id: 1, status: 'successful', finished: 'yesterday' },
+      },
+    };
+    const { container } = renderWithContexts(
+      <Test inventorySource={inventorySource} />
+    );
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+
+    // Another source's update, running and then finished.
+    await act(async () => {
+      mockServer.send(
+        JSON.stringify({
+          group_name: 'jobs',
+          inventory_id: 1,
+          status: 'running',
+          type: 'inventory_update',
+          unified_job_id: 5,
+          unified_job_template_id: 2,
+          inventory_source_id: 2,
+        })
+      );
+      mockServer.send(
+        JSON.stringify({
+          group_name: 'jobs',
+          inventory_id: 1,
+          status: 'successful',
+          type: 'inventory_update',
+          unified_job_id: 5,
+          unified_job_template_id: 2,
+          inventory_source_id: 2,
+        })
+      );
+    });
+
+    expect(readResult(container).summary_fields.current_job).toEqual({
+      id: 1,
+      status: 'successful',
+      finished: 'yesterday',
+    });
+    expect(InventorySourcesAPI.readDetail).not.toHaveBeenCalled();
+    vi.clearAllMocks();
+  });
 });

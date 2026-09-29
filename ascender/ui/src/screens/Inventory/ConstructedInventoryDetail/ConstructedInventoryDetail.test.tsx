@@ -192,7 +192,7 @@ describe('<ConstructedInventoryDetail />', () => {
       '/inventories/constructed_inventory/1/edit'
     );
     expect(
-      screen.getByRole('button', { name: 'Start inventory source sync' })
+      screen.getByRole('button', { name: 'Sync Inventory' })
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
@@ -220,11 +220,12 @@ describe('<ConstructedInventoryDetail />', () => {
     } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
     renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
+    // The shared wording for an inventory sync, on the button and its name.
     expect(
       screen.getByRole('button', {
-        name: 'Cancel Constructed Inventory Source Sync',
+        name: 'Cancel Inventory Sync',
       })
-    ).toBeInTheDocument();
+    ).toHaveTextContent('Cancel Inventory Sync');
   });
 
   test('should show error when the api throws while fetching details', async () => {

@@ -2,12 +2,7 @@ import type { InventorySource, SummaryFieldRef, UnifiedJob } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import {
-  Button,
-  Content,
-  ContentVariants,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Button, Content, ContentVariants } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -17,6 +12,8 @@ import ErrorDetail from 'components/ErrorDetail';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import JobCancelButton from 'components/JobCancelButton';
+import useCanCancelSync from 'hooks/useCanCancelSync';
+import { getRunActionLabels, isJobCancelable } from 'util/jobs';
 import StatusLabel from 'components/StatusLabel';
 import { CardBody, CardActionsRow } from 'components/Card';
 import { DetailList, Detail, UserDateDetail } from 'components/DetailList';
@@ -29,6 +26,7 @@ import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
 import { getVerbosityLabel } from 'components/VerbositySelectField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
+import Tooltip from 'components/Tooltip';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
@@ -121,6 +119,21 @@ function InventorySourceDetail({
     execution_environment,
   } = summary_fields;
 
+  // Read before the loading returns below, since it feeds a hook.
+  let job = null;
+
+  if (summary_fields?.current_job) {
+    job = summary_fields.current_job;
+  } else if (summary_fields?.last_job) {
+    job = summary_fields.last_job;
+  }
+  const canCancelSync = useCanCancelSync(
+    'inventory_update',
+    job?.id,
+    job?.status,
+    user_capabilities?.edit
+  );
+
   const handleDelete = async () => {
     try {
       await Promise.all([
@@ -150,19 +163,19 @@ function InventorySourceDetail({
       <Content component={ContentVariants.ul}>
         {overwrite && (
           <Content component={ContentVariants.li}>
-            {t`Overwrite local groups and hosts from remote inventory source`}
+            {t`Overwrite`}
             <Popover content={helpText.subFormOptions.overwrite} />
           </Content>
         )}
         {overwrite_vars && (
           <Content component={ContentVariants.li}>
-            {t`Overwrite local variables from remote inventory source`}
+            {t`Overwrite Variables`}
             <Popover content={helpText.subFormOptions.overwriteVariables} />
           </Content>
         )}
         {update_on_launch && (
           <Content component={ContentVariants.li}>
-            {t`Update on launch`}
+            {t`Update on Launch`}
             <Popover
               content={helpText.subFormOptions.updateOnLaunch({
                 value: source_project,
@@ -199,14 +212,6 @@ function InventorySourceDetail({
     </>
   );
 
-  let job = null;
-
-  if (summary_fields?.current_job) {
-    job = summary_fields.current_job;
-  } else if (summary_fields?.last_job) {
-    job = summary_fields.last_job;
-  }
-
   const docsBaseUrl = getDocsBaseUrl();
 
   return (
@@ -222,7 +227,7 @@ function InventorySourceDetail({
                 content={generateLastJobTooltip(job as UnifiedJob)}
                 key={job.id}
               >
-                <Link to={`/jobs/inventory/${job.id}`}>
+                <Link to={`/runs/inventory/${job.id}`}>
                   <StatusLabel status={job.status} />
                 </Link>
               </Tooltip>
@@ -263,7 +268,7 @@ function InventorySourceDetail({
         )}
         {source === 'scm' ? (
           <Detail
-            label={t`Inventory file`}
+            label={t`Inventory File`}
             helpText={helpText.sourcePath}
             value={source_path === '' ? t`/ (project root)` : source_path}
           />
@@ -283,12 +288,12 @@ function InventorySourceDetail({
           value={getVerbosityLabel(verbosity, i18n)}
         />
         <Detail
-          label={t`Source Control Branch`}
+          label={t`Source Control Branch/Tag/Commit`}
           helpText={helpText.sourceControlBranch}
           value={scm_branch}
         />
         <Detail
-          label={t`Cache timeout`}
+          label={t`Cache Timeout`}
           value={
             <Plural
               value={update_cache_timeout}
@@ -322,11 +327,11 @@ function InventorySourceDetail({
           isEmpty={credentials?.length === 0}
         />
         {optionsList && (
-          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
+          <Detail fullWidth label={t`Update Options`} value={optionsList} />
         )}
         {source_vars && (
           <VariablesDetail
-            label={t`Source variables`}
+            label={t`Source Variables`}
             rows={4}
             value={source_vars}
             helpText={helpText.sourceVars(docsBaseUrl, source ?? '')}
@@ -337,7 +342,7 @@ function InventorySourceDetail({
         <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
-          label={t`Last modified`}
+          label={t`Last Modified`}
           user={modified_by}
         />
       </DetailList>
@@ -346,30 +351,33 @@ function InventorySourceDetail({
           <Button
             ouiaId="inventory-source-detail-edit-button"
             component={Link}
-            aria-label={t`edit`}
+            aria-label={t`Edit`}
             to={`/inventories/inventory/${inventory?.id}/sources/${id}/edit`}
           >
             {t`Edit`}
           </Button>
         )}
-        {user_capabilities?.start &&
-          (['new', 'running', 'pending', 'waiting'].includes(
-            job?.status ?? ''
-          ) ? (
-            <JobCancelButton
-              job={{ id: job!.id, type: 'inventory_update' }}
-              errorTitle={t`Inventory Source Sync Error`}
-              title={t`Cancel Inventory Source Sync`}
-              errorMessage={t`Failed to cancel Inventory Source Sync`}
-              buttonText={t`Cancel Sync`}
-            />
-          ) : (
-            <InventorySourceSyncButton source={inventorySource} icon={false} />
-          ))}
+        {/* While a sync can still be stopped the place of Sync is taken by
+            its Cancel, for whoever the api lets cancel it. */}
+        {isJobCancelable(job?.status)
+          ? canCancelSync && (
+              <JobCancelButton
+                job={{ id: job!.id, type: 'inventory_update' }}
+                /* The shared wording for this kind of run, the one the runs
+                   list and the run's own page use. */
+                title={i18n._(getRunActionLabels('inventory_update').cancel)}
+              />
+            )
+          : user_capabilities?.start && (
+              <InventorySourceSyncButton
+                source={inventorySource}
+                icon={false}
+              />
+            )}
         {user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            modalTitle={t`Delete inventory source`}
+            modalTitle={t`Delete Inventory Source`}
             onConfirm={handleDelete}
             deleteDetailsRequests={deleteDetailsRequests}
             deleteMessage={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`}

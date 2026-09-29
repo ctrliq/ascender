@@ -21,13 +21,18 @@ export interface AccountThemeUser {
  * /api/v2/me/ answers, and a browser shared between accounts sees at most
  * the previous account's theme for that one round trip.
  */
-export function applyAccountTheme(me?: AccountThemeUser) {
+export function applyAccountTheme(
+  me?: AccountThemeUser,
+  installDefault?: string
+) {
   const accountTheme = (me?.preferred_theme as string) || '';
   if (accountTheme) {
     applyTheme(accountTheme, true);
   } else {
     localStorage.removeItem('theme');
-    applyTheme('default');
+    // No account preference, so the installation's default decides. Blank
+    // means it has not been set and applyTheme falls back to Default itself.
+    applyTheme(installDefault || 'default');
   }
 }
 

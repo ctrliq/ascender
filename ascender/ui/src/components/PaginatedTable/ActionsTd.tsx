@@ -17,6 +17,17 @@ export default function ActionsTd({
 }: ActionsTdProps) {
   const numActions = React.Children.count(children) || 1;
   const width = numActions * 40;
+  /*
+   * Every child gets a slot of its own, the hidden ones included: an ActionItem
+   * a row may not use renders nothing, and without the slot the actions after
+   * it slid left into its place. A list with a sync button on some rows and
+   * not on others then had its edit button under the sync column on those
+   * rows. Children.map calls back for a null child too, so a conditional
+   * action keeps its place the same way.
+   */
+  const slots = React.Children.map(children, (child) => (
+    <div className="ascender-actions-td__slot">{child}</div>
+  ));
   return (
     <Td
       className={['ascender-actions-td__cell', className]
@@ -27,7 +38,7 @@ export default function ActionsTd({
       }
       {...props}
     >
-      <div className="ascender-actions-td__grid">{children}</div>
+      <div className="ascender-actions-td__grid">{slots}</div>
     </Td>
   );
 }

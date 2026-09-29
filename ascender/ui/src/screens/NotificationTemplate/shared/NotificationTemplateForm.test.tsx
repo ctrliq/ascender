@@ -13,7 +13,7 @@ const template = {
   notification_type: 'slack',
   name: 'Test Notification',
   description: 'a sample notification',
-  url: '/notification_templates/3',
+  url: '/notifications/3',
   organization: 1,
   summary_fields: {
     user_capabilities: { edit: true },
@@ -156,7 +156,7 @@ const renderForm = (props = {}) =>
     <NotificationTemplateForm
       template={template}
       defaultMessages={defaultMessages}
-      detailUrl="/notification_templates/3/detail"
+      detailUrl="/notifications/3/detail"
       onSubmit={vi.fn()}
       onCancel={vi.fn()}
       {...props}
@@ -186,6 +186,41 @@ describe('<NotificationTemplateForm />', () => {
       expect(container.querySelector('#option-use-ssl')).toBeInTheDocument()
     );
     expect(container.querySelector('#option-use-tls')).toBeInTheDocument();
+  });
+
+  test('names the types as every other screen does, translated', async () => {
+    let container!: HTMLElement;
+    await act(async () => {
+      ({ container } = renderForm());
+    });
+    const labels = Array.from(
+      container.querySelectorAll('#notification-type option')
+    ).map((option) => option.textContent);
+    expect(labels).toEqual([
+      'Choose a notification type',
+      'Email',
+      'Grafana',
+      'IRC',
+      'Matrix',
+      'Mattermost',
+      'Pagerduty',
+      'Rocket.Chat',
+      'Slack',
+      'Twilio',
+      'Webhook',
+    ]);
+  });
+
+  test('gives the IRC SSL box an id of its own', async () => {
+    const { container, user } = renderForm();
+    await user.selectOptions(
+      container.querySelector('#notification-type')!,
+      'irc'
+    );
+    expect(await screen.findByLabelText('Use SSL')).toHaveAttribute(
+      'id',
+      'irc-ssl'
+    );
   });
 
   test('should render existing custom messages', async () => {

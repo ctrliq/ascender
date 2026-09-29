@@ -123,11 +123,11 @@ function InventoryHostItem({
           <HostToggle host={host} />
           <ActionItem
             visible={host.summary_fields.user_capabilities?.edit}
-            tooltip={t`Edit host`}
+            tooltip={t`Edit Host`}
           >
             <Button
               icon={<PencilAltIcon />}
-              aria-label={t`Edit host`}
+              aria-label={t`Edit Host`}
               ouiaId={`${host.id}-edit-button`}
               variant="plain"
               component={Link}

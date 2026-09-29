@@ -33,6 +33,7 @@ import WorkflowDenyButton from '../shared/WorkflowDenyButton';
 import {
   getDetailPendingLabel,
   getStatus,
+  isWorkflowDeleted,
 } from '../shared/WorkflowApprovalUtils';
 import './WorkflowApprovalDetail.css';
 
@@ -59,7 +60,7 @@ function WorkflowApprovalDetail({
   } = useRequest(
     useCallback(async () => {
       await WorkflowApprovalsAPI.destroy(workflowApprovalId);
-      navigate(`/workflow_approvals`);
+      navigate(`/approvals`);
     }, [workflowApprovalId, navigate])
   );
 
@@ -221,7 +222,7 @@ function WorkflowApprovalDetail({
           dataCy="wa-detail-explanation"
         />
         <Detail
-          label={t`Workflow Job Template`}
+          label={t`Workflow Template`}
           value={
             sourceWorkflowJobTemplate && (
               <Link
@@ -258,17 +259,17 @@ function WorkflowApprovalDetail({
       <PFTitle
         className="ascender-workflow-approval-detail__title"
         headingLevel="h2"
-      >{t`Workflow job details`}</PFTitle>
+      >{t`Workflow details`}</PFTitle>
       <PFDivider className="ascender-workflow-approval-detail__divider" />
       <DetailList
         className="ascender-workflow-approval-detail__wf-detail-list"
         gutter="sm"
       >
         <Detail
-          label={t`Workflow Job`}
+          label={t`Workflow`}
           value={
             sourceWorkflowJob && sourceWorkflowJob?.id ? (
-              <Link to={`/jobs/workflow/${sourceWorkflowJob?.id}`}>
+              <Link to={`/runs/workflow/${sourceWorkflowJob?.id}`}>
                 {`${sourceWorkflowJob?.id} - ${sourceWorkflowJob?.name}`}
               </Link>
             ) : (
@@ -359,22 +360,35 @@ function WorkflowApprovalDetail({
                 isDetailView
                 onHandleToast={handleToast}
               />
-              <JobCancelButton
-                onCancelWorkflow={() =>
-                  handleToast(
-                    workflowApproval.summary_fields.source_workflow_job?.id,
-                    t`Workflow Cancelled `
-                  )
-                }
-                title={t`Cancel Workflow`}
-                job={{
-                  ...workflowApproval.summary_fields.source_workflow_job,
-                  type: 'workflow_job',
-                }}
-                buttonText={t`Cancel Workflow`}
-                cancelationMessage={t`This will cancel all subsequent nodes in this workflow.`}
-              />
             </>
+          )}
+        {/* Canceling the workflow is a right on the workflow job rather than
+            the approver role, so it is offered on its own capability: a
+            workflow admin who may not vote can still stop it, and an approver
+            who may not stop it is not offered a cancel the api refuses. */}
+        {workflowApproval.status === 'pending' &&
+          workflowApproval.can_cancel_workflow && (
+            <JobCancelButton
+              onCancelWorkflow={() =>
+                handleToast(
+                  workflowApproval.summary_fields.source_workflow_job?.id,
+                  t`Workflow Canceled`
+                )
+              }
+              title={t`Cancel Workflow Job`}
+              job={{
+                ...workflowApproval.summary_fields.source_workflow_job,
+                type: 'workflow_job',
+              }}
+              buttonText={t`Cancel Workflow Job`}
+              isDisabled={isWorkflowDeleted(workflowApproval)}
+              tooltip={
+                isWorkflowDeleted(workflowApproval)
+                  ? t`This workflow has been deleted`
+                  : t`Cancel Workflow Job`
+              }
+              cancelationMessage={t`This will cancel all subsequent nodes in this workflow.`}
+            />
           )}
         {showDeleteButton && (
           <DeleteButton

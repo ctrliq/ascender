@@ -53,7 +53,7 @@ function InventoryGroupItem({
         <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
           <ActionItem
             visible={group.summary_fields.user_capabilities?.edit}
-            tooltip={t`Edit group`}
+            tooltip={t`Edit Group`}
           >
             <Button
               icon={<PencilAltIcon />}

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Label, Tooltip } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import type { LabelProps } from '@patternfly/react-core';
 import icons from '../StatusIcon/icons';
+import Tooltip from '../Tooltip';
 
 const colors = {
   approved: 'green',
@@ -78,12 +79,16 @@ export default function StatusLabel({
   const color = colors[status as keyof typeof colors] || 'grey';
   const Icon = icons[status as keyof typeof icons];
 
+  /* data-status is the only thing distinguishing two statuses that share a
+     colour. Without it a theme cannot paint pending differently from running,
+     since the colour map above is all the markup carries. */
   const renderLabel = () => (
     <Label
       variant="filled"
       color={color as LabelProps['color']}
       icon={Icon ? <Icon /> : null}
       className="ascender-status-label"
+      data-status={status}
     >
       {children || label}
     </Label>

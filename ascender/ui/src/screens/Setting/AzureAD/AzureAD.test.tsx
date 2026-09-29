@@ -38,7 +38,7 @@ describe('<AzureAD />', () => {
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route path="/settings/azure/*" element={<AzureAD />} />
+          <Route path="/authentication/azure/*" element={<AzureAD />} />
         </Routes>
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -46,21 +46,21 @@ describe('<AzureAD />', () => {
   }
 
   test('should render azure details', async () => {
-    renderAzure(['/settings/azure/default/details']);
+    renderAzure(['/authentication/azure/default/details']);
     expect(
       await screen.findByText('Azure AD OAuth2 Callback URL')
     ).toBeInTheDocument();
   });
 
   test('should render azure edit', async () => {
-    renderAzure(['/settings/azure/default/edit']);
+    renderAzure(['/authentication/azure/default/edit']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderAzure(['/settings/azure/foo/bar/baz']);
+    renderAzure(['/authentication/azure/foo/bar/baz']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)

@@ -1,7 +1,7 @@
 import type { SurveyQuestion } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
-import { Label, Tooltip, Button } from '@patternfly/react-core';
+import { Label, Button } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -10,6 +10,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import ChipGroup from 'components/ChipGroup';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 import './SurveyListItem.css';
+import Tooltip from 'components/Tooltip';
 
 export interface SurveyListItemProps {
   canEdit?: boolean;
@@ -103,9 +104,12 @@ function SurveyListItem({
         dataLabel={t`Actions`}
       >
         <ActionItem visible={canEdit}>
-          <Tooltip content={t`Edit Survey`} position="top">
+          {/* The row is one question, so it edits that question rather
+              than the survey, and a screen reader hears the same words. */}
+          <Tooltip content={t`Edit Question`} position="top">
             <Button
               icon={<PencilAltIcon />}
+              aria-label={t`Edit Question`}
               ouiaId={`edit-survey-${question.variable}`}
               variant="plain"
               component={Link}

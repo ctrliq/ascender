@@ -3,6 +3,8 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
 import { CardBody } from 'components/Card';
 import InventorySourceForm from '../shared/InventorySourceForm';
@@ -16,6 +18,27 @@ export interface InventorySourceAddProps {
 function InventorySourceAdd({ inventory }: InventorySourceAddProps) {
   const navigate = useNavigate();
   const { id, organization } = inventory;
+
+  /*
+   * What the form draws with, read here rather than inside it: read there, the
+   * card was already on screen and a second loading animation ran inside it.
+   */
+  const {
+    request: fetchSourceOptions,
+    result: sourceOptions,
+    isLoading: isSourceOptionsLoading,
+    error: sourceOptionsError,
+  } = useRequest(
+    useCallback(async () => {
+      const { data } = await InventorySourcesAPI.readOptions();
+      return data;
+    }, []),
+    null
+  );
+
+  useEffect(() => {
+    fetchSourceOptions();
+  }, [fetchSourceOptions]);
 
   const { error, request, result } = useRequest(
     useCallback(
@@ -85,10 +108,25 @@ function InventorySourceAdd({ inventory }: InventorySourceAddProps) {
     navigate(`/inventories/inventory/${id}/sources`);
   };
 
+  if (sourceOptionsError) {
+    return (
+      <Card>
+        <CardBody>
+          <ContentError error={sourceOptionsError} />
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (isSourceOptionsLoading || !sourceOptions) {
+    return <ContentLoading />;
+  }
+
   return (
     <Card>
       <CardBody>
         <InventorySourceForm
+          sourceOptions={sourceOptions}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
           submitError={error}

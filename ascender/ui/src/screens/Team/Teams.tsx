@@ -27,11 +27,11 @@ function Teams() {
         '/teams': t`Teams`,
         '/teams/add': t`Create New Team`,
         [`/teams/${team.id}`]: `${team.name}`,
-        [`/teams/${team.id}/edit`]: t`Edit Details`,
-        [`/teams/${team.id}/details`]: t`Details`,
-        [`/teams/${team.id}/users`]: t`Users`,
-        [`/teams/${team.id}/access`]: t`Access`,
-        [`/teams/${team.id}/roles`]: t`Roles`,
+        [`/teams/${team.id}/edit`]: t`Edit ${team.name}`,
+        [`/teams/${team.id}/details`]: `${team.name}`,
+        [`/teams/${team.id}/users`]: `${team.name}`,
+        [`/teams/${team.id}/access`]: `${team.name}`,
+        [`/teams/${team.id}/roles`]: `${team.name}`,
       });
     },
     [t]

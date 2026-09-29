@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import {
   renderWithContexts,
   assertDetail,
@@ -43,9 +43,12 @@ describe('PromptWFJobTemplateDetail', () => {
       '/api/v2/workflow_job_templates/47/github/'
     );
 
-    // Enabled Options renders one <li> per enabled flag
-    expect(screen.getByText('Concurrent Jobs')).toBeInTheDocument();
-    expect(screen.getByText('Webhooks')).toBeInTheDocument();
+    // Options renders one <li> per enabled flag, named as on the form
+    expect(
+      within(screen.getByText('Options').nextElementSibling as HTMLElement)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual(['Enable Webhook', 'Concurrent Jobs']);
 
     // Webhook Credential chip
     const webhookCredTerm = screen.getByText('Webhook Credential');

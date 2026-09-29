@@ -1,5 +1,9 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HostsAPI } from 'api';
 import type { Host } from 'types/api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -27,7 +31,7 @@ const mockHost = {
 } as unknown as Host;
 
 // The PF Switch renders a hidden checkbox input with the aria-label
-const getToggle = () => screen.getByRole('switch', { name: 'Toggle host' });
+const getToggle = () => screen.getByRole('switch', { name: 'Toggle Host' });
 
 describe('<HostToggle>', () => {
   afterEach(() => {
@@ -47,6 +51,8 @@ describe('<HostToggle>', () => {
     });
     await waitFor(() => expect(getToggle()).not.toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(false);
+    // PF6 has no off label, so the label itself has to follow the state.
+    expect(screen.getByText('Off')).toBeInTheDocument();
   });
 
   test('should toggle on', async () => {
@@ -70,6 +76,61 @@ describe('<HostToggle>', () => {
     });
     await waitFor(() => expect(getToggle()).toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(true);
+    expect(screen.getByText('On')).toBeInTheDocument();
+  });
+
+  test('should follow the host it is handed when that changes', async () => {
+    // A list returning from another screen paints its cached rows and then
+    // the fresh ones into the same row, so the switch has to follow the new
+    // host rather than keep what it was mounted with.
+    const { rerender } = renderWithContexts(<HostToggle host={mockHost} />);
+    expect(getToggle()).toBeChecked();
+
+    rerender(
+      <HostToggle host={{ ...mockHost, enabled: false } as unknown as Host} />
+    );
+
+    await waitFor(() => expect(getToggle()).not.toBeChecked());
+  });
+
+  test('should write the change into the cached host lists', async () => {
+    // Otherwise the list navigated back to would paint the old state until
+    // its own read came back.
+    const queryClient = new QueryClient();
+    const other = { ...mockHost, id: 2 };
+    queryClient.setQueryData(['host-list', ''], {
+      hosts: [mockHost, other],
+      count: 2,
+    });
+    queryClient.setQueryData(['inventory-host-list', 1, ''], {
+      hosts: [mockHost],
+      hostCount: 1,
+    });
+    queryClient.setQueryData(['team-list', ''], { results: [{ id: 1 }] });
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <I18nProvider i18n={i18n}>
+          <HostToggle host={mockHost} />
+        </I18nProvider>
+      </QueryClientProvider>
+    );
+
+    await user.click(getToggle());
+    await waitFor(() => expect(getToggle()).not.toBeChecked());
+
+    interface HostPage {
+      hosts: Host[];
+    }
+    const hostList = queryClient.getQueryData<HostPage>(['host-list', '']);
+    expect(hostList?.hosts.map((h) => h.enabled)).toEqual([false, true]);
+    expect(
+      queryClient.getQueryData<HostPage>(['inventory-host-list', 1, ''])
+        ?.hosts[0]?.enabled
+    ).toBe(false);
+    expect(queryClient.getQueryData(['team-list', ''])).toEqual({
+      results: [{ id: 1 }],
+    });
   });
 
   test('should be enabled', async () => {

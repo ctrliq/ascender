@@ -29,6 +29,7 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
     scm_update_cache_timeout,
     scm_url,
     summary_fields,
+    webhook_service,
   } = resource;
 
   let optionsList: React.ReactNode = '';
@@ -37,34 +38,34 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
     scm_delete_on_update ||
     scm_track_submodules ||
     scm_update_on_launch ||
-    allow_override
+    allow_override ||
+    webhook_service
   ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
         {scm_clean && (
-          <Content component={ContentVariants.li}>
-            {t`Discard local changes before syncing`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Clean`}</Content>
         )}
         {scm_delete_on_update && (
-          <Content component={ContentVariants.li}>
-            {t`Delete the project before syncing`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Delete`}</Content>
         )}
         {scm_track_submodules && (
           <Content component={ContentVariants.li}>
-            {t`Track submodules latest commit on branch`}
+            {t`Track Submodules`}
           </Content>
         )}
         {scm_update_on_launch && (
           <Content component={ContentVariants.li}>
-            {t`Update revision on job launch`}
+            {t`Update Revision on Launch`}
           </Content>
         )}
         {allow_override && (
           <Content component={ContentVariants.li}>
-            {t`Allow branch override`}
+            {t`Allow Branch Override`}
           </Content>
+        )}
+        {webhook_service && (
+          <Content component={ContentVariants.li}>{t`Enable Webhook`}</Content>
         )}
       </Content>
     );
@@ -103,7 +104,12 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
         value={scm_url}
       />
       <Detail
-        label={t`Source Control Branch`}
+        /* Named as the project form names it for this kind of project. */
+        label={
+          scm_type === 'svn'
+            ? t`Revision #`
+            : t`Source Control Branch/Tag/Commit`
+        }
         dataCy={`${prefixCy}-source-control-branch`}
         value={scm_branch}
       />
@@ -140,8 +146,8 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
       )}
       {optionsList && (
         <Detail
-          label={t`Enabled Options`}
-          dataCy={`${prefixCy}-enabled-options`}
+          label={t`Options`}
+          dataCy={`${prefixCy}-options`}
           value={optionsList}
         />
       )}

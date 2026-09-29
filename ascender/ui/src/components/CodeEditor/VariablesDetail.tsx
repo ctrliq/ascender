@@ -6,6 +6,12 @@ import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
 import MultiButtonToggle from '../MultiButtonToggle';
 import Popover from '../Popover';
 import CodeEditor from './CodeEditor';
+import {
+  EditorActions,
+  fittedHeight,
+  HeightModal,
+  useEditorRows,
+} from './EditorActions';
 import { JSON_MODE, YAML_MODE } from './constants';
 import type { VariablesMode } from './constants';
 import './VariablesDetail.css';
@@ -39,6 +45,9 @@ function VariablesDetail({
   const [mode, setMode] = useState(
     isJsonObject(value) || isJsonString(value) ? JSON_MODE : YAML_MODE
   );
+  // Starts fitted to the value and collapses to minRows: a detail page holds
+  // one or two of these, so opening them is the useful default.
+  const height = useEditorRows(minRows, rows, true);
 
   let currentValue = value as string;
   let error: Error | undefined;
@@ -71,6 +80,19 @@ function VariablesDetail({
   const labelCy = dataCy ? `${dataCy}-label` : null;
   const valueCy = dataCy ? `${dataCy}-value` : null;
 
+  // The editor wraps no lines, so a newline is a row and the row count is the
+  // height the value asks for. Collapsing only means anything when that is more
+  // than the collapsed height holds, and only when the box was growing to fit
+  // in the first place: a caller that asked for a fixed number of rows already
+  // decided the height. Counting the value in the mode on screen rather than
+  // the raw one, because the two do not run to the same number of lines.
+  const lineCount = currentValue ? currentValue.split('\n').length : 0;
+
+  // A caller that asked for a fixed number of rows already decided the height,
+  // so the controls only do something where the box was growing to fit.
+  const isSizeable = rows === 'auto' && lineCount > minRows;
+  const shownRows = isSizeable ? height.rows : rows;
+
   return (
     <div className="ascender-variables-detail__wrapper">
       <div
@@ -86,6 +108,17 @@ function VariablesDetail({
           mode={mode}
           setMode={setMode}
           name={name}
+          actions={
+            <EditorActions
+              dataCy={dataCy}
+              copyValue={currentValue}
+              controls={`${dataCy}-preview`}
+              isCollapsed={height.isCollapsed}
+              isSizeable={isSizeable}
+              onToggleCollapse={height.toggleCollapse}
+              onSetHeight={height.openModal}
+            />
+          }
         />
       </div>
       <div
@@ -97,10 +130,20 @@ function VariablesDetail({
           mode={mode}
           value={currentValue}
           readOnly
-          rows={rows}
+          rows={shownRows}
           minRows={minRows}
         />
       </div>
+      {height.isModalOpen && (
+        <HeightModal
+          dataCy={dataCy}
+          value={
+            typeof shownRows === 'number' ? shownRows : fittedHeight(lineCount)
+          }
+          onCancel={height.closeModal}
+          onSave={height.chooseRows}
+        />
+      )}
       {error && (
         <div
           style={{
@@ -123,6 +166,8 @@ interface ModeToggleProps {
   mode: VariablesMode;
   setMode: (mode: VariablesMode) => void;
   name?: string;
+  /** The copy, collapse and height buttons, which sit at the row's end. */
+  actions?: React.ReactNode;
 }
 
 function ModeToggle({
@@ -133,10 +178,13 @@ function ModeToggle({
   mode,
   setMode,
   name,
+  actions,
 }: ModeToggleProps) {
   return (
     <Split hasGutter>
-      <SplitItem isFilled>
+      {/* Not filled: the actions sit beside the mode toggle rather than out at
+          the edge of a wide row, which is where the eye already is. */}
+      <SplitItem>
         <Split hasGutter style={{ alignItems: 'baseline' }}>
           <SplitItem>
             <label className="pf-v6-c-form__label" htmlFor={id}>
@@ -169,6 +217,9 @@ function ModeToggle({
           </SplitItem>
         </Split>
       </SplitItem>
+      {/* The first item fills, so these sit against the right edge of the
+          label row, which is the top right corner of the editor below it. */}
+      {actions}
     </Split>
   );
 }

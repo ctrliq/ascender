@@ -27,6 +27,9 @@ vi.mock('../shared/ExecutionEnvironmentForm', () => ({
       <div>
         {submitError ? <div data-testid="form-submit-error" /> : null}
         <div data-testid="prefill-image">{executionEnvironment?.image}</div>
+        <div data-testid="prefill-organization">
+          {executionEnvironment?.summary_fields?.organization?.name}
+        </div>
         <button
           type="button"
           onClick={() =>
@@ -49,6 +52,16 @@ vi.mock('../shared/ExecutionEnvironmentForm', () => ({
 }));
 
 describe('<ExecutionEnvironmentAdd/>', () => {
+  /*
+   * The page reads what the form draws with before it renders it, so that the
+   * whole page has one loading state rather than one inside the card.
+   */
+  beforeEach(() => {
+    vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: { pull: { choices: [] } } } },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
+  });
+
   let history: TestHistory;
 
   const renderAdd = (initialEntry = '/execution_environments') => {
@@ -67,7 +80,7 @@ describe('<ExecutionEnvironmentAdd/>', () => {
       data: { id: 42 },
     } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.create>);
     const { user } = renderAdd();
-    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    await user.click(await screen.findByRole('button', { name: 'Submit' }));
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.create).toHaveBeenCalledWith({
         name: 'Test EE',
@@ -85,7 +98,7 @@ describe('<ExecutionEnvironmentAdd/>', () => {
 
   test('handleCancel returns the user back to the list', async () => {
     const { user } = renderAdd();
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual('/execution_environments');
   });
 
@@ -94,14 +107,47 @@ describe('<ExecutionEnvironmentAdd/>', () => {
       response: { data: { detail: 'An error occurred' } },
     });
     const { user } = renderAdd();
-    await user.click(screen.getByRole('button', { name: 'Submit' }));
+    await user.click(await screen.findByRole('button', { name: 'Submit' }));
     expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
   });
 
-  test('prefills the image from the query params', () => {
+  test('prefills the image from the query params', async () => {
     renderAdd('/execution_environments/add?image=https://myhub.io/repo:2.0');
-    expect(screen.getByTestId('prefill-image')).toHaveTextContent(
+    // The page reads before it renders the form, so the fill is asserted once
+    // the form is on screen rather than on the first paint.
+    expect(await screen.findByTestId('prefill-image')).toHaveTextContent(
       'https://myhub.io/repo:2.0'
     );
+  });
+
+  describe('when opened from an organization', () => {
+    const renderFromOrganization = () => {
+      history = createMemoryHistory({
+        initialEntries: [
+          {
+            pathname: '/execution_environments/add',
+            state: { organization: { id: 71, name: 'measure-org' } },
+          },
+        ],
+      });
+      return renderWithContexts(<ExecutionEnvironmentAdd />, {
+        context: { router: { history } },
+      });
+    };
+
+    test('starts the form in that organization', async () => {
+      renderFromOrganization();
+      expect(
+        await screen.findByTestId('prefill-organization')
+      ).toHaveTextContent('measure-org');
+    });
+
+    test('cancels back to the organization it came from', async () => {
+      const { user } = renderFromOrganization();
+      await user.click(await screen.findByRole('button', { name: 'Cancel' }));
+      expect(history.location.pathname).toEqual(
+        '/organizations/71/execution_environments'
+      );
+    });
   });
 });

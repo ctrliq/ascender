@@ -57,9 +57,19 @@ describe('<LoggingEdit />', () => {
     vi.clearAllMocks();
   });
 
-  async function renderEdit() {
+  // Each tab is its own page, so a test names the group it is editing. The
+  // overrides are for the fields one tab renders conditionally on a setting
+  // that belongs to another: the protocol decides whether the TCP timeout on
+  // Miscellaneous is there at all.
+  async function renderEdit(
+    group = 'general',
+    overrides: Record<string, unknown> = {}
+  ) {
+    vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
+      data: { ...mockSettings, ...overrides },
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     history = createMemoryHistory({
-      initialEntries: ['/settings/logging/edit'],
+      initialEntries: [`/logging/edit/${group}`],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -154,7 +164,7 @@ describe('<LoggingEdit />', () => {
   });
 
   test('HTTPS certificate toggle should be shown when protocol is https', async () => {
-    const { container } = await renderEdit();
+    const { container } = await renderEdit('protocol');
     expect(
       screen.getByText('Enable/disable HTTPS certificate verification')
     ).toBeInTheDocument();
@@ -168,56 +178,63 @@ describe('<LoggingEdit />', () => {
   });
 
   test('TCP connection timeout should be required when protocol is tcp', async () => {
-    const { container } = await renderEdit();
-    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
-      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'tcp' },
+    const { container } = await renderEdit('misc', {
+      LOG_AGGREGATOR_PROTOCOL: 'tcp',
     });
-    await waitFor(() =>
-      expect(screen.getByText('TCP Connection Timeout')).toBeInTheDocument()
-    );
+    expect(screen.getByText('TCP Connection Timeout')).toBeInTheDocument();
     const tcpGroup = getFormGroup(container, 'TCP Connection Timeout');
     expect(
       tcpGroup!.querySelectorAll('.pf-v6-c-form__label-required')
     ).toHaveLength(1);
   });
 
-  test('TCP connection timeout and https certificate toggle should be hidden when protocol is udp', async () => {
-    const { container } = await renderEdit();
-    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
-      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'udp' },
-    });
-    await waitFor(() =>
-      expect(
-        screen.queryByText('TCP Connection Timeout')
-      ).not.toBeInTheDocument()
-    );
+  test('TCP connection timeout should be hidden when protocol is udp', async () => {
+    await renderEdit('misc', { LOG_AGGREGATOR_PROTOCOL: 'udp' });
     expect(
-      screen.queryByText('Enable/disable HTTPS certificate verification')
+      screen.queryByText('TCP Connection Timeout')
     ).not.toBeInTheDocument();
     expect(
       screen.getByText('Logging Aggregator Level Threshold')
     ).toBeInTheDocument();
   });
 
+  test('https certificate toggle should be hidden when protocol is udp', async () => {
+    const { container } = await renderEdit('protocol');
+    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
+      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'udp' },
+    });
+    await waitFor(() =>
+      expect(
+        screen.queryByText('Enable/disable HTTPS certificate verification')
+      ).not.toBeInTheDocument()
+    );
+    expect(screen.getByText('Logging Aggregator Port')).toBeInTheDocument();
+  });
+
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('logging');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      LOG_AGGREGATOR_ENABLED: false,
+      LOG_AGGREGATOR_HOST: null,
+      LOG_AGGREGATOR_TYPE: null,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
-    const { user, container } = await renderEdit();
+    const { user, container } = await renderEdit('protocol');
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     const portInput = container.querySelector(
       '#LOG_AGGREGATOR_PORT'
@@ -226,24 +243,42 @@ describe('<LoggingEdit />', () => {
     await user.type(portInput, '1010');
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // The protocol tab's own three settings and nothing else.
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
-      ...mockSettings,
+      LOG_AGGREGATOR_PROTOCOL: 'https',
       LOG_AGGREGATOR_PORT: 1010,
+      LOG_AGGREGATOR_VERIFY_CERT: true,
+    });
+  });
+
+  test('should not send the aggregator password from another tab', async () => {
+    // A save of the general tab once carried the whole category, the stored
+    // password among it.
+    const { user } = await renderEdit('general', {
+      LOG_AGGREGATOR_PASSWORD: '$encrypted$',
+    });
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      LOG_AGGREGATOR_ENABLED: true,
+      LOG_AGGREGATOR_HOST: 'https://logstash',
+      LOG_AGGREGATOR_TYPE: 'logstash',
     });
   });
 
   test('should navigate to logging detail on successful submission', async () => {
-    const { user } = await renderEdit();
+    const { user } = await renderEdit('protocol');
     await user.click(screen.getByRole('button', { name: 'Save' }));
+    // Back on the tab that was edited rather than the first one.
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/settings/logging/details')
+      expect(history.location.pathname).toEqual('/logging/protocol')
     );
   });
 
   test('should navigate to logging detail when cancel is clicked', async () => {
-    const { user } = await renderEdit();
+    const { user } = await renderEdit('protocol');
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/settings/logging/details');
+    expect(history.location.pathname).toEqual('/logging/protocol');
   });
 
   test('should display error message on unsuccessful submission', async () => {

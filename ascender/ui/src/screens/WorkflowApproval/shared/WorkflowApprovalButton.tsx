@@ -8,18 +8,25 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import { isWorkflowDeleted } from './WorkflowApprovalUtils';
 
 export interface WorkflowApprovalButtonProps {
   isDetailView?: boolean;
   workflowApproval: WorkflowApproval;
   /** Raises the toast the screen shows once the vote has landed. */
   onHandleToast: (id: number, title: string) => void;
+  /**
+   * Holds the button back for a reason the approval itself does not show,
+   * such as the viewer not being allowed to vote on it.
+   */
+  isDisabled?: boolean;
 }
 
 function WorkflowApprovalButton({
   isDetailView,
   workflowApproval,
   onHandleToast,
+  isDisabled = false,
 }: WorkflowApprovalButtonProps) {
   const { t } = useLingui();
   const { id } = workflowApproval;
@@ -28,6 +35,7 @@ function WorkflowApprovalButton({
       .length > 0 ||
     workflowApproval.status === 'canceled' ||
     workflowApproval.user_has_voted === true;
+  const workflowIsDeleted = isWorkflowDeleted(workflowApproval);
   const { error: approveApprovalError, request: approveWorkflowApprovals } =
     useRequest(useCallback(async () => WorkflowApprovalsAPI.approve(id), [id]));
 
@@ -42,14 +50,15 @@ function WorkflowApprovalButton({
   return (
     <>
       <Button
-        isDisabled={hasBeenActedOn}
+        isDisabled={hasBeenActedOn || workflowIsDeleted || isDisabled}
         variant={isDetailView ? 'primary' : 'plain'}
         ouiaId="workflow-approve-button"
         onClick={() => handleApprove()}
         aria-label={
           hasBeenActedOn
             ? t`This workflow has already been acted on`
-            : t`Approve`
+            : (workflowIsDeleted && t`This workflow has been deleted`) ||
+              t`Approve`
         }
       >
         {isDetailView ? t`Approve` : <OutlinedThumbsUpIcon />}

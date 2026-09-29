@@ -5,11 +5,11 @@ import * as SessionContext from 'contexts/Session';
 import * as navigation from 'util/navigation';
 import * as auth from 'util/auth';
 import type { SessionValue } from 'contexts/Session';
+import { createMemoryHistory } from 'history';
 import type { ResponseOf } from '../testUtils/responseOf';
 import { renderWithContexts } from '../testUtils/rtlContexts';
-import { createMemoryHistory } from '../testUtils/historyShim';
 import { SESSION_REDIRECT_URL } from './constants';
-import App, { ProtectedRoute } from './App';
+import App, { AuthorizedRoutes, ProtectedRoute } from './App';
 
 vi.mock('./api');
 vi.mock('util/webWorker', () => ({ default: vi.fn() }));
@@ -232,5 +232,63 @@ describe('<App />', () => {
     );
 
     expect(await screen.findByText('foo')).toBeInTheDocument();
+  });
+
+  describe('old settings addresses', () => {
+    // Two pages standing in for the real screens, so each test is about where
+    // an old address lands rather than what the page there draws.
+    const routeConfig = [
+      {
+        groupTitle: 'Settings',
+        groupId: 'settings',
+        routes: [
+          {
+            title: 'Appearance',
+            path: '/appearance',
+            screen: () => <div>Appearance page</div>,
+          },
+          {
+            title: 'Authentication',
+            path: '/authentication',
+            screen: () => <div>Authentication page</div>,
+          },
+        ],
+      },
+    ];
+
+    beforeEach(() => {
+      vi.spyOn(SessionContext, 'useSession').mockImplementation(
+        () =>
+          ({
+            setAuthRedirectTo: vi.fn(),
+            isSessionExpired: false,
+            isUserBeingLoggedOut: false,
+            loginRedirectOverride: null,
+          }) as unknown as SessionValue
+      );
+      vi.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
+    });
+
+    test.each(['/settings/radius', '/settings/tacacsplus/edit'])(
+      'sends %s, a sign in method taken out, to the authentication page',
+      async (path) => {
+        const history = createMemoryHistory({ initialEntries: [path] });
+        renderWithContexts(<AuthorizedRoutes routeConfig={routeConfig} />, {
+          context: { router: { history } },
+        });
+        expect(
+          await screen.findByText('Authentication page')
+        ).toBeInTheDocument();
+        expect(history.location.pathname).toBe('/authentication');
+      }
+    );
+
+    test('still sends the rest of /settings to its new address', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/settings'] });
+      renderWithContexts(<AuthorizedRoutes routeConfig={routeConfig} />, {
+        context: { router: { history } },
+      });
+      expect(await screen.findByText('Appearance page')).toBeInTheDocument();
+    });
   });
 });

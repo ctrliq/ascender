@@ -14,7 +14,7 @@ export default function useRunTypeStep(askLinkType: boolean) {
   const [artifactKeyField] = useField('linkConditionArtifactKey');
 
   return {
-    step: getStep(t`Run type`, askLinkType, meta, artifactKeyField),
+    step: getStep(t`Run Type`, askLinkType, meta, artifactKeyField),
     initialValues: askLinkType
       ? {
           linkType: 'success',

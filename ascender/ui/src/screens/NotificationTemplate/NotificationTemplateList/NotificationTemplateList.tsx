@@ -21,6 +21,7 @@ import useSelected from 'hooks/useSelected';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import NotificationTemplateListItem from './NotificationTemplateListItem';
+import { getNotificationTypeOptions } from '../constants';
 
 const QS_CONFIG = getQSConfig('notification-templates', {
   page: 1,
@@ -30,11 +31,11 @@ const QS_CONFIG = getQSConfig('notification-templates', {
 
 function NotificationTemplatesList() {
   const location = useLocation();
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   // const [testToasts, setTestToasts] = useState([]);
   const { addToast, Toast, toastProps } = useToast();
 
-  const addUrl = '/notification_templates/add';
+  const addUrl = '/notifications/add';
 
   const {
     result: {
@@ -127,28 +128,19 @@ function NotificationTemplatesList() {
                 key: 'description__icontains',
               },
               {
-                name: t`Notification type`,
+                name: t`Notification Type`,
                 key: 'or__notification_type',
-                options: [
-                  ['email', t`Email`],
-                  ['grafana', t`Grafana`],
-                  ['hipchat', t`Hipchat`],
-                  ['irc', t`IRC`],
-                  ['matrix', t`Matrix`],
-                  ['mattermost', t`Mattermost`],
-                  ['pagerduty', t`Pagerduty`],
-                  ['rocketchat', t`Rocket.Chat`],
-                  ['slack', t`Slack`],
-                  ['twilio', t`Twilio`],
-                  ['webhook', t`Webhook`],
-                ],
+                // The api's types, read from the one list the rows and the
+                // form name them by, so a filter and a row never call a type
+                // two different things.
+                options: getNotificationTypeOptions(i18n),
               },
               {
-                name: t`Created by (username)`,
+                name: t`Created By (Username)`,
                 key: 'created_by__username__icontains',
               },
               {
-                name: t`Modified by (username)`,
+                name: t`Modified By (Username)`,
                 key: 'modified_by__username__icontains',
               },
             ]}
@@ -162,7 +154,13 @@ function NotificationTemplatesList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo={addUrl} />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add Notification Template`}
+                          key="add"
+                          linkTo={addUrl}
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -220,15 +218,12 @@ function NotificationTemplatesList() {
                 key={template.id}
                 fetchTemplates={fetchTemplates}
                 template={template}
-                detailUrl={`/notification_templates/${template.id}`}
+                detailUrl={`/notifications/${template.id}`}
                 isSelected={selected.some((row) => row.id === template.id)}
                 onSelect={() => handleSelect(template)}
                 rowIndex={index}
               />
             )}
-            emptyStateControls={
-              canAdd ? <ToolbarAddButton key="add" linkTo={addUrl} /> : null
-            }
           />
         </Card>
       </PageSection>
@@ -238,7 +233,7 @@ function NotificationTemplatesList() {
         title={t`Error!`}
         onClose={clearDeletionError}
       >
-        {t`Failed to delete one or more notification template.`}
+        {t`Failed to delete one or more notification templates.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
       <Toast {...toastProps} />

@@ -33,6 +33,14 @@ class LabelsListMixin(object):
 
 
 class LabelSerializer(BaseSerializer):
+    # edit and delete are both an admin of the label's organization, which the
+    # interface reads to offer the actions. delete does not say whether the
+    # label is in use: that is a state the DELETE answers with 409, and working
+    # it out here would cost a query for every label on a page. The admin check
+    # is prefetched for the page, and delete copies edit.
+    show_capabilities = ['edit', 'delete']
+    capabilities_prefetch = [{'edit': 'organization.admin'}]
+
     class Meta:
         model = Label
         fields = ('*', '-description', 'organization')

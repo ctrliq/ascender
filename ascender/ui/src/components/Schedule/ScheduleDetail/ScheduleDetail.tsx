@@ -216,9 +216,11 @@ function ScheduleDetail({
   const repeatFrequency = frequency.length
     ? frequency.map((f) => frequencies[f]).join(', ')
     : t`None (Run Once)`;
+  // No exception is simply none, as the form's exception select says: run
+  // once belongs to the repeat frequency alone.
   const exceptionRepeatFrequency = exceptionFrequency.length
     ? exceptionFrequency.map((f) => frequencies[f]).join(', ')
-    : t`None (Run Once)`;
+    : t`None`;
 
   const {
     ask_credential_on_launch,
@@ -348,7 +350,7 @@ function ScheduleDetail({
   return (
     <CardBody>
       <ScheduleToggle
-        className="ascender-schedule-detail__padding-bottom-40"
+        className="ascender-schedule-detail__toggle-row"
         schedule={schedule}
         isDisabled={isDisabled}
       />
@@ -359,8 +361,12 @@ function ScheduleDetail({
           value={description}
           dataCy="schedule-description"
         />
+        {/* The form's name for the same field. The api does not keep the
+            start as typed here: it stores dtstart as the rule's first
+            occurrence, so a weekly Friday rule started on a Monday shows
+            that Friday. */}
         <Detail
-          label={t`First Run`}
+          label={t`Start Date/Time`}
           value={formatDateString(dtstart, timezone)}
           dataCy="schedule-first-run"
         />
@@ -369,13 +375,27 @@ function ScheduleDetail({
           value={formatDateString(next_run, timezone)}
           dataCy="schedule-next-run"
         />
-        <Detail label={t`Last Run`} value={formatDateString(dtend, timezone)} />
+        {/* dtend is the rule's last occurrence, empty for a rule that never
+            ends: when the schedule stops, not a run that has happened, and
+            the form's name for its end. */}
+        <Detail
+          label={t`End Date/Time`}
+          value={formatDateString(dtend, timezone)}
+          dataCy="schedule-end-date-time"
+        />
         <Detail
           label={t`Local Time Zone`}
           value={timezone}
           helpText={helpText.localTimeZone(config)}
           dataCy="schedule-timezone"
         />
+        {hasDaysToKeepField ? (
+          <Detail
+            label={t`Days of Data to Keep`}
+            value={daysToKeep}
+            dataCy="schedule-days-to-keep"
+          />
+        ) : null}
         <Detail
           label={t`Repeat Frequency`}
           value={repeatFrequency}
@@ -388,50 +408,51 @@ function ScheduleDetail({
         />
       </DetailList>
       {frequency.length ? (
-        <div className="ascender-schedule-detail__frequency-details-container">
-          <div ouia-component-id="schedule-frequency-details">
-            <p>
-              <strong>{t`Frequency Details`}</strong>
-            </p>
-            {frequency.map((freq) => (
-              <FrequencyDetails
-                key={freq}
-                type={freq}
-                label={frequencies[freq]}
-                options={frequencyOptions[freq] as FrequencyOptions}
-                timezone={timezone}
-              />
-            ))}
+        <>
+          {/* Above the block it names, in the voice the detail labels use, so
+              it reads as a heading rather than as the first line inside it. */}
+          <h2 className="ascender-schedule-detail__frequency-title">
+            {t`Frequency Details`}
+          </h2>
+          <div className="ascender-schedule-detail__frequency-details-container">
+            <div ouia-component-id="schedule-frequency-details">
+              {frequency.map((freq) => (
+                <FrequencyDetails
+                  key={freq}
+                  type={freq}
+                  label={frequencies[freq]}
+                  options={frequencyOptions[freq] as FrequencyOptions}
+                  timezone={timezone}
+                  showFrequency={frequency.length > 1}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       ) : null}
       {exceptionFrequency.length ? (
-        <div className="ascender-schedule-detail__frequency-details-container">
-          <div ouia-component-id="schedule-exception-details">
-            <p className="ascender-schedule-detail__border-top-0">
-              <strong>{t`Frequency Exception Details`}</strong>
-            </p>
-            {exceptionFrequency.map((freq) => (
-              <FrequencyDetails
-                key={freq}
-                type={freq}
-                label={frequencies[freq]}
-                options={exceptionOptions[freq] as FrequencyOptions}
-                timezone={timezone}
-                isException
-              />
-            ))}
+        <>
+          <h2 className="ascender-schedule-detail__frequency-title">
+            {t`Exceptions`}
+          </h2>
+          <div className="ascender-schedule-detail__frequency-details-container">
+            <div ouia-component-id="schedule-exception-details">
+              {exceptionFrequency.map((freq) => (
+                <FrequencyDetails
+                  key={freq}
+                  type={freq}
+                  label={frequencies[freq]}
+                  options={exceptionOptions[freq] as FrequencyOptions}
+                  timezone={timezone}
+                  isException
+                  showFrequency={exceptionFrequency.length > 1}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       ) : null}
       <DetailList gutter="sm">
-        {hasDaysToKeepField ? (
-          <Detail
-            label={t`Days of Data to Keep`}
-            value={daysToKeep}
-            dataCy="schedule-days-to-keep"
-          />
-        ) : null}
         <ScheduleOccurrences preview={preview} tz={timezone} />
         <UserDateDetail
           label={t`Created`}

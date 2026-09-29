@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb, User } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Link,
@@ -15,6 +15,7 @@ import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
 import { TokensAPI } from 'api';
 import useRequest from 'hooks/useRequest';
+import { useConfig } from 'contexts/Config';
 import UserTokenDetail from '../UserTokenDetail';
 
 export interface UserTokenProps {
@@ -40,11 +41,40 @@ function UserToken({ setBreadcrumb, user }: UserTokenProps) {
         token: response.data,
       };
     }, [setBreadcrumb, user, tokenId]),
-    { token: null }
+    // Loading from the first render: the read starts in an effect, after the
+    // routes below have drawn once, and until then an idle hook with no token
+    // sent the details address to Not Found for a moment.
+    { token: null, isLoading: true }
   );
   useEffect(() => {
     fetchToken();
   }, [fetchToken]);
+
+  /*
+   * A token's page lives under its owner, but a superuser reaches another
+   * user's token from an application's Tokens tab, and Back should return
+   * there. The application list says so in the link's state, read once so a
+   * click on the Details tab, which drops it, does not lose it. Without it, a
+   * reload for one, a token issued through an application that is not the
+   * viewer's own can only have been reached from that application.
+   */
+  const { me } = useConfig();
+  const [cameFrom] = useState(() => {
+    const backTo = (location.state as { backTo?: unknown } | null)?.backTo;
+    return typeof backTo === 'string' && backTo.startsWith('/applications/')
+      ? backTo
+      : null;
+  });
+  const tokenApplicationId = token?.summary_fields?.application?.id;
+  const isOthersToken =
+    token?.summary_fields?.user?.id !== undefined &&
+    token.summary_fields.user.id !== me?.id;
+  let backLink = `/users/${id}/tokens`;
+  if (cameFrom) {
+    backLink = cameFrom;
+  } else if (tokenApplicationId && isOthersToken) {
+    backLink = `/applications/${tokenApplicationId}/tokens`;
+  }
 
   const tabsArray = [
     {
@@ -54,7 +84,7 @@ function UserToken({ setBreadcrumb, user }: UserTokenProps) {
           {t`Back to Tokens`}
         </>
       ),
-      link: `/users/${id}/tokens`,
+      link: backLink,
       id: 99,
     },
     {
@@ -78,7 +108,7 @@ function UserToken({ setBreadcrumb, user }: UserTokenProps) {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Token not found.`}{' '}
-                <Link to="/users/:id/tokens">{t`View all tokens.`}</Link>
+                <Link to={`/users/${id}/tokens`}>{t`View all Tokens.`}</Link>
               </span>
             )}
           </ContentError>
@@ -93,14 +123,19 @@ function UserToken({ setBreadcrumb, user }: UserTokenProps) {
       <Routes>
         <Route index element={<Navigate to="details" replace />} />
         {token && (
-          <Route path="details" element={<UserTokenDetail token={token} />} />
+          <Route
+            path="details"
+            element={<UserTokenDetail token={token} backLink={backLink} />}
+          />
         )}
         <Route
           path="*"
           element={
             !isLoading ? (
               <ContentError isNotFound>
-                {id && <Link to={`/users/${id}/tokens`}>{t`View Tokens`}</Link>}
+                {id && (
+                  <Link to={`/users/${id}/tokens`}>{t`View all Tokens.`}</Link>
+                )}
               </ContentError>
             ) : null
           }

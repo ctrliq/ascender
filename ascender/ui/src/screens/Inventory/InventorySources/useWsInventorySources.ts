@@ -7,7 +7,7 @@ export default function useWsInventorySources(
   initialSources: InventorySource[]
 ) {
   const [sources, setSources] = useState(initialSources);
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
   });
@@ -16,20 +16,24 @@ export default function useWsInventorySources(
     setSources(initialSources);
   }, [initialSources]);
 
+  // Every message in the batch is applied, each on the rows the one before it
+  // left, so two sources finishing in the same tick both show it.
   useEffect(() => {
-    if (!lastMessage?.unified_job_id || !lastMessage?.inventory_source_id) {
-      return;
-    }
-
-    const sourceId = lastMessage.inventory_source_id;
-    setSources((currentSources) => {
-      const index = currentSources.findIndex((s) => s.id === sourceId);
-      if (index > -1) {
-        return updateSource(currentSources, index, lastMessage);
+    messages.forEach((message) => {
+      if (!message.unified_job_id || !message.inventory_source_id) {
+        return;
       }
-      return currentSources;
+
+      const sourceId = message.inventory_source_id;
+      setSources((currentSources) => {
+        const index = currentSources.findIndex((s) => s.id === sourceId);
+        if (index > -1) {
+          return updateSource(currentSources, index, message);
+        }
+        return currentSources;
+      });
     });
-  }, [lastMessage]);
+  }, [messages]);
 
   return sources;
 }

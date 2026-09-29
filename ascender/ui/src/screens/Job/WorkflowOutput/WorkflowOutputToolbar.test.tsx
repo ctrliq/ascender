@@ -1,7 +1,7 @@
 import type { AnyJob } from 'types/api';
 import type { WorkflowState } from 'components/Workflow/workflowReducer';
 import React from 'react';
-import { act } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -22,6 +22,7 @@ const job = {
     user_capabilities: {
       start: true,
       delete: true,
+      cancel: true,
     },
   },
 } as unknown as AnyJob;
@@ -98,6 +99,34 @@ describe('WorkflowOutputToolbar', () => {
       () => {}
     );
     expect(byOuia('workflow-output-delete-button')).toBeInTheDocument();
+  });
+
+  test('a new workflow offers both Delete and Cancel, as the api does', () => {
+    renderToolbar({ ...job, status: 'new' } as AnyJob, { nodes: [{ id: 1 }] });
+    expect(byOuia('workflow-output-delete-button')).toBeInTheDocument();
+    expect(byOuia('cancel-job-button')).toBeInTheDocument();
+  });
+
+  test('offers no Cancel without the cancel capability', () => {
+    renderToolbar(
+      {
+        ...job,
+        summary_fields: {
+          ...job.summary_fields,
+          user_capabilities: { start: true, delete: true, cancel: false },
+        },
+      } as unknown as AnyJob,
+      { nodes }
+    );
+    expect(byOuia('cancel-job-button')).not.toBeInTheDocument();
+  });
+
+  test('names the relaunch for a workflow job', async () => {
+    const { user } = renderToolbar(job, { nodes });
+    await user.hover(byOuia('workflow-output-relaunch-button')!);
+    expect(
+      await screen.findByText('Relaunch Workflow Job')
+    ).toBeInTheDocument();
   });
 
   test('Shows correct number of nodes', () => {

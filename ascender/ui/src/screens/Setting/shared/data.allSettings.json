@@ -99,7 +99,6 @@
   "MAX_UI_JOB_EVENTS": 4000,
   "UI_LIVE_UPDATES_ENABLED": true,
   "AUTHENTICATION_BACKENDS": [
-      "awx.sso.backends.TACACSPlusBackend",
       "awx.main.backends.AWXModelBackend"
   ],
   "SOCIAL_AUTH_ORGANIZATION_MAP": null,
@@ -242,15 +241,6 @@
   "AUTH_LDAP_5_USER_FLAGS_BY_GROUP": {},
   "AUTH_LDAP_5_ORGANIZATION_MAP": {},
   "AUTH_LDAP_5_TEAM_MAP": {},
-  "RADIUS_SERVER": "example.org",
-  "RADIUS_PORT": 1812,
-  "RADIUS_SECRET": "$encrypted$",
-  "TACACSPLUS_HOST": "",
-  "TACACSPLUS_PORT": 49,
-  "TACACSPLUS_SECRET": "",
-  "TACACSPLUS_SESSION_TIMEOUT": 5,
-  "TACACSPLUS_AUTH_PROTOCOL": "ascii",
-  "TACACSPLUS_REM_ADDR": false,
   "SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL": "https://localhost:3000/sso/complete/google-oauth2/",
   "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY": "",
   "SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET": "",

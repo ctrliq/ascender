@@ -22,7 +22,12 @@ import PaginatedTable, {
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
 import DataListToolbar from 'components/DataListToolbar';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import type { QSParams } from 'util/qs';
+import {
+  getInventoryType,
+  isReadOnlyInventoryType,
+} from 'screens/Inventory/shared/utils';
 import HostGroupItem from './HostGroupItem';
 
 const QS_CONFIG = getQSConfig('group', {
@@ -43,6 +48,15 @@ function HostGroupsList({ host }: HostGroupsListProps) {
   const { search } = useLocation();
   // The list is mounted under an inventory, so the host it lists is in one.
   const invId = host.summary_fields.inventory?.id as number;
+  /*
+   * A constructed or federated inventory builds its groups from its sources,
+   * so they are not linked or unlinked by hand, as on the same list under
+   * the inventory.
+   */
+  const isReadOnlyInventory = isReadOnlyInventoryType(
+    getInventoryType(host.summary_fields.inventory?.kind)
+  );
+  const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
 
   const {
     result: {
@@ -51,12 +65,14 @@ function HostGroupsList({ host }: HostGroupsListProps) {
       actions,
       relatedSearchableKeys,
       searchableKeys,
+      moduleOptions,
+      isAdHocDisabled,
     },
     error: contentError,
     isLoading,
     request: fetchGroups,
   } = useCachedRequest(
-    ['host-groups-list', search],
+    ['host-groups-list', hostId, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
 
@@ -65,12 +81,18 @@ function HostGroupsList({ host }: HostGroupsListProps) {
           data: { count, results },
         },
         actionsResponse,
+        adHocOptions,
       ] = await Promise.all([
         HostsAPI.readAllGroups(hostId, params),
         HostsAPI.readGroupsOptions(hostId),
+        // What the run menu offers for a command on the host's inventory.
+        InventoriesAPI.readAdHocOptions(invId),
       ]);
 
       return {
+        moduleOptions:
+          adHocOptions.data.actions.GET?.module_name?.choices ?? [],
+        isAdHocDisabled: !adHocOptions.data.actions.POST,
         groups: results,
         itemCount: count,
         actions: actionsResponse.data.actions,
@@ -79,13 +101,15 @@ function HostGroupsList({ host }: HostGroupsListProps) {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [hostId, search]),
+    }, [hostId, invId, search]),
     {
       groups: [],
       itemCount: 0,
       actions: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
+      moduleOptions: [],
+      isAdHocDisabled: true,
     }
   );
 
@@ -149,15 +173,20 @@ function HostGroupsList({ host }: HostGroupsListProps) {
   );
 
   const canAdd =
-    actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
+    !isReadOnlyInventory &&
+    actions &&
+    Object.prototype.hasOwnProperty.call(actions, 'POST');
 
   const { t } = useLingui();
 
   return (
     <>
       <PaginatedTable
+        pluralizedItemName={t`Groups`}
         contentError={contentError}
-        hasContentLoading={isLoading || isDisassociateLoading}
+        hasContentLoading={
+          isLoading || isDisassociateLoading || isAdHocLaunchLoading
+        }
         items={groups}
         itemCount={itemCount}
         qsConfig={QS_CONFIG}
@@ -182,7 +211,8 @@ function HostGroupsList({ host }: HostGroupsListProps) {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell>{t`Actions`}</HeaderCell>
+            {/* Its rows have nothing to offer under a read-only inventory. */}
+            {!isReadOnlyInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
           </HeaderRow>
         }
         renderRow={(item, index) => (
@@ -203,30 +233,43 @@ function HostGroupsList({ host }: HostGroupsListProps) {
             onSelectAll={selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
+              <RunSelectionMenu
+                key="run"
+                ouiaId="host-groups-list-run-menu"
+                items={selected}
+                inventoryId={invId}
+                moduleOptions={moduleOptions}
+                onLaunchLoading={setIsAdHocLaunchLoading}
+                canRunCommand={!isAdHocDisabled}
+                /* Nothing ticked is this host, as on the host's other tabs,
+                   rather than every host in its inventory. */
+                scope={{ item: host, label: t`Run on Host` }}
+              />,
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Group`}
                       ouiaId="host-groups-add-button"
                       key="add"
                       onClick={() => setIsModalOpen(true)}
                     />,
                   ]
                 : []),
-              <DisassociateButton
-                key="disassociate"
-                onDisassociate={handleDisassociate}
-                itemsToDisassociate={selected}
-                modalTitle={t`Disassociate group from host?`}
-                modalNote={t`Note that you may still see the group in the list after disassociating if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly.`}
-              />,
+              ...(isReadOnlyInventory
+                ? []
+                : [
+                    <DisassociateButton
+                      key="disassociate"
+                      onDisassociate={handleDisassociate}
+                      itemsToDisassociate={selected}
+                      modalTitle={t`Disassociate the host from these groups?`}
+                      modalNote={t`Note that you may still see the group in the list after disassociating it if the host is also a member of that group’s children.  This list shows all groups the host is associated with directly and indirectly.`}
+                    />,
+                  ]),
             ]}
           />
         )}
-        emptyStateControls={
-          canAdd ? (
-            <ToolbarAddButton key="add" onClick={() => setIsModalOpen(true)} />
-          ) : null
-        }
       />
       {isModalOpen && (
         <AssociateModal
@@ -237,7 +280,7 @@ function HostGroupsList({ host }: HostGroupsListProps) {
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Groups`}
+          title={t`Associate Groups`}
         />
       )}
       {error && (
@@ -248,7 +291,7 @@ function HostGroupsList({ host }: HostGroupsListProps) {
           variant="error"
         >
           {associateError
-            ? t`Failed to associate.`
+            ? t`Failed to associate one or more groups.`
             : t`Failed to disassociate one or more groups.`}
           <ErrorDetail error={error} />
         </AlertModal>

@@ -1,0 +1,52 @@
+/* The first heading of the preview sits at the top of the step, where the
+   space the later headings keep above them has nothing to separate. */
+.ascender-schedule-wizard__preview-title.ascender-prompt-detail__title {
+  margin-top: 0;
+}
+
+/*
+ * The frequency block in the modal. On a page it is a shaded panel pulled out
+ * to the card's edges; a modal has no card to reach, so it sat indented from
+ * the fields above it with nothing drawn around it. Here it lines up with
+ * them and keeps the form's own spacing.
+ */
+.ascender-schedule-wizard__form .ascender-sub-form-layout {
+  display: grid;
+  gap: var(--pf-v6-c-form--GridGap);
+  padding: 0;
+  background: none;
+}
+
+.ascender-schedule-wizard__form .ascender-sub-form-layout > .pf-v6-c-title {
+  margin: 0;
+}
+
+/* No rule under each frequency and under the exceptions: the headings and
+   the gap already separate them, and the rules sat flush against the radios. */
+.ascender-schedule-wizard__form .ascender-form-column-layout--stacked {
+  border-bottom: 0;
+  padding: 0;
+}
+
+/* A rule between two frequencies, where one block of fields follows another
+   and nothing else says where the first ends. The exceptions select is a block
+   of its own, so it neither takes one nor puts one before the first exception. */
+.ascender-schedule-wizard__form
+  .ascender-form-column-layout--stacked:not(
+    :has([data-ouia-component-id="frequency-select-exception-frequency"])
+  )
+  + .ascender-form-column-layout--stacked {
+  border-top: var(--pf-t--global--border--width--divider--default, 1px) solid
+    var(--pf-t--global--border--color--default);
+  padding-top: var(--pf-v6-c-form--GridGap);
+}
+
+/* And one before Exceptions, which starts a second section of the block
+   rather than another frequency. */
+.ascender-schedule-wizard__form
+  .ascender-form-column-layout--stacked
+  + .pf-v6-c-title {
+  border-top: var(--pf-t--global--border--width--divider--default, 1px) solid
+    var(--pf-t--global--border--color--default);
+  padding-top: var(--pf-v6-c-form--GridGap);
+}

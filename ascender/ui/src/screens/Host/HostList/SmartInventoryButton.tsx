@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import { Button, DropdownItem } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
+import Tooltip from 'components/Tooltip';
 
 export interface SmartInventoryButtonProps {
   onClick: (event?: React.MouseEvent) => void;
@@ -24,16 +25,16 @@ function SmartInventoryButton({
 
   const renderTooltipContent = () => {
     if (hasInvalidKeys) {
-      return t`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters.  Remove these to create a new Smart Inventory with this filter.`;
+      return t`Some search modifiers like not__ and __search are not supported in Smart Inventory host filters. Remove these to add a Smart Inventory with this filter.`;
     }
     if (hasAnsibleFactsKeys) {
-      return t`To create a smart inventory using ansible facts, go to the smart inventory screen.`;
+      return t`To add a Smart Inventory using Ansible facts, go to the Smart Inventory screen.`;
     }
     if (isDisabled) {
-      return t`Enter at least one search filter to create a new Smart Inventory`;
+      return t`Enter at least one search filter to add a Smart Inventory.`;
     }
 
-    return t`Create a new Smart Inventory with the applied filter`;
+    return t`Add Smart Inventory From This Filter`;
   };
 
   const renderContent = () => {
@@ -46,7 +47,7 @@ function SmartInventoryButton({
           onClick={onClick}
           ouiaId="smart-inventory-dropdown-item"
         >
-          {t`Smart Inventory`}
+          {t`Add Smart Inventory`}
         </DropdownItem>
       );
     }
@@ -55,11 +56,11 @@ function SmartInventoryButton({
       <Button
         ouiaId="smart-inventory-button"
         onClick={onClick}
-        aria-label={t`Smart Inventory`}
+        aria-label={t`Add Smart Inventory`}
         variant="secondary"
         isDisabled={isDisabled}
       >
-        {t`Smart Inventory`}
+        {t`Add Smart Inventory`}
       </Button>
     );
   };

@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ManagementJobs from './ManagementJobs';
 
-// stub the list so the /management_jobs route resolves without hitting the API
+// stub the list so the /cleanup_jobs route resolves without hitting the API
 vi.mock('./ManagementJobList', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
@@ -17,20 +17,20 @@ vi.mock('./ManagementJobList', async () => {
 });
 
 describe('<ManagementJobs />', () => {
-  test('renders the list at /management_jobs', () => {
+  test('renders the list at /cleanup_jobs', () => {
     const history = createMemoryHistory({
-      initialEntries: ['/management_jobs'],
+      initialEntries: ['/cleanup_jobs'],
     });
     renderWithContexts(
       <Routes>
-        <Route path="/management_jobs/*" element={<ManagementJobs />} />
+        <Route path="/cleanup_jobs/*" element={<ManagementJobs />} />
       </Routes>,
       {
         context: { router: { history } },
       }
     );
 
-    expect(screen.getByText('Management jobs')).toBeInTheDocument();
+    expect(screen.getByText('Cleanup Jobs')).toBeInTheDocument();
     expect(screen.getByText('ManagementJobList')).toBeInTheDocument();
   });
 });

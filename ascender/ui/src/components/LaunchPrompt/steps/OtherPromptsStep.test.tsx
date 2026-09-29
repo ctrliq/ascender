@@ -162,6 +162,24 @@ describe('OtherPromptsStep', () => {
     expect(toggle).toBeChecked();
   });
 
+  test('should label the show changes toggle Off when it is off', () => {
+    // PF6 has no off label, so the label itself has to follow the state.
+    renderWithContexts(
+      <FormRoot onSubmit={() => {}} initialValues={{ diff_mode: false }}>
+        <OtherPromptsStep
+          launchConfig={{
+            ask_diff_mode_on_launch: true,
+            ...jobTemplateData,
+          }}
+        />
+      </FormRoot>
+    );
+
+    const toggle = screen.getByRole('switch', { name: 'Off' });
+    expect(toggle).not.toBeChecked();
+    expect(toggle.closest('label')).toHaveTextContent('Off');
+  });
+
   test('should render variables field', async () => {
     // VariablesField does an async Formik update on mount; findBy settles it
     // inside act so the console-error trap stays quiet.

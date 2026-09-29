@@ -111,9 +111,9 @@ describe('<ApplicationDetails/>', () => {
     renderDetails(buildApplication());
     assertDetail('Name', 'Alex');
     assertDetail('Description', 'foo');
-    assertDetail('Authorization grant type', 'Authorization code');
+    assertDetail('Authorization Grant Type', 'Authorization code');
     assertDetail('Redirect URIs', 'http://www.google.com');
-    assertDetail('Client type', 'Confidential');
+    assertDetail('Client Type', 'Confidential');
     assertDetail('Client ID', 'b1dmj8xzkbFm1ZQ27ygw2ZeE9I0AXqqeL74fiyk4');
 
     const orgLink = screen.getByRole('link', { name: 'bar' });

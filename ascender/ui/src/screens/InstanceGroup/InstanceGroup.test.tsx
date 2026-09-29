@@ -8,6 +8,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroup from './InstanceGroup';
 
 vi.mock('../../api/models/InstanceGroups');
+vi.mock('../../api/models/Settings');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
@@ -56,6 +57,8 @@ function renderAt(path: string) {
         path="/instance_groups/:id/*"
         element={<InstanceGroup setBreadcrumb={() => {}} />}
       />
+      {/* Where a container group is sent, so the redirect lands somewhere. */}
+      <Route path="/container_groups/*" element={<div>ContainerGroup</div>} />
     </Routes>,
     { context: { router: { history } } }
   );
@@ -89,8 +92,8 @@ describe('<InstanceGroup />', () => {
     expect(await screen.findByText('Instances subtree')).toBeInTheDocument();
   });
 
-  test('renders the jobs panel at /jobs', async () => {
-    renderAt('/instance_groups/42/jobs');
+  test('renders the jobs panel at /runs', async () => {
+    renderAt('/instance_groups/42/runs');
     expect(await screen.findByText('JobList')).toBeInTheDocument();
   });
 
@@ -99,6 +102,26 @@ describe('<InstanceGroup />', () => {
     expect(await screen.findByText('InstanceGroupDetails')).toBeInTheDocument();
     await waitFor(() =>
       expect(history.location.pathname).toBe('/instance_groups/42/details')
+    );
+  });
+
+  test('sends a container group to its own address, keeping the tab', async () => {
+    vi.mocked(InstanceGroupsAPI.readDetail).mockResolvedValue({
+      data: { ...instanceGroup, is_container_group: true },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readDetail>);
+    const { history } = renderAt('/instance_groups/42/runs');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/container_groups/42/runs')
+    );
+  });
+
+  test('drops a tab the container group screen does not have', async () => {
+    vi.mocked(InstanceGroupsAPI.readDetail).mockResolvedValue({
+      data: { ...instanceGroup, is_container_group: true },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readDetail>);
+    const { history } = renderAt('/instance_groups/42/instances');
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/container_groups/42')
     );
   });
 

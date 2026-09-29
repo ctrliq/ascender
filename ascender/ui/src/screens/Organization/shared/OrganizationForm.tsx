@@ -1,12 +1,9 @@
 import type { Organization, SummaryFieldRef } from 'types/api';
 import { FormRoot, useField, useFormContext } from 'components/Form';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 
-import { OrganizationsAPI } from 'api';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import FormField, { FormSubmitError } from 'components/FormField';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import {
@@ -81,7 +78,7 @@ function OrganizationFormFields({
         onBlur={() => executionEnvironmentHelpers.setTouched(true)}
         value={executionEnvironmentField.value}
         onChange={(value) => executionEnvironmentHelpers.setValue(value)}
-        popoverContent={t`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`}
+        popoverContent={t`The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`}
         globallyAvailable
         organizationId={organizationId ?? undefined}
         isDefaultEnvironment
@@ -128,6 +125,13 @@ export interface OrganizationFormValues {
 export interface OrganizationFormProps {
   /** Absent on the add screen, which starts the form empty. */
   organization?: Partial<Organization>;
+  /**
+   * The organization's instance groups. The screen reads them alongside the
+   * organization itself and hands them here: read in this form instead, they
+   * landed after the page had drawn and the form replaced itself with a second
+   * loading animation while they were on their way.
+   */
+  instanceGroups?: SummaryFieldRef[];
   onCancel: () => void;
   /**
    * Takes the instance groups alongside the values, because they are
@@ -144,17 +148,22 @@ export interface OrganizationFormProps {
 
 function OrganizationForm({
   organization = {},
+  instanceGroups: savedInstanceGroups = [],
   onCancel,
   onSubmit,
   submitError = null,
   defaultGalaxyCredential = null,
 }: OrganizationFormProps) {
-  const [contentError, setContentError] = useState<unknown>(null);
-  const [hasContentLoading, setHasContentLoading] = useState(true);
-  const [initialInstanceGroups, setInitialInstanceGroups] = useState<
-    SummaryFieldRef[]
-  >([]);
-  const [instanceGroups, setInstanceGroups] = useState<SummaryFieldRef[]>([]);
+  /*
+   * What the organization has, and what the form has made of it. The saved
+   * list is what a save compares against to know which groups to associate and
+   * which to let go.
+   */
+  const [initialInstanceGroups] =
+    useState<SummaryFieldRef[]>(savedInstanceGroups);
+  const [instanceGroups, setInstanceGroups] = useState<SummaryFieldRef[]>([
+    ...savedInstanceGroups,
+  ]);
 
   const handleCancel = () => {
     onCancel();
@@ -167,37 +176,6 @@ function OrganizationForm({
       typeof values.max_hosts === 'number' ? values.max_hosts : 0;
     onSubmit({ ...values, max_hosts }, instanceGroups, initialInstanceGroups);
   };
-
-  useEffect(() => {
-    (async () => {
-      const { id } = organization;
-      if (!id) {
-        setHasContentLoading(false);
-        return;
-      }
-      setContentError(null);
-      setHasContentLoading(true);
-      try {
-        const {
-          data: { results = [] },
-        } = await OrganizationsAPI.readInstanceGroups(id);
-        setInitialInstanceGroups(results);
-        setInstanceGroups(results);
-      } catch (error) {
-        setContentError(error);
-      } finally {
-        setHasContentLoading(false);
-      }
-    })();
-  }, [organization]);
-
-  if (contentError) {
-    return <ContentError error={contentError} />;
-  }
-
-  if (hasContentLoading) {
-    return <ContentLoading />;
-  }
 
   return (
     <FormRoot

@@ -234,7 +234,7 @@ describe('Setting form fields', () => {
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
             needsConfirmationModal
-            modalTitle="Confirm Disable Local Authorization"
+            modalTitle="Confirm Disable Local Authentication"
             config={{
               category: 'Authentication',
               category_slug: 'authentication',
@@ -255,11 +255,11 @@ describe('Setting form fields', () => {
     expect(toggle).not.toBeDisabled();
     await user.click(toggle!);
     expect(
-      screen.getByText('Confirm Disable Local Authorization')
+      screen.getByText('Confirm Disable Local Authentication')
     ).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
     expect(
-      screen.queryByText('Confirm Disable Local Authorization')
+      screen.queryByText('Confirm Disable Local Authentication')
     ).not.toBeInTheDocument();
     expect(container.querySelector('#DISABLE_LOCAL_AUTH')).toBeChecked();
   });
@@ -274,7 +274,7 @@ describe('Setting form fields', () => {
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
             needsConfirmationModal
-            modalTitle="Confirm Disable Local Authorization"
+            modalTitle="Confirm Disable Local Authentication"
             config={{
               category: 'Authentication',
               category_slug: 'authentication',
@@ -295,7 +295,7 @@ describe('Setting form fields', () => {
     expect(toggle).not.toBeDisabled();
     await user.click(toggle!);
     expect(
-      screen.queryByText('Confirm Disable Local Authorization')
+      screen.queryByText('Confirm Disable Local Authentication')
     ).not.toBeInTheDocument();
     expect(container.querySelector('#DISABLE_LOCAL_AUTH')).not.toBeChecked();
   });
@@ -310,7 +310,7 @@ describe('Setting form fields', () => {
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
             needsConfirmationModal
-            modalTitle="Confirm Disable Local Authorization"
+            modalTitle="Confirm Disable Local Authentication"
             config={{
               category: 'Authentication',
               category_slug: 'authentication',
@@ -331,11 +331,44 @@ describe('Setting form fields', () => {
     expect(toggle).not.toBeDisabled();
     await user.click(toggle!);
     expect(
-      screen.getByText('Confirm Disable Local Authorization')
+      screen.getByText('Confirm Disable Local Authentication')
     ).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(
-      screen.queryByText('Confirm Disable Local Authorization')
+      screen.queryByText('Confirm Disable Local Authentication')
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('#DISABLE_LOCAL_AUTH')).not.toBeChecked();
+  });
+
+  test('should not toggle disable local auth when the dialog is closed', async () => {
+    // Closing the dialog declines it, the way Cancel does.
+    const { user, container } = renderWithContexts(
+      <FormRoot
+        onSubmit={() => {}}
+        initialValues={{ DISABLE_LOCAL_AUTH: false }}
+      >
+        {() => (
+          <BooleanField
+            name="DISABLE_LOCAL_AUTH"
+            needsConfirmationModal
+            modalTitle="Confirm Disable Local Authentication"
+            config={{
+              default: false,
+              label: 'Disable the built-in authentication system',
+              type: 'boolean',
+              value: false,
+            }}
+          />
+        )}
+      </FormRoot>
+    );
+    await user.click(container.querySelector('#DISABLE_LOCAL_AUTH')!);
+    expect(
+      screen.getByText('Confirm Disable Local Authentication')
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    expect(
+      screen.queryByText('Confirm Disable Local Authentication')
     ).not.toBeInTheDocument();
     expect(container.querySelector('#DISABLE_LOCAL_AUTH')).not.toBeChecked();
   });

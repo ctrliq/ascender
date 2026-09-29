@@ -82,7 +82,7 @@ function CustomMessagesSubForm({
       <div style={{ gridColumn: '1 / -1' }}>
         <Switch
           id="toggle-custom-messages"
-          label={t`Customize messages…`}
+          label={t`Customize Messages…`}
           isChecked={!!useCustomField.value}
           onChange={() => useCustomHelpers.setValue(!useCustomField.value)}
         />
@@ -127,7 +127,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="start-message"
                 name="messages.started.message"
-                label={t`Start message`}
+                label={t`Start Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -136,7 +136,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="start-body"
                 name="messages.started.body"
-                label={t`Start message body`}
+                label={t`Start Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -145,7 +145,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="success-message"
                 name="messages.success.message"
-                label={t`Success message`}
+                label={t`Success Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -154,7 +154,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="success-body"
                 name="messages.success.body"
-                label={t`Success message body`}
+                label={t`Success Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -163,7 +163,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="error-message"
                 name="messages.error.message"
-                label={t`Error message`}
+                label={t`Error Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -172,7 +172,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="error-body"
                 name="messages.error.body"
-                label={t`Error message body`}
+                label={t`Error Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -181,7 +181,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="changed-message"
                 name="messages.changed.message"
-                label={t`Changed message`}
+                label={t`Changed Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -190,7 +190,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="changed-body"
                 name="messages.changed.body"
-                label={t`Changed message body`}
+                label={t`Changed Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -199,7 +199,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-approved-message"
                 name="messages.workflow_approval.approved.message"
-                label={t`Workflow approved message`}
+                label={t`Workflow Approved Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -208,7 +208,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-approved-body"
                 name="messages.workflow_approval.approved.body"
-                label={t`Workflow approved message body`}
+                label={t`Workflow Approved Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -217,7 +217,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-denied-message"
                 name="messages.workflow_approval.denied.message"
-                label={t`Workflow denied message`}
+                label={t`Workflow Denied Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -226,7 +226,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-denied-body"
                 name="messages.workflow_approval.denied.body"
-                label={t`Workflow denied message body`}
+                label={t`Workflow Denied Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -235,7 +235,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-running-message"
                 name="messages.workflow_approval.running.message"
-                label={t`Workflow pending message`}
+                label={t`Workflow Pending Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -244,7 +244,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-running-body"
                 name="messages.workflow_approval.running.body"
-                label={t`Workflow pending message body`}
+                label={t`Workflow Pending Message Body`}
                 mode="jinja2"
                 rows={6}
               />
@@ -253,7 +253,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-timed-out-message"
                 name="messages.workflow_approval.timed_out.message"
-                label={t`Workflow timed out message`}
+                label={t`Workflow Timed Out Message`}
                 mode="jinja2"
                 rows={2}
               />
@@ -262,7 +262,7 @@ function CustomMessagesSubForm({
               <CodeEditorField
                 id="wf-timed-out-body"
                 name="messages.workflow_approval.timed_out.body"
-                label={t`Workflow timed out message body`}
+                label={t`Workflow Timed Out Message Body`}
                 mode="jinja2"
                 rows={6}
               />
