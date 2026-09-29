@@ -28,6 +28,7 @@ from ascender.api.permissions import WorkflowApprovalPermission
 from ascender.api.views.labels import LabelSubListCreateAttachDetachView
 from ascender.api.views.mixin import RelatedJobsPreventDeleteMixin, UnifiedJobDeletionMixin
 from ascender.main import models
+from ascender.main.access import relaunch_prevented
 from ascender.main.scheduler.dag_workflow import WorkflowDAG
 from ascender.main.utils import ScheduleWorkflowManager, getattrd, parse_yaml_or_json
 from collections import OrderedDict
@@ -410,6 +411,8 @@ class WorkflowJobRelaunch(GenericAPIView):
 
     def check_object_permissions(self, request, obj):
         if request.method == 'POST' and obj:
+            if relaunch_prevented(obj):
+                self.permission_denied(request, message=_('Relaunch is disabled on the job template of this sliced job.'))
             relaunch_perm, messages = request.user.can_access_with_errors(self.model, 'start', obj)
             if not relaunch_perm and 'workflow_job_template' in messages:
                 self.permission_denied(request, message=messages['workflow_job_template'])

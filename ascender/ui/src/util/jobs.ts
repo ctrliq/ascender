@@ -32,6 +32,27 @@ export function canOverwriteRelaunchVars(job: unknown): boolean {
   );
 }
 
+/**
+ * Whether a running job gets a Cancel button on its detail and output screens.
+ * Those screens read this off the start capability, but the API turns start
+ * off for every job whose template prevents relaunch, so those jobs are let
+ * through here and the API decides whether the cancel goes ahead, as it does
+ * from the job list.
+ */
+export function canOfferCancel(job: unknown): boolean {
+  const summary = (
+    job as {
+      summary_fields?: {
+        user_capabilities?: { start?: boolean };
+        job_template?: { prevent_relaunch?: boolean };
+      };
+    } | null
+  )?.summary_fields;
+  return Boolean(
+    summary?.user_capabilities?.start || summary?.job_template?.prevent_relaunch
+  );
+}
+
 // Overloaded so a caller that names the type in the call gets that model
 // rather than the union of all six, which shares only the base methods.
 export function getJobModel(type: 'ad_hoc_command'): typeof AdHocCommandsAPI;

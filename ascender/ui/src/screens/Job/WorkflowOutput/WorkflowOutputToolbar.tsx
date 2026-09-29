@@ -18,7 +18,7 @@ import {
 } from '@patternfly/react-icons';
 import StatusLabel from 'components/StatusLabel';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
-import { canOverwriteRelaunchVars } from 'util/jobs';
+import { canOfferCancel, canOverwriteRelaunchVars } from 'util/jobs';
 import JobCancelButton from 'components/JobCancelButton';
 import DeleteButton from 'components/DeleteButton';
 import {
@@ -158,7 +158,7 @@ function WorkflowOutputToolbar({
         </Tooltip>
 
         {['new', 'pending', 'waiting', 'running'].includes(job?.status ?? '') &&
-        job?.summary_fields?.user_capabilities?.start ? (
+        canOfferCancel(job) ? (
           <JobCancelButton
             job={job}
             errorTitle={t`Job Cancel Error`}

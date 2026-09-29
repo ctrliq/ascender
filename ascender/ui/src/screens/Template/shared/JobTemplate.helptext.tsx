@@ -33,6 +33,7 @@ function getHelpText() {
     enableWebhook: t`Enable webhook for this template.`,
     concurrentJobs: t`If enabled, simultaneous runs of this job template will be allowed.`,
     preventInstanceGroupFallback: t`If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`,
+    preventRelaunch: t`If enabled, jobs launched from this job template cannot be relaunched, by anyone, including from the API. The template itself can still be launched. Turning this off makes earlier jobs relaunchable again.`,
     enableFactStorage: t`If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.`,
     enabledOptions: (
       <>
@@ -51,6 +52,9 @@ function getHelpText() {
         <p>{t`Webhooks: Enable webhook for this template.`}</p>
         <p>
           {t`Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.`}
+        </p>
+        <p>
+          {t`Prevent Relaunch: If enabled, jobs launched from this job template cannot be relaunched.`}
         </p>
       </>
     ),

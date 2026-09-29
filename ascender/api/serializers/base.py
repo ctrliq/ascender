@@ -91,7 +91,7 @@ SUMMARIZABLE_FK_FIELDS = {
     'credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'cloud', 'kubernetes', 'credential_type_id'),
     'signature_validation_credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'credential_type_id'),
     'job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'started', 'elapsed', 'type', 'canceled_on'),
-    'job_template': DEFAULT_SUMMARY_FIELDS,
+    'job_template': DEFAULT_SUMMARY_FIELDS + ('prevent_relaunch',),
     'workflow_job_template': DEFAULT_SUMMARY_FIELDS,
     'workflow_job': DEFAULT_SUMMARY_FIELDS,
     'workflow_approval_template': DEFAULT_SUMMARY_FIELDS + ('timeout',),

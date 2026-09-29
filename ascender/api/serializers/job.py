@@ -220,6 +220,7 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
             'webhook_credential',
             'webhook_key',
             'prevent_instance_group_fallback',
+            'prevent_relaunch',
         )
         read_only_fields = ('*',)
 
