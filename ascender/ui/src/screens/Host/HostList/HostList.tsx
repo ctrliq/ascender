@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
-import { HostsAPI } from 'api';
+import { HostsAPI, InventoriesAPI } from 'api';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import AlertModal from 'components/AlertModal';
 import DataListToolbar from 'components/DataListToolbar';
 import ErrorDetail from 'components/ErrorDetail';
@@ -16,7 +17,7 @@ import PaginatedTable, {
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import useCachedRequest from 'hooks/useCachedRequest';
-import { useDeleteItems } from 'hooks/useRequest';
+import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import type { QSParams, QSParamValue } from 'util/qs';
 import { encodeQueryString, getQSConfig, parseQueryString } from 'util/qs';
@@ -122,6 +123,45 @@ function HostList() {
     clearSelected();
   };
 
+  /*
+   * An ad hoc command runs against one inventory, and this list is every
+   * inventory's hosts: the command is offered once the selection is from a
+   * single inventory, and the limit it runs with is the hosts selected.
+   */
+  const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
+  const selectedInventoryIds = [
+    ...new Set(selected.map((host) => host.inventory)),
+  ];
+  const adHocInventoryId =
+    selectedInventoryIds.length === 1 ? selectedInventoryIds[0] : null;
+
+  const {
+    result: { moduleOptions, isAdHocDisabled },
+    request: fetchAdHocOptions,
+  } = useRequest(
+    useCallback(async () => {
+      if (!adHocInventoryId) {
+        return { moduleOptions: [], isAdHocDisabled: true };
+      }
+      const { data } = await InventoriesAPI.readAdHocOptions(
+        adHocInventoryId as number
+      );
+      return {
+        moduleOptions: data.actions.GET?.module_name?.choices ?? [],
+        isAdHocDisabled: !data.actions.POST,
+      };
+    }, [adHocInventoryId]),
+    { moduleOptions: [], isAdHocDisabled: true }
+  );
+
+  // Only once a selection names an inventory: there is nothing to ask the api
+  // about until then, and the answer is the same as the value it starts with.
+  useEffect(() => {
+    if (adHocInventoryId) {
+      fetchAdHocOptions();
+    }
+  }, [adHocInventoryId, fetchAdHocOptions]);
+
   const handleSmartInventoryClick = () => {
     navigate(
       `/inventories/smart_inventory/add?host_filter=${encodeURIComponent(
@@ -138,7 +178,9 @@ function HostList() {
       <Card>
         <PaginatedTable
           contentError={contentError}
-          hasContentLoading={isLoading || isDeleteLoading}
+          hasContentLoading={
+            isLoading || isDeleteLoading || isAdHocLaunchLoading
+          }
           items={hosts}
           itemCount={count}
           pluralizedItemName={t`Hosts`}
@@ -181,8 +223,26 @@ function HostList() {
               onSelectAll={selectAll}
               qsConfig={QS_CONFIG}
               additionalControls={[
+                <RunSelectionMenu
+                  key="run"
+                  ouiaId="host-list-run-menu"
+                  items={selected}
+                  inventoryId={adHocInventoryId}
+                  moduleOptions={moduleOptions}
+                  onLaunchLoading={setIsAdHocLaunchLoading}
+                  /* Until the selection names an inventory there is nothing
+                     to ask, so the command shows and says what it wants. */
+                  canRunCommand={!adHocInventoryId || !isAdHocDisabled}
+                  spansInventories={selectedInventoryIds.length > 1}
+                />,
                 ...(canAdd
-                  ? [<ToolbarAddButton key="add" linkTo="/hosts/add" />]
+                  ? [
+                      <ToolbarAddButton
+                        key="add"
+                        linkTo="/hosts/add"
+                        tooltip={t`Add Host`}
+                      />,
+                    ]
                   : []),
                 <ToolbarDeleteButton
                   key="delete"
@@ -217,9 +277,6 @@ function HostList() {
               rowIndex={index}
             />
           )}
-          emptyStateControls={
-            canAdd ? <ToolbarAddButton key="add" linkTo="/hosts/add" /> : null
-          }
         />
       </Card>
       {Boolean(deletionError) && (

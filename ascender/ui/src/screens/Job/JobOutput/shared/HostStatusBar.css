@@ -14,4 +14,11 @@
   display: flex;
   height: 5px;
   width: 100%;
+  /* The card body this sits in is a flex column, so the bar is a flex item and
+     its height is the main size a flex item is free to shrink. A finished job
+     brings its whole output with it, the column runs short of room, and the
+     five pixel bar was squeezed down to one: the same job looked thinner on the
+     way back to it than it had while it ran. Nothing about this bar should give
+     way, so it does not. */
+  flex-shrink: 0;
 }

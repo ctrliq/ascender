@@ -64,6 +64,7 @@ function InventorySourcesList({
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Inventory Sources`}
       contentError={error}
       hasContentLoading={isLoading}
       itemCount={count}

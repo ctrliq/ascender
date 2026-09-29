@@ -10,6 +10,11 @@
   --pf-v6-c-title--m-md--FontWeight: 700;
 }
 
+/*
+ * No inline padding: the workflow's details sit under their heading in the
+ * same column as the approval's own details above them, rather than a
+ * step to the right of everything else on the card.
+ */
 .ascender-workflow-approval-detail__wf-detail-list {
-  padding: 0px var(--pf-v6-global--spacer--lg);
+  padding: 0;
 }

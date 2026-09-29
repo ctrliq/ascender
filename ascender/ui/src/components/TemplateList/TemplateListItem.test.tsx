@@ -106,7 +106,7 @@ describe('<TemplateListItem />', () => {
       />
     );
     expect(
-      screen.getByRole('button', { name: 'Launch template' })
+      screen.getByRole('button', { name: 'Launch Template' })
     ).toBeInTheDocument();
   });
 
@@ -131,7 +131,7 @@ describe('<TemplateListItem />', () => {
       />
     );
     expect(
-      screen.queryByRole('button', { name: 'Launch template' })
+      screen.queryByRole('button', { name: 'Launch Template' })
     ).not.toBeInTheDocument();
   });
 
@@ -289,6 +289,31 @@ describe('<TemplateListItem />', () => {
     expect(
       screen.getByText('Template 1').closest('td')!.querySelector('svg')
     ).not.toBeInTheDocument();
+  });
+
+  /*
+   * The API calls the type workflow_job_template, and the screen calls them
+   * workflow templates: the tab above the list, the add button and the type
+   * search all say so, and the column used to be the one place that did not.
+   */
+  test('should name a workflow a workflow template, as the rest of the screen does', () => {
+    renderItem(
+      <TemplateListItem
+        {...defaultProps}
+        isSelected={false}
+        template={
+          {
+            id: 1,
+            name: 'Template 1',
+            url: '/templates/workflow_job_template/1',
+            type: 'workflow_job_template',
+            summary_fields: { user_capabilities: { edit: false } },
+          } as unknown as JobTemplate
+        }
+      />
+    );
+    expect(screen.getByText('Workflow Template')).toBeInTheDocument();
+    expect(screen.queryByText('Workflow Job Template')).toBeNull();
   });
 
   test('clicking on template from templates list navigates properly', async () => {

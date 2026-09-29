@@ -36,10 +36,7 @@ function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>
-      <Route
-        path="/notification_templates/*"
-        element={<NotificationTemplates />}
-      />
+      <Route path="/notifications/*" element={<NotificationTemplates />} />
     </Routes>,
     {
       context: { router: { history } },
@@ -48,15 +45,15 @@ function renderAt(path: string) {
 }
 
 describe('<NotificationTemplates />', () => {
-  test('renders the list at /notification_templates', async () => {
-    renderAt('/notification_templates');
+  test('renders the list at /notifications', async () => {
+    renderAt('/notifications');
     expect(
       await screen.findByText('NotificationTemplateList')
     ).toBeInTheDocument();
   });
 
-  test('renders the add form at /notification_templates/add', async () => {
-    renderAt('/notification_templates/add');
+  test('renders the add form at /notifications/add', async () => {
+    renderAt('/notifications/add');
     expect(
       await screen.findByText('NotificationTemplateAdd')
     ).toBeInTheDocument();
@@ -65,8 +62,8 @@ describe('<NotificationTemplates />', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('renders the detail subtree at /notification_templates/:id', async () => {
-    renderAt('/notification_templates/42/details');
+  test('renders the detail subtree at /notifications/:id', async () => {
+    renderAt('/notifications/42/details');
     expect(
       await screen.findByText('NotificationTemplate detail')
     ).toBeInTheDocument();

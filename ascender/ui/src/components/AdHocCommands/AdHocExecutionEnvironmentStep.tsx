@@ -13,8 +13,9 @@ import Popover from '../Popover';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import OptionsList from '../OptionsList';
+import ADHOC_NAMESPACES from './namespaces';
 
-const QS_CONFIG = getQSConfig('execution_environments', {
+const QS_CONFIG = getQSConfig(ADHOC_NAMESPACES.executionEnvironment, {
   page: 1,
   page_size: 5,
   order_by: 'name',

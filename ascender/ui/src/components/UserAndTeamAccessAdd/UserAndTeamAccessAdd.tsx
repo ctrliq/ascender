@@ -85,7 +85,7 @@ function UserAndTeamAccessAdd({
     () => [
       {
         selectedResource: 'jobTemplate',
-        label: t`Job templates`,
+        label: t`Job Templates`,
         searchColumns: [
           {
             name: t`Name`,
@@ -93,7 +93,7 @@ function UserAndTeamAccessAdd({
             isDefault: true,
           },
           {
-            name: t`Playbook name`,
+            name: t`Playbook Name`,
             key: 'playbook__icontains',
           },
           {
@@ -117,16 +117,12 @@ function UserAndTeamAccessAdd({
       },
       {
         selectedResource: 'workflowJobTemplate',
-        label: t`Workflow job templates`,
+        label: t`Workflow Templates`,
         searchColumns: [
           {
             name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
-          },
-          {
-            name: t`Playbook name`,
-            key: 'playbook__icontains',
           },
           {
             name: t`Created By (Username)`,
@@ -157,18 +153,12 @@ function UserAndTeamAccessAdd({
             isDefault: true,
           },
           {
-            name: t`Type`,
-            key: 'or__scm_type',
-            options: [
-              [``, t`Manual`],
-              [`git`, t`Git`],
-              [`svn`, t`Subversion`],
-              [`archive`, t`Remote Archive`],
-            ],
+            name: t`Description`,
+            key: 'description__icontains',
           },
           {
-            name: t`Source Control URL`,
-            key: 'scm_url__icontains',
+            name: t`Credential Type`,
+            key: 'credential_type__search',
           },
           {
             name: t`Modified By (Username)`,
@@ -287,19 +277,13 @@ function UserAndTeamAccessAdd({
       {
         selectedResource: 'instanceGroup',
         label: t`Instance Groups`,
+        // Name only: an instance group records nobody as having created or
+        // changed it, and the api refuses a filter on either with a 400.
         searchColumns: [
           {
             name: t`Name`,
             key: 'name__icontains',
             isDefault: true,
-          },
-          {
-            name: t`Created By (Username)`,
-            key: 'created_by__username__icontains',
-          },
-          {
-            name: t`Modified By (Username)`,
-            key: 'modified_by__username__icontains',
           },
         ],
         sortColumns: [
@@ -316,31 +300,49 @@ function UserAndTeamAccessAdd({
     [t]
   );
 
-  const { request: handleWizardSave, error: saveError } = useRequest(
+  // A failure is handed to the caller from here rather than read back off the
+  // request's error on the next render: telling the parent from inside render
+  // set its state while React was still rendering this component.
+  const { request: handleWizardSave } = useRequest(
     useCallback(async () => {
-      const roleRequests: Promise<unknown>[] = [];
-      const resourceRolesTypes = resourcesSelected.flatMap((resource) =>
-        Object.values(
-          (resource.summary_fields?.object_roles ?? {}) as Record<
-            string,
-            SummaryFieldRef
-          >
-        )
-      );
+      try {
+        const roleRequests: Promise<unknown>[] = [];
+        const resourceRolesTypes = resourcesSelected.flatMap((resource) =>
+          Object.values(
+            (resource.summary_fields?.object_roles ?? {}) as Record<
+              string,
+              SummaryFieldRef
+            >
+          )
+        );
 
-      rolesSelected.map((role) =>
-        resourceRolesTypes.forEach((rolename) => {
-          if (rolename.name === role.name) {
-            roleRequests.push(
-              apiModel.associateRole(associationId, rolename.id)
-            );
-          }
-        })
-      );
+        rolesSelected.map((role) =>
+          resourceRolesTypes.forEach((rolename) => {
+            if (rolename.name === role.name) {
+              roleRequests.push(
+                apiModel.associateRole(associationId, rolename.id)
+              );
+            }
+          })
+        );
 
-      await Promise.all(roleRequests);
-      onFetchData();
-    }, [onFetchData, rolesSelected, apiModel, associationId, resourcesSelected])
+        await Promise.all(roleRequests);
+        onFetchData();
+      } catch (err) {
+        onError(err);
+        // One request failing does not stop the others, so some of the roles
+        // may well have been associated. The list is read again rather than
+        // left showing none of them, which is also what closes this wizard.
+        onFetchData();
+      }
+    }, [
+      onFetchData,
+      onError,
+      rolesSelected,
+      apiModel,
+      associationId,
+      resourcesSelected,
+    ])
   );
 
   // Object roles can be user only, so we remove them when
@@ -359,7 +361,7 @@ function UserAndTeamAccessAdd({
   const steps = [
     {
       id: 1,
-      name: t`Add resource type`,
+      name: t`Select a Resource Type`,
       component: (
         <div className="ascender-user-and-team-access-add__grid">
           {resourceAccessConfig.map((resource) => (
@@ -384,7 +386,7 @@ function UserAndTeamAccessAdd({
     },
     {
       id: 2,
-      name: t`Select items from list`,
+      name: t`Select Items from List`,
       component: selectedResourceType && (
         <SelectResourceStep
           searchColumns={selectedResourceType.searchColumns}
@@ -403,7 +405,7 @@ function UserAndTeamAccessAdd({
     },
     {
       id: 3,
-      name: t`Select roles to apply`,
+      name: t`Select Roles to Apply`,
       component: resourcesSelected?.length > 0 && (
         <SelectRoleStep
           onRolesClick={handleRoleSelect}
@@ -414,15 +416,11 @@ function UserAndTeamAccessAdd({
           selectedRoleRows={rolesSelected}
         />
       ),
-      nextButtonText: t`Save`,
+      nextButtonText: t`Associate`,
+      enableNext: rolesSelected.length > 0,
       canJumpTo: stepIdReached >= 3,
     },
   ];
-
-  if (saveError) {
-    onError(saveError);
-    onClose();
-  }
 
   return (
     <Wizard

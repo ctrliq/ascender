@@ -134,7 +134,7 @@ function ExecutionEnvironmentListItem({
             onCopyStart={handleCopyStart}
             onCopyFinish={handleCopyFinish}
             copyItem={copyExecutionEnvironment}
-            errorMessage={t`Failed to copy execution environment`}
+            errorMessage={t`Failed to copy execution environment.`}
           />
         </ActionItem>
       </ActionsTd>

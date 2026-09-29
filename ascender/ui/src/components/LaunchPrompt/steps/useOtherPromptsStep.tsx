@@ -91,7 +91,7 @@ export default function useOtherPromptsStep(
           key: 5,
           name: (
             <StepName hasErrors={hasError} id="other-prompts-step">
-              {t`Other prompts`}
+              {t`Other Prompts`}
             </StepName>
           ),
           component: (
@@ -156,7 +156,9 @@ function getInitialValues(
     initialValues.job_type = resource?.job_type || '';
   }
   if (launchConfig.ask_limit_on_launch) {
-    initialValues.limit = resource?.limit || null;
+    // Empty rather than null: the field is a text box, and React reads null
+    // as "this input is not controlled" and says so in the console.
+    initialValues.limit = resource?.limit || '';
   }
   if (launchConfig.ask_verbosity_on_launch) {
     initialValues.verbosity = resource?.verbosity || 0;

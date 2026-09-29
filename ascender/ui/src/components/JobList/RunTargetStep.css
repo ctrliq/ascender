@@ -1,0 +1,18 @@
+/* The kind sits above the list it picks, close to it: this is one thing
+   above another rather than two parts of the step. */
+.ascender-run-target__kind {
+  align-items: center;
+  margin-block-end: var(--pf-t--global--spacer--lg);
+}
+
+/* The toolbar opens with a padding of its own, written for a toolbar at the
+   top of a card. Here it lands under the row above and doubles the gap, so
+   the margin above carries it instead: the same gap the toolbar leaves below
+   itself, above and below the search row alike. */
+.ascender-run-target__kind + .pf-v6-c-toolbar {
+  padding-block-start: 0;
+}
+
+.ascender-run-target__error {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}

@@ -1,5 +1,5 @@
 import type { SummaryFieldRef, Team } from 'types/api';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import PaginatedTable, {
@@ -20,9 +20,11 @@ import useRequest, {
 } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { TeamsAPI, UsersAPI } from 'api';
-import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
+import { useConfig } from 'contexts/Config';
+import { getQSConfig, parseQueryString } from 'util/qs';
 
 import type { QSParams } from 'util/qs';
+import { membershipPickerParams } from '../shared/membership';
 import UserTeamListItem from './UserTeamListItem';
 
 const QS_CONFIG = getQSConfig('teams', {
@@ -36,20 +38,15 @@ function UserTeamList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const { id: userId } = useParams() as { id: string };
+  const { me, adminOrgCount } = useConfig();
 
   const {
-    result: {
-      teams,
-      count,
-      userOptions,
-      relatedSearchableKeys,
-      searchableKeys,
-    },
+    result: { teams, count, relatedSearchableKeys, searchableKeys },
     error: contentError,
     isLoading,
     request: fetchTeams,
   } = useCachedRequest(
-    ['user-team-list', location.search],
+    ['user-team-list', userId, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -57,16 +54,13 @@ function UserTeamList() {
           data: { results, count: teamCount },
         },
         actionsResponse,
-        usersResponse,
       ] = await Promise.all([
         UsersAPI.readTeams(userId, params),
         UsersAPI.readTeamsOptions(userId),
-        UsersAPI.readOptions(),
       ]);
       return {
         teams: results,
         count: teamCount,
-        userOptions: usersResponse.data.actions,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
@@ -76,7 +70,6 @@ function UserTeamList() {
     {
       teams: [],
       count: 0,
-      userOptions: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
     }
@@ -152,13 +145,34 @@ function UserTeamList() {
     associateError || disassociateError
   );
 
-  const canAdd =
-    userOptions && Object.prototype.hasOwnProperty.call(userOptions, 'POST');
+  /*
+   * Membership is the team's Member role, which the api lets a superuser, an
+   * admin of the team's organization or an admin of the team itself grant.
+   * Whether the viewer may create users, which the users endpoint's OPTIONS
+   * answers, is a different question. Whether the viewer runs a team is asked
+   * only when neither of the first two already settles it.
+   */
+  const isOrgLevel = Boolean(me?.is_superuser) || Boolean(adminOrgCount);
+  const { result: adminTeamCount, request: fetchAdminTeamCount } = useRequest(
+    useCallback(async () => {
+      const {
+        data: { count: teamsAdministered },
+      } = await TeamsAPI.read({ role_level: 'admin_role', page_size: 1 });
+      return teamsAdministered;
+    }, []),
+    0
+  );
+  useEffect(() => {
+    if (!isOrgLevel) {
+      fetchAdminTeamCount();
+    }
+  }, [isOrgLevel, fetchAdminTeamCount]);
+  const canAdd = isOrgLevel || adminTeamCount > 0;
 
   const fetchTeamsToAssociate = useCallback(
     (params: QSParams) =>
       TeamsAPI.read(
-        mergeParams(params, {
+        membershipPickerParams(params, {
           not__member_role__members__id: userId,
           not__admin_role__members__id: userId,
         })
@@ -179,6 +193,11 @@ function UserTeamList() {
         hasContentLoading={isLoading || isDisassociateLoading}
         itemCount={count}
         pluralizedItemName={t`Teams`}
+        emptyContentMessage={
+          canAdd
+            ? t`Associate the user with a team to list it here`
+            : t`Teams this user belongs to appear here`
+        }
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         headerRow={
@@ -209,9 +228,10 @@ function UserTeamList() {
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Team`}
                       key="associate"
                       onClick={() => setIsModalOpen(true)}
-                      defaultLabel={t`Associate`}
                     />,
                   ]
                 : []),
@@ -219,20 +239,14 @@ function UserTeamList() {
                 key="disassociate"
                 onDisassociate={handleDisassociate}
                 itemsToDisassociate={selected}
-                modalTitle={t`Disassociate related team(s)?`}
-                modalNote={t`This action will disassociate all roles for this user from the selected teams.`}
+                modalTitle={t`Disassociate the user from these teams?`}
+                modalNote={t`This removes all of the user's roles in the selected teams. The teams themselves are not deleted.`}
               />,
             ]}
-            emptyStateControls={
-              canAdd ? (
-                <ToolbarAddButton
-                  key="add"
-                  onClick={() => setIsModalOpen(true)}
-                />
-              ) : null
-            }
           />
         )}
+        // On the table, which hands it to the list header: the toolbar has
+        // no such prop, and given to it this was dropped.
         toolbarSearchColumns={[
           {
             name: t`Name`,
@@ -254,19 +268,19 @@ function UserTeamList() {
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Teams`}
+          title={t`Associate Teams`}
           optionsRequest={readTeamOptions}
         />
       )}
-      {error && (
+      {Boolean(error) && (
         <AlertModal
-          isOpen={error}
+          isOpen={Boolean(error)}
           onClose={dismissError}
           title={t`Error!`}
           variant="error"
         >
           {associateError
-            ? t`Failed to associate.`
+            ? t`Failed to associate one or more teams.`
             : t`Failed to disassociate one or more teams.`}
           <ErrorDetail error={error} />
         </AlertModal>

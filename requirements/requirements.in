@@ -21,7 +21,6 @@ django-guid>=3.6.1
 django-oauth-toolkit>=3.4.1
 django-polymorphic
 django-pgware
-django-radius
 django-solo
 drf-spectacular>=0.27.0
 django-split-settings
@@ -53,7 +52,6 @@ social-auth-app-django
 sqlparse>=0.6.0   # CVE-2026-59893 CVE-2026-54284 CVE-2026-71491 CVE-2026-59894; required by django
 requests>=2.33.0 # CVE-2026-25645
 slack-sdk
-tacacs-plus
 twisted[tls]>=26.4.0   # CVE-2026-42304
 urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
 uvicorn[standard]  # the ASGI server that serves the API and the websockets

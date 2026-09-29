@@ -155,7 +155,7 @@ describe('<InstanceDetail/>', () => {
     });
   });
 
-  test('buttons should be disabled', async () => {
+  test('offers the health check to a superuser only, as the list does', async () => {
     vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_system_auditor: true },
     }));
@@ -168,7 +168,7 @@ describe('<InstanceDetail/>', () => {
     const healthCheckButton = container.querySelector(
       '[data-ouia-component-id="health-check-button"]'
     );
-    expect(healthCheckButton).toBeDisabled();
+    expect(healthCheckButton).not.toBeInTheDocument();
   });
 
   test('should display instance toggle', async () => {
@@ -215,6 +215,51 @@ describe('<InstanceDetail/>', () => {
 
     expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1);
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to run a health check.')
+    ).toBeInTheDocument();
     expect(screen.getByText('Details', { exact: false })).toBeInTheDocument();
+  });
+
+  // Managed only stops a node being deleted; the api runs a health check on
+  // any execution node for a superuser.
+  test('offers a superuser the health check on a managed node', async () => {
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+      me: { is_superuser: true },
+    }));
+    const { data } = await InstancesAPI.readDetail(1);
+    vi.mocked(InstancesAPI.readDetail).mockResolvedValue({
+      data: { ...data, managed: true },
+    } as unknown as ResponseOf<typeof InstancesAPI.readDetail>);
+    renderWithContexts(<InstanceDetail isK8s setBreadcrumb={() => {}} />);
+    await screen.findByText('awx_1');
+
+    expect(
+      screen.getByRole('button', { name: 'Run Health Check' })
+    ).toBeEnabled();
+  });
+
+  test('orders the actions Edit, Health Check, toggle, then Delete', async () => {
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+      me: { is_superuser: true },
+    }));
+    renderWithContexts(<InstanceDetail isK8s setBreadcrumb={() => {}} />);
+    await screen.findByText('awx_1');
+
+    const edit = screen.getByRole('link', { name: 'Edit' });
+    const healthCheck = screen.getByRole('button', {
+      name: 'Run Health Check',
+    });
+    const toggle = screen.getByRole('switch');
+    const remove = screen.getByRole('button', { name: 'Delete' });
+    // Document order of the four, read off every control in the card.
+    const controls = [
+      ...document.querySelectorAll('a, button, input[role="switch"]'),
+    ];
+    const order = [edit, healthCheck, toggle, remove].map((el) =>
+      controls.indexOf(el)
+    );
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    expect(order.every((index) => index >= 0)).toBe(true);
   });
 });

@@ -19,6 +19,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import DatalistToolbar from 'components/DataListToolbar';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import ResourceTabs from 'components/ResourceTabs';
 import CredentialTypeListItem from './CredentialTypeListItem';
 
 const QS_CONFIG = getQSConfig('credential-type', {
@@ -107,12 +108,26 @@ function CredentialTypeList() {
     <>
       <PageSection hasBodyWrapper={false}>
         <Card>
+          {/* Credential types are a variant of the same object, so they are a
+              tab here rather than a second item in the rail. */}
+          <ResourceTabs
+            aria-label={t`Credential tabs`}
+            ouiaId="credential-tabs"
+            tabs={[
+              { label: t`Credentials`, path: '/credentials' },
+              { label: t`Credential Types`, path: '/credential_types' },
+            ]}
+          />
           <PaginatedTable
             contentError={contentError}
             hasContentLoading={isLoading || deleteLoading}
             items={credentialTypes}
             itemCount={credentialTypesCount}
             pluralizedItemName={t`Credential Types`}
+            // The API lists only custom types here, so an empty list still
+            // leaves every built-in type available.
+            emptyContentTitle={t`No Custom Credential Types Found`}
+            emptyContentMessage={t`Built-in credential types are not listed here; add a custom one to see it`}
             qsConfig={QS_CONFIG}
             clearSelected={clearSelected}
             toolbarSearchColumns={[
@@ -146,6 +161,7 @@ function CredentialTypeList() {
                   ...(canAdd
                     ? [
                         <ToolbarAddButton
+                          tooltip={t`Add Credential Type`}
                           key="add"
                           linkTo="/credential_types/add"
                         />,
@@ -157,11 +173,15 @@ function CredentialTypeList() {
                     itemsToDelete={selected}
                     pluralizedItemName={t`Credential Types`}
                     deleteDetailsRequests={deleteDetailsRequests}
+                    /* Every delete is sent, and the api refuses the ones in
+                       use, so those fail and are reported as failed while
+                       the rest go. The message says so rather than promising
+                       the ones in use are quietly skipped. */
                     deleteMessage={
                       <Plural
                         value={selected.length}
                         one="This credential type is currently being used by some credentials and cannot be deleted."
-                        other="Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?"
+                        other="Credential types that are being used by credentials cannot be deleted. Deleting any of these that are in use will fail, and the rest will be deleted."
                       />
                     }
                   />,
@@ -187,19 +207,14 @@ function CredentialTypeList() {
                 rowIndex={index}
               />
             )}
-            emptyStateControls={
-              canAdd && (
-                <ToolbarAddButton key="add" linkTo="/credential_types/add" />
-              )
-            }
           />
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={t`Deletion error`}
+        aria-label={t`Deletion Error`}
         isOpen={Boolean(deletionError)}
         onClose={clearDeletionError}
-        title={t`Error`}
+        title={t`Error!`}
         variant="error"
       >
         {t`Failed to delete one or more credential types.`}

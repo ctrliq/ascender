@@ -2,7 +2,7 @@ import type { AnyJob, SummaryFields } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { JobsAPI } from 'api';
+import { JobsAPI, ProjectUpdatesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
@@ -76,8 +76,8 @@ describe('<JobDetail />', () => {
     assertDetail('Started', '8/8/2019, 7:24:18 PM');
     assertDetail('Finished', '8/8/2019, 7:24:50 PM');
     assertDetail('Job Template', mockJobData.summary_fields.job_template?.name);
-    assertDetail('Source Workflow Job', '1234 - Test Source Workflow');
-    assertDetail('Job Type', 'Playbook Run');
+    assertDetail('Source Workflow', '1234 - Test Source Workflow');
+    assertDetail('Job Type', 'Job');
     assertDetail(
       'Launched By',
       mockJobData.summary_fields.created_by?.username
@@ -178,7 +178,7 @@ describe('<JobDetail />', () => {
     );
     assertDetail('Module Name', 'command');
     assertDetail('Module Arguments', 'echo hello_world');
-    assertDetail('Job Type', 'Run Command');
+    assertDetail('Job Type', 'Command');
     expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
@@ -300,6 +300,23 @@ describe('<JobDetail />', () => {
     ).toBeInTheDocument();
   });
 
+  test('names the kind of run a refused delete was for', async () => {
+    vi.mocked(ProjectUpdatesAPI.destroy).mockRejectedValue(
+      new Error('delete failed')
+    );
+    const { user } = renderWithContexts(
+      <JobDetail job={{ ...mockJobData, type: 'project_update' }} />
+    );
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+    const dialog = await screen.findByRole('dialog', {
+      name: /Project Sync Delete Error/,
+    });
+    expect(dialog).toHaveTextContent('Failed to delete project sync.');
+  });
+
   test('should display Playbook Check detail', () => {
     renderWithContexts(
       <JobDetail
@@ -314,7 +331,7 @@ describe('<JobDetail />', () => {
 
   test('should not show cancel job button, not super user', () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+      initialEntries: ['/system/edit'],
     });
 
     renderWithContexts(
@@ -323,6 +340,10 @@ describe('<JobDetail />', () => {
           ...mockJobData,
           status: 'pending',
           type: 'system_job',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            user_capabilities: { delete: true, start: false, cancel: false },
+          },
         }}
       />,
       {
@@ -333,14 +354,47 @@ describe('<JobDetail />', () => {
       }
     );
     expect(
-      screen.queryByRole('button', { name: 'Cancel Demo Job Template' })
+      screen.queryByRole('button', { name: 'Cancel Cleanup Job' })
     ).not.toBeInTheDocument();
     expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
+  test('should name a project sync by what started it and label its credential', () => {
+    renderWithContexts(
+      <JobDetail
+        job={
+          {
+            ...mockJobData,
+            type: 'project_update',
+            launch_type: 'sync',
+            launched_by: { id: 6, name: 'Sync project', type: 'project' },
+            summary_fields: {
+              ...mockJobData.summary_fields,
+              created_by: undefined,
+              credential: {
+                id: 9,
+                name: 'SCM cred',
+                kind: 'scm',
+                cloud: false,
+              },
+            },
+          } as unknown as AnyJob
+        }
+      />
+    );
+    expect(screen.getByText('Source Control Credential')).toBeInTheDocument();
+    expect(screen.queryByText('Machine Credential')).not.toBeInTheDocument();
+    const launchedBy = detailValue('Launched By');
+    expect(
+      within(launchedBy as HTMLElement).getByRole('link', {
+        name: 'Sync project',
+      })
+    ).toHaveAttribute('href', '/projects/6/details');
+  });
+
   test('should not show cancel job button, job completed', () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+      initialEntries: ['/system/edit'],
     });
 
     renderWithContexts(
@@ -359,13 +413,13 @@ describe('<JobDetail />', () => {
       }
     );
     expect(
-      screen.queryByRole('button', { name: 'Cancel Demo Job Template' })
+      screen.queryByRole('button', { name: 'Cancel Project Sync' })
     ).not.toBeInTheDocument();
   });
 
   test('should show cancel button, pending, super user', () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+      initialEntries: ['/system/edit'],
     });
 
     renderWithContexts(
@@ -374,6 +428,10 @@ describe('<JobDetail />', () => {
           ...mockJobData,
           status: 'pending',
           type: 'system_job',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            user_capabilities: { delete: true, start: false, cancel: true },
+          },
         }}
       />,
       {
@@ -384,13 +442,13 @@ describe('<JobDetail />', () => {
       }
     );
     expect(
-      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+      screen.getByRole('button', { name: 'Cancel Cleanup Job' })
     ).toBeInTheDocument();
   });
 
   test('should show cancel button, pending, super project update, not super user', () => {
     const history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+      initialEntries: ['/system/edit'],
     });
 
     renderWithContexts(
@@ -399,6 +457,10 @@ describe('<JobDetail />', () => {
           ...mockJobData,
           status: 'pending',
           type: 'project_update',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            user_capabilities: { delete: true, start: true, cancel: true },
+          },
         }}
       />,
       {
@@ -408,9 +470,48 @@ describe('<JobDetail />', () => {
         },
       }
     );
+    // The button reads a plain Cancel beside Relaunch and Delete, while its
+    // name and tooltip keep the kind of run.
     expect(
-      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+      screen.getByRole('button', { name: 'Cancel Project Sync' })
+    ).toHaveTextContent(/^Cancel$/);
+  });
+
+  test('hides cancel from a user the api would refuse, even one who may start it', () => {
+    renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          status: 'running',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            user_capabilities: { delete: true, start: true, cancel: false },
+          },
+        }}
+      />
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Cancel Job' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers both Cancel and Delete on a new run, as the api does', () => {
+    renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          status: 'new',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            user_capabilities: { delete: true, start: true, cancel: true },
+          },
+        }}
+      />
+    );
+    expect(
+      screen.getByRole('button', { name: 'Cancel Job' })
     ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
   test('hides relaunch but keeps cancel when the template prevents relaunch', () => {
@@ -425,13 +526,15 @@ describe('<JobDetail />', () => {
               ...mockJobData.summary_fields.job_template,
               prevent_relaunch: true,
             },
-            user_capabilities: { start: false, delete: false },
+            // Relaunch prevention takes start away, and the api still
+            // reports whether this user may cancel the run.
+            user_capabilities: { start: false, delete: false, cancel: true },
           } as SummaryFields,
         }}
       />
     );
     expect(
-      screen.getByRole('button', { name: 'Cancel Demo Job Template' })
+      screen.getByRole('button', { name: 'Cancel Job' })
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Relaunch' })
@@ -543,9 +646,47 @@ describe('<JobDetail />', () => {
     assertDetail('Started', '7/6/2021, 7:40:17 PM');
     assertDetail('Finished', '7/6/2021, 7:40:42 PM');
     assertDetail('Job Template', 'Sliced Job Template');
-    assertDetail('Job Type', 'Workflow Job');
+    assertDetail('Job Type', 'Workflow');
     assertDetail('Inventory', 'Demo Inventory');
     assertDetail('Job Slice Parent', 'True');
+  });
+
+  test('offers the relaunch-from-failed menu for a failed workflow', async () => {
+    const { user } = renderWithContexts(
+      <JobDetail
+        job={
+          {
+            ...mockJobData,
+            type: 'workflow_job',
+            status: 'failed',
+          } as AnyJob
+        }
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'relaunch workflow' }));
+    expect(
+      await screen.findByRole('menuitem', { name: 'Relaunch from failed node' })
+    ).toBeInTheDocument();
+  });
+
+  test('keeps the plain Relaunch for a workflow that succeeded', () => {
+    renderWithContexts(
+      <JobDetail
+        job={
+          {
+            ...mockJobData,
+            type: 'workflow_job',
+            status: 'successful',
+          } as AnyJob
+        }
+      />
+    );
+    expect(
+      screen.queryByRole('button', { name: 'relaunch workflow' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Relaunch' })
+    ).toBeInTheDocument();
   });
 
   test('should not load Source', () => {
@@ -609,5 +750,34 @@ describe('<JobDetail />', () => {
       />
     );
     expect(screen.queryByText('Skip Tags')).not.toBeInTheDocument();
+  });
+
+  test('should explain Artifacts the way it explains Variables', async () => {
+    const { user } = renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          // The generated type calls artifacts a string, but the API sends the
+          // object set_stats produced and the detail JSON.stringify()s it, so
+          // the fixture is the shape the screen actually receives.
+          artifacts: { deploy_tag: 'v1.2.3' } as unknown as string,
+        }}
+      />
+    );
+
+    // Popover renders nothing without content, so the button existing in the
+    // Artifacts label row is the whole of the change under test
+    const label = document.querySelector(
+      '[data-cy="job-detail-artifacts-label"]'
+    ) as HTMLElement;
+    expect(label).not.toBeNull();
+    const help = within(label).getByRole('button', {
+      name: 'More information',
+    });
+
+    await user.click(help);
+    expect(
+      await screen.findByText(/saved with the set_stats module/)
+    ).toBeInTheDocument();
   });
 });

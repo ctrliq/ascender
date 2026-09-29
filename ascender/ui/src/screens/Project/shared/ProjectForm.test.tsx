@@ -1,4 +1,4 @@
-import type { Project } from 'types/api';
+import type { OptionsField, Project } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -9,7 +9,7 @@ import ProjectForm from './ProjectForm';
 
 vi.mock('../../../api');
 
-describe('<ProjectForm />', () => {
+describe('<ProjectForm options={mockFormOptions} />', () => {
   const mockData = {
     name: 'foo',
     description: 'bar',
@@ -86,6 +86,17 @@ describe('<ProjectForm />', () => {
     },
   };
 
+  /*
+   * What the screen reads and hands the form. The api mocks below stay so the
+   * cases can assert the form does not read any of it for itself.
+   */
+  const mockFormOptions = {
+    scmCredentialTypeId: 4,
+    cryptographyCredentialTypeId: 6,
+    scmTypeChoices: projectOptionsResolve.data.actions.GET.scm_type
+      .choices as OptionsField['choices'],
+  };
+
   beforeEach(() => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
@@ -111,7 +122,11 @@ describe('<ProjectForm />', () => {
 
   test('new form displays primary form fields', async () => {
     renderWithContexts(
-      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
+      <ProjectForm
+        options={mockFormOptions}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
+      />
     );
     expect(await screen.findByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
@@ -123,7 +138,11 @@ describe('<ProjectForm />', () => {
 
   test('should display scm subform when scm type select has a value', async () => {
     const { user } = renderWithContexts(
-      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
+      <ProjectForm
+        options={mockFormOptions}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
+      />
     );
     await screen.findByText('Source Control Type');
 
@@ -150,6 +169,7 @@ describe('<ProjectForm />', () => {
     // organization lookup prefilled from summary_fields.
     renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
         project={{ ...mockData } as unknown as Partial<Project>}
@@ -166,6 +186,7 @@ describe('<ProjectForm />', () => {
   test('git project with a webhook service mounts with the webhook subform open', async () => {
     renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
         project={
@@ -193,6 +214,7 @@ describe('<ProjectForm />', () => {
   test('checking Enable Webhook reveals the webhook subform', async () => {
     const { user } = renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
         project={{ ...mockData } as unknown as Partial<Project>}
@@ -218,6 +240,7 @@ describe('<ProjectForm />', () => {
     };
     renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
         project={{ scm_type: '', local_path: '/_foo__bar' }}
@@ -235,6 +258,7 @@ describe('<ProjectForm />', () => {
     };
     const { container } = renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
         project={{ scm_type: '', local_path: '' }}
@@ -255,6 +279,7 @@ describe('<ProjectForm />', () => {
     const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         project={mockData as unknown as Partial<Project>}
         handleSubmit={handleSubmit}
         handleCancel={vi.fn()}
@@ -271,6 +296,7 @@ describe('<ProjectForm />', () => {
     const handleCancel = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
+        options={mockFormOptions}
         project={mockData as unknown as Partial<Project>}
         handleSubmit={vi.fn()}
         handleCancel={handleCancel}
@@ -281,17 +307,5 @@ describe('<ProjectForm />', () => {
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(handleCancel).toHaveBeenCalled();
-  });
-
-  test('should display ContentError on throw', async () => {
-    vi.mocked(CredentialTypesAPI.read).mockImplementationOnce(() =>
-      Promise.reject(new Error())
-    );
-    renderWithContexts(
-      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
-    );
-    expect(
-      await screen.findByText('Something went wrong...')
-    ).toBeInTheDocument();
   });
 });

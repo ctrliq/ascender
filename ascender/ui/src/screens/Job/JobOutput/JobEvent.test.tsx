@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobEvent from './JobEvent';
@@ -56,6 +59,15 @@ const mockOnPlayStartLineTextHtml = [
 const lineTextNodes = (container: HTMLElement) =>
   container.querySelectorAll('[type="job_event_line_text"]');
 
+const lineTextCss = fs.readFileSync(
+  path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    'shared',
+    'JobEventLineText.css'
+  ),
+  'utf8'
+);
+
 describe('<JobEvent />', () => {
   test('playbook event timestamps are rendered', () => {
     const { container: c1 } = renderWithContexts(
@@ -77,6 +89,21 @@ describe('<JobEvent />', () => {
       />
     );
     expect(c2.innerHTML).toContain('08:01:02');
+  });
+
+  test('numbers its lines from one, although the api counts from zero', () => {
+    const { container } = renderWithContexts(
+      <JobEvent
+        onJobEventClick={() => {}}
+        lineTextHtml={mockOnPlayStartLineTextHtml}
+        event={mockOnPlayStartEvent}
+        measure={vi.fn()}
+      />
+    );
+    const numbers = Array.from(lineTextNodes(container), (node) =>
+      node.previousElementSibling?.textContent?.trim()
+    );
+    expect(numbers).toEqual(['1', '2']);
   });
 
   test('ansi stdout colors are rendered as html', () => {
@@ -118,12 +145,13 @@ describe('<JobEvent />', () => {
       window.getSelection = originalGetSelection;
     });
 
-    // JobEventLine sets onClick only when isClickable; the clickable element is
-    // the line wrapper that contains the line-text node.
+    // The text is what opens the event, rather than the row it sits in: the row
+    // runs the width of the output, so clicking it meant clicking the empty
+    // space after a line, and the line number, counted as clicking the line.
     const clickableLine = (container: HTMLElement) =>
-      (lineTextNodes(container)[0]?.closest('[class]')?.parentElement ||
-        container.querySelector('[type="job_event_line_text"]')
-          ?.parentElement) as HTMLElement;
+      lineTextNodes(container)[0] as HTMLElement;
+    const rowAround = (container: HTMLElement) =>
+      (lineTextNodes(container)[0] as HTMLElement).parentElement as HTMLElement;
 
     test('click fires onJobEventClick when no text is selected', async () => {
       window.getSelection = vi.fn().mockReturnValue({
@@ -141,6 +169,30 @@ describe('<JobEvent />', () => {
       );
       await user.click(clickableLine(container));
       expect(onJobEventClick).toHaveBeenCalledTimes(1);
+    });
+
+    /*
+     * The row is as wide as the output, so anything on it that is not the text
+     * is empty space or the line number. Neither opens the event.
+     */
+    test('the row around the text does not open the event', async () => {
+      window.getSelection = vi.fn().mockReturnValue({
+        toString: () => '',
+      });
+      const onJobEventClick = vi.fn();
+      const { container, user } = renderWithContexts(
+        <JobEvent
+          lineTextHtml={mockAnsiLineTextHtml}
+          event={mockRunnerOnOkEvent}
+          isClickable
+          onJobEventClick={onJobEventClick}
+          measure={vi.fn()}
+        />
+      );
+
+      await user.click(rowAround(container));
+
+      expect(onJobEventClick).not.toHaveBeenCalled();
     });
 
     test('click is suppressed when text is selected', async () => {
@@ -180,5 +232,27 @@ describe('<JobEvent />', () => {
       line.click();
       expect(onJobEventClick).not.toHaveBeenCalled();
     });
+  });
+
+  /*
+   * The pointer is asked for outright rather than on hover. cursor is
+   * inherited, so with a hover state not yet applied the text took auto from
+   * the row, which over text is the I beam: the browser picks the cursor for a
+   * move from the style as it stands and applies hover after, so crossing into
+   * a line drew a frame of I beam first. jsdom paints no cursor, so what the
+   * stylesheet says is what there is to hold on to here.
+   */
+  test('asks for the pointer without waiting to be hovered', () => {
+    const rule = lineTextCss
+      .split('}')
+      .find((block) =>
+        block.includes('.ascender-job-event-line-text--clickable')
+      );
+
+    expect(rule).toBeDefined();
+    expect(rule).toContain('cursor: pointer');
+    expect(
+      lineTextCss.includes('.ascender-job-event-line-text--clickable:hover')
+    ).toBe(false);
   });
 });

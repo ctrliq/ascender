@@ -3,7 +3,8 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
-import { InventoriesAPI } from 'api';
+import { HostsAPI, InventoriesAPI, UnifiedJobsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../shared/data.host.json';
 import AdvancedInventoryHost from './AdvancedInventoryHost';
@@ -50,10 +51,57 @@ describe('<AdvancedInventoryHost />', () => {
   test('should render expected tabs', async () => {
     renderAt('/inventories/smart_inventory/1234/hosts/2/details');
     await screen.findByRole('tab', { name: 'Details' });
-    const expectedTabs = ['Back to Hosts', 'Details'];
-    expectedTabs.forEach((name) =>
-      expect(screen.getByRole('tab', { name })).toBeInTheDocument()
+    expect(
+      screen.getAllByRole('tab').map((tab) => tab.textContent?.trim())
+    ).toEqual(['Back to Hosts', 'Details', 'Facts', 'Runs']);
+  });
+
+  test('facts tab reads the host facts', async () => {
+    vi.mocked(HostsAPI.readFacts).mockResolvedValue({
+      data: { ansible_hostname: 'host-a' },
+    } as unknown as ResponseOf<typeof HostsAPI.readFacts>);
+    renderAt('/inventories/smart_inventory/1234/hosts/2/facts');
+    await waitFor(() =>
+      expect(HostsAPI.readFacts).toHaveBeenCalledWith(mockHost.id)
     );
+  });
+
+  test('runs tab lists the host runs, with a run on this host', async () => {
+    vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
+    vi.mocked(UnifiedJobsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.readOptions>);
+    renderAt('/inventories/smart_inventory/1234/hosts/2/runs');
+    await waitFor(() =>
+      expect(UnifiedJobsAPI.read).toHaveBeenCalledWith(
+        expect.objectContaining({ job__hosts: mockHost.id })
+      )
+    );
+    expect(
+      await screen.findByRole('button', { name: 'Run' })
+    ).toBeInTheDocument();
+  });
+
+  test('sends the old jobs address on to the runs tab', async () => {
+    vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
+    vi.mocked(UnifiedJobsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.readOptions>);
+    const { history } = renderAt(
+      '/inventories/smart_inventory/1234/hosts/2/jobs'
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/inventories/smart_inventory/1234/hosts/2/runs'
+      )
+    );
+    expect(
+      screen.queryByText(/view smart inventory host details/i)
+    ).not.toBeInTheDocument();
   });
 
   test('should show content error when api throws error on initial render', async () => {
@@ -71,5 +119,14 @@ describe('<AdvancedInventoryHost />', () => {
         screen.getByText(/view smart inventory host details/i)
       ).toBeInTheDocument()
     );
+  });
+
+  // Each kind of inventory this screen serves is named for what it is.
+  test.each([
+    ['constructed_inventory', 'View Constructed Inventory Host Details'],
+    ['federated_inventory', 'View Federated Inventory Host Details'],
+  ])('names a %s on its not found link', async (inventoryType, text) => {
+    renderAt(`/inventories/${inventoryType}/1234/hosts/2/foobar`);
+    expect(await screen.findByText(text)).toBeInTheDocument();
   });
 });

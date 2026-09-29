@@ -6,6 +6,7 @@ import {
   ProjectsAPI,
   JobTemplatesAPI,
   InventorySourcesAPI,
+  ProjectUpdatesAPI,
   WorkflowJobTemplateNodesAPI,
 } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
@@ -100,13 +101,17 @@ const mockProject = {
 
 function renderDetail(
   project: Project = mockProject,
-  entry = '/projects/1/details'
+  entry = '/projects/1/details',
+  config?: Record<string, unknown>
 ) {
   const history = createMemoryHistory({ initialEntries: [entry] });
   return renderWithContexts(<ProjectDetail project={project} />, {
-    context: { router: { history } },
+    context: { router: { history }, ...(config ? { config } : {}) },
   });
 }
+
+// The harness signs in a superuser, whom the api always lets cancel.
+const notSuperuser = { me: { id: 2, is_superuser: false } };
 
 describe('<ProjectDetail />', () => {
   beforeEach(() => {
@@ -139,7 +144,7 @@ describe('<ProjectDetail />', () => {
     assertDetail('Organization', mockProject.summary_fields.organization.name);
     assertDetail('Source Control Type', 'Git');
     assertDetail('Source Control URL', mockProject.scm_url);
-    assertDetail('Source Control Branch', mockProject.scm_branch);
+    assertDetail('Source Control Branch/Tag/Commit', mockProject.scm_branch);
     assertDetail('Source Control Refspec', mockProject.scm_refspec);
     assertDetail(
       'Source Control Credential',
@@ -162,18 +167,26 @@ describe('<ProjectDetail />', () => {
     expect(screen.getByText('Created')).toBeInTheDocument();
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
 
-    const optionsTerm = screen.getByText('Enabled Options');
+    // Each option is named as its checkbox on the form is.
+    const optionsTerm = screen.getByText('Options');
     const optionsList = within(
       optionsTerm.nextElementSibling as unknown as HTMLElement
     ).getAllByRole('listitem');
-    expect(optionsList).toHaveLength(5);
-    [
-      'Discard local changes before syncing',
-      'Delete the project before syncing',
-      'Track submodules latest commit on branch',
-      'Update revision on job launch',
-      'Allow branch override',
-    ].forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+    expect(optionsList.map((item) => item.textContent?.trim())).toEqual([
+      'Clean',
+      'Delete',
+      'Track Submodules',
+      'Update Revision on Launch',
+      'Allow Branch Override',
+    ]);
+  });
+
+  test('names the branch Revision # for a Subversion project, as its form does', () => {
+    renderDetail({ ...mockProject, scm_type: 'svn' });
+    assertDetail('Revision #', mockProject.scm_branch);
+    expect(
+      screen.queryByText('Source Control Branch/Tag/Commit')
+    ).not.toBeInTheDocument();
   });
 
   test('should hide options label when all project options return false', () => {
@@ -188,7 +201,7 @@ describe('<ProjectDetail />', () => {
       modified: '',
     };
     renderDetail({ ...mockProject, ...mockOptions });
-    expect(screen.queryByText('Enabled Options')).not.toBeInTheDocument();
+    expect(screen.queryByText('Options')).not.toBeInTheDocument();
   });
 
   test('delete confirmation fires the 3 related-resource requests', async () => {
@@ -223,7 +236,7 @@ describe('<ProjectDetail />', () => {
   test('should show edit and sync button for users with edit permission', async () => {
     renderDetail();
     // the Sync button shows its "Sync" label only on the details view
-    const editButton = await screen.findByRole('link', { name: 'edit' });
+    const editButton = await screen.findByRole('link', { name: 'Edit' });
     const syncButton = await screen.findByRole('button', {
       name: 'Sync Project',
     });
@@ -243,16 +256,84 @@ describe('<ProjectDetail />', () => {
     });
     await screen.findByText('Name');
     expect(
-      screen.queryByRole('link', { name: 'edit' })
+      screen.queryByRole('link', { name: 'Edit' })
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Sync Project' })
     ).not.toBeInTheDocument();
   });
 
+  // A new sync has not reached a node yet, and the api still lets it go.
+  test('should offer Cancel Sync for a sync not yet started', async () => {
+    renderDetail({
+      ...mockProject,
+      summary_fields: {
+        ...mockProject.summary_fields,
+        current_job: { id: 7, status: 'new' },
+      },
+    } as unknown as Project);
+    expect(
+      await screen.findByRole('button', { name: 'Cancel Project Sync' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Sync Project' })
+    ).not.toBeInTheDocument();
+    expect(ProjectUpdatesAPI.readDetail).not.toHaveBeenCalled();
+  });
+
+  /*
+   * The api lets whoever started a sync cancel it, whatever their role on
+   * the project, so that answer is read from the running update itself.
+   */
+  test('should offer Cancel Sync to the user who started it', async () => {
+    vi.mocked(ProjectUpdatesAPI.readDetail).mockResolvedValue({
+      data: { summary_fields: { user_capabilities: { cancel: true } } },
+    } as unknown as ResponseOf<typeof ProjectUpdatesAPI.readDetail>);
+    renderDetail(
+      {
+        ...mockProject,
+        summary_fields: {
+          ...mockProject.summary_fields,
+          user_capabilities: { start: false, edit: false },
+          current_job: { id: 7, status: 'running' },
+        },
+      } as unknown as Project,
+      undefined,
+      notSuperuser
+    );
+    expect(
+      await screen.findByRole('button', { name: 'Cancel Project Sync' })
+    ).toBeInTheDocument();
+    expect(ProjectUpdatesAPI.readDetail).toHaveBeenCalledWith(7);
+  });
+
+  test('should not offer Cancel Sync to a user the api would refuse', async () => {
+    vi.mocked(ProjectUpdatesAPI.readDetail).mockResolvedValue({
+      data: { summary_fields: { user_capabilities: { cancel: false } } },
+    } as unknown as ResponseOf<typeof ProjectUpdatesAPI.readDetail>);
+    renderDetail(
+      {
+        ...mockProject,
+        summary_fields: {
+          ...mockProject.summary_fields,
+          user_capabilities: { start: true, edit: false },
+          current_job: { id: 7, status: 'running' },
+        },
+      } as unknown as Project,
+      undefined,
+      notSuperuser
+    );
+    await waitFor(() =>
+      expect(ProjectUpdatesAPI.readDetail).toHaveBeenCalledWith(7)
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Cancel Project Sync' })
+    ).not.toBeInTheDocument();
+  });
+
   test('edit button should navigate to project edit', async () => {
     const { history, user } = renderDetail();
-    await user.click(screen.getByRole('link', { name: 'edit' }));
+    await user.click(screen.getByRole('link', { name: 'Edit' }));
     expect(history.location.pathname).toEqual('/projects/1/edit');
   });
 

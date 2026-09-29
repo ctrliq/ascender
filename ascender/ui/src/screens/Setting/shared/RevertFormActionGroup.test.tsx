@@ -14,7 +14,7 @@ describe('RevertFormActionGroup', () => {
     );
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
   });
@@ -32,7 +32,7 @@ describe('RevertFormActionGroup', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(onSubmit).toHaveBeenCalledTimes(1);

@@ -29,7 +29,7 @@ function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>
-      <Route path="/workflow_approvals/*" element={<WorkflowApprovals />} />
+      <Route path="/approvals/*" element={<WorkflowApprovals />} />
     </Routes>,
     {
       context: { router: { history } },
@@ -38,13 +38,13 @@ function renderAt(path: string) {
 }
 
 describe('<WorkflowApprovals />', () => {
-  test('renders the list at /workflow_approvals', async () => {
-    renderAt('/workflow_approvals');
+  test('renders the list at /approvals', async () => {
+    renderAt('/approvals');
     expect(await screen.findByText('WorkflowApprovalList')).toBeInTheDocument();
   });
 
-  test('renders the detail subtree at /workflow_approvals/:id', async () => {
-    renderAt('/workflow_approvals/1/details');
+  test('renders the detail subtree at /approvals/:id', async () => {
+    renderAt('/approvals/1/details');
     expect(
       await screen.findByText('WorkflowApproval detail')
     ).toBeInTheDocument();

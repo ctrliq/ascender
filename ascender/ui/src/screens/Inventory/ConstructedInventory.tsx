@@ -17,7 +17,6 @@ import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import JobList from 'components/JobList';
 import RelatedTemplateList from 'components/RelatedTemplateList';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import RoutedTabs from 'components/RoutedTabs';
@@ -26,6 +25,7 @@ import ConstructedInventoryEdit from './ConstructedInventoryEdit';
 import InventoryGroups from './InventoryGroups';
 import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
+import { inventoryRunsRoutes } from './shared/InventoryRuns';
 
 export interface ConstructedInventoryProps {
   setBreadcrumb: SetBreadcrumb;
@@ -71,19 +71,21 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
       ),
       link: `/inventories`,
       id: 99,
+      persistentFilterKey: 'inventories',
     },
     { name: t`Details`, link: `${constructedBaseUrl}/details`, id: 0 },
     { name: t`Access`, link: `${constructedBaseUrl}/access`, id: 1 },
-    { name: t`Hosts`, link: `${constructedBaseUrl}/hosts`, id: 2 },
-    { name: t`Groups`, link: `${constructedBaseUrl}/groups`, id: 3 },
-    {
-      name: t`Jobs`,
-      link: `${constructedBaseUrl}/jobs`,
-      id: 4,
-    },
+    { name: t`Groups`, link: `${constructedBaseUrl}/groups`, id: 2 },
+    { name: t`Hosts`, link: `${constructedBaseUrl}/hosts`, id: 3 },
+    // Runs last, after the inventory's own tabs, as on every screen.
     {
       name: t`Job Templates`,
       link: `${constructedBaseUrl}/job_templates`,
+      id: 4,
+    },
+    {
+      name: t`Runs`,
+      link: `${constructedBaseUrl}/runs`,
       id: 5,
     },
   ];
@@ -91,9 +93,7 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -184,28 +184,14 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
               }
             />
           )}
-          {inventory && (
-            <Route
-              path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__inventoryupdate__inventory_source__inventory:
-                      inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
-                />
-              }
-            />
-          )}
+          {inventoryRunsRoutes(inventory)}
           {inventory && (
             <Route
               path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}
+                  resourceName={inventory.name}
                 />
               }
             />

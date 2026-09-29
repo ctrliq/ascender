@@ -90,7 +90,7 @@ describe('<JobListItem />', () => {
 
   beforeEach(() => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs'],
+      initialEntries: ['/runs'],
     });
     ({ container } = renderItem(
       <JobListItem
@@ -138,7 +138,7 @@ describe('<JobListItem />', () => {
             summary_fields: { user_capabilities: { start: false } },
           } as unknown as UnifiedJob
         }
-        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        detailUrl={`/runs/playbook/${mockJob.id}`}
         onSelect={() => {}}
         isSelected={false}
       />
@@ -159,7 +159,7 @@ describe('<JobListItem />', () => {
             summary_fields: { user_capabilities: { start: false } },
           } as unknown as UnifiedJob
         }
-        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        detailUrl={`/runs/playbook/${mockJob.id}`}
         onSelect={() => {}}
         isSelected={false}
       />
@@ -286,7 +286,7 @@ describe('<JobListItem with failed job />', () => {
 
   beforeEach(() => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs'],
+      initialEntries: ['/runs'],
     });
     ({ user, container } = renderItem(
       <JobListItem
@@ -352,11 +352,71 @@ describe('<JobListItem with failed job />', () => {
             summary_fields: { user_capabilities: { start: false } },
           } as unknown as UnifiedJob
         }
-        detailUrl={`/jobs/playbook/${mockJob.id}`}
+        detailUrl={`/runs/playbook/${mockJob.id}`}
         onSelect={() => {}}
         isSelected={false}
       />
     );
     expect(queryLaunchButton(within(c))).not.toBeInTheDocument();
+  });
+
+  test('cancel shown on a running row to users who may cancel it', () => {
+    const { container: c } = renderItem(
+      <JobListItem
+        {...defaultProps}
+        job={
+          {
+            ...mockJob,
+            status: 'running',
+            summary_fields: {
+              ...mockJob.summary_fields,
+              user_capabilities: { start: true, cancel: true },
+            },
+          } as unknown as UnifiedJob
+        }
+      />
+    );
+    expect(
+      within(c).getByRole('button', { name: 'Cancel Job' })
+    ).toBeInTheDocument();
+  });
+
+  test('cancel hidden from an executor the api would refuse', () => {
+    const { container: c } = renderItem(
+      <JobListItem
+        {...defaultProps}
+        job={
+          {
+            ...mockJob,
+            status: 'running',
+            summary_fields: {
+              ...mockJob.summary_fields,
+              user_capabilities: { start: true, cancel: false },
+            },
+          } as unknown as UnifiedJob
+        }
+      />
+    );
+    expect(
+      within(c).queryByRole('button', { name: 'Cancel Job' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('cancel hidden from users who may not start the run', () => {
+    const { container: c } = renderItem(
+      <JobListItem
+        {...defaultProps}
+        job={
+          {
+            ...mockJob,
+            status: 'running',
+            summary_fields: { user_capabilities: { start: false } },
+          } as unknown as UnifiedJob
+        }
+      />
+    );
+    expect(
+      within(c).queryByRole('button', { name: 'Cancel Job' })
+    ).not.toBeInTheDocument();
   });
 });

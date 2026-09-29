@@ -5,27 +5,23 @@ import type {
   OptionsResponse,
   SummaryFieldRef,
 } from 'types/api';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Form,
   FormGroup,
-  Tooltip,
   FormHelperText,
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import { ExecutionEnvironmentsAPI } from 'api';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import FormActionGroup from 'components/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { FormColumnLayout } from 'components/FormLayout';
 import { OrganizationLookup } from 'components/Lookup';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import { required } from 'util/validators';
-import useRequest from 'hooks/useRequest';
+import Tooltip from 'components/Tooltip';
 import useExecutionEnvironmentHelpTextStrings from './ExecutionEnvironment.helptext';
 
 export interface ExecutionEnvironmentFormFieldsProps {
@@ -77,7 +73,10 @@ function ExecutionEnvironmentFormFields({
     options?.actions?.POST?.pull?.choices ?? []
   ).map(([value, label]) => ({
     value: value ?? '',
-    label,
+    // The api names its blank choice with Django's dashes. It stays a choice,
+    // since a blank pull policy is valid and is how one is cleared, but reads
+    // as the prompt the other selects show while empty.
+    label: value ? label : t`Choose a pull policy`,
     key: value ?? '',
   }));
 
@@ -170,7 +169,7 @@ function ExecutionEnvironmentFormFields({
       )}
 
       <CredentialLookup
-        label={t`Registry credential`}
+        label={t`Registry Credential`}
         credentialTypeKind="registry"
         helperTextInvalid={credentialMeta.error}
         isValid={!credentialMeta.touched || !credentialMeta.error}
@@ -195,6 +194,12 @@ export interface ExecutionEnvironmentFormValues {
 }
 
 export interface ExecutionEnvironmentFormProps {
+  /**
+   * What the form draws with, read by the screen above: read here, it arrived
+   * after the card was on screen and the form replaced itself with a second
+   * loading animation while it was on its way.
+   */
+  options: OptionsResponse;
   /** Absent on the add screen, which starts the form empty. */
   executionEnvironment?: Partial<ExecutionEnvironment>;
   onSubmit: (values: ExecutionEnvironmentFormValues) => void;
@@ -211,34 +216,9 @@ function ExecutionEnvironmentForm({
   onCancel,
   submitError = null,
   me,
+  options,
   isOrgLookupDisabled = false,
 }: ExecutionEnvironmentFormProps) {
-  const {
-    isLoading,
-    error,
-    request: fetchOptions,
-    result: options,
-  } = useRequest(
-    useCallback(async () => {
-      const res = await ExecutionEnvironmentsAPI.readOptions();
-      const { data } = res;
-      return data;
-    }, []),
-    null
-  );
-
-  useEffect(() => {
-    fetchOptions();
-  }, [fetchOptions]);
-
-  if (isLoading || !options) {
-    return <ContentLoading />;
-  }
-
-  if (error) {
-    return <ContentError error={error} />;
-  }
-
   const initialValues = {
     name: executionEnvironment.name || '',
     image: executionEnvironment.image || '',

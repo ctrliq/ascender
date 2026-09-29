@@ -1,5 +1,7 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { act, screen, waitFor, within } from '@testing-library/react';
+import WS from 'vitest-websocket-mock';
 import {
   ProjectsAPI,
   JobTemplatesAPI,
@@ -7,7 +9,10 @@ import {
   WorkflowJobTemplateNodesAPI,
 } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
-import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import {
+  renderWithContexts,
+  settleTooltips,
+} from '../../../../testUtils/rtlContexts';
 import ProjectList from './ProjectList';
 
 vi.mock('../../../api');
@@ -232,7 +237,9 @@ describe('<ProjectList />', () => {
     );
     const { user } = renderWithContexts(<ProjectList />);
     await screen.findByRole('link', { name: 'Project 1' });
-    expect(ProjectsAPI.read).toHaveBeenCalledTimes(1);
+    /* The list, the count of what has a source to sync from, and the count
+       of those the reader may start. */
+    expect(ProjectsAPI.read).toHaveBeenCalledTimes(3);
 
     await user.click(getRowCheckbox('Project 1'));
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -263,5 +270,130 @@ describe('<ProjectList />', () => {
     await screen.findByRole('link', { name: 'Project 1' });
 
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
+  });
+
+  /*
+   * Sync All reads what the search matches, as the list does, and every page
+   * of it rather than stopping at the first.
+   */
+  test('Sync All counts and syncs within the search, every page', async () => {
+    const [first, , third] = mockProjects;
+    vi.mocked(ProjectsAPI.read).mockImplementation(((
+      params: Record<string, unknown> = {}
+    ) => {
+      if (params.page_size === 200) {
+        return Promise.resolve({
+          data:
+            params.page === 1
+              ? { count: 2, results: [first], next: '/page=2' }
+              : { count: 2, results: [third], next: null },
+        });
+      }
+      return Promise.resolve({
+        data: { count: mockProjects.length, results: mockProjects },
+      });
+    }) as unknown as typeof ProjectsAPI.read);
+    const history = createMemoryHistory({
+      initialEntries: ['/projects?project.name__icontains=foo'],
+    });
+    const { user } = renderWithContexts(<ProjectList />, {
+      context: { router: { history } },
+    });
+    await screen.findByRole('link', { name: 'Project 1' });
+
+    // The counts that enable the button are taken within the search.
+    expect(ProjectsAPI.read).toHaveBeenCalledWith({
+      name__icontains: 'foo',
+      not__scm_type: '',
+      role_level: 'update_role',
+      page_size: 1,
+    });
+
+    const button = screen.getByRole('button', { name: 'Sync All' });
+    await user.hover(button);
+    expect(
+      await screen.findByText('Sync all Projects matching the current search')
+    ).toBeInTheDocument();
+
+    await user.click(button);
+    await settleTooltips();
+    await waitFor(() => expect(ProjectsAPI.sync).toHaveBeenCalledTimes(2));
+    expect(ProjectsAPI.sync).toHaveBeenCalledWith(1);
+    expect(ProjectsAPI.sync).toHaveBeenCalledWith(3);
+    expect(ProjectsAPI.read).toHaveBeenCalledWith({
+      name__icontains: 'foo',
+      not__scm_type: '',
+      role_level: 'update_role',
+      page: 2,
+      page_size: 200,
+      order_by: 'name',
+    });
+  });
+
+  /*
+   * Two syncs ending close together start two reads of their projects. The
+   * first used to be dropped once the second began, which left its row
+   * holding the finished job and showing Syncing instead of its revision.
+   */
+  test('should show the new revision of every project whose sync finished', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+    const debug = global.console.debug;
+    global.console.debug = () => {};
+
+    try {
+      const reads: Record<number, (data: unknown) => void> = {};
+      vi.mocked(ProjectsAPI.readDetail).mockImplementation(
+        ((id: number) =>
+          new Promise((resolve) => {
+            reads[id] = (data) => resolve({ data });
+          })) as unknown as typeof ProjectsAPI.readDetail
+      );
+
+      renderWithContexts(<ProjectList />);
+      await screen.findByRole('link', { name: 'Project 1' });
+      await mockServer.connected;
+
+      const send = (
+        projectId: number,
+        status: string,
+        finished: string | null
+      ) =>
+        act(() => {
+          mockServer.send(
+            JSON.stringify({
+              project_id: projectId,
+              unified_job_id: 100 + projectId,
+              type: 'project_update',
+              status,
+              finished,
+            })
+          );
+        });
+
+      send(1, 'running', null);
+      send(2, 'running', null);
+      await waitFor(() =>
+        expect(screen.getAllByText('Syncing')).toHaveLength(2)
+      );
+
+      send(1, 'successful', '2026-09-29T10:00:00Z');
+      await waitFor(() => expect(reads[1]).toBeDefined());
+      send(2, 'successful', '2026-09-29T10:00:01Z');
+      await waitFor(() => expect(reads[2]).toBeDefined());
+
+      // Both reads are in flight; the first answers only after the second began.
+      await act(async () => {
+        reads[1]!({ ...mockProjects[0], scm_revision: 'aaaaaaa1111111' });
+        reads[2]!({ ...mockProjects[1], scm_revision: 'bbbbbbb2222222' });
+      });
+
+      expect(await screen.findByText('aaaaaaa')).toBeInTheDocument();
+      expect(await screen.findByText('bbbbbbb')).toBeInTheDocument();
+      expect(screen.queryByText('Syncing')).not.toBeInTheDocument();
+    } finally {
+      global.console.debug = debug;
+      WS.clean();
+    }
   });
 });

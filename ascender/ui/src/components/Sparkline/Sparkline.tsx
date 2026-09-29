@@ -2,12 +2,13 @@ import type { RecentJob } from 'types/api';
 import React from 'react';
 
 import { Link } from 'react-router';
-import { Tooltip } from '@patternfly/react-core';
+
 import { useLingui } from '@lingui/react/macro';
 import { formatDateString } from 'util/dates';
 import StatusIcon from '../StatusIcon';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import './Sparkline.css';
+import Tooltip from '../Tooltip';
 
 export interface SparklineProps {
   jobs?: RecentJob[];
@@ -37,7 +38,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
       <Link
         className="ascender-sparkline__link"
         aria-label={t`View job ${job.id}`}
-        to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type as string]}/${job.id}`}
+        to={`/runs/${JOB_TYPE_URL_SEGMENTS[job.type as string]}/${job.id}`}
       >
         <StatusIcon status={job.status as string} />
       </Link>

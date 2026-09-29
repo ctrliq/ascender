@@ -13,7 +13,6 @@ import {
   HelperText,
   HelperTextItem,
   InputGroup,
-  Tooltip,
   InputGroupItem,
 } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -43,7 +42,9 @@ import {
 } from './shared/HostFilterUtils';
 import type { SearchChip, SearchChipGroup } from '../Search/getChipsByKey';
 import type { HostSearchParams } from './shared/HostFilterUtils';
+import './Lookup.css';
 import './HostFilterLookup.css';
+import Tooltip from '../Tooltip';
 
 const useModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,7 +141,7 @@ function HostFilterLookup({
       key: 'instance_id',
     },
     {
-      name: t`Last job`,
+      name: t`Last Job`,
       key: 'last_job',
     },
   ];
@@ -313,8 +314,20 @@ function HostFilterLookup({
           variant={ButtonVariant.control}
         />
       </InputGroupItem>
-      <InputGroupItem>
-        <div className="ascender-host-filter-lookup__chip-holder pf-v6-c-form-control">
+      {/* The chip holder takes the same fill, height and disabled colour as
+          every other multiple-value lookup. Without them it sat unfilled and,
+          holding no chips, collapsed to its borders, which read as a dash. */}
+      <InputGroupItem isFill>
+        <div
+          className={[
+            'ascender-lookup__chip-holder',
+            'ascender-host-filter-lookup__chip-holder',
+            isDisabled && 'pf-m-disabled',
+            'pf-v6-c-form-control',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           {searchColumns.map(({ name, key }) => (
             <ChipGroup
               categoryName={name}
@@ -362,7 +375,7 @@ function HostFilterLookup({
     <FormGroup
       fieldId="host-filter"
       isRequired
-      label={t`Smart host filter`}
+      label={t`Smart Host Filter`}
       labelHelp={
         <Popover
           content={t`Populate the hosts for this inventory by using a search
@@ -435,7 +448,7 @@ function HostFilterLookup({
             hasContentLoading={isLoading}
             itemCount={count}
             items={hosts}
-            pluralizedItemName={t`hosts`}
+            pluralizedItemName={t`Hosts`}
             qsConfig={QS_CONFIG}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>

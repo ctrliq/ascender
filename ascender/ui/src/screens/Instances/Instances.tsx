@@ -14,7 +14,7 @@ function Instances() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/instances': t`Instances`,
-    '/instances/add': t`Create new Instance`,
+    '/instances/add': t`Create New Instance`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -24,12 +24,14 @@ function Instances() {
       }
       setBreadcrumbConfig({
         '/instances': t`Instances`,
-        '/instances/add': t`Create new Instance`,
+        '/instances/add': t`Create New Instance`,
         [`/instances/${instance.id}`]: `${instance.hostname}`,
-        [`/instances/${instance.id}/details`]: t`Details`,
-        [`/instances/${instance.id}/peers`]: t`Peers`,
-        [`/instances/${instance.id}/listener_addresses`]: t`Listener Addresses`,
-        [`/instances/${instance.id}/edit`]: t`Edit Instance`,
+        [`/instances/${instance.id}/details`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/peers`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/listener_addresses`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/instance_groups`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/runs`]: `${instance.hostname}`,
+        [`/instances/${instance.id}/edit`]: t`Edit ${instance.hostname}`,
       });
     },
     [t]

@@ -11,15 +11,23 @@ import ErrorDetail from 'components/ErrorDetail';
 import { TokensAPI } from 'api';
 import { formatDateString } from 'util/dates';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
+import { useConfig } from 'contexts/Config';
 import { toTitleCase } from 'util/strings';
 import userHelpTextStrings from '../shared/User.helptext';
+import canDeleteToken from '../shared/canDeleteToken';
 
 export interface UserTokenDetailProps {
   token: OAuth2Token;
+  /**
+   * Where the page's Back tab leads, the application's Tokens tab when the
+   * token was reached from there. A deleted token's page has nothing left to
+   * show, so Delete goes the same way.
+   */
+  backLink?: string;
   [key: string]: unknown;
 }
 
-function UserTokenDetail({ token }: UserTokenDetailProps) {
+function UserTokenDetail({ token, backLink }: UserTokenDetailProps) {
   const { t } = useLingui();
   const helptext = userHelpTextStrings();
   const { scope, description, created, modified, expires, summary_fields } =
@@ -33,10 +41,21 @@ function UserTokenDetail({ token }: UserTokenDetailProps) {
   } = useRequest(
     useCallback(async () => {
       await TokensAPI.destroy(tokenId);
-      navigate(`/users/${id}/tokens`);
-    }, [tokenId, id, navigate])
+      navigate(backLink ?? `/users/${id}/tokens`);
+    }, [tokenId, id, navigate, backLink])
   );
   const { error, dismissError } = useDismissableError(deleteError);
+  const { me, adminOrgCount } = useConfig();
+
+  // The token names its application by id and name only, so the helper has
+  // no application capability to go on here unless that reference carries
+  // one, and falls back to offering Delete to any organization admin, which
+  // the api then decides on.
+  const canDelete = canDeleteToken(
+    token,
+    me,
+    adminOrgCount as number | undefined
+  );
 
   return (
     <CardBody>
@@ -75,14 +94,16 @@ function UserTokenDetail({ token }: UserTokenDetailProps) {
         />
       </DetailList>
       <CardActionsRow>
-        <DeleteButton
-          name={summary_fields?.application?.name || t`Personal Access Token`}
-          modalTitle={t`Delete User Token`}
-          onConfirm={deleteToken}
-          isDisabled={isLoading}
-        >
-          {t`Delete`}
-        </DeleteButton>
+        {canDelete && (
+          <DeleteButton
+            name={summary_fields?.application?.name || t`Personal Access Token`}
+            modalTitle={t`Delete User Token`}
+            onConfirm={deleteToken}
+            isDisabled={isLoading}
+          >
+            {t`Delete`}
+          </DeleteButton>
+        )}
       </CardActionsRow>
       {Boolean(error) && (
         <AlertModal
@@ -91,7 +112,7 @@ function UserTokenDetail({ token }: UserTokenDetailProps) {
           title={t`Error!`}
           onClose={dismissError}
         >
-          {t`Failed to user token.`}
+          {t`Failed to delete user token.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

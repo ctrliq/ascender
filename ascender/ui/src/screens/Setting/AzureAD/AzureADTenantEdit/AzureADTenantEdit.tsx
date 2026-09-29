@@ -10,7 +10,7 @@ function AzureADTenantEdit() {
   return (
     <SettingsEditForm
       category="azuread-oauth2-tenant"
-      detailUrl="/settings/azure/tenant/details"
+      detailUrl="/authentication/azure/tenant/details"
     >
       {(azureTenant) => (
         <>

@@ -62,20 +62,6 @@ describe('<AzureADDetail />', () => {
     ).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
-    await renderDetail();
-    const expectedTabs = [
-      /Back to Settings/,
-      /Azure AD Default/,
-      /Azure AD Tenant/,
-    ];
-    expectedTabs.forEach((text) => {
-      expect(screen.getAllByRole('tab', { name: text }).length).toBeGreaterThan(
-        0
-      );
-    });
-  });
-
   test('should render expected details', async () => {
     await renderDetail();
     assertDetail(

@@ -137,4 +137,73 @@ describe('<UserTokenAdd />', () => {
     );
     expect(onSuccessfulAdd).toHaveBeenCalledWith(rtnData);
   });
+
+  describe('when opened from an application', () => {
+    const renderFromApplication = () => {
+      const history = createMemoryHistory({
+        initialEntries: [
+          {
+            pathname: '/users/1/tokens/add',
+            state: { application: { id: 3, name: 'hg' } },
+          },
+        ],
+      });
+      return {
+        ...renderWithContexts(
+          <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
+          { context: { router: { history } } }
+        ),
+        history,
+      };
+    };
+
+    test('makes the token for that application without picking it', async () => {
+      vi.mocked(UsersAPI.createToken).mockResolvedValueOnce({
+        data: { id: 2 },
+      } as unknown as ResponseOf<typeof UsersAPI.createToken>);
+      const { user } = renderFromApplication();
+
+      await user.selectOptions(
+        await screen.findByLabelText('Select Input'),
+        'read'
+      );
+      await user.click(screen.getByRole('button', { name: 'Save' }));
+
+      await waitFor(() =>
+        expect(UsersAPI.createToken).toHaveBeenCalledWith(1, {
+          application: 3,
+          description: '',
+          scope: 'read',
+        })
+      );
+    });
+
+    test('shows the token before going back to the application', async () => {
+      vi.mocked(UsersAPI.createToken).mockResolvedValueOnce({
+        data: { id: 2, token: 'secret' },
+      } as unknown as ResponseOf<typeof UsersAPI.createToken>);
+      const { user, history } = renderFromApplication();
+
+      await user.selectOptions(
+        await screen.findByLabelText('Select Input'),
+        'read'
+      );
+      await user.click(screen.getByRole('button', { name: 'Save' }));
+
+      // Handed up with the way back, which is taken once it has been read.
+      await waitFor(() =>
+        expect(onSuccessfulAdd).toHaveBeenCalledWith(
+          { id: 2, token: 'secret' },
+          '/applications/3/tokens'
+        )
+      );
+      expect(history.location.pathname).toEqual('/users/1/tokens/add');
+    });
+
+    test('cancels back to the application it came from', async () => {
+      const { user, history } = renderFromApplication();
+      await user.click(await screen.findByRole('button', { name: 'Cancel' }));
+      expect(history.location.pathname).toEqual('/applications/3/tokens');
+    });
+  });
 });

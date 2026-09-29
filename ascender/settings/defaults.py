@@ -282,6 +282,13 @@ STDOUT_MAX_BYTES_DISPLAY = 1048576
 # on how many events to display before truncating/hiding
 MAX_UI_JOB_EVENTS = 4000
 
+# The ceiling on how far a read-only variables editor grows to fit its value.
+# The editor renders a line of DOM per line of content, and a host's facts run
+# to thousands, so an uncapped box costs seconds to paint and lags every scroll
+# after. The rest of the value scrolls. A reader can still ask a single editor
+# for more than this; the cap governs the height it takes on its own.
+MAX_UI_EDITOR_ROWS = 50
+
 # Returned in index.html, tells the UI if it should make requests
 # to update job data in response to status changes websocket events
 UI_LIVE_UPDATES_ENABLED = True
@@ -538,8 +545,6 @@ AUTHENTICATION_BACKENDS = (
     'ascender.sso.backends.LDAPBackend3',
     'ascender.sso.backends.LDAPBackend4',
     'ascender.sso.backends.LDAPBackend5',
-    'ascender.sso.backends.RADIUSBackend',
-    'ascender.sso.backends.TACACSPlusBackend',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.github.GithubOrganizationOAuth2',
@@ -551,6 +556,10 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.azuread.AzureADOAuth2',
     'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
     'ascender.sso.backends.SAMLAuth',
+    'ascender.main.backends.AscenderModelBackend',
+    # The same class under the name it used to have. Sessions record the path
+    # they were created with, and django will not load one that is not listed,
+    # so removing this logs out everyone who signed in before the rename.
     'ascender.main.backends.AWXModelBackend',
 )
 
@@ -573,20 +582,6 @@ AUTH_LDAP_SERVER_URI = None
 # Note: This setting may be overridden by database settings.
 AUTH_LDAP_CONNECTION_OPTIONS = {ldap.OPT_REFERRALS: 0, ldap.OPT_NETWORK_TIMEOUT: 30}
 
-# Radius server settings (default to empty string to skip using Radius auth).
-# Note: These settings may be overridden by database settings.
-RADIUS_SERVER = ''
-RADIUS_PORT = 1812
-RADIUS_SECRET = ''
-
-# TACACS+ settings (default host to empty string to skip using TACACS+ auth).
-# Note: These settings may be overridden by database settings.
-TACACSPLUS_HOST = ''
-TACACSPLUS_PORT = 49
-TACACSPLUS_SECRET = ''
-TACACSPLUS_SESSION_TIMEOUT = 5
-TACACSPLUS_AUTH_PROTOCOL = 'ascii'
-TACACSPLUS_REM_ADDR = False
 
 # Enable / Disable HTTP Basic Authentication used in the API browser
 # Note: Session limits are not enforced when using HTTP Basic Authentication.

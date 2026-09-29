@@ -1,6 +1,8 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
+
+import './RevertFormActionGroup.css';
 import { FormFullWidthLayout } from 'components/FormLayout';
 
 export interface RevertFormActionGroupProps {
@@ -20,7 +22,7 @@ const RevertFormActionGroup = ({
   const { t } = useLingui();
   return (
     <FormFullWidthLayout>
-      <ActionGroup>
+      <ActionGroup className="ascender-settings-actions">
         <Button
           aria-label={t`Save`}
           variant="primary"
@@ -31,13 +33,13 @@ const RevertFormActionGroup = ({
           {t`Save`}
         </Button>
         <Button
-          aria-label={t`Revert all to default`}
+          aria-label={t`Revert All to Default`}
           variant="secondary"
           type="button"
           onClick={onRevert}
           ouiaId="revert-all-button"
         >
-          {t`Revert all to default`}
+          {t`Revert All to Default`}
         </Button>
         {children}
         <Button

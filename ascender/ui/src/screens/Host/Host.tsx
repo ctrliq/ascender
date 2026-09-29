@@ -17,6 +17,7 @@ import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import JobList from 'components/JobList';
+import InventoryRunMenu from 'components/JobList/InventoryRunMenu';
 import { HostsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import HostFacts from './HostFacts';
@@ -78,8 +79,8 @@ function Host({ setBreadcrumb }: HostProps) {
       id: 2,
     },
     {
-      name: t`Jobs`,
-      link: `/hosts/${id}/jobs`,
+      name: t`Runs`,
+      link: `/hosts/${id}/runs`,
       id: 3,
     },
   ];
@@ -87,9 +88,7 @@ function Host({ setBreadcrumb }: HostProps) {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -132,10 +131,24 @@ function Host({ setBreadcrumb }: HostProps) {
           {host && (
             <Route path="groups/*" element={<HostGroups host={host} />} />
           )}
+          {/* The tab's address before the rail called these runs. */}
+          <Route path="jobs" element={<Navigate to="../runs" replace />} />
           {host && (
             <Route
-              path="jobs"
-              element={<JobList defaultParams={{ job__hosts: host.id }} />}
+              path="runs"
+              element={
+                <JobList
+                  defaultParams={{ job__hosts: host.id }}
+                  // The hosts list's Run menu, aimed at this one host.
+                  runControl={
+                    <InventoryRunMenu
+                      inventoryId={host.inventory as number}
+                      items={[{ id: host.id, name: host.name }]}
+                      tooltip={t`Run on Host`}
+                    />
+                  }
+                />
+              }
             />
           )}
           <Route

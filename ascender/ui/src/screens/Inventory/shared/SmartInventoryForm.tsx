@@ -1,11 +1,9 @@
-import type { Inventory, SummaryFieldRef } from 'types/api';
+import type { Inventory, OptionsResponse, SummaryFieldRef } from 'types/api';
 import { FormRoot, useField, useFormContext } from 'components/Form';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Form } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import FormActionGroup from 'components/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
@@ -16,9 +14,7 @@ import {
 import HostFilterLookup from 'components/Lookup/HostFilterLookup';
 import InstanceGroupsLookup from 'components/Lookup/InstanceGroupsLookup';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
-import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
-import { InventoriesAPI } from 'api';
 import { useLingui } from '@lingui/react/macro';
 
 export interface SmartInventoryFormFieldsProps {
@@ -125,6 +121,12 @@ export interface SmartInventoryFormValues {
 
 export interface SmartInventoryFormProps {
   inventory?: Partial<Inventory>;
+  /**
+   * What the form draws with, read by the screen above: read here, it arrived
+   * after the card was on screen and the form replaced itself with a second
+   * loading animation while it was on its way.
+   */
+  options: OptionsResponse;
   instanceGroups?: SummaryFieldRef[];
   onSubmit: (values: SmartInventoryFormValues) => void;
   onCancel: () => void;
@@ -134,6 +136,7 @@ export interface SmartInventoryFormProps {
 
 function SmartInventoryForm({
   inventory = {},
+  options,
   instanceGroups = [],
   onSubmit,
   onCancel,
@@ -164,31 +167,6 @@ function SmartInventoryForm({
     organization: inventory.summary_fields?.organization || null,
     variables: inventory.variables || '---',
   };
-
-  const {
-    isLoading,
-    error: optionsError,
-    request: fetchOptions,
-    result: options,
-  } = useRequest(
-    useCallback(async () => {
-      const { data } = await InventoriesAPI.readOptions();
-      return data;
-    }, []),
-    null
-  );
-
-  useEffect(() => {
-    fetchOptions();
-  }, [fetchOptions]);
-
-  if (isLoading) {
-    return <ContentLoading />;
-  }
-
-  if (optionsError) {
-    return <ContentError error={optionsError} />;
-  }
 
   return (
     <FormRoot

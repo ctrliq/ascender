@@ -802,7 +802,7 @@
               "type": "boolean",
               "required": false,
               "label": "Allow External Users to Create OAuth2 Tokens",
-              "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
+              "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
               "category": "Authentication",
               "category_slug": "authentication",
               "default": false
@@ -862,6 +862,106 @@
               "category_slug": "ui",
               "placeholder": "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=",
               "default": ""
+          },
+          "CUSTOM_THEME": {
+              "type": "string",
+              "required": false,
+              "label": "Custom Theme CSS",
+              "help_text": "The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=\"custom\"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=\"custom\"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": ""
+          },
+          "CUSTOM_THEME_NAME": {
+              "type": "string",
+              "required": false,
+              "label": "Custom Theme Name",
+              "help_text": "Name shown for the custom theme in the theme list. Defaults to Custom when left blank.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": ""
+          },
+          "DEFAULT_UI_THEME": {
+              "type": "choice",
+              "required": false,
+              "label": "Default Theme",
+              "help_text": "The theme a user sees before they choose one of their own. There is no blank: a user can always pick a different theme, so an unset value would only mean Default by another name.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": "default",
+              "choices": [
+                  [
+                      "default",
+                      "Default"
+                  ],
+                  [
+                      "light",
+                      "Light"
+                  ],
+                  [
+                      "dark",
+                      "Dark"
+                  ],
+                  [
+                      "classic",
+                      "Classic"
+                  ],
+                  [
+                      "custom",
+                      "Custom"
+                  ]
+              ]
+          },
+          "DEFAULT_UI_LANGUAGE": {
+              "type": "choice",
+              "required": false,
+              "label": "Default Language",
+              "help_text": "The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.",
+              "category": "UI",
+              "category_slug": "ui",
+              "default": "",
+              "choices": [
+                  [
+                      "",
+                      "Follow the browser"
+                  ],
+                  [
+                      "en",
+                      "English"
+                  ],
+                  [
+                      "ar",
+                      "Arabic"
+                  ],
+                  [
+                      "zh",
+                      "Chinese"
+                  ],
+                  [
+                      "nl",
+                      "Dutch"
+                  ],
+                  [
+                      "fr",
+                      "French"
+                  ],
+                  [
+                      "hi",
+                      "Hindi"
+                  ],
+                  [
+                      "ja",
+                      "Japanese"
+                  ],
+                  [
+                      "ko",
+                      "Korean"
+                  ],
+                  [
+                      "es",
+                      "Spanish"
+                  ]
+              ]
           },
           "MAX_UI_JOB_EVENTS": {
               "type": "integer",
@@ -2891,104 +2991,6 @@
                       "read_only": false
                   }
               }
-          },
-          "RADIUS_SERVER": {
-              "type": "string",
-              "required": false,
-              "label": "RADIUS Server",
-              "help_text": "Hostname/IP of RADIUS server. RADIUS authentication is disabled if this setting is empty.",
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "placeholder": "radius.example.com",
-              "default": ""
-          },
-          "RADIUS_PORT": {
-              "type": "integer",
-              "required": false,
-              "label": "RADIUS Port",
-              "help_text": "Port of RADIUS server.",
-              "min_value": 1,
-              "max_value": 65535,
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "default": 1812
-          },
-          "RADIUS_SECRET": {
-              "type": "string",
-              "required": false,
-              "label": "RADIUS Secret",
-              "help_text": "Shared secret for authenticating to RADIUS server.",
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "default": ""
-          },
-          "TACACSPLUS_HOST": {
-              "type": "string",
-              "required": false,
-              "label": "TACACS+ Server",
-              "help_text": "Hostname of TACACS+ server.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "default": ""
-          },
-          "TACACSPLUS_PORT": {
-              "type": "integer",
-              "required": false,
-              "label": "TACACS+ Port",
-              "help_text": "Port number of TACACS+ server.",
-              "min_value": 1,
-              "max_value": 65535,
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "default": 49
-          },
-          "TACACSPLUS_SECRET": {
-              "type": "string",
-              "required": false,
-              "label": "TACACS+ Secret",
-              "help_text": "Shared secret for authenticating to TACACS+ server.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "default": ""
-          },
-          "TACACSPLUS_SESSION_TIMEOUT": {
-              "type": "integer",
-              "required": false,
-              "label": "TACACS+ Auth Session Timeout",
-              "help_text": "TACACS+ session timeout value in seconds, 0 disables timeout.",
-              "min_value": 0,
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "unit": "seconds",
-              "default": 5
-          },
-          "TACACSPLUS_AUTH_PROTOCOL": {
-              "type": "choice",
-              "required": false,
-              "label": "TACACS+ Authentication Protocol",
-              "help_text": "Choose the authentication protocol used by TACACS+ client.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "default": "ascii",
-              "choices": [
-                  [
-                      "ascii",
-                      "ascii"
-                  ],
-                  [
-                      "pap",
-                      "pap"
-                  ]
-              ]
-          },
-          "TACACSPLUS_REM_ADDR": {
-              "type": "boolean",
-              "required": false,
-              "label": "TACACS+ client address sending enabled",
-              "help_text": "Enable the client address sending by TACACS+ client.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "default": false
           },
           "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY": {
               "type": "string",
@@ -5325,7 +5327,7 @@
           "ALLOW_OAUTH2_FOR_EXTERNAL_USERS": {
               "type": "boolean",
               "label": "Allow External Users to Create OAuth2 Tokens",
-              "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
+              "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false
@@ -5377,6 +5379,102 @@
               "category": "UI",
               "category_slug": "ui",
               "defined_in_file": false
+          },
+          "CUSTOM_THEME": {
+              "type": "string",
+              "label": "Custom Theme CSS",
+              "help_text": "The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=\"custom\"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=\"custom\"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.",
+              "category": "UI",
+              "category_slug": "ui",
+              "defined_in_file": false
+          },
+          "CUSTOM_THEME_NAME": {
+              "type": "string",
+              "label": "Custom Theme Name",
+              "help_text": "Name shown for the custom theme in the theme list. Defaults to Custom when left blank.",
+              "category": "UI",
+              "category_slug": "ui",
+              "defined_in_file": false
+          },
+          "DEFAULT_UI_THEME": {
+              "type": "choice",
+              "label": "Default Theme",
+              "help_text": "The theme a user sees before they choose one of their own. There is no blank: a user can always pick a different theme, so an unset value would only mean Default by another name.",
+              "category": "UI",
+              "category_slug": "ui",
+              "defined_in_file": false,
+              "choices": [
+                  [
+                      "default",
+                      "Default"
+                  ],
+                  [
+                      "light",
+                      "Light"
+                  ],
+                  [
+                      "dark",
+                      "Dark"
+                  ],
+                  [
+                      "classic",
+                      "Classic"
+                  ],
+                  [
+                      "custom",
+                      "Custom"
+                  ]
+              ]
+          },
+          "DEFAULT_UI_LANGUAGE": {
+              "type": "choice",
+              "label": "Default Language",
+              "help_text": "The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.",
+              "category": "UI",
+              "category_slug": "ui",
+              "defined_in_file": false,
+              "choices": [
+                  [
+                      "",
+                      "Follow the browser"
+                  ],
+                  [
+                      "en",
+                      "English"
+                  ],
+                  [
+                      "ar",
+                      "Arabic"
+                  ],
+                  [
+                      "zh",
+                      "Chinese"
+                  ],
+                  [
+                      "nl",
+                      "Dutch"
+                  ],
+                  [
+                      "fr",
+                      "French"
+                  ],
+                  [
+                      "hi",
+                      "Hindi"
+                  ],
+                  [
+                      "ja",
+                      "Japanese"
+                  ],
+                  [
+                      "ko",
+                      "Korean"
+                  ],
+                  [
+                      "es",
+                      "Spanish"
+                  ]
+              ]
           },
           "MAX_UI_JOB_EVENTS": {
               "type": "integer",
@@ -6758,94 +6856,6 @@
                       "read_only": false
                   }
               }
-          },
-          "RADIUS_SERVER": {
-              "type": "string",
-              "label": "RADIUS Server",
-              "help_text": "Hostname/IP of RADIUS server. RADIUS authentication is disabled if this setting is empty.",
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "defined_in_file": false
-          },
-          "RADIUS_PORT": {
-              "type": "integer",
-              "label": "RADIUS Port",
-              "help_text": "Port of RADIUS server.",
-              "min_value": 1,
-              "max_value": 65535,
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "defined_in_file": false
-          },
-          "RADIUS_SECRET": {
-              "type": "string",
-              "label": "RADIUS Secret",
-              "help_text": "Shared secret for authenticating to RADIUS server.",
-              "category": "RADIUS",
-              "category_slug": "radius",
-              "defined_in_file": false
-          },
-          "TACACSPLUS_HOST": {
-              "type": "string",
-              "label": "TACACS+ Server",
-              "help_text": "Hostname of TACACS+ server.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false
-          },
-          "TACACSPLUS_PORT": {
-              "type": "integer",
-              "label": "TACACS+ Port",
-              "help_text": "Port number of TACACS+ server.",
-              "min_value": 1,
-              "max_value": 65535,
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false
-          },
-          "TACACSPLUS_SECRET": {
-              "type": "string",
-              "label": "TACACS+ Secret",
-              "help_text": "Shared secret for authenticating to TACACS+ server.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false
-          },
-          "TACACSPLUS_SESSION_TIMEOUT": {
-              "type": "integer",
-              "label": "TACACS+ Auth Session Timeout",
-              "help_text": "TACACS+ session timeout value in seconds, 0 disables timeout.",
-              "min_value": 0,
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false,
-              "unit": "seconds"
-          },
-          "TACACSPLUS_AUTH_PROTOCOL": {
-              "type": "choice",
-              "label": "TACACS+ Authentication Protocol",
-              "help_text": "Choose the authentication protocol used by TACACS+ client.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false,
-              "choices": [
-                  [
-                      "ascii",
-                      "ascii"
-                  ],
-                  [
-                      "pap",
-                      "pap"
-                  ]
-              ]
-          },
-          "TACACSPLUS_REM_ADDR": {
-              "type": "boolean",
-              "label": "TACACS+ client address sending enabled",
-              "help_text": "Enable the client address sending by TACACS+ client.",
-              "category": "TACACS+",
-              "category_slug": "tacacsplus",
-              "defined_in_file": false
           },
           "SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL": {
               "type": "string",

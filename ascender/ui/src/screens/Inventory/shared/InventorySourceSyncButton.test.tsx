@@ -23,7 +23,7 @@ describe('<InventorySourceSyncButton />', () => {
     const { container } = renderWithContexts(
       <InventorySourceSyncButton source={source} />
     );
-    const button = screen.getByRole('button', { name: 'Start sync source' });
+    const button = screen.getByRole('button', { name: 'Sync Source' });
     expect(button).toBeInTheDocument();
     expect(button).not.toBeDisabled();
     expect(container.querySelector('svg')).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('<InventorySourceSyncButton />', () => {
       <InventorySourceSyncButton source={source} />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Start sync source' }));
+    await user.click(screen.getByRole('button', { name: 'Sync Source' }));
 
     await waitFor(() =>
       expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1)
@@ -52,7 +52,7 @@ describe('<InventorySourceSyncButton />', () => {
       <InventorySourceSyncButton source={source} />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Start sync source' }));
+    await user.click(screen.getByRole('button', { name: 'Sync Source' }));
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
   });

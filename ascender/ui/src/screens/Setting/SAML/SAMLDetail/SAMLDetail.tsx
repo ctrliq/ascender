@@ -2,11 +2,9 @@ import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
-import RoutedTabs from 'components/RoutedTabs';
 import { SettingsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { DetailList } from 'components/DetailList';
@@ -46,62 +44,41 @@ function SAMLDetail() {
     request();
   }, [request]);
 
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`Details`,
-      link: `/settings/saml/details`,
-      id: 0,
-    },
-  ];
-
   return (
-    <>
-      <RoutedTabs tabsArray={tabsArray} />
-      <CardBody>
-        {isLoading && <ContentLoading />}
-        {!isLoading && Boolean(error) && <ContentError error={error} />}
-        {!isLoading && saml && (
-          <DetailList>
-            {Object.keys(saml).map((key) => {
-              const record = options?.[key];
-              return (
-                <SettingDetail
-                  key={key}
-                  id={key}
-                  helpText={record?.help_text}
-                  label={record?.label}
-                  type={record?.type}
-                  unit={record?.unit}
-                  value={saml?.[key]}
-                />
-              );
-            })}
-          </DetailList>
-        )}
-        {me?.is_superuser && (
-          <CardActionsRow>
-            <Button
-              ouiaId="saml-detail-edit-button"
-              aria-label={t`Edit`}
-              component={Link}
-              to="/settings/saml/edit"
-            >
-              {t`Edit`}
-            </Button>
-          </CardActionsRow>
-        )}
-      </CardBody>
-    </>
+    <CardBody>
+      {isLoading && <ContentLoading />}
+      {!isLoading && Boolean(error) && <ContentError error={error} />}
+      {!isLoading && saml && (
+        <DetailList>
+          {Object.keys(saml).map((key) => {
+            const record = options?.[key];
+            return (
+              <SettingDetail
+                key={key}
+                id={key}
+                helpText={record?.help_text}
+                label={record?.label}
+                type={record?.type}
+                unit={record?.unit}
+                value={saml?.[key]}
+              />
+            );
+          })}
+        </DetailList>
+      )}
+      {me?.is_superuser && (
+        <CardActionsRow>
+          <Button
+            ouiaId="saml-detail-edit-button"
+            aria-label={t`Edit`}
+            component={Link}
+            to="/authentication/saml/edit"
+          >
+            {t`Edit`}
+          </Button>
+        </CardActionsRow>
+      )}
+    </CardBody>
   );
 }
 

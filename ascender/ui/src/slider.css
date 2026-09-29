@@ -1,0 +1,42 @@
+/*
+ * Every slider in the app is the instance capacity adjustment: a rail between
+ * a CPU figure and a RAM figure, with the fork count it works out written
+ * above it.
+ *
+ * PatternFly draws a label under the rail for the minimum of the scale, which
+ * here is the bare "0" of a 0 to 1 adjustment factor: a number on a scale the
+ * screen never names, on a line of its own, under a rail that already says
+ * what it is worth in forks. In a table cell that line is what pushes the row
+ * to a second one.
+ *
+ * The rail keeps enough room around the track for the thumb, which is one
+ * rem, and loses the rest.
+ */
+.pf-v6-c-slider .pf-v6-c-slider__steps {
+  display: none;
+}
+
+.pf-v6-c-slider .pf-v6-c-slider__rail {
+  /* Not symmetrical: the thumb carries a touch target twelve pixels deep, and
+     whatever hangs below the last row of a table is a scroll bar down the side
+     of it. Above the rail there is the fork count to hang into. */
+  padding-block: 8px 12px;
+}
+
+/*
+ * PatternFly pins the thumb at a fixed eighteen pixels down, which is the
+ * middle of the rail it ships with rather than of the one above. Half of
+ * whatever the rail is keeps the thumb on its track.
+ */
+.pf-v6-c-slider .pf-v6-c-slider__thumb {
+  /* The eight pixels above the rail and half the four of the track itself. */
+  inset-block-start: 10px;
+}
+
+/*
+ * The fork count is a reading of where the thumb is, not a caption on it, so
+ * it wants a little air between the two.
+ */
+.pf-v6-c-slider {
+  margin-block-start: 10px;
+}

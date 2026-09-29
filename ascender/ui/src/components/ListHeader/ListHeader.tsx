@@ -2,7 +2,6 @@ import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, SortColumn } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 
 import {
   parseQueryString,
@@ -13,10 +12,8 @@ import {
 import type { QSConfig, QSParamValue } from 'util/qs';
 import DataListToolbar from '../DataListToolbar';
 import type { DataListToolbarProps } from '../DataListToolbar/DataListToolbar';
-import './ListHeader.css';
 
 export interface ListHeaderProps {
-  emptyStateControls?: React.ReactNode;
   itemCount?: number;
   pagination?: React.ReactNode;
   qsConfig: QSConfig;
@@ -30,7 +27,6 @@ export interface ListHeaderProps {
 }
 
 function ListHeader({
-  emptyStateControls,
   itemCount,
   pagination,
   qsConfig,
@@ -53,6 +49,20 @@ function ListHeader({
       page: 1,
     });
     pushHistoryState(qs);
+  };
+
+  /*
+   * The box as it is typed in: one value for the key rather than another chip
+   * beside the last one, back on the first page, and in place of the address
+   * rather than after it, so a typed word leaves one entry in the history and
+   * not one per letter.
+   */
+  const handleLiveSearch = (key: string, value: QSParamValue) => {
+    const qs = updateQueryString(qsConfig, search, {
+      [key]: value,
+      page: 1,
+    });
+    pushHistoryState(qs, true);
   };
 
   const handleReplaceSearch = (key: string, value: QSParamValue) => {
@@ -91,46 +101,32 @@ function ListHeader({
     pushHistoryState(qs);
   };
 
-  const pushHistoryState = (queryString: unknown) => {
-    navigate(queryString ? `${pathname}?${queryString}` : pathname);
+  const pushHistoryState = (queryString: unknown, replace = false) => {
+    navigate(queryString ? `${pathname}?${queryString}` : pathname, {
+      replace,
+    });
   };
 
-  const params = parseQueryString(qsConfig, search);
-  const isEmpty = itemCount === 0 && Object.keys(params).length === 0;
+  /* An empty list keeps its whole toolbar, so Add and the search that
+     emptied it stay where they are. */
   return (
     <>
-      {isEmpty ? (
-        <Toolbar
-          id={`${qsConfig.namespace}-list-toolbar`}
-          clearAllFilters={handleRemoveAll}
-          collapseListedFiltersBreakpoint="lg"
-          ouiaId={`${qsConfig.namespace}-list-toolbar`}
-        >
-          <ToolbarContent>
-            <div className="ascender-list-header__empty-state-controls-wrapper">
-              {emptyStateControls}
-            </div>
-          </ToolbarContent>
-        </Toolbar>
-      ) : (
-        <>
-          {renderToolbar({
-            itemCount,
-            searchColumns,
-            sortColumns,
-            searchableKeys,
-            relatedSearchableKeys,
-            onSearch: handleSearch,
-            onReplaceSearch: handleReplaceSearch,
-            onSort: handleSort,
-            onRemove: handleRemove,
-            clearAllFilters: handleRemoveAll,
-            qsConfig,
-            pagination,
-            isFilterCleared,
-          })}
-        </>
-      )}
+      {renderToolbar({
+        itemCount,
+        searchColumns,
+        sortColumns,
+        searchableKeys,
+        relatedSearchableKeys,
+        onSearch: handleSearch,
+        onReplaceSearch: handleReplaceSearch,
+        onLiveSearch: handleLiveSearch,
+        onSort: handleSort,
+        onRemove: handleRemove,
+        clearAllFilters: handleRemoveAll,
+        qsConfig,
+        pagination,
+        isFilterCleared,
+      })}
     </>
   );
 }

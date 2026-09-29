@@ -61,9 +61,11 @@ describe('<MiscSystemEdit />', () => {
     vi.clearAllMocks();
   });
 
-  async function mountEdit() {
+  // One tab, one page: the execution environment is the group most of these
+  // are about, so it is the default.
+  async function mountEdit(group = 'execution_environment') {
     history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_system/edit'],
+      initialEntries: [`/system/edit/${group}`],
     });
     // The production read mutates the shared OPTIONS objects (sets .value), so
     // deep-clone to keep tests isolated.
@@ -100,9 +102,43 @@ describe('<MiscSystemEdit />', () => {
     const { user } = await mountEdit();
     await selectExecutionEnvironment(user);
     await user.click(screen.getByRole('button', { name: 'Save' }));
+    // The tab's own setting and nothing else: the rest of the category was
+    // never on screen, so it is not the form's to send.
     await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledWith(systemData)
+      expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+        DEFAULT_EXECUTION_ENVIRONMENT: 1,
+      })
     );
+  });
+
+  test('should save only the settings of the tab being edited', async () => {
+    const { user } = await mountEdit('users');
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      ORG_ADMINS_CAN_SEE_ALL_USERS: systemData.ORG_ADMINS_CAN_SEE_ALL_USERS,
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS:
+        systemData.ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS,
+      MANAGE_ORGANIZATION_AUTH: systemData.MANAGE_ORGANIZATION_AUTH,
+    });
+  });
+
+  test('should show an error rather than the form when the environment cannot be read', async () => {
+    // A form opened without the environment the setting names shows the
+    // field empty, and saving it would clear the setting.
+    vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
+      data: { ...mockAllSettings, DEFAULT_EXECUTION_ENVIRONMENT: 7 },
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
+    vi.mocked(ExecutionEnvironmentsAPI.readDetail).mockRejectedValue(
+      new Error()
+    );
+    await mountEdit();
+    expect(
+      await screen.findByText(/Something went wrong/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Save' })
+    ).not.toBeInTheDocument();
   });
 
   test('should remove execution environment', async () => {
@@ -125,7 +161,6 @@ describe('<MiscSystemEdit />', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
       expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
-        ...systemData,
         DEFAULT_EXECUTION_ENVIRONMENT: null,
       })
     );
@@ -133,19 +168,22 @@ describe('<MiscSystemEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await mountEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('system');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      DEFAULT_EXECUTION_ENVIRONMENT: null,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -158,18 +196,14 @@ describe('<MiscSystemEdit />', () => {
     const { user } = await mountEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
-      expect(history.location.pathname).toEqual(
-        '/settings/miscellaneous_system/details'
-      )
+      expect(history.location.pathname).toEqual('/system/execution_environment')
     );
   });
 
   test('should navigate to miscellaneous detail when cancel is clicked', async () => {
     const { user } = await mountEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual(
-      '/settings/miscellaneous_system/details'
-    );
+    expect(history.location.pathname).toEqual('/system/execution_environment');
   });
 
   test('should display error message on unsuccessful submission', async () => {

@@ -46,7 +46,7 @@ and records the job each node produced.
 
 System job templates are used deliberately: every instance has them, they need no
 project, inventory, credential or network access, and they finish in seconds. It
-also means the specs navigate under `/jobs/management/`, exercising a url segment
+also means the specs navigate under `/runs/management/`, exercising a url segment
 other than the default one.
 
 The workflow job template is reused on later runs. It is safe to delete.

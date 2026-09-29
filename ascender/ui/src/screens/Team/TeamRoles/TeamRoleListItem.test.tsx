@@ -49,7 +49,10 @@ describe('<TeamRoleListItem/>', () => {
 
   test('should render deletable chip', () => {
     renderItem();
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    // Named for what it does, the way the access lists name it.
+    expect(
+      screen.getByRole('button', { name: 'Disassociate Admin' })
+    ).toBeInTheDocument();
   });
 
   test('should render read only chip', () => {

@@ -84,7 +84,7 @@ async function watchLayoutLoops(page) {
 const workflowToggle = (page) =>
   page
     .locator('button[class*="menu-toggle"]')
-    .filter({ hasText: /Workflow Job|Successful|Failed/ })
+    .filter({ hasText: /Job \d+\/\d+|Successful|Failed/ })
     .first();
 
 const menuItem = (page, label) =>
