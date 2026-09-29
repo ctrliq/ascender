@@ -957,6 +957,10 @@ ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC = False
 
 CALLBACK_QUEUE = "callback_tasks"
 
+# Socket timeout for the callback receiver's valkey client. Must stay above the
+# blpop timeout in CallbackBrokerWorker.read, or every read would time out.
+CALLBACK_QUEUE_SOCKET_TIMEOUT = 30
+
 # Note: This setting may be overridden by database settings.
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
