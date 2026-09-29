@@ -142,7 +142,7 @@ function ConstructedInventoryFormFields({
       </FormGroup>
       <FormField
         id="cache-timeout"
-        label={t`Cache timeout (seconds)`}
+        label={t`Cache Timeout (Seconds)`}
         max="2147483647"
         min="0"
         name="update_cache_timeout"
@@ -168,7 +168,7 @@ function ConstructedInventoryFormFields({
         <VariablesField
           id="source_vars"
           name="source_vars"
-          label={t`Source vars`}
+          label={t`Source Variables`}
           tooltip={helpText.constructedInventorySourceVars()}
           validators={constructedPluginValidator}
           isRequired

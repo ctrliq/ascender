@@ -1,4 +1,10 @@
-import type { DetailedError, SetBreadcrumb } from 'types/api';
+import type {
+  DetailedError,
+  InstanceGroup,
+  Inventory as InventoryModel,
+  OptionsResponse,
+  SetBreadcrumb,
+} from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import {
   Link,
@@ -17,7 +23,6 @@ import { InventoriesAPI } from 'api';
 
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import JobList from 'components/JobList';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import RoutedTabs from 'components/RoutedTabs';
 import RelatedTemplateList from 'components/RelatedTemplateList';
@@ -25,6 +30,13 @@ import SmartInventoryDetail from './SmartInventoryDetail';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
+import { inventoryRunsRoutes } from './shared/InventoryRuns';
+
+/** What the edit form draws with, read only on the edit route. */
+interface SmartInventoryEditData {
+  formOptions: OptionsResponse;
+  instanceGroups: InstanceGroup[];
+}
 
 export interface SmartInventoryProps {
   setBreadcrumb: SetBreadcrumb;
@@ -47,13 +59,46 @@ function SmartInventory({ setBreadcrumb }: SmartInventoryProps) {
       const { data } = await InventoriesAPI.readDetail(id);
       return data;
     }, [id]),
-
-    null
+    null as InventoryModel | null
   );
 
   useEffect(() => {
     fetchInventory();
   }, [fetchInventory, location.pathname]);
+
+  /*
+   * What the edit form draws with is read only on the edit route, and read
+   * whole before the form draws so it has one loading state rather than a
+   * second one inside it. Read with the inventory it was asked for again on
+   * every change of tab, and a failure to read it replaced the whole page
+   * with an error although only the form needs it. The instance groups are
+   * read again each time the form opens, since saving it changes them.
+   */
+  const isEditRoute = location.pathname.endsWith('/edit');
+  const {
+    result: editData,
+    error: editDataError,
+    request: fetchEditData,
+    setValue: setEditData,
+  } = useRequest<SmartInventoryEditData | null>(
+    useCallback(async () => {
+      const [{ data: formOptions }, groups] = await Promise.all([
+        InventoriesAPI.readOptions(),
+        InventoriesAPI.readInstanceGroups(id),
+      ]);
+      return { formOptions, instanceGroups: groups.data.results };
+    }, [id]),
+    null
+  );
+
+  // Dropped on the way out, so the form never opens on the last visit's groups.
+  useEffect(() => {
+    if (isEditRoute) {
+      fetchEditData();
+    } else {
+      setEditData(null);
+    }
+  }, [isEditRoute, fetchEditData, setEditData]);
 
   useEffect(() => {
     if (inventory) {
@@ -71,28 +116,33 @@ function SmartInventory({ setBreadcrumb }: SmartInventoryProps) {
       ),
       link: `/inventories`,
       id: 99,
+      persistentFilterKey: 'inventories',
     },
     { name: t`Details`, link: `${smartBaseUrl}/details`, id: 0 },
     { name: t`Access`, link: `${smartBaseUrl}/access`, id: 1 },
     { name: t`Hosts`, link: `${smartBaseUrl}/hosts`, id: 2 },
-    {
-      name: t`Jobs`,
-      link: `${smartBaseUrl}/jobs`,
-      id: 3,
-    },
+    // Runs last, after the inventory's own tabs, as on every screen.
     {
       name: t`Job Templates`,
       link: `${smartBaseUrl}/job_templates`,
+      id: 3,
+    },
+    {
+      name: t`Runs`,
+      link: `${smartBaseUrl}/runs`,
       id: 4,
     },
   ];
 
-  if (hasContentLoading) {
+  /*
+   * One loading animation, until the inventory first arrives. A later read, on
+   * a change of tab, keeps the page already drawn rather than swapping it for
+   * the animation and back.
+   */
+  if (hasContentLoading && !inventory) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -116,6 +166,20 @@ function SmartInventory({ setBreadcrumb }: SmartInventoryProps) {
 
   if (inventory && inventory?.kind !== 'smart') {
     return <Navigate to={`${getInventoryPath(inventory)}/details`} replace />;
+  }
+
+  // The edit route waits on what the form draws with, and alone reports it.
+  let editElement: React.ReactNode = <ContentLoading />;
+  if (editDataError) {
+    editElement = <ContentError error={editDataError} />;
+  } else if (inventory && editData) {
+    editElement = (
+      <SmartInventoryEdit
+        inventory={inventory}
+        formOptions={editData.formOptions}
+        instanceGroups={editData.instanceGroups}
+      />
+    );
   }
 
   let showCardHeader = true;
@@ -144,12 +208,7 @@ function SmartInventory({ setBreadcrumb }: SmartInventoryProps) {
               }
             />
           )}
-          {inventory && (
-            <Route
-              path="edit"
-              element={<SmartInventoryEdit inventory={inventory} />}
-            />
-          )}
+          {inventory && <Route path="edit" element={editElement} />}
           {inventory && (
             <Route
               path="access"
@@ -173,28 +232,14 @@ function SmartInventory({ setBreadcrumb }: SmartInventoryProps) {
               }
             />
           )}
-          {inventory && (
-            <Route
-              path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__inventoryupdate__inventory_source__inventory:
-                      inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
-                />
-              }
-            />
-          )}
+          {inventoryRunsRoutes(inventory)}
           {inventory && (
             <Route
               path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}
+                  resourceName={inventory.name}
                 />
               }
             />

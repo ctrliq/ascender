@@ -1,6 +1,7 @@
 import type { User } from 'types/api';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { TokensAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -77,5 +78,89 @@ describe('<UserToken/>', () => {
 
     await screen.findByRole('tab', { name: 'Details' });
     expect(TokensAPI.readDetail).toHaveBeenCalledWith(2);
+  });
+
+  test("links a missing token back to this user's tokens", async () => {
+    vi.mocked(TokensAPI.readDetail).mockRejectedValue(
+      Object.assign(new Error('Not found'), {
+        response: {
+          config: { method: 'get', url: '/api/v2/tokens/2/' },
+          data: 'Not found',
+          status: 404,
+        },
+      })
+    );
+    renderWithContexts(
+      <UserToken setBreadcrumb={vi.fn()} user={user as unknown as User} />
+    );
+
+    expect(
+      await screen.findByRole('link', { name: 'View all Tokens.' })
+    ).toHaveAttribute('href', '/users/1/tokens');
+  });
+
+  /*
+   * Back to Tokens returns to where the token was opened from: the user's own
+   * list for their token, an application's Tokens tab for someone else's.
+   */
+  describe('Back to Tokens', () => {
+    const goBack = async (
+      config: Record<string, unknown>,
+      entry: string | { pathname: string; state?: unknown }
+    ) => {
+      const history = createMemoryHistory({ initialEntries: [entry] });
+      const { user: events } = renderWithContexts(
+        <UserToken setBreadcrumb={vi.fn()} user={user as unknown as User} />,
+        { context: { config, router: { history } } }
+      );
+      await events.click(
+        await screen.findByRole('tab', { name: /Back to Tokens/ })
+      );
+      return history;
+    };
+
+    test("returns to the user's tokens for the viewer's own token", async () => {
+      const history = await goBack(
+        { me: { id: 1, is_superuser: true } },
+        '/users/1/tokens/2/details'
+      );
+      await waitFor(() =>
+        expect(history.location.pathname).toBe('/users/1/tokens')
+      );
+    });
+
+    test('returns to the application for a token of someone else', async () => {
+      const history = await goBack(
+        { me: { id: 5, is_superuser: true } },
+        '/users/1/tokens/2/details'
+      );
+      await waitFor(() =>
+        expect(history.location.pathname).toBe('/applications/3/tokens')
+      );
+    });
+
+    test('returns where the application list says it came from', async () => {
+      const history = await goBack(
+        { me: { id: 1, is_superuser: true } },
+        {
+          pathname: '/users/1/tokens/2/details',
+          state: { backTo: '/applications/3/tokens' },
+        }
+      );
+      await waitFor(() =>
+        expect(history.location.pathname).toBe('/applications/3/tokens')
+      );
+    });
+  });
+
+  test('does not say Not Found while the token is still loading', async () => {
+    vi.mocked(TokensAPI.readDetail).mockReturnValue(
+      new Promise(() => {}) as ReturnType<typeof TokensAPI.readDetail>
+    );
+    renderWithContexts(
+      <UserToken setBreadcrumb={vi.fn()} user={user as unknown as User} />
+    );
+    await waitFor(() => expect(TokensAPI.readDetail).toHaveBeenCalled());
+    expect(screen.queryByText('Not Found')).not.toBeInTheDocument();
   });
 });

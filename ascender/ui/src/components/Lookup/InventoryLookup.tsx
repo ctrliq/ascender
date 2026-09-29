@@ -173,12 +173,12 @@ function InventoryLookup({
         onDebounce={checkInventoryName}
         fieldName={fieldName}
         validate={validate}
-        isLoading={isLoading}
         isDisabled={isDisabled}
         qsConfig={QS_CONFIG}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading}
             options={inventories}
             optionCount={count}
             searchColumns={[
@@ -236,12 +236,12 @@ function InventoryLookup({
         multiple={multiple}
         onBlur={onBlur}
         required={required}
-        isLoading={isLoading}
         isDisabled={isDisabled}
         qsConfig={QS_CONFIG}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading}
             options={inventories}
             optionCount={count}
             searchColumns={[

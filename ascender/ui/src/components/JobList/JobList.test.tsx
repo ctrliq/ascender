@@ -1,8 +1,10 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
+import WS from 'vitest-websocket-mock';
 import {
   AdHocCommandsAPI,
   InventoryUpdatesAPI,
+  JobTemplatesAPI,
   JobsAPI,
   ProjectUpdatesAPI,
   SystemJobsAPI,
@@ -16,7 +18,8 @@ import {
   renderWithContexts,
   settleTooltips,
 } from '../../../testUtils/rtlContexts';
-import JobList from './JobList';
+import { createMemoryHistory } from '../../../testUtils/historyShim';
+import JobList, { asChoiceLists } from './JobList';
 
 vi.mock('../../api');
 
@@ -32,6 +35,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         start: true,
       },
@@ -48,6 +52,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         start: true,
       },
@@ -64,6 +69,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         start: true,
       },
@@ -80,6 +86,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         start: true,
       },
@@ -96,6 +103,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         edit: true,
       },
@@ -112,6 +120,7 @@ const mockResults = [
     },
     summary_fields: {
       user_capabilities: {
+        cancel: true,
         delete: true,
         edit: true,
       },
@@ -174,6 +183,233 @@ describe('<JobList />', () => {
     renderWithContexts(<JobList />);
     await waitFor(() =>
       expect(screen.getAllByRole('link', { name: /— job \d/ })).toHaveLength(6)
+    );
+  });
+
+  /*
+   * The toolbar reads left to right as the run does: start one, stop the ones
+   * running, remove what has finished.
+   */
+  test('should offer run, cancel and delete, in that order', async () => {
+    renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    const order = screen
+      .getAllByRole('button')
+      .map((button) => button.textContent?.trim())
+      .filter((label) => ['Run', 'Cancel', 'Delete'].includes(label ?? ''));
+    expect(order).toEqual(['Run', 'Cancel', 'Delete']);
+
+    expect(screen.getByRole('button', { name: 'Run' })).toBeEnabled();
+    // Nothing is selected, so neither of these has anything to act on.
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+  });
+
+  test("puts a runs tab's own Run in place of the menu of everything", async () => {
+    const { user } = renderWithContexts(
+      <JobList
+        runControl={
+          <button type="button" aria-label="Run">
+            Run this one
+          </button>
+        }
+      />
+    );
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+    // The tab's own control, not the menu that asks what to run.
+    expect(screen.getByText('Run this one')).toBeInTheDocument();
+    expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  });
+
+  test('leaves the run control out entirely when told to', async () => {
+    const { container } = renderWithContexts(<JobList runControl={false} />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    expect(
+      screen.queryByRole('button', { name: 'Run' })
+    ).not.toBeInTheDocument();
+    // No toolbar item is left standing empty where the control would be.
+    const emptyItems = [
+      ...container.querySelectorAll('.pf-v6-c-toolbar__item'),
+    ].filter((item) => item.childElementCount === 0);
+    expect(emptyItems).toHaveLength(0);
+  });
+
+  /*
+   * The API ORs every or__ clause together, with each other and with any the
+   * defaults hold, as an inventory's Runs tab does. A Status of Failed has to
+   * be an AND clause on every list, or it widens the list instead: to every
+   * failed run anywhere, or, beside a Type of Job, to every job as well.
+   */
+  test.each([
+    ['a list of its own', undefined, 'job.status=failed'],
+    [
+      'an inventory Runs tab',
+      { or__job__inventory: 2, or__adhoccommand__inventory: 2 },
+      'job.status=failed',
+    ],
+  ])(
+    'filters by status on %s so that it narrows',
+    async (_label, defaultParams, expected) => {
+      const { user, history } = renderWithContexts(
+        <JobList defaultParams={defaultParams} />
+      );
+      await screen.findByRole('link', { name: '1 — job 1' });
+
+      await user.click(
+        screen.getByRole('button', { name: 'Simple key select' })
+      );
+      await user.click(await screen.findByRole('option', { name: 'Status' }));
+      await user.click(
+        screen.getByRole('button', { name: 'Filter By Status' })
+      );
+      await user.click(await screen.findByRole('checkbox', { name: 'Failed' }));
+
+      await waitFor(() => expect(history.location.search).toContain(expected));
+    }
+  );
+
+  /*
+   * Two ticked statuses mean either of them, so on every list they go as one
+   * __in list: repeated AND clauses would match nothing, and the or__ group
+   * would widen the list.
+   */
+  test.each([
+    [
+      'a list of its own',
+      undefined,
+      '?job.status=failed&job.status=successful',
+      { status__in: 'failed,successful' },
+    ],
+    [
+      'an inventory Runs tab',
+      { or__job__inventory: 2, or__adhoccommand__inventory: 2 },
+      '?job.status=failed&job.status=successful',
+      { status__in: 'failed,successful' },
+    ],
+  ])(
+    'asks for either of two ticked statuses on %s',
+    async (_label, defaultParams, search, expected) => {
+      renderWithContexts(<JobList defaultParams={defaultParams} />, {
+        context: {
+          router: {
+            history: createMemoryHistory({ initialEntries: [`/${search}`] }),
+          },
+        },
+      });
+
+      await waitFor(() =>
+        expect(UnifiedJobsAPI.read).toHaveBeenCalledWith(
+          expect.objectContaining(expected)
+        )
+      );
+      expect(
+        vi.mocked(UnifiedJobsAPI.read).mock.calls[0]?.[0]
+      ).not.toHaveProperty('status');
+    }
+  );
+
+  /*
+   * Type and Status used to go as or__type and or__status, which the API ORs
+   * together: a Type of Job and a Status of Failed listed every job and every
+   * failed run of any kind, rather than the jobs that failed.
+   */
+  test('asks for runs of the ticked type that also have the ticked status', async () => {
+    const { user, history } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    const tick = async (key: string, option: string) => {
+      await user.click(
+        screen.getByRole('button', { name: 'Simple key select' })
+      );
+      await user.click(await screen.findByRole('option', { name: key }));
+      await user.click(
+        screen.getByRole('button', { name: `Filter By ${key}` })
+      );
+      await user.click(await screen.findByRole('checkbox', { name: option }));
+    };
+    await tick('Type', 'Job');
+    await tick('Status', 'Failed');
+
+    await waitFor(() =>
+      expect(history.location.search).toContain('job.status=failed')
+    );
+    expect(history.location.search).toContain('job.type=job');
+    await waitFor(() =>
+      expect(UnifiedJobsAPI.read).toHaveBeenLastCalledWith(
+        expect.objectContaining({ type: 'job', status: 'failed' })
+      )
+    );
+    const params = vi.mocked(UnifiedJobsAPI.read).mock.lastCall?.[0];
+    expect(params).not.toHaveProperty('or__type');
+    expect(params).not.toHaveProperty('or__status');
+  });
+
+  /* An address saved while the filters were or__ still opens, and asks for
+     what it meant rather than joining the OR group. */
+  test('reads a status saved in the old or__ form', async () => {
+    renderWithContexts(<JobList />, {
+      context: {
+        router: {
+          history: createMemoryHistory({
+            initialEntries: [
+              '/?job.or__status=failed&job.or__status=successful',
+            ],
+          }),
+        },
+      },
+    });
+
+    await screen.findByRole('link', { name: '1 — job 1' });
+    const params = vi.mocked(UnifiedJobsAPI.read).mock.calls[0]?.[0];
+    expect(params).toEqual(
+      expect.objectContaining({ status__in: 'failed,successful' })
+    );
+    expect(params).not.toHaveProperty('or__status');
+  });
+
+  /*
+   * The button offers every kind of run the list shows, and each item opens
+   * what that kind is started from.
+   */
+  test('should offer a run of each kind the list shows', async () => {
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+
+    [
+      'Job',
+      'Workflow',
+      'Command',
+      'Inventory Sync',
+      'Project Sync',
+      'Cleanup Job',
+    ].forEach((kind) =>
+      expect(screen.getByRole('menuitem', { name: kind })).toBeVisible()
+    );
+  });
+
+  /* The template is the wizard's first step, then where to run it. */
+  test('should open the launch wizard on the template to run', async () => {
+    vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+      data: { count: 1, results: [{ id: 7, name: 'a template' }] },
+    } as unknown as Awaited<ReturnType<typeof JobTemplatesAPI.read>>);
+    const { user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: '1 — job 1' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+    await user.click(screen.getByRole('menuitem', { name: 'Job' }));
+
+    expect(await screen.findByText('a template')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        document.querySelector('.pf-v6-c-wizard__nav-link.pf-m-current')
+          ?.textContent
+      ).toEqual('Template')
     );
   });
 
@@ -345,6 +581,75 @@ describe('<JobList />', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
   });
 
+  /*
+   * The selection is a copy of each row taken when it was ticked, while the
+   * websocket moves the rows on. The toolbar must decide on the status a run
+   * has now, so a run that finished after being ticked becomes deletable and
+   * stops being cancelable.
+   */
+  describe('after a ticked run changes status', () => {
+    let mockServer: WS;
+
+    beforeEach(() => {
+      WS.clean();
+      global.document.cookie = 'csrftoken=abc123';
+      mockServer = new WS('ws://localhost/websocket/');
+      vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
+        data: { count: 1, results: [mockResults[1]] },
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
+    });
+
+    afterEach(() => {
+      mockServer.close();
+      WS.clean();
+    });
+
+    async function tickThenFinish() {
+      const rendered = renderWithContexts(<JobList />);
+      await screen.findByRole('link', { name: '2 — job 2' });
+      await mockServer.connected;
+      await rendered.user.click(
+        screen.getByRole('checkbox', { name: 'Select row 0' })
+      );
+      expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeEnabled();
+
+      await act(async () => {
+        mockServer.send(
+          JSON.stringify({
+            unified_job_id: 2,
+            type: 'job',
+            status: 'successful',
+          })
+        );
+      });
+      return rendered;
+    }
+
+    test('enables Delete once the run has finished', async () => {
+      const destroyJob = mockInherited(JobsAPI, 'destroy');
+      const { user } = await tickThenFinish();
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled()
+      );
+      await user.click(screen.getByRole('button', { name: 'Delete' }));
+      const dialog = await screen.findByRole('dialog');
+      await user.click(
+        within(dialog).getByRole('button', { name: 'confirm delete' })
+      );
+      await waitFor(() => expect(destroyJob).toHaveBeenCalledWith(2));
+    });
+
+    test('disables Cancel once the run has finished', async () => {
+      await tickThenFinish();
+
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled()
+      );
+    });
+  });
+
   test('error is shown when job not successfully deleted from api', async () => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 6, results: deletableResults },
@@ -413,7 +718,7 @@ describe('<JobList />', () => {
     await screen.findByRole('link', { name: '1 — job 1' });
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
-    await user.click(screen.getByRole('button', { name: 'Cancel jobs' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     // confirm modal -> the danger confirm button
     const dialog = await screen.findByRole('dialog');
     await user.click(dialog.querySelector('#cancel-job-confirm-button')!);
@@ -448,11 +753,47 @@ describe('<JobList />', () => {
     await user.click(
       within(row as unknown as HTMLElement).getByRole('checkbox')
     );
-    await user.click(screen.getByRole('button', { name: 'Cancel job' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     const dialog = await screen.findByRole('dialog');
     await user.click(dialog.querySelector('#cancel-job-confirm-button')!);
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
     await settleTooltips();
+  });
+});
+
+describe('asChoiceLists', () => {
+  test('sends a status or type with several options as one __in list', () => {
+    expect(
+      asChoiceLists({
+        status: ['failed', 'error'],
+        type: ['job', 'project_update'],
+        page: 2,
+      })
+    ).toEqual({
+      status__in: 'failed,error',
+      type__in: 'job,project_update',
+      page: 2,
+    });
+  });
+
+  test('leaves a single option and other filters as they are', () => {
+    const params = { status: 'failed', name__icontains: ['a', 'b'] };
+    expect(asChoiceLists(params)).toEqual(params);
+  });
+
+  test('folds the old or__ form into the plain one', () => {
+    expect(
+      asChoiceLists({
+        or__status: ['failed', 'error'],
+        status: 'failed',
+        or__type: 'job',
+        or__job__inventory: 2,
+      })
+    ).toEqual({
+      status__in: 'failed,error',
+      type: 'job',
+      or__job__inventory: 2,
+    });
   });
 });

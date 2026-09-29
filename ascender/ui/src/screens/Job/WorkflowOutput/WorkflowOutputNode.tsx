@@ -13,6 +13,7 @@ import { WorkflowNodeTypeLetter } from 'components/Workflow';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
 import { constants as wfConstants } from 'components/Workflow/WorkflowUtils';
+import { JOB_TYPE_URL_SEGMENTS } from '../../../constants';
 import './WorkflowOutputNode.css';
 
 // $hasJob is transient: the job object itself used to be forwarded to the <g>
@@ -64,7 +65,12 @@ function WorkflowOutputNode({
     return () => clearInterval(timer);
   }, [isRunning, jobStarted]);
 
-  let borderColor = 'var(--pf-t--global--border--color--default)';
+  // A node with no status yet takes the resting edge, which the ALL badge below
+  // fills itself with, so the badge's own text colour follows it: white reads
+  // on every status colour, and on a light resting fill it does not.
+  const RESTING_BORDER =
+    'var(--ascender-workflow-node-border, var(--pf-t--global--border--color--default))';
+  let borderColor = RESTING_BORDER;
 
   if (job) {
     if (job.status === 'failed' || job.status === 'error') {
@@ -83,11 +89,25 @@ function WorkflowOutputNode({
     borderColor = 'var(--pf-t--global--color--status--success--default)';
   }
 
+  const convergeTextColor =
+    borderColor === RESTING_BORDER
+      ? 'var(--ascender-workflow-converge-color, #ffffff)'
+      : '#ffffff';
+
   const handleNodeClick = () => {
     if (job) {
-      const basePath =
-        job.type !== 'workflow_approval' ? 'jobs' : 'workflow_approvals';
-      navigate(`/${basePath}/${job.id}/details`);
+      // Straight to the address the run is shown at. The /jobs and
+      // /workflow_approvals shapes this built only arrived there by way of two
+      // redirects, each a hop in the history. A type the map does not name
+      // still lands, through the /runs/<id>/details redirect that looks the type up.
+      const segment = JOB_TYPE_URL_SEGMENTS[job.type as string];
+      if (job.type === 'workflow_approval') {
+        navigate(`/approvals/${job.id}/details`);
+      } else if (segment) {
+        navigate(`/runs/${segment}/${job.id}/details`);
+      } else {
+        navigate(`/runs/${job.id}/details`);
+      }
     }
   };
 
@@ -144,7 +164,12 @@ function WorkflowOutputNode({
             x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
             y={-wfConstants.nodeH / 4 - 1}
           >
-            <p className="ascender-workflow-output-node__convergence-label">{t`ALL`}</p>
+            <p
+              className="ascender-workflow-output-node__convergence-label"
+              style={{ color: convergeTextColor }}
+            >
+              {t`ALL`}
+            </p>
           </foreignObject>
         </>
       )}

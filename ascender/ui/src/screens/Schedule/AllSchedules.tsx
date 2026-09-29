@@ -5,6 +5,7 @@ import { useLingui } from '@lingui/react/macro';
 
 import ScreenHeader from 'components/ScreenHeader';
 import { ScheduleList } from 'components/Schedule';
+import AddScheduleButton from 'components/Schedule/ScheduleList/AddScheduleButton';
 import { SchedulesAPI } from 'api';
 import type { QSParams } from 'util/qs';
 
@@ -36,6 +37,9 @@ function AllSchedules() {
                   loadSchedules={loadSchedules}
                   loadScheduleOptions={loadScheduleOptions}
                   hideAddButton
+                  /* This list belongs to no resource, so its add button asks
+                     which one the schedule is for before the form opens. */
+                  addButton={<AddScheduleButton key="add" />}
                 />
               </Card>
             </PageSection>

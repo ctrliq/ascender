@@ -64,10 +64,12 @@ describe('<InstanceGroupListItem/>', () => {
   test('should render the proper data for an instance group', () => {
     renderItem(instanceGroups[0] as InstanceGroup);
     const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
-    const typeCell = within(row!)
-      .getAllByRole('cell')
-      .find((cell) => cell.getAttribute('data-label') === 'Type');
-    expect(typeCell).toHaveTextContent('Instance group');
+    // No type column: the tab the list sits on says which kind these are.
+    expect(
+      within(row!)
+        .getAllByRole('cell')
+        .some((cell) => cell.getAttribute('data-label') === 'Type')
+    ).toBe(false);
     // Used capacity is rendered as a Progress bar (100 - 60 = 40).
     expect(within(row!).getByRole('progressbar')).toHaveAttribute(
       'aria-valuenow',
@@ -75,34 +77,40 @@ describe('<InstanceGroupListItem/>', () => {
     );
     // edit capability is true -> the edit button is present.
     expect(
-      within(row!).getByRole('link', { name: 'Edit instance group' })
+      within(row!).getByRole('link', { name: 'Edit Instance Group' })
     ).toBeInTheDocument();
   });
 
   test('should render the proper data for a container group', () => {
     renderItem(instanceGroups[1] as InstanceGroup);
     const row = screen.getByRole('link', { name: 'Bar' }).closest('tr');
-    const typeCell = within(row!)
-      .getAllByRole('cell')
-      .find((cell) => cell.getAttribute('data-label') === 'Type');
-    expect(typeCell).toHaveTextContent('Container group');
     // edit capability is false -> no edit button.
     expect(
-      within(row!).queryByRole('link', { name: 'Edit instance group' })
+      within(row!).queryByRole('link', { name: 'Edit Container Group' })
     ).not.toBeInTheDocument();
+  });
+
+  test('names the edit button after a container group', () => {
+    renderItem({
+      ...instanceGroups[1],
+      summary_fields: { user_capabilities: { edit: true, delete: true } },
+    } as unknown as InstanceGroup);
+    expect(
+      screen.getByRole('link', { name: 'Edit Container Group' })
+    ).toHaveAttribute('href', '/container_groups/2/edit');
   });
 
   test('edit button shown to users with edit capabilities', () => {
     renderItem(instanceGroups[0] as InstanceGroup, { isSelected: true });
     expect(
-      screen.getByRole('link', { name: 'Edit instance group' })
+      screen.getByRole('link', { name: 'Edit Instance Group' })
     ).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
     renderItem(instanceGroups[1] as InstanceGroup, { isSelected: true });
     expect(
-      screen.queryByRole('link', { name: 'Edit instance group' })
+      screen.queryByRole('link', { name: 'Edit Container Group' })
     ).not.toBeInTheDocument();
   });
 });

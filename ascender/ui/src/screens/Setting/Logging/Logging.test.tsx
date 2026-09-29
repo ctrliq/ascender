@@ -50,10 +50,10 @@ describe('<Logging />', () => {
 
   function renderLogging(initialEntries: string[], context?: TestContexts) {
     const history = createMemoryHistory({ initialEntries });
-    return renderWithContexts(
+    const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route path="/settings/logging/*" element={<Logging />} />
+          <Route path="/logging/*" element={<Logging />} />
         </Routes>
       </SettingsProvider>,
       {
@@ -63,24 +63,44 @@ describe('<Logging />', () => {
         },
       }
     );
+    return { ...result, history };
   }
 
   test('should render logging details', async () => {
-    renderLogging(['/settings/logging/details']);
+    renderLogging(['/logging']);
     expect(
-      await screen.findByText('Enable External Logging')
+      await screen.findByText('Logging Aggregator Username')
     ).toBeInTheDocument();
   });
 
-  test('should render logging edit', async () => {
-    renderLogging(['/settings/logging/edit']);
+  test('should open the page on its first tab', async () => {
+    const { history } = renderLogging(['/logging']);
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/logging/credentials')
+    );
+  });
+
+  test('should send an old ?tab= link to the tab it names', async () => {
+    // The tab once lived in the query, and links to those addresses are
+    // still about.
+    const { history } = renderLogging(['/logging?tab=protocol']);
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/logging/protocol')
+    );
+    expect(
+      await screen.findByText('Logging Aggregator Protocol')
+    ).toBeInTheDocument();
+  });
+
+  test('should render the edit form of a group', async () => {
+    renderLogging(['/logging/edit/general']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderLogging(['/settings/logging/foo']);
+    renderLogging(['/logging/foo']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)
@@ -89,11 +109,11 @@ describe('<Logging />', () => {
   });
 
   test('should redirect to details for users without system admin permissions', async () => {
-    renderLogging(['/settings/logging/edit'], {
+    renderLogging(['/logging/edit/general'], {
       config: { me: { is_superuser: false } },
     });
     expect(
-      await screen.findByText('Enable External Logging')
+      await screen.findByText('Logging Aggregator Username')
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Save' })

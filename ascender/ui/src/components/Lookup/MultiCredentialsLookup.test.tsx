@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import { FormRoot } from 'components/Form';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
@@ -229,6 +229,28 @@ describe('<FormRoot><MultiCredentialsLookup /></FormRoot>', () => {
         page_size: 5,
       })
     );
+  });
+
+  /*
+   * The job template form also holds the webhook credential's lookup, whose
+   * search lives under its own name in the same address. Changing it must
+   * not send this lookup's request again.
+   */
+  test('should not fetch again when another lookup changes the address', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/templates'] });
+    renderLookup({}, { context: { router: { history } } });
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+
+    act(() =>
+      history.push('/templates?webhook_credential.name__icontains=git')
+    );
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+    });
+
+    expect(CredentialsAPI.read).toHaveBeenCalledTimes(1);
   });
 
   test('should only add 1 credential per credential type except vault(see below)', async () => {

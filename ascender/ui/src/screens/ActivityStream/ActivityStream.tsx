@@ -102,27 +102,40 @@ function ActivityStream() {
     navigate(qs ? `${location.pathname}?${qs}` : location.pathname);
   };
 
+  /*
+   * Named and grouped as the nav rail names them, so a type reads the same
+   * here as the screen it links from. Runs takes in every kind the stream
+   * records, not only playbook jobs. Cleanup jobs are left out: the stream
+   * records nothing for them, so the choice would only ever show an empty
+   * list.
+   */
+  const RUN_TYPES = 'job,workflow_job,ad_hoc_command';
+  const TEMPLATE_TYPES =
+    'job_template,workflow_job_template,workflow_job_template_node';
+  const APPLICATION_TYPES = 'o_auth2_application,o_auth2_access_token';
+
   const typeLabelMap = {
-    all: t`Dashboard (all activity)`,
-    job: t`Jobs`,
+    all: t`Dashboard (All Activity)`,
+    workflow_approval: t`Approvals`,
+    [RUN_TYPES]: t`Runs`,
     schedule: t`Schedules`,
-    workflow_approval: t`Workflow Approvals`,
-    'job_template,workflow_job_template,workflow_job_template_node': t`Templates`,
     credential: t`Credentials`,
-    project: t`Projects`,
-    inventory: t`Inventories`,
     host: t`Hosts`,
-    organization: t`Organizations`,
-    user: t`Users`,
-    team: t`Teams`,
+    inventory: t`Inventories`,
+    label: t`Labels`,
+    project: t`Projects`,
+    [TEMPLATE_TYPES]: t`Templates`,
     credential_type: t`Credential Types`,
-    notification_template: t`Notification Templates`,
+    organization: t`Organizations`,
+    team: t`Teams`,
+    user: t`Users`,
+    execution_environment: t`Execution Environments`,
     instance: t`Instances`,
     instance_group: t`Instance Groups`,
-    'o_auth2_application,o_auth2_access_token': t`Applications & Tokens`,
-    execution_environment: t`Execution Environments`,
+    [APPLICATION_TYPES]: t`API Applications & Tokens`,
+    notification_template: t`Notifications`,
     setting: t`Settings`,
-  };
+  } as Record<string, string>;
 
   return (
     <>
@@ -135,7 +148,7 @@ function ActivityStream() {
           {t`Activity Stream`}
         </Title>
         <span id="grouped-type-select-id" hidden>
-          {t`Activity Stream type selector`}
+          {t`Activity Stream Type Selector`}
         </span>
         <Select
           isOpen={isTypeDropdownOpen}
@@ -159,66 +172,75 @@ function ActivityStream() {
               onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
               isExpanded={isTypeDropdownOpen}
             >
-              {typeLabelMap[activityStreamType as keyof typeof typeLabelMap] ||
-                activityStreamType}
+              {typeLabelMap[activityStreamType] || activityStreamType}
             </MenuToggle>
           )}
         >
           <SelectGroup label={t`Views`} key="views">
             <SelectList>
-              <SelectOption value="all">
-                {t`Dashboard (all activity)`}
-              </SelectOption>
-              <SelectOption value="job">{t`Jobs`}</SelectOption>
-              <SelectOption value="schedule">{t`Schedules`}</SelectOption>
-              <SelectOption value="workflow_approval">
-                {t`Workflow Approvals`}
-              </SelectOption>
+              <SelectOption value="all">{typeLabelMap.all}</SelectOption>
+            </SelectList>
+          </SelectGroup>
+          <SelectGroup label={t`Operations`} key="operations">
+            <SelectList>
+              {['workflow_approval', RUN_TYPES, 'schedule'].map((type) => (
+                <SelectOption key={type} value={type}>
+                  {typeLabelMap[type]}
+                </SelectOption>
+              ))}
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Resources`} key="resources">
             <SelectList>
-              <SelectOption value="job_template,workflow_job_template,workflow_job_template_node">
-                {t`Templates`}
-              </SelectOption>
-              <SelectOption value="credential">{t`Credentials`}</SelectOption>
-              <SelectOption value="project">{t`Projects`}</SelectOption>
-              <SelectOption value="inventory">{t`Inventories`}</SelectOption>
-              <SelectOption value="host">{t`Hosts`}</SelectOption>
+              {[
+                'credential',
+                'host',
+                'inventory',
+                'label',
+                'project',
+                TEMPLATE_TYPES,
+                'credential_type',
+              ].map((type) => (
+                <SelectOption key={type} value={type}>
+                  {typeLabelMap[type]}
+                </SelectOption>
+              ))}
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Access`} key="access">
             <SelectList>
-              <SelectOption value="organization">
-                {t`Organizations`}
-              </SelectOption>
-              <SelectOption value="user">{t`Users`}</SelectOption>
-              <SelectOption value="team">{t`Teams`}</SelectOption>
+              {['organization', 'team', 'user'].map((type) => (
+                <SelectOption key={type} value={type}>
+                  {typeLabelMap[type]}
+                </SelectOption>
+              ))}
             </SelectList>
           </SelectGroup>
-          <SelectGroup label={t`Administration`} key="administration">
+          <SelectGroup label={t`Infrastructure`} key="infrastructure">
             <SelectList>
-              <SelectOption value="credential_type">
-                {t`Credential Types`}
-              </SelectOption>
-              <SelectOption value="notification_template">
-                {t`Notification Templates`}
-              </SelectOption>
-              <SelectOption value="instance">{t`Instances`}</SelectOption>
-              <SelectOption value="instance_group">
-                {t`Instance Groups`}
-              </SelectOption>
-              <SelectOption value="o_auth2_application,o_auth2_access_token">
-                {t`Applications & Tokens`}
-              </SelectOption>
-              <SelectOption value="execution_environment">
-                {t`Execution Environments`}
-              </SelectOption>
+              {['execution_environment', 'instance', 'instance_group'].map(
+                (type) => (
+                  <SelectOption key={type} value={type}>
+                    {typeLabelMap[type]}
+                  </SelectOption>
+                )
+              )}
+            </SelectList>
+          </SelectGroup>
+          <SelectGroup label={t`Integrations`} key="integrations">
+            <SelectList>
+              {[APPLICATION_TYPES, 'notification_template'].map((type) => (
+                <SelectOption key={type} value={type}>
+                  {typeLabelMap[type]}
+                </SelectOption>
+              ))}
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Settings`} key="settings">
             <SelectList>
-              <SelectOption value="setting">{t`Settings`}</SelectOption>
+              <SelectOption value="setting">
+                {typeLabelMap.setting}
+              </SelectOption>
             </SelectList>
           </SelectGroup>
         </Select>
@@ -239,7 +261,7 @@ function ActivityStream() {
                 isDefault: true,
               },
               {
-                name: t`Initiated by (username)`,
+                name: t`Initiated By (Username)`,
                 key: 'actor__username__icontains',
               },
               {
@@ -253,17 +275,17 @@ function ActivityStream() {
                 key: 'timestamp',
               },
               {
-                name: t`Initiated by`,
+                name: t`Initiated By`,
                 key: 'actor__username',
               },
             ]}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
             headerRow={
-              <HeaderRow qsConfig={QS_CONFIG}>
+              <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
                 <HeaderCell sortKey="timestamp">{t`Time`}</HeaderCell>
                 <HeaderCell sortKey="actor__username">
-                  {t`Initiated by`}
+                  {t`Initiated By`}
                 </HeaderCell>
                 <HeaderCell>{t`Event`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>

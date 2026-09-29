@@ -6,7 +6,6 @@ import { Label, Button } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
 import {
   DeletedDetail,
@@ -21,12 +20,23 @@ import CredentialChip from 'components/CredentialChip';
 import { VariablesDetail } from 'components/CodeEditor';
 import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
-import { LaunchButton, ReLaunchDropDown } from 'components/LaunchButton';
+import {
+  LaunchButton,
+  ReLaunchDropDown,
+  WorkflowReLaunchDropDown,
+} from 'components/LaunchButton';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import { getVerbosityLabel } from 'components/VerbositySelectField';
-import { canOfferCancel, getJobModel, isJobRunning } from 'util/jobs';
+import {
+  canCancelJob,
+  canDeleteJob,
+  canOverwriteRelaunchVars,
+  getJobModel,
+  getRunActionLabels,
+  isJobRunning,
+} from 'util/jobs';
 import { formatDateString } from 'util/dates';
 import getJobHelpText from '../Job.helptext';
 import './JobDetail.css';
@@ -41,7 +51,6 @@ export interface JobDetailProps {
 function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
   const { t, i18n } = useLingui();
   const jobHelpText = getJobHelpText();
-  const { me } = useConfig();
   const {
     created_by,
     credential,
@@ -63,13 +72,22 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
   const navigate = useNavigate();
 
   const jobTypes = {
-    project_update: t`Source Control Update`,
+    project_update: t`Project Sync`,
     inventory_update: t`Inventory Sync`,
-    job: job.job_type === 'check' ? t`Playbook Check` : t`Playbook Run`,
-    ad_hoc_command: t`Run Command`,
-    system_job: t`Management Job`,
-    workflow_job: t`Workflow Job`,
+    job: job.job_type === 'check' ? t`Playbook Check` : t`Job`,
+    ad_hoc_command: t`Command`,
+    system_job: t`Cleanup Job`,
+    workflow_job: t`Workflow`,
   };
+
+  // One credential field serves every kind of run, but only an ad hoc
+  // command's is a machine credential: a project sync's is the source control
+  // one, and an inventory sync's is whatever its source authenticates with.
+  const singleCredentialLabel =
+    {
+      project_update: t`Source Control Credential`,
+      inventory_update: t`Credential`,
+    }[job.type as string] ?? t`Machine Credential`;
 
   const scmTypes = {
     '': t`Manual`,
@@ -81,7 +99,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
   const deleteJob = async () => {
     try {
       await getJobModel(job.type).destroy(job.id);
-      navigate('/jobs');
+      navigate('/runs');
     } catch (err) {
       setErrorMsg(err);
     }
@@ -92,7 +110,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
   );
 
   const buildContainerGroupLink = (item: SummaryFieldRef) => (
-    <Link to={`/instance_groups/container_group/${item.id}`}>{item.name}</Link>
+    <Link to={`/container_groups/${item.id}`}>{item.name}</Link>
   );
 
   const renderInventoryDetail = () => {
@@ -165,7 +183,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         project ? project?.id : source_project?.id
       }/details`;
 
-      const jobLink = `/jobs/project/${
+      const jobLink = `/runs/project/${
         project ? projectUpdate?.id : job.source_project_update
       }`;
 
@@ -216,6 +234,64 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     }
     return null;
   };
+  /**
+   * The relaunch this run offers: a failed playbook run can rerun only the
+   * hosts that failed, a workflow that stopped part way can skip the nodes
+   * that already succeeded, as the list row and the workflow output toolbar
+   * offer, and anything else is simply run again.
+   */
+  const renderRelaunch = () => {
+    if (job.status === 'failed' && job.type === 'job') {
+      return (
+        <LaunchButton resource={job}>
+          {({ handleRelaunch, isLaunching }) => (
+            <ReLaunchDropDown
+              ouiaId="job-detail-relaunch-dropdown"
+              isPrimary
+              handleRelaunch={handleRelaunch}
+              isLaunching={isLaunching}
+            />
+          )}
+        </LaunchButton>
+      );
+    }
+    if (
+      job.type === 'workflow_job' &&
+      ['failed', 'error', 'canceled'].includes(job.status ?? '')
+    ) {
+      return (
+        <LaunchButton resource={job}>
+          {({ handleRelaunch, isLaunching }) => (
+            <WorkflowReLaunchDropDown
+              ouiaId="job-detail-workflow-relaunch-dropdown"
+              id="job-detail-workflow-relaunch"
+              isPrimary
+              handleRelaunch={handleRelaunch}
+              isLaunching={isLaunching}
+              status={job.status}
+              canOverwriteVars={canOverwriteRelaunchVars(job)}
+              jobId={job.id}
+            />
+          )}
+        </LaunchButton>
+      );
+    }
+    return (
+      <LaunchButton resource={job} aria-label={t`Relaunch`}>
+        {({ handleRelaunch, isLaunching }) => (
+          <Button
+            ouiaId="job-detail-relaunch-button"
+            type="submit"
+            onClick={() => handleRelaunch()}
+            isDisabled={isLaunching}
+          >
+            {t`Relaunch`}
+          </Button>
+        )}
+      </LaunchButton>
+    );
+  };
+
   return (
     <CardBody>
       <DetailList>
@@ -271,7 +347,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         {workflowJobTemplate && (
           <Detail
             dataCy="workflow-job-template"
-            label={t`Workflow Job Template`}
+            label={t`Workflow Template`}
             value={
               workflowJobTemplate.name ? (
                 <Link
@@ -288,14 +364,14 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         {source_workflow_job && (
           <Detail
             dataCy="source-workflow-job"
-            label={t`Source Workflow Job`}
+            label={t`Source Workflow`}
             value={
               source_workflow_job.name ? (
-                <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
+                <Link to={`/runs/workflow/${source_workflow_job.id}`}>
                   {source_workflow_job.id} - {source_workflow_job.name}
                 </Link>
               ) : (
-                'Unknown Workflow Job'
+                'Unknown Workflow'
               )
             }
           />
@@ -442,7 +518,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         {credential && (
           <Detail
             dataCy="job-machine-credential"
-            label={t`Machine Credential`}
+            label={singleCredentialLabel}
             value={
               <ChipGroup
                 numChips={5}
@@ -601,67 +677,46 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             label={t`Artifacts`}
             name="artifacts"
             dataCy="job-detail-artifacts"
+            helpText={jobHelpText.artifacts}
           />
         )}
       </DetailList>
       <CardActionsRow>
         {job.type !== 'system_job' &&
           job.summary_fields?.user_capabilities?.start &&
-          (job.status === 'failed' && job.type === 'job' ? (
-            <LaunchButton resource={job}>
-              {({ handleRelaunch, isLaunching }) => (
-                <ReLaunchDropDown
-                  ouiaId="job-detail-relaunch-dropdown"
-                  isPrimary
-                  handleRelaunch={handleRelaunch}
-                  isLaunching={isLaunching}
-                />
-              )}
-            </LaunchButton>
-          ) : (
-            <LaunchButton resource={job} aria-label={t`Relaunch`}>
-              {({ handleRelaunch, isLaunching }) => (
-                <Button
-                  ouiaId="job-detail-relaunch-button"
-                  type="submit"
-                  onClick={() => handleRelaunch()}
-                  isDisabled={isLaunching}
-                >
-                  {t`Relaunch`}
-                </Button>
-              )}
-            </LaunchButton>
-          ))}
-        {isJobRunning(job.status) &&
-          (job.type === 'system_job'
-            ? me?.is_superuser
-            : canOfferCancel(job)) && (
-            <JobCancelButton
-              job={job}
-              errorTitle={t`Job Cancel Error`}
-              title={t`Cancel ${job.name}`}
-              errorMessage={t`Failed to cancel ${job.name}`}
-            />
-          )}
-        {!isJobRunning(job.status) &&
-          job?.summary_fields?.user_capabilities?.delete && (
-            <DeleteButton
-              name={job.name}
-              modalTitle={t`Delete Job`}
-              onConfirm={deleteJob}
-              ouiaId="job-detail-delete-button"
-            >
-              {t`Delete`}
-            </DeleteButton>
-          )}
+          renderRelaunch()}
+        {/* One rule for Cancel and one for Delete, shared with the list and
+            the output toolbars: the api's capability in a status it allows,
+            which gives a new run both. */}
+        {canCancelJob(job) && (
+          <JobCancelButton
+            job={job}
+            title={i18n._(getRunActionLabels(job.type).cancel)}
+            errorMessage={t`Failed to cancel ${job.name}`}
+            // Plain beside Relaunch and Delete: the tooltip and the
+            // confirmation still name the kind of run.
+            buttonText={t`Cancel`}
+          />
+        )}
+        {canDeleteJob(job) && (
+          <DeleteButton
+            name={job.name}
+            modalTitle={i18n._(getRunActionLabels(job.type).delete)}
+            onConfirm={deleteJob}
+            ouiaId="job-detail-delete-button"
+          >
+            {t`Delete`}
+          </DeleteButton>
+        )}
       </CardActionsRow>
       {Boolean(errorMsg) && (
         <AlertModal
           isOpen={Boolean(errorMsg)}
           variant="error"
           onClose={() => setErrorMsg(undefined)}
-          title={t`Job Delete Error`}
+          title={i18n._(getRunActionLabels(job.type).deleteError)}
         >
+          {i18n._(getRunActionLabels(job.type).deleteErrorMessage)}
           <ErrorDetail error={errorMsg} />
         </AlertModal>
       )}

@@ -24,10 +24,13 @@ const adHocItems = [
   { name: 'inventory 3' },
 ];
 
-function renderWizard(onLaunch: AdHocCommandsWizardProps['onLaunch']) {
+function renderWizard(
+  onLaunch: AdHocCommandsWizardProps['onLaunch'],
+  items: { name: string }[] = adHocItems
+) {
   return renderWithContexts(
     <AdHocCommandsWizard
-      adHocItems={adHocItems as unknown as AdHocItem[]}
+      adHocItems={items as unknown as AdHocItem[]}
       onLaunch={onLaunch}
       moduleOptions={moduleOptions}
       onCloseWizard={() => {}}
@@ -68,7 +71,33 @@ describe('<AdHocCommandsWizard/>', () => {
   test('should mount properly', async () => {
     renderWizard(onLaunch);
     // the wizard renders its title in a body portal
-    expect(await screen.findByText('Run command')).toBeInTheDocument();
+    expect(await screen.findByText('Run Command')).toBeInTheDocument();
+  });
+
+  /*
+   * The header says what the command is aimed at, on every step rather than
+   * only the one holding the field, and reads it from the field itself so an
+   * edit to it shows.
+   */
+  test('should say what the command is limited to', async () => {
+    renderWizard(onLaunch);
+    expect(
+      await screen.findByText('Limit: Inventory 1,Inventory 2,inventory 3')
+    ).toBeInTheDocument();
+  });
+
+  test('should say every host where nothing was ticked', async () => {
+    renderWizard(onLaunch, []);
+    expect(await screen.findByText('Limit: all')).toBeInTheDocument();
+  });
+
+  test('should follow the limit field as it is edited', async () => {
+    const { user } = renderWizard(onLaunch, [{ name: 'web1' }]);
+    expect(await screen.findByText('Limit: web1')).toBeInTheDocument();
+
+    await user.clear(screen.getByRole('textbox', { name: /Limit/ }));
+    await user.type(screen.getByRole('textbox', { name: /Limit/ }), 'web2');
+    expect(await screen.findByText('Limit: web2')).toBeInTheDocument();
   });
 
   test('launch button should be disabled', async () => {
@@ -166,7 +195,7 @@ describe('<AdHocCommandsWizard/>', () => {
         extra_vars: '---',
         forks: 0,
         job_type: 'run',
-        limit: 'Inventory 1, Inventory 2, inventory 3',
+        limit: 'Inventory 1,Inventory 2,inventory 3',
         module_args: 'foo',
         module_name: 'command',
         verbosity: '1',
@@ -240,6 +269,10 @@ describe('<AdHocCommandsWizard/>', () => {
     );
     await user.type(sshPassword as unknown as Element, 'password');
     expect(sshPassword).toHaveValue('password');
+    // The step is named in Title Case, as the other steps are.
+    expect(screen.getAllByText('Credential Passwords').length).toBeGreaterThan(
+      0
+    );
     await user.click(nextButton());
 
     // preview step -> launch
@@ -258,7 +291,7 @@ describe('<AdHocCommandsWizard/>', () => {
         extra_vars: '---',
         forks: 0,
         job_type: 'run',
-        limit: 'Inventory 1, Inventory 2, inventory 3',
+        limit: 'Inventory 1,Inventory 2,inventory 3',
         module_args: 'foo',
         module_name: 'command',
         verbosity: '1',

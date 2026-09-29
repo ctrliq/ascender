@@ -13,7 +13,6 @@ import {
   LabelGroup,
   Content,
   ContentVariants,
-  Tooltip,
 } from '@patternfly/react-core';
 
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
@@ -31,9 +30,12 @@ import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import JobCancelButton from 'components/JobCancelButton';
+import useCanCancelSync from 'hooks/useCanCancelSync';
+import { getRunActionLabels, isJobCancelable } from 'util/jobs';
 import Popover from 'components/Popover';
 import StatusLabel from 'components/StatusLabel';
-import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
+import Tooltip from 'components/Tooltip';
+import InventorySyncAllButton from '../shared/InventorySyncAllButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
 
@@ -68,7 +70,7 @@ function JobStatusLabel({ job }: JobStatusLabelProps) {
       }
       key={job.id}
     >
-      <Link to={`/jobs/inventory/${job.id}`}>
+      <Link to={`/runs/inventory/${job.id}`}>
         <StatusLabel status={job.status} />
       </Link>
     </Tooltip>
@@ -82,7 +84,7 @@ export interface ConstructedInventoryDetailProps {
 function ConstructedInventoryDetail({
   inventory,
 }: ConstructedInventoryDetailProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const navigate = useNavigate();
   const helpText = getHelpText();
 
@@ -132,6 +134,14 @@ function ConstructedInventoryDetail({
     wsInventorySource.summary_fields?.current_job ||
     wsInventorySource.summary_fields?.last_job ||
     null;
+  // The sync runs as the constructed inventory's one source, whose cancel
+  // the api grants to an admin of the inventory itself.
+  const canCancelSync = useCanCancelSync(
+    'inventory_update',
+    inventorySourceSyncJob?.id as number | undefined,
+    inventorySourceSyncJob?.status as string | undefined,
+    inventory?.summary_fields?.user_capabilities?.edit
+  );
   const wsInventory = {
     ...inventory,
     ...wsInventorySource?.summary_fields?.inventory,
@@ -201,31 +211,31 @@ function ConstructedInventoryDetail({
           }
         />
         <Detail
-          label={t`Total groups`}
+          label={t`Total Groups`}
           value={wsInventory.total_groups}
           helpText={actions.total_groups?.help_text}
           dataCy="constructed-inventory-total-groups"
         />
         <Detail
-          label={t`Total hosts`}
+          label={t`Total Hosts`}
           value={wsInventory.total_hosts}
           helpText={actions.total_hosts?.help_text}
           dataCy="constructed-inventory-total-hosts"
         />
         <Detail
-          label={t`Total inventory sources`}
+          label={t`Total Inventory Sources`}
           value={wsInventory.total_inventory_sources}
           helpText={actions.total_inventory_sources?.help_text}
           dataCy="constructed-inventory-sources"
         />
         <Detail
-          label={t`Update cache timeout`}
+          label={t`Cache Timeout`}
           value={inventory.update_cache_timeout}
           helpText={actions.update_cache_timeout?.help_text}
           dataCy="constructed-inventory-cache-timeout"
         />
         <Detail
-          label={t`Inventory sources with failures`}
+          label={t`Inventory Sources With Failures`}
           value={wsInventory.inventory_sources_with_failures}
           helpText={actions.inventory_sources_with_failures?.help_text}
           dataCy="constructed-inventory-sources-with-failures"
@@ -248,7 +258,7 @@ function ConstructedInventoryDetail({
         {inventory.prevent_instance_group_fallback && (
           <Detail
             fullWidth
-            label={t`Enabled Options`}
+            label={t`Options`}
             dataCy="constructed-inventory-instance-group-fallback"
             value={
               <Content component={ContentVariants.ul}>
@@ -313,7 +323,7 @@ function ConstructedInventoryDetail({
           isEmpty={inputInventories?.length === 0}
         />
         <VariablesDetail
-          label={t`Source vars`}
+          label={t`Source Variables`}
           helpText={helpText.variables()}
           value={inventory.source_vars}
           rows={4}
@@ -326,7 +336,7 @@ function ConstructedInventoryDetail({
           user={inventory.summary_fields.created_by}
         />
         <UserDateDetail
-          label={t`Modified`}
+          label={t`Last Modified`}
           date={inventory.modified}
           user={inventory.summary_fields.modified_by}
         />
@@ -341,20 +351,23 @@ function ConstructedInventoryDetail({
             {t`Edit`}
           </Button>
         )}
-        {inventorySource?.summary_fields?.user_capabilities?.start &&
-          (['new', 'running', 'pending', 'waiting'].includes(
-            (inventorySourceSyncJob?.status as string) ?? ''
-          ) ? (
-            <JobCancelButton
-              job={{ id: inventorySourceSyncJob!.id, type: 'inventory_update' }}
-              errorTitle={t`Constructed Inventory Source Sync Error`}
-              title={t`Cancel Constructed Inventory Source Sync`}
-              errorMessage={t`Failed to cancel Constructed Inventory Source Sync`}
-              buttonText={t`Cancel Sync`}
-            />
-          ) : (
-            <ConstructedInventorySyncButton inventoryId={inventory.id} />
-          ))}
+        {/* While a sync can still be stopped the place of Sync is taken by
+            its Cancel, for whoever the api lets cancel it. */}
+        {isJobCancelable(inventorySourceSyncJob?.status as string | undefined)
+          ? canCancelSync && (
+              <JobCancelButton
+                job={{
+                  id: inventorySourceSyncJob!.id,
+                  type: 'inventory_update',
+                }}
+                /* The shared wording for this kind of run, the one the runs
+                   list and the run's own page use. */
+                title={i18n._(getRunActionLabels('inventory_update').cancel)}
+              />
+            )
+          : inventorySource?.summary_fields?.user_capabilities?.start && (
+              <InventorySyncAllButton inventoryId={inventory.id} />
+            )}
         {inventory?.summary_fields?.user_capabilities?.delete && (
           <DeleteButton
             name={inventory.name}

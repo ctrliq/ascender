@@ -184,10 +184,29 @@ describe('CredentialsStep', () => {
     );
   });
 
-  test('should reset query params (credential.page) when selected credential type is changed', async () => {
+  /* The prompt opens over the credentials list, which pages as credential:
+     turning the prompt's page must leave that list's alone. */
+  test('should not read the credentials list behind it', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/credentials?credential.page=3'],
+    });
+    renderWithContexts(
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
+        <CredentialsStep allowCredentialsWithPasswords />
+      </FormRoot>,
+      { context: { router: { history } } }
+    );
+
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
+    expect(vi.mocked(CredentialsAPI.read).mock.calls[0]?.[0]).not.toMatchObject(
+      { page: 3 }
+    );
+  });
+
+  test('should reset query params (launch-credential.page) when selected credential type is changed', async () => {
     const history = createMemoryHistory({
       initialEntries: [
-        '?credential.page=2&credential.page_size=5&credential.order_by=name',
+        '?launch-credential.page=2&launch-credential.page_size=5&launch-credential.order_by=name',
       ],
     });
     const { user, container } = renderWithContexts(

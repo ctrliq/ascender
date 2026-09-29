@@ -1,0 +1,8 @@
+/*
+ * The detail list lays its rows out in three columns, and this list holds one
+ * row: the line reads across the preview rather than stopping a third of the
+ * way in.
+ */
+.ascender-run-on > div {
+  grid-column: 1 / -1;
+}

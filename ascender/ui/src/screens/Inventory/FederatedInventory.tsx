@@ -17,7 +17,6 @@ import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
 
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import JobList from 'components/JobList';
 import RelatedTemplateList from 'components/RelatedTemplateList';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import RoutedTabs from 'components/RoutedTabs';
@@ -26,6 +25,7 @@ import FederatedInventoryEdit from './FederatedInventoryEdit';
 import InventoryGroups from './InventoryGroups';
 import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
+import { inventoryRunsRoutes } from './shared/InventoryRuns';
 
 export interface FederatedInventoryProps {
   setBreadcrumb: SetBreadcrumb;
@@ -71,15 +71,21 @@ function FederatedInventory({ setBreadcrumb }: FederatedInventoryProps) {
       ),
       link: `/inventories`,
       id: 99,
+      persistentFilterKey: 'inventories',
     },
     { name: t`Details`, link: `${federatedBaseUrl}/details`, id: 0 },
     { name: t`Access`, link: `${federatedBaseUrl}/access`, id: 1 },
-    { name: t`Hosts`, link: `${federatedBaseUrl}/hosts`, id: 2 },
-    { name: t`Groups`, link: `${federatedBaseUrl}/groups`, id: 3 },
-    { name: t`Jobs`, link: `${federatedBaseUrl}/jobs`, id: 4 },
+    { name: t`Groups`, link: `${federatedBaseUrl}/groups`, id: 2 },
+    { name: t`Hosts`, link: `${federatedBaseUrl}/hosts`, id: 3 },
+    // Runs last, after the inventory's own tabs, as on every screen.
     {
       name: t`Job Templates`,
       link: `${federatedBaseUrl}/job_templates`,
+      id: 4,
+    },
+    {
+      name: t`Runs`,
+      link: `${federatedBaseUrl}/runs`,
       id: 5,
     },
   ];
@@ -87,9 +93,7 @@ function FederatedInventory({ setBreadcrumb }: FederatedInventoryProps) {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -180,26 +184,14 @@ function FederatedInventory({ setBreadcrumb }: FederatedInventoryProps) {
               }
             />
           )}
-          {inventory && (
-            <Route
-              path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
-                />
-              }
-            />
-          )}
+          {inventoryRunsRoutes(inventory, { includeSourceUpdates: false })}
           {inventory && (
             <Route
               path="job_templates"
               element={
                 <RelatedTemplateList
                   searchParams={{ inventory__id: inventory.id }}
+                  resourceName={inventory.name}
                 />
               }
             />

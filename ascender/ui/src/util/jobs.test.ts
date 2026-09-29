@@ -1,4 +1,12 @@
-import { canOfferCancel, getJobModel, isJobRunning } from './jobs';
+import {
+  canCancelJob,
+  canDeleteJob,
+  getJobModel,
+  getRunActionLabels,
+  isJobCancelable,
+  isJobDeletable,
+  isJobRunning,
+} from './jobs';
 
 describe('isJobRunning', () => {
   test('should return true for new', () => {
@@ -44,26 +52,66 @@ describe('getJobModel', () => {
   });
 });
 
-describe('canOfferCancel', () => {
-  test('follows the start capability', () => {
-    expect(
-      canOfferCancel({ summary_fields: { user_capabilities: { start: true } } })
-    ).toBe(true);
-    expect(
-      canOfferCancel({
-        summary_fields: { user_capabilities: { start: false } },
-      })
-    ).toBe(false);
-    expect(canOfferCancel({})).toBe(false);
+/* The same list under a second name, so the two cannot drift apart. */
+test('isJobCancelable is isJobRunning', () => {
+  expect(isJobCancelable).toBe(isJobRunning);
+});
+
+describe('isJobCancelable and isJobDeletable', () => {
+  test.each([
+    ['new', true, true],
+    ['pending', true, false],
+    ['waiting', true, false],
+    ['running', true, false],
+    ['successful', false, true],
+    ['failed', false, true],
+    ['error', false, true],
+    ['canceled', false, true],
+  ])('%s: cancelable %s, deletable %s', (status, cancelable, deletable) => {
+    expect(isJobCancelable(status)).toBe(cancelable);
+    expect(isJobDeletable(status)).toBe(deletable);
   });
-  test('is offered when relaunch prevention took the start capability away', () => {
-    expect(
-      canOfferCancel({
-        summary_fields: {
-          user_capabilities: { start: false },
-          job_template: { prevent_relaunch: true },
-        },
-      })
-    ).toBe(true);
+});
+
+describe('canCancelJob and canDeleteJob', () => {
+  const run = (status: string, caps: Record<string, boolean>) => ({
+    status,
+    summary_fields: { user_capabilities: caps },
+  });
+
+  test('cancel needs the capability and a status that can stop', () => {
+    expect(canCancelJob(run('running', { cancel: true }))).toBe(true);
+    expect(canCancelJob(run('new', { cancel: true }))).toBe(true);
+    expect(canCancelJob(run('running', { start: true }))).toBe(false);
+    expect(canCancelJob(run('successful', { cancel: true }))).toBe(false);
+  });
+
+  test('delete needs the capability and a status the api allows', () => {
+    expect(canDeleteJob(run('new', { delete: true }))).toBe(true);
+    expect(canDeleteJob(run('failed', { delete: true }))).toBe(true);
+    expect(canDeleteJob(run('running', { delete: true }))).toBe(false);
+    expect(canDeleteJob(run('failed', {}))).toBe(false);
+  });
+});
+
+describe('getRunActionLabels', () => {
+  test('names the kind of run', () => {
+    expect(getRunActionLabels('workflow_job').relaunch.message).toBe(
+      'Relaunch Workflow Job'
+    );
+    expect(getRunActionLabels('system_job').delete.message).toBe(
+      'Delete Cleanup Job'
+    );
+    expect(getRunActionLabels(undefined).delete.message).toBe('Delete Job');
+  });
+
+  test('names the kind of run it cancels', () => {
+    const labels = getRunActionLabels('project_update');
+    expect(labels.cancel.message).toBe('Cancel Project Sync');
+    expect(labels.cancelConfirm.message).toBe(
+      'Are you sure you want to cancel this project sync?'
+    );
+    expect(labels.cancelError.message).toBe('Project Sync Cancel Error');
+    expect(getRunActionLabels(undefined).cancel.message).toBe('Cancel Job');
   });
 });

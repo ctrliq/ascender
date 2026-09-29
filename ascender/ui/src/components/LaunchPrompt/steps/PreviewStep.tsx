@@ -1,7 +1,7 @@
 import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
-import { Tooltip } from '@patternfly/react-core';
+
 import { useLingui } from '@lingui/react/macro';
 import { useFormContext } from 'components/Form';
 
@@ -11,6 +11,7 @@ import getSurveyValues from 'util/prompt/getSurveyValues';
 import PromptDetail from '../../PromptDetail';
 import type { LaunchConfig, LaunchPromptValues, SurveyConfig } from '../types';
 import './PreviewStep.css';
+import Tooltip from '../../Tooltip';
 
 export interface PreviewStepProps {
   resource: LaunchableResource | null;
@@ -63,7 +64,6 @@ function PreviewStep({
         <div className="ascender-preview-step__error-message-wrapper">
           {t`Some of the previous step(s) have errors`}
           <Tooltip
-            position="right"
             content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >

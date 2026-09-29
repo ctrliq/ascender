@@ -1,10 +1,18 @@
+import type { Group } from 'types/api';
 import React from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 import InventoryRelatedGroupList from './InventoryRelatedGroupList';
 import InventoryRelatedGroupAdd from '../InventoryRelatedGroupAdd';
 import { isReadOnlyInventoryType } from '../shared/utils';
 
-function InventoryRelatedGroups() {
+export interface InventoryRelatedGroupsProps {
+  /** The group whose related groups these are, handed on to the list. */
+  inventoryGroup?: Group;
+}
+
+function InventoryRelatedGroups({
+  inventoryGroup,
+}: InventoryRelatedGroupsProps = {}) {
   const { id, groupId, inventoryType } = useParams() as {
     id: string;
     groupId: string;
@@ -27,7 +35,10 @@ function InventoryRelatedGroups() {
           )
         }
       />
-      <Route index element={<InventoryRelatedGroupList />} />
+      <Route
+        index
+        element={<InventoryRelatedGroupList inventoryGroup={inventoryGroup} />}
+      />
     </Routes>
   );
 }

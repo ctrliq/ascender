@@ -185,6 +185,35 @@ def get_user_capabilities(user, instance, **kwargs):
     return access_class(user).get_user_capabilities(instance, **kwargs)
 
 
+def user_held_roles(user, role_ids):
+    """
+    Answer `user in role` for many roles with a single query.
+
+    `Role.__contains__` asks whether any ancestor of the role, the role itself
+    included, has the user as a direct member, reading the denormalized role
+    ancestors table. This runs that same lookup over every role at once and
+    keeps the roles it matched, so a page of objects needs one query for its
+    role checks instead of one per object and role.
+
+    Args:
+        user: The user whose memberships are looked up. Anything that is not
+            a saved User is refused, the way `Role.__contains__` refuses it.
+        role_ids: Ids of the roles to test. None entries are ignored.
+
+    Returns:
+        set: The ids among role_ids for which `user in role` would be True.
+
+    Raises:
+        RuntimeError: When user is not a saved User.
+    """
+    if not isinstance(user, User) or user.pk is None:
+        raise RuntimeError(f'Role evaluations only valid for users, received {user}')
+    role_ids = {role_id for role_id in role_ids if role_id is not None}
+    if not role_ids:
+        return set()
+    return set(RoleAncestorEntry.objects.filter(descendent_id__in=role_ids, ancestor__members=user).values_list('descendent_id', flat=True).distinct())
+
+
 def check_superuser(func):
     """
     check_superuser is a decorator that provides a simple short circuit
@@ -400,7 +429,7 @@ class BaseAccess(object):
         user_capabilities = {}
 
         # Custom ordering to loop through methods so we can reuse earlier calcs
-        for display_method in ['edit', 'delete', 'start', 'schedule', 'copy', 'adhoc', 'unattach']:
+        for display_method in ['edit', 'delete', 'start', 'schedule', 'copy', 'adhoc', 'unattach', 'cancel']:
             if display_method not in method_list:
                 continue
 
@@ -470,6 +499,8 @@ class BaseAccess(object):
                 return access_method(obj)
             elif method in ['start']:
                 return self.can_start(obj)
+            elif method in ['cancel']:
+                return self.get_cancel_capability(obj)
             elif method in ['attach', 'unattach']:  # parent/sub-object call
                 access_method = getattr(self, "can_%s" % method)
                 if type(parent_obj) == Team:
@@ -481,6 +512,30 @@ class BaseAccess(object):
         except (ParseError, ObjectDoesNotExist, PermissionDenied):
             return False
         return False
+
+    def get_cancel_capability(self, obj):
+        """
+        Whether the user may cancel this unified job right now.
+
+        The cancel views let a superuser through before any access check, and
+        refuse a job whose status has moved past the point of canceling, so
+        this does both too. Access classes without a can_cancel method, such as
+        the one for system jobs, leave canceling to superusers alone.
+
+        Args:
+            obj: The unified job the capability is computed for.
+
+        Returns:
+            bool: True when a cancel request from this user would be accepted.
+        """
+        if not getattr(obj, 'can_cancel', False):
+            return False
+        if self.user.is_superuser:
+            return True
+        access_method = getattr(self, 'can_cancel', None)
+        if access_method is None:
+            return False
+        return bool(access_method(obj))
 
 
 class ReadOnlyAccess:
@@ -2230,6 +2285,88 @@ class WorkflowJobAccess(BaseAccess):
             return True
         return obj.workflow_job_template is not None and self.user in obj.workflow_job_template.admin_role
 
+    def get_cancel_capabilities(self, workflow_jobs):
+        """
+        The 'cancel' user capability of many workflow jobs, at a fixed query cost.
+
+        Each answer equals what `get_user_capabilities(user, workflow_job,
+        method_list=['cancel'])['cancel']` returns for that workflow job: no for
+        a read-only token, no once the status is past canceling, yes for a
+        superuser, and otherwise can_cancel's creator, organization workflow
+        admin (can_delete) and template admin checks. The templates behind the
+        jobs are read in one query and the role checks in another, where the
+        per job path reads the template, its organization and each role in
+        turn for every job.
+
+        A job is left out of the result, so its caller asks the per job path
+        instead, whenever the batched reading could part from that path: a
+        template reference that no longer resolves, or an organization or
+        template without the role the check reads. Leaving a job out only
+        costs its queries back, never changes an answer.
+
+        Args:
+            workflow_jobs: The workflow jobs to answer for.
+
+        Returns:
+            dict: Workflow job pk to the cancel capability as a bool, for every
+                job answered here.
+        """
+        workflow_jobs = [wj for wj in workflow_jobs if isinstance(wj, WorkflowJob) and wj.pk is not None]
+        # The per job path compares the user to created_by as model instances,
+        # which only a saved User can match; anything else is left to it whole.
+        if not workflow_jobs or not isinstance(self.user, User) or self.user.pk is None:
+            return {}
+
+        # get_user_capabilities refuses every action to a token without write
+        # scope before it looks at the job at all.
+        if 'write' not in getattr(self.user, 'oauth_scopes', ['write']):
+            return {wj.pk: False for wj in workflow_jobs}
+
+        answers = {}
+        undecided = []
+        for wj in workflow_jobs:
+            # get_cancel_capability: the status comes first, then the superuser.
+            if not wj.can_cancel:
+                answers[wj.pk] = False
+            elif self.user.is_superuser:
+                answers[wj.pk] = True
+            # can_cancel: the user who started the job may always cancel it.
+            elif wj.created_by_id is not None and wj.created_by_id == self.user.pk:
+                answers[wj.pk] = True
+            # With no template both can_delete and the admin check are falsy.
+            elif wj.workflow_job_template_id is None:
+                answers[wj.pk] = False
+            else:
+                undecided.append(wj)
+        if not undecided:
+            return answers
+
+        # can_delete reads the template's organization and that organization's
+        # workflow admin role, the last check reads the template's admin role.
+        templates = {
+            row[0]: row[1:]
+            for row in WorkflowJobTemplate.objects.filter(pk__in={wj.workflow_job_template_id for wj in undecided}).values_list(
+                'pk', 'organization_id', 'organization__workflow_admin_role_id', 'admin_role_id'
+            )
+        }
+        answerable = []
+        for wj in undecided:
+            template = templates.get(wj.workflow_job_template_id)
+            if template is None:
+                continue
+            organization_id, workflow_admin_role_id, admin_role_id = template
+            if admin_role_id is None or (organization_id is not None and workflow_admin_role_id is None):
+                continue
+            answerable.append((wj, organization_id, workflow_admin_role_id, admin_role_id))
+
+        held = user_held_roles(
+            self.user, [role_id for _, _, workflow_admin_role_id, admin_role_id in answerable for role_id in (workflow_admin_role_id, admin_role_id)]
+        )
+        for wj, organization_id, workflow_admin_role_id, admin_role_id in answerable:
+            can_delete = organization_id is not None and workflow_admin_role_id in held
+            answers[wj.pk] = can_delete or admin_role_id in held
+        return answers
+
 
 class AdHocCommandAccess(BaseAccess):
     """
@@ -2530,6 +2667,106 @@ class UnifiedJobAccess(BaseAccess):
 
     def get_queryset(self):
         return super(UnifiedJobAccess, self).get_queryset().filter(workflowapproval__isnull=True)
+
+    # For each kind of unified job answered by get_cancel_capabilities: the
+    # model whose admin role can_cancel reads, the job's column pointing at
+    # that model, and the path from the model to the role. The organization
+    # fallback of an orphaned job is handled apart, in get_cancel_capabilities.
+    CANCEL_ROLE_PATHS = {
+        Job: (JobTemplate, 'job_template_id', 'admin_role_id'),
+        ProjectUpdate: (Project, 'project_id', 'admin_role_id'),
+        InventoryUpdate: (InventorySource, 'inventory_source_id', 'inventory__admin_role_id'),
+        AdHocCommand: (Inventory, 'inventory_id', 'admin_role_id'),
+    }
+
+    def get_cancel_capabilities(self, unified_jobs):
+        """
+        The 'cancel' user capability of many unified jobs, at a fixed query cost.
+
+        Each answer equals what `get_user_capabilities(user, job,
+        method_list=['cancel'])['cancel']` returns for that job, whose access
+        class is JobAccess, ProjectUpdateAccess, InventoryUpdateAccess,
+        AdHocCommandAccess or WorkflowJobAccess. The per job path reads the
+        job's template, project or inventory and then asks one role question,
+        so a page of running jobs costs a few queries a row. Here the related
+        rows are read in one query per kind of job and every role question in
+        one more; workflow jobs go to WorkflowJobAccess.get_cancel_capabilities.
+
+        Nothing is answered for a superuser, and nothing for a token without
+        write scope: get_user_capabilities answers both without a query, and a
+        cached False would be turned into True for a superuser. Other kinds of
+        job, a system job or an approval, are left out too, as are jobs whose
+        batched reading could part from the per job path: a related row that
+        no longer resolves, or one without the role the check reads. Leaving a
+        job out only costs its queries back, never changes an answer.
+
+        Args:
+            unified_jobs: The unified jobs to answer for, as the concrete
+                instances a polymorphic queryset yields.
+
+        Returns:
+            dict: Unified job pk to the cancel capability as a bool, for every
+                job answered here.
+        """
+        # The per job path compares the user to created_by as model instances,
+        # which only a saved User can match; anything else is left to it whole.
+        if not isinstance(self.user, User) or self.user.pk is None or self.user.is_superuser:
+            return {}
+        if 'write' not in getattr(self.user, 'oauth_scopes', ['write']):
+            return {}
+
+        unified_jobs = [uj for uj in unified_jobs if uj is not None and uj.pk is not None]
+        answers = WorkflowJobAccess(self.user).get_cancel_capabilities([uj for uj in unified_jobs if type(uj) is WorkflowJob])
+
+        # Step 1: what each can_cancel decides without a query. The status
+        # comes first (get_cancel_capability), then the creator, who may always
+        # cancel their own job, and an ad hoc command whose inventory is gone.
+        undecided = []
+        for uj in unified_jobs:
+            if type(uj) not in self.CANCEL_ROLE_PATHS:
+                continue
+            if not uj.can_cancel:
+                answers[uj.pk] = False
+            elif uj.created_by_id is not None and uj.created_by_id == self.user.pk:
+                answers[uj.pk] = True
+            elif type(uj) is AdHocCommand and uj.inventory_id is None:
+                answers[uj.pk] = False
+            else:
+                undecided.append(uj)
+        if not undecided:
+            return answers
+
+        # Step 2: the role each remaining job is judged by, one query per kind
+        # of related row. A job whose template is gone falls back to its
+        # organization's job template admin role, as JobAccess.can_cancel does.
+        role_of = {}
+        orphans = []
+        for model_class, (related_model, column, role_path) in self.CANCEL_ROLE_PATHS.items():
+            jobs = [uj for uj in undecided if type(uj) is model_class]
+            if model_class is Job:
+                orphans = [uj for uj in jobs if uj.job_template_id is None]
+                jobs = [uj for uj in jobs if uj.job_template_id is not None]
+            if not jobs:
+                continue
+            roles = dict(related_model.objects.filter(pk__in={getattr(uj, column) for uj in jobs}).values_list('pk', role_path))
+            for uj in jobs:
+                role_of[uj.pk] = roles.get(getattr(uj, column))
+        for uj in orphans:
+            if uj.organization_id is None:
+                answers[uj.pk] = False
+        orphans = [uj for uj in orphans if uj.organization_id is not None]
+        if orphans:
+            roles = dict(Organization.objects.filter(pk__in={uj.organization_id for uj in orphans}).values_list('pk', 'job_template_admin_role_id'))
+            for uj in orphans:
+                role_of[uj.pk] = roles.get(uj.organization_id)
+
+        # Step 3: every role question in one query. A job whose role could not
+        # be read stays out of the answers and is checked on its own.
+        role_of = {pk: role_id for pk, role_id in role_of.items() if role_id is not None}
+        held = user_held_roles(self.user, role_of.values())
+        for pk, role_id in role_of.items():
+            answers[pk] = role_id in held
+        return answers
 
 
 class ScheduleAccess(UnifiedCredentialsMixin, BaseAccess):
@@ -2871,11 +3108,17 @@ class WorkflowApprovalAccess(BaseAccess):
     """
 
     model = WorkflowApproval
-    prefetch_related = (
+    # The users are forward foreign keys, joined into the same query. The
+    # template, node and workflow job every row of the approvals list reads
+    # are prefetched by WorkflowApprovalPageSerializer for the page instead,
+    # because this queryset also serves the single approval views, which
+    # would otherwise pay for every one of those queries on each request.
+    select_related = (
         'created_by',
         'modified_by',
-        'votes',
+        'approved_or_denied_by',
     )
+    prefetch_related = ('votes',)
 
     def can_use(self, obj):
         return True
@@ -2886,8 +3129,68 @@ class WorkflowApprovalAccess(BaseAccess):
     read_via = (WorkflowJobTemplate, 'unified_job_node__workflow_job__unified_job_template')
 
     def can_approve_or_deny(self, obj):
-        if (obj.workflow_job_template and self.user in obj.workflow_job_template.approval_role) or self.user.is_superuser:
+        # The superuser check comes first because it costs nothing, where the
+        # role membership is a query, run once per row on the approvals list.
+        if self.user.is_superuser or (obj.workflow_job_template and self.user in obj.workflow_job_template.approval_role):
             return True
+
+    def can_approve_or_deny_many(self, approvals):
+        """
+        can_approve_or_deny for many approvals, at a fixed query cost.
+
+        Each answer is exactly what can_approve_or_deny returns for that
+        approval, True or None, so a caller wraps it the same way. The
+        approval roles are checked in one query, where the per approval path
+        runs one for each; the templates come from the relations the
+        approvals list already prefetches.
+
+        An approval is left out of the result, so its caller asks the per
+        approval path instead, whenever the batched reading could part from
+        that path: a node without a workflow job, a template that is not a
+        workflow job template, or one without an approval role. Leaving an
+        approval out only costs its queries back, never changes an answer.
+
+        Args:
+            approvals: The workflow approvals to answer for.
+
+        Returns:
+            dict: Approval pk to the can_approve_or_deny result, for every
+                approval answered here.
+        """
+        approvals = [approval for approval in approvals if isinstance(approval, WorkflowApproval) and approval.pk is not None]
+        if not approvals:
+            return {}
+        if self.user.is_superuser:
+            return {approval.pk: True for approval in approvals}
+        # Role.__contains__ refuses anything but a saved user, so such a
+        # reader is left to the per approval path whole.
+        if not isinstance(self.user, User) or self.user.pk is None:
+            return {}
+
+        answers = {}
+        answerable = []
+        for approval in approvals:
+            # The workflow_job_template property swallows a missing node,
+            # workflow job or template and returns None, which
+            # can_approve_or_deny turns into None. A node with no workflow job
+            # at all raises there instead, so that one is left to it.
+            try:
+                workflow_job = approval.unified_job_node.workflow_job
+                if workflow_job is None:
+                    continue
+                template = workflow_job.unified_job_template
+            except ObjectDoesNotExist:
+                answers[approval.pk] = None
+                continue
+            if template is None:
+                answers[approval.pk] = None
+            elif isinstance(template, WorkflowJobTemplate) and template.approval_role_id is not None:
+                answerable.append((approval, template.approval_role_id))
+
+        held = user_held_roles(self.user, [role_id for _, role_id in answerable])
+        for approval, role_id in answerable:
+            answers[approval.pk] = True if role_id in held else None
+        return answers
 
 
 class WorkflowApprovalTemplateAccess(BaseAccess):

@@ -52,7 +52,7 @@ describe('<UserTokens />', () => {
       }
     );
     expect(
-      screen.queryByRole('dialog', { name: /Token information/ })
+      screen.queryByRole('dialog', { name: /Token Information/ })
     ).not.toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'simulate successful add' })
@@ -60,7 +60,7 @@ describe('<UserTokens />', () => {
     // PF Modal's aria-labelledby includes the modal box itself, so the
     // computed accessible name is longer than the title — match on substring.
     expect(
-      await screen.findByRole('dialog', { name: /Token information/ })
+      await screen.findByRole('dialog', { name: /Token Information/ })
     ).toBeInTheDocument();
   });
 });

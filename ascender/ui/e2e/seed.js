@@ -7,7 +7,7 @@
 // has them, they need no project, inventory, credential or network access, and
 // they finish in seconds, so the suite has a real multi-node workflow job to
 // navigate without depending on anything that can be slow or absent. They also
-// route under /jobs/management/, so the specs exercise a url segment other than
+// route under /runs/management/, so the specs exercise a url segment other than
 // the default one rather than only the common case.
 const fs = require('fs');
 const path = require('path');

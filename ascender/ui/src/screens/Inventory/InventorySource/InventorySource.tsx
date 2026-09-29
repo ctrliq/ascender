@@ -24,8 +24,10 @@ import { Schedules } from 'components/Schedule';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import RoutedTabs from 'components/RoutedTabs';
+import JobList from 'components/JobList';
 import NotificationList from 'components/NotificationList/NotificationList';
 import type { QSParams } from 'util/qs';
+import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import InventorySourceDetail from '../InventorySourceDetail';
 import InventorySourceEdit from '../InventorySourceEdit';
 
@@ -106,23 +108,32 @@ function InventorySource({
       link: `${detailsBaseUrl}/details`,
       id: 1,
     },
-    {
-      name: t`Schedules`,
-      link: `${detailsBaseUrl}/schedules`,
-      id: 2,
-    },
   ];
 
   const canToggleNotifications = isNotifAdmin;
   const canSeeNotificationsTab = me.is_system_auditor || isNotifAdmin;
 
+  // The same order as a template's or a project's tabs.
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
       link: `${detailsBaseUrl}/notifications`,
-      id: 3,
+      id: 2,
     });
   }
+
+  tabsArray.push(
+    {
+      name: t`Schedules`,
+      link: `${detailsBaseUrl}/schedules`,
+      id: 3,
+    },
+    {
+      name: t`Runs`,
+      link: `${detailsBaseUrl}/runs`,
+      id: 4,
+    }
+  );
 
   if (error) {
     return <ContentError error={error} />;
@@ -179,11 +190,38 @@ function InventorySource({
             }
           />
           <Route
+            path="runs"
+            element={
+              /*
+               * Every sync, including the ones a job launch started for
+               * itself, which are as much the source's history as the rest.
+               */
+              <JobList
+                defaultParams={{ unified_job_template: source.id }}
+                includeDependencySyncs
+                // Sync, as on the source's details, for whoever may.
+                runControl={
+                  source.summary_fields?.user_capabilities?.start ? (
+                    <InventorySourceSyncButton
+                      source={source}
+                      icon={false}
+                      label={t`Run`}
+                      tooltip={t`Sync Source`}
+                    />
+                  ) : (
+                    // false, not null: null would bring back the general Run menu.
+                    false
+                  )
+                }
+              />
+            }
+          />
+          <Route
             path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${detailsBaseUrl}/details`}>
-                  {t`View inventory source details`}
+                  {t`View Inventory Source Details`}
                 </Link>
               </ContentError>
             }

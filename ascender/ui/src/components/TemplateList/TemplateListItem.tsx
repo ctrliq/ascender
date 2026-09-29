@@ -5,7 +5,7 @@ import type { AnyUnifiedJobTemplate, SummaryFieldRef } from 'types/api';
 
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
-import { Label, Button, Tooltip } from '@patternfly/react-core';
+import { Label, Button } from '@patternfly/react-core';
 
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -25,6 +25,7 @@ import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { LaunchButton } from '../LaunchButton';
 import Sparkline from '../Sparkline';
 import CopyButton from '../CopyButton';
+import Tooltip from '../Tooltip';
 
 export interface TemplateListItemProps {
   isExpanded: boolean;
@@ -38,6 +39,12 @@ export interface TemplateListItemProps {
   /** Re-reads the page once the copy has landed. */
   fetchTemplates: () => unknown;
   rowIndex: number;
+  /**
+   * Whether the table this row sits in carries a Type column. A list holding
+   * one kind of template does not: the tab above it has said which, and a
+   * column repeating that on every row is a column of one value.
+   */
+  hasTypeColumn?: boolean;
   [key: string]: unknown;
 }
 
@@ -51,6 +58,7 @@ function TemplateListItem({
   detailUrl,
   fetchTemplates,
   rowIndex,
+  hasTypeColumn = true,
 }: TemplateListItemProps) {
   const { t } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -144,10 +152,7 @@ function TemplateListItem({
           </Link>
           {missingResourceIcon && (
             <span>
-              <Tooltip
-                content={t`Resources are missing from this template.`}
-                position="right"
-              >
+              <Tooltip content={t`Resources are missing from this template.`}>
                 <ExclamationTriangleIcon
                   style={{
                     color:
@@ -164,27 +169,17 @@ function TemplateListItem({
           ) : null}
         </Td>
         <Td dataLabel={t`Last Ran`}>{lastRun}</Td>
-        <Td dataLabel={t`Type`}>
-          {template.type === 'workflow_job_template'
-            ? t`Workflow Job Template`
-            : t`Job Template`}
-        </Td>
+        {/* Workflow Template rather than the API's own Workflow Job Template:
+            the screen calls them workflow templates everywhere else, the tab
+            above the list among them. */}
+        {hasTypeColumn && (
+          <Td dataLabel={t`Type`}>
+            {template.type === 'workflow_job_template'
+              ? t`Workflow Template`
+              : t`Job Template`}
+          </Td>
+        )}
         <ActionsTd dataLabel={t`Actions`}>
-          <ActionItem
-            visible={template.type === 'workflow_job_template'}
-            tooltip={t`Visualizer`}
-          >
-            <Button
-              icon={<ProjectDiagramIcon />}
-              ouiaId={`${template.id}-visualizer-button`}
-              id={`template-action-visualizer-${template.id}`}
-              isDisabled={isDisabled}
-              aria-label={t`Visualizer`}
-              variant="plain"
-              component={Link}
-              to={`/templates/workflow_job_template/${template.id}/visualizer`}
-            />
-          </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities?.start}
             tooltip={t`Launch Template`}
@@ -196,7 +191,7 @@ function TemplateListItem({
                   ouiaId={`${template.id}-launch-button`}
                   id={`template-action-launch-${template.id}`}
                   isDisabled={isDisabled || isLaunching}
-                  aria-label={t`Launch template`}
+                  aria-label={t`Launch Template`}
                   variant="plain"
                   onClick={handleLaunch}
                 />
@@ -231,6 +226,24 @@ function TemplateListItem({
               copyItem={copyTemplate}
             />
           </ActionItem>
+          {/* Last, where the rows without it leave an empty slot at the end
+              rather than one ahead of launch, edit and copy: a list of job
+              templates alone would otherwise open every row with a gap. */}
+          <ActionItem
+            visible={template.type === 'workflow_job_template'}
+            tooltip={t`Visualizer`}
+          >
+            <Button
+              icon={<ProjectDiagramIcon />}
+              ouiaId={`${template.id}-visualizer-button`}
+              id={`template-action-visualizer-${template.id}`}
+              isDisabled={isDisabled}
+              aria-label={t`Visualizer`}
+              variant="plain"
+              component={Link}
+              to={`/templates/workflow_job_template/${template.id}/visualizer`}
+            />
+          </ActionItem>
         </ActionsTd>
       </Tr>
       <Tr
@@ -238,7 +251,7 @@ function TemplateListItem({
         ouiaId={`template-row-${template.id}-expanded`}
       >
         <Td colSpan={2} />
-        <Td colSpan={4}>
+        <Td colSpan={hasTypeColumn ? 5 : 4}>
           <ExpandableRowContent>
             <DetailList>
               <Detail

@@ -95,7 +95,7 @@ describe('<InventoryDetail />', () => {
     await screen.findByText('Inv no hosts');
     assertDetail('Name', mockInventory.name);
     assertDetail('Type', 'Inventory');
-    assertDetail('Total hosts', String(mockInventory.total_hosts));
+    assertDetail('Total Hosts', String(mockInventory.total_hosts));
     assertDetail(
       'Organization',
       mockInventory.summary_fields.organization?.name
@@ -196,5 +196,70 @@ describe('<InventoryDetail />', () => {
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
     expect(screen.getByText('Failed to delete inventory.')).toBeInTheDocument();
+  });
+
+  describe('Sync', () => {
+    const withSources = {
+      ...mockInventory,
+      has_inventory_sources: true,
+    } as unknown as Inventory;
+
+    function mockFirstSource(start: boolean) {
+      vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
+        data: {
+          count: 1,
+          results: [
+            { id: 9, summary_fields: { user_capabilities: { start } } },
+          ],
+        },
+      } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
+    }
+
+    beforeEach(() => {
+      vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
+        data: { results: [] },
+      } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
+    });
+
+    test('syncs every source for whoever may start them', async () => {
+      mockFirstSource(true);
+      vi.mocked(InventoriesAPI.syncAllSources).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof InventoriesAPI.syncAllSources>
+      );
+      const { user } = renderWithContexts(
+        <InventoryDetail inventory={withSources} />
+      );
+
+      // Named for what its tooltip says it does.
+      await user.click(
+        await screen.findByRole('button', { name: 'Sync All Sources' })
+      );
+      await waitFor(() =>
+        expect(InventoriesAPI.syncAllSources).toHaveBeenCalledWith(1)
+      );
+    });
+
+    test('is left out for whoever may not start the sources', async () => {
+      mockFirstSource(false);
+      renderWithContexts(<InventoryDetail inventory={withSources} />);
+
+      await screen.findByText('Inv no hosts');
+      await waitFor(() =>
+        expect(InventoriesAPI.readSources).toHaveBeenCalled()
+      );
+      expect(
+        screen.queryByRole('button', { name: /sync/i })
+      ).not.toBeInTheDocument();
+    });
+
+    test('is left out, unasked, for an inventory without sources', async () => {
+      renderWithContexts(<InventoryDetail inventory={mockInventory} />);
+
+      await screen.findByText('Inv no hosts');
+      expect(InventoriesAPI.readSources).not.toHaveBeenCalled();
+      expect(
+        screen.queryByRole('button', { name: /sync/i })
+      ).not.toBeInTheDocument();
+    });
   });
 });

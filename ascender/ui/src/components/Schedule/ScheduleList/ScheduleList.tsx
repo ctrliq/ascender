@@ -43,6 +43,12 @@ export interface ScheduleListProps {
   ) => Promise<ApiResponse<Paginated<Schedule>>>;
   loadScheduleOptions: () => Promise<ApiResponse<OptionsResponse>>;
   hideAddButton?: boolean;
+  /**
+   * The add button to show instead of the built-in one, for a list that is
+   * not a resource's own: the schedule has nothing to belong to until that
+   * button has asked.
+   */
+  addButton?: React.ReactNode;
   /** The thing the schedules belong to, absent on the all schedules list. */
   resource?: ApiEntity;
   launchConfig?: LaunchConfig;
@@ -54,6 +60,7 @@ function ScheduleList({
   loadSchedules,
   loadScheduleOptions,
   hideAddButton = false,
+  addButton,
   resource,
   launchConfig,
   surveyConfig,
@@ -130,10 +137,13 @@ function ScheduleList({
     clearSelected();
   };
 
-  const canAdd =
-    actions &&
-    Object.prototype.hasOwnProperty.call(actions, 'POST') &&
-    !hideAddButton;
+  /* Whichever add is shown, the list's own or the one a caller hands in,
+     it is offered only where the api offers POST on this list: a reader who
+     may not add a schedule is not walked through a form the api refuses. */
+  const mayAdd = Boolean(
+    actions && Object.prototype.hasOwnProperty.call(actions, 'POST')
+  );
+  const canAdd = mayAdd && !hideAddButton;
   const isTemplate =
     resource?.type === 'workflow_job_template' ||
     resource?.type === 'job_template';
@@ -180,10 +190,12 @@ function ScheduleList({
     }
     return missingValues && t`This schedule is missing required survey values`;
   };
-  let emptyContentMessage = t`Please add a Schedule to populate this list.`;
+  let emptyContentMessage = t`Please add Schedules to populate this list`;
 
+  // The top level schedules list belongs to no resource: its add button asks
+  // which one the schedule is for, so the empty list names what can take one.
   if (location.pathname.startsWith('/schedules')) {
-    emptyContentMessage = t`Please add a Schedule to populate this list.  Schedules can be added to a Template, Project, or Inventory Source.`;
+    emptyContentMessage = t`Add a schedule for a template, project, inventory source, or cleanup job to list it here`;
   }
 
   return (
@@ -201,10 +213,10 @@ function ScheduleList({
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
             <HeaderCell sortKey="unified_job_template">
-              {t`Related resource`}
+              {t`Related Resource`}
             </HeaderCell>
             <HeaderCell sortKey="unified_job_template__polymorphic_ctype__model">
-              {t`Resource type`}
+              {t`Resource Type`}
             </HeaderCell>
             <HeaderCell sortKey="next_run">{t`Next Run`}</HeaderCell>
             <HeaderCell>{t`Actions`}</HeaderCell>
@@ -252,9 +264,11 @@ function ScheduleList({
             onSelectAll={selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
+              ...(addButton && mayAdd ? [addButton] : []),
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      tooltip={t`Add Schedule`}
                       ouiaId="add-schedule-button"
                       key="add"
                       linkTo={`${location.pathname}/add`}

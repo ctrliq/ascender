@@ -124,7 +124,10 @@ function User({ setBreadcrumb, me }: UserProps) {
             <Route path="details" element={<UserDetail user={user} />} />
           )}
           {user && (
-            <Route path="organizations" element={<UserOrganizations />} />
+            <Route
+              path="organizations"
+              element={<UserOrganizations user={user} />}
+            />
           )}
           {user && <Route path="teams" element={<UserTeams />} />}
           {user && (
@@ -136,10 +139,14 @@ function User({ setBreadcrumb, me }: UserProps) {
               element={<UserTokens user={user} setBreadcrumb={setBreadcrumb} />}
             />
           )}
+          {/* Only once the user is in: the read starts in an effect, after
+              these routes have drawn once, and before it the hook is idle
+              with no user, which sent every address here for a moment. A
+              failed read never gets this far, it returns the error above. */}
           <Route
             path="*"
             element={
-              !isLoading ? (
+              !isLoading && user ? (
                 <ContentError isNotFound>
                   {id && (
                     <Link to={`/users/${id}/details`}>

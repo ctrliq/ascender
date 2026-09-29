@@ -62,8 +62,8 @@ describe('<CredentialTypeDetails/>', () => {
     assertDetail('Description', 'Bar');
     expect(screen.getByText('Created')).toBeInTheDocument();
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
-    expect(screen.getByText('Input configuration')).toBeInTheDocument();
-    expect(screen.getByText('Injector configuration')).toBeInTheDocument();
+    expect(screen.getByText('Input Configuration')).toBeInTheDocument();
+    expect(screen.getByText('Injector Configuration')).toBeInTheDocument();
   });
 
   test('should disable delete and show proper tooltip when in use', async () => {

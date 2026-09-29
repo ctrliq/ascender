@@ -2,11 +2,12 @@ import type { AnyJob, DetailedError } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { MinusCircleIcon } from '@patternfly/react-icons';
-import { Button, Tooltip } from '@patternfly/react-core';
-import { getJobModel } from 'util/jobs';
+import { Button } from '@patternfly/react-core';
+import { getJobModel, getRunActionLabels } from 'util/jobs';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
+import Tooltip from '../Tooltip';
 
 export interface JobCancelButtonProps {
   errorTitle?: React.ReactNode;
@@ -37,8 +38,12 @@ function JobCancelButton({
   cancelationMessage,
   onCancelWorkflow,
 }: JobCancelButtonProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
+  // The wording names the kind of run, as Relaunch and Delete do, so a
+  // project sync is never offered as a job. A caller's own text still wins.
+  const actionLabels = getRunActionLabels(job.type);
+  const resolvedErrorTitle = errorTitle ?? i18n._(actionLabels.cancelError);
   const { error: cancelError, request: cancelJob } = useRequest(
     useCallback(async () => {
       setIsOpen(false);
@@ -83,7 +88,7 @@ function JobCancelButton({
               onClick={() => setIsOpen(true)}
               style={style}
             >
-              {buttonText || t`Cancel Job`}
+              {buttonText || i18n._(actionLabels.cancel)}
             </Button>
           )}
         </div>
@@ -100,11 +105,11 @@ function JobCancelButton({
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
-              aria-label={t`Confirm cancel job`}
+              aria-label={t`Confirm Cancellation`}
               ouiaId="cancel-job-confirm-button"
               onClick={cancelJob}
             >
-              {t`Confirm cancellation`}
+              {t`Confirm Cancellation`}
             </Button>,
             <Button
               id="cancel-job-return-button"
@@ -118,7 +123,7 @@ function JobCancelButton({
             </Button>,
           ]}
         >
-          {cancelationMessage ?? t`Are you sure you want to cancel this job?`}
+          {cancelationMessage ?? i18n._(actionLabels.cancelConfirm)}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (
@@ -126,8 +131,8 @@ function JobCancelButton({
           isOpen={error}
           variant="danger"
           onClose={dismissCancelError}
-          title={errorTitle}
-          label={String(errorTitle ?? '')}
+          title={resolvedErrorTitle}
+          label={String(resolvedErrorTitle)}
         >
           {errorMessage}
           <ErrorDetail error={error} />

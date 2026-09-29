@@ -1,8 +1,9 @@
 import React from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import { Button, DropdownItem } from '@patternfly/react-core';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
+import Tooltip from '../Tooltip';
 
 export interface HealthCheckButtonProps {
   isDisabled: boolean;
@@ -23,9 +24,18 @@ function HealthCheckButton({
   const { isKebabified } = useKebabifiedMenu();
 
   const selectedItemsCount = selectedItems.length;
+  // The api only checks execution nodes and skips the rest, so a selection
+  // holding none of them leaves the button disabled, and the tooltip says why
+  // rather than inviting a click.
+  const hasExecutionNode = selectedItems.some(
+    (item) => (item as { node_type?: string })?.node_type === 'execution'
+  );
 
-  const buildTooltip = () =>
-    selectedItemsCount ? (
+  const buildTooltip = () => {
+    if (selectedItemsCount && !hasExecutionNode) {
+      return t`Health checks can only be run on execution nodes.`;
+    }
+    return selectedItemsCount ? (
       <Plural
         value={selectedItemsCount}
         one="Click to run a health check on the selected instance."
@@ -34,6 +44,7 @@ function HealthCheckButton({
     ) : (
       t`Select an instance to run a health check.`
     );
+  };
 
   if (isKebabified) {
     return (
@@ -46,7 +57,7 @@ function HealthCheckButton({
           ouiaId="health-check"
           isLoading={healthCheckPending}
         >
-          {healthCheckPending ? t`Running health check` : t`Run health check`}
+          {healthCheckPending ? t`Running Health Check` : t`Run Health Check`}
         </DropdownItem>
       </Tooltip>
     );
@@ -60,9 +71,9 @@ function HealthCheckButton({
           ouiaId="health-check"
           onClick={onClick}
           isLoading={healthCheckPending}
-          spinnerAriaLabel={t`Running health check`}
+          spinnerAriaLabel={t`Running Health Check`}
         >
-          {healthCheckPending ? t`Running health check` : t`Run health check`}
+          {healthCheckPending ? t`Running Health Check` : t`Run Health Check`}
         </Button>
       </div>
     </Tooltip>

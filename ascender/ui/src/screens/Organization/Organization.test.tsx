@@ -82,6 +82,9 @@ describe('<Organization />', () => {
     vi.mocked(OrganizationsAPI.readGalaxyCredentials).mockResolvedValue({
       data: { results: [] },
     } as unknown as ResponseOf<typeof OrganizationsAPI.readGalaxyCredentials>);
+    vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue({
+      data: { results: [] },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [] },
     } as unknown as ResponseOf<typeof OrganizationsAPI.read>);

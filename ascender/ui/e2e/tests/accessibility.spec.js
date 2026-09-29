@@ -9,7 +9,7 @@ const { login, route, watchConsole } = require('./helpers');
 // the list views that most of the application is built from.
 const SCREENS = [
   { name: 'login', hash: '/login', authenticated: false },
-  { name: 'jobs', hash: '/jobs', authenticated: true },
+  { name: 'runs', hash: '/runs', authenticated: true },
   { name: 'templates', hash: '/templates', authenticated: true },
   // The forms, which is where accessibility problems usually live: a label that
   // names nothing, a required field that only says so in colour, a control

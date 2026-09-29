@@ -18,8 +18,11 @@ import PaginatedTable, {
 import { useConfig } from 'contexts/Config';
 import { parseQueryString, getQSConfig } from 'util/qs';
 import useRequest from 'hooks/useRequest';
+import useSelected from 'hooks/useSelected';
+import { keepsHistory } from 'components/JobList/LaunchDaysPrompt';
 
 import ManagementJobListItem from './ManagementJobListItem';
+import ManagementJobRunButton from './ManagementJobRunButton';
 
 const QS_CONFIG = getQSConfig('system_job_templates', {
   page: 1,
@@ -77,6 +80,11 @@ function ManagementJobList() {
   }, [request]);
 
   const { searchableKeys, relatedSearchableKeys } = buildSearchKeys(options);
+  /* Only a superuser may run these, so only a superuser is offered the ticks
+     that say which to run. */
+  const isSuperUser = Boolean(me?.is_superuser);
+  const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
+    useSelected<SystemJobTemplate>(items);
 
   return (
     <>
@@ -88,7 +96,7 @@ function ManagementJobList() {
             hasContentLoading={isLoading}
             items={items}
             itemCount={count}
-            pluralizedItemName={t`Management Jobs`}
+            pluralizedItemName={t`Cleanup Jobs`}
             emptyContentMessage={' '}
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
@@ -100,26 +108,47 @@ function ManagementJobList() {
               },
             ]}
             renderToolbar={(props) => (
-              <DatalistToolbar {...props} qsConfig={QS_CONFIG} />
+              <DatalistToolbar
+                {...props}
+                qsConfig={QS_CONFIG}
+                // Select-all too, or an auditor gets a box that ticks rows
+                // it has no checkboxes or Run for.
+                {...(isSuperUser
+                  ? { isAllSelected, onSelectAll: selectAll }
+                  : {})}
+                additionalControls={
+                  isSuperUser
+                    ? [
+                        <ManagementJobRunButton
+                          key="run"
+                          jobs={selected}
+                          onLaunched={clearSelected}
+                        />,
+                      ]
+                    : []
+                }
+              />
             )}
             headerRow={
-              <HeaderRow qsConfig={QS_CONFIG}>
+              <HeaderRow qsConfig={QS_CONFIG} isSelectable={isSuperUser}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
                 <HeaderCell>{t`Description`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={({ id, name, description, job_type }) => (
+            renderRow={(job, index) => (
               <ManagementJobListItem
-                key={id}
-                id={id}
-                name={name ?? ''}
-                jobType={job_type ?? ''}
-                description={description ?? ''}
-                isSuperUser={Boolean(me?.is_superuser)}
-                isPrompted={['cleanup_activitystream', 'cleanup_jobs'].includes(
-                  job_type ?? ''
-                )}
+                key={job.id}
+                id={job.id}
+                name={job.name ?? ''}
+                jobType={job.job_type ?? ''}
+                description={job.description ?? ''}
+                rowIndex={index}
+                isSelectable={isSuperUser}
+                isSelected={selected.some((row) => row.id === job.id)}
+                onSelect={() => handleSelect(job)}
+                isSuperUser={isSuperUser}
+                isPrompted={keepsHistory(job)}
                 onLaunchError={setLaunchError}
               />
             )}
@@ -132,7 +161,7 @@ function ManagementJobList() {
         title={t`Error!`}
         onClose={() => setLaunchError(null)}
       >
-        {t`Failed to launch job.`}
+        {t`Failed to run cleanup job.`}
         <ErrorDetail error={launchError} />
       </AlertModal>
     </>

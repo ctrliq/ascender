@@ -24,6 +24,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/Inventory.helptext';
+import InventorySyncAllButton from '../shared/InventorySyncAllButton';
 
 export interface InventoryDetailProps {
   inventory: AnyInventory;
@@ -50,6 +51,29 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
   useEffect(() => {
     fetchInstanceGroups();
   }, [fetchInstanceGroups]);
+
+  /*
+   * The inventory's own capabilities say nothing of syncing, which takes its
+   * update role. Every source of it answers start from that same role, so the
+   * first one says it for all, as the sources tab and the inventories list
+   * decide their Sync. A failed read only leaves the button out.
+   */
+  const { result: canSync, request: fetchCanSync } = useRequest(
+    useCallback(async () => {
+      if (!inventory.has_inventory_sources) {
+        return false;
+      }
+      const { data } = await InventoriesAPI.readSources(inventory.id, {
+        page_size: 1,
+      });
+      return Boolean(data.results[0]?.summary_fields?.user_capabilities?.start);
+    }, [inventory.id, inventory.has_inventory_sources]),
+    false
+  );
+
+  useEffect(() => {
+    fetchCanSync();
+  }, [fetchCanSync]);
 
   const { request: deleteInventory, error: deleteError } = useRequest(
     useCallback(async () => {
@@ -113,7 +137,7 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
             </Link>
           }
         />
-        <Detail label={t`Total hosts`} value={inventory.total_hosts} />
+        <Detail label={t`Total Hosts`} value={inventory.total_hosts} />
         {instanceGroups && (
           <Detail
             fullWidth
@@ -132,7 +156,7 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
         {renderOptionsField && (
           <Detail
             fullWidth
-            label={t`Enabled Options`}
+            label={t`Options`}
             value={renderOptions}
             dataCy="jt-detail-enabled-options"
             helpText={helpText.enabledOptions}
@@ -190,6 +214,13 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
           >
             {t`Edit`}
           </Button>
+        )}
+        {canSync && (
+          <InventorySyncAllButton
+            inventoryId={inventory.id}
+            tooltip={t`Sync All Sources`}
+            errorMessage={t`Failed to sync inventory sources.`}
+          />
         )}
         {userCapabilities?.delete && (
           <DeleteButton

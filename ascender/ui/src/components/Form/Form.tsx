@@ -39,8 +39,43 @@ interface ValidatorBox {
   current: FieldValidator | undefined;
 }
 
+/*
+ * Every useField call on a name adds its own box, rather than one box per
+ * name. A form commonly reads a field it does not validate: the lookup that
+ * renders the organization carries the required rule, while the form around
+ * it calls a bare useField('organization') to read the value. React runs the
+ * child's effect before the parent's, so with one box per name the parent's
+ * empty registration replaced the lookup's validator and a required field
+ * went out blank. With a set, each registration only ever adds or removes
+ * itself, and every validator for the name runs.
+ */
 interface Registry {
-  boxes: Map<string, ValidatorBox>;
+  boxes: Map<string, Set<ValidatorBox>>;
+}
+
+/**
+ * The first error any of a field's validators reports for a value.
+ *
+ * Args:
+ *   boxes: the registrations for one field name.
+ *   value: the field's current value.
+ *
+ * Returns:
+ *   The first error message, or undefined when every validator passes.
+ */
+function firstError(
+  boxes: Set<ValidatorBox> | undefined,
+  value: unknown
+): string | undefined {
+  if (!boxes) return undefined;
+  let found: string | undefined;
+  boxes.forEach((box) => {
+    if (found !== undefined) return;
+    const validate = box.current as
+      ((value: unknown) => string | undefined) | undefined;
+    found = validate?.(value);
+  });
+  return found;
 }
 
 const RegistryContext = createContext<Registry | null>(null);
@@ -118,10 +153,8 @@ export function Form<V extends object>({
 
   const runValidators = useCallback((against: Values): Errors => {
     let found: Errors = { ...(validateRef.current?.(against as V) ?? {}) };
-    registry.current.boxes.forEach((box, name) => {
-      const validate = box.current as
-        ((value: unknown) => string | undefined) | undefined;
-      const error = validate?.(getIn(against, name));
+    registry.current.boxes.forEach((boxes, name) => {
+      const error = firstError(boxes, getIn(against, name));
       if (error !== undefined) found = setIn(found, name, error);
     });
     return found;
@@ -164,10 +197,10 @@ export function Form<V extends object>({
   );
 
   const validateField = useCallback((name: string) => {
-    const validate = registry.current.boxes.get(name)?.current as
-      ((value: unknown) => string | undefined) | undefined;
-    if (!validate) return;
-    const error = validate(getIn(valuesRef.current, name));
+    const boxes = registry.current.boxes.get(name);
+    // A field nobody validates keeps whatever error it has, as before.
+    if (!boxes || ![...boxes].some((box) => box.current)) return;
+    const error = firstError(boxes, getIn(valuesRef.current, name));
     setErrorsState((prev) => setIn(prev, name, error));
   }, []);
 

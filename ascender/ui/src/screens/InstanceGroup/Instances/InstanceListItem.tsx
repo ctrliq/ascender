@@ -8,7 +8,6 @@ import {
   ProgressMeasureLocation,
   ProgressSize,
   Slider,
-  Tooltip,
 } from '@patternfly/react-core';
 import { OutlinedClockIcon } from '@patternfly/react-icons';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
@@ -26,6 +25,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { Detail, DetailList } from 'components/DetailList';
 import './InstanceListItem.css';
+import Tooltip from 'components/Tooltip';
 
 export interface InstanceListItemProps {
   instance: Instance;
@@ -69,7 +69,7 @@ function InstanceListItem({
           value={Math.round(100 - Number(item.percent_capacity_remaining))}
           measureLocation={ProgressMeasureLocation.top}
           size={ProgressSize.sm}
-          title={t`Used capacity`}
+          aria-label={t`Used Capacity`}
         />
       );
     }
@@ -182,8 +182,8 @@ function InstanceListItem({
           </div>
         </Td>
         <Td
-          className="ascender-instance-group-instance-list-item__pf-v6-c-table-cell-MinWidth-175"
-          dataLabel={t`Instance group used capacity`}
+          className="ascender-instance-group-instance-list-item__used-capacity"
+          dataLabel={t`Used Capacity`}
         >
           {usedCapacity(instance)}
         </Td>

@@ -1,6 +1,6 @@
-import type { DetailedError } from 'types/api';
+import type { DetailedError, SummaryFieldRef } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
@@ -17,6 +17,15 @@ import type {
 function NotificationTemplateAdd() {
   const { t } = useLingui();
   const navigate = useNavigate();
+  /*
+   * An organization's Notifications tab sends its organization along, so the
+   * template is made in it without the reader picking it again, and Cancel
+   * goes back to that tab rather than to every template.
+   */
+  const { state } = useLocation() as {
+    state?: { organization?: SummaryFieldRef } | null;
+  };
+  const organization = state?.organization ?? null;
   const [formError, setFormError] = useState<unknown>(null);
   const {
     result: defaultMessages,
@@ -36,14 +45,18 @@ function NotificationTemplateAdd() {
   const handleSubmit = async (values: NotificationTemplateFormValues) => {
     try {
       const { data } = await NotificationTemplatesAPI.create(values);
-      navigate(`/notification_templates/${data.id}`);
+      navigate(`/notifications/${data.id}`);
     } catch (err) {
       setFormError(err);
     }
   };
 
   const handleCancel = () => {
-    navigate('/notification_templates');
+    navigate(
+      organization
+        ? `/organizations/${organization.id}/notifications`
+        : '/notifications'
+    );
   };
 
   if (error) {
@@ -54,9 +67,7 @@ function NotificationTemplateAdd() {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Notification Template not found.`}{' '}
-                <Link to="/notification_templates">
-                  {t`View all Notification Templates.`}
-                </Link>
+                <Link to="/notifications">{t`View all Notifications.`}</Link>
               </span>
             )}
           </ContentError>
@@ -71,6 +82,15 @@ function NotificationTemplateAdd() {
         <CardBody>
           {defaultMessages && (
             <NotificationTemplateForm
+              template={
+                organization
+                  ? {
+                      name: '',
+                      description: '',
+                      summary_fields: { organization },
+                    }
+                  : undefined
+              }
               defaultMessages={defaultMessages}
               onSubmit={handleSubmit}
               onCancel={handleCancel}

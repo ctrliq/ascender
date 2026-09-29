@@ -61,7 +61,7 @@ function RunStep() {
         <div className="ascender-run-step__condition-fields">
           <FormGroup
             fieldId="link-condition-trigger"
-            label={t`Evaluate on`}
+            label={t`Evaluate On`}
             labelHelp={
               <Popover
                 content={t`Parent node outcome required before the condition is evaluated.`}
@@ -94,7 +94,7 @@ function RunStep() {
           </FormGroup>
           <FormGroup
             fieldId="link-condition-artifact-key"
-            label={t`Artifact key`}
+            label={t`Artifact Key`}
             isRequired
             labelHelp={
               <Popover
@@ -113,7 +113,7 @@ function RunStep() {
                   : 'default'
               }
               onChange={(event, value) => artifactKeyHelpers.setValue(value)}
-              aria-label={t`Artifact key`}
+              aria-label={t`Artifact Key`}
             />
           </FormGroup>
           <FormGroup fieldId="link-condition-operator" label={t`Operator`}>
@@ -130,7 +130,7 @@ function RunStep() {
                 {
                   value: 'ne',
                   key: 'ne',
-                  label: t`Not equals`,
+                  label: t`Not Equals`,
                 },
               ]}
               onChange={(event, value) => operatorHelpers.setValue(value)}
@@ -138,7 +138,7 @@ function RunStep() {
           </FormGroup>
           <FormGroup
             fieldId="link-condition-expected-value"
-            label={t`Expected value`}
+            label={t`Expected Value`}
             labelHelp={
               <Popover
                 content={t`Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string.`}
@@ -150,7 +150,7 @@ function RunStep() {
               type="text"
               value={expectedValueField.value}
               onChange={(event, value) => expectedValueHelpers.setValue(value)}
-              aria-label={t`Expected value`}
+              aria-label={t`Expected Value`}
             />
           </FormGroup>
         </div>

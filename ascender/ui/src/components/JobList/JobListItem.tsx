@@ -8,7 +8,12 @@ import { Label, Button } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
 import { formatDateString } from 'util/dates';
-import { canOverwriteRelaunchVars, isJobRunning } from 'util/jobs';
+import {
+  canCancelJob,
+  canOverwriteRelaunchVars,
+  getRunActionLabels,
+  isJobRunning,
+} from 'util/jobs';
 import getScheduleUrl from 'util/getScheduleUrl';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
 import {
@@ -39,7 +44,6 @@ export interface JobListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   showTypeColumn?: boolean;
-  isSuperUser?: boolean;
   /** The source types the api offers, as value and label pairs. */
   inventorySourceLabels: [string | number | null, string][];
   [key: string]: unknown;
@@ -53,10 +57,10 @@ function JobListItem({
   isSelected,
   onSelect,
   showTypeColumn = false,
-  isSuperUser = false,
   inventorySourceLabels,
 }: JobListItemProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  const actionLabels = getRunActionLabels(job.type);
   const labelId = `check-action-${job.id}`;
   // a workflow that did not fully succeed (failed / errored / canceled) offers
   // the relaunch-from-failed dropdown so successful nodes can be skipped
@@ -65,12 +69,12 @@ function JobListItem({
     ['failed', 'error', 'canceled'].includes(job.status);
 
   const jobTypes = {
-    project_update: t`Source Control Update`,
+    project_update: t`Project Sync`,
     inventory_update: t`Inventory Sync`,
-    job: job.job_type === 'check' ? t`Playbook Check` : t`Playbook Run`,
+    job: job.job_type === 'check' ? t`Playbook Check` : t`Job`,
     ad_hoc_command: t`Command`,
-    system_job: t`Management Job`,
-    workflow_job: t`Workflow Job`,
+    system_job: t`Cleanup Job`,
+    workflow_job: t`Workflow`,
   };
 
   const {
@@ -111,7 +115,7 @@ function JobListItem({
         />
         <TdBreakWord id={labelId} dataLabel={t`Name`}>
           <span>
-            <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
+            <Link to={`/runs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
               <b>
                 {job.id}{' '}
                 <span className="ascender-job-list-item__dash">&mdash;</span>{' '}
@@ -128,25 +132,18 @@ function JobListItem({
             {jobTypes[job.type as keyof typeof jobTypes]}
           </Td>
         )}
-        <Td dataLabel={t`Start Time`}>{formatDateString(job.started)}</Td>
-        <Td dataLabel={t`Finish Time`}>
+        {/*
+         * A date and its time read as one value, so the cell keeps them on a
+         * line rather than dropping the AM or PM under the rest. The name is
+         * the column that gives up the width.
+         */}
+        <Td dataLabel={t`Start Time`} modifier="nowrap">
+          {formatDateString(job.started)}
+        </Td>
+        <Td dataLabel={t`Finish Time`} modifier="nowrap">
           {job.finished ? formatDateString(job.finished) : ''}
         </Td>
         <ActionsTd dataLabel={t`Actions`}>
-          <ActionItem
-            visible={
-              ['pending', 'waiting', 'running'].includes(job.status) &&
-              (job.type === 'system_job' ? isSuperUser : true)
-            }
-          >
-            <JobCancelButton
-              job={job}
-              errorTitle={t`Job Cancel Error`}
-              title={t`Cancel ${job.name}`}
-              errorMessage={t`Failed to cancel ${job.name}`}
-              showIconButton
-            />
-          </ActionItem>
           <ActionItem
             visible={
               job.type !== 'system_job' &&
@@ -154,9 +151,9 @@ function JobListItem({
             }
             tooltip={(() => {
               if (job.status === 'failed' && job.type === 'job') {
-                return t`Relaunch using host parameters`;
+                return t`Relaunch Using Host Parameters`;
               }
-              return t`Relaunch Job`;
+              return i18n._(actionLabels.relaunch);
             })()}
           >
             {job.status === 'failed' && job.type === 'job' && (
@@ -202,6 +199,21 @@ function JobListItem({
                 )}
               </LaunchButton>
             )}
+          </ActionItem>
+          {/* Last, since only a run still going has it: ahead of relaunch it
+              would leave every finished row opening with an empty slot. */}
+          <ActionItem
+            // The api's own rule, the same one the details page, the output
+            // toolbars and the list's Cancel button read, so a row never
+            // offers a cancel the api refuses.
+            visible={canCancelJob(job)}
+          >
+            <JobCancelButton
+              job={job}
+              title={i18n._(actionLabels.cancel)}
+              errorMessage={t`Failed to cancel ${job.name}`}
+              showIconButton
+            />
           </ActionItem>
         </ActionsTd>
       </Tr>
@@ -251,7 +263,7 @@ function JobListItem({
               )}
               {workflow_job_template && (
                 <Detail
-                  label={t`Workflow Job Template`}
+                  label={t`Workflow Template`}
                   value={
                     <Link
                       to={`/templates/workflow_job_template/${workflow_job_template.id}`}
@@ -263,9 +275,9 @@ function JobListItem({
               )}
               {source_workflow_job && (
                 <Detail
-                  label={t`Source Workflow Job`}
+                  label={t`Source Workflow`}
                   value={
-                    <Link to={`/jobs/workflow/${source_workflow_job.id}`}>
+                    <Link to={`/runs/workflow/${source_workflow_job.id}`}>
                       {source_workflow_job.id} - {source_workflow_job.name}
                     </Link>
                   }

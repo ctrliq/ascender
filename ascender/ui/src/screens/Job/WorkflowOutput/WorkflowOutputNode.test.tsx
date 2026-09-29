@@ -163,7 +163,7 @@ describe('WorkflowOutputNode', () => {
     expect(node).toHaveTextContent('00:00:07');
     // the job-template type letter still renders on the carried node
     expect(container.querySelector('#node-2-type-letter')).toHaveTextContent(
-      'JT'
+      'J'
     );
   });
 
@@ -178,7 +178,7 @@ describe('WorkflowOutputNode', () => {
     };
     const { container } = renderNode(pendingNode);
     expect(container.querySelector('#node-4-type-letter')).toHaveTextContent(
-      'JT'
+      'J'
     );
   });
 
@@ -254,5 +254,26 @@ describe('WorkflowOutputNode', () => {
     expect(container.querySelector('rect')!.getAttribute('stroke')).toBe(
       'var(--ascender-status-canceled-color)'
     );
+  });
+
+  test.each([
+    ['job', 'job', '/runs/playbook/9000/details'],
+    ['a nested workflow', 'workflow_job', '/runs/workflow/9000/details'],
+    ['a project sync', 'project_update', '/runs/project/9000/details'],
+    ['an approval', 'workflow_approval', '/approvals/9000/details'],
+  ])('clicking %s opens it at its own address', async (_, type, path) => {
+    const node = {
+      ...nodeWithJT,
+      originalNodeObject: {
+        ...nodeWithJT.originalNodeObject,
+        summary_fields: {
+          ...nodeWithJT.originalNodeObject.summary_fields,
+          job: { ...nodeWithJT.originalNodeObject.summary_fields.job, type },
+        },
+      },
+    };
+    const { container, history, user } = renderNode(node);
+    await user.click(container.querySelector('#node-2')!);
+    expect(history.location.pathname).toBe(path);
   });
 });

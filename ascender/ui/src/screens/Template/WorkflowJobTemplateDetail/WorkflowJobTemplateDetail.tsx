@@ -38,7 +38,6 @@ function WorkflowJobTemplateDetail({
     ask_inventory_on_launch,
     name,
     description,
-    type,
     extra_vars,
     created,
     modified,
@@ -61,16 +60,16 @@ function WorkflowJobTemplateDetail({
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
+      {template.webhook_service && (
+        <Content component={ContentVariants.li}>{t`Enable Webhook`}</Content>
+      )}
       {template.allow_simultaneous && (
         <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
       )}
       {template.allow_overwrite_flow_vars_on_relaunch && (
         <Content component={ContentVariants.li}>
-          {t`Overwriting Variables on Relaunch`}
+          {t`Allow Overwriting Variables on Relaunch`}
         </Content>
-      )}
-      {template.webhook_service && (
-        <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
       )}
     </Content>
   );
@@ -94,13 +93,13 @@ function WorkflowJobTemplateDetail({
     return ask_inventory_on_launch ? (
       <>
         <Link to={`/inventories/${inventorykind}/${inventoryId}/details`}>
-          <Label>{summary_fields.inventory?.name}</Label>
+          {summary_fields.inventory?.name}
         </Link>
-        <span> {t`(Prompt on launch)`}</span>
+        <span> {t`(Prompt on Launch)`}</span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${inventoryId}/details`}>
-        <Label>{summary_fields.inventory?.name}</Label>
+        {summary_fields.inventory?.name}
       </Link>
     );
   };
@@ -131,7 +130,7 @@ function WorkflowJobTemplateDetail({
               <Link
                 to={`/organizations/${summary_fields.organization.id}/details`}
               >
-                <Label>{summary_fields.organization.name}</Label>
+                {summary_fields.organization.name}
               </Link>
             }
           />
@@ -144,7 +143,6 @@ function WorkflowJobTemplateDetail({
             helpText={helpText.sourceControlBranch}
           />
         )}
-        <Detail label={t`Job Type`} value={toTitleCase(type)} />
         {summary_fields.inventory && (
           <Detail
             label={t`Inventory`}
@@ -181,7 +179,7 @@ function WorkflowJobTemplateDetail({
         {webhook_credential && (
           <Detail
             fullWidth
-            label={t`Webhook Credentials`}
+            label={t`Webhook Credential`}
             helpText={helpText.webhookCredential}
             value={
               <Link
@@ -198,14 +196,14 @@ function WorkflowJobTemplateDetail({
           user={summary_fields.created_by}
         />
         <UserDateDetail
-          label={t`Modified`}
+          label={t`Last Modified`}
           date={modified}
           user={summary_fields.modified_by}
         />
         {renderOptionsField && (
           <Detail
             fullWidth
-            label={t`Enabled Options`}
+            label={t`Options`}
             value={renderOptions}
             helpText={helpText.enabledOptions}
           />
@@ -272,11 +270,11 @@ function WorkflowJobTemplateDetail({
           summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={name}
-              modalTitle={t`Delete Workflow Job Template`}
+              modalTitle={t`Delete Workflow Template`}
               onConfirm={deleteWorkflowJobTemplate}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={t`This workflow job template is currently being used by other resources. Are you sure you want to delete it?`}
+              deleteMessage={t`This workflow template is currently being used by other resources. Are you sure you want to delete it?`}
             >
               {t`Delete`}
             </DeleteButton>
@@ -289,7 +287,7 @@ function WorkflowJobTemplateDetail({
           title={t`Error!`}
           onClose={dismissError}
         >
-          {t`Failed to delete workflow job template.`}
+          {t`Failed to delete workflow template.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

@@ -114,12 +114,61 @@ describe('<InventoryHostList />', () => {
     expect(screen.getByRole('link', { name: 'Host 3' })).toBeInTheDocument();
   });
 
-  test('should render Run Commands button', async () => {
-    renderUnder();
+  /** The toolbar's run menu, and the kind of run picked from it. */
+  const runFromMenu = async (
+    user: { click: (el: Element) => Promise<void> },
+    kind: string
+  ) => {
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+    await user.click(await screen.findByRole('menuitem', { name: kind }));
+  };
+
+  test('should offer a run of each kind the list can start', async () => {
+    const { user } = renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+
     expect(
-      screen.getByRole('button', { name: 'Run Command' })
+      screen.getAllByRole('menuitem').map((item) => item.textContent)
+    ).toEqual(['Job', 'Workflow', 'Command']);
+  });
+
+  /*
+   * A template runs against the inventory this list belongs to; the selection
+   * says which of its hosts, so the pattern is taken as the modal opens rather
+   * than read later, when the list behind it may have been paged.
+   */
+  test('should run a template against the hosts selected', async () => {
+    const { user } = renderUnder();
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    const pick = (name: string) =>
+      within(screen.getByRole('link', { name }).closest('tr')!).getByRole(
+        'checkbox',
+        { name: /select/i }
+      );
+    await user.click(pick('Host 1'));
+    await user.click(pick('Host 2'));
+    await runFromMenu(user, 'Job');
+
+    // The tooltip says the same words as the wizard's title, so the limit is
+    // what tells the two apart, and it is the thing under test anyway.
+    expect(await screen.findByText('Limit: Host 1,Host 2')).toBeInTheDocument();
+  });
+
+  test('should run a template on every host when none are ticked', async () => {
+    const { user } = renderUnder();
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await runFromMenu(user, 'Workflow');
+
+    // Nothing ticked is the whole list, as it is for the ad hoc command, so
+    // the header says so and nothing is ruled out.
+    expect(
+      await screen.findByRole('heading', { name: 'Run Workflow' })
     ).toBeInTheDocument();
+    expect(screen.getByText('Limit: all')).toBeInTheDocument();
   });
 
   test('should check and uncheck the row item', async () => {
@@ -198,6 +247,39 @@ describe('<InventoryHostList />', () => {
     await waitFor(() => expect(HostsAPI.destroy).toHaveBeenCalledTimes(1));
   });
 
+  test('steps back a page when every host on it is deleted', async () => {
+    vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
+      data: { count: 21, results: [mockHosts[0]] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
+    vi.mocked(HostsAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof HostsAPI.destroy>
+    );
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/hosts?host.page=2'],
+    });
+    const { user } = renderWithContexts(
+      <Routes>
+        <Route
+          path="/inventories/inventory/:id/hosts"
+          element={<InventoryHostList />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() =>
+      expect(history.location.search).not.toContain('host.page=2')
+    );
+    await settleTooltips();
+  });
+
   test('should show error modal when host is not successfully deleted from api', async () => {
     vi.mocked(HostsAPI.destroy).mockRejectedValue(new Error());
     const { user } = renderUnder();
@@ -247,7 +329,7 @@ describe('<InventoryHostList />', () => {
     ).toBeInTheDocument();
   });
 
-  test('should not render Run Commands button', async () => {
+  test('should leave the command out where none may be started', async () => {
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
       data: {
         actions: {
@@ -262,10 +344,13 @@ describe('<InventoryHostList />', () => {
         },
       },
     } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
-    renderUnder();
+    const { user } = renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+
     expect(
-      screen.queryByRole('button', { name: 'Run Command' })
-    ).not.toBeInTheDocument();
+      screen.getAllByRole('menuitem').map((item) => item.textContent)
+    ).toEqual(['Job', 'Workflow']);
   });
 });

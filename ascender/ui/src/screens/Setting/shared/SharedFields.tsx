@@ -11,13 +11,10 @@ import {
   FormHelperText,
   HelperText,
   HelperTextItem,
-  InputGroup,
   Switch,
   TextArea,
   TextInput,
-  Tooltip,
   ButtonVariant,
-  InputGroupItem,
 } from '@patternfly/react-core';
 import FileUploadIcon from '@patternfly/react-icons/dist/js/icons/file-upload-icon';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
@@ -29,6 +26,7 @@ import { FormFullWidthLayout } from 'components/FormLayout';
 import Popover from 'components/Popover';
 import { combine, minMaxValue, required, url, number } from 'util/validators';
 import AlertModal from 'components/AlertModal';
+import Tooltip from 'components/Tooltip';
 import RevertButton from './RevertButton';
 import './SharedFields.css';
 
@@ -137,7 +135,11 @@ const BooleanField = ({
           title={modalTitle}
           variant="danger"
           aria-label={modalTitle}
+          /* Closing the dialog is declining it, as Cancel is: the switch
+             went on when it was flipped, so leaving it there would make the
+             change the reader just walked away from. */
           onClose={() => {
+            helpers.setValue(false);
             setIsModalOpen(false);
           }}
           actions={[
@@ -175,7 +177,10 @@ const BooleanField = ({
         ouiaId={name}
         isChecked={field.value}
         isDisabled={disabled}
-        label={t`On`}
+        /* PatternFly 6 dropped labelOff, so a single label is shown in both
+           states: this read "On" while the switch was off. The state is what
+           the word is there to report, so it has to follow the value. */
+        label={field.value ? t`On` : t`Off`}
 
         onChange={(_event, isOn) => {
           if (needsConfirmationModal && isOn) {
@@ -240,17 +245,13 @@ const EncryptedField = ({
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
     >
-      <InputGroup>
-        <InputGroupItem isFill>
-          <PasswordInput
-            id={name}
-            name={name}
-            label={config.label}
-            validate={validate}
-            isRequired={isRequired}
-          />
-        </InputGroupItem>
-      </InputGroup>
+      <PasswordInput
+        id={name}
+        name={name}
+        label={config.label}
+        validate={validate}
+        isRequired={isRequired}
+      />
     </SettingGroup>
   ) : null;
 };
@@ -311,7 +312,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
         <div className="ascender-shared-fields__selected">
           {isDisable && (
             <Tooltip
-              content={t`Edit Login redirect override URL`}
+              content={t`Edit Login Redirect Override URL`}
               position="top"
             >
               <Button
@@ -341,9 +342,9 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
       {isModalOpen && isDisable && (
         <AlertModal
           isOpen
-          title={t`Edit login redirect override URL`}
+          title={t`Edit Login Redirect Override URL`}
           variant="danger"
-          aria-label={t`Edit login redirect override URL`}
+          aria-label={t`Edit Login Redirect Override URL`}
           onClose={() => {
             setIsModalOpen(false);
           }}
@@ -505,7 +506,16 @@ const FileUploadField = ({
   config,
   type = 'text',
   isRequired = false,
-}: SettingFieldProps & { type?: FileUploadProps['type'] }) => {
+  hasPreview = true,
+}: SettingFieldProps & {
+  type?: FileUploadProps['type'];
+  /**
+   * Whether the box under the picker shows what was uploaded. A stylesheet is
+   * the file itself rather than a value to read back, so its field is the
+   * picker alone.
+   */
+  hasPreview?: boolean;
+}) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : undefined;
   const [filename, setFilename] = useState('');
@@ -546,9 +556,9 @@ const FileUploadField = ({
           onReadStarted={() => setFileIsUploading(true)}
           onReadFinished={() => setFileIsUploading(false)}
           isLoading={fileIsUploading}
-          allowEditingUploadedText
+          allowEditingUploadedText={hasPreview}
           validated={isValid ? 'default' : 'error'}
-          hideDefaultPreview={type === 'dataURL'}
+          hideDefaultPreview={type === 'dataURL' || !hasPreview}
           browseButtonText={t`Browse…`}
           clearButtonText={t`Clear`}
         >

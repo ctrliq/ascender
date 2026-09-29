@@ -1,5 +1,7 @@
 import parseHostFilter, {
+  getGroupInventory,
   getInventoryPath,
+  getInventoryType,
   getVmwarePlugin,
   mergeVmwarePlugin,
   VMWARE_DEFAULT_PLUGIN,
@@ -96,5 +98,44 @@ describe('mergeVmwarePlugin', () => {
   test('returns unparseable source vars unchanged', () => {
     const vars = 'this: is: not: yaml';
     expect(mergeVmwarePlugin(vars, 'vmware.vmware.vms')).toEqual(vars);
+  });
+});
+
+describe('getInventoryType', () => {
+  test.each([
+    ['', 'inventory'],
+    [null, 'inventory'],
+    ['smart', 'smart_inventory'],
+    ['constructed', 'constructed_inventory'],
+    ['federated', 'federated_inventory'],
+  ])('names the type of a %s inventory', (kind, type) => {
+    expect(getInventoryType(kind)).toBe(type);
+  });
+});
+
+describe('getGroupInventory', () => {
+  const groupIn = (kind?: string) => ({
+    summary_fields: kind === undefined ? {} : { inventory: { id: 7, kind } },
+  });
+
+  test('follows the kind of the inventory the group is in', () => {
+    expect(getGroupInventory(groupIn('constructed') as never)).toEqual({
+      path: '/inventories/constructed_inventory/7',
+      isReadOnly: true,
+    });
+    expect(getGroupInventory(groupIn('federated') as never).isReadOnly).toBe(
+      true
+    );
+    expect(getGroupInventory(groupIn('') as never)).toEqual({
+      path: '/inventories/inventory/7',
+      isReadOnly: false,
+    });
+  });
+
+  test('falls back to the inventory on screen', () => {
+    expect(getGroupInventory(groupIn() as never, 3)).toEqual({
+      path: '/inventories/inventory/3',
+      isReadOnly: false,
+    });
   });
 });
