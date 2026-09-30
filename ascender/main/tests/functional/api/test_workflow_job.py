@@ -409,3 +409,281 @@ def test_workflow_job_relaunch_of_a_relaunch_by_a_user_without_prompting(wfjt, j
     resp = post(url, {}, rando, expect=status)
     if status == 201:
         assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['colour'] == 'blue'
+
+
+def _forceable_workflow_job(wfjt, job_template, allowed=True):
+    """A run of wfjt whose only node failed. Launched for real, so the run has
+    a launch config and its node comes from the template node: a relaunch
+    rebuilds the nodes from the template and maps them back by identifier."""
+    wfjt.allow_force_node_success_on_relaunch = allowed
+    wfjt.save()
+    wfjt.workflow_job_template_nodes.create(unified_job_template=job_template, identifier='n1')
+    wfj = wfjt.create_unified_job()
+    wfj.status = 'failed'
+    wfj.save()
+    node = wfj.workflow_job_nodes.get()
+    node.job = job_template.create_job()
+    node.job.status = 'failed'
+    node.job.save()
+    node.save()
+    return wfj, node
+
+
+FORCE_REASON = 'the confluence page failed to update, the patching itself went fine'
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_forces_a_failed_node(wfjt, job_template, post, get, admin_user):
+    from ascender.main.models import WorkflowJob
+
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': f'  {FORCE_REASON} '}, admin_user, expect=201)
+    forced = WorkflowJob.objects.get(pk=resp.data['id']).workflow_job_nodes.get(identifier='n1')
+    assert forced.prior_run_succeeded is True
+    assert forced.forced_success is True
+    assert forced.forced_success_reason == FORCE_REASON
+    assert forced.forced_success_by == admin_user
+    assert forced.forced_success_job_id == node.job_id
+
+    # and whoever looks at the run later can tell it apart from a success
+    data = get(reverse('api:workflow_job_node_detail', kwargs={'pk': forced.pk}), admin_user, expect=200).data
+    assert data['forced_success'] is True
+    assert data['forced_success_reason'] == FORCE_REASON
+    assert data['summary_fields']['forced_success_by']['username'] == admin_user.username
+    assert data['summary_fields']['forced_success_job']['status'] == 'failed'
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_needs_the_template_to_allow_it(wfjt, job_template, post, admin_user):
+    wfj, node = _forceable_workflow_job(wfjt, job_template, allowed=False)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'does not allow forcing nodes' in str(resp.data)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('allowed_now, status', [(True, 201), (False, 400)])
+def test_workflow_job_relaunch_force_reads_the_template_as_it_is_now(wfjt, job_template, post, admin_user, allowed_now, status):
+    # the run copied the opposite value at launch; what the template says at
+    # relaunch time is what counts, in both directions
+    wfj, node = _forceable_workflow_job(wfjt, job_template, allowed=not allowed_now)
+    wfj.allow_force_node_success_on_relaunch = not allowed_now
+    wfj.save()
+    wfjt.allow_force_node_success_on_relaunch = allowed_now
+    wfjt.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    post(url, {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=status)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_falls_back_to_the_run_once_the_template_is_gone(wfjt, job_template, admin_user):
+    wfj, _node = _forceable_workflow_job(wfjt, job_template, allowed=False)
+    wfj.allow_force_node_success_on_relaunch = True
+    wfj.save()
+    assert wfj.allows_forcing_node_success() is False
+    wfjt.delete()
+    wfj.refresh_from_db()
+    assert wfj.allows_forcing_node_success() is True
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('reason', [None, '', '   ', 42])
+def test_workflow_job_relaunch_force_needs_a_reason(wfjt, job_template, post, admin_user, reason):
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    payload = {'nodes': 'failed', 'force_success_nodes': [node.id]}
+    if reason is not None:
+        payload['force_success_reason'] = reason
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, payload, admin_user, expect=400)
+    assert 'force_success_reason is required' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_needs_from_failed(wfjt, job_template, post, admin_user):
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'only be forced as successful when relaunching from failed nodes' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_reason_without_nodes(wfjt, job_template, post, admin_user):
+    wfj, _node = _forceable_workflow_job(wfjt, job_template)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'without any force_success_nodes' in str(resp.data)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('payload', ['1', 1, {'id': 1}, ['1'], [True], [None]])
+def test_workflow_job_relaunch_force_nodes_must_be_a_list_of_ids(wfjt, job_template, post, admin_user, payload):
+    wfj, _node = _forceable_workflow_job(wfjt, job_template)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': payload, 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'must be a list of workflow job node ids' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_refuses_a_node_of_another_run(wfjt, job_template, post, admin_user):
+    wfj, _node = _forceable_workflow_job(wfjt, job_template)
+    other = wfjt.create_unified_job().workflow_job_nodes.get()
+    other.job = job_template.create_job()
+    other.job.status = 'failed'
+    other.job.save()
+    other.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [other.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'not part of this workflow job' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_refuses_an_approval(wfjt, job_template, post, admin_user):
+    from ascender.main.models import WorkflowApprovalTemplate, WorkflowJobNode
+
+    wfj, _node = _forceable_workflow_job(wfjt, job_template)
+    approval_template = WorkflowApprovalTemplate.objects.create(name='approve patching')
+    approval_node = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=approval_template, identifier='a1')
+    approval_node.job = approval_template.create_unified_job()
+    approval_node.job.status = 'failed'
+    approval_node.job.save()
+    approval_node.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [approval_node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'approvals cannot be forced' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_force_and_overwrite_vars_together(wfjt, job_template, post, admin_user):
+    # the forced node published nothing the next one needs, so the relaunch
+    # hands the missing value in as a variable
+    from ascender.main.models import WorkflowJob
+
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    wfj.allow_overwrite_flow_vars_on_relaunch = True
+    wfj.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    payload = {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON, 'extra_vars': {'colour': 'green'}}
+    resp = post(url, payload, admin_user, expect=201)
+    new_wfj = WorkflowJob.objects.get(pk=resp.data['id'])
+    assert new_wfj.extra_vars_dict['colour'] == 'green'
+    assert new_wfj.workflow_job_nodes.get(identifier='n1').forced_success is True
+
+
+@pytest.mark.django_db
+def test_workflow_job_template_summary_says_whether_nodes_can_be_forced(wfjt, job_template, get, admin_user):
+    wfj, _node = _forceable_workflow_job(wfjt, job_template)
+    data = get(reverse('api:workflow_job_detail', kwargs={'pk': wfj.pk}), admin_user, expect=200).data
+    assert data['summary_fields']['workflow_job_template']['allow_force_node_success_on_relaunch'] is True
+
+
+def _fail_node(node, job_template):
+    node.job = job_template.create_job()
+    node.job.status = 'failed'
+    node.job.save()
+    node.save()
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_after_a_forced_run_fails_further_down(wfjt, job_template, post, admin_user):
+    # patch -> confluence -> notify. Confluence fails and is forced; in that run
+    # notify fails too. Relaunching from failed again keeps confluence forced
+    # and runs notify again, and notify can then be forced as well, each with
+    # its own reason.
+    from ascender.main.models import WorkflowJob
+    from ascender.main.scheduler.dag_workflow import WorkflowDAG
+
+    wfjt.allow_force_node_success_on_relaunch = True
+    wfjt.save()
+    patch = wfjt.workflow_job_template_nodes.create(unified_job_template=job_template, identifier='patch')
+    confluence = wfjt.workflow_job_template_nodes.create(unified_job_template=job_template, identifier='confluence')
+    notify = wfjt.workflow_job_template_nodes.create(unified_job_template=job_template, identifier='notify')
+    patch.success_nodes.add(confluence)
+    confluence.success_nodes.add(notify)
+
+    run1 = wfjt.create_unified_job()
+    run1.status = 'failed'
+    run1.save()
+    nodes1 = {n.identifier: n for n in run1.workflow_job_nodes.all()}
+    nodes1['patch'].job = job_template.create_job()
+    nodes1['patch'].job.status = 'successful'
+    nodes1['patch'].job.save()
+    nodes1['patch'].save()
+    _fail_node(nodes1['confluence'], job_template)
+
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': run1.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [nodes1['confluence'].id], 'force_success_reason': 'token expired'}, admin_user, expect=201)
+    run2 = WorkflowJob.objects.get(pk=resp.data['id'])
+    nodes2 = {n.identifier: n for n in run2.workflow_job_nodes.all()}
+    assert nodes2['confluence'].forced_success
+    dag = WorkflowDAG(workflow_job=run2)
+    dag.mark_dnr_nodes()
+    assert nodes2['notify'] in dag.bfs_nodes_to_run()
+
+    # notify fails in the second run
+    _fail_node(nodes2['notify'], job_template)
+    run2.status = 'failed'
+    run2.save()
+
+    # a plain relaunch from failed: confluence stays forced, notify runs again
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': run2.pk})
+    resp = post(url, {'nodes': 'failed'}, admin_user, expect=201)
+    run3 = WorkflowJob.objects.get(pk=resp.data['id'])
+    nodes3 = {n.identifier: n for n in run3.workflow_job_nodes.all()}
+    assert nodes3['patch'].prior_run_succeeded and not nodes3['patch'].forced_success
+    assert nodes3['confluence'].forced_success
+    assert nodes3['confluence'].forced_success_reason == 'token expired'
+    assert nodes3['confluence'].forced_success_job_id == nodes1['confluence'].job_id
+    assert not nodes3['notify'].prior_run_succeeded
+    dag = WorkflowDAG(workflow_job=run3)
+    dag.mark_dnr_nodes()
+    assert dag.bfs_nodes_to_run() == [nodes3['notify']]
+
+    # or force notify too: both end up forced, each with its own reason
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [nodes2['notify'].id], 'force_success_reason': 'slack is down'}, admin_user, expect=201)
+    run4 = WorkflowJob.objects.get(pk=resp.data['id'])
+    nodes4 = {n.identifier: n for n in run4.workflow_job_nodes.all()}
+    assert nodes4['confluence'].forced_success_reason == 'token expired'
+    assert nodes4['notify'].forced_success_reason == 'slack is down'
+    assert nodes4['notify'].forced_success_job_id == nodes2['notify'].job_id
+    dag = WorkflowDAG(workflow_job=run4)
+    dag.mark_dnr_nodes()
+    assert dag.bfs_nodes_to_run() == []
+    assert dag.is_workflow_done()
+    assert dag.has_workflow_failed() == (False, None)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_cannot_force_a_node_that_was_already_forced(wfjt, job_template, post, admin_user):
+    # in the run after a forced one, the forced node did not fail: it was
+    # carried. Naming it again is refused rather than silently ignored.
+    from ascender.main.models import WorkflowJob
+
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=201)
+    run2 = WorkflowJob.objects.get(pk=resp.data['id'])
+    run2.status = 'failed'
+    run2.save()
+    forced = run2.workflow_job_nodes.get()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': run2.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [forced.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'did not fail' in str(resp.data)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('change', ['rename', 'delete'])
+def test_workflow_job_relaunch_force_refuses_a_node_the_template_lost(wfjt, job_template, post, admin_user, change):
+    # the relaunch rebuilds the nodes from the template and matches them back
+    # by identifier; a node the template no longer has would run again rather
+    # than be forced, so say so instead of answering 201
+    wfj, node = _forceable_workflow_job(wfjt, job_template)
+    template_node = wfjt.workflow_job_template_nodes.get()
+    if change == 'rename':
+        template_node.identifier = 'renamed'
+        template_node.save()
+    else:
+        template_node.delete()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'force_success_nodes': [node.id], 'force_success_reason': FORCE_REASON}, admin_user, expect=400)
+    assert 'no longer in the workflow job template' in str(resp.data)

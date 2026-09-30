@@ -65,6 +65,20 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
     }
   }
 
+  const forced = node?.originalNodeObject?.forced_success
+    ? {
+        reason: node.originalNodeObject.forced_success_reason,
+        jobId: (
+          node.originalNodeObject.summary_fields?.forced_success_job as
+            { id?: number } | undefined
+        )?.id,
+        by: (
+          node.originalNodeObject.summary_fields?.forced_success_by as
+            { username?: string } | undefined
+        )?.username,
+      }
+    : null;
+
   let jobStatus;
   if (job) {
     switch (job.status) {
@@ -162,7 +176,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
           )}
         </dl>
       )}
-      {unifiedJobTemplate && !job && (
+      {(unifiedJobTemplate || forced) && !job && (
         <dl className="ascender-workflow-node-help__grid-dl">
           {identifier && (
             <>
@@ -182,7 +196,28 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
             <b>{t`Type`}</b>
           </dt>
           <dd id="workflow-node-help-type">{nodeType}</dd>
+          {forced && (
+            <>
+              <dt>
+                <b>{t`Job Status`}</b>
+              </dt>
+              <dd id="workflow-node-help-status">{t`Failed, forced as successful`}</dd>
+              <dt>
+                <b>{t`Forced by`}</b>
+              </dt>
+              <dd id="workflow-node-help-forced-by">
+                {forced.by || t`Deleted`}
+              </dd>
+              <dt>
+                <b>{t`Reason`}</b>
+              </dt>
+              <dd id="workflow-node-help-forced-reason">{forced.reason}</dd>
+            </>
+          )}
         </dl>
+      )}
+      {forced?.jobId && (
+        <p className="ascender-workflow-node-help__margin-top-10">{t`Click to view the job that failed`}</p>
       )}
       {job && job.type !== 'workflow_approval' && (
         <p className="ascender-workflow-node-help__margin-top-10">{t`Click to view job details`}</p>

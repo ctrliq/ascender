@@ -50,6 +50,7 @@ export interface WorkflowJobTemplateFormValues {
   job_tags: string;
   allow_simultaneous: boolean;
   allow_overwrite_flow_vars_on_relaunch: boolean;
+  allow_force_node_success_on_relaunch: boolean;
   webhook_credential: SummaryFieldRef | null;
   webhook_service: string;
   ask_labels_on_launch: boolean;
@@ -318,6 +319,12 @@ function WorkflowJobTemplateForm({
             tooltip={helpText.allowOverwriteFlowVarsOnRelaunch}
             label={t`Allow Overwriting Variables on Relaunch`}
           />
+          <CheckboxField
+            name="allow_force_node_success_on_relaunch"
+            id="allow_force_node_success_on_relaunch"
+            tooltip={helpText.allowForceNodeSuccessOnRelaunch}
+            label={t`Allow Forcing Failed Nodes as Successful on Relaunch`}
+          />
         </FormCheckboxLayout>
       </FormGroup>
 
@@ -360,6 +367,8 @@ const FormikApp = withForm<
       allow_simultaneous: template.allow_simultaneous || false,
       allow_overwrite_flow_vars_on_relaunch:
         template.allow_overwrite_flow_vars_on_relaunch || false,
+      allow_force_node_success_on_relaunch:
+        template.allow_force_node_success_on_relaunch || false,
       webhook_credential: template?.summary_fields?.webhook_credential || null,
       webhook_service: template.webhook_service || '',
       ask_labels_on_launch: template.ask_labels_on_launch || false,

@@ -73,4 +73,63 @@ describe('WorkflowNodeHelp', () => {
     // element as an attribute
     expect(notice).not.toHaveAttribute('job');
   });
+
+  test('says who forced a node as successful and why', () => {
+    const forcedNode = {
+      originalNodeObject: {
+        prior_run_succeeded: true,
+        forced_success: true,
+        forced_success_reason: 'confluence is down, patching went fine',
+        summary_fields: {
+          unified_job_template: {
+            name: 'Update Confluence',
+            type: 'job_template',
+          },
+          forced_success_by: { id: 1, username: 'fernando' },
+          forced_success_job: { id: 4242, status: 'failed' },
+        },
+      },
+    };
+    const { container } = renderWithContexts(
+      <WorkflowNodeHelp node={forcedNode as unknown as WorkflowNode} />
+    );
+    expect(
+      container.querySelector('#workflow-node-help-status')
+    ).toHaveTextContent('Failed, forced as successful');
+    expect(
+      container.querySelector('#workflow-node-help-forced-by')
+    ).toHaveTextContent('fernando');
+    expect(
+      container.querySelector('#workflow-node-help-forced-reason')
+    ).toHaveTextContent('confluence is down, patching went fine');
+  });
+
+  test('keeps who forced a node and why when its template was deleted', () => {
+    const forcedNode = {
+      originalNodeObject: {
+        prior_run_succeeded: true,
+        forced_success: true,
+        forced_success_reason: 'confluence is down',
+        summary_fields: {
+          forced_success_by: { id: 1, username: 'fernando' },
+        },
+      },
+    };
+    const { container, queryByText } = renderWithContexts(
+      <WorkflowNodeHelp node={forcedNode as unknown as WorkflowNode} />
+    );
+    expect(
+      queryByText('The resource associated with this node has been deleted.')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('#workflow-node-help-forced-by')
+    ).toHaveTextContent('fernando');
+    expect(
+      container.querySelector('#workflow-node-help-forced-reason')
+    ).toHaveTextContent('confluence is down');
+    // the failed job is gone too, so there is nothing to click through to
+    expect(
+      queryByText('Click to view the job that failed')
+    ).not.toBeInTheDocument();
+  });
 });

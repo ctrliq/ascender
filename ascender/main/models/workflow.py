@@ -458,6 +458,41 @@ class WorkflowJobNode(WorkflowNodeBase):
         editable=False,
         help_text=_("Elapsed time (seconds) of this node's job in the run it was carried forward from."),
     )
+    forced_success = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text=_(
+            "Set when a workflow is relaunched from a failed node and this node was forced as "
+            "successful: its job failed in the prior run, but whoever relaunched it chose to carry it "
+            "forward as though it had succeeded. Such a node also has prior_run_succeeded set."
+        ),
+    )
+    forced_success_reason = models.TextField(
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_("Why the node was forced as successful, as given by whoever relaunched the workflow."),
+    )
+    forced_success_by = models.ForeignKey(
+        'auth.User',
+        related_name='+',
+        blank=True,
+        null=True,
+        default=None,
+        editable=False,
+        on_delete=models.SET_NULL,
+        help_text=_("The user who forced the node as successful."),
+    )
+    forced_success_job = models.ForeignKey(
+        'UnifiedJob',
+        related_name='+',
+        blank=True,
+        null=True,
+        default=None,
+        editable=False,
+        on_delete=models.SET_NULL,
+        help_text=_("The failed job whose outcome was overridden when the node was forced as successful."),
+    )
     retry_attempts = models.PositiveIntegerField(
         default=0,
         editable=False,
@@ -672,6 +707,14 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
         default=False,
         help_text=_("Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run."),
     )
+    allow_force_node_success_on_relaunch = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had "
+            "succeeded, so the workflow continues down their success paths. Each forced node records who "
+            "forced it and why."
+        ),
+    )
 
     extra_vars_dict = VarsDictProperty('extra_vars', True)
 
@@ -717,26 +760,50 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
                     expected_value=old_link.expected_value,
                 )
 
+    FORCED_SUCCESS_FIELDS = ('forced_success', 'forced_success_reason', 'forced_success_by', 'forced_success_job')
+
     @staticmethod
-    def _carried_forward_node_state(node):
+    def _carried_forward_node_state(node, forced=None):
         """For relaunch-from-failed: decide whether an original-run node should be
-        carried forward (it succeeded, or was already carried in an earlier
-        relaunch) and, if so, return the (prior_run_elapsed, ancestor_artifacts)
-        to copy onto the new node. The artifacts matter because a carried node
-        spawns no job of its own, so without this its set_stats output would be
-        invisible to downstream re-run nodes (which read it from the parent's
-        ancestor_artifacts). Return None for nodes that should run again."""
+        carried forward and, if so, return the field values to copy onto the new
+        node. A node is carried when it succeeded, when it was already carried in
+        an earlier relaunch, or when it is one of the failed nodes the relaunch
+        forces as successful (forced maps those node ids to (user, reason)).
+        The artifacts matter because a carried node spawns no job of its own, so
+        without them its set_stats output would be invisible to downstream re-run
+        nodes (which read it from the parent's ancestor_artifacts). Return None
+        for nodes that should run again."""
         if node.prior_run_succeeded:
             # Already carried once; its ancestor_artifacts already holds the full
-            # upstream set captured the first time it was carried forward.
-            return node.prior_run_elapsed, dict(node.ancestor_artifacts or {})
-        if node.job_id and node.job.status == 'successful':
+            # upstream set captured the first time it was carried forward, and a
+            # node forced back then stays marked as forced.
+            state = {
+                'prior_run_succeeded': True,
+                'prior_run_elapsed': node.prior_run_elapsed,
+                'ancestor_artifacts': dict(node.ancestor_artifacts or {}),
+            }
+            if node.forced_success:
+                state.update({f: getattr(node, f) for f in WorkflowJobOptions.FORCED_SUCCESS_FIELDS})
+            return state
+        if node.job_id and (node.job.status == 'successful' or (forced and node.id in forced)):
+            # A forced node hands down whatever its job managed to publish before
+            # it failed, as a successful one would.
             artifacts = dict(node.ancestor_artifacts or {})
             artifacts.update(node.job.get_effective_artifacts(parents_set=set([node.workflow_job_id])))
-            return node.job.elapsed, artifacts
+            state = {'prior_run_succeeded': True, 'prior_run_elapsed': node.job.elapsed, 'ancestor_artifacts': artifacts}
+            if node.job.status != 'successful':
+                user, reason = forced[node.id]
+                state.update({'forced_success': True, 'forced_success_reason': reason, 'forced_success_by': user, 'forced_success_job': node.job})
+            return state
         return None
 
-    def copy_nodes_from_original(self, original=None, user=None, mark_succeeded_as_prior=False):
+    @staticmethod
+    def _apply_carried_forward_state(new_node, state):
+        for field, value in state.items():
+            setattr(new_node, field, value)
+        new_node.save(update_fields=list(state))
+
+    def copy_nodes_from_original(self, original=None, user=None, mark_succeeded_as_prior=False, forced=None):
         old_node_list = original.workflow_nodes.prefetch_related('always_nodes', 'success_nodes', 'failure_nodes', 'condition_links_from').all()
         node_links = self._create_workflow_nodes(old_node_list, user=user)
         self._inherit_node_relationships(old_node_list, node_links)
@@ -745,17 +812,11 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
             # job already succeeded so the scheduler treats them as done-successful
             # and only the failed node(s) and everything downstream run again.
             for old_node in old_node_list:
-                state = WorkflowJob._carried_forward_node_state(old_node)
-                if state is None:
-                    continue
-                elapsed, artifacts = state
-                new_node = node_links[old_node.pk]
-                new_node.prior_run_succeeded = True
-                new_node.prior_run_elapsed = elapsed
-                new_node.ancestor_artifacts = artifacts
-                new_node.save(update_fields=['prior_run_succeeded', 'prior_run_elapsed', 'ancestor_artifacts'])
+                state = WorkflowJob._carried_forward_node_state(old_node, forced=forced)
+                if state is not None:
+                    WorkflowJob._apply_carried_forward_state(node_links[old_node.pk], state)
 
-    def mark_prior_succeeded_nodes_from(self, original):
+    def mark_prior_succeeded_nodes_from(self, original, forced=None):
         # Relaunch-from-failed (template path): the new nodes were rebuilt from the
         # workflow job template, so map them back to the original run by identifier
         # and carry forward the ones whose job succeeded.
@@ -766,27 +827,26 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
         for node in original.workflow_nodes.all():
             if not node.identifier:
                 continue
-            state = WorkflowJob._carried_forward_node_state(node)
+            state = WorkflowJob._carried_forward_node_state(node, forced=forced)
             if state is not None:
                 carried[node.identifier] = state
         if not carried:
             return
         for new_node in self.workflow_nodes.all():
             if new_node.identifier in carried:
-                elapsed, artifacts = carried[new_node.identifier]
-                new_node.prior_run_succeeded = True
-                new_node.prior_run_elapsed = elapsed
-                new_node.ancestor_artifacts = artifacts
-                new_node.save(update_fields=['prior_run_succeeded', 'prior_run_elapsed', 'ancestor_artifacts'])
+                WorkflowJob._apply_carried_forward_state(new_node, carried[new_node.identifier])
 
-    def create_relaunch_workflow_job(self, from_failed=False, extra_vars=None):
+    def create_relaunch_workflow_job(self, from_failed=False, extra_vars=None, forced=None):
+        """forced maps the ids of failed nodes of this run to the (user, reason)
+        they are forced as successful with; it only means something together
+        with from_failed."""
         new_workflow_job = self.copy_unified_job()
         if extra_vars:
             new_workflow_job.apply_relaunch_extra_vars(extra_vars)
         if self.unified_job_template_id is None:
-            new_workflow_job.copy_nodes_from_original(original=self, mark_succeeded_as_prior=from_failed)
+            new_workflow_job.copy_nodes_from_original(original=self, mark_succeeded_as_prior=from_failed, forced=forced)
         elif from_failed:
-            new_workflow_job.mark_prior_succeeded_nodes_from(original=self)
+            new_workflow_job.mark_prior_succeeded_nodes_from(original=self, forced=forced)
         return new_workflow_job
 
 
@@ -1021,6 +1081,52 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
         if wfjt is not None:
             keys |= set(wfjt.survey_password_variables())
         return keys
+
+    def allows_forcing_node_success(self):
+        """Whether a relaunch from failed nodes may force some of them as successful.
+
+        Read from the workflow job template as it is now, not from the copy this
+        run took at launch: the setting is typically turned on right after a run
+        failed on a node nobody can fix in time, and turning it off has to stop
+        it for runs already started too. The run's own copy only answers once its
+        template is gone."""
+        wfjt = self.workflow_job_template
+        if wfjt is not None:
+            return wfjt.allow_force_node_success_on_relaunch
+        return self.allow_force_node_success_on_relaunch
+
+    def forceable_failed_nodes(self, node_ids):
+        """Return the nodes of this run named by node_ids, or raise ValueError
+        naming the first that cannot be forced as successful.
+
+        Only a node whose job failed for good can be forced. An approval never
+        can: forcing a denied or timed out approval would be a way around the
+        people who were asked to approve."""
+        nodes = {n.id: n for n in self.workflow_job_nodes.filter(id__in=node_ids).select_related('job')}
+        # A run that still has its template is relaunched from that template,
+        # and its nodes are matched back to this run's by identifier: a node
+        # whose identifier the template no longer has would run again instead
+        # of being forced, so it is refused here rather than ignored.
+        template_identifiers = None
+        wfjt = self.workflow_job_template if self.unified_job_template_id is not None else None
+        if wfjt is not None:
+            template_identifiers = set(wfjt.workflow_job_template_nodes.values_list('identifier', flat=True))
+        for node_id in node_ids:
+            node = nodes.get(node_id)
+            if node is None:
+                raise ValueError(_('Node {} is not part of this workflow job.').format(node_id))
+            if not node.finally_failed():
+                raise ValueError(_('Node {} did not fail in this workflow job, so there is nothing to force.').format(node_id))
+            job_cls = node.job.get_real_instance_class() if node.job.polymorphic_ctype_id else type(node.job)
+            if issubclass(job_cls, WorkflowApproval):
+                raise ValueError(_('Node {} is an approval, and approvals cannot be forced as successful.').format(node_id))
+            if template_identifiers is not None and (not node.identifier or node.identifier not in template_identifiers):
+                raise ValueError(
+                    _(
+                        'Node {} is no longer in the workflow job template, or its identifier changed since this run, so the relaunch cannot carry it forward.'
+                    ).format(node_id)
+                )
+        return [nodes[node_id] for node_id in node_ids]
 
     def validate_relaunch_extra_vars(self, extra_vars):
         """Check the variables handed to a relaunch.

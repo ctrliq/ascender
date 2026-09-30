@@ -279,7 +279,7 @@ msgstr "تعذر تحميل آخر تحديث للمهمة"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:164
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:105
 msgid "(Prompt on launch)"
 msgstr "(المطالبة عند الإطلاق)"
 
@@ -341,7 +341,7 @@ msgid "Branch to checkout. In addition to branches, you can input tags, commit h
 msgstr "الفرع المراد سحبه. بالإضافة إلى الفروع، يمكنك إدخال العلامات وتجزئات الالتزام والمراجع العشوائية. قد لا تتوفر بعض تجزئات الالتزام والمراجع ما لم تقدم أيضًا refspec مخصصًا."
 
 #: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobListItem.tsx:131
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -352,8 +352,8 @@ msgstr "الفرع المراد سحبه. بالإضافة إلى الفروع،
 #: components/TemplateList/TemplateListItem.tsx:167
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:160
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:228
-#: components/Workflow/WorkflowNodeHelp.tsx:146
-#: components/Workflow/WorkflowNodeHelp.tsx:182
+#: components/Workflow/WorkflowNodeHelp.tsx:156
+#: components/Workflow/WorkflowNodeHelp.tsx:192
 #: screens/Credential/CredentialList/CredentialList.tsx:165
 #: screens/Credential/CredentialList/CredentialListItem.tsx:75
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:98
@@ -434,7 +434,7 @@ msgstr "إنشاء مجموعة جديدة"
 msgid "Create New Project"
 msgstr "إنشاء مشروع جديد"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:188
+#: components/Workflow/WorkflowNodeHelp.tsx:219
 msgid "Click to view job details"
 msgstr "انقر لعرض تفاصيل المهمة"
 
@@ -513,6 +513,10 @@ msgstr "فشل تشغيل فحص الصحة على مثيل واحد أو أكث
 #: components/DetailList/LaunchedByDetail.tsx:67
 msgid "Launched By"
 msgstr "أُطلقت بواسطة"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:76
+msgid "Failed node, forced as successful"
+msgstr "العقدة الفاشلة، مفروضة كناجحة"
 
 #: screens/ActivityStream/ActivityStream.tsx:268
 #: screens/ActivityStream/ActivityStreamListItem.tsx:52
@@ -594,7 +598,7 @@ msgstr "{0, plural, one {لا يمكنك إلغاء المهمة التالية 
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:291
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:292
 msgid "Options"
 msgstr "الخيارات"
 
@@ -738,7 +742,7 @@ msgid "JSON tab"
 msgstr "علامة تبويب JSON"
 
 #: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobListItem.tsx:135
 msgid "Start Time"
 msgstr "وقت البدء"
 
@@ -755,7 +759,7 @@ msgstr "تكرار التردد"
 msgid "File Difference"
 msgstr "اختلاف الملف"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:56
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:66
 msgid "Relaunch from canceled node"
 msgstr "إعادة الإطلاق من العقدة الملغاة"
 
@@ -926,7 +930,7 @@ msgstr "إلغاء ربط المجموعة من المضيف؟"
 msgid "Destination SMS number(s)"
 msgstr "رقم (أرقام) SMS الوجهة"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:227
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:228
 msgid "Source control branch"
 msgstr "فرع التحكم بالمصدر"
 
@@ -1192,7 +1196,7 @@ msgid "Select the inventory that this host will belong to."
 msgstr "حدد المخزون الذي سينتمي إليه هذا المضيف."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:25
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
 msgid "Select a webhook service."
 msgstr "حدد خدمة webhook."
 
@@ -1214,7 +1218,7 @@ msgid "View all settings"
 msgstr "عرض جميع الإعدادات"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:27
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
 msgid "Webhook services can use this as a shared secret."
 msgstr "يمكن لخدمات webhook استخدام هذا كسر مشترك."
 
@@ -1265,7 +1269,7 @@ msgid "Select Items from List"
 msgstr "حدد العناصر من القائمة"
 
 #: components/JobList/JobList.tsx:223
-#: components/JobList/JobListItem.tsx:69
+#: components/JobList/JobListItem.tsx:73
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:42
 #: components/Workflow/WorkflowLegend.tsx:38
 #: screens/Job/JobDetail/JobDetail.tsx:67
@@ -1368,7 +1372,7 @@ msgstr "التصفية حسب المهام الفاشلة"
 msgid "Playbook Started"
 msgstr "بدأ Playbook"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:279
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:285
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "قالب مهمة سير العمل هذا قيد الاستخدام حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟"
 
@@ -1416,7 +1420,7 @@ msgstr "البريد الإلكتروني"
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:153
 msgid "Job Type"
 msgstr "نوع المهمة"
 
@@ -1490,7 +1494,7 @@ msgstr "إضافة مجموعة موجودة"
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:64
 msgid "Failed node"
 msgstr "عقدة فاشلة"
 
@@ -1613,7 +1617,7 @@ msgstr "تم النسخ"
 msgid "Failed to cancel one or more jobs."
 msgstr "فشل إلغاء مهمة واحدة أو أكثر."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:142
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:146
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.tsx:75
 msgid "Total Nodes"
 msgstr "إجمالي العقد"
@@ -1640,7 +1644,7 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
 #: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:112
+#: components/JobList/JobListItem.tsx:116
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1831,14 +1835,14 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Team/TeamList/TeamListItem.tsx:42
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:183
 #: screens/Template/shared/JobTemplateForm.tsx:329
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:160
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyListItem.tsx:50
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:290
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:120
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:126
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:75
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
@@ -1898,7 +1902,7 @@ msgstr "التفاصيل."
 
 #: components/JobList/JobList.tsx:243
 #: components/StatusLabel/StatusLabel.tsx:56
-#: components/Workflow/WorkflowNodeHelp.tsx:87
+#: components/Workflow/WorkflowNodeHelp.tsx:97
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:211
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:37
@@ -1938,7 +1942,7 @@ msgstr "تمت الموافقة"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
 #: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobListItem.tsx:139
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2088,8 +2092,8 @@ msgstr "فشل العنصر"
 msgid "Team Roles"
 msgstr "أدوار الفريق"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:190
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:220
 msgid "relaunch workflow"
 msgstr "إعادة إطلاق سير العمل"
 
@@ -2142,7 +2146,7 @@ msgstr "مطالبات أخرى"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "نتيجة العقدة الأصل مطلوبة قبل تقييم الشرط."
 
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:249
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2223,7 +2227,7 @@ msgstr "عرض تفاصيل المخزون الموحّد"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:137
 #: screens/Template/shared/JobTemplateForm.tsx:695
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:66
 msgid "Concurrent Jobs"
 msgstr "المهام المتزامنة"
 
@@ -2443,6 +2447,10 @@ msgstr "خطأ في إطلاق مهمة الإدارة"
 msgid "Search"
 msgstr "بحث"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:216
+msgid "Click to view the job that failed"
+msgstr "انقر لعرض المهمة التي فشلت"
+
 #: screens/Setting/shared/SharedFields.tsx:354
 msgid "confirm edit login redirect"
 msgstr "تأكيد تحرير إعادة توجيه تسجيل الدخول"
@@ -2514,6 +2522,10 @@ msgstr "المخزون الذي ينتمي إليه هذا المضيف."
 msgid "Log In"
 msgstr "تسجيل الدخول"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:200
+msgid "Failed, forced as successful"
+msgstr "فشلت، مفروضة كناجحة"
+
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:197
 msgid "{intervalValue, plural, one {week} other {weeks}}"
 msgstr "{intervalValue, plural, one {أسبوع} other {أسابيع}}"
@@ -2562,7 +2574,7 @@ msgstr "تفاصيل المستخدم"
 msgid "Delete Execution Environment"
 msgstr "حذف بيئة التنفيذ"
 
-#: components/JobList/JobListItem.tsx:368
+#: components/JobList/JobListItem.tsx:373
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "شريحة المهمة"
@@ -2843,8 +2855,8 @@ msgstr "لم يتم العثور على نتيجة"
 msgid "0 (Normal)"
 msgstr "0 (عادي)"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:134
-#: components/Workflow/WorkflowNodeHelp.tsx:170
+#: components/Workflow/WorkflowNodeHelp.tsx:144
+#: components/Workflow/WorkflowNodeHelp.tsx:180
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:353
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:354
 msgid "Node Alias"
@@ -3045,7 +3057,7 @@ msgstr "تفاصيل مهمة سير العمل"
 msgid "Azure AD settings"
 msgstr "إعدادات Azure AD"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:378
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3057,6 +3069,10 @@ msgstr "إعدادات Azure AD"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:456
 msgid "True"
 msgstr "صحيح"
+
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:224
+msgid "Forced as successful"
+msgstr "مفروضة كناجحة"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:85
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:140
@@ -3114,7 +3130,7 @@ msgstr "فشل رفض {0}."
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:756
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
 msgstr "تفاصيل Webhook"
 
@@ -3397,7 +3413,7 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:287
 #: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
@@ -3445,8 +3461,8 @@ msgstr "قراءة"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:294
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:297
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:298
 msgid "Enable Webhook"
 msgstr "تمكين Webhook"
 
@@ -3544,7 +3560,7 @@ msgstr "GitHub Team"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
 #: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
@@ -3658,6 +3674,8 @@ msgstr "سيؤدي هذا الإجراء إلى إلغاء ربط جميع ال�
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:135
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:139
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
@@ -3905,7 +3923,7 @@ msgstr "مُعطّل"
 msgid "Default Execution Environment"
 msgstr "بيئة التنفيذ الافتراضية"
 
-#: components/JobList/JobListItem.tsx:292
+#: components/JobList/JobListItem.tsx:297
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3946,7 +3964,7 @@ msgstr "قوالب مهام سير العمل"
 #~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 #~ msgstr "تنسيق ملف غير صالح. يرجى تحميل بيان اشتراك Red Hat صالح."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:121
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:125
 msgid "Toggle Legend"
 msgstr "تبديل وسيلة الإيضاح"
 
@@ -4001,7 +4019,7 @@ msgstr "إنشاء قالب إشعار جديد"
 
 #: components/Schedule/shared/ScheduleFormFields.tsx:211
 #: components/Schedule/shared/ScheduleFormFields.tsx:218
-#: components/Workflow/WorkflowNodeHelp.tsx:105
+#: components/Workflow/WorkflowNodeHelp.tsx:115
 msgid "None"
 msgstr "لا شيء"
 
@@ -4046,7 +4064,7 @@ msgstr "مصدره مشروع"
 msgid "Destination Channels"
 msgstr "قنوات الوجهة"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:292
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:298
 msgid "Failed to delete workflow job template."
 msgstr "فشل حذف قالب مهمة سير العمل."
 
@@ -4067,7 +4085,7 @@ msgstr "عرض إعدادات استكشاف الأخطاء وإصلاحها"
 msgid "Edit Source"
 msgstr "تحرير المصدر"
 
-#: components/JobList/JobListItem.tsx:70
+#: components/JobList/JobListItem.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:68
 msgid "Playbook Check"
 msgstr "فحص Playbook"
@@ -4168,8 +4186,8 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:502
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:504
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
 #: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
@@ -4244,7 +4262,7 @@ msgstr "host-description-{0}"
 msgid "Soft delete {pluralizedItemName}?"
 msgstr "حذف {pluralizedItemName} بشكل مؤقت؟"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:108
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:121
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:211
 msgid "DELETED"
 msgstr "محذوف"
@@ -4301,7 +4319,7 @@ msgstr "ليس لديك إذن لإلغاء ربط ما يلي: {itemsUnableToDi
 msgid "Failed to update capacity adjustment."
 msgstr "فشل تحديث تعديل السعة."
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:69
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:70
 msgid "Overwriting Variables on Relaunch"
 msgstr "الكتابة فوق المتغيرات عند إعادة الإطلاق"
 
@@ -4332,6 +4350,10 @@ msgstr "فشل"
 #: screens/Job/JobOutput/JobOutputSearch.tsx:140
 msgid "Variables Prompted"
 msgstr "المتغيرات المطلوبة"
+
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:157
+msgid "Nodes to force as successful"
+msgstr "العقد المراد فرضها كناجحة"
 
 #: screens/Metrics/Metrics.tsx:239
 msgid "Select a metric"
@@ -4502,7 +4524,7 @@ msgid "Refresh project revision"
 msgstr "تحديث مراجعة المشروع"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:28
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:23
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "اختياريًا، حدد بيانات الاعتماد المراد استخدامها لإرسال تحديثات الحالة مرة أخرى إلى خدمة webhook."
 
@@ -4639,7 +4661,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:542
 #: screens/Template/TemplateSurvey.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:295
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
@@ -4689,7 +4711,7 @@ msgid "Clean"
 msgstr "تنظيف"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:26
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
 msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
 msgstr "يمكن لخدمات webhook تشغيل المهام باستخدام قالب مهمة سير العمل هذا عن طريق إجراء طلب POST إلى عنوان URL هذا."
 
@@ -4789,12 +4811,13 @@ msgstr "بدأ بواسطة"
 msgid "Delete this node"
 msgstr "حذف هذه العقدة"
 
-#: components/JobList/JobListItem.tsx:266
+#: components/JobList/JobListItem.tsx:271
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "مهمة سير العمل المصدر"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:150
+#: components/Workflow/WorkflowNodeHelp.tsx:160
+#: components/Workflow/WorkflowNodeHelp.tsx:198
 msgid "Job Status"
 msgstr "حالة المهمة"
 
@@ -4857,7 +4880,7 @@ msgstr "عرض إعدادات SAML"
 
 #: components/JobList/JobList.tsx:245
 #: components/StatusLabel/StatusLabel.tsx:65
-#: components/Workflow/WorkflowNodeHelp.tsx:93
+#: components/Workflow/WorkflowNodeHelp.tsx:103
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
 msgstr "ملغى"
@@ -4948,8 +4971,8 @@ msgstr "بيئات التنفيذ"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "المطالبة بنوع المهمة عند الإطلاق."
 
-#: components/JobList/JobListItem.tsx:232
-#: components/JobList/JobListItem.tsx:240
+#: components/JobList/JobListItem.tsx:237
+#: components/JobList/JobListItem.tsx:245
 msgid "Schedule"
 msgstr "الجدول"
 
@@ -5008,8 +5031,8 @@ msgstr "حدد سؤالاً لحذفه"
 #: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:489
 #: screens/Template/shared/JobTemplateForm.tsx:495
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:263
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:245
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:341
 msgid "Variables"
 msgstr "المتغيرات"
@@ -5154,7 +5177,7 @@ msgstr "يوم"
 msgid "Collapse"
 msgstr "طي"
 
-#: components/JobList/JobListItem.tsx:337
+#: components/JobList/JobListItem.tsx:342
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5171,8 +5194,8 @@ msgstr "طي"
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:404
 #: screens/Template/shared/JobTemplateForm.tsx:480
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:246
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:221
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:317
 msgid "Labels"
 msgstr "التسميات"
@@ -5197,7 +5220,7 @@ msgstr "حدد الحالة"
 msgid "Month"
 msgstr "شهر"
 
-#: components/JobList/JobListItem.tsx:313
+#: components/JobList/JobListItem.tsx:318
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5241,7 +5264,7 @@ msgstr "الحد الأدنى لعدد المثيلات التي سيتم تعي
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:438
 #: screens/Template/shared/JobTemplateForm.tsx:625
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:269
 msgid "Job Tags"
 msgstr "وسوم المهمة"
 
@@ -5270,8 +5293,8 @@ msgstr "حدد صفًا للموافقة"
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:227
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:231
 msgid "Delete Job"
 msgstr "حذف المهمة"
 
@@ -5371,8 +5394,8 @@ msgstr "إلغاء الرجوع"
 msgid "Extra variables"
 msgstr "متغيرات إضافية"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:140
-#: components/Workflow/WorkflowNodeHelp.tsx:176
+#: components/Workflow/WorkflowNodeHelp.tsx:150
+#: components/Workflow/WorkflowNodeHelp.tsx:186
 #: screens/Team/TeamRoles/TeamRoleListItem.tsx:24
 #: screens/Team/TeamRoles/TeamRolesList.tsx:186
 msgid "Resource Name"
@@ -5399,7 +5422,7 @@ msgid "Use TLS"
 msgstr "استخدام TLS"
 
 #: components/JobList/JobList.tsx:226
-#: components/JobList/JobListItem.tsx:72
+#: components/JobList/JobListItem.tsx:76
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Workflow/WorkflowLegend.tsx:46
 #: components/Workflow/WorkflowNodeHelp.tsx:61
@@ -5516,7 +5539,7 @@ msgstr "التالي"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
 #: screens/Template/shared/JobTemplateForm.tsx:489
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:254
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:255
 msgid "Create"
 msgstr "إنشاء"
 
@@ -5692,6 +5715,10 @@ msgstr "العودة إلى التطبيقات"
 msgid "login type"
 msgstr "نوع تسجيل الدخول"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:202
+msgid "Forced by"
+msgstr "فرضها"
+
 #: screens/Inventory/Inventories.tsx:119
 msgid "Group details"
 msgstr "تفاصيل المجموعة"
@@ -5732,7 +5759,7 @@ msgstr "انقر لإعادة ترتيب أسئلة الاستبيان"
 #~ msgid "Subscription Details"
 #~ msgstr "تفاصيل الاشتراك"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:72
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:108
 msgid "Relaunch from canceled node with new variables"
 msgstr "إعادة الإطلاق من العقدة الملغاة بمتغيرات جديدة"
@@ -5784,7 +5811,7 @@ msgid "Management job not found."
 msgstr "لم يتم العثور على مهمة الإدارة."
 
 #: components/JobList/JobList.tsx:238
-#: components/Workflow/WorkflowNodeHelp.tsx:72
+#: components/Workflow/WorkflowNodeHelp.tsx:82
 msgid "New"
 msgstr "جديد"
 
@@ -5832,7 +5859,7 @@ msgstr "إشعار الاختبار"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
 msgstr "الخيارات المُفعّلة"
 
@@ -5855,7 +5882,7 @@ msgid "This step contains errors"
 msgstr "تحتوي هذه الخطوة على أخطاء"
 
 #: screens/Template/shared/JobTemplateForm.tsx:434
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:238
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:239
 msgid "source control branch"
 msgstr "فرع التحكم بالمصدر"
 
@@ -5893,7 +5920,7 @@ msgstr "مجموعات المثيلات"
 #: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:464
 #: screens/Template/shared/JobTemplateForm.tsx:637
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:281
 msgid "Skip Tags"
 msgstr "تخطي الوسوم"
 
@@ -5920,6 +5947,11 @@ msgstr "تم إلغاء سير العمل "
 #: screens/Template/shared/JobTemplate.helptext.tsx:29
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "الفرع المراد استخدامه في تشغيل المهمة. يتم استخدام القيمة الافتراضية للمشروع إذا كان فارغًا. مسموح به فقط إذا تم تعيين حقل allow_override الخاص بالمشروع على true."
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:78
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:108
+msgid "Relaunch forcing canceled nodes as successful"
+msgstr "إعادة التشغيل مع فرض العقد الملغاة كناجحة"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:205
 msgid "Workflow Statuses"
@@ -5983,9 +6015,9 @@ msgstr "يرجى إدخال عنوان URL صالح"
 msgid "Canonical"
 msgstr "أساسي"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:156
+#: components/Workflow/WorkflowNodeHelp.tsx:166
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:151
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
 msgstr "منقضٍ"
@@ -6074,7 +6106,7 @@ msgstr "إضافة استثناءات"
 msgid "These are the verbosity levels for standard out of the command run that are supported."
 msgstr "هذه هي مستويات التفصيل المدعومة للمخرجات القياسية لتشغيل الأمر."
 
-#: components/Workflow/WorkflowNodeHelp.tsx:108
+#: components/Workflow/WorkflowNodeHelp.tsx:118
 msgid "Updating"
 msgstr "جارٍ التحديث"
 
@@ -6212,6 +6244,10 @@ msgstr "عرض أمثلة YAML في"
 msgid "Overwrite local groups and hosts from remote inventory source"
 msgstr "الكتابة فوق المجموعات والمضيفين المحليين من مصدر المخزون البعيد"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:153
+msgid "The nodes ticked here are not run again: the workflow carries them forward as though they had succeeded and goes on down their success paths. They stay marked as forced, together with who forced them and why."
+msgstr "لا يُعاد تشغيل العقد المحددة هنا: يعاملها سير العمل كأنها نجحت ويتابع عبر مسارات النجاح الخاصة بها. تبقى معلّمة كمفروضة، مع من فرضها وسبب ذلك."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:272
 msgid "Resource deleted"
 msgstr "تم حذف المورد"
@@ -6252,7 +6288,7 @@ msgstr "حدد مجموعات المثيلات التي سيتم تشغيل قا
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "اتركه فارغًا لإنشاء مفتاح webhook جديد عند الحفظ"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:109
 msgid "Relaunch from failed node with new variables"
 msgstr "إعادة الإطلاق من العقدة الفاشلة بمتغيرات جديدة"
@@ -6444,14 +6480,18 @@ msgstr "لا يمكن تشغيل فحوصات الصحة إلا على عقد ا
 msgid "Visualizer"
 msgstr "أداة التصور"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:147
+msgid "This run has no failed nodes that can be forced. Approvals can never be forced as successful."
+msgstr "لا يحتوي هذا التشغيل على عقد فاشلة يمكن فرضها. لا يمكن أبدًا فرض الموافقات كناجحة."
+
 #: screens/Template/shared/JobTemplate.helptext.tsx:50
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "استدعاءات التزويد: تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ Ascender وطلب تحديث التكوين باستخدام قالب المهمة هذا."
 
-#: components/JobList/JobListItem.tsx:159
+#: components/JobList/JobListItem.tsx:163
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch Job"
 msgstr "إعادة إطلاق المهمة"
 
@@ -6534,7 +6574,7 @@ msgstr "إعادة ترتيب {label}"
 msgid "Credential"
 msgstr "بيانات الاعتماد"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:101
 msgid "First node"
 msgstr "العقدة الأولى"
 
@@ -6543,7 +6583,7 @@ msgstr "العقدة الأولى"
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# ثانية} other {# ثوانٍ}}"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:184
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:190
 msgid "Webhook Credentials"
 msgstr "بيانات اعتماد Webhook"
 
@@ -6808,7 +6848,7 @@ msgstr "مصادر المخزون"
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "إذا تم التمكين، فسيُسمح بالتشغيل المتزامن لقالب المهمة هذا."
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:314
 msgid "Enable Concurrent Jobs"
 msgstr "تمكين المهام المتزامنة"
 
@@ -7103,7 +7143,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "اختر دليل Playbook"
 
-#: components/JobList/JobListItem.tsx:254
+#: components/JobList/JobListItem.tsx:259
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7258,6 +7298,10 @@ msgstr "لم يتم العثور على عناصر."
 msgid "April"
 msgstr "أبريل"
 
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:75
+msgid "Forcing Failed Nodes as Successful on Relaunch"
+msgstr "فرض العقد الفاشلة كناجحة عند إعادة التشغيل"
+
 #: screens/Job/JobOutput/JobOutputSearch.tsx:120
 msgid "Host Failure"
 msgstr "فشل المضيف"
@@ -7282,7 +7326,7 @@ msgstr "يُمكّن من إنشاء عنوان URL\n"
 "                              هذا"
 
 #: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:132
+#: components/JobList/JobListItem.tsx:136
 msgid "Finish Time"
 msgstr "وقت الانتهاء"
 
@@ -7454,8 +7498,8 @@ msgstr "{0, selectordinal, one {أول {dayOfWeek}} two {ثاني {dayOfWeek}} =
 msgid "Failed Host Count"
 msgstr "عدد المضيفين الفاشلين"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:89
 msgid "Relaunch from:"
 msgstr "إعادة الإطلاق من:"
 
@@ -7553,9 +7597,9 @@ msgstr "مزامنة"
 #: screens/Team/TeamList/TeamList.tsx:120
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:337
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:168
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:121
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:127
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
@@ -7582,7 +7626,7 @@ msgstr "اختر الأدوار المراد تطبيقها على الموار�
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook URL"
 msgstr "عنوان URL لـ Webhook"
 
@@ -7683,7 +7727,7 @@ msgstr "تسجيل الدخول باستخدام GitHub Enterprise"
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:180
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
 #: screens/Template/Survey/SurveyQuestionForm.tsx:31
 #: screens/User/shared/UserForm.tsx:202
 #: util/validators.ts:237
@@ -7870,13 +7914,13 @@ msgstr "فشل إلغاء ربط مجموعة واحدة أو أكثر."
 msgid "Token information"
 msgstr "معلومات الرمز المميز"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:96
+#: components/Workflow/WorkflowNodeHelp.tsx:106
 msgid "Never Updated"
 msgstr "لم يتم التحديث أبدًا"
 
 #: components/JobList/JobList.tsx:242
 #: components/StatusLabel/StatusLabel.tsx:54
-#: components/Workflow/WorkflowNodeHelp.tsx:84
+#: components/Workflow/WorkflowNodeHelp.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:218
 msgid "Successful"
@@ -7909,7 +7953,7 @@ msgid "Federated Inventory not found."
 msgstr "لم يتم العثور على المخزون الموحّد."
 
 #: components/JobList/JobList.tsx:224
-#: components/JobList/JobListItem.tsx:70
+#: components/JobList/JobListItem.tsx:74
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:43
 #: screens/Job/JobDetail/JobDetail.tsx:68
 msgid "Playbook Run"
@@ -8045,7 +8089,7 @@ msgstr "تأكيد كلمة المرور"
 msgid "Personal access token"
 msgstr "رمز وصول شخصي"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:95
 msgid "Relaunch from first node"
 msgstr "إعادة الإطلاق من العقدة الأولى"
 
@@ -8095,11 +8139,11 @@ msgstr "رموز المستخدم المميزة"
 msgid "View RADIUS settings"
 msgstr "عرض إعدادات RADIUS"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:319
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:320
 msgid "Allow Overwriting Variables on Relaunch"
 msgstr "السماح بالكتابة فوق المتغيرات عند إعادة الإطلاق"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:176
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
 msgstr "الكل"
@@ -8130,7 +8174,7 @@ msgstr "من الصعب تقديم مواصفات\n"
 "            المخزون الذي يحتوي على `gather_facts: true`. ستختلف\n"
 "            الحقائق الفعلية من نظام إلى آخر."
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:378
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "أصل شريحة المهمة"
@@ -8595,7 +8639,7 @@ msgid "Inventory variables this source added on an earlier sync are removed once
 msgstr "تتم إزالة متغيرات المخزون التي أضافها هذا المصدر في مزامنة سابقة عندما يتوقف المصدر عن توفيرها، ما لم يتم تعديلها منذ ذلك الحين أو ما لم يوفرها مصدر آخر لهذا المخزون."
 
 #: components/JobList/JobList.tsx:222
-#: components/JobList/JobListItem.tsx:68
+#: components/JobList/JobListItem.tsx:72
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
 #: screens/Job/JobDetail/JobDetail.tsx:66
 msgid "Source Control Update"
@@ -8652,6 +8696,11 @@ msgstr "فشل رمز المستخدم المميز."
 #: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "تسجيل الدخول باستخدام SAML"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:109
+msgid "Relaunch forcing failed nodes as successful"
+msgstr "إعادة التشغيل مع فرض العقد الفاشلة كناجحة"
 
 #: screens/WorkflowApproval/WorkflowApproval.tsx:74
 msgid "Back to Workflow Approvals"
@@ -8741,7 +8790,7 @@ msgstr "نص رسالة سير العمل المعلّق"
 msgid "Answer variable name"
 msgstr "اسم متغير الإجابة"
 
-#: components/JobList/JobListItem.tsx:110
+#: components/JobList/JobListItem.tsx:114
 #: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
@@ -8781,7 +8830,7 @@ msgstr "في كل مرة تعمل فيها مهمة باستخدام هذا ال
 #: components/JobList/JobList.tsx:241
 #: components/StatusLabel/StatusLabel.tsx:59
 #: components/TemplateList/TemplateListItem.tsx:117
-#: components/Workflow/WorkflowNodeHelp.tsx:81
+#: components/Workflow/WorkflowNodeHelp.tsx:91
 msgid "Running"
 msgstr "قيد التشغيل"
 
@@ -9008,7 +9057,7 @@ msgstr "الشهر الماضي"
 msgid "Execution Environment"
 msgstr "بيئة التنفيذ"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:275
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
 msgid "Delete Workflow Job Template"
 msgstr "حذف قالب مهمة سير العمل"
 
@@ -9110,7 +9159,7 @@ msgid "Not configured"
 msgstr "غير مُكوّن"
 
 #: components/JobList/JobList.tsx:227
-#: components/JobList/JobListItem.tsx:73
+#: components/JobList/JobListItem.tsx:77
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:46
 #: screens/Job/JobDetail/JobDetail.tsx:71
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:268
@@ -9205,7 +9254,7 @@ msgid "Credential Name"
 msgstr "اسم بيانات الاعتماد"
 
 #: components/JobList/JobList.tsx:225
-#: components/JobList/JobListItem.tsx:71
+#: components/JobList/JobListItem.tsx:75
 #: screens/Job/JobOutput/HostEventModal.tsx:177
 msgid "Command"
 msgstr "الأمر"
@@ -9216,7 +9265,7 @@ msgstr "رمز الوصول"
 
 #: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:57
-#: components/Workflow/WorkflowNodeHelp.tsx:90
+#: components/Workflow/WorkflowNodeHelp.tsx:100
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
@@ -9463,7 +9512,7 @@ msgstr "فشل تبديل الإشعار."
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:329
 #: screens/Template/shared/WebhookSubForm.tsx:205
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:183
 msgid "Webhook Key"
 msgstr "مفتاح Webhook"
 
@@ -9570,7 +9619,7 @@ msgstr "عنوان URL لاستدعاء التوفير"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:207
 #: screens/User/UserTokenList/UserTokenList.tsx:159
 msgid "Modified"
 msgstr "تم التعديل"
@@ -9595,7 +9644,7 @@ msgstr "{sessionCountdown, plural, one {سيتم تسجيل خروجك خلال 
 msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "إذا تم التمكين، فسيمنع قالب المهمة إضافة أي مجموعات مثيلات مخزون أو مؤسسة إلى قائمة مجموعات المثيلات المفضلة للتشغيل عليها. ملاحظة: إذا كان هذا الإعداد ممكّنًا وقدمت قائمة فارغة، فسيتم تطبيق مجموعات المثيلات العامة."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:60
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:70
 msgid "Failed node, new variables"
 msgstr "عقدة فاشلة، متغيرات جديدة"
 
@@ -9741,7 +9790,7 @@ msgstr "يجب تحديد مخزون"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
 msgid "Source Control Branch"
 msgstr "فرع التحكم بالمصدر"
@@ -9822,12 +9871,12 @@ msgstr "عرض جميع موافقات سير العمل."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "عند عدم التحديد، سيتم إجراء دمج، يجمع بين المتغيرات المحلية وتلك الموجودة في المصدر الخارجي."
 
-#: components/JobList/JobListItem.tsx:144
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:168
 msgid "Job Cancel Error"
 msgstr "خطأ في إلغاء المهمة"
 
@@ -9841,7 +9890,7 @@ msgstr "مصادر المخزون التي بها إخفاقات"
 
 #: components/JobList/JobList.tsx:235
 #: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:123
+#: components/JobList/JobListItem.tsx:127
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9864,6 +9913,10 @@ msgstr "مصادر المخزون التي بها إخفاقات"
 msgid "Status"
 msgstr "الحالة"
 
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:326
+msgid "Allow Forcing Failed Nodes as Successful on Relaunch"
+msgstr "السماح بفرض العقد الفاشلة كناجحة عند إعادة التشغيل"
+
 #: components/DeleteButton/DeleteButton.tsx:147
 msgid "Are you sure you want to delete:"
 msgstr "هل أنت متأكد من أنك تريد حذف:"
@@ -9874,11 +9927,11 @@ msgstr "فشل استرجاع كائن مورد العقدة الكامل."
 
 #: components/JobList/JobList.tsx:239
 #: components/StatusLabel/StatusLabel.tsx:60
-#: components/Workflow/WorkflowNodeHelp.tsx:75
+#: components/Workflow/WorkflowNodeHelp.tsx:85
 msgid "Pending"
 msgstr "معلّق"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:131
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:135
 msgid "Toggle Tools"
 msgstr "تبديل الأدوات"
 
@@ -9924,7 +9977,7 @@ msgstr "تبديل الأدوات"
 #: screens/Team/TeamList/TeamListItem.tsx:47
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:208
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:135
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
 #: screens/User/UserTeams/UserTeamList.tsx:187
@@ -10104,7 +10157,7 @@ msgstr "بيئة التنفيذ مفقودة أو محذوفة."
 
 #: components/JobList/JobList.tsx:240
 #: components/StatusLabel/StatusLabel.tsx:63
-#: components/Workflow/WorkflowNodeHelp.tsx:78
+#: components/Workflow/WorkflowNodeHelp.tsx:88
 msgid "Waiting"
 msgstr "في انتظار"
 
@@ -10136,7 +10189,7 @@ msgstr "{0, plural, one {بيانات الاعتماد هذه قيد الاست�
 msgid "Last Name"
 msgstr "اسم العائلة"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
 msgid "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."
 msgstr "إذا تم التمكين، يمكن عند إعادة الإطلاق من العقدة الفاشلة تقديم متغيرات تحل محل المتغيرات التي استخدمها التشغيل الأصلي. يكون ذلك مفيدًا عندما تترك عقدة سابقة قيمة يجب تصحيحها قبل أن يتمكن سير العمل من المتابعة."
 
@@ -10220,7 +10273,7 @@ msgstr "الاسم الأول"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:143
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:79
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -10229,7 +10282,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {سيكون المخزون في حالة معلقة حتى تتم معالجة الحذف النهائي.} other {ستكون المخزونات في حالة معلقة حتى تتم معالجة الحذف النهائي.}}"
 
-#: components/JobList/JobListItem.tsx:157
+#: components/JobList/JobListItem.tsx:161
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "إعادة الإطلاق باستخدام معلمات المضيف"
@@ -10287,6 +10340,10 @@ msgstr "الأربعاء"
 #: screens/InstanceGroup/InstanceGroups.tsx:34
 msgid "Create new container group"
 msgstr "إنشاء مجموعة حاويات جديدة"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
+msgstr "عند التمكين، يمكن لإعادة التشغيل من العقدة الفاشلة أن تعامل العقد الفاشلة المختارة كأنها نجحت، فيتابع سير العمل عبر مسارات النجاح الخاصة بها. مخصص لعقدة تفشل لسبب لا يمكن إصلاحه في الوقت المناسب ولا يؤثر على ما يليها. السبب مطلوب دائمًا، وتبقى العقدة معلّمة كمفروضة مع من فرضها. لا يمكن أبدًا فرض الموافقات. يتم التحقق عند إعادة التشغيل، لذا فإن إيقافه يمنعه أيضًا للتشغيلات التي بدأت بالفعل."
 
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:286
 #: screens/Template/shared/WebhookSubForm.tsx:138
@@ -10349,8 +10406,9 @@ msgid "Edit details"
 msgstr "تحرير التفاصيل"
 
 #: components/DetailList/DeletedDetail.tsx:20
-#: components/Workflow/WorkflowNodeHelp.tsx:143
-#: components/Workflow/WorkflowNodeHelp.tsx:179
+#: components/Workflow/WorkflowNodeHelp.tsx:153
+#: components/Workflow/WorkflowNodeHelp.tsx:189
+#: components/Workflow/WorkflowNodeHelp.tsx:205
 #: screens/HostMetrics/HostMetrics.tsx:139
 #: screens/HostMetrics/HostMetricsListItem.tsx:37
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:275
@@ -10383,6 +10441,12 @@ msgstr "إنشاء جدول جديد"
 msgid "Add new group"
 msgstr "إضافة مجموعة جديدة"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:173
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:178
+#: components/Workflow/WorkflowNodeHelp.tsx:208
+msgid "Reason"
+msgstr "السبب"
+
 #: components/Pagination/Pagination.tsx:37
 msgid "Current page"
 msgstr "الصفحة الحالية"
@@ -10414,7 +10478,7 @@ msgstr "قم بتمرير متغيرات سطر أوامر إضافية إلى P
 msgid "Hide"
 msgstr "إخفاء"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:124
+#: components/Workflow/WorkflowNodeHelp.tsx:134
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:149
 msgid "The resource associated with this node has been deleted."
 msgstr "تم حذف المورد المرتبط بهذه العقدة."
@@ -10484,7 +10548,7 @@ msgstr "نافذة تفاصيل الحدث"
 msgid "End time"
 msgstr "وقت الانتهاء"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:102
+#: components/Workflow/WorkflowNodeHelp.tsx:112
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:95
 msgid "Missing"
 msgstr "مفقود"
@@ -10529,7 +10593,7 @@ msgid "Select Teams"
 msgstr "حدد الفرق"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:156
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:152
 msgid "Elapsed time that the job ran"
 msgstr "الوقت المنقضي لتشغيل المهمة"
 
@@ -10555,7 +10619,7 @@ msgstr "نسخ المشروع"
 #~ msgid "Prompt for verbosity on launch."
 #~ msgstr "المطالبة بالتفصيل عند الإطلاق."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:67
 msgid "Relaunch from failed node"
 msgstr "إعادة الإطلاق من العقدة الفاشلة"
 
@@ -10638,7 +10702,7 @@ msgstr "تأكيد إزالة الرابط"
 msgid "This field must be at least {0} characters"
 msgstr "يجب أن يحتوي هذا الحقل على {0} أحرف على الأقل"
 
-#: components/JobList/JobListItem.tsx:220
+#: components/JobList/JobListItem.tsx:225
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10739,11 +10803,11 @@ msgstr "رمز الحساب المميز"
 msgid "Edit Login redirect override URL"
 msgstr "تحرير عنوان URL لتجاوز إعادة توجيه تسجيل الدخول"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:28
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:29
 msgid "Webhooks: Enable webhook for this workflow job template."
 msgstr "Webhooks: تمكين webhook لقالب مهمة سير العمل هذا."
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:26
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:27
 msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
 msgstr "المهام المتزامنة: إذا تم التمكين، فسيُسمح بالتشغيل المتزامن لقالب مهمة سير العمل هذا."
 
@@ -10858,10 +10922,10 @@ msgid "Choose a job type"
 msgstr "اختر نوع مهمة"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:145
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
 msgid "Cancel {0}"
 msgstr "إلغاء {0}"
 
@@ -10895,12 +10959,12 @@ msgstr "إجمالي مصادر المخزون"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "قدّم نمط مضيف لتقييد قائمة المضيفين الذين سيتم إدارتهم أو التأثير عليهم بواسطة سير العمل بشكل أكبر."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:64
 msgid "Canceled node"
 msgstr "عقدة ملغاة"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:108
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:112
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:116
 msgid "Edit workflow"
 msgstr "تحرير سير العمل"
 
@@ -11051,7 +11115,7 @@ msgstr "عنوان بريد إلكتروني غير صالح"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:124
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:130
 msgid "Activity"
 msgstr "النشاط"
 
@@ -11596,8 +11660,8 @@ msgstr "يرجى تشغيل مهمة لملء هذه القائمة."
 #: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:262
 #: screens/Template/shared/JobTemplateForm.tsx:522
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:210
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:166
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:282
 msgid "Limit"
 msgstr "الحد"
@@ -11628,15 +11692,17 @@ msgstr "هذا المشروع قيد الاستخدام حاليًا من قبل
 msgid "Associate"
 msgstr "ربط"
 
-#: components/JobList/JobListItem.tsx:199
+#: components/JobList/JobListItem.tsx:204
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:125
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:130
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:212
 msgid "Relaunch"
 msgstr "إعادة الإطلاق"
 
@@ -11668,7 +11734,7 @@ msgstr "خطأ في ربط الدور"
 msgid "Workflow Job Template Nodes"
 msgstr "عُقد قالب مهمة سير العمل"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:59
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
 msgid "Canceled node, new variables"
 msgstr "عقدة ملغاة، متغيرات جديدة"
 
@@ -11739,13 +11805,17 @@ msgstr "إعادة محاولة المضيف"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
 msgid "Webhook Service"
 msgstr "خدمة Webhook"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:31
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ {brandName} وطلب تحديث التكوين باستخدام قالب المهمة هذا."
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
+msgid "Canceled node, forced as successful"
+msgstr "العقدة الملغاة، مفروضة كناجحة"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:199
 #: components/HostToggle/HostToggle.tsx:72
@@ -11831,12 +11901,12 @@ msgstr "يونيو"
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:508
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:517
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:263
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:272
 msgid "Launch"
 msgstr "إطلاق"
 
-#: components/JobList/JobListItem.tsx:361
+#: components/JobList/JobListItem.tsx:366
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "الشرح"
@@ -11858,7 +11928,7 @@ msgid "Survey preview modal"
 msgstr "نافذة معاينة الاستبيان"
 
 #: components/StatusLabel/StatusLabel.tsx:55
-#: components/Workflow/WorkflowNodeHelp.tsx:99
+#: components/Workflow/WorkflowNodeHelp.tsx:109
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:25
 msgid "OK"
@@ -11916,10 +11986,10 @@ msgid "Error message body"
 msgstr "نص رسالة الخطأ"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:146
+#: components/JobList/JobListItem.tsx:150
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "فشل إلغاء {0}"
 
@@ -12080,7 +12150,7 @@ msgid "Toggle notification start"
 msgstr "تبديل بدء الإشعار"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:276
+#: components/JobList/JobListItem.tsx:281
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12112,7 +12182,7 @@ msgstr "تبديل بدء الإشعار"
 #: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:212
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:156
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
 msgid "Inventory"

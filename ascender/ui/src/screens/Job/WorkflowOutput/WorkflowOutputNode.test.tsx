@@ -167,6 +167,40 @@ describe('WorkflowOutputNode', () => {
     );
   });
 
+  test('a node forced as successful shows green and red, not a success', async () => {
+    const forcedNode = {
+      id: 2,
+      originalNodeObject: {
+        prior_run_succeeded: true,
+        prior_run_elapsed: 7,
+        forced_success: true,
+        forced_success_reason: 'confluence is down',
+        summary_fields: {
+          unified_job_template: { name: 'Update Confluence' },
+          forced_success_job: { id: 4242, status: 'failed' },
+        },
+      },
+    };
+    const { container, user, history } = renderNode(forcedNode);
+    const node = container.querySelector('#node-2') as HTMLElement;
+    expect(
+      node.querySelector('[data-job-status="successful"]')
+    ).not.toBeInTheDocument();
+    expect(
+      node.querySelector('[data-job-status="forced"]')
+    ).toBeInTheDocument();
+    // the border is the diagonal split, not the success colour
+    const gradientId = 'ascender-workflow-output-node-forced-2';
+    expect(node.querySelector(`#${gradientId}`)).toBeInTheDocument();
+    expect(node.querySelector('rect')).toHaveAttribute(
+      'stroke',
+      `url(#${gradientId})`
+    );
+    // clicking it leads to the job that failed
+    await user.click(node);
+    expect(history.location.pathname).toBe('/jobs/4242/details');
+  });
+
   test('pending node (not yet run) shows its type letter from the start', () => {
     const pendingNode = {
       id: 4,

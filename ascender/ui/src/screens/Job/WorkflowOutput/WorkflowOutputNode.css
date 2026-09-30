@@ -50,3 +50,18 @@
 .ascender-workflow-output-node__node-g--has-job {
   cursor: pointer;
 }
+
+/* A failed node forced as successful on relaunch: half green, half red, the
+   same split its border has. */
+.ascender-workflow-output-node__forced-icon {
+  background: linear-gradient(
+    135deg,
+    var(--pf-t--global--color--status--success--default) 50%,
+    var(--pf-t--global--color--status--danger--default) 50%
+  );
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+  height: 14px;
+  width: 14px;
+}
