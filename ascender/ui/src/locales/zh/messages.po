@@ -277,7 +277,7 @@ msgstr "无法加载最后的作业更新"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:164
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:105
 msgid "(Prompt on launch)"
 msgstr "（启动时提示）"
 
@@ -339,7 +339,7 @@ msgid "Branch to checkout. In addition to branches, you can input tags, commit h
 msgstr "要检出的分支。除了分支之外，您还可以输入标签、提交哈希和任意引用。除非您还提供自定义 refspec，否则某些提交哈希和引用可能不可用。"
 
 #: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobListItem.tsx:131
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -350,8 +350,8 @@ msgstr "要检出的分支。除了分支之外，您还可以输入标签、提
 #: components/TemplateList/TemplateListItem.tsx:167
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:160
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:228
-#: components/Workflow/WorkflowNodeHelp.tsx:146
-#: components/Workflow/WorkflowNodeHelp.tsx:182
+#: components/Workflow/WorkflowNodeHelp.tsx:156
+#: components/Workflow/WorkflowNodeHelp.tsx:192
 #: screens/Credential/CredentialList/CredentialList.tsx:165
 #: screens/Credential/CredentialList/CredentialListItem.tsx:75
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:98
@@ -432,7 +432,7 @@ msgstr "创建新组"
 msgid "Create New Project"
 msgstr "创建新项目"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:188
+#: components/Workflow/WorkflowNodeHelp.tsx:219
 msgid "Click to view job details"
 msgstr "点击以查看作业详情"
 
@@ -511,6 +511,10 @@ msgstr "在一个或多个实例上运行健康检查失败。"
 #: components/DetailList/LaunchedByDetail.tsx:67
 msgid "Launched By"
 msgstr "启动者"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:76
+msgid "Failed node, forced as successful"
+msgstr "失败的节点，强制为成功"
 
 #: screens/ActivityStream/ActivityStream.tsx:268
 #: screens/ActivityStream/ActivityStreamListItem.tsx:52
@@ -592,7 +596,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:291
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:292
 msgid "Options"
 msgstr "选项"
 
@@ -736,7 +740,7 @@ msgid "JSON tab"
 msgstr "JSON 标签页"
 
 #: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobListItem.tsx:135
 msgid "Start Time"
 msgstr "开始时间"
 
@@ -753,7 +757,7 @@ msgstr "重复频率"
 msgid "File Difference"
 msgstr "文件差异"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:56
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:66
 msgid "Relaunch from canceled node"
 msgstr "从已取消的节点重新启动"
 
@@ -924,7 +928,7 @@ msgstr "从主机中解除关联组？"
 msgid "Destination SMS number(s)"
 msgstr "目标 SMS 号码"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:227
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:228
 msgid "Source control branch"
 msgstr "源控制分支"
 
@@ -1190,7 +1194,7 @@ msgid "Select the inventory that this host will belong to."
 msgstr "选择此主机要属于的清单。"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:25
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
 msgid "Select a webhook service."
 msgstr "选择一个 webhook 服务。"
 
@@ -1212,7 +1216,7 @@ msgid "View all settings"
 msgstr "查看所有设置"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:27
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
 msgid "Webhook services can use this as a shared secret."
 msgstr "Webhook 服务可以将此用作共享密钥。"
 
@@ -1263,7 +1267,7 @@ msgid "Select Items from List"
 msgstr "从列表中选择项"
 
 #: components/JobList/JobList.tsx:223
-#: components/JobList/JobListItem.tsx:69
+#: components/JobList/JobListItem.tsx:73
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:42
 #: components/Workflow/WorkflowLegend.tsx:38
 #: screens/Job/JobDetail/JobDetail.tsx:67
@@ -1366,7 +1370,7 @@ msgstr "根据失败的作业过滤"
 msgid "Playbook Started"
 msgstr "Playbook 已启动"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:279
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:285
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此工作流作业模板。确定要删除它吗？"
 
@@ -1414,7 +1418,7 @@ msgstr "电子邮件"
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:153
 msgid "Job Type"
 msgstr "作业类型"
 
@@ -1488,7 +1492,7 @@ msgstr "添加现有组"
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:64
 msgid "Failed node"
 msgstr "失败的节点"
 
@@ -1611,7 +1615,7 @@ msgstr "复制"
 msgid "Failed to cancel one or more jobs."
 msgstr "取消一个或多个作业失败。"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:142
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:146
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.tsx:75
 msgid "Total Nodes"
 msgstr "节点总数"
@@ -1638,7 +1642,7 @@ msgstr "创建新联邦库存"
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
 #: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:112
+#: components/JobList/JobListItem.tsx:116
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1829,14 +1833,14 @@ msgstr "创建新联邦库存"
 #: screens/Team/TeamList/TeamListItem.tsx:42
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:183
 #: screens/Template/shared/JobTemplateForm.tsx:329
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:160
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyListItem.tsx:50
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:290
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:120
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:126
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:75
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
@@ -1896,7 +1900,7 @@ msgstr "详情。"
 
 #: components/JobList/JobList.tsx:243
 #: components/StatusLabel/StatusLabel.tsx:56
-#: components/Workflow/WorkflowNodeHelp.tsx:87
+#: components/Workflow/WorkflowNodeHelp.tsx:97
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:211
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:37
@@ -1936,7 +1940,7 @@ msgstr "已批准"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
 #: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobListItem.tsx:139
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2086,8 +2090,8 @@ msgstr "项故障"
 msgid "Team Roles"
 msgstr "团队角色"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:190
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:220
 msgid "relaunch workflow"
 msgstr "重新启动工作流"
 
@@ -2140,7 +2144,7 @@ msgstr "其他提示"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "在评估条件之前需要父节点的结果。"
 
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:249
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2221,7 +2225,7 @@ msgstr "查看联邦库存详情"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:137
 #: screens/Template/shared/JobTemplateForm.tsx:695
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:66
 msgid "Concurrent Jobs"
 msgstr "并发作业"
 
@@ -2441,6 +2445,10 @@ msgstr "管理作业启动错误"
 msgid "Search"
 msgstr "搜索"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:216
+msgid "Click to view the job that failed"
+msgstr "单击以查看失败的作业"
+
 #: screens/Setting/shared/SharedFields.tsx:354
 msgid "confirm edit login redirect"
 msgstr "确认编辑登录重定向"
@@ -2512,6 +2520,10 @@ msgstr "此主机要属于的清单。"
 msgid "Log In"
 msgstr "登录"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:200
+msgid "Failed, forced as successful"
+msgstr "失败，强制为成功"
+
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:197
 msgid "{intervalValue, plural, one {week} other {weeks}}"
 msgstr "{intervalValue, plural, one {week} other {weeks}}"
@@ -2560,7 +2572,7 @@ msgstr "用户详情"
 msgid "Delete Execution Environment"
 msgstr "删除执行环境"
 
-#: components/JobList/JobListItem.tsx:368
+#: components/JobList/JobListItem.tsx:373
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "作业分片"
@@ -2841,8 +2853,8 @@ msgstr "未找到结果"
 msgid "0 (Normal)"
 msgstr "0（普通）"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:134
-#: components/Workflow/WorkflowNodeHelp.tsx:170
+#: components/Workflow/WorkflowNodeHelp.tsx:144
+#: components/Workflow/WorkflowNodeHelp.tsx:180
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:353
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:354
 msgid "Node Alias"
@@ -3043,7 +3055,7 @@ msgstr "工作流作业详情"
 msgid "Azure AD settings"
 msgstr "Azure AD 设置"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:378
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3055,6 +3067,10 @@ msgstr "Azure AD 设置"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:456
 msgid "True"
 msgstr "True"
+
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:224
+msgid "Forced as successful"
+msgstr "强制为成功"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:85
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:140
@@ -3112,7 +3128,7 @@ msgstr "拒绝 {0} 失败。"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:756
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
 msgstr "Webhook 详情"
 
@@ -3394,7 +3410,7 @@ msgstr "小于或等于比较。"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:287
 #: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
@@ -3442,8 +3458,8 @@ msgstr "读取"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:294
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:297
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:298
 msgid "Enable Webhook"
 msgstr "启用 Webhook"
 
@@ -3541,7 +3557,7 @@ msgstr "GitHub Team"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
 #: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
@@ -3655,6 +3671,8 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:135
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:139
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
@@ -3902,7 +3920,7 @@ msgstr "禁用"
 msgid "Default Execution Environment"
 msgstr "默认执行环境"
 
-#: components/JobList/JobListItem.tsx:292
+#: components/JobList/JobListItem.tsx:297
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3943,7 +3961,7 @@ msgstr "工作流作业模板"
 #~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 #~ msgstr "无效的文件格式。请上传有效的红帽订阅清单。"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:121
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:125
 msgid "Toggle Legend"
 msgstr "切换图例"
 
@@ -3998,7 +4016,7 @@ msgstr "创建新通知模板"
 
 #: components/Schedule/shared/ScheduleFormFields.tsx:211
 #: components/Schedule/shared/ScheduleFormFields.tsx:218
-#: components/Workflow/WorkflowNodeHelp.tsx:105
+#: components/Workflow/WorkflowNodeHelp.tsx:115
 msgid "None"
 msgstr "无"
 
@@ -4043,7 +4061,7 @@ msgstr "来自项目的源"
 msgid "Destination Channels"
 msgstr "目标频道"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:292
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:298
 msgid "Failed to delete workflow job template."
 msgstr "删除工作流任务模板失败。"
 
@@ -4064,7 +4082,7 @@ msgstr "故障修复设置"
 msgid "Edit Source"
 msgstr "编辑源"
 
-#: components/JobList/JobListItem.tsx:70
+#: components/JobList/JobListItem.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:68
 msgid "Playbook Check"
 msgstr "Playbook 检查"
@@ -4165,8 +4183,8 @@ msgstr "删除凭证"
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:502
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:504
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
 #: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
@@ -4241,7 +4259,7 @@ msgstr "host-description-{0}"
 msgid "Soft delete {pluralizedItemName}?"
 msgstr "软删除"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:108
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:121
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:211
 msgid "DELETED"
 msgstr "已删除"
@@ -4298,7 +4316,7 @@ msgstr "您没有权限取消关联： {itemsUnableToDisassociate}"
 msgid "Failed to update capacity adjustment."
 msgstr "更新容量调整失败。"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:69
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:70
 msgid "Overwriting Variables on Relaunch"
 msgstr "重新启动时覆盖变量"
 
@@ -4329,6 +4347,10 @@ msgstr "失败"
 #: screens/Job/JobOutput/JobOutputSearch.tsx:140
 msgid "Variables Prompted"
 msgstr "提示变量"
+
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:157
+msgid "Nodes to force as successful"
+msgstr "要强制为成功的节点"
 
 #: screens/Metrics/Metrics.tsx:239
 msgid "Select a metric"
@@ -4499,7 +4521,7 @@ msgid "Refresh project revision"
 msgstr "重新刷新项目修订版本"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:28
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:23
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "（可选）选择用于将状态更新发送回 webhook 服务的凭证。"
 
@@ -4636,7 +4658,7 @@ msgstr "查看机构详情"
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:542
 #: screens/Template/TemplateSurvey.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:295
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
@@ -4686,7 +4708,7 @@ msgid "Clean"
 msgstr "清理"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:26
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
 msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
 msgstr "Webhook 服务可以通过向此 URL 发出 POST 请求来使用此工作流任务模板启动任务。"
 
@@ -4786,12 +4808,13 @@ msgstr "启动者"
 msgid "Delete this node"
 msgstr "删除此节点"
 
-#: components/JobList/JobListItem.tsx:266
+#: components/JobList/JobListItem.tsx:271
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "源工作流作业"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:150
+#: components/Workflow/WorkflowNodeHelp.tsx:160
+#: components/Workflow/WorkflowNodeHelp.tsx:198
 msgid "Job Status"
 msgstr "作业状态"
 
@@ -4854,7 +4877,7 @@ msgstr "查看 SAML 设置"
 
 #: components/JobList/JobList.tsx:245
 #: components/StatusLabel/StatusLabel.tsx:65
-#: components/Workflow/WorkflowNodeHelp.tsx:93
+#: components/Workflow/WorkflowNodeHelp.tsx:103
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
 msgstr "已取消"
@@ -4945,8 +4968,8 @@ msgstr "执行环境"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "启动时提示输入作业类型。"
 
-#: components/JobList/JobListItem.tsx:232
-#: components/JobList/JobListItem.tsx:240
+#: components/JobList/JobListItem.tsx:237
+#: components/JobList/JobListItem.tsx:245
 msgid "Schedule"
 msgstr "调度"
 
@@ -5005,8 +5028,8 @@ msgstr "选择要删除的问题"
 #: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:489
 #: screens/Template/shared/JobTemplateForm.tsx:495
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:263
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:245
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:341
 msgid "Variables"
 msgstr "变量"
@@ -5151,7 +5174,7 @@ msgstr "天"
 msgid "Collapse"
 msgstr "折叠"
 
-#: components/JobList/JobListItem.tsx:337
+#: components/JobList/JobListItem.tsx:342
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5168,8 +5191,8 @@ msgstr "折叠"
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:404
 #: screens/Template/shared/JobTemplateForm.tsx:480
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:246
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:221
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:317
 msgid "Labels"
 msgstr "标签"
@@ -5194,7 +5217,7 @@ msgstr "选择状态"
 msgid "Month"
 msgstr "月"
 
-#: components/JobList/JobListItem.tsx:313
+#: components/JobList/JobListItem.tsx:318
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5238,7 +5261,7 @@ msgstr "当新实例上线时将自动分配给此组的\n"
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:438
 #: screens/Template/shared/JobTemplateForm.tsx:625
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:269
 msgid "Job Tags"
 msgstr "作业标签"
 
@@ -5267,8 +5290,8 @@ msgstr "选择要批准的行"
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:227
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:231
 msgid "Delete Job"
 msgstr "删除作业"
 
@@ -5368,8 +5391,8 @@ msgstr "取消恢复"
 msgid "Extra variables"
 msgstr "额外变量"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:140
-#: components/Workflow/WorkflowNodeHelp.tsx:176
+#: components/Workflow/WorkflowNodeHelp.tsx:150
+#: components/Workflow/WorkflowNodeHelp.tsx:186
 #: screens/Team/TeamRoles/TeamRoleListItem.tsx:24
 #: screens/Team/TeamRoles/TeamRolesList.tsx:186
 msgid "Resource Name"
@@ -5396,7 +5419,7 @@ msgid "Use TLS"
 msgstr "使用 TLS"
 
 #: components/JobList/JobList.tsx:226
-#: components/JobList/JobListItem.tsx:72
+#: components/JobList/JobListItem.tsx:76
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Workflow/WorkflowLegend.tsx:46
 #: components/Workflow/WorkflowNodeHelp.tsx:61
@@ -5513,7 +5536,7 @@ msgstr "下一"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
 #: screens/Template/shared/JobTemplateForm.tsx:489
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:254
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:255
 msgid "Create"
 msgstr "创建"
 
@@ -5689,6 +5712,10 @@ msgstr "返回到应用程序"
 msgid "login type"
 msgstr "登录类型"
 
+#: components/Workflow/WorkflowNodeHelp.tsx:202
+msgid "Forced by"
+msgstr "强制者"
+
 #: screens/Inventory/Inventories.tsx:119
 msgid "Group details"
 msgstr "组详情"
@@ -5729,7 +5756,7 @@ msgstr "单击以重新安排调查问题的顺序"
 #~ msgid "Subscription Details"
 #~ msgstr "订阅详情"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:72
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:108
 msgid "Relaunch from canceled node with new variables"
 msgstr "使用新变量从已取消的节点重新启动"
@@ -5781,7 +5808,7 @@ msgid "Management job not found."
 msgstr "未找到管理作业。"
 
 #: components/JobList/JobList.tsx:238
-#: components/Workflow/WorkflowNodeHelp.tsx:72
+#: components/Workflow/WorkflowNodeHelp.tsx:82
 msgid "New"
 msgstr "新"
 
@@ -5829,7 +5856,7 @@ msgstr "测试通知"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
 msgstr "启用的选项"
 
@@ -5852,7 +5879,7 @@ msgid "This step contains errors"
 msgstr "这一步包含错误"
 
 #: screens/Template/shared/JobTemplateForm.tsx:434
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:238
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:239
 msgid "source control branch"
 msgstr "源控制分支"
 
@@ -5890,7 +5917,7 @@ msgstr "实例组"
 #: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:464
 #: screens/Template/shared/JobTemplateForm.tsx:637
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:281
 msgid "Skip Tags"
 msgstr "跳过标签"
 
@@ -5917,6 +5944,11 @@ msgstr "工作流已取消 "
 #: screens/Template/shared/JobTemplate.helptext.tsx:29
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "任务运行中要使用的分支。如果为空，则使用项目默认值。仅当项目的 allow_override 字段设置为 true 时才允许。"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:78
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:108
+msgid "Relaunch forcing canceled nodes as successful"
+msgstr "将已取消的节点强制为成功并重新启动"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:205
 msgid "Workflow Statuses"
@@ -5980,9 +6012,9 @@ msgstr "请输入有效的 URL"
 msgid "Canonical"
 msgstr "规范"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:156
+#: components/Workflow/WorkflowNodeHelp.tsx:166
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:151
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
 msgstr "已经过"
@@ -6071,7 +6103,7 @@ msgstr "添加例外"
 msgid "These are the verbosity levels for standard out of the command run that are supported."
 msgstr "这些是支持的标准运行命令运行的详细程度。"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:108
+#: components/Workflow/WorkflowNodeHelp.tsx:118
 msgid "Updating"
 msgstr "更新"
 
@@ -6209,6 +6241,10 @@ msgstr "在以下位置查看YAML示例："
 msgid "Overwrite local groups and hosts from remote inventory source"
 msgstr "从远程清单源覆盖本地组和主机"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:153
+msgid "The nodes ticked here are not run again: the workflow carries them forward as though they had succeeded and goes on down their success paths. They stay marked as forced, together with who forced them and why."
+msgstr "此处勾选的节点不会重新运行：工作流会将其视为已成功并沿其成功路径继续。它们会保持强制标记，并记录强制者及原因。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:272
 msgid "Resource deleted"
 msgstr "资源已删除"
@@ -6249,7 +6285,7 @@ msgstr "选择此任务模板要在其上运行的实例组。"
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "留空以在保存时生成新的 webhook 密钥"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:109
 msgid "Relaunch from failed node with new variables"
 msgstr "使用新变量从失败的节点重新启动"
@@ -6441,14 +6477,18 @@ msgstr "运行状况检查只能在执行节点上运行。"
 msgid "Visualizer"
 msgstr "可视化工具"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:147
+msgid "This run has no failed nodes that can be forced. Approvals can never be forced as successful."
+msgstr "此运行没有可强制的失败节点。审批永远不能被强制为成功。"
+
 #: screens/Template/shared/JobTemplate.helptext.tsx:50
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "置备回调：启用创建置备回调 URL。使用该 URL，主机可以联系 Ascender 并使用此任务模板请求配置更新。"
 
-#: components/JobList/JobListItem.tsx:159
+#: components/JobList/JobListItem.tsx:163
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch Job"
 msgstr "重新启动作业"
 
@@ -6531,7 +6571,7 @@ msgstr "重新排序 {label}"
 msgid "Credential"
 msgstr "凭证"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:101
 msgid "First node"
 msgstr "第一个节点"
 
@@ -6540,7 +6580,7 @@ msgstr "第一个节点"
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:184
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:190
 msgid "Webhook Credentials"
 msgstr "Webhook 凭证"
 
@@ -6805,7 +6845,7 @@ msgstr "清单源"
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "如果启用，将允许同时运行此任务模板。"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:314
 msgid "Enable Concurrent Jobs"
 msgstr "启用并发作业"
 
@@ -7100,7 +7140,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "选择 Playbook 目录"
 
-#: components/JobList/JobListItem.tsx:254
+#: components/JobList/JobListItem.tsx:259
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7255,6 +7295,10 @@ msgstr "没有找到项。"
 msgid "April"
 msgstr "4 月"
 
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:75
+msgid "Forcing Failed Nodes as Successful on Relaunch"
+msgstr "重新启动时将失败的节点强制为成功"
+
 #: screens/Job/JobOutput/JobOutputSearch.tsx:120
 msgid "Host Failure"
 msgstr "主机故障"
@@ -7279,7 +7323,7 @@ msgstr "启用置备回调 URL 的创建。\n"
 "                              更新"
 
 #: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:132
+#: components/JobList/JobListItem.tsx:136
 msgid "Finish Time"
 msgstr "完成时间"
 
@@ -7451,8 +7495,8 @@ msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWee
 msgid "Failed Host Count"
 msgstr "失败的主机计数"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:89
 msgid "Relaunch from:"
 msgstr "重新启动自："
 
@@ -7550,9 +7594,9 @@ msgstr "同步"
 #: screens/Team/TeamList/TeamList.tsx:120
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:337
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:168
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:121
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:127
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
@@ -7579,7 +7623,7 @@ msgstr "选择应用到所选资源的角色。请注意，所有选择的角色
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook URL"
 msgstr "Webhook URL"
 
@@ -7680,7 +7724,7 @@ msgstr "使用 GitHub Enterprise 登录"
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:180
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
 #: screens/Template/Survey/SurveyQuestionForm.tsx:31
 #: screens/User/shared/UserForm.tsx:202
 #: util/validators.ts:237
@@ -7867,13 +7911,13 @@ msgstr "解除关联一个或多个组关联。"
 msgid "Token information"
 msgstr "令牌信息"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:96
+#: components/Workflow/WorkflowNodeHelp.tsx:106
 msgid "Never Updated"
 msgstr "永不更新"
 
 #: components/JobList/JobList.tsx:242
 #: components/StatusLabel/StatusLabel.tsx:54
-#: components/Workflow/WorkflowNodeHelp.tsx:84
+#: components/Workflow/WorkflowNodeHelp.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:218
 msgid "Successful"
@@ -7906,7 +7950,7 @@ msgid "Federated Inventory not found."
 msgstr "未找到联邦库存。"
 
 #: components/JobList/JobList.tsx:224
-#: components/JobList/JobListItem.tsx:70
+#: components/JobList/JobListItem.tsx:74
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:43
 #: screens/Job/JobDetail/JobDetail.tsx:68
 msgid "Playbook Run"
@@ -8042,7 +8086,7 @@ msgstr "确认密码"
 msgid "Personal access token"
 msgstr "个人访问令牌"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:95
 msgid "Relaunch from first node"
 msgstr "从第一个节点重新启动"
 
@@ -8092,11 +8136,11 @@ msgstr "用户令牌"
 msgid "View RADIUS settings"
 msgstr "查看 RADIUS 设置"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:319
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:320
 msgid "Allow Overwriting Variables on Relaunch"
 msgstr "允许在重新启动时覆盖变量"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:176
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
 msgstr "所有"
@@ -8127,7 +8171,7 @@ msgstr "很难为 Ansible 事实的清单提供\n"
 "            playbook。实际事实\n"
 "            会因系统而异。"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:378
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "任务分片父级"
@@ -8591,7 +8635,7 @@ msgid "Inventory variables this source added on an earlier sync are removed once
 msgstr "此源在之前同步中添加的清单变量，会在源不再提供它们时被删除，除非它们此后已被编辑，或者此清单的另一个源仍提供它们。"
 
 #: components/JobList/JobList.tsx:222
-#: components/JobList/JobListItem.tsx:68
+#: components/JobList/JobListItem.tsx:72
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
 #: screens/Job/JobDetail/JobDetail.tsx:66
 msgid "Source Control Update"
@@ -8648,6 +8692,11 @@ msgstr "用户令牌失败。"
 #: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "使用 SAML 登陆"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:109
+msgid "Relaunch forcing failed nodes as successful"
+msgstr "将失败的节点强制为成功并重新启动"
 
 #: screens/WorkflowApproval/WorkflowApproval.tsx:74
 msgid "Back to Workflow Approvals"
@@ -8737,7 +8786,7 @@ msgstr "工作流待处理信息正文"
 msgid "Answer variable name"
 msgstr "回答变量名称"
 
-#: components/JobList/JobListItem.tsx:110
+#: components/JobList/JobListItem.tsx:114
 #: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
@@ -8777,7 +8826,7 @@ msgstr "每次使用此清单运行作业时，请在执行作业任务之前刷
 #: components/JobList/JobList.tsx:241
 #: components/StatusLabel/StatusLabel.tsx:59
 #: components/TemplateList/TemplateListItem.tsx:117
-#: components/Workflow/WorkflowNodeHelp.tsx:81
+#: components/Workflow/WorkflowNodeHelp.tsx:91
 msgid "Running"
 msgstr "运行中"
 
@@ -9004,7 +9053,7 @@ msgstr "过去一个月"
 msgid "Execution Environment"
 msgstr "执行环境"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:275
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
 msgid "Delete Workflow Job Template"
 msgstr "删除工作流作业模板"
 
@@ -9106,7 +9155,7 @@ msgid "Not configured"
 msgstr "没有配置"
 
 #: components/JobList/JobList.tsx:227
-#: components/JobList/JobListItem.tsx:73
+#: components/JobList/JobListItem.tsx:77
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:46
 #: screens/Job/JobDetail/JobDetail.tsx:71
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:268
@@ -9201,7 +9250,7 @@ msgid "Credential Name"
 msgstr "凭证名称"
 
 #: components/JobList/JobList.tsx:225
-#: components/JobList/JobListItem.tsx:71
+#: components/JobList/JobListItem.tsx:75
 #: screens/Job/JobOutput/HostEventModal.tsx:177
 msgid "Command"
 msgstr "命令"
@@ -9212,7 +9261,7 @@ msgstr "访问令牌"
 
 #: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:57
-#: components/Workflow/WorkflowNodeHelp.tsx:90
+#: components/Workflow/WorkflowNodeHelp.tsx:100
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
@@ -9459,7 +9508,7 @@ msgstr "切换通知失败。"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:329
 #: screens/Template/shared/WebhookSubForm.tsx:205
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:183
 msgid "Webhook Key"
 msgstr "Webhook 密钥"
 
@@ -9566,7 +9615,7 @@ msgstr "部署回调 URL"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:207
 #: screens/User/UserTokenList/UserTokenList.tsx:159
 msgid "Modified"
 msgstr "修改"
@@ -9591,7 +9640,7 @@ msgstr "{sessionCountdown, plural, one {You will be logged out in # second due t
 msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "如果启用，任务模板将阻止将任何清单或组织实例组添加到要运行的首选实例组列表中。注意：如果启用此设置且您提供了空列表，则将应用全局实例组。"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:60
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:70
 msgid "Failed node, new variables"
 msgstr "失败的节点，新变量"
 
@@ -9737,7 +9786,7 @@ msgstr "必须选择一个清单"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
 msgid "Source Control Branch"
 msgstr "源控制分支"
@@ -9818,12 +9867,12 @@ msgstr "查看所有工作流批准。"
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "未选中时，将执行合并，将局部变量与外部源上的局部变量相结合。"
 
-#: components/JobList/JobListItem.tsx:144
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:168
 msgid "Job Cancel Error"
 msgstr "作业取消错误"
 
@@ -9837,7 +9886,7 @@ msgstr "出现故障的库存源"
 
 #: components/JobList/JobList.tsx:235
 #: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:123
+#: components/JobList/JobListItem.tsx:127
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9860,6 +9909,10 @@ msgstr "出现故障的库存源"
 msgid "Status"
 msgstr "状态"
 
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:326
+msgid "Allow Forcing Failed Nodes as Successful on Relaunch"
+msgstr "允许在重新启动时将失败的节点强制为成功"
+
 #: components/DeleteButton/DeleteButton.tsx:147
 msgid "Are you sure you want to delete:"
 msgstr "您确定要删除："
@@ -9870,11 +9923,11 @@ msgstr "获取完整节点资源对象失败。"
 
 #: components/JobList/JobList.tsx:239
 #: components/StatusLabel/StatusLabel.tsx:60
-#: components/Workflow/WorkflowNodeHelp.tsx:75
+#: components/Workflow/WorkflowNodeHelp.tsx:85
 msgid "Pending"
 msgstr "待处理"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:131
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:135
 msgid "Toggle Tools"
 msgstr "切换工具"
 
@@ -9920,7 +9973,7 @@ msgstr "切换工具"
 #: screens/Team/TeamList/TeamListItem.tsx:47
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:208
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:135
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
 #: screens/User/UserTeams/UserTeamList.tsx:187
@@ -10100,7 +10153,7 @@ msgstr "执行环境缺失或删除。"
 
 #: components/JobList/JobList.tsx:240
 #: components/StatusLabel/StatusLabel.tsx:63
-#: components/Workflow/WorkflowNodeHelp.tsx:78
+#: components/Workflow/WorkflowNodeHelp.tsx:88
 msgid "Waiting"
 msgstr "等待"
 
@@ -10132,7 +10185,7 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 msgid "Last Name"
 msgstr "姓氏"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
 msgid "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."
 msgstr "如果启用，从失败的节点重新启动时可以提供变量来覆盖原始运行所使用的变量。当较早的节点留下的值必须在工作流继续之前进行更正时，此选项很有用。"
 
@@ -10216,7 +10269,7 @@ msgstr "名字"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:143
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:79
 msgid "Webhooks"
 msgstr "Webhook"
 
@@ -10225,7 +10278,7 @@ msgstr "Webhook"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {在处理最终删除之前，清单将处于待处理状态。} other {在处理最终删除之前，清单将处于待处理状态。}}"
 
-#: components/JobList/JobListItem.tsx:157
+#: components/JobList/JobListItem.tsx:161
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "使用主机参数重新启动"
@@ -10283,6 +10336,10 @@ msgstr "周三"
 #: screens/InstanceGroup/InstanceGroups.tsx:34
 msgid "Create new container group"
 msgstr "创建新容器组"
+
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
+msgstr "如果启用，从失败节点重新启动时可以将选定的失败节点视为已成功，使工作流沿其成功路径继续。适用于因无法及时修复且不影响后续步骤的原因而失败的节点。始终需要填写原因，节点会保留强制标记及强制者。审批永远不能被强制。在重新启动时检查，因此关闭后对已启动的运行同样生效。"
 
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:286
 #: screens/Template/shared/WebhookSubForm.tsx:138
@@ -10345,8 +10402,9 @@ msgid "Edit details"
 msgstr "编辑详情"
 
 #: components/DetailList/DeletedDetail.tsx:20
-#: components/Workflow/WorkflowNodeHelp.tsx:143
-#: components/Workflow/WorkflowNodeHelp.tsx:179
+#: components/Workflow/WorkflowNodeHelp.tsx:153
+#: components/Workflow/WorkflowNodeHelp.tsx:189
+#: components/Workflow/WorkflowNodeHelp.tsx:205
 #: screens/HostMetrics/HostMetrics.tsx:139
 #: screens/HostMetrics/HostMetricsListItem.tsx:37
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:275
@@ -10379,6 +10437,12 @@ msgstr "创建新调度"
 msgid "Add new group"
 msgstr "添加新组"
 
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:173
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:178
+#: components/Workflow/WorkflowNodeHelp.tsx:208
+msgid "Reason"
+msgstr "原因"
+
 #: components/Pagination/Pagination.tsx:37
 msgid "Current page"
 msgstr "当前页"
@@ -10410,7 +10474,7 @@ msgstr "向 playbook 传递额外的命令行变量。这是 ansible-playbook �
 msgid "Hide"
 msgstr "隐藏"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:124
+#: components/Workflow/WorkflowNodeHelp.tsx:134
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:149
 msgid "The resource associated with this node has been deleted."
 msgstr "已删除与该节点关联的资源。"
@@ -10480,7 +10544,7 @@ msgstr "事件详情模式"
 msgid "End time"
 msgstr "结束时间"
 
-#: components/Workflow/WorkflowNodeHelp.tsx:102
+#: components/Workflow/WorkflowNodeHelp.tsx:112
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:95
 msgid "Missing"
 msgstr "缺少"
@@ -10525,7 +10589,7 @@ msgid "Select Teams"
 msgstr "选择团队"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:156
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:152
 msgid "Elapsed time that the job ran"
 msgstr "作业运行所经过的时间"
 
@@ -10551,7 +10615,7 @@ msgstr "复制项目"
 #~ msgid "Prompt for verbosity on launch."
 #~ msgstr "启动时提示输入详细程度。"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:67
 msgid "Relaunch from failed node"
 msgstr "从失败的节点重新启动"
 
@@ -10634,7 +10698,7 @@ msgstr "确认链接删除"
 msgid "This field must be at least {0} characters"
 msgstr "此字段必须至少包含 {0} 个字符"
 
-#: components/JobList/JobListItem.tsx:220
+#: components/JobList/JobListItem.tsx:225
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10735,11 +10799,11 @@ msgstr "帐户令牌"
 msgid "Edit Login redirect override URL"
 msgstr "编辑登录重定向覆写 URL"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:28
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:29
 msgid "Webhooks: Enable webhook for this workflow job template."
 msgstr "Webhook：为此工作流作业模板启用 webhook。"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:26
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:27
 msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
 msgstr "并发任务：如果启用，将允许同时运行此工作流作业模板。"
 
@@ -10854,10 +10918,10 @@ msgid "Choose a job type"
 msgstr "选择作业类型"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:145
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
 msgid "Cancel {0}"
 msgstr "取消 {0}"
 
@@ -10891,12 +10955,12 @@ msgstr "总库存来源"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "提供主机模式以进一步限制将由工作流管理或影响的主机列表。"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:64
 msgid "Canceled node"
 msgstr "已取消的节点"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:108
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:112
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:116
 msgid "Edit workflow"
 msgstr "编辑工作流"
 
@@ -11047,7 +11111,7 @@ msgstr "电子邮件地址无效"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:124
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:130
 msgid "Activity"
 msgstr "活动"
 
@@ -11592,8 +11656,8 @@ msgstr "请运行一个作业来填充此列表。"
 #: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:262
 #: screens/Template/shared/JobTemplateForm.tsx:522
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:210
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:166
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:282
 msgid "Limit"
 msgstr "限制"
@@ -11624,15 +11688,17 @@ msgstr "其他资源目前正在使用此项目。您确定要删除它吗？"
 msgid "Associate"
 msgstr "关联"
 
-#: components/JobList/JobListItem.tsx:199
+#: components/JobList/JobListItem.tsx:204
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:125
+#: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:130
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:212
 msgid "Relaunch"
 msgstr "重新启动"
 
@@ -11664,7 +11730,7 @@ msgstr "关联角色错误"
 msgid "Workflow Job Template Nodes"
 msgstr "工作流作业模板节点"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:59
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
 msgid "Canceled node, new variables"
 msgstr "已取消的节点，新变量"
 
@@ -11735,13 +11801,17 @@ msgstr "主机重试"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
 msgid "Webhook Service"
 msgstr "Webhook 服务"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:31
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "启用创建置备回调 URL。使用该 URL，主机可以联系 {brandName} 并使用此任务模板请求配置更新。"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
+msgid "Canceled node, forced as successful"
+msgstr "已取消的节点，强制为成功"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:199
 #: components/HostToggle/HostToggle.tsx:72
@@ -11827,12 +11897,12 @@ msgstr "6 月"
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:508
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:517
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:263
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:272
 msgid "Launch"
 msgstr "启动"
 
-#: components/JobList/JobListItem.tsx:361
+#: components/JobList/JobListItem.tsx:366
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "解释"
@@ -11854,7 +11924,7 @@ msgid "Survey preview modal"
 msgstr "问卷调查预览模态"
 
 #: components/StatusLabel/StatusLabel.tsx:55
-#: components/Workflow/WorkflowNodeHelp.tsx:99
+#: components/Workflow/WorkflowNodeHelp.tsx:109
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:25
 msgid "OK"
@@ -11912,10 +11982,10 @@ msgid "Error message body"
 msgstr "错误消息正文"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:146
+#: components/JobList/JobListItem.tsx:150
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "取消 {0} 失败"
 
@@ -12076,7 +12146,7 @@ msgid "Toggle notification start"
 msgstr "切换通知开始"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:276
+#: components/JobList/JobListItem.tsx:281
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12108,7 +12178,7 @@ msgstr "切换通知开始"
 #: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:212
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:156
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
 msgid "Inventory"

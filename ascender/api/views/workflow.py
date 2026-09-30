@@ -450,10 +450,44 @@ class WorkflowJobRelaunch(GenericAPIView):
             raise ParseError({'variables_needed_to_start': errors})
         return extra_vars
 
+    def _forced_success_nodes(self, request, obj, from_failed):
+        """Read which failed nodes the relaunch wants carried forward as though
+        they had succeeded, and why.
+
+        Returns a mapping of node id to (user, reason), as the model expects it.
+        Forcing is off unless the workflow job template turned it on, it only
+        applies to a relaunch from failed nodes, and it always needs a reason:
+        the forced node keeps it, together with who forced it, so the next
+        person looking at the run can tell a skipped failure from a success."""
+        node_ids = request.data.get('force_success_nodes')
+        if node_ids in (None, []):
+            if request.data.get('force_success_reason'):
+                raise ParseError(_('force_success_reason was given without any force_success_nodes.'))
+            return None
+        if not from_failed:
+            raise ParseError(_('Nodes can only be forced as successful when relaunching from failed nodes.'))
+        if not obj.allows_forcing_node_success():
+            raise ParseError(
+                _('This workflow job does not allow forcing nodes as successful. Enable allow_force_node_success_on_relaunch on its workflow job template.')
+            )
+        if not isinstance(node_ids, list) or not all(isinstance(i, int) and not isinstance(i, bool) for i in node_ids):
+            raise ParseError(_('force_success_nodes must be a list of workflow job node ids.'))
+        node_ids = list(dict.fromkeys(node_ids))
+        reason = request.data.get('force_success_reason')
+        if not isinstance(reason, str) or not reason.strip():
+            raise ParseError(_('A force_success_reason is required to force nodes as successful.'))
+        try:
+            nodes = obj.forceable_failed_nodes(node_ids)
+        except ValueError as e:
+            raise ParseError(str(e))
+        reason = reason.strip()
+        return {node.id: (request.user, reason) for node in nodes}
+
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
         from_failed = request.data.get('nodes') == 'failed'
         extra_vars = self._relaunch_extra_vars(request, obj, from_failed)
+        forced = self._forced_success_nodes(request, obj, from_failed)
         if obj.is_sliced_job:
             if from_failed:
                 raise ParseError(_('Cannot relaunch a sliced workflow job from failed nodes.'))
@@ -474,7 +508,7 @@ class WorkflowJobRelaunch(GenericAPIView):
                         _('Cannot relaunch from failed nodes: this workflow failed because a node has no job template, which relaunching cannot recover.')
                     )
                 raise ParseError(_('This workflow job has no failed nodes to relaunch from.'))
-        new_workflow_job = obj.create_relaunch_workflow_job(from_failed=from_failed, extra_vars=extra_vars)
+        new_workflow_job = obj.create_relaunch_workflow_job(from_failed=from_failed, extra_vars=extra_vars, forced=forced)
         new_workflow_job.signal_start()
 
         data = serializers.WorkflowJobSerializer(new_workflow_job, context=self.get_serializer_context()).data

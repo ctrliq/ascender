@@ -6780,6 +6780,14 @@ export interface components {
        * @description Elapsed time (seconds) of this node's job in the run it was carried forward from.
        */
       readonly prior_run_elapsed: number | null;
+      /** @description Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set. */
+      readonly forced_success: boolean;
+      /** @description Why the node was forced as successful, as given by whoever relaunched the workflow. */
+      readonly forced_success_reason: string;
+      /** @description The user who forced the node as successful. */
+      readonly forced_success_by: number | null;
+      /** @description The failed job whose outcome was overridden when the node was forced as successful. */
+      readonly forced_success_job: number | null;
       /**
        * @description Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.
        * @default 0
@@ -13342,6 +13350,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19281,6 +19294,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19386,6 +19404,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19427,6 +19450,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19520,6 +19548,14 @@ export interface components {
        * @description Elapsed time (seconds) of this node's job in the run it was carried forward from.
        */
       readonly prior_run_elapsed: number | null;
+      /** @description Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set. */
+      readonly forced_success: boolean;
+      /** @description Why the node was forced as successful, as given by whoever relaunched the workflow. */
+      readonly forced_success_reason: string;
+      /** @description The user who forced the node as successful. */
+      readonly forced_success_by: number | null;
+      /** @description The failed job whose outcome was overridden when the node was forced as successful. */
+      readonly forced_success_job: number | null;
       /**
        * @description Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.
        * @default 0
@@ -19595,6 +19631,14 @@ export interface components {
        * @description Elapsed time (seconds) of this node's job in the run it was carried forward from.
        */
       readonly prior_run_elapsed: number | null;
+      /** @description Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set. */
+      readonly forced_success: boolean;
+      /** @description Why the node was forced as successful, as given by whoever relaunched the workflow. */
+      readonly forced_success_reason: string;
+      /** @description The user who forced the node as successful. */
+      readonly forced_success_by: number | null;
+      /** @description The failed job whose outcome was overridden when the node was forced as successful. */
+      readonly forced_success_job: number | null;
       /**
        * @description Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.
        * @default 0
@@ -19637,6 +19681,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19972,6 +20021,11 @@ export interface components {
        * @default false
        */
       allow_overwrite_flow_vars_on_relaunch: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.
+       * @default false
+       */
+      allow_force_node_success_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
