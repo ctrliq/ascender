@@ -16,6 +16,7 @@ from ascender.dab.lib.utils.models import prevent_search
 
 # Ascender
 from ascender.api.versioning import reverse
+from ascender.main.fields import OrderedManyToManyField
 from ascender.main.models.base import AD_HOC_JOB_TYPE_CHOICES, VERBOSITY_CHOICES, VarsDictProperty
 from ascender.main.models.events import AdHocCommandEvent, UnpartitionedAdHocCommandEvent
 from ascender.main.models.unified_jobs import UnifiedJob
@@ -88,6 +89,15 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
             blank=True,
             default='',
         )
+    )
+
+    instance_groups = OrderedManyToManyField(
+        'InstanceGroup',
+        related_name='ad_hoc_command_instance_groups',
+        blank=True,
+        editable=False,
+        through='AdHocCommandInstanceGroupMembership',
+        help_text=_('Instance groups picked when the command was launched. When empty, the inventory and organization instance groups are used.'),
     )
 
     extra_vars_dict = VarsDictProperty('extra_vars', True)
@@ -211,7 +221,13 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
             'diff_mode',
         ):
             data[field] = getattr(self, field)
-        return AdHocCommand.objects.create(**data)
+        instance_groups = list(self.instance_groups.all())
+        if instance_groups:
+            data['preferred_instance_groups_cache'] = [ig.pk for ig in instance_groups]
+        new_command = AdHocCommand.objects.create(**data)
+        for ig in instance_groups:
+            new_command.instance_groups.add(ig)
+        return new_command
 
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields') or []
@@ -233,6 +249,12 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
 
     @property
     def preferred_instance_groups(self):
+        # Instance groups picked at launch win over the ones from the inventory
+        # and organization, same as prompted instance groups on a job template.
+        if self.pk:
+            launch_instance_groups = list(self.instance_groups.all())
+            if launch_instance_groups:
+                return launch_instance_groups
         selected_groups = []
         if self.inventory is not None:
             for instance_group in self.inventory.instance_groups.all():

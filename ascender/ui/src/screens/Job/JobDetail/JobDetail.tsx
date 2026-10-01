@@ -59,6 +59,9 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     execution_environment: executionEnvironment,
   } = job.summary_fields ?? ({} as SummaryFields);
   const { scm_branch: scmBranch } = job;
+  // Only ad hoc commands list the groups picked at launch here
+  const launchInstanceGroups = (job.summary_fields?.instance_groups ??
+    []) as SummaryFieldRef[];
   const [errorMsg, setErrorMsg] = useState<unknown>();
   const navigate = useNavigate();
 
@@ -403,6 +406,28 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             dataCy="job-container-group"
             label={t`Container Group`}
             value={buildContainerGroupLink(instanceGroup)}
+          />
+        )}
+        {job.type === 'ad_hoc_command' && launchInstanceGroups.length > 0 && (
+          <Detail
+            dataCy="job-launch-instance-groups"
+            label={t`Requested Instance Groups`}
+            helpText={t`Instance groups picked when the command was launched, in order of preference.`}
+            value={
+              <ChipGroup
+                numChips={5}
+                totalChips={launchInstanceGroups.length}
+                ouiaId="job-launch-instance-groups-chips"
+              >
+                {launchInstanceGroups.map((ig) => (
+                  <Label key={ig.id} variant="outline">
+                    {ig.is_container_group
+                      ? buildContainerGroupLink(ig)
+                      : buildInstanceGroupLink(ig)}
+                  </Label>
+                ))}
+              </ChipGroup>
+            }
           />
         )}
         {typeof job.job_slice_number === 'number' &&

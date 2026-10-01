@@ -19,7 +19,13 @@ export interface AdHocPreviewStepProps {
 
 function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
   const { t, i18n } = useLingui();
-  const { credentials, execution_environment, extra_vars, verbosity } = values;
+  const {
+    credentials,
+    execution_environment,
+    instance_groups,
+    extra_vars,
+    verbosity,
+  } = values;
 
   const items = Object.entries(values) as [string, React.ReactNode][];
   return (
@@ -41,6 +47,7 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
           ([key, value]) =>
             key !== 'extra_vars' &&
             key !== 'execution_environment' &&
+            key !== 'instance_groups' &&
             key !== 'credentials' &&
             key !== 'verbosity' &&
             !key.startsWith('credential_passwords') && (
@@ -54,6 +61,12 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
           <Detail
             label={t`Execution Environment`}
             value={execution_environment[0]?.name}
+          />
+        )}
+        {instance_groups?.length > 0 && (
+          <Detail
+            label={t`Instance Groups`}
+            value={instance_groups.map((ig) => ig.name).join(', ')}
           />
         )}
         {verbosity && (

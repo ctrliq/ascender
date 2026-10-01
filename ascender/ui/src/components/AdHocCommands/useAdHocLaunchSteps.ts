@@ -4,6 +4,7 @@ import type { OptionsChoice } from 'types/api';
 import useCredentialPasswordsStep from './useAdHocCredentialPasswordStep';
 import useAdHocDetailsStep from './useAdHocDetailsStep';
 import useAdHocExecutionEnvironmentStep from './useAdHocExecutionEnvironmentStep';
+import useAdHocInstanceGroupsStep from './useAdHocInstanceGroupsStep';
 import useAdHocCredentialStep from './useAdHocCredentialStep';
 import useAdHocPreviewStep from './useAdHocPreviewStep';
 import type { AdHocValues } from './types';
@@ -35,6 +36,7 @@ export default function useAdHocLaunchSteps(
   const steps = [
     useAdHocDetailsStep(visited, moduleOptions),
     useAdHocExecutionEnvironmentStep(organizationId),
+    useAdHocInstanceGroupsStep(),
     useAdHocCredentialStep(visited, credentialTypeId),
     useCredentialPasswordsStep(
       showCredentialPasswordsStep(
@@ -114,6 +116,7 @@ export default function useAdHocLaunchSteps(
       setVisited({
         details: true,
         executionEnvironment: true,
+        instanceGroups: true,
         credentials: true,
         credentialPasswords: true,
         preview: true,
