@@ -22,6 +22,8 @@ export interface AdHocValues {
   credential_passwords: Record<string, string>;
   /** The lookup holds a list, because its own step selects from one. */
   execution_environment: SummaryFieldRef[] | null;
+  /** Where to run the command, in order. Empty keeps the inventory's own. */
+  instance_groups: SummaryFieldRef[];
   [key: string]: unknown;
 }
 

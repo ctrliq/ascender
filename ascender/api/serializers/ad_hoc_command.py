@@ -10,10 +10,11 @@ Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-from ascender.main.models import AdHocCommand, AdHocCommandEvent
+from ascender.main.models import AdHocCommand, AdHocCommandEvent, InstanceGroup
 from ascender.main.utils import extract_ansible_vars, truncate_stdout
 from ascender.main.validators import vars_validate_or_raise
 from ascender.api.serializers.base import (
+    SUMMARIZABLE_FK_FIELDS,
     BaseSerializer,
     UnifiedJobListSerializer,
     UnifiedJobSerializer,
@@ -21,6 +22,14 @@ from ascender.api.serializers.base import (
 
 
 class AdHocCommandSerializer(UnifiedJobSerializer):
+    instance_groups = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=InstanceGroup.objects.all(),
+        required=False,
+        write_only=True,
+        help_text=_('Instance groups to run the command on, in order of preference. When left empty, the inventory and organization instance groups are used.'),
+    )
+
     class Meta:
         model = AdHocCommand
         fields = (
@@ -36,6 +45,7 @@ class AdHocCommandSerializer(UnifiedJobSerializer):
             'extra_vars',
             'become_enabled',
             'diff_mode',
+            'instance_groups',
             '-unified_job_template',
             '-description',
         )
@@ -74,9 +84,18 @@ class AdHocCommandSerializer(UnifiedJobSerializer):
                 notifications=self.reverse('api:ad_hoc_command_notifications_list', kwargs={'pk': obj.pk}),
             )
         )
+        res['instance_groups'] = self.reverse('api:ad_hoc_command_instance_groups_list', kwargs={'pk': obj.pk})
         res['cancel'] = self.reverse('api:ad_hoc_command_cancel', kwargs={'pk': obj.pk})
         res['relaunch'] = self.reverse('api:ad_hoc_command_relaunch', kwargs={'pk': obj.pk})
         return res
+
+    def get_summary_fields(self, obj):
+        summary_fields = super(AdHocCommandSerializer, self).get_summary_fields(obj)
+        if self.is_detail_view and obj.pk:
+            summary_fields['instance_groups'] = [
+                {field: getattr(ig, field) for field in SUMMARIZABLE_FK_FIELDS['instance_group']} for ig in obj.instance_groups.all()
+            ]
+        return summary_fields
 
     def to_representation(self, obj):
         ret = super(AdHocCommandSerializer, self).to_representation(obj)
@@ -93,6 +112,26 @@ class AdHocCommandSerializer(UnifiedJobSerializer):
     def validate(self, attrs):
         ret = super(AdHocCommandSerializer, self).validate(attrs)
         return ret
+
+    def validate_instance_groups(self, value):
+        # Keep the order the user asked for but drop repeats, the ordered m2m
+        # would otherwise end up with the same group twice.
+        unique = []
+        for ig in value:
+            if ig not in unique:
+                unique.append(ig)
+        return unique
+
+    def create(self, validated_data):
+        instance_groups = validated_data.pop('instance_groups', [])
+        if instance_groups:
+            # The task manager reads this cache, so it has to be right before
+            # the command is saved for the first time.
+            validated_data['preferred_instance_groups_cache'] = [ig.pk for ig in instance_groups]
+        obj = super(AdHocCommandSerializer, self).create(validated_data)
+        for ig in instance_groups:
+            obj.instance_groups.add(ig)
+        return obj
 
     def validate_extra_vars(self, value):
         redacted_extra_vars, removed_vars = extract_ansible_vars(value)

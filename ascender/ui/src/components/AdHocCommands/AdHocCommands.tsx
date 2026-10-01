@@ -92,6 +92,7 @@ function AdHocCommands({
       credentials,
       credential_passwords: { become_password, ssh_password, ssh_key_unlock },
       execution_environment,
+      instance_groups,
       ...remainingValues
     } = values;
     const newCredential = credentials[0]?.id;
@@ -102,6 +103,9 @@ function AdHocCommands({
       ssh_password,
       ssh_key_unlock,
       execution_environment: execution_environment?.[0]?.id,
+      ...(instance_groups?.length
+        ? { instance_groups: instance_groups.map((ig) => ig.id) }
+        : {}),
       ...remainingValues,
     };
     await launchAdHocCommands(manipulatedValues);

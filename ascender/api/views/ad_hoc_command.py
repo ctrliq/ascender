@@ -177,5 +177,12 @@ class AdHocCommandNotificationsList(SubListAPIView):
     search_fields = ('subject', 'notification_type', 'body')
 
 
+class AdHocCommandInstanceGroupsList(SubListAPIView):
+    model = models.InstanceGroup
+    serializer_class = serializers.InstanceGroupSerializer
+    parent_model = models.AdHocCommand
+    relationship = 'instance_groups'
+
+
 class AdHocCommandStdout(UnifiedJobStdout):
     model = models.AdHocCommand

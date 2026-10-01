@@ -92,6 +92,7 @@ const FormikApp = withForm<AdHocCommandsWizardProps, AdHocValues>({
       job_type: 'run',
       credential_passwords: {},
       execution_environment: [],
+      instance_groups: [],
     };
   },
   // The wizard launches from its own onSave rather than through formik, and
