@@ -92,7 +92,7 @@ SUMMARIZABLE_FK_FIELDS = {
     'signature_validation_credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'credential_type_id'),
     'job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'started', 'elapsed', 'type', 'canceled_on'),
     'job_template': DEFAULT_SUMMARY_FIELDS + ('prevent_relaunch',),
-    'workflow_job_template': DEFAULT_SUMMARY_FIELDS,
+    'workflow_job_template': DEFAULT_SUMMARY_FIELDS + ('allow_force_node_success_on_relaunch',),
     'workflow_job': DEFAULT_SUMMARY_FIELDS,
     'workflow_approval_template': DEFAULT_SUMMARY_FIELDS + ('timeout',),
     'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('timeout', 'status'),
@@ -112,6 +112,8 @@ SUMMARIZABLE_FK_FIELDS = {
     'target_credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'cloud', 'credential_type_id'),
     'webhook_credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'cloud', 'credential_type_id'),
     'approved_or_denied_by': ('id', 'username', 'first_name', 'last_name'),
+    'forced_success_by': ('id', 'username', 'first_name', 'last_name'),
+    'forced_success_job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'elapsed', 'type'),
     'credential_type': DEFAULT_SUMMARY_FIELDS,
 }
 

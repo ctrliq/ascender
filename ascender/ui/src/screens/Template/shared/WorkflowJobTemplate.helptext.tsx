@@ -15,6 +15,7 @@ function getHelpText() {
     skipTags: t`Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.`,
     enableWebhook: t`Enable webhook for this workflow job template.`,
     enableConcurrentJobs: t`If enabled, simultaneous runs of this workflow job template will be allowed.`,
+    allowForceNodeSuccessOnRelaunch: t`If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too.`,
     allowOverwriteFlowVarsOnRelaunch: t`If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on.`,
     webhookService: t`Select a webhook service.`,
     webhookURL: t`Webhook services can launch jobs with this workflow job template by making a POST request to this URL.`,

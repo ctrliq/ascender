@@ -8,7 +8,11 @@ import { Label, Button } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
 import { formatDateString } from 'util/dates';
-import { canOverwriteRelaunchVars, isJobRunning } from 'util/jobs';
+import {
+  canForceRelaunchNodeSuccess,
+  canOverwriteRelaunchVars,
+  isJobRunning,
+} from 'util/jobs';
 import getScheduleUrl from 'util/getScheduleUrl';
 import { ActionsTd, ActionItem, TdBreakWord } from '../PaginatedTable';
 import {
@@ -180,6 +184,7 @@ function JobListItem({
                     ouiaId={`relaunch-workflow-${job.id}`}
                     status={job.status}
                     canOverwriteVars={canOverwriteRelaunchVars(job)}
+                    canForceSuccess={canForceRelaunchNodeSuccess(job)}
                     jobId={job.id}
                   />
                 )}

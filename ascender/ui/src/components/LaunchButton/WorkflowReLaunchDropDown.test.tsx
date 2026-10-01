@@ -72,6 +72,59 @@ describe('WorkflowReLaunchDropDown', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('offers forcing nodes only when the template allows it', async () => {
+    const { user } = renderWithContexts(
+      <WorkflowReLaunchDropDown handleRelaunch={() => {}} jobId={7} />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'relaunch workflow' }));
+    expect(
+      screen.queryByRole('menuitem', {
+        name: 'Relaunch forcing failed nodes as successful',
+      })
+    ).not.toBeInTheDocument();
+  });
+
+  test('relaunches from failed forcing the nodes the modal collected', async () => {
+    vi.mocked(WorkflowJobsAPI.readNodes).mockResolvedValue({
+      data: {
+        count: 1,
+        results: [
+          {
+            id: 31,
+            identifier: 'update-confluence',
+            summary_fields: { job: { status: 'failed', type: 'job' } },
+          },
+        ],
+      },
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readNodes>);
+    const handleRelaunch = vi.fn();
+    const { user } = renderWithContexts(
+      <WorkflowReLaunchDropDown
+        handleRelaunch={handleRelaunch}
+        canForceSuccess
+        jobId={7}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'relaunch workflow' }));
+    await user.click(
+      screen.getByRole('menuitem', {
+        name: 'Relaunch forcing failed nodes as successful',
+      })
+    );
+    await user.type(
+      await screen.findByRole('textbox', { name: 'Reason' }),
+      'confluence is down'
+    );
+    await user.click(screen.getByRole('button', { name: 'Relaunch' }));
+    expect(handleRelaunch).toHaveBeenCalledWith({
+      nodes: 'failed',
+      force_success_nodes: [31],
+      force_success_reason: 'confluence is down',
+    });
+  });
+
   test('relaunches from failed with the variables the modal collected', async () => {
     vi.mocked(WorkflowJobsAPI.readDetail).mockResolvedValue({
       data: { extra_vars: '{"colour": "red"}' },

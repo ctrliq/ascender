@@ -57,6 +57,7 @@ function WorkflowJobTemplateDetail({
   const renderOptionsField =
     template.allow_simultaneous ||
     template.allow_overwrite_flow_vars_on_relaunch ||
+    template.allow_force_node_success_on_relaunch ||
     template.webhook_service;
 
   const renderOptions = (
@@ -67,6 +68,11 @@ function WorkflowJobTemplateDetail({
       {template.allow_overwrite_flow_vars_on_relaunch && (
         <Content component={ContentVariants.li}>
           {t`Overwriting Variables on Relaunch`}
+        </Content>
+      )}
+      {template.allow_force_node_success_on_relaunch && (
+        <Content component={ContentVariants.li}>
+          {t`Forcing Failed Nodes as Successful on Relaunch`}
         </Content>
       )}
       {template.webhook_service && (
