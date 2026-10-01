@@ -384,7 +384,7 @@ ujson==6.0.0
     # via autobahn
 uritemplate==4.2.0
     # via drf-spectacular
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   -r /ascender_devel/requirements/requirements.in
     #   botocore
