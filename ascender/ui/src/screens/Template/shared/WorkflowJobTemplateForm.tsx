@@ -224,7 +224,7 @@ function WorkflowJobTemplateForm({
         </FieldWithPrompt>
         <FieldWithPrompt
           fieldId="wfjt-scm-branch"
-          label={t`Source control branch`}
+          label={t`Source Control Branch`}
           promptId="wfjt-ask-scm-branch-on-launch"
           promptName="ask_scm_branch_on_launch"
           tooltip={helpText.sourceControlBranch}
@@ -310,7 +310,7 @@ function WorkflowJobTemplateForm({
             name="allow_simultaneous"
             id="allow_simultaneous"
             tooltip={helpText.enableConcurrentJobs}
-            label={t`Enable Concurrent Jobs`}
+            label={t`Concurrent Jobs`}
           />
           <CheckboxField
             name="allow_overwrite_flow_vars_on_relaunch"
@@ -326,7 +326,9 @@ function WorkflowJobTemplateForm({
           <Title size="md" headingLevel="h4">
             {t`Webhook details`}
           </Title>
-          <WebhookSubForm templateType={template.type ?? ''} />
+          <WebhookSubForm
+            templateType={template.type ?? 'workflow_job_template'}
+          />
         </SubFormLayout>
       )}
 

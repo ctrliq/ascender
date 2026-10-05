@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
+import { ConfigContext } from 'contexts/Config';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import {
@@ -124,8 +125,8 @@ const tokens = {
 };
 
 async function selectThirdTokenAndDelete(user: TestUser) {
-  // the third token is the one described as 'fgds' (title-cased to 'Fgds') (id 3)
-  const row = screen.getByText('Fgds').closest('tr');
+  // the third token is the one described as 'fgds' (id 3)
+  const row = screen.getByText('fgds').closest('tr');
   await user.click(within(row!).getByRole('checkbox'));
 
   const deleteButton = screen.getByRole('button', { name: 'Delete' });
@@ -148,7 +149,7 @@ describe('<UserTokenList />', () => {
     } as unknown as ResponseOf<typeof UsersAPI.readTokenOptions>);
 
     ({ user } = renderWithContexts(<UserTokenList />));
-    await screen.findByText('Fgds');
+    await screen.findByText('fgds');
   });
 
   test('should mount properly, and fetch tokens', () => {
@@ -199,6 +200,84 @@ describe('<UserTokenList />', () => {
       expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
     // closing the modal refocuses the Tooltip-wrapped toolbar Delete button
+    await settleTooltips();
+  });
+});
+
+describe('<UserTokenList /> for other viewers', () => {
+  beforeEach(() => {
+    vi.mocked(UsersAPI.readTokens).mockResolvedValue(
+      tokens as unknown as ResponseOf<typeof UsersAPI.readTokens>
+    );
+    vi.mocked(UsersAPI.readTokenOptions).mockResolvedValue({
+      data: { related_search_fields: [] },
+    } as unknown as ResponseOf<typeof UsersAPI.readTokenOptions>);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  /*
+   * A token is always made for whoever asks for it, so a superuser on someone
+   * else's list is not offered Add, while the owner is.
+   */
+  test('offers Add only on the viewer own tokens', async () => {
+    const { unmount } = renderWithContexts(<UserTokenList />, {
+      context: { config: { me: { id: 2, is_superuser: true } } },
+    });
+    await screen.findByText('fgds');
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
+    unmount();
+
+    renderWithContexts(<UserTokenList />, {
+      context: { config: { me: { id: 1 } } },
+    });
+    await screen.findByText('fgds');
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
+  });
+
+  /*
+   * Tokens carry no user_capabilities, so the list asks what the api asks: a
+   * viewer who is neither a superuser, the owner, nor an organization admin
+   * cannot delete the token.
+   */
+  test('does not let a viewer who may not delete the token do so', async () => {
+    const { user } = renderWithContexts(<UserTokenList />, {
+      context: { config: { me: { id: 2 }, adminOrgCount: 0 } },
+    });
+    await screen.findByText('fgds');
+
+    const row = screen.getByText('fgds').closest('tr');
+    await user.click(within(row!).getByRole('checkbox'));
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+    await settleTooltips();
+  });
+
+  /*
+   * The read is cached by the list's address, so whether a token may be
+   * deleted is worked out as the list renders: a viewer who comes to
+   * administer an organization is offered the deletion without a reload.
+   */
+  test('updates what may be deleted when the viewer changes', async () => {
+    const { user, rerender } = renderWithContexts(
+      <ConfigContext.Provider value={{ me: { id: 2 }, adminOrgCount: 0 }}>
+        <UserTokenList />
+      </ConfigContext.Provider>
+    );
+    await screen.findByText('fgds');
+    const row = screen.getByText('fgds').closest('tr');
+    await user.click(within(row!).getByRole('checkbox'));
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+
+    rerender(
+      <ConfigContext.Provider value={{ me: { id: 2 }, adminOrgCount: 1 }}>
+        <UserTokenList />
+      </ConfigContext.Provider>
+    );
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled()
+    );
     await settleTooltips();
   });
 });

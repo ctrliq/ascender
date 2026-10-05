@@ -58,15 +58,7 @@ describe('<GoogleOAuth2Detail />', () => {
 
   test('initially renders without crashing', async () => {
     await mountDetail();
-    expect(screen.getByText('Details')).toBeInTheDocument();
-  });
-
-  test('should render expected tabs', async () => {
-    await mountDetail();
-    const expectedTabs = ['Back to Settings', 'Details'];
-    screen.getAllByRole('tab').forEach((tab, index) => {
-      expect(tab).toHaveTextContent(expectedTabs[index]!);
-    });
+    expect(screen.getByText('Google OAuth2 Callback URL')).toBeInTheDocument();
   });
 
   test('should render expected details', async () => {

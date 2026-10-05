@@ -56,4 +56,47 @@ describe('<InventoryHostGroupItem />', () => {
       .find((link) => link.getAttribute('href')?.endsWith('/edit'));
     expect(editLink).toBeUndefined();
   });
+  /*
+   * A group of a constructed or federated inventory opens under that kind of
+   * inventory, where the app looks for it, not under a plain one.
+   */
+  test.each([
+    ['', '/inventories/inventory/7/groups/2/details'],
+    ['constructed', '/inventories/constructed_inventory/7/groups/2/details'],
+    ['federated', '/inventories/federated_inventory/7/groups/2/details'],
+  ])('links a group of a %s inventory by its kind', (kind, href) => {
+    renderItem({
+      ...mockGroup,
+      summary_fields: {
+        inventory: { id: 7, name: 'inv', kind },
+        user_capabilities: { edit: false },
+      },
+    } as unknown as Group);
+    expect(screen.getByRole('link', { name: 'foo' })).toHaveAttribute(
+      'href',
+      href
+    );
+  });
+
+  /*
+   * A constructed or federated inventory builds its groups from its sources
+   * and the api refuses to edit them, so the row offers no Edit even to
+   * someone the group says may edit it.
+   */
+  test.each(['constructed', 'federated'])(
+    'offers no edit for a group of a %s inventory',
+    (kind) => {
+      renderItem({
+        ...mockGroup,
+        summary_fields: {
+          inventory: { id: 7, name: 'inv', kind },
+          user_capabilities: { edit: true },
+        },
+      } as unknown as Group);
+      const editLink = screen
+        .queryAllByRole('link')
+        .find((link) => link.getAttribute('href')?.endsWith('/edit'));
+      expect(editLink).toBeUndefined();
+    }
+  );
 });

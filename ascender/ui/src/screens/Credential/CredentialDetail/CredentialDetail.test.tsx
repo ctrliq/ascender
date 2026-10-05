@@ -131,9 +131,9 @@ describe('<CredentialDetail />', () => {
       'Privilege Escalation Username',
       mockCredential.inputs.become_username
     );
-    assertDetail('Privilege Escalation Password', 'Prompt on launch');
+    assertDetail('Privilege Escalation Password', 'Prompt on Launch');
 
-    const enabledOptions = screen.getByText('Enabled Options');
+    const enabledOptions = screen.getByText('Options');
     expect(enabledOptions.nextElementSibling).toHaveTextContent('Authorize');
   });
 
@@ -181,12 +181,12 @@ describe('<CredentialDetail />', () => {
 
   test('should not load enabled options', async () => {
     // a credential whose inputs have no enabled boolean fields renders the
-    // Enabled Options Detail as isEmpty (nothing in the DOM)
+    // Options Detail as isEmpty (nothing in the DOM)
     await renderDetail({
       ...mockCredential,
       inputs: { ...mockCredential.inputs, authorize: false },
     });
 
-    expect(screen.queryByText('Enabled Options')).not.toBeInTheDocument();
+    expect(screen.queryByText('Options')).not.toBeInTheDocument();
   });
 });

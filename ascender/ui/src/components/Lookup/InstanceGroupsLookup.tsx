@@ -98,7 +98,6 @@ function InstanceGroupsLookup({
         qsConfig={QS_CONFIG}
         multiple
         required={required}
-        isLoading={isLoading}
         modalDescription={
           <>
             <b>
@@ -114,6 +113,7 @@ function InstanceGroupsLookup({
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading}
             options={instanceGroups}
             optionCount={count}
             searchColumns={[

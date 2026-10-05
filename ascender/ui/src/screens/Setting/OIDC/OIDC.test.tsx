@@ -5,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestContexts } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { settingOptions } from '../../../../testUtils/settingOptions';
 import OIDC from './OIDC';
@@ -27,36 +28,49 @@ describe('<OIDC />', () => {
     vi.clearAllMocks();
   });
 
-  function renderOIDC(initialEntries: string[]) {
+  function renderOIDC(initialEntries: string[], context?: TestContexts) {
     const history = createMemoryHistory({ initialEntries });
-    return renderWithContexts(
+    const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route path="/settings/oidc/*" element={<OIDC />} />
+          <Route path="/authentication/oidc/*" element={<OIDC />} />
         </Routes>
       </SettingsProvider>,
-      { context: { router: { history } } }
+      { context: { router: { history }, ...context } }
     );
+    return { ...result, history };
   }
 
   test('should render OIDC details', async () => {
-    renderOIDC(['/settings/oidc/details']);
+    renderOIDC(['/authentication/oidc/details']);
     expect(await screen.findByText('OIDC Key')).toBeInTheDocument();
   });
 
   test('should render OIDC edit', async () => {
-    renderOIDC(['/settings/oidc/edit']);
+    renderOIDC(['/authentication/oidc/edit']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderOIDC(['/settings/oidc/foo']);
+    renderOIDC(['/authentication/oidc/foo']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)
       ).toBeInTheDocument()
     );
+  });
+
+  test('should send users without system admin permissions to the details', async () => {
+    const { history } = renderOIDC(['/authentication/oidc/edit'], {
+      config: { me: { is_superuser: false } },
+    });
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/authentication/oidc/details')
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Save' })
+    ).not.toBeInTheDocument();
   });
 });

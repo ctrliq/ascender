@@ -35,7 +35,6 @@ export interface LookupProps {
    * PatternFly input the field renders, which names its own event type.
    */
   onBlur?(event?: React.SyntheticEvent): void;
-  isLoading?: boolean;
   value?: LookupItem | LookupItem[] | null;
   multiple?: boolean;
   required?: boolean;
@@ -70,7 +69,6 @@ function Lookup({
   header,
   onChange,
   onBlur = () => {},
-  isLoading,
   value,
   multiple = false,
   required = false,
@@ -178,6 +176,14 @@ function Lookup({
     <>
       <InputGroup onBlur={onBlur}>
         <InputGroupItem>
+          {/*
+            Disabled means the field is disabled, and nothing else. Gating this
+            on the option list's request instead painted every lookup on a form
+            in the disabled colour for as long as its list took to arrive, then
+            animated each one to its real colour as the responses landed one by
+            one. The modal carries its own loading state, so opening it before
+            the list is back costs nothing.
+          */}
           <Button
             icon={<SearchIcon />}
             aria-label={t`Search`}
@@ -185,7 +191,7 @@ function Lookup({
             ouiaId={`${id}-open`}
             onClick={onClick}
             variant={ButtonVariant.control}
-            isDisabled={isLoading || isDisabled}
+            isDisabled={isDisabled}
           />
         </InputGroupItem>
         {multiple ? (
@@ -193,7 +199,7 @@ function Lookup({
             <div
               className={[
                 'ascender-lookup__chip-holder',
-                isDisabled && 'ascender-lookup__chip-holder--disabled',
+                isDisabled && 'pf-m-disabled',
                 'pf-v6-c-form-control',
               ]
                 .filter(Boolean)
@@ -226,7 +232,7 @@ function Lookup({
                   debounceRequest(inputValue);
                 }
               }}
-              isDisabled={isLoading || isDisabled}
+              isDisabled={isDisabled}
             />
           </InputGroupItem>
         )}

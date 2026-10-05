@@ -17,6 +17,7 @@ function WorkflowActionTooltip({
   const tipHeight = 25 * actions.length + 5 * actions.length - 1 + 10;
   return (
     <foreignObject
+      className="ascender-workflow-action-tooltip"
       x={pointX}
       y={Number(pointY) - tipHeight / 2}
       width="52"

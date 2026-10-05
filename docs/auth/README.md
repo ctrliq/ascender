@@ -13,14 +13,12 @@ When a user wants to log into Ascender, she can explicitly choose some of the su
 
 On the other hand, the other authentication methods use the same types of login info (username and password), but authenticate using external auth systems rather than Ascender's own database. If some of these methods are enabled, Ascender will try authenticating using the enabled methods *before Ascender's own authentication method*. The order of precedence is:
 * LDAP
-* RADIUS
-* TACACS+
 * SAML
 
-Ascender will try authenticating against each enabled authentication method *in the specified order*, meaning if the same username and password is valid in multiple enabled auth methods (*e.g.*, both LDAP and TACACS+), Ascender will only use the first positive match (in the above example, log a user in via LDAP and skip TACACS+).
+Ascender will try authenticating against each enabled authentication method *in the specified order*, meaning if the same username and password is valid in multiple enabled auth methods (*e.g.*, both LDAP and SAML), Ascender will only use the first positive match (in the above example, log a user in via LDAP and skip SAML).
 
 ## Notes:
-SAML users, RADIUS users and TACACS+ users are categorized as 'Enterprise' users. The following rules apply to Enterprise users:
+SAML users are categorized as 'Enterprise' users. The following rules apply to Enterprise users:
 
   * Enterprise users can only be created via the first successful login attempt from remote authentication backend.
   * Enterprise users cannot be created/authenticated if non-enterprise users with the same name has already been created in Ascender.

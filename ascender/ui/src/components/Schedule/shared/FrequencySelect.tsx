@@ -62,8 +62,11 @@ export default function FrequencySelect({
       onOpenChange={handleOpenChange}
       onSelect={onSelectHandler}
       toggle={(toggleRef) => (
+        /* Full width, as the time zone select above it is: a menu toggle is
+           otherwise only as wide as the frequencies it names. */
         <MenuToggle
           ref={toggleRef}
+          isFullWidth
           onClick={() => handleOpenChange(!isOpen)}
           isExpanded={isOpen}
           ouiaId={`frequency-select-${id}`}

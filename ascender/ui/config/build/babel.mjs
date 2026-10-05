@@ -28,7 +28,11 @@ export function babelTransform() {
         return null;
       }
       const result = await transformAsync(code, {
-        filename: id,
+        // Without the query, because preset-typescript reads the extension off
+        // this name: a worker arrives as simulationWorker.ts?worker_file, whose
+        // extension is not .ts as far as the preset is concerned, so the types
+        // it holds are parsed as JavaScript and the file fails to build.
+        filename: id.split('?')[0],
         babelrc: false,
         configFile: false,
         sourceMaps: true,

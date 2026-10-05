@@ -7,7 +7,6 @@ import {
   ClipboardCopy,
   Content,
   ContentVariants,
-  Tooltip,
 } from '@patternfly/react-core';
 import { Config, useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
@@ -22,11 +21,14 @@ import { ProjectsAPI } from 'api';
 import { toTitleCase } from 'util/strings';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useBrandName from 'hooks/useBrandName';
+import useCanCancelSync from 'hooks/useCanCancelSync';
+import { getRunActionLabels, isJobCancelable } from 'util/jobs';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import StatusLabel from 'components/StatusLabel';
 import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
+import Tooltip from 'components/Tooltip';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 import getProjectHelpText from '../shared/Project.helptext';
 import useWsProject from './useWsProject';
@@ -38,7 +40,7 @@ export interface ProjectDetailProps {
 }
 
 function ProjectDetail({ project }: ProjectDetailProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const projectHelpText = getProjectHelpText();
   const {
     allow_override,
@@ -86,19 +88,19 @@ function ProjectDetail({ project }: ProjectDetailProps) {
     scm_delete_on_update ||
     scm_track_submodules ||
     scm_update_on_launch ||
-    allow_override
+    allow_override ||
+    webhook_service
   ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
         {scm_clean && (
           <Content component={ContentVariants.li}>
-            {t`Discard local changes before syncing`}
-            <Popover content={projectHelpText.options.clean} />
+            {t`Clean`} <Popover content={projectHelpText.options.clean} />
           </Content>
         )}
         {scm_delete_on_update && (
           <Content component={ContentVariants.li}>
-            {t`Delete the project before syncing`}{' '}
+            {t`Delete`}{' '}
             <Popover
               content={projectHelpText.options.delete}
               id="scm-delete-on-update"
@@ -107,20 +109,26 @@ function ProjectDetail({ project }: ProjectDetailProps) {
         )}
         {scm_track_submodules && (
           <Content component={ContentVariants.li}>
-            {t`Track submodules latest commit on branch`}{' '}
+            {t`Track Submodules`}{' '}
             <Popover content={projectHelpText.options.trackSubModules} />
           </Content>
         )}
         {scm_update_on_launch && (
           <Content component={ContentVariants.li}>
-            {t`Update revision on job launch`}{' '}
+            {t`Update Revision on Launch`}{' '}
             <Popover content={projectHelpText.options.updateOnLaunch} />
           </Content>
         )}
         {allow_override && (
           <Content component={ContentVariants.li}>
-            {t`Allow branch override`}{' '}
+            {t`Allow Branch Override`}{' '}
             <Popover content={projectHelpText.options.allowBranchOverride} />
+          </Content>
+        )}
+        {webhook_service && (
+          <Content component={ContentVariants.li}>
+            {t`Enable Webhook`}{' '}
+            <Popover content={projectHelpText.options.enableWebhook} />
           </Content>
         )}
       </Content>
@@ -150,6 +158,12 @@ function ProjectDetail({ project }: ProjectDetailProps) {
   } else if (summary_fields?.last_job) {
     job = summary_fields.last_job;
   }
+  const canCancelSync = useCanCancelSync(
+    'project_update',
+    job?.id,
+    job?.status,
+    summary_fields?.user_capabilities?.edit
+  );
 
   const getSourceControlUrlHelpText = () =>
     scm_type === 'git'
@@ -167,7 +181,7 @@ function ProjectDetail({ project }: ProjectDetailProps) {
                 content={generateLastJobTooltip(job as UnifiedJob)}
                 key={job.id}
               >
-                <Link to={`/jobs/project/${job.id}`}>
+                <Link to={`/runs/project/${job.id}`}>
                   <StatusLabel status={job.status} />
                 </Link>
               </Tooltip>
@@ -229,7 +243,12 @@ function ProjectDetail({ project }: ProjectDetailProps) {
         />
         <Detail
           helpText={projectHelpText.branchFormField}
-          label={t`Source Control Branch`}
+          /* Named as the form names it for this kind of project. */
+          label={
+            scm_type === 'svn'
+              ? t`Revision #`
+              : t`Source Control Branch/Tag/Commit`
+          }
           value={scm_branch}
         />
         <Detail
@@ -333,35 +352,37 @@ function ProjectDetail({ project }: ProjectDetailProps) {
           user={summary_fields.modified_by}
         />
         {optionsList && (
-          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
+          <Detail fullWidth label={t`Options`} value={optionsList} />
         )}
       </DetailList>
       <CardActionsRow>
         {summary_fields.user_capabilities?.edit && (
           <Button
             ouiaId="project-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={t`Edit`}
             component={Link}
             to={`/projects/${id}/edit`}
           >
             {t`Edit`}
           </Button>
         )}
-        {summary_fields.user_capabilities?.start &&
-          (['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
-            <JobCancelButton
-              job={{ id: job!.id, type: 'project_update' }}
-              errorTitle={t`Project Sync Error`}
-              title={t`Cancel Project Sync`}
-              errorMessage={t`Failed to cancel Project Sync`}
-              buttonText={t`Cancel Sync`}
-            />
-          ) : (
-            <ProjectSyncButton
-              projectId={project.id}
-              lastJobStatus={job && job.status}
-            />
-          ))}
+        {/* While a sync can still be stopped the place of Sync is taken by
+            its Cancel, for whoever the api lets cancel it. */}
+        {isJobCancelable(job?.status)
+          ? canCancelSync && (
+              <JobCancelButton
+                job={{ id: job!.id, type: 'project_update' }}
+                /* The shared wording for this kind of run, the one the runs
+                   list and the run's own page use. */
+                title={i18n._(getRunActionLabels('project_update').cancel)}
+              />
+            )
+          : summary_fields.user_capabilities?.start && (
+              <ProjectSyncButton
+                projectId={project.id}
+                lastJobStatus={job && job.status}
+              />
+            )}
         {summary_fields.user_capabilities?.delete && (
           <DeleteButton
             name={name}

@@ -121,9 +121,24 @@ describe('<Lookup />', () => {
     expect(optionsListProps().canDelete).toEqual(false);
   });
 
-  test('should be disabled while isLoading is true', () => {
-    renderLookup({ isLoading: true });
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  test('should be disabled only when the field itself is disabled', () => {
+    renderLookup({ isDisabled: true });
     expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
+  });
+
+  /*
+   * A lookup whose option list is still loading used to render its controls
+   * disabled, which meant every lookup on a form painted in the disabled
+   * colour and then animated to its real one as the responses landed. The
+   * modal carries the loading state now, so the controls open at their final
+   * colour and the list says what it is doing.
+   */
+  test('should stay enabled and open while its options are loading', async () => {
+    const { user } = renderLookup();
+    const search = screen.getByRole('button', { name: 'Search' });
+    expect(search).toBeEnabled();
+
+    await user.click(search);
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
   });
 });

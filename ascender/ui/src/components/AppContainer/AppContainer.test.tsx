@@ -75,7 +75,7 @@ describe('<AppContainer />', () => {
       container.querySelector('nav[aria-label="Navigation"]')
     ).toBeInTheDocument();
 
-    // sidebar groups (NavExpandableGroup, 2 expandable groups) and route links
+    // sidebar groups (NavigationGroup, 2 expandable groups) and route links
     expect(
       container.querySelectorAll(
         '[data-ouia-component-type="PF6/NavExpandable"]'

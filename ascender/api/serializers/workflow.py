@@ -9,12 +9,16 @@ Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 """
 
 from datetime import timedelta
+from django.db.models import prefetch_related_objects
+from django.db.models.manager import BaseManager
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from ascender.main.access import WorkflowApprovalAccess, WorkflowJobAccess, get_user_capabilities
 from ascender.main.models import (
     Inventory,
     JobTemplate,
     Label,
+    UnifiedJob,
     WorkflowApproval,
     WorkflowApprovalTemplate,
     WorkflowApprovalVote,
@@ -221,20 +225,142 @@ class WorkflowApprovalViewSerializer(UnifiedJobSerializer):
         fields = []
 
 
+# ----------------------------------------------------------------------------
+# Workflow approvals
+# ----------------------------------------------------------------------------
+
+# Context keys under which a page of approvals carries its permission answers,
+# computed once for the page by WorkflowApprovalPageSerializer.
+APPROVE_OR_DENY_ANSWERS = 'workflow_approval_approve_or_deny_answers'
+CANCEL_WORKFLOW_ANSWERS = 'workflow_approval_cancel_workflow_answers'
+
+
+def waiting_workflow_job(approval):
+    """
+    The workflow job an approval waits in, if it waits in one.
+
+    Only an approval a workflow spawned waits in a workflow job, and it reaches
+    that job through the workflow job node that ran it. Either link can be
+    missing, a node that no longer exists or one with no workflow job, and both
+    read as the approval waiting in nothing, which is what the two callers want.
+
+    Args:
+        approval: The workflow approval to look from.
+
+    Returns:
+        WorkflowJob or None: The workflow job, or None when the approval was
+            not spawned by a workflow or the link to its job no longer exists.
+    """
+    if not approval.spawned_by_workflow:
+        return None
+    try:
+        return approval.unified_job_node.workflow_job
+    except UnifiedJob.unified_job_node.RelatedObjectDoesNotExist:
+        return None
+
+
+class WorkflowApprovalPageSerializer(serializers.ListSerializer):
+    """
+    Serializes a page of approvals with its permission checks done once.
+
+    can_approve_or_deny and can_cancel_workflow each ask role questions about
+    every approval, several queries a row for anyone but a superuser. Before
+    the rows are serialized this asks the access classes for the whole page at
+    once and leaves the answers in the serializer context, where the row
+    methods pick them up. A row the access classes did not answer is checked
+    on its own, as it would be without this.
+
+    BaseSerializer already prefetches user_capabilities for a page through
+    capabilities_prefetch, but that mechanism can only express "the user holds
+    this role on the row or a related row", and neither answer here fits it:
+    approving reads votes and quorum, and canceling asks about another object.
+    """
+
+    # What every row of a page reads besides its own columns: its template for
+    # the related links and summary fields, and the node, workflow job and
+    # workflow template behind can_approve_or_deny and can_cancel_workflow.
+    PAGE_PREFETCH = ('workflow_approval_template', 'unified_job_node__workflow_job__unified_job_template')
+
+    @staticmethod
+    def prefetch_page(approvals):
+        """
+        Load what the rows of a page read, a few queries for the whole page.
+
+        This lives here rather than in WorkflowApprovalAccess.prefetch_related
+        because that queryset also serves the detail, approve and deny views,
+        which read one approval and would pay for every prefetch up front.
+
+        An approval's unified_job_template and workflow_approval_template are
+        two foreign keys to the same row, the second one typed, and the base
+        manager of UnifiedJobTemplate is polymorphic, so reading the first
+        yields the same WorkflowApprovalTemplate the second holds. It is read
+        once, through workflow_approval_template, and handed to the other.
+
+        Args:
+            approvals: The approvals of the page, as a list. They are changed
+                in place: the related objects land in their caches.
+        """
+        prefetch_related_objects(approvals, *WorkflowApprovalPageSerializer.PAGE_PREFETCH)
+        unified_job_template = WorkflowApproval.unified_job_template.field
+        for approval in approvals:
+            if unified_job_template.is_cached(approval) or approval.unified_job_template_id is None:
+                continue
+            template = approval.workflow_approval_template
+            if template is not None and template.pk == approval.unified_job_template_id:
+                unified_job_template.set_cached_value(approval, template)
+
+    def to_representation(self, data):
+        """
+        Answer the page's permission checks, then serialize its rows.
+
+        Args:
+            data: The approvals of the page, as a list, queryset or manager.
+
+        Returns:
+            list: One serialized approval per row, as ListSerializer gives.
+        """
+        iterable = data.all() if isinstance(data, BaseManager) else data
+        approvals = list(iterable)
+        self.prefetch_page(approvals)
+        request = self.context.get('request', None)
+        if request is not None:
+            # Step 1: can_approve_or_deny, keyed by approval.
+            self.context[APPROVE_OR_DENY_ANSWERS] = WorkflowApprovalAccess(request.user).can_approve_or_deny_many(approvals)
+            # Step 2: the cancel capability of the workflow jobs the approvals
+            # wait in, keyed by workflow job. Only approvals a workflow spawned
+            # are asked about, as get_can_cancel_workflow only asks for those.
+            workflow_jobs = {}
+            for approval in approvals:
+                workflow_job = waiting_workflow_job(approval)
+                if workflow_job is not None:
+                    workflow_jobs[workflow_job.pk] = workflow_job
+            self.context[CANCEL_WORKFLOW_ANSWERS] = WorkflowJobAccess(request.user).get_cancel_capabilities(workflow_jobs.values())
+        return super().to_representation(approvals)
+
+
 class WorkflowApprovalSerializer(UnifiedJobSerializer):
     can_approve_or_deny = serializers.SerializerMethodField()
+    can_cancel_workflow = serializers.SerializerMethodField()
     approval_expiration = serializers.SerializerMethodField()
     timed_out = serializers.ReadOnlyField()
     approvals_received = serializers.SerializerMethodField()
     user_has_voted = serializers.SerializerMethodField()
 
+    # An approval is stopped by approving or denying it, or by canceling the
+    # workflow job it waits in (reported as can_cancel_workflow). It has no
+    # cancel endpoint of its own, so the inherited 'cancel' capability would
+    # offer an action no request could carry out.
+    show_capabilities = ['start', 'delete']
+
     class Meta:
         model = WorkflowApproval
+        list_serializer_class = WorkflowApprovalPageSerializer
         fields = (
             '*',
             '-controller_node',
             '-execution_node',
             'can_approve_or_deny',
+            'can_cancel_workflow',
             'approval_expiration',
             'timed_out',
             'context_message',
@@ -250,9 +376,53 @@ class WorkflowApprovalSerializer(UnifiedJobSerializer):
         return obj.created + timedelta(seconds=obj.timeout)
 
     def get_can_approve_or_deny(self, obj):
+        """
+        Whether the user may approve or deny this approval now.
+
+        On a page of approvals the access check was answered for the whole
+        page up front (see WorkflowApprovalPageSerializer); an approval it left
+        unanswered, or one serialized on its own, is checked here.
+
+        Args:
+            obj: The workflow approval being serialized.
+
+        Returns:
+            bool: True when the approval is pending and the user may decide it.
+        """
         request = self.context.get('request', None)
-        allowed = request.user.can_access(WorkflowApproval, 'approve_or_deny', obj)
+        answers = self.context.get(APPROVE_OR_DENY_ANSWERS) or {}
+        if obj.pk in answers:
+            allowed = answers[obj.pk]
+        else:
+            allowed = request.user.can_access(WorkflowApproval, 'approve_or_deny', obj)
         return allowed is True and obj.status == 'pending'
+
+    def get_can_cancel_workflow(self, obj):
+        """
+        Whether the user may cancel the workflow job this approval waits in.
+
+        Canceling the workflow is a right on the workflow job, its creator or an
+        admin of its template, not the approver role, so it is reported apart
+        from can_approve_or_deny.
+
+        Args:
+            obj: The workflow approval being serialized.
+
+        Returns:
+            bool: True when a cancel request for the workflow job would be accepted.
+        """
+        request = self.context.get('request', None)
+        if request is None:
+            return False
+        workflow_job = waiting_workflow_job(obj)
+        if workflow_job is None:
+            return False
+        # On a page of approvals the capability was answered for every
+        # workflow job up front; one left unanswered is checked on its own.
+        answers = self.context.get(CANCEL_WORKFLOW_ANSWERS) or {}
+        if workflow_job.pk in answers:
+            return answers[workflow_job.pk]
+        return bool(get_user_capabilities(request.user, workflow_job, method_list=['cancel']).get('cancel'))
 
     def get_approvals_received(self, obj):
         return obj.approvals_received()
@@ -289,7 +459,17 @@ class WorkflowApprovalActivityStreamSerializer(WorkflowApprovalSerializer):
 
 class WorkflowApprovalListSerializer(WorkflowApprovalSerializer, UnifiedJobListSerializer):
     class Meta:
-        fields = ('*', '-controller_node', '-execution_node', 'can_approve_or_deny', 'approval_expiration', 'timed_out', '-context_message')
+        list_serializer_class = WorkflowApprovalPageSerializer
+        fields = (
+            '*',
+            '-controller_node',
+            '-execution_node',
+            'can_approve_or_deny',
+            'can_cancel_workflow',
+            'approval_expiration',
+            'timed_out',
+            '-context_message',
+        )
 
     def get_field_names(self, declared_fields, info):
         field_names = super(WorkflowApprovalListSerializer, self).get_field_names(declared_fields, info)

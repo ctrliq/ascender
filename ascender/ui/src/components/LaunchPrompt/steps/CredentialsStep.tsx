@@ -16,9 +16,10 @@ import ContentLoading from '../../ContentLoading';
 import CredentialChip from '../../CredentialChip';
 import ContentError from '../../ContentError';
 import credentialsValidator from './credentialsValidator';
+import LAUNCH_PROMPT_NAMESPACES from '../namespaces';
 import './CredentialsStep.css';
 
-const QS_CONFIG = getQSConfig('credential', {
+const QS_CONFIG = getQSConfig(LAUNCH_PROMPT_NAMESPACES.credential, {
   page: 1,
   page_size: 5,
   order_by: 'name',

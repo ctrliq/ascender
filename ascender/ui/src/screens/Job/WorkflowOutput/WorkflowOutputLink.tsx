@@ -24,7 +24,6 @@ function WorkflowOutputLink({
   mouseLeave,
 }: WorkflowOutputLinkProps) {
   const ref = useRef<SVGPolygonElement>(null);
-  const [hovering, setHovering] = useState<boolean>(false);
   const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
     'var(--pf-t--global--border--color--default)'
@@ -35,19 +34,14 @@ function WorkflowOutputLink({
     WorkflowStateContext
   ) as WorkflowState & { nodePositions: NodePositions };
 
-  // The overlay is moved to the end of its parent while hovered and back to
-  // the front on the way out, which is what puts it over its neighbours.
+  // Nothing is drawn on hover here any more, so there is nothing to raise: the
+  // group used to be moved to the end of its parent to put an opaque band over
+  // its neighbours, and that band is what cut the lines it covered.
   const handleLinkMouseEnter = () => {
-    const polygon = ref.current;
-    polygon?.parentNode?.appendChild(polygon);
-    setHovering(true);
     mouseEnter();
   };
 
   const handleLinkMouseLeave = () => {
-    const polygon = ref.current;
-    polygon?.parentNode?.prepend(polygon);
-    setHovering(false);
     mouseLeave();
   };
 
@@ -78,14 +72,15 @@ function WorkflowOutputLink({
       onMouseEnter={handleLinkMouseEnter}
       onMouseLeave={handleLinkMouseLeave}
     >
-      <polygon
-        style={{ fill: 'var(--pf-t--global--background--color--200)' }}
-        id={`link-${link.source.id}-${link.target.id}-overlay`}
-        opacity={hovering ? '1' : '0'}
-        points={getLinkOverlayPoints(link, nodePositions)}
-      />
+      {/* The band that used to sit here was filled opaque and painted over
+          every link crossing the hovered one, which is what cut the lines. It
+          was already switched off in the dark and default themes, where the
+          fill was overridden to nothing, so it had been doing nothing in half
+          the product. The hover has its own feedback: the help panel, and in
+          the visualizer the action menu. */}
       <path d={pathD ?? undefined} stroke={pathStroke} strokeWidth="2px" />
       <polygon
+        id={`link-${link.source.id}-${link.target.id}-overlay`}
         onMouseEnter={() => mouseEnter()}
         onMouseLeave={() => mouseLeave()}
         opacity="0"

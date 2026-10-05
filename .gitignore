@@ -160,7 +160,7 @@ use_dev_supervisor.txt
 .idea/*
 *.unison.tmp
 *.#
-/awx/ui/.ui-built
+/ascender/ui/.ui-built
 /_build/
 /_build_kube_dev/
 /Dockerfile

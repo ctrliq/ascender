@@ -217,8 +217,7 @@ function ShowChangesToggle() {
       <Switch
         aria-label={field.value ? t`On` : t`Off`}
         id="prompt-show-changes"
-        label={t`On`}
-
+        label={field.value ? t`On` : t`Off`}
         isChecked={field.value}
         onChange={helpers.setValue}
         ouiaId="prompt-show-changes"

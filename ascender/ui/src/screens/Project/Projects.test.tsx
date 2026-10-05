@@ -31,7 +31,7 @@ describe('<Projects />', () => {
     expect(screen.getByText('ProjectsList')).toBeInTheDocument();
     // streamType="project" wires the activity stream link query param
     expect(
-      screen.getByRole('link', { name: 'View activity stream' })
+      screen.getByRole('link', { name: 'View Activity Stream' })
     ).toHaveAttribute('href', '/activity_stream?type=project');
   });
 });

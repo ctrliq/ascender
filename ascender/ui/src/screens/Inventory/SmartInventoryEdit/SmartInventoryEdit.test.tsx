@@ -1,4 +1,4 @@
-import type { Inventory } from 'types/api';
+import type { Inventory, OptionsResponse, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -46,6 +46,13 @@ vi.mock('../shared/SmartInventoryForm', () => ({
   },
 }));
 
+/** What the screen reads and hands down, in place of this screen reading. */
+const formOptions = { actions: { POST: true } } as unknown as OptionsResponse;
+const instanceGroups = [
+  { id: 10, name: 'instance-group-10' },
+  { id: 20, name: 'instance-group-20' },
+] as unknown as SummaryFieldRef[];
+
 describe('<SmartInventoryEdit />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.update).mockResolvedValue({
@@ -67,22 +74,12 @@ describe('<SmartInventoryEdit />', () => {
     vi.clearAllMocks();
   });
 
-  test('should fetch related instance groups on initial render', async () => {
-    renderWithContexts(
-      <SmartInventoryEdit
-        inventory={{ ...mockSmartInv } as unknown as Inventory}
-      />
-    );
-    expect(
-      await screen.findByRole('button', { name: 'mock-submit' })
-    ).toBeInTheDocument();
-    expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
-  });
-
   test('should post to the api when submit is clicked', async () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit
         inventory={{ ...mockSmartInv } as unknown as Inventory}
+        formOptions={formOptions}
+        instanceGroups={instanceGroups}
       />
     );
     await user.click(
@@ -100,6 +97,8 @@ describe('<SmartInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit
         inventory={{ ...mockSmartInv } as unknown as Inventory}
+        formOptions={formOptions}
+        instanceGroups={instanceGroups}
       />,
       { context: { router: { history } } }
     );
@@ -121,6 +120,8 @@ describe('<SmartInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit
         inventory={{ ...mockSmartInv } as unknown as Inventory}
+        formOptions={formOptions}
+        instanceGroups={instanceGroups}
       />,
       { context: { router: { history } } }
     );
@@ -138,6 +139,8 @@ describe('<SmartInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit
         inventory={{ ...mockSmartInv } as unknown as Inventory}
+        formOptions={formOptions}
+        instanceGroups={instanceGroups}
       />
     );
     await user.click(
@@ -145,20 +148,5 @@ describe('<SmartInventoryEdit />', () => {
     );
 
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
-  });
-
-  test('should throw content error', async () => {
-    vi.mocked(InventoriesAPI.readInstanceGroups).mockRejectedValueOnce(
-      new Error()
-    );
-    renderWithContexts(
-      <SmartInventoryEdit
-        inventory={{ ...mockSmartInv } as unknown as Inventory}
-      />
-    );
-
-    expect(
-      await screen.findByText(/There was an error loading this content/i)
-    ).toBeInTheDocument();
   });
 });

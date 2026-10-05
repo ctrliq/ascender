@@ -108,7 +108,7 @@ function mockAllCategories() {
 
 async function setup(category: string, context?: TestContexts) {
   const history = createMemoryHistory({
-    initialEntries: [`/settings/github/${category}/details`],
+    initialEntries: [`/authentication/github/${category}/details`],
   });
   const mergedContext = {
     ...context,
@@ -117,7 +117,7 @@ async function setup(category: string, context?: TestContexts) {
   const utils = renderWithContexts(
     <Routes>
       <Route
-        path="/settings/github/:category/details"
+        path="/authentication/github/:category/details"
         element={
           <SettingsProvider value={settingOptions}>
             <GitHubDetail />
@@ -141,22 +141,6 @@ describe('<GitHubDetail />', () => {
   describe('Default', () => {
     beforeEach(() => {
       mockAllCategories();
-    });
-
-    test('should render expected tabs', async () => {
-      await setup('default');
-      const expectedTabs = [
-        'Back to Settings',
-        'GitHub Default',
-        'GitHub Organization',
-        'GitHub Team',
-        'GitHub Enterprise',
-        'GitHub Enterprise Organization',
-        'GitHub Enterprise Team',
-      ];
-      expectedTabs.forEach((tab) => {
-        expect(screen.getByText(tab)).toBeInTheDocument();
-      });
     });
 
     test('should render expected details', async () => {
@@ -326,12 +310,12 @@ describe('<GitHubDetail />', () => {
     test('should redirect when user navigates to erroneous category', async () => {
       mockAllCategories();
       const history = createMemoryHistory({
-        initialEntries: ['/settings/github/foo/details'],
+        initialEntries: ['/authentication/github/foo/details'],
       });
       renderWithContexts(
         <Routes>
           <Route
-            path="/settings/github/:category/details"
+            path="/authentication/github/:category/details"
             element={
               <SettingsProvider value={settingOptions}>
                 <GitHubDetail />
@@ -343,7 +327,7 @@ describe('<GitHubDetail />', () => {
       );
       await waitFor(() =>
         expect(history.location.pathname).toEqual(
-          '/settings/github/default/details'
+          '/authentication/github/default/details'
         )
       );
     });

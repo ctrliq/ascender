@@ -79,7 +79,7 @@ describe('getScheduleUrl', () => {
       },
     };
     expect(getScheduleUrl(systemJob as unknown as Job | UnifiedJob)).toEqual(
-      '/management_jobs/9/schedules/10/details'
+      '/cleanup_jobs/9/schedules/10/details'
     );
   });
   test('should return expected schedule URL for workflow job', () => {

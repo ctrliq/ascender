@@ -110,6 +110,18 @@ describe('<HostGroupsList />', () => {
         },
       },
     } as unknown as ResponseOf<typeof HostsAPI.readGroupsOptions>);
+    vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
+      data: {
+        actions: {
+          GET: {
+            module_name: {
+              choices: [['command', 'command']],
+            },
+          },
+          POST: {},
+        },
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
   });
 
   afterEach(() => {
@@ -169,7 +181,9 @@ describe('<HostGroupsList />', () => {
   test('should show add button according to permissions', async () => {
     const { unmount } = renderList();
     expect(await screen.findByText('foo')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Associate' })
+    ).toBeInTheDocument();
     unmount();
 
     vi.mocked(HostsAPI.readGroupsOptions).mockResolvedValueOnce({
@@ -182,9 +196,50 @@ describe('<HostGroupsList />', () => {
     renderList();
     await screen.findByText('foo');
     expect(
-      screen.queryByRole('button', { name: 'Add' })
+      screen.queryByRole('button', { name: 'Associate' })
     ).not.toBeInTheDocument();
   });
+
+  test('offers a run on the inventory the host is in', async () => {
+    renderList();
+    await screen.findByRole('link', { name: 'foo' });
+
+    expect(screen.getByRole('button', { name: 'Run' })).toBeInTheDocument();
+    expect(InventoriesAPI.readAdHocOptions).toHaveBeenCalledWith(1);
+  });
+
+  // Nothing ticked is this host, not every host in its inventory.
+  test('says Run on Host with nothing ticked', async () => {
+    const { user } = renderList();
+    await screen.findByRole('link', { name: 'foo' });
+
+    await user.hover(screen.getByRole('button', { name: 'Run' }));
+    expect(await screen.findByText('Run on Host')).toBeInTheDocument();
+  });
+
+  test.each(['constructed', 'federated'])(
+    'offers no Associate or Disassociate for a host in a %s inventory',
+    async (kind) => {
+      renderList({
+        host: {
+          summary_fields: { inventory: { id: 1, kind } },
+        } as unknown as Host,
+      });
+      await screen.findByRole('link', { name: 'foo' });
+
+      expect(
+        screen.queryByRole('button', { name: 'Associate' })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Disassociate' })
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Run' })).toBeInTheDocument();
+      // Nor an Actions column, whose rows would have nothing in it.
+      expect(
+        screen.queryByRole('columnheader', { name: 'Actions' })
+      ).not.toBeInTheDocument();
+    }
+  );
 
   test('should show associate group modal when adding an existing group', async () => {
     vi.mocked(InventoriesAPI.readGroups).mockResolvedValue({
@@ -196,12 +251,12 @@ describe('<HostGroupsList />', () => {
     const { user } = renderList();
     await screen.findByRole('link', { name: 'foo' });
 
-    await user.click(screen.getByRole('button', { name: 'Add' }));
-    expect(await screen.findByText('Select Groups')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
+    expect(await screen.findByText('Associate Groups')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await settleTooltips();
-    expect(screen.queryByText('Select Groups')).not.toBeInTheDocument();
+    expect(screen.queryByText('Associate Groups')).not.toBeInTheDocument();
   });
 
   test('should make expected api request when associating groups', async () => {
@@ -228,14 +283,14 @@ describe('<HostGroupsList />', () => {
     const { user } = renderList();
     await screen.findByRole('link', { name: 'foo' });
 
-    await user.click(screen.getByRole('button', { name: 'Add' }));
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     const associateItem = await screen.findByText('associate me');
     const associateRow = associateItem.closest('tr');
     await user.click(within(associateRow!).getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
 
     await settleTooltips();
-    expect(screen.queryByText('Select Groups')).not.toBeInTheDocument();
+    expect(screen.queryByText('Associate Groups')).not.toBeInTheDocument();
     expect(InventoriesAPI.readGroups).toHaveBeenCalledTimes(1);
     expect(HostsAPI.associateGroup).toHaveBeenCalledTimes(1);
   });
@@ -257,11 +312,11 @@ describe('<HostGroupsList />', () => {
 
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     expect(
-      await screen.findByText('Disassociate group from host?')
+      await screen.findByText('Disassociate the host from these groups?')
     ).toBeInTheDocument();
 
     await user.click(
-      screen.getByRole('button', { name: 'confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
 
     await waitFor(() =>
@@ -278,11 +333,11 @@ describe('<HostGroupsList />', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     expect(
-      await screen.findByText('Disassociate group from host?')
+      await screen.findByText('Disassociate the host from these groups?')
     ).toBeInTheDocument();
 
     await user.click(
-      screen.getByRole('button', { name: 'confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();

@@ -106,13 +106,13 @@ function FederatedInventoryDetail({
           }
         />
         <Detail
-          label={t`Total hosts`}
+          label={t`Total Hosts`}
           value={inventory.total_hosts}
           helpText={actions?.total_hosts?.help_text}
           dataCy="federated-inventory-total-hosts"
         />
         <Detail
-          label={t`Total groups`}
+          label={t`Total Groups`}
           value={inventory.total_groups}
           helpText={actions?.total_groups?.help_text}
           dataCy="federated-inventory-total-groups"
@@ -171,7 +171,7 @@ function FederatedInventoryDetail({
           user={inventory.summary_fields.created_by}
         />
         <UserDateDetail
-          label={t`Modified`}
+          label={t`Last Modified`}
           date={inventory.modified}
           user={inventory.summary_fields.modified_by}
         />

@@ -3,12 +3,13 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 
-import { Popover, Tooltip } from '@patternfly/react-core';
+import { Popover } from '@patternfly/react-core';
 import { ExclamationTriangleIcon as PFExclamationTriangleIcon } from '@patternfly/react-icons';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { Detail } from '../DetailList';
 import './ExecutionEnvironmentDetail.css';
+import Tooltip from '../Tooltip';
 
 export interface ExecutionEnvironmentDetailProps {
   /**

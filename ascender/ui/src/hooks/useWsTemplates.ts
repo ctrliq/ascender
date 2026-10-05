@@ -8,7 +8,7 @@ export default function useWsTemplates(
 ) {
   const [templates, setTemplates] =
     useState<AnyUnifiedJobTemplate[]>(initialTemplates);
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
   });
@@ -17,28 +17,23 @@ export default function useWsTemplates(
     setTemplates(initialTemplates);
   }, [initialTemplates]);
 
-  useEffect(
-    () => {
-      if (!lastMessage?.unified_job_id) {
+  // Every message in the batch is applied, each on the templates the one
+  // before it left, so two jobs of one template finishing together both show
+  // in its sparkline.
+  useEffect(() => {
+    messages.forEach((message) => {
+      if (!message.unified_job_id) {
         return;
       }
-      const index = templates.findIndex(
-        (t) => t.id === lastMessage.unified_job_template_id
+      setTemplates((current) =>
+        current.map((template) =>
+          template.id === message.unified_job_template_id
+            ? updateTemplate(template, message)
+            : template
+        )
       );
-      if (index === -1) {
-        return;
-      }
-
-      const template = templates[index];
-      if (!template) {
-        return;
-      }
-      const updated = [...templates];
-      updated[index] = updateTemplate(template, lastMessage);
-      setTemplates(updated);
-    },
-    [lastMessage] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+    });
+  }, [messages]);
 
   return templates;
 }

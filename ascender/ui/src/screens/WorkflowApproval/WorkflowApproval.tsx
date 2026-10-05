@@ -55,9 +55,7 @@ function WorkflowApproval({ setBreadcrumb }: WorkflowApprovalProps) {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Workflow Approval not found.`}{' '}
-                <Link to="/workflow_approvals">
-                  {t`View all Workflow Approvals.`}
-                </Link>
+                <Link to="/approvals">{t`View all Approvals.`}</Link>
               </span>
             )}
           </ContentError>
@@ -71,16 +69,16 @@ function WorkflowApproval({ setBreadcrumb }: WorkflowApprovalProps) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Workflow Approvals`}
+          {t`Back to Approvals`}
         </>
       ),
-      link: `/workflow_approvals`,
+      link: `/approvals`,
       persistentFilterKey: 'workflowApprovals',
       id: 99,
     },
     {
       name: t`Details`,
-      link: `/workflow_approvals/${workflowApprovalId}/details`,
+      link: `/approvals/${workflowApprovalId}/details`,
       id: 0,
     },
   ];
@@ -107,9 +105,7 @@ function WorkflowApproval({ setBreadcrumb }: WorkflowApprovalProps) {
               !isLoading ? (
                 <ContentError isNotFound>
                   {workflowApprovalId && (
-                    <Link
-                      to={`/workflow_approvals/${workflowApprovalId}/details`}
-                    >
+                    <Link to={`/approvals/${workflowApprovalId}/details`}>
                       {t`View Workflow Approval Details`}
                     </Link>
                   )}

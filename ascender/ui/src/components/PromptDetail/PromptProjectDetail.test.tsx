@@ -1,6 +1,6 @@
 import type { Project } from 'types/api';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import {
   renderWithContexts,
   assertDetail,
@@ -30,7 +30,7 @@ describe('PromptProjectDetail', () => {
       'Source Control URL',
       'https://github.com/ansible/ansible-tower-samples'
     );
-    assertDetail('Source Control Branch', 'foo');
+    assertDetail('Source Control Branch/Tag/Commit', 'foo');
     assertDetail('Source Control Refspec', 'refs/');
     assertDetail('Cache Timeout', '3 seconds');
     assertDetail('Project Base Path', 'dir/foo/bar');
@@ -41,20 +41,18 @@ describe('PromptProjectDetail', () => {
       mockProject.summary_fields.default_environment.name
     );
 
-    // Enabled Options renders one <li> per enabled flag
+    // Options renders one <li> per enabled flag, named as on the form
     expect(
-      screen.getByText('Discard local changes before syncing')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Delete the project before syncing')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Track submodules latest commit on branch')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Update revision on job launch')
-    ).toBeInTheDocument();
-    expect(screen.getByText('Allow branch override')).toBeInTheDocument();
+      within(screen.getByText('Options').nextElementSibling as HTMLElement)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual([
+      'Clean',
+      'Delete',
+      'Track Submodules',
+      'Update Revision on Launch',
+      'Allow Branch Override',
+    ]);
   });
 
   test('should render "Deleted" details', () => {

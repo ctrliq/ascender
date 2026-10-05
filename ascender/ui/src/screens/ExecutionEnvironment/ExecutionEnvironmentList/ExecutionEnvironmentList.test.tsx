@@ -112,7 +112,11 @@ describe('<ExecutionEnvironmentList/>', () => {
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     fireEvent.click(await screen.findByLabelText('confirm delete'));
 
-    expect(await screen.findByLabelText('Deletion error')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Deletion Error')).toBeInTheDocument();
+    expect(screen.getByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to delete one or more execution environments.')
+    ).toBeInTheDocument();
   });
 
   test('should show a content error when the fetch fails', async () => {

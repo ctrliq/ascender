@@ -74,10 +74,10 @@ describe('<ConstructedInventoryForm />', () => {
     expect(screen.getByText('Organization')).toBeInTheDocument();
     expect(screen.getByText('Instance Groups')).toBeInTheDocument();
     expect(screen.getByText('Input Inventories')).toBeInTheDocument();
-    expect(screen.getByText('Cache timeout (seconds)')).toBeInTheDocument();
+    expect(screen.getByText('Cache Timeout (Seconds)')).toBeInTheDocument();
     expect(screen.getByText('Verbosity')).toBeInTheDocument();
     expect(screen.getByText('Limit')).toBeInTheDocument();
-    expect(screen.getByText('Source vars')).toBeInTheDocument();
+    expect(screen.getByText('Source Variables')).toBeInTheDocument();
     // ConstructedInventoryHint renders its expandable alert title.
     expect(
       screen.getByText('How to use constructed inventory plugin')
@@ -114,11 +114,11 @@ describe('<ConstructedInventoryForm />', () => {
   // asserts the field is wired (label renders, isRequired marker present) and
   // that the form's required validators block submission until the required
   // fields are satisfied, which is the same behaviour from the outside.
-  test('Source vars field is rendered and required validators block submit', async () => {
+  test('Source Variables field is rendered and required validators block submit', async () => {
     const { user, container } = renderForm();
     await screen.findByRole('button', { name: 'Save' });
 
-    expect(screen.getByText('Source vars')).toBeInTheDocument();
+    expect(screen.getByText('Source Variables')).toBeInTheDocument();
 
     // Provide a name but leave the required input inventories empty; submitting
     // must surface the required-field error and must not call onSubmit.

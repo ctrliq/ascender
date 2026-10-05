@@ -237,6 +237,8 @@ class AscenderSettings(Protocol):
     CUSTOM_LOGO: str
     CUSTOM_THEME: str
     CUSTOM_THEME_NAME: str
+    DEFAULT_UI_THEME: str
+    DEFAULT_UI_LANGUAGE: str
     CUSTOM_TITLE: str
     DATABASES: dict[str, Any]
     DATABASE_CONN_MAX_AGE: Any
@@ -381,6 +383,7 @@ class AscenderSettings(Protocol):
     MAX_EVENT_RES_DATA: int
     MAX_FORKS: int
     MAX_PAGE_SIZE: int
+    MAX_UI_EDITOR_ROWS: int
     MAX_UI_JOB_EVENTS: int
     MAX_WEBSOCKET_EVENT_RATE: int
     MEDIA_ROOT: str
@@ -414,9 +417,6 @@ class AscenderSettings(Protocol):
     PROJECTS_ROOT: str
     PROJECT_UPDATE_VVV: bool
     PROXY_IP_ALLOWED_LIST: list[Any]
-    RADIUS_PORT: int
-    RADIUS_SECRET: str
-    RADIUS_SERVER: str
     RECEPTOR_LOG_LEVEL: str
     RECEPTOR_RELEASE_WORK: bool
     RECEPTOR_SERVICE_ADVERTISEMENT_PERIOD: int
@@ -599,12 +599,6 @@ class AscenderSettings(Protocol):
     SUBSYSTEM_METRICS_TASK_MANAGER_RECORD_INTERVAL: int
     SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX: str
     SYSTEM_UUID: str
-    TACACSPLUS_AUTH_PROTOCOL: str
-    TACACSPLUS_HOST: str
-    TACACSPLUS_PORT: int
-    TACACSPLUS_REM_ADDR: bool
-    TACACSPLUS_SECRET: str
-    TACACSPLUS_SESSION_TIMEOUT: int
     TASKS: dict[str, Any]
     TASK_MANAGER_TIMEOUT: int
     TASK_MANAGER_TIMEOUT_GRACE_PERIOD: int

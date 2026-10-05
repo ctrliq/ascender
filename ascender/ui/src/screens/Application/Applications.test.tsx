@@ -86,7 +86,7 @@ describe('<Applications />', () => {
   test('shows the information modal after a successful creation', async () => {
     const { user } = renderAt('/applications/add');
     expect(
-      screen.queryByRole('dialog', { name: /Application information/ })
+      screen.queryByRole('dialog', { name: /Application Information/ })
     ).not.toBeInTheDocument();
 
     await user.click(
@@ -94,7 +94,7 @@ describe('<Applications />', () => {
     );
 
     const dialog = await screen.findByRole('dialog', {
-      name: /Application information/,
+      name: /Application Information/,
     });
     // the name renders as a plain Detail value (client_id/secret sit inside
     // collapsed ClipboardCopy expansions, so they are not queried here)

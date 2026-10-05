@@ -143,35 +143,36 @@ def test_empty_ldap_dn(get, put, patch, delete, admin, setting):
 
 
 @pytest.mark.django_db
-def test_radius_settings(get, put, patch, delete, admin, settings):
-    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'radius'})
+def test_encrypted_setting_round_trip(get, put, patch, delete, admin, settings):
+    """An encrypted setting reads back as $encrypted$ and is stored encrypted."""
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'ldap'})
     response = get(url, user=admin, expect=200)
     put(url, user=admin, data=response.data, expect=200)
     # Set secret via the API.
-    patch(url, user=admin, data={'RADIUS_SECRET': 'mysecret'}, expect=200)
+    patch(url, user=admin, data={'AUTH_LDAP_BIND_PASSWORD': 'mysecret'}, expect=200)
     response = get(url, user=admin, expect=200)
-    assert response.data['RADIUS_SECRET'] == '$encrypted$'
-    assert Setting.objects.filter(key='RADIUS_SECRET').first().value.startswith('$encrypted$')
-    assert settings.RADIUS_SECRET == 'mysecret'
+    assert response.data['AUTH_LDAP_BIND_PASSWORD'] == '$encrypted$'
+    assert Setting.objects.filter(key='AUTH_LDAP_BIND_PASSWORD').first().value.startswith('$encrypted$')
+    assert settings.AUTH_LDAP_BIND_PASSWORD == 'mysecret'
     # Set secret via settings wrapper.
     settings_wrapper = settings._ascender_conf_settings
-    settings_wrapper.RADIUS_SECRET = 'mysecret2'
+    settings_wrapper.AUTH_LDAP_BIND_PASSWORD = 'mysecret2'
     response = get(url, user=admin, expect=200)
-    assert response.data['RADIUS_SECRET'] == '$encrypted$'
-    assert Setting.objects.filter(key='RADIUS_SECRET').first().value.startswith('$encrypted$')
-    assert settings.RADIUS_SECRET == 'mysecret2'
+    assert response.data['AUTH_LDAP_BIND_PASSWORD'] == '$encrypted$'
+    assert Setting.objects.filter(key='AUTH_LDAP_BIND_PASSWORD').first().value.startswith('$encrypted$')
+    assert settings.AUTH_LDAP_BIND_PASSWORD == 'mysecret2'
     # If we send back $encrypted$, the setting is not updated.
-    patch(url, user=admin, data={'RADIUS_SECRET': '$encrypted$'}, expect=200)
+    patch(url, user=admin, data={'AUTH_LDAP_BIND_PASSWORD': '$encrypted$'}, expect=200)
     response = get(url, user=admin, expect=200)
-    assert response.data['RADIUS_SECRET'] == '$encrypted$'
-    assert Setting.objects.filter(key='RADIUS_SECRET').first().value.startswith('$encrypted$')
-    assert settings.RADIUS_SECRET == 'mysecret2'
+    assert response.data['AUTH_LDAP_BIND_PASSWORD'] == '$encrypted$'
+    assert Setting.objects.filter(key='AUTH_LDAP_BIND_PASSWORD').first().value.startswith('$encrypted$')
+    assert settings.AUTH_LDAP_BIND_PASSWORD == 'mysecret2'
     # If we send an empty string, the setting is also set to an empty string.
-    patch(url, user=admin, data={'RADIUS_SECRET': ''}, expect=200)
+    patch(url, user=admin, data={'AUTH_LDAP_BIND_PASSWORD': ''}, expect=200)
     response = get(url, user=admin, expect=200)
-    assert response.data['RADIUS_SECRET'] == ''
-    assert Setting.objects.filter(key='RADIUS_SECRET').first().value == ''
-    assert settings.RADIUS_SECRET == ''
+    assert response.data['AUTH_LDAP_BIND_PASSWORD'] == ''
+    assert Setting.objects.filter(key='AUTH_LDAP_BIND_PASSWORD').first().value == ''
+    assert settings.AUTH_LDAP_BIND_PASSWORD == ''
 
 
 @pytest.mark.django_db
@@ -188,21 +189,6 @@ def test_login_redirect_override_scheme(get, patch, admin, settings):
     assert 'LOGIN_REDIRECT_OVERRIDE' in response.data
     assert settings.LOGIN_REDIRECT_OVERRIDE == 'https://idp.example.com/start'
     patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': ''}, expect=200)
-
-
-@pytest.mark.django_db
-def test_tacacsplus_settings(get, put, patch, admin):
-    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'tacacsplus'})
-    response = get(url, user=admin, expect=200)
-    put(url, user=admin, data=response.data, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_SECRET': 'mysecret'}, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_SECRET': ''}, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_HOST': 'localhost'}, expect=400)
-    patch(url, user=admin, data={'TACACSPLUS_SECRET': 'mysecret'}, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_HOST': 'localhost'}, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_HOST': '', 'TACACSPLUS_SECRET': ''}, expect=200)
-    patch(url, user=admin, data={'TACACSPLUS_HOST': 'localhost', 'TACACSPLUS_SECRET': ''}, expect=400)
-    patch(url, user=admin, data={'TACACSPLUS_HOST': 'localhost', 'TACACSPLUS_SECRET': 'mysecret'}, expect=200)
 
 
 @pytest.mark.django_db

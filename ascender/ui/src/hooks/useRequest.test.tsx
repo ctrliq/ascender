@@ -100,6 +100,46 @@ describe('useRequest hooks', () => {
       expect(latest().result).toEqual({ data: 'foo' });
     });
 
+    /*
+     * Two requests in flight at once is ordinary as soon as a list searches
+     * while it is typed in, and the slower of them can answer last.
+     */
+    test('should keep the newest result when an older answer lands last', async () => {
+      let resolveSlow: (value: unknown) => void = () => {};
+      let resolveFast: (value: unknown) => void = () => {};
+      const slow = new Promise((r) => {
+        resolveSlow = r;
+      });
+      const fast = new Promise((r) => {
+        resolveFast = r;
+      });
+      const makeRequest = vi
+        .fn()
+        .mockReturnValueOnce(slow)
+        .mockReturnValueOnce(fast);
+      render(<Test makeRequest={makeRequest} />);
+
+      let first: Promise<unknown> | undefined;
+      let second: Promise<unknown> | undefined;
+      await act(async () => {
+        first = latest().request();
+        second = latest().request();
+      });
+
+      await act(async () => {
+        resolveFast({ data: 'newest' });
+        await second;
+      });
+      expect(latest().result).toEqual({ data: 'newest' });
+
+      await act(async () => {
+        resolveSlow({ data: 'oldest' });
+        await first;
+      });
+      expect(latest().result).toEqual({ data: 'newest' });
+      expect(latest().isLoading).toEqual(false);
+    });
+
     test('should invoke request function', async () => {
       const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });

@@ -30,7 +30,7 @@ const JOB_TYPE_URL_SEGMENT_MAP = {
 };
 
 // The menu takes its minimum width from the toggle, and the toggle is only as
-// wide as what it holds: picking a status swaps "Workflow Job 3/12" for a single
+// wide as what it holds: picking a status swaps "Job 3/12" for a single
 // short chip, which collapsed the toggle and the menu with it, down to the width
 // of the filter input and truncating the node names. A floor keeps both usable,
 // and leaves room for the longer translations of the position text.
@@ -87,7 +87,7 @@ function WorkflowOutputNavigation({
   // {currentPosition}/{total} rather than leaving translators with a
   // positional {0}
   const positionLabel = (currentPosition: number) =>
-    t`Workflow Job ${currentPosition}/${total}`;
+    t`Job ${currentPosition}/${total}`;
 
   const statusLabels = {
     Failed: t`Failed`,
@@ -154,7 +154,7 @@ function WorkflowOutputNavigation({
     if (!segment) {
       return;
     }
-    navigate(`/jobs/${segment}/${job?.id}/output`);
+    navigate(`/runs/${segment}/${job?.id}/output`);
   };
 
   return (
@@ -189,7 +189,7 @@ function WorkflowOutputNavigation({
           {!filterBy &&
             (viewedPosition > 0
               ? positionLabel(viewedPosition)
-              : t`Workflow Jobs (${total})`)}
+              : t`Jobs (${total})`)}
         </MenuToggle>
       )}
     >

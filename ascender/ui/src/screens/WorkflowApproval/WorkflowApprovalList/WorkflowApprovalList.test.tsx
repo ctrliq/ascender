@@ -1,5 +1,6 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
+import WS from 'vitest-websocket-mock';
 import { WorkflowApprovalsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
@@ -147,5 +148,67 @@ describe('<WorkflowApprovalList />', () => {
     );
     // closing the modal refocuses the Tooltip-wrapped toolbar Delete button
     await settleTooltips();
+  });
+
+  /*
+   * The selection is a copy of each row taken when it was ticked. When an
+   * approval is acted on elsewhere the list reads itself again, and the
+   * toolbar must decide on the approval as it is now rather than offer an
+   * Approve or Deny the api would refuse.
+   */
+  test('stops offering Approve and Deny once a ticked approval is acted on', async () => {
+    WS.clean();
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+    try {
+      const { user } = await renderList();
+      await mockServer.connected;
+
+      // The pending approval, id 218, is the first of the two rows its
+      // workflow gives the same link text.
+      const row = screen
+        .getAllByRole('link', { name: '216 - approval' })[0]!
+        .closest('tr');
+      await user.click(within(row!).getByRole('checkbox'));
+      // The rows carry Approve and Deny of their own, so the toolbar's are
+      // found by their ouia ids.
+      const toolbarButton = (id: string) =>
+        document.querySelector(`[data-ouia-component-id="${id}"]`);
+      const approve = () => toolbarButton('workflow-approval-approve-button');
+      const deny = () => toolbarButton('workflow-approval-deny-button');
+      expect(approve()).toBeEnabled();
+      expect(deny()).toBeEnabled();
+
+      vi.mocked(WorkflowApprovalsAPI.read).mockResolvedValue({
+        data: {
+          count: mockWorkflowApprovals.results.length,
+          results: mockWorkflowApprovals.results.map((approval) =>
+            approval.id === 218
+              ? {
+                  ...approval,
+                  status: 'successful',
+                  can_approve_or_deny: false,
+                }
+              : approval
+          ),
+        },
+      } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.read>);
+      await act(async () => {
+        mockServer.send(
+          JSON.stringify({
+            unified_job_id: 218,
+            type: 'workflow_approval',
+            status: 'successful',
+          })
+        );
+      });
+
+      await waitFor(() => expect(approve()).toBeDisabled(), { timeout: 4000 });
+      expect(deny()).toBeDisabled();
+      expect(within(row!).getByRole('checkbox')).toBeChecked();
+    } finally {
+      mockServer.close();
+      WS.clean();
+    }
   });
 });

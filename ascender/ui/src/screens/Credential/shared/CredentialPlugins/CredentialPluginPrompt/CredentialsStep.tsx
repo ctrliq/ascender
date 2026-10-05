@@ -62,6 +62,7 @@ function CredentialsStep() {
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Credentials`}
       contentError={credentialsError}
       hasContentLoading={isCredentialsLoading}
       itemCount={count}

@@ -5,7 +5,7 @@ import type {
   Schedule,
   SummaryFieldRef,
 } from 'types/api';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
@@ -46,6 +46,15 @@ function SchedulePromptableFields({
 }: SchedulePromptableFieldsProps) {
   const { setFieldTouched, values, initialValues, resetForm } =
     useFormContext<ScheduleFormValues>();
+  /*
+   * An empty survey where the template has none, and the same one for as long
+   * as the wizard is open: the hook seeds the prompted fields only once it has
+   * a survey config, and seeds them again whenever it changes.
+   */
+  const promptSurveyConfig = useMemo(
+    () => surveyConfig ?? ({} as SurveyConfig),
+    [surveyConfig]
+  );
   const {
     steps,
     visitStep,
@@ -54,9 +63,7 @@ function SchedulePromptableFields({
     contentError,
     isReady,
   } = useSchedulePromptSteps(
-    // The wizard only opens for a resource that prompts, which is what having
-    // these means.
-    surveyConfig as SurveyConfig,
+    promptSurveyConfig,
     launchConfig as LaunchConfig,
     schedule,
     resource,

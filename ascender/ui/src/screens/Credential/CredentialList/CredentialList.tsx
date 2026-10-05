@@ -20,6 +20,7 @@ import useCachedRequest from 'hooks/useCachedRequest';
 import { useDeleteItems } from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import ResourceTabs from 'components/ResourceTabs';
 import CredentialListItem from './CredentialListItem';
 
 const QS_CONFIG = getQSConfig('credential', {
@@ -127,6 +128,16 @@ function CredentialList() {
     <>
       <PageSection hasBodyWrapper={false}>
         <Card>
+          {/* Credential types are a variant of the same object, so they are a
+              tab here rather than a second item in the rail. */}
+          <ResourceTabs
+            aria-label={t`Credential tabs`}
+            ouiaId="credential-tabs"
+            tabs={[
+              { label: t`Credentials`, path: '/credentials' },
+              { label: t`Credential Types`, path: '/credential_types' },
+            ]}
+          />
           <PaginatedTable
             contentError={contentError}
             hasContentLoading={isLoading || isDeleteLoading}
@@ -186,7 +197,13 @@ function CredentialList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo="/credentials/add" />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add Credential`}
+                          key="add"
+                          linkTo="/credentials/add"
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"

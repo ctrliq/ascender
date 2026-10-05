@@ -27,10 +27,10 @@ function Credentials() {
         '/credentials': t`Credentials`,
         '/credentials/add': t`Create New Credential`,
         [`/credentials/${credential.id}`]: `${credential.name}`,
-        [`/credentials/${credential.id}/edit`]: t`Edit Details`,
-        [`/credentials/${credential.id}/details`]: t`Details`,
-        [`/credentials/${credential.id}/access`]: t`Access`,
-        [`/credentials/${credential.id}/job_templates`]: t`Job Templates`,
+        [`/credentials/${credential.id}/edit`]: t`Edit ${credential.name}`,
+        [`/credentials/${credential.id}/details`]: `${credential.name}`,
+        [`/credentials/${credential.id}/access`]: `${credential.name}`,
+        [`/credentials/${credential.id}/job_templates`]: `${credential.name}`,
       });
     },
     [t]

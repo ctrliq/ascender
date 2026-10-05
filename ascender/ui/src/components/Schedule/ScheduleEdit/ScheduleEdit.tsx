@@ -11,10 +11,8 @@ import type {
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
-import * as yaml from 'js-yaml';
 import { OrganizationsAPI, SchedulesAPI } from 'api';
 import { getAddedAndRemoved } from 'util/lists';
-import { parseVariableField } from 'util/yaml';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import createNewLabels from 'util/labels';
@@ -32,6 +30,70 @@ export interface ScheduleEditProps {
   surveyConfig?: SurveyConfig | null;
   resourceDefaultCredentials?: LaunchCredential[] | null;
   [key: string]: unknown;
+}
+
+/**
+ * The extra_data to save, starting from what the schedule already holds.
+ *
+ * The prompt values (the survey answers as survey_ fields and the variables
+ * as extra_vars) only reach the form once the Prompt wizard has been opened,
+ * which loads them from the schedule. Before that the form has neither, and
+ * building extra_data from nothing replaced the saved variables with the
+ * survey defaults and dropped every other variable. So an edit that never
+ * opened the wizard keeps extra_data as it was, only adding defaults for
+ * survey questions it has no answer to, and one that did starts from the
+ * loaded values, which are the schedule's saved answers.
+ *
+ * Args:
+ *   values: the form values at submit.
+ *   schedule: the schedule being edited, as loaded.
+ *   launchConfig: the template's launch configuration.
+ *   surveyConfig: the template's survey, if it has one.
+ *
+ * Returns:
+ *   The extra_data object for the request body.
+ */
+function buildExtraData(
+  values: ScheduleFormValues,
+  schedule: Schedule,
+  launchConfig?: LaunchConfig,
+  surveyConfig?: SurveyConfig | null
+): Record<string, unknown> {
+  const saved = { ...((schedule.extra_data ?? {}) as Record<string, unknown>) };
+  const keys = Object.keys(values);
+  const hasVariables = keys.includes('extra_vars');
+  const hasSurvey = keys.some((key) => key.startsWith('survey_'));
+  if (!hasVariables && !hasSurvey) {
+    // Nothing the schedule holds is touched. A survey question it has no
+    // answer for takes the question's default, which is what a new schedule
+    // saved without opening the wizard gets as well.
+    surveyConfig?.spec?.forEach((question: SurveyQuestion) => {
+      if (!(question.variable in saved) && question.default !== undefined) {
+        saved[question.variable] = question.default;
+      }
+    });
+    return saved;
+  }
+
+  // The variables editor, when it was loaded, is the whole set of variables;
+  // otherwise the schedule's own stay as they are.
+  let base: Record<string, unknown> = saved;
+  if (hasVariables && launchConfig?.ask_variables_on_launch) {
+    base = mergeExtraVars((values.extra_vars as string) || '---', {});
+  }
+  if (!hasSurvey || !surveyConfig?.spec) {
+    return base;
+  }
+
+  // The survey fields are the answers. A question left blank is not in
+  // surveyValues, so its saved answer is taken out of the base rather than
+  // carried back in from it.
+  const surveyValues = getSurveyValues(values);
+  const withoutAnswers = { ...base };
+  surveyConfig.spec.forEach((question: SurveyQuestion) => {
+    delete withoutAnswers[question.variable];
+  });
+  return { ...withoutAnswers, ...surveyValues };
 }
 
 function ScheduleEdit({
@@ -72,39 +134,21 @@ function ScheduleEdit({
     // What is left of the form values is the request body, which the handler
     // then adds the derived rrule and extra_data to.
     const submitValues: Record<string, unknown> = rest;
-    let extraVars;
-    const surveyValues = getSurveyValues(values);
-
-    if (
-      !Object.values(surveyValues).length &&
-      surveyConfiguration?.spec?.length
-    ) {
-      surveyConfiguration.spec.forEach((q: SurveyQuestion) => {
-        surveyValues[q.variable] = q.default;
-      });
-    }
-
-    // Empty string when the launch config does not prompt for variables,
-    // which is what mergeExtraVars treats as no overrides.
-    const initialExtraVars = launchConfiguration?.ask_variables_on_launch
-      ? (values.extra_vars as string) || '---'
-      : '';
-    if (surveyConfiguration?.spec) {
-      extraVars = yaml.dump(mergeExtraVars(initialExtraVars, surveyValues));
-    } else {
-      extraVars = yaml.dump(mergeExtraVars(initialExtraVars, {}));
-    }
-    submitValues.extra_data = extraVars && parseVariableField(extraVars);
-
-    if (
-      Object.keys(submitValues.extra_data as object).length === 0 &&
-      Object.keys((schedule.extra_data ?? {}) as object).length > 0
-    ) {
-      submitValues.extra_data = schedule.extra_data;
-    }
+    submitValues.extra_data = buildExtraData(
+      values,
+      schedule,
+      launchConfiguration,
+      surveyConfiguration
+    );
     delete values.extra_vars;
     if (inventory) {
       submitValues.inventory = inventory.id;
+    }
+    // A blank limit on a resource with none of its own is no answer at all.
+    // Stored as an empty string it would still override, and on a workflow
+    // it replaces every node's own limit with none on each scheduled run.
+    if (submitValues.limit === '' && !resource?.limit) {
+      submitValues.limit = null;
     }
 
     if (execution_environment) {

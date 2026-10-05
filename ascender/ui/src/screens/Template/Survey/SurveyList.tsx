@@ -160,8 +160,8 @@ function SurveyList({
   if (emptyList && !isLoading) {
     content = (
       <ContentEmpty
-        message={t`Please add survey questions.`}
-        title={t`No survey questions found.`}
+        message={t`Please add survey questions to populate this list`}
+        title={t`No Survey Questions Found`}
       />
     );
   }

@@ -130,7 +130,13 @@ function ApplicationsList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add Application`}
+                          key="add"
+                          linkTo={`${listUrl}/add`}
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -162,9 +168,6 @@ function ApplicationsList() {
                 rowIndex={index}
               />
             )}
-            emptyStateControls={
-              canAdd && <ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />
-            }
           />
         </Card>
       </PageSection>

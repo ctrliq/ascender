@@ -40,9 +40,12 @@
   padding: 0.875rem 0;
 }
 
-.ascender-detail-list dd .pf-v6-c-label {
-  margin-left: -6px;
-}
+/*
+ * No negative margin on a label in a value any more. It pulled a PF4 chip's
+ * text into line with the values around it; a PF6 label is a filled box, so
+ * the same pull stood the box six pixels left of its own label and of every
+ * other value in the column.
+ */
 
 .ascender-detail-list + .ascender-detail-list {
   margin-top: var(--pf-v6-global--spacer--2xl);
@@ -60,6 +63,23 @@
 .ascender-detail-value {
   overflow-wrap: break-word;
   margin: 0;
+}
+
+/*
+ * A label's help icon, kept on the line of the label's last word. Beside a long
+ * label the line broke between the two and left the icon alone under it. The
+ * icon now takes no room on the line, so wherever the last word fits the icon
+ * stays with it, drawn into room the label keeps clear at its end. The button
+ * is twenty six pixels wide, the last four of them padding that may overhang,
+ * so twenty two is the room the icon itself needs. The popover wraps its
+ * trigger in a box that draws as if it were not there, hence the div.
+ */
+.ascender-detail-name:has(> div > .ascender-popover__button) {
+  padding-inline-end: 22px;
+}
+
+.ascender-detail-name > div > .ascender-popover__button {
+  margin-inline-end: -26px;
 }
 
 .ascender-detail-name--full-width,

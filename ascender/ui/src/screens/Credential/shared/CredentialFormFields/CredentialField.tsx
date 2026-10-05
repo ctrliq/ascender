@@ -13,7 +13,6 @@ import {
   FormGroup,
   InputGroup,
   TextInput,
-  Tooltip,
   InputGroupItem,
   FormHelperText,
   HelperText,
@@ -23,6 +22,7 @@ import { PficonHistoryIcon } from '@patternfly/react-icons';
 import { PasswordInput } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { required } from 'util/validators';
+import Tooltip from 'components/Tooltip';
 import type { CredentialFormValues } from '../CredentialForm';
 import { CredentialPluginField } from '../CredentialPlugins';
 import BecomeMethodField from './BecomeMethodField';
@@ -140,12 +140,16 @@ function CredentialInput({
     const passwordInput = () => (
       <>
         {RevertReplaceButton}
-        <PasswordInput
-          isFieldGroupValid={isFieldGroupValid}
-          {...subFormField}
-          id={`credential-${fieldOptions.id}`}
-          {...rest}
-        />
+        {/* The password input is an input group of its own, so it takes an
+            item that fills whatever the plugin field's group leaves over. */}
+        <InputGroupItem isFill>
+          <PasswordInput
+            isFieldGroupValid={isFieldGroupValid}
+            {...subFormField}
+            id={`credential-${fieldOptions.id}`}
+            {...rest}
+          />
+        </InputGroupItem>
       </>
     );
     return credentialKind === 'external' ? (
@@ -185,7 +189,7 @@ function CredentialField({
   const validateField = () => {
     if (isRequired && !formikValues?.passwordPrompts[fieldOptions.id]) {
       const validationMsg = fieldOptions.ask_at_runtime
-        ? t`Provide a value for this field or select the Prompt on launch option.`
+        ? t`Provide a value for this field or select the Prompt on Launch option.`
         : null;
       return required(validationMsg);
     }

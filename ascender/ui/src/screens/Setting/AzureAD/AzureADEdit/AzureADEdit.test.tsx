@@ -43,7 +43,7 @@ describe('<AzureADEdit />', () => {
 
   async function renderEdit() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/azure/default/edit'],
+      initialEntries: ['/authentication/azure/default/edit'],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -64,19 +64,25 @@ describe('<AzureADEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('azuread-oauth2');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: '',
+      SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '',
+      SOCIAL_AUTH_AZUREAD_OAUTH2_ORGANIZATION_MAP: null,
+      SOCIAL_AUTH_AZUREAD_OAUTH2_TEAM_MAP: null,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -100,7 +106,7 @@ describe('<AzureADEdit />', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
-        '/settings/azure/default/details'
+        '/authentication/azure/default/details'
       )
     );
   });
@@ -109,7 +115,7 @@ describe('<AzureADEdit />', () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(
-      '/settings/azure/default/details'
+      '/authentication/azure/default/details'
     );
   });
 

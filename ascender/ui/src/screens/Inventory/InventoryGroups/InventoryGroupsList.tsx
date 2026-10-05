@@ -2,7 +2,7 @@ import type { Group } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Tooltip } from '@patternfly/react-core';
+
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useSelected from 'hooks/useSelected';
 import useCachedRequest from 'hooks/useCachedRequest';
@@ -14,7 +14,8 @@ import PaginatedTable, {
   ToolbarAddButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
+import Tooltip from 'components/Tooltip';
 import InventoryGroupItem from './InventoryGroupItem';
 import InventoryGroupsDeleteModal from '../shared/InventoryGroupsDeleteModal';
 import { isReadOnlyInventoryType } from '../shared/utils';
@@ -52,7 +53,7 @@ function InventoryGroupsList() {
     isLoading,
     request: fetchData,
   } = useCachedRequest(
-    ['inventory-groups-list', location.search],
+    ['inventory-groups-list', inventoryId, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, groupOptions, options] = await Promise.all([
@@ -113,6 +114,7 @@ function InventoryGroupsList() {
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Groups`}
       contentError={contentError}
       hasContentLoading={isLoading || isAdHocLaunchLoading}
       items={groups}
@@ -126,7 +128,7 @@ function InventoryGroupsList() {
           isDefault: true,
         },
         {
-          name: t`Group type`,
+          name: t`Group Type`,
           key: 'parents__isnull',
           options: [['true', t`Show only root groups`]],
         },
@@ -163,21 +165,21 @@ function InventoryGroupsList() {
           onSelectAll={selectAll}
           qsConfig={QS_CONFIG}
           additionalControls={[
+            <RunSelectionMenu
+              key="run"
+              ouiaId="inventory-groups-list-run-menu"
+              items={selected}
+              inventoryId={inventoryId}
+              moduleOptions={moduleOptions}
+              onLaunchLoading={setIsAdHocLaunchLoading}
+              canRunCommand={!isAdHocDisabled}
+            />,
             ...(canAdd
               ? [
                   <ToolbarAddButton
+                    tooltip={t`Add Group`}
                     key="add"
                     linkTo={`/inventories/inventory/${inventoryId}/groups/add`}
-                  />,
-                ]
-              : []),
-            ...(!isAdHocDisabled
-              ? [
-                  <AdHocCommands
-                    adHocItems={selected}
-                    hasListItems={groupCount > 0}
-                    onLaunchLoading={setIsAdHocLaunchLoading}
-                    moduleOptions={moduleOptions}
                   />,
                 ]
               : []),
@@ -206,14 +208,6 @@ function InventoryGroupsList() {
           ]}
         />
       )}
-      emptyStateControls={
-        canAdd && (
-          <ToolbarAddButton
-            key="add"
-            linkTo={`/inventories/inventory/${inventoryId}/groups/add`}
-          />
-        )
-      }
     />
   );
 }

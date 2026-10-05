@@ -70,10 +70,7 @@ function HostDetail({ host }: HostDetailProps) {
 
   return (
     <CardBody>
-      <HostToggle
-        className="ascender-host-detail__padding-bottom-40"
-        host={host}
-      />
+      <HostToggle className="ascender-host-detail__toggle-row" host={host} />
       <DetailList gutter="sm">
         <Detail label={t`Name`} value={name} dataCy="host-name" />
         <Detail
@@ -110,7 +107,7 @@ function HostDetail({ host }: HostDetailProps) {
         {user_capabilities?.edit && (
           <Button
             ouiaId="host-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={t`Edit`}
             component={Link}
             to={`/hosts/${id}/edit`}
           >

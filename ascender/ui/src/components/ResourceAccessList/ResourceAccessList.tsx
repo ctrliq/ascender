@@ -10,7 +10,9 @@ import { useLingui } from '@lingui/react/macro';
 import { RolesAPI, TeamsAPI, UsersAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useSelected from 'hooks/useSelected';
 import { useUserProfile } from 'contexts/Config';
+import DisassociateButton from '../DisassociateButton';
 import AddResourceRole from '../AddRole/AddResourceRole';
 import AlertModal from '../AlertModal';
 import DataListToolbar from '../DataListToolbar';
@@ -21,9 +23,26 @@ import PaginatedTable, {
   getSearchableKeys,
 } from '../PaginatedTable';
 import DeleteRoleConfirmationModal from './DeleteRoleConfirmationModal';
-import ResourceAccessListItem from './ResourceAccessListItem';
+import ResourceAccessListItem, {
+  removableRoles,
+} from './ResourceAccessListItem';
 import type { AccessRecord, AccessRole } from './ResourceAccessListItem';
 import ErrorDetail from '../ErrorDetail';
+
+/**
+ * How many roles a row shows, directly held and inherited alike. A row stays
+ * in the list for as long as it has one, which is what decides whether taking
+ * roles off leaves the page empty.
+ *
+ * Args:
+ *   record: The user's access record on this resource.
+ *
+ * Returns:
+ *   The number of roles the record carries.
+ */
+const roleCount = (record: AccessRecord): number =>
+  (record.summary_fields?.direct_access?.length ?? 0) +
+  (record.summary_fields?.indirect_access?.length ?? 0);
 
 const QS_CONFIG = getQSConfig('access', {
   page: 1,
@@ -156,7 +175,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     clearDeletionError,
   } = useDeleteItems(
     useCallback(() => {
-      // Both are set by the row's delete button before the modal opens.
+      // Both are set by the role chip's close button before the modal opens.
       const role = deletionRole as AccessRole;
       if (typeof role.team_id !== 'undefined') {
         return TeamsAPI.disassociateRole(role.team_id, role.id);
@@ -169,9 +188,81 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     }, [deletionRole]),
     {
       qsConfig: QS_CONFIG,
+      // The page empties, and so steps back one, only when its one row loses
+      // its one role.
+      allItemsSelected:
+        accessRecords.length === 1 &&
+        deletionRecord !== null &&
+        roleCount(deletionRecord) === 1,
       fetchItems: fetchAccessRecords,
     }
   );
+
+  /*
+   * The toolbar's Disassociate takes each ticked user's own roles on this resource
+   * off, the ones a chip would, all at once. Only a user holding one of those
+   * can be ticked, and the confirmation names every role that goes.
+   */
+  const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
+    useSelected<AccessRecord>(
+      accessRecords.filter(
+        (record: AccessRecord) => removableRoles(record).length > 0
+      )
+    );
+  const {
+    isLoading: isBulkRemoveLoading,
+    deleteItems: removeSelectedAccess,
+    deletionError: bulkRemoveError,
+    clearDeletionError: clearBulkRemoveError,
+  } = useDeleteItems(
+    useCallback(
+      () =>
+        Promise.all(
+          selected.flatMap((record) =>
+            removableRoles(record).map((role) =>
+              UsersAPI.disassociateRole(record.id, role.id)
+            )
+          )
+        ),
+      [selected]
+    ),
+    {
+      qsConfig: QS_CONFIG,
+      /*
+       * Every row on the page ticked is not enough to empty it: a user who
+       * keeps a team's role or an inherited one stays listed. The page steps
+       * back only when every row is ticked and every role on it goes.
+       */
+      allItemsSelected:
+        accessRecords.length > 0 &&
+        accessRecords.every(
+          (record: AccessRecord) =>
+            selected.some((row) => row.id === record.id) &&
+            removableRoles(record).length === roleCount(record)
+        ),
+      fetchItems: fetchAccessRecords,
+    }
+  );
+  const handleRemoveSelected = async () => {
+    await removeSelectedAccess();
+    clearSelected();
+  };
+  const selectedToRemove = selected.map((record) => ({
+    id: record.id,
+    name: `${record.username ?? ''}: ${removableRoles(record)
+      .map((role) => role.name)
+      .join(', ')}`,
+  }));
+
+  // The resource's own roles, the only ones a chip may take off.
+  const resourceRoleIds = Object.values(
+    (resource.summary_fields?.object_roles ?? {}) as Record<
+      string,
+      SummaryFieldRef
+    >
+  )
+    .map((role) => role?.id)
+    .filter((id): id is number => typeof id === 'number');
 
   const toolbarSearchColumns: SearchColumn[] = [
     {
@@ -200,37 +291,57 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
   return (
     <>
       <PaginatedTable
-        error={contentError}
-        hasContentLoading={isLoading || isDeleteLoading}
+        contentError={contentError}
+        hasContentLoading={isLoading || isDeleteLoading || isBulkRemoveLoading}
         items={accessRecords}
         itemCount={itemCount}
-        pluralizedItemName={t`Roles`}
+        pluralizedItemName={t`Users`}
+        emptyContentMessage={
+          canAddAdditionalControls
+            ? t`Associate a role to list it here`
+            : t`Users with a role on this resource appear here`
+        }
         qsConfig={QS_CONFIG}
+        clearSelected={clearSelected}
         toolbarSearchColumns={toolbarSearchColumns}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         renderToolbar={(props) => (
           <DataListToolbar
             {...props}
+            isAllSelected={isAllSelected}
+            onSelectAll={selectAll}
             qsConfig={QS_CONFIG}
-            additionalControls={
-              canAddAdditionalControls
+            additionalControls={[
+              ...(canAddAdditionalControls
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Role`}
                       ouiaId="access-add-button"
                       key="add"
                       onClick={() => setShowAddModal(true)}
                     />,
                   ]
-                : []
-            }
+                : []),
+              <DisassociateButton
+                key="disassociate"
+                onDisassociate={handleRemoveSelected}
+                itemsToDisassociate={selectedToRemove}
+                // Only users with a role the api lets this viewer remove can
+                // be ticked.
+                verifyCannotDisassociate={false}
+                modalTitle={t`Disassociate these users' roles from this resource?`}
+                modalNote={t`Only roles given to each user directly on this resource are removed. Roles held through a team or inherited from an organization stay.`}
+              />,
+            ]}
           />
         )}
         headerRow={
-          <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
+          <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="username">{t`Username`}</HeaderCell>
-            <HeaderCell sortKey="first_name">{t`First name`}</HeaderCell>
-            <HeaderCell sortKey="last_name">{t`Last name`}</HeaderCell>
+            <HeaderCell sortKey="first_name">{t`First Name`}</HeaderCell>
+            <HeaderCell sortKey="last_name">{t`Last Name`}</HeaderCell>
             <HeaderCell>{t`Roles`}</HeaderCell>
           </HeaderRow>
         }
@@ -238,12 +349,15 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           <ResourceAccessListItem
             key={accessRecord.id}
             accessRecord={accessRecord}
+            resourceRoleIds={resourceRoleIds}
             onRoleDelete={(role, record) => {
               setDeletionRecord(record);
               setDeletionRole(role);
               setShowDeleteModal(true);
             }}
             rowIndex={index}
+            isSelected={selected.some((row) => row.id === accessRecord.id)}
+            onSelect={() => handleSelect(accessRecord)}
           />
         )}
       />
@@ -283,8 +397,19 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           isOpen={submitError}
           onClose={() => setSubmitError(null)}
         >
-          {t`Failed to assign roles properly`}
+          {t`Failed to associate one or more roles. Some roles may have been associated; the list now shows which.`}
           <ErrorDetail error={submitError} />
+        </AlertModal>
+      )}
+      {Boolean(bulkRemoveError) && (
+        <AlertModal
+          isOpen={Boolean(bulkRemoveError)}
+          variant="error"
+          title={t`Error!`}
+          onClose={clearBulkRemoveError}
+        >
+          {t`Failed to disassociate one or more roles.`}
+          <ErrorDetail error={bulkRemoveError} />
         </AlertModal>
       )}
       {Boolean(deletionError) && (
@@ -294,7 +419,8 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {t`Failed to delete role`}
+          {t`Failed to disassociate role.`}
+          <ErrorDetail error={deletionError} />
         </AlertModal>
       )}
     </>

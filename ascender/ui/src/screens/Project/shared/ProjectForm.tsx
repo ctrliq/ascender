@@ -18,16 +18,15 @@ import {
 } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';
 import AnsibleSelect from 'components/AnsibleSelect';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import ExecutionEnvironmentLookup from 'components/Lookup/ExecutionEnvironmentLookup';
-import { CredentialTypesAPI, ProjectsAPI } from 'api';
 import { required } from 'util/validators';
 import { FormColumnLayout, SubFormLayout } from 'components/FormLayout';
+import { sortCredential } from './projectFormOptions';
+import type { ProjectFormOptions } from './projectFormOptions';
 import getProjectHelpText from './Project.helptext';
 import {
   GitSubForm,
@@ -52,46 +51,6 @@ export interface ProjectFormValues {
   credential?: SummaryFieldRef | null;
   [key: string]: unknown;
 }
-
-const fetchCredentials = async (credential?: SummaryFieldRef) => {
-  const [
-    {
-      data: {
-        results: [scmCredentialType],
-      },
-    },
-    {
-      data: {
-        results: [cryptographyCredentialType],
-      },
-    },
-  ] = await Promise.all([
-    CredentialTypesAPI.read({ kind: 'scm' }),
-    CredentialTypesAPI.read({ kind: 'cryptography' }),
-  ]);
-
-  const scmTypeId = scmCredentialType?.id;
-  const cryptographyTypeId = cryptographyCredentialType?.id;
-
-  if (!credential) {
-    return {
-      scm: { typeId: scmTypeId },
-      cryptography: { typeId: cryptographyTypeId },
-    };
-  }
-
-  const { credential_type_id } = credential;
-  return {
-    scm: {
-      typeId: scmTypeId,
-      value: credential_type_id === scmTypeId ? credential : null,
-    },
-    cryptography: {
-      typeId: cryptographyTypeId,
-      value: credential_type_id === cryptographyTypeId ? credential : null,
-    },
-  };
-};
 
 /**
  * The credential the form holds for one kind, and the type it has to be.
@@ -322,7 +281,7 @@ function ProjectFormFields({
             {
               value: '',
               key: '',
-              label: t`Choose a Source Control Type`,
+              label: t`Choose a source control type`,
               isDisabled: true,
             },
             ...(scmTypeOptions ?? []).map(([choice, label]) => {
@@ -355,6 +314,9 @@ function ProjectFormFields({
       <CredentialLookup
         credentialTypeId={signatureValidationCredentials.cryptography.typeId}
         label={t`Content Signature Validation Credential`}
+        // Its own field, so its search and paging stay apart from the source
+        // control credential's lookup below.
+        fieldName="signature_validation_credential"
         onChange={handleSignatureValidationCredentialChange}
         value={signatureValidationCredentials.cryptography.value}
         tooltip={projectHelpText.signatureValidation}
@@ -407,6 +369,13 @@ function ProjectFormFields({
 export interface ProjectFormProps {
   /** The project being edited, absent on the add form. */
   project?: Partial<Project>;
+  /**
+   * The credential type ids and source control choices the form draws with,
+   * read by the screen: read here instead, they landed after the page had
+   * drawn and the form replaced itself with a second loading animation while
+   * they were on their way.
+   */
+  options: ProjectFormOptions;
   submitError?: unknown;
   handleCancel: () => void;
   handleSubmit: (values: ProjectFormValues) => void;
@@ -415,14 +384,13 @@ export interface ProjectFormProps {
 
 function ProjectForm({
   project = {},
+  options,
   submitError = null,
   ...props
 }: ProjectFormProps) {
   const { handleCancel, handleSubmit } = props;
   const { summary_fields = {} } = project;
   const { project_base_dir, project_local_paths } = useConfig();
-  const [contentError, setContentError] = useState<unknown>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [scmSubFormState, setScmSubFormState] = useState<ScmSubFormState>({
     scm_url: '',
     scm_branch: '',
@@ -436,54 +404,31 @@ function ProjectForm({
     allow_override: false,
     scm_update_cache_timeout: 0,
   });
-  const [scmTypeOptions, setScmTypeOptions] = useState<
-    OptionsField['choices'] | null
-  >(null);
-  const [credentials, setCredentials] = useState<ProjectCredentials>({
-    scm: { typeId: null, value: null },
-    cryptography: { typeId: null, value: null },
-  });
+  const scmTypeOptions = options.scmTypeChoices;
+
+  /*
+   * Which slot the project's own credential fills, worked out from what the
+   * screen read. Held in state because the lookups below set them as the user
+   * picks, and seeded again if the project is re-read under the form.
+   */
+  const [credentials, setCredentials] = useState<ProjectCredentials>(() =>
+    sortCredential(options, summary_fields.credential)
+  );
   const [signatureValidationCredentials, setSignatureValidationCredentials] =
-    useState<ProjectCredentials>({
-      scm: { typeId: null, value: null },
-      cryptography: { typeId: null, value: null },
-    });
+    useState<ProjectCredentials>(() =>
+      sortCredential(options, summary_fields.signature_validation_credential)
+    );
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const credentialResponse = fetchCredentials(summary_fields.credential);
-        const signatureValidationCredentialResponse = fetchCredentials(
-          summary_fields.signature_validation_credential
-        );
-        const { data: options } = await ProjectsAPI.readOptions();
-        const choices = options.actions.GET?.scm_type?.choices ?? [];
-
-        setCredentials(await credentialResponse);
-        setSignatureValidationCredentials(
-          await signatureValidationCredentialResponse
-        );
-        setScmTypeOptions(choices);
-      } catch (error) {
-        setContentError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
+    setCredentials(sortCredential(options, summary_fields.credential));
+    setSignatureValidationCredentials(
+      sortCredential(options, summary_fields.signature_validation_credential)
+    );
   }, [
+    options,
     summary_fields.credential,
     summary_fields.signature_validation_credential,
   ]);
-
-  if (isLoading) {
-    return <ContentLoading />;
-  }
-
-  if (contentError) {
-    return <ContentError error={contentError} />;
-  }
 
   return (
     <FormRoot<ProjectFormValues>

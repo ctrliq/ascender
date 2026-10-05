@@ -110,13 +110,13 @@ function UserList() {
             clearSelected={clearSelected}
             toolbarSearchColumns={[
               {
-                name: t`Email`,
-                key: 'email__icontains',
+                name: t`Username`,
+                key: 'username__icontains',
                 isDefault: true,
               },
               {
-                name: t`Username`,
-                key: 'username__icontains',
+                name: t`Email`,
+                key: 'email__icontains',
               },
               {
                 name: t`First Name`,
@@ -137,7 +137,13 @@ function UserList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo="/users/add" />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add User`}
+                          key="add"
+                          linkTo="/users/add"
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -154,8 +160,7 @@ function UserList() {
                 <HeaderCell sortKey="first_name">{t`First Name`}</HeaderCell>
                 <HeaderCell sortKey="last_name">{t`Last Name`}</HeaderCell>
                 <HeaderCell>{t`Email`}</HeaderCell>
-                <HeaderCell>{t`Organization`}</HeaderCell>
-                <HeaderCell>{t`Role`}</HeaderCell>
+                <HeaderCell>{t`User Type`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
@@ -169,9 +174,6 @@ function UserList() {
                 rowIndex={index}
               />
             )}
-            emptyStateControls={
-              canAdd ? <ToolbarAddButton key="add" linkTo="/users/add" /> : null
-            }
           />
         </Card>
       </PageSection>

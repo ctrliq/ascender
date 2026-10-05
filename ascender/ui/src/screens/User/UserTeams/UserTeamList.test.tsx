@@ -151,10 +151,10 @@ describe('<UserTeamList />', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     expect(
-      await screen.findByText('Disassociate related team(s)?')
+      await screen.findByText('Disassociate the user from these teams?')
     ).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
     expect(await screen.findByText('Error!')).toBeInTheDocument();
     expect(
@@ -177,10 +177,10 @@ describe('<UserTeamList />', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     expect(
-      await screen.findByText('Disassociate related team(s)?')
+      await screen.findByText('Disassociate the user from these teams?')
     ).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
     await waitFor(() =>
       expect(UsersAPI.disassociateRole).toHaveBeenCalledTimes(9)
@@ -232,12 +232,84 @@ describe('<UserTeamList />', () => {
     } as unknown as ResponseOf<typeof TeamsAPI.read>);
     await user.click(screen.getByRole('button', { name: 'Associate' }));
     await user.click(await screen.findByText('Baz'));
-    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     await waitFor(() =>
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     );
     expect(UsersAPI.associateRole).toHaveBeenCalledTimes(1);
     expect(TeamsAPI.read).toHaveBeenCalledTimes(1);
+    // Only the teams the viewer runs, which are the ones the api lets them
+    // put somebody in.
+    expect(TeamsAPI.read).toHaveBeenCalledWith(
+      expect.objectContaining({ role_level: 'admin_role' })
+    );
     await waitFor(() => expect(UsersAPI.readTeams).toHaveBeenCalledTimes(2));
+  });
+});
+
+/*
+ * Membership is the team's Member role, which a superuser, an admin of the
+ * team's organization or an admin of the team may grant. Whether the viewer
+ * may create users, which the users endpoint's OPTIONS answers, is not it.
+ */
+describe('<UserTeamList /> for a viewer who is not a superuser', () => {
+  function renderFor(
+    config: Record<string, unknown>,
+    usersActions: Record<string, unknown>
+  ) {
+    vi.mocked(UsersAPI.readTeams).mockResolvedValue({
+      data: {
+        count: mockAPIUserTeamList.length,
+        results: mockAPIUserTeamList,
+      },
+    } as unknown as ResponseOf<typeof UsersAPI.readTeams>);
+    vi.mocked(UsersAPI.readTeamsOptions).mockResolvedValue(
+      options as unknown as ResponseOf<typeof UsersAPI.readTeamsOptions>
+    );
+    vi.mocked(UsersAPI.readOptions).mockResolvedValue({
+      data: { actions: usersActions },
+    } as unknown as ApiResponse<unknown>);
+    return renderWithContexts(<UserTeamList />, { context: { config } });
+  }
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('offers Associate to an organization admin', async () => {
+    renderFor({ me: { id: 9, is_superuser: false }, adminOrgCount: 1 }, {});
+    await screen.findByRole('link', { name: 'Team 0' });
+    expect(
+      screen.getByRole('button', { name: 'Associate' })
+    ).toBeInTheDocument();
+  });
+
+  test('offers Associate to a team admin', async () => {
+    vi.mocked(TeamsAPI.read).mockResolvedValue({
+      data: { count: 1, results: [] },
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
+    renderFor({ me: { id: 9, is_superuser: false }, adminOrgCount: 0 }, {});
+    await screen.findByRole('link', { name: 'Team 0' });
+    expect(
+      await screen.findByRole('button', { name: 'Associate' })
+    ).toBeInTheDocument();
+    expect(TeamsAPI.read).toHaveBeenCalledWith(
+      expect.objectContaining({ role_level: 'admin_role' })
+    );
+  });
+
+  test('offers no Associate to a viewer who runs nothing', async () => {
+    vi.mocked(TeamsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
+    renderFor(
+      { me: { id: 9, is_superuser: false }, adminOrgCount: 0 },
+      { GET: {}, POST: {} }
+    );
+    await screen.findByRole('link', { name: 'Team 0' });
+    await waitFor(() => expect(TeamsAPI.read).toHaveBeenCalled());
+    expect(
+      screen.queryByRole('button', { name: 'Associate' })
+    ).not.toBeInTheDocument();
   });
 });

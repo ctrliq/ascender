@@ -109,6 +109,20 @@ Do not rename the labels.
   unreachable annotation, so such filters always failed with a 400. The Cast now
   follows the full related path and the lookup is rewritten to target the top-level
   annotation. Covered by `ascender/main/tests/functional/test_dab_rest_filters.py`.
+- `rest_filters/rest_framework/field_lookup_backend.py` — the `__search` loop unpacked
+  its unused third value into `_`, which made `_` a local name for the whole of
+  `filter_queryset` and hid the module's gettext import. A `role_level` filter on a list
+  whose model has no roles, such as `/api/v2/notification_templates/`, then answered 500
+  with an UnboundLocalError instead of the intended 400 ParseError. The variable is now
+  `_distinct`. Covered by `ascender/main/tests/functional/test_dab_rest_filters.py`.
+- `rest_filters/rest_framework/field_lookup_backend.py` — a lookup on a run's type
+  (`type`, which is `polymorphic_ctype__model`) returned right after removing its
+  underscores, so `type__in` never split its list and
+  `/api/v2/unified_jobs/?type__in=job,project_update` compared the whole comma-joined
+  string and matched nothing. The early return now splits an `__in` value first; every
+  other type lookup (`or__type`, `not__type`, `type__icontains`, ...) still keeps its
+  value as a model name, as upstream does. Covered by
+  `ascender/main/tests/functional/test_dab_rest_filters.py`.
 
 Remaining `awx.dab.rbac.*` / `awx.dab.oauth2_provider.*` / `awx.dab.activitystream.*`
 imports are lazy and guarded by INSTALLED_APPS checks; those apps are never installed here.
