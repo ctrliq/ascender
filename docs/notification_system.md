@@ -78,6 +78,7 @@ The currently-defined Notification Types are:
 * Pagerduty
 * Twilio
 * IRC
+* Matrix
 * Webhook
 * Grafana
 
@@ -218,6 +219,42 @@ Connectivity information is straightforward:
 ### Test Service
 
 There are a few modern IRC servers to choose from. [InspIRCd](http://www.inspircd.org/) is recommended because it is actively maintained and pretty straightforward to configure.
+
+## Matrix
+
+The Matrix notification type posts an `m.room.message` event straight to the homeserver's client-server API (`PUT /_matrix/client/v3/rooms/{roomId}/send/m.room.message/{txnId}`), so it works with any spec-compliant homeserver (Synapse, Conduit, Dendrite, ...) and needs no client library. Notifications are sent as an ordinary Matrix user, identified by an access token; that user has to be a member of every destination room already.
+
+The parameters are:
+
+* `homeserver_url`: The base URL of the homeserver's client API, for example `https://matrix.example.org`. The `/_matrix/client/v3` paths are added automatically.
+* `access_token`: The access token of the sending user. Stored encrypted, like the other notification secrets.
+* `rooms`: A list of destination rooms, each either a room ID (`!abcdef:example.org`) or a room alias (`#automation:example.org`). Aliases are resolved through the homeserver's room directory before sending.
+* `use_html`: Defaults to true. The rendered *message* template is always sent as the plain-text `body`. With this on, the rendered *body* template is sent alongside it as an HTML `formatted_body` (`org.matrix.custom.html`), and the default body templates render the job link as a clickable anchor. Clients that cannot show HTML fall back to the plain text.
+* `disable_ssl_verification`: Turn off certificate verification for homeservers behind a private CA.
+
+A homeserver that rate limits the sender (HTTP 429) is retried a bounded number of times, honouring its `retry_after_ms`. Any other error response is reported with the homeserver's `errcode` and `error`, e.g. `M_FORBIDDEN` when the sending user is not in the room, or `M_UNKNOWN_TOKEN` for a bad token.
+
+### Test Considerations
+
+* Test a room ID and a room alias as destinations, and several rooms at once.
+* Test with `use_html` on and off, and check the plain-text fallback is present in both cases.
+* Test a room the sending user has not joined, and a wrong access token: both must record the homeserver's error on the notification.
+
+### Test Service
+
+[Conduit](https://conduit.rs/) is a small single-binary homeserver that comes up in seconds:
+
+```
+docker run -d --name conduit --network="tools_default" -p 6167:6167 \
+  -e CONDUIT_CONFIG='' -e CONDUIT_SERVER_NAME=test.local \
+  -e CONDUIT_DATABASE_BACKEND=rocksdb -e CONDUIT_DATABASE_PATH=/var/lib/matrix-conduit \
+  -e CONDUIT_ADDRESS=0.0.0.0 -e CONDUIT_PORT=6167 -e CONDUIT_ALLOW_FEDERATION=false \
+  -e CONDUIT_ALLOW_REGISTRATION=true \
+  -e CONDUIT_YES_I_AM_VERY_VERY_SURE_I_WANT_AN_OPEN_REGISTRATION_SERVER_PRONE_TO_ABUSE=true \
+  matrixconduit/matrix-conduit:latest
+```
+
+Register a user with `POST /_matrix/client/v3/register` (`{"auth": {"type": "m.login.dummy"}, "username": "bot", "password": "..."}`), which returns the access token, then create a room with `POST /_matrix/client/v3/createRoom` (`{"room_alias_name": "automation"}` publishes the `#automation:test.local` alias). The homeserver is reachable from the Ascender container at `http://conduit:6167`, and `GET /_matrix/client/v3/rooms/{roomId}/messages?dir=b` shows what arrived.
 
 ## Webhook
 

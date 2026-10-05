@@ -7659,6 +7659,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0
@@ -7690,6 +7692,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0
@@ -8885,6 +8889,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     /** @description Provide recent jobs and survey details in summary_fields */
     JobTemplateRequest: {
@@ -9013,6 +9022,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     /**
      * @description * `new` - New
@@ -9294,6 +9308,7 @@ export interface components {
      * @description * `email` - Email
      *     * `grafana` - Grafana
      *     * `irc` - IRC
+     *     * `matrix` - Matrix
      *     * `mattermost` - Mattermost
      *     * `pagerduty` - Pagerduty
      *     * `rocketchat` - Rocket.Chat
@@ -9306,6 +9321,7 @@ export interface components {
       | 'email'
       | 'grafana'
       | 'irc'
+      | 'matrix'
       | 'mattermost'
       | 'pagerduty'
       | 'rocketchat'
@@ -10600,6 +10616,8 @@ export interface components {
       /** @description Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. */
       is_container_group?: boolean;
       credential?: number | null;
+      /** @description Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API. */
+      mesh_node?: number | null;
       /**
        * @description Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.
        * @default 0
@@ -10909,6 +10927,11 @@ export interface components {
        * @default false
        */
       prevent_instance_group_fallback: boolean | null;
+      /**
+       * @description If enabled, jobs launched from this job template cannot be relaunched, by anyone. The template itself can still be launched. Checked at relaunch time, so turning it off makes earlier jobs relaunchable again.
+       * @default false
+       */
+      prevent_relaunch: boolean | null;
     };
     PatchedLabelRequest: {
       name?: string | null;
@@ -11182,6 +11205,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -12866,7 +12895,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -12900,7 +12929,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
@@ -12955,6 +12984,73 @@ export interface components {
        * @default true
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
+      /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
       /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
@@ -13241,6 +13337,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -14182,6 +14283,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -15928,7 +16035,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -15967,7 +16074,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
@@ -16022,6 +16129,78 @@ export interface components {
        * @default true
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
+      /**
+       * OIDC Callback URL
+       * @description Register this URL as a valid redirect URI of the client at your OIDC provider.
+       */
+      readonly SOCIAL_AUTH_OIDC_CALLBACK_URL: string;
+      /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
       /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
@@ -16211,6 +16390,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -17895,7 +18080,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
       /**
        * Azure AD OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: string;
@@ -17929,7 +18114,7 @@ export interface components {
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
       /**
        * Azure AD Tenant OAuth2 Secret
-       * @description The OAuth2 secret (Client Secret) from your Azure AD application.
+       * @description The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: string;
@@ -17984,6 +18169,73 @@ export interface components {
        * @default true
        */
       SOCIAL_AUTH_OIDC_VERIFY_SSL: boolean;
+      /**
+       * OIDC Additional Scopes
+       * @description Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.
+       * @default []
+       */
+      SOCIAL_AUTH_OIDC_SCOPE: string[];
+      /**
+       * OIDC Username Claim
+       * @description The claim a new user's username is taken from.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from OIDC Usernames
+       * @description Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * OIDC Groups Claim
+       * @description The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.
+       * @default groups
+       */
+      SOCIAL_AUTH_OIDC_GROUPS_CLAIM: string;
+      /**
+       * OIDC Login Rule
+       * @description A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.
+       */
+      SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * OIDC Organization Map
+       * @description Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC Team Map
+       * @description Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_OIDC_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * OIDC User Flags
+       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_OIDC_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of the OIDC Provider
+       * @description When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.
+       * @default false
+       */
+      SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP: boolean;
+      /**
+       * OIDC Post Logout Redirect URL
+       * @description Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL?: string;
       /**
        * Automatically Create Organizations and Teams on SAML Login
        * @description When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.
@@ -19024,6 +19276,11 @@ export interface components {
       extra_vars: string | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19124,6 +19381,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19160,6 +19422,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19365,6 +19632,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19695,6 +19967,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */

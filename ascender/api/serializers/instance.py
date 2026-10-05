@@ -266,6 +266,11 @@ class InstanceSerializer(BaseSerializer):
                     raise serializers.ValidationError(_("Can only change instances to the 'deprovisioning' state."))
                 if self.instance.managed:
                     raise serializers.ValidationError(_("Cannot deprovision managed nodes."))
+                groups = list(self.instance.remote_container_groups.values_list('name', flat=True))
+                if groups:
+                    raise serializers.ValidationError(
+                        _("Cannot deprovision a node that runs the pods of these container groups: {}.").format(', '.join(sorted(groups)))
+                    )
         else:
             if value and value != Instance.States.INSTALLED:
                 raise serializers.ValidationError(_("Can only create instances in the 'installed' state."))
@@ -423,6 +428,7 @@ class InstanceGroupSerializer(BaseSerializer):
             "instances",
             "is_container_group",
             "credential",
+            "mesh_node",
             "policy_instance_percentage",
             "policy_instance_minimum",
             "policy_instance_list",
@@ -438,6 +444,8 @@ class InstanceGroupSerializer(BaseSerializer):
         res['object_roles'] = self.reverse('api:instance_group_object_role_list', kwargs={'pk': obj.pk})
         if obj.credential:
             res['credential'] = self.reverse('api:credential_detail', kwargs={'pk': obj.credential_id})
+        if obj.mesh_node_id:
+            res['mesh_node'] = self.reverse('api:instance_detail', kwargs={'pk': obj.mesh_node_id})
 
         return res
 
@@ -496,7 +504,27 @@ class InstanceGroupSerializer(BaseSerializer):
         if attrs.get('credential') and not attrs.get('is_container_group'):
             raise serializers.ValidationError({'is_container_group': _('is_container_group must be True when associating a credential to an Instance Group')})
 
+        def current(field):
+            if field in attrs:
+                return attrs[field]
+            return getattr(self.instance, field) if self.instance else None
+
+        if current('mesh_node'):
+            if not current('is_container_group'):
+                raise serializers.ValidationError({'mesh_node': _('Only container groups can run their pods on a mesh node.')})
+            if current('credential'):
+                raise serializers.ValidationError(
+                    {'mesh_node': _("A container group behind a mesh node uses that node's service account and cannot have a credential.")}
+                )
+
         return attrs
+
+    def validate_mesh_node(self, value):
+        if value and value.node_type != Instance.Types.HOP:
+            raise serializers.ValidationError(_('Only hop nodes can run the pods of a container group.'))
+        if value and value.node_state in (Instance.States.DEPROVISIONING, Instance.States.DEPROVISION_FAIL):
+            raise serializers.ValidationError(_('Cannot run the pods of a container group on a node that is being deprovisioned.'))
+        return value
 
     def get_ig_mgr(self):
         # Store capacity values (globally computed) in the context

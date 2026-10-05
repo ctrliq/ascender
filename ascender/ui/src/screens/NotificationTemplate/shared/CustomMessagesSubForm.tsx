@@ -26,7 +26,7 @@ function CustomMessagesSubForm({
   const { t } = useLingui();
   const [useCustomField, , useCustomHelpers] = useField('useCustomMessages');
   const showMessages = type !== 'webhook';
-  const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
+  const showBodies = ['email', 'matrix', 'pagerduty', 'webhook'].includes(type);
 
   const { setFieldValue } = useFormContext<Record<string, unknown>>();
   const config = useConfig();

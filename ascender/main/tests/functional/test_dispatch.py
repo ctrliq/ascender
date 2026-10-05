@@ -138,6 +138,23 @@ class TestWorkerPool:
             assert worker.messages_sent == 0
             assert worker.alive is True
 
+    def test_cleanup_replaces_dead_worker(self):
+        # a worker that exits is replaced in its own slot, so the pool keeps
+        # consuming and the surviving workers are left alone
+        self.pool.init_workers(SimpleWorker().work_loop)
+        dead = self.pool.workers[1]
+        survivors = [self.pool.workers[0].pid, self.pool.workers[2].pid]
+        dead.process.kill()
+        dead.process.join()  # waits for the process to fully terminate
+        assert dead.alive is False
+
+        self.pool.cleanup()
+
+        assert len(self.pool) == 3
+        assert self.pool.workers[1].pid != dead.pid
+        assert self.pool.workers[1].alive is True
+        assert [self.pool.workers[0].pid, self.pool.workers[2].pid] == survivors
+
     def test_single_task(self):
         self.pool.init_workers(SimpleWorker().work_loop)
         self.pool.write(0, 'xyz')

@@ -14,6 +14,7 @@ from datetime import timedelta
 
 # python-ldap
 import ldap
+from ascender.main import constants
 from ascender.settings.environment import environment_setting
 
 DEBUG = True
@@ -660,6 +661,8 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
+    'ascender.sso.oidc.check_login_allowed',
+    'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.social_auth.associate_by_email',
@@ -671,7 +674,7 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'social_core.pipeline.user.user_details',
     'ascender.sso.social_base_pipeline.prevent_inactive_login',
 )
-SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.social_pipeline.update_user_org_team_mappings',)
+SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.social_pipeline.update_user_org_team_mappings', 'ascender.sso.oidc.update_user_flags')
 SOCIAL_AUTH_SAML_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.saml_pipeline.populate_user', 'ascender.sso.saml_pipeline.update_user_flags')
 SAML_AUTO_CREATE_OBJECTS = True
 
@@ -957,13 +960,18 @@ ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC = False
 
 CALLBACK_QUEUE = "callback_tasks"
 
+# Socket timeout for the callback receiver's valkey client. Must stay above the
+# blpop timeout in CallbackBrokerWorker.read, or every read would time out.
+CALLBACK_QUEUE_SOCKET_TIMEOUT = 30
+
 # Note: This setting may be overridden by database settings.
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
+ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
-ASCENDER_URL_BASE = "https://ascenderhost"
+ASCENDER_URL_BASE = constants.ASCENDER_URL_BASE_PLACEHOLDER
 
 
 # Settings related to external logger configuration

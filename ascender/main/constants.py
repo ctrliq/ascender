@@ -6,6 +6,7 @@ import re
 from django.utils.translation import gettext_lazy as _
 
 __all__ = [
+    'ASCENDER_URL_BASE_PLACEHOLDER',
     'CLOUD_PROVIDERS',
     'PRIVILEGE_ESCALATION_METHODS',
     'ANSI_SGR_PATTERN',
@@ -14,6 +15,8 @@ __all__ = [
     'STANDARD_INVENTORY_UPDATE_ENV',
 ]
 
+#: What ASCENDER_URL_BASE says until someone sets it.
+ASCENDER_URL_BASE_PLACEHOLDER = 'https://ascenderhost'
 CLOUD_PROVIDERS = ('azure_rm', 'ec2', 'gce', 'vmware', 'openstack', 'satellite6', 'ascender', 'terraform')
 PRIVILEGE_ESCALATION_METHODS = [
     ('sudo', _('Sudo')),

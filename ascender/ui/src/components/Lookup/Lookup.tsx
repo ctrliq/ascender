@@ -18,6 +18,7 @@ import type { QSConfig } from 'util/qs';
 import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 import type { LookupAction, LookupItem, LookupState } from './shared/reducer';
+import './Lookup.css';
 
 export interface LookupProps {
   id?: string;

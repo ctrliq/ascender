@@ -546,6 +546,15 @@ def delete_inventory_for_org(sender, instance, **kwargs):
             logger.debug(e)
 
 
+@receiver(pre_delete, sender=JobTemplate)
+def keep_relaunch_prevented_on_orphaned_jobs(sender, instance, **kwargs):
+    # Deleting the template nulls job.job_template, which would otherwise make
+    # its protected jobs relaunchable. Sliced workflow jobs need nothing here:
+    # an orphaned one cannot be relaunched at all.
+    if instance.prevent_relaunch:
+        Job.objects.filter(job_template=instance).update(prevent_relaunch=True)
+
+
 @receiver(pre_delete, sender=WorkflowJobTemplateNode)
 def delete_approval_templates(sender, instance, **kwargs):
     # Check if unified_job_template exists and is accessible

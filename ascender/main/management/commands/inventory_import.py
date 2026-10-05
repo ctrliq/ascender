@@ -2,6 +2,7 @@
 # All Rights Reserved.
 
 # Python
+import hashlib
 import json
 import logging
 import os
@@ -435,29 +436,66 @@ class Command(BaseCommand):
                 group_group_count + group_host_count,
             )
 
+    @staticmethod
+    def _hash_variable(value):
+        # Truncated: only used to detect edits made after a sync, not for integrity.
+        return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode('utf-8')).hexdigest()[:16]
+
+    def _remove_stale_inventory_variables(self, db_variables, source_variables, previous):
+        """
+        Remove inventory variables this source wrote on its last sync but no longer provides,
+        unless they were edited since or another source of this inventory also provides them.
+        """
+        removed = [key for key in previous if key not in source_variables and key in db_variables]
+        if not removed:
+            return
+        claimed = set()
+        other_sources = self.inventory.inventory_sources.exclude(pk=self.inventory_source.pk).filter(managed_inventory_variables__has_any_keys=removed)
+        for other_managed in other_sources.values_list('managed_inventory_variables', flat=True):
+            claimed.update(other_managed)
+        for key in removed:
+            if key in claimed:
+                logger.debug('Inventory variable "%s" kept, another inventory source provides it', key)
+            elif self._hash_variable(db_variables[key]) != previous[key]:
+                logger.debug('Inventory variable "%s" kept, it was changed after the last sync', key)
+            else:
+                del db_variables[key]
+                logger.debug('Inventory variable "%s" removed, no longer provided by the source', key)
+
     def _update_inventory(self):
         """
         Update inventory variables from "all" group.
         """
-        # TODO: We disable variable overwrite here in case user-defined inventory variables get
-        # mangled. But we still need to figure out a better way of processing multiple inventory
-        # update variables mixing with each other.
-        # issue for this: https://github.com/ansible/awx/issues/11623
+        # Merged rather than replaced so variables from users and other sources survive; with
+        # overwrite_vars, only variables this source previously wrote are removed. See ansible/awx#11623.
+        source_variables = self.all_group.variables
+        # Reread under the perform_update lock; the cached inventory and source may predate a concurrent sync.
+        self.inventory.refresh_from_db(fields=['variables'])
+        original_variables = self.inventory.variables_dict
+        previous = InventorySource.objects.filter(pk=self.inventory_source.pk).values_list('managed_inventory_variables', flat=True).first() or {}
 
         if self.inventory.kind == 'constructed' and self.inventory_source.overwrite_vars:
             # NOTE: we had to add a exception case to not merge variables
             # to make constructed inventory coherent
-            db_variables = self.all_group.variables
+            db_variables = source_variables
         else:
-            db_variables = self.inventory.variables_dict
-            db_variables.update(self.all_group.variables)
+            db_variables = dict(original_variables)
+            if self.overwrite_vars:
+                self._remove_stale_inventory_variables(db_variables, source_variables, previous)
+            db_variables.update(source_variables)
 
-        if db_variables != self.inventory.variables_dict:
+        if db_variables != original_variables:
             self.inventory.variables = json.dumps(db_variables)
             self.inventory.save(update_fields=['variables'])
             logger.debug('Inventory variables updated from "all" group')
         else:
             logger.debug('Inventory variables unmodified')
+
+        managed = {key: self._hash_variable(value) for key, value in source_variables.items()}
+        if managed != previous:
+            # update() skips InventorySource.save(), which recomputes inventory fields and fires signals.
+            InventorySource.objects.filter(pk=self.inventory_source.pk).update(managed_inventory_variables=managed)
+            self.inventory_source.managed_inventory_variables = managed
 
     def _create_update_groups(self):
         """

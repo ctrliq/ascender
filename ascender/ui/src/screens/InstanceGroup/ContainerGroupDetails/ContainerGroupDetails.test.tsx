@@ -103,6 +103,29 @@ describe('<ContainerGroupDetails/>', () => {
     expect(screen.getByText('Pod spec override')).toBeInTheDocument();
   });
 
+  test('links to the mesh node the pods run behind', () => {
+    renderWithContexts(
+      <ContainerGroupDetails
+        instanceGroup={buildInstanceGroup({
+          credential: null,
+          mesh_node: 5,
+          summary_fields: {
+            credential: undefined,
+            mesh_node: {
+              id: 5,
+              hostname: 'receptor.remote',
+              node_state: 'ready',
+            },
+          },
+        })}
+      />
+    );
+    expect(
+      screen.getByRole('link', { name: 'receptor.remote' })
+    ).toHaveAttribute('href', '/instances/5/details');
+    expect(screen.queryByRole('link', { name: 'CG' })).not.toBeInTheDocument();
+  });
+
   test('expected api call is made for delete', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/instance_groups/container_group/42/details'],

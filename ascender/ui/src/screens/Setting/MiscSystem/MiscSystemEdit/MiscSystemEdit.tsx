@@ -45,6 +45,7 @@ function MiscSystemEdit() {
         'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC',
         'MANAGE_ORGANIZATION_AUTH',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
+        'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
         'REMOTE_HOST_HEADERS',
         'ASCENDER_URL_BASE',
         'DEFAULT_EXECUTION_ENVIRONMENT',
@@ -189,6 +190,10 @@ function MiscSystemEdit() {
                 <BooleanField
                   name="ORG_ADMINS_CAN_SEE_ALL_USERS"
                   config={system.ORG_ADMINS_CAN_SEE_ALL_USERS}
+                />
+                <BooleanField
+                  name="ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS"
+                  config={system.ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS}
                 />
                 <BooleanField
                   name="MANAGE_ORGANIZATION_AUTH"

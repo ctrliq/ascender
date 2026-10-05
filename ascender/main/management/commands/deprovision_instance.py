@@ -4,7 +4,7 @@
 from django.db import transaction
 from django.core.management.base import BaseCommand, CommandError
 
-from ascender.main.models import Instance
+from ascender.main.models import Instance, InstanceGroup
 from ascender.main.utils.pglock import advisory_lock
 
 
@@ -27,6 +27,9 @@ class Command(BaseCommand):
         with advisory_lock('instance_registration_%s' % hostname):
             instance = Instance.objects.filter(hostname=hostname)
             if instance.exists():
+                groups = list(InstanceGroup.objects.filter(mesh_node__hostname=hostname).values_list('name', flat=True))
+                if groups:
+                    raise CommandError('{} runs the pods of these container groups, remove it from them first: {}'.format(hostname, ', '.join(sorted(groups))))
                 instance.delete()
                 print("Instance Removed")
                 print('Successfully deprovisioned {}'.format(hostname))

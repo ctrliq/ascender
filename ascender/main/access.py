@@ -200,6 +200,19 @@ def check_superuser(func):
     return wrapper
 
 
+def relaunch_prevented(job):
+    """
+    Whether the job template behind this job turned relaunch off. A sliced
+    workflow job counts too, since relaunching it runs every slice again.
+    This binds superusers as well: clearing the template's flag is the way back.
+    Once the template is deleted, the job keeps the protection it had then.
+    """
+    job_template = getattr(job, 'job_template', None)
+    if job_template is not None:
+        return job_template.prevent_relaunch
+    return getattr(job, 'prevent_relaunch', False)
+
+
 def consumer_access(group_name):
     """
     consumer_access returns the proper Access class based on group_name
@@ -585,6 +598,7 @@ class InstanceGroupAccess(BaseAccess):
     """
 
     model = InstanceGroup
+    select_related = ('mesh_node',)
     prefetch_related = ('instances',)
 
     read_via = (InstanceGroup, '')
@@ -598,6 +612,10 @@ class InstanceGroupAccess(BaseAccess):
 
     @check_superuser
     def can_change(self, obj, data):
+        # The mesh node decides which cluster the pods run in, and the nodes of the mesh are
+        # only managed by system administrators, so only they may point a group at one.
+        if data and 'mesh_node' in data and get_pk_from_dict(data, 'mesh_node') != obj.mesh_node_id:
+            return False
         return self.can_admin(obj)
 
     @check_superuser
@@ -1770,6 +1788,8 @@ class JobAccess(BaseAccess):
 
     def get_method_capability(self, method, obj, parent_obj):
         if method == 'start':
+            if relaunch_prevented(obj):
+                return False
             # Return simplistic permission, will perform detailed check on POST
             if not obj.job_template:
                 return True
@@ -2143,6 +2163,8 @@ class WorkflowJobAccess(BaseAccess):
 
     def get_method_capability(self, method, obj, parent_obj):
         if method == 'start':
+            if relaunch_prevented(obj):
+                return False
             # Return simplistic permission, will perform detailed check on POST
             if not obj.workflow_job_template:
                 return self.user.is_superuser
@@ -2179,7 +2201,13 @@ class WorkflowJobAccess(BaseAccess):
                 raise PermissionDenied(_("Job was launched with secret prompts provided by another user."))
             if not JobLaunchConfigAccess(self.user).can_add({'reference_obj': config}):
                 raise PermissionDenied(_('Job was launched with prompts you lack access to.'))
-            if config.has_unprompted(template):
+            # A run corrected by a relaunch from failed nodes keeps the variables
+            # it was given in its launch config, so relaunching it again runs
+            # with them. While the template still allows that overwrite, anyone
+            # who can relaunch could hand those same variables in themselves,
+            # so they are not prompts the template stopped accepting.
+            ignore_variables = getattr(template, 'allow_overwrite_flow_vars_on_relaunch', False)
+            if config.has_unprompted(template, ignore_variables=ignore_variables):
                 raise PermissionDenied(_('Job was launched with prompts no longer accepted.'))
 
         return True  # passed config checks

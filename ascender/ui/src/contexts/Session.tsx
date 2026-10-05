@@ -10,6 +10,7 @@ import { Navigate, useLocation, useNavigationType } from 'react-router';
 import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';
+import locationReplace, { isHttpUrl } from 'util/navigation';
 import useRequest from 'hooks/useRequest';
 import queryClient from '../queryClient';
 import { clearOptionsCache } from '../api/optionsCache';
@@ -158,11 +159,20 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
     // reply carries are what decide which buttons a screen offers.
     queryClient.clear();
     clearOptionsCache();
-    await RootAPI.logout();
+    const response = await RootAPI.logout();
     setSessionTimeout(0);
     setSessionCountdown(0);
     clearTimeout(sessionTimeoutId.current);
     clearInterval(sessionIntervalId.current);
+    // Only a logout the user asked for goes on to the provider. One forced by
+    // the idle timeout would end their single sign on everywhere else too.
+    // The server only hands back http(s) addresses, but a javascript: one
+    // would run here rather than navigate, so that is checked again.
+    const logoutUrl = response?.data?.logout_url;
+    if (logoutUrl && isHttpUrl(logoutUrl) && !isSessionExpired.current) {
+      locationReplace(logoutUrl);
+      return null;
+    }
     return <Navigate to="/login" />;
   }, [setSessionTimeout, setSessionCountdown]);
 

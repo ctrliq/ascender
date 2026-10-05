@@ -21,6 +21,7 @@ __all__ = [
     'batch_role_ancestor_rebuilding',
     'ROLE_SINGLETON_SYSTEM_ADMINISTRATOR',
     'ROLE_SINGLETON_SYSTEM_AUDITOR',
+    'ROLE_SINGLETONS_HIDDEN_FROM_RESOURCE_ACCESS_LISTS',
     'role_summary_fields_generator',
 ]
 
@@ -28,6 +29,16 @@ logger = logging.getLogger('ascender.main.models.rbac')
 
 ROLE_SINGLETON_SYSTEM_ADMINISTRATOR = 'system_administrator'
 ROLE_SINGLETON_SYSTEM_AUDITOR = 'system_auditor'
+
+# Singleton roles that are hidden from a resource's access list when the
+# ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS setting is enabled. Both the access
+# list view's queryset and the ResourceAccessListElementSerializer must agree on
+# exactly this set; keeping it in one place prevents the two layers from
+# silently diverging if another singleton role is ever added.
+ROLE_SINGLETONS_HIDDEN_FROM_RESOURCE_ACCESS_LISTS = (
+    ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
+    ROLE_SINGLETON_SYSTEM_AUDITOR,
+)
 
 # Maps gateway/DAB RoleDefinition names, as they appear in JWT claims, to the
 # role field holding that permission on the target model. Consumed by

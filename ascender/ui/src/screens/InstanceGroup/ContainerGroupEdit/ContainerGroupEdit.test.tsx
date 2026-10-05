@@ -171,6 +171,7 @@ describe('<ContainerGroupEdit/>', () => {
       expect(InstanceGroupsAPI.update).toHaveBeenCalledWith(123, {
         ...mockUpdatedInstanceGroup,
         credential: 12,
+        mesh_node: null,
         pod_spec_override: null,
         max_concurrent_jobs: 0,
         max_forks: 0,

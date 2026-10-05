@@ -722,6 +722,12 @@ class TaskManager(TaskBase):
                 if not self.tm_models.instance_groups[instance_group.name].has_remaining_capacity(task):
                     continue
                 if instance_group.is_container_group:
+                    mesh_node = self.tm_models.instance_groups[instance_group.name].mesh_node_hostname
+                    if mesh_node:
+                        # The pod runs behind this node, so it is where the job executes. This also
+                        # lets the node deprovisioning and lost node handling see the job.
+                        task.execution_node = mesh_node
+                        task.log_lifecycle("execution_node_chosen")
                     self.start_task(task, instance_group, None)
                     found_acceptable_queue = True
                     break

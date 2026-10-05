@@ -1,6 +1,7 @@
 import type { AnyJob } from 'types/api';
 import React, { useEffect, useState, useRef } from 'react';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
+import { canOfferCancel } from 'util/jobs';
 import {
   CopyIcon,
   DownloadIcon,
@@ -166,7 +167,7 @@ const OutputToolbar = ({
       {['pending', 'waiting', 'running'].includes(jobStatus) &&
         (job.type === 'system_job'
           ? me?.is_superuser
-          : job?.summary_fields?.user_capabilities?.start) && (
+          : canOfferCancel(job)) && (
           <JobCancelButton
             job={job}
             errorTitle={t`Job Cancel Error`}

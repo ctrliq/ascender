@@ -248,7 +248,7 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
     playbook) to an inventory source with a given credential.
     """
 
-    FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials', 'survey_spec', 'prevent_instance_group_fallback']
+    FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials', 'survey_spec', 'prevent_instance_group_fallback', 'prevent_relaunch']
     FIELDS_TO_DISCARD_AT_COPY = ['vault_credential', 'credential', 'webhook_key']
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
 
@@ -326,6 +326,14 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             "instance groups to the list of preferred instances groups to run on."
             "If this setting is enabled and you provided an empty list, the global instance "
             "groups will be applied."
+        ),
+    )
+    prevent_relaunch = models.BooleanField(
+        default=False,
+        help_text=_(
+            "If enabled, jobs launched from this job template cannot be relaunched, by anyone. "
+            "The template itself can still be launched. Checked at relaunch time, so turning it off "
+            "makes earlier jobs relaunchable again."
         ),
     )
     notification_templates_changed = models.ManyToManyField(
@@ -673,6 +681,11 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         null=True,
         default=None,
         on_delete=models.SET_NULL,
+    )
+    prevent_relaunch = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text=_("Set when the job template was deleted while it prevented relaunch, so the orphaned job stays protected."),
     )
     hosts = models.ManyToManyField('Host', related_name='jobs', editable=False, through='JobHostSummary', through_fields=('job', 'host'))
     artifacts = JSONBlob(
@@ -1150,15 +1163,17 @@ class JobLaunchConfig(LaunchTimeConfig):
         """
         return self._has_user_prompts(template, only_unprompted=False)
 
-    def has_unprompted(self, template):
+    def has_unprompted(self, template, ignore_variables=False):
         """
         returns True if the template has set ask_ fields to False after
         launching with those prompts
         """
-        return self._has_user_prompts(template, only_unprompted=True)
+        return self._has_user_prompts(template, only_unprompted=True, ignore_variables=ignore_variables)
 
-    def _has_user_prompts(self, template, only_unprompted=True):
+    def _has_user_prompts(self, template, only_unprompted=True, ignore_variables=False):
         prompts = self.prompts_dict()
+        if ignore_variables:
+            prompts.pop('extra_vars', None)
         ask_mapping = template.get_ask_mapping()
         if template.survey_enabled and (not template.ask_variables_on_launch):
             ask_mapping.pop('extra_vars')

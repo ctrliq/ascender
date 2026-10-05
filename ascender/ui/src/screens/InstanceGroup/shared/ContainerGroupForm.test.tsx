@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { CredentialsAPI } from 'api';
+import { CredentialsAPI, InstancesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
@@ -85,6 +85,15 @@ describe('<ContainerGroupForm/>', () => {
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
     } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
+    vi.mocked(InstancesAPI.read).mockResolvedValue({
+      data: {
+        count: 1,
+        results: [{ id: 5, hostname: 'receptor.remote', node_type: 'hop' }],
+      },
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
+    vi.mocked(InstancesAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof InstancesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -143,6 +152,67 @@ describe('<ContainerGroupForm/>', () => {
     expect(onSubmit).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+  });
+
+  test('picking a mesh node drops the credential', async () => {
+    const { user } = setup();
+    const meshNode = await screen.findByRole('textbox', { name: /Mesh node/i });
+    await user.type(meshNode, 'receptor.remote');
+
+    await waitFor(() =>
+      expect(InstancesAPI.read).toHaveBeenCalledWith({
+        node_type: 'hop',
+        hostname: 'receptor.remote',
+      })
+    );
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('textbox', { name: /Credential/i })
+      ).not.toBeInTheDocument()
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          credential: null,
+          mesh_node: expect.objectContaining({
+            id: 5,
+            name: 'receptor.remote',
+          }),
+        })
+      )
+    );
+  });
+
+  test('a group behind a mesh node shows it by hostname', async () => {
+    renderWithContexts(
+      <ContainerGroupForm
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        instanceGroup={{
+          ...instanceGroup,
+          credential: null,
+          mesh_node: 5,
+          summary_fields: {
+            ...instanceGroup.summary_fields,
+            credential: undefined,
+            mesh_node: {
+              id: 5,
+              hostname: 'receptor.remote',
+              node_state: 'ready',
+            },
+          },
+        }}
+        initialPodSpec={initialPodSpec}
+      />
+    );
+    expect(
+      await screen.findByRole('textbox', { name: /Mesh node/i })
+    ).toHaveValue('receptor.remote');
+    expect(
+      screen.queryByRole('textbox', { name: /Credential/i })
+    ).not.toBeInTheDocument();
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {

@@ -55,12 +55,19 @@ function WorkflowJobTemplateDetail({
   const navigate = useNavigate();
 
   const renderOptionsField =
-    template.allow_simultaneous || template.webhook_service;
+    template.allow_simultaneous ||
+    template.allow_overwrite_flow_vars_on_relaunch ||
+    template.webhook_service;
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
       {template.allow_simultaneous && (
         <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
+      )}
+      {template.allow_overwrite_flow_vars_on_relaunch && (
+        <Content component={ContentVariants.li}>
+          {t`Overwriting Variables on Relaunch`}
+        </Content>
       )}
       {template.webhook_service && (
         <Content component={ContentVariants.li}>{t`Webhooks`}</Content>

@@ -54,6 +54,20 @@ register(
 )
 
 register(
+    'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Hide System Roles from Access Lists'),
+    help_text=_(
+        'When enabled, the System Administrator and System Auditor roles are hidden from the access '
+        'lists of resources. Users appear in an access list only through roles they actually hold on it '
+        '(organization membership, team roles, direct grants).'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
     'ASCENDER_URL_BASE',
     field_class=fields.URLField,
     schemes=('http', 'https'),

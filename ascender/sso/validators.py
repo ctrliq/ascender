@@ -18,7 +18,7 @@ __all__ = [
     'validate_ldap_filter',
     'validate_ldap_filter_with_user',
     'validate_tacacsplus_disallow_nonascii',
-    'validate_ldap_trigger_rule',
+    'validate_trigger_rule',
 ]
 
 
@@ -78,9 +78,9 @@ def validate_tacacsplus_disallow_nonascii(value):
         raise ValidationError(_('TACACS+ secret does not allow non-ascii characters'))
 
 
-def validate_ldap_trigger_rule(triggers):
+def validate_trigger_rule(triggers):
     """
-    The problems with an LDAP org/team map trigger rule, keyed by where they are.
+    The problems with an org/team map trigger rule, keyed by where they are.
 
     On top of the platform's own trigger definition this refuses two kinds of
     rule the evaluator would take somewhere the person writing it did not mean
@@ -94,7 +94,7 @@ def validate_ldap_trigger_rule(triggers):
     An empty rule body, or an empty operand, still decides: has_and and has_not
     over an empty list match every user, so do contains, ends_with and matches
     against an empty string, while has_or and in over an empty list match none.
-    With remove set, both answers reach the whole directory, one handing out the
+    With remove set, both answers reach every user, one handing out the
     role and the other taking it away.
 
     Used both when a rule is saved and when it is evaluated, because the
@@ -117,7 +117,7 @@ def validate_ldap_trigger_rule(triggers):
             errors['triggers.groups'] = _('One of has_or, has_and or has_not is required.')
         for operator, group_dns in groups.items():
             if isinstance(group_dns, list) and not group_dns:
-                errors['triggers.groups.{}'.format(operator)] = _('At least one group DN is required.')
+                errors['triggers.groups.{}'.format(operator)] = _('At least one group is required.')
 
     attributes = triggers.get('attributes')
     if isinstance(attributes, dict):
