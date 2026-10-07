@@ -24,11 +24,15 @@ export function babelTransform() {
     name: 'awx:babel',
     enforce: 'pre',
     async transform(code, id) {
-      if (!SOURCE.test(id.split('?')[0]) || id.includes('/node_modules/')) {
+      // Vite appends queries such as ?worker_file&type=classic to the id. The
+      // filename babel sees has to be the bare path, because preset-typescript
+      // decides whether to strip types from its extension.
+      const filename = id.split('?')[0];
+      if (!SOURCE.test(filename) || id.includes('/node_modules/')) {
         return null;
       }
       const result = await transformAsync(code, {
-        filename: id,
+        filename,
         babelrc: false,
         configFile: false,
         sourceMaps: true,
