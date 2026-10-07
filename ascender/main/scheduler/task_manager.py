@@ -464,6 +464,7 @@ class TaskManager(TaskBase):
         'AdHocCommand___inventory',
         'WorkflowJob___workflow_job_template',
         'WorkflowJob___allow_simultaneous',
+        'ExecutionEnvironmentBuilderBuild___execution_environment_builder',
     )
 
     def __init__(self):

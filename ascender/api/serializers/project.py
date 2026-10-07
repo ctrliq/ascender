@@ -220,6 +220,25 @@ class ProjectInventoriesSerializer(ProjectSerializer):
         return ReturnList(ret, serializer=self)
 
 
+class ProjectExecutionEnvironmentFilesSerializer(ProjectSerializer):
+    execution_environment_files = serializers.SerializerMethodField(
+        help_text=_('Array of ansible-builder execution environment definition files available within this project.')
+    )
+
+    class Meta:
+        model = Project
+        fields = ('execution_environment_files',)
+
+    def get_execution_environment_files(self, obj):
+        return obj.execution_environment_files if obj.scm_type else obj.execution_environment_definitions
+
+    @property
+    def data(self):
+        ret = super(ProjectExecutionEnvironmentFilesSerializer, self).data
+        ret = ret.get('execution_environment_files', [])
+        return ReturnList(ret, serializer=self)
+
+
 class ProjectUpdateViewSerializer(ProjectSerializer):
     can_update = serializers.BooleanField(read_only=True)
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
   AdHocCommandsAPI,
+  ExecutionEnvironmentBuilderBuildsAPI,
   InventorySourcesAPI,
   JobsAPI,
   JobTemplatesAPI,
@@ -244,6 +245,10 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
       readRelaunch = AdHocCommandsAPI.readRelaunch(resource.id);
     } else if (resource.type === 'job') {
       readRelaunch = JobsAPI.readRelaunch(resource.id);
+    } else if (resource.type === 'execution_environment_builder_build') {
+      readRelaunch = ExecutionEnvironmentBuilderBuildsAPI.readRelaunch(
+        resource.id
+      );
     }
 
     try {
@@ -269,6 +274,8 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
           relaunch = AdHocCommandsAPI.relaunch(resource.id);
         } else if (resource.type === 'job') {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
+        } else if (resource.type === 'execution_environment_builder_build') {
+          relaunch = ExecutionEnvironmentBuilderBuildsAPI.relaunch(resource.id);
         }
         if (!relaunch) {
           return;

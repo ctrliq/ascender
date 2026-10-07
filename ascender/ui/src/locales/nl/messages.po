@@ -170,9 +170,9 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:111
+#: routeConfig.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:112
-#: screens/ActivityStream/ActivityStream.tsx:185
+#: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:89
 #: screens/Project/ProjectList/ProjectList.tsx:181
 #: screens/Project/ProjectList/ProjectList.tsx:249
@@ -325,7 +325,7 @@ msgid "Click to download bundle"
 msgstr "Klik om de bundel te downloaden"
 
 #: components/AdHocCommands/AdHocCommands.tsx:127
-#: components/LaunchButton/LaunchButton.tsx:308
+#: components/LaunchButton/LaunchButton.tsx:315
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:135
 msgid "Failed to launch job."
 msgstr "Kan de taak niet starten."
@@ -338,8 +338,8 @@ msgstr "Rollen selecteren om toe te passen"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "Uit te checken branch. Naast branches kunt u tags, commit-hashes en willekeurige refs invoeren. Sommige commit-hashes en refs zijn mogelijk niet beschikbaar tenzij u ook een aangepaste refspec opgeeft."
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:128
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -512,7 +512,7 @@ msgstr "Kan geen gezondheidscontrole uitvoeren op een of meer instanties."
 msgid "Launched By"
 msgstr "Gestart door"
 
-#: screens/ActivityStream/ActivityStream.tsx:268
+#: screens/ActivityStream/ActivityStream.tsx:276
 #: screens/ActivityStream/ActivityStreamListItem.tsx:52
 #: screens/Job/JobOutput/JobOutputSearch.tsx:109
 msgid "Event"
@@ -706,12 +706,16 @@ msgstr "Een of meer instantiegroepen kunnen niet worden verwijderd."
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:56
-#: screens/ActivityStream/ActivityStream.tsx:167
+#: routeConfig.tsx:59
+#: screens/ActivityStream/ActivityStream.tsx:168
 msgid "Views"
 msgstr "Weergaven"
 
-#: routeConfig.tsx:85
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:167
+msgid "No execution environment files found in this project. Sync the project after adding one."
+msgstr "Geen uitvoeringsomgevingsbestanden gevonden in dit project. Synchroniseer het project nadat u er een hebt toegevoegd."
+
+#: routeConfig.tsx:88
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -735,8 +739,8 @@ msgstr "Knooppunt toevoegen"
 msgid "JSON tab"
 msgstr "JSON-tabblad"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:270
+#: components/JobList/JobListItem.tsx:132
 msgid "Start Time"
 msgstr "Starttijd"
 
@@ -928,6 +932,11 @@ msgstr "Sms-nummer(s) bestemming"
 msgid "Source control branch"
 msgstr "Vertakking broncontrole"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:77
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:29
+msgid "Builds"
+msgstr "Builds"
+
 #: screens/Dashboard/Dashboard.tsx:103
 #: screens/Job/JobOutput/HostEventModal.tsx:146
 msgid "Tabs"
@@ -1015,6 +1024,16 @@ msgstr "Kies de bronnen die nieuwe rollen gaan ontvangen.  U kunt de rollen sele
 msgid "May"
 msgstr "Mei"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:157
+msgid "Delete Execution Environment Builder"
+msgstr "Uitvoeringsomgevingsbouwer verwijderen"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:105
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:134
+msgid "Execution Environment File"
+msgstr "Uitvoeringsomgevingsbestand"
+
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:540
 msgid "Destination channels"
 msgstr "Bestemmingskanalen"
@@ -1079,6 +1098,7 @@ msgstr "Terug naar toegangsgegevens"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:199
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:227
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:215
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:219
 msgid "Deletion error"
 msgstr "Fout bij verwijderen"
@@ -1159,7 +1179,8 @@ msgstr "Fout:"
 msgid "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 msgstr "Bepaalt of deze instantie al dan niet door beleid wordt beheerd. Indien ingeschakeld, is het exemplaar beschikbaar voor automatische toewijzing aan en verwijdering uit exemplaargroepen op basis van beleidsregels."
 
-#: components/JobList/JobList.tsx:257
+#: components/JobList/JobList.tsx:261
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
@@ -1331,6 +1352,11 @@ msgstr "Workflowgoedkeuring"
 msgid "Node types"
 msgstr "Typen knooppunten"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:91
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:96
+msgid "Build Execution Environment"
+msgstr "Uitvoeringsomgeving bouwen"
+
 #: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
@@ -1370,9 +1396,9 @@ msgstr "Draaiboek gestart"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Deze sjabloon voor workflowtaken wordt momenteel gebruikt door andere bronnen. Weet u zeker dat u hem wilt verwijderen?"
 
-#: routeConfig.tsx:121
+#: routeConfig.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:114
-#: screens/ActivityStream/ActivityStream.tsx:187
+#: screens/ActivityStream/ActivityStream.tsx:188
 #: screens/Dashboard/Dashboard.tsx:67
 #: screens/Host/HostList/HostList.tsx:144
 #: screens/Host/HostList/HostList.tsx:191
@@ -1411,6 +1437,7 @@ msgstr "E-mail"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:95
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
@@ -1538,13 +1565,14 @@ msgstr "Kan bericht niet verwijderen."
 msgid "Show less"
 msgstr "Minder tonen"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:150
 #: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
 msgstr "Herziening"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:341
 msgid "Failed to delete one or more jobs."
 msgstr "Een of meer taken kunnen niet worden verwijderd."
 
@@ -1585,6 +1613,12 @@ msgstr "Tokens"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "Selecteer de broninventarissen voor deze gefedereerde inventaris. Wanneer een taak wordt gestart, worden hosts automatisch gerouteerd naar de instantiegroep van elke broninventaris."
 
+#: components/JobList/JobList.tsx:230
+#: components/JobList/JobListItem.tsx:74
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:96
+msgid "Execution Environment Build"
+msgstr "Build van uitvoeringsomgeving"
+
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
 msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
 msgstr "Hop-knooppunt van het receptor-netwerk dat de pods van deze groep uitvoert in het cluster waarin het zich bevindt, met zijn eigen serviceaccount. Het werk bereikt het via het netwerk, dus dit cluster heeft geen toegang tot dat cluster nodig. Laat leeg om de pods via de API van dit cluster uit te voeren."
@@ -1607,7 +1641,7 @@ msgstr "Minuut"
 msgid "Copied"
 msgstr "Gekopieerd"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:352
 msgid "Failed to cancel one or more jobs."
 msgstr "Kan een of meer taken niet annuleren."
 
@@ -1637,8 +1671,8 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:112
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:113
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1731,6 +1765,11 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:119
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:22
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:65
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:158
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:66
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:93
 #: screens/Host/HostDetail/HostDetail.tsx:78
 #: screens/Host/HostGroups/HostGroupItem.tsx:44
 #: screens/Host/HostGroups/HostGroupsList.tsx:167
@@ -1894,7 +1933,7 @@ msgstr "Meer informatie"
 #~ msgid "Subscription manifest"
 #~ msgstr "Abonnementsmanifest"
 
-#: components/JobList/JobList.tsx:243
+#: components/JobList/JobList.tsx:247
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:87
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
@@ -1935,15 +1974,15 @@ msgid "Approved"
 msgstr "Goedgekeurd"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:272
+#: components/JobList/JobListItem.tsx:136
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
 #: components/SelectedList/DraggableSelectedList.tsx:240
 #: components/TemplateList/TemplateList.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:172
-#: screens/ActivityStream/ActivityStream.tsx:269
+#: screens/ActivityStream/ActivityStream.tsx:277
 #: screens/ActivityStream/ActivityStreamListItem.tsx:55
 #: screens/Application/ApplicationsList/ApplicationListItem.tsx:58
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:151
@@ -1953,6 +1992,8 @@ msgstr "Goedgekeurd"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:48
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:167
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:113
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:162
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:88
 #: screens/Host/HostGroups/HostGroupItem.tsx:50
 #: screens/Host/HostGroups/HostGroupsList.tsx:185
 #: screens/Host/HostList/HostList.tsx:174
@@ -2004,7 +2045,7 @@ msgstr "Acties"
 msgid "Event summary not available"
 msgstr "Samenvatting van de gebeurtenis niet beschikbaar"
 
-#: routeConfig.tsx:60
+#: routeConfig.tsx:63
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2095,8 +2136,8 @@ msgstr "werkstroom opnieuw starten"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "Dit project wordt momenteel gesynchroniseerd en kan niet worden aangeklikt totdat het synchronisatieproces is voltooid"
 
-#: routeConfig.tsx:149
-#: screens/ActivityStream/ActivityStream.tsx:199
+#: routeConfig.tsx:163
+#: screens/ActivityStream/ActivityStream.tsx:200
 msgid "Administration"
 msgstr "Beheer"
 
@@ -2140,7 +2181,7 @@ msgstr "Overige meldingen"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Uitkomst van bovenliggend knooppunt vereist voordat de voorwaarde wordt geëvalueerd."
 
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:245
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2159,6 +2200,10 @@ msgstr "Taaksjabloon"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:216
 msgid "Install Bundle"
 msgstr "Bundel installeren"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:92
+msgid "View all execution environment builders"
+msgstr "Alle uitvoeringsomgevingsbouwers weergeven"
 
 #: screens/Project/shared/Project.helptext.tsx:18
 msgid "Example URLs for GIT Source Control include:"
@@ -2560,7 +2605,7 @@ msgstr "Gebruikersdetails"
 msgid "Delete Execution Environment"
 msgstr "Uitvoeringsomgeving verwijderen"
 
-#: components/JobList/JobListItem.tsx:368
+#: components/JobList/JobListItem.tsx:369
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "Taken verdelen"
@@ -2619,6 +2664,7 @@ msgstr "Gebruik één IRC-kanaal of gebruikersnaam per regel. Het hekje-\n"
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:234
 #: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
@@ -2631,6 +2677,7 @@ msgstr "Fout bij verwijderen taak"
 msgid "On days"
 msgstr "Aan-dagen"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:173
 #: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "Uitvoeringsknooppunt"
@@ -2648,9 +2695,9 @@ msgstr "Meerdere selectie"
 msgid "Zoom in"
 msgstr "Inzoomen"
 
-#: routeConfig.tsx:173
+#: routeConfig.tsx:187
 #: screens/ActivityStream/ActivityStream.tsx:120
-#: screens/ActivityStream/ActivityStream.tsx:207
+#: screens/ActivityStream/ActivityStream.tsx:208
 #: screens/InstanceGroup/InstanceGroup.tsx:81
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:198
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:81
@@ -2687,6 +2734,7 @@ msgstr "Uitvoer kopiëren"
 #: components/Search/RelatedLookupTypeInput.tsx:129
 #: screens/Credential/shared/CredentialForm.tsx:265
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:153
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:168
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:224
 #: screens/Template/shared/PlaybookSelect.tsx:164
 msgid "No results found"
@@ -2725,7 +2773,7 @@ msgstr "Een of meer hosts kunnen niet worden losgekoppeld."
 msgid "JOB ID:"
 msgstr "TAAK-ID:"
 
-#: routeConfig.tsx:163
+#: routeConfig.tsx:177
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "Beheerderstaken"
@@ -3043,7 +3091,7 @@ msgstr "Taakdetails weergeven"
 msgid "Azure AD settings"
 msgstr "Azure AD-instellingen"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3145,9 +3193,9 @@ msgstr "Host is mislukt"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:142
+#: routeConfig.tsx:145
 #: screens/ActivityStream/ActivityStream.tsx:117
-#: screens/ActivityStream/ActivityStream.tsx:196
+#: screens/ActivityStream/ActivityStream.tsx:197
 #: screens/Organization/Organization.tsx:139
 #: screens/Organization/OrganizationList/OrganizationList.tsx:143
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:51
@@ -3345,6 +3393,7 @@ msgstr "Typ het antwoord en klik dan op het selectievakje rechts om het antwoord
 msgid "Survey Question Order"
 msgstr "Volgorde vragen enquête"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:84
 #: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "Onbekende startdatum"
@@ -3369,6 +3418,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:298
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:133
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:142
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:163
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
@@ -3385,6 +3435,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:225
 #: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
@@ -3515,7 +3566,7 @@ msgstr "Hosts selecteren"
 msgid "GitHub Team"
 msgstr "GitHub-team"
 
-#: components/JobList/JobList.tsx:253
+#: components/JobList/JobList.tsx:257
 #: components/Lookup/ApplicationLookup.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:216
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:437
@@ -3524,6 +3575,8 @@ msgstr "GitHub-team"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:99
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:123
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:148
 #: screens/Host/HostDetail/HostDetail.tsx:95
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
@@ -3535,6 +3588,7 @@ msgstr "GitHub-team"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:188
 #: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
@@ -3729,6 +3783,7 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "Nieuwe instantiegroep maken"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:140
 #: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "Projectupdate"
@@ -3876,6 +3931,16 @@ msgstr "Voorkeurstaal"
 msgid "Prompt Overrides"
 msgstr "Meldingsoverschrijvingen"
 
+#: routeConfig.tsx:156
+#: screens/ActivityStream/ActivityStream.tsx:124
+#: screens/ActivityStream/ActivityStream.tsx:223
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:122
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:14
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:24
+msgid "Execution Environment Builders"
+msgstr "Uitvoeringsomgevingsbouwers"
+
 #: screens/Setting/SettingList.tsx:56
 msgid "TACACS+ settings"
 msgstr "TACACS+ instellingen"
@@ -3902,7 +3967,7 @@ msgstr "Uitgeschakeld"
 msgid "Default Execution Environment"
 msgstr "Standaarduitvoeringsomgeving"
 
-#: components/JobList/JobListItem.tsx:292
+#: components/JobList/JobListItem.tsx:293
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3910,7 +3975,14 @@ msgstr "Standaarduitvoeringsomgeving"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:142
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:94
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:138
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:160
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:72
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:124
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:130
 #: screens/Job/JobDetail/JobDetail.tsx:180
 #: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:227
@@ -4021,7 +4093,7 @@ msgstr "Standaardantwoord(en)"
 msgid "Delete Job Template"
 msgstr "Taaksjabloon verwijderen"
 
-#: routeConfig.tsx:188
+#: routeConfig.tsx:202
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4114,6 +4186,7 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:287
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:141
 #: screens/Host/HostDetail/HostDetail.tsx:117
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
@@ -4312,6 +4385,10 @@ msgstr "Minimumpercentage van alle instanties dat automatisch\n"
 msgid "Confirm cancellation"
 msgstr "Annuleren bevestigen"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:9
+msgid "The ansible-builder definition file to build, a version 3 execution-environment.yml from the project. A source control project lists the files its last sync found."
+msgstr "Het ansible-builder-definitiebestand dat wordt gebouwd, een execution-environment.yml van versie 3 uit het project. Een broncontroleproject toont de bestanden die de laatste synchronisatie heeft gevonden."
+
 #: components/Sort/Sort.tsx:146
 msgid "Sort"
 msgstr "Sorteren"
@@ -4471,7 +4548,7 @@ msgid "Edit Template"
 msgstr "Sjabloon bewerken"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:178
+#: routeConfig.tsx:192
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4566,9 +4643,9 @@ msgstr "Organisatiedetails weergeven"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
-#: components/LaunchButton/LaunchButton.tsx:305
+#: components/JobList/JobList.tsx:338
+#: components/JobList/JobList.tsx:349
+#: components/LaunchButton/LaunchButton.tsx:312
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
@@ -4728,6 +4805,10 @@ msgstr "Een of meer projecten kunnen niet worden verwijderd."
 msgid "Set source path to"
 msgstr "Stel bronpad in op"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:11
+msgid "The organization whose execution environment admins can manage and run this builder."
+msgstr "De organisatie waarvan de uitvoeringsomgevingsbeheerders deze bouwer kunnen beheren en uitvoeren."
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4757,7 +4838,7 @@ msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Aanmelden met GitHub Enterprise-organisaties"
 
 #: screens/ActivityStream/ActivityStream.tsx:119
-#: screens/ActivityStream/ActivityStream.tsx:205
+#: screens/ActivityStream/ActivityStream.tsx:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:116
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:171
 #: screens/NotificationTemplate/NotificationTemplates.tsx:15
@@ -4775,8 +4856,8 @@ msgstr "Body startbericht"
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Filiaal om te gebruiken bij voorraadsynchronisatie. Projectstandaard gebruikt indien leeg. Alleen toegestaan als het veld project allow_override is ingesteld op true."
 
-#: screens/ActivityStream/ActivityStream.tsx:256
-#: screens/ActivityStream/ActivityStream.tsx:266
+#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:274
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:57
 msgid "Initiated by"
 msgstr "Gestart door"
@@ -4786,7 +4867,7 @@ msgstr "Gestart door"
 msgid "Delete this node"
 msgstr "Dit knooppunt verwijderen"
 
-#: components/JobList/JobListItem.tsx:266
+#: components/JobList/JobListItem.tsx:267
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "Taak bronworkflow"
@@ -4827,7 +4908,7 @@ msgstr "Oragnisatie"
 msgid "{brandName} logo"
 msgstr "{brandName} logo"
 
-#: screens/Job/Job.tsx:238
+#: screens/Job/Job.tsx:244
 msgid "View Job Details"
 msgstr "Taakdetails weergeven"
 
@@ -4852,14 +4933,14 @@ msgstr "Opnieuw starten voorkomen"
 msgid "View SAML settings"
 msgstr "SAML-instellingen weergeven"
 
-#: components/JobList/JobList.tsx:245
+#: components/JobList/JobList.tsx:249
 #: components/StatusLabel/StatusLabel.tsx:65
 #: components/Workflow/WorkflowNodeHelp.tsx:93
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
 msgstr "Geannuleerd"
 
-#: screens/Job/Job.tsx:149
+#: screens/Job/Job.tsx:151
 #: screens/Job/JobOutput/HostEventModal.tsx:221
 #: screens/Job/Jobs.tsx:51
 msgid "Output"
@@ -4892,9 +4973,9 @@ msgstr "Workflow goedgekeurd bericht"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:70
+#: routeConfig.tsx:73
 #: screens/ActivityStream/ActivityStream.tsx:108
-#: screens/ActivityStream/ActivityStream.tsx:173
+#: screens/ActivityStream/ActivityStream.tsx:174
 #: screens/Inventory/Inventories.tsx:130
 #: screens/Inventory/InventorySource/InventorySource.tsx:110
 #: screens/ManagementJob/ManagementJob.tsx:121
@@ -4926,9 +5007,9 @@ msgstr "Systeemwaarschuwing"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:183
+#: routeConfig.tsx:197
 #: screens/ActivityStream/ActivityStream.tsx:123
-#: screens/ActivityStream/ActivityStream.tsx:215
+#: screens/ActivityStream/ActivityStream.tsx:216
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:190
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:14
@@ -4945,8 +5026,8 @@ msgstr "Uitvoeringsomgevingen"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Vraag om taaktype bij opstarten."
 
-#: components/JobList/JobListItem.tsx:232
-#: components/JobList/JobListItem.tsx:240
+#: components/JobList/JobListItem.tsx:233
+#: components/JobList/JobListItem.tsx:241
 msgid "Schedule"
 msgstr "Schema"
 
@@ -5063,6 +5144,10 @@ msgstr "Hosts onbereikbaar"
 msgid "On timeout"
 msgstr "Bij time-out"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:10
+msgid "Credential for the container registry the image is pushed to."
+msgstr "Toegangsgegevens voor het containerregister waarnaar de image wordt gepusht."
+
 #: screens/Team/Teams.tsx:17
 #: screens/Team/Teams.tsx:28
 msgid "Create New Team"
@@ -5151,7 +5236,7 @@ msgstr "Dag"
 msgid "Collapse"
 msgstr "Samenvouwen"
 
-#: components/JobList/JobListItem.tsx:337
+#: components/JobList/JobListItem.tsx:338
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5159,7 +5244,7 @@ msgstr "Samenvouwen"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:96
+#: routeConfig.tsx:99
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5194,7 +5279,7 @@ msgstr "Status selecteren"
 msgid "Month"
 msgstr "Maand"
 
-#: components/JobList/JobListItem.tsx:313
+#: components/JobList/JobListItem.tsx:314
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5204,9 +5289,9 @@ msgstr "Maand"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:106
+#: routeConfig.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:111
-#: screens/ActivityStream/ActivityStream.tsx:184
+#: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
@@ -5264,6 +5349,7 @@ msgstr "Selecteer een rij om goed te keuren"
 #~ msgid "Unique Hosts"
 #~ msgstr "Unieke hosts"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:221
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
@@ -5311,6 +5397,13 @@ msgstr "Maart"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:164
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:86
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:87
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:134
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:144
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:159
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:71
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:117
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:116
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:92
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:111
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:28
@@ -5602,7 +5695,7 @@ msgid "View Credential Details"
 msgstr "Details toegangsgegevens weergeven"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:158
+#: routeConfig.tsx:172
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5668,6 +5761,10 @@ msgstr "Afgelopen twee weken"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
 msgstr "Terug"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#~ msgid "Deleting the builder also deletes all of its builds. Are you sure you want to delete it?"
+#~ msgstr ""
 
 #: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
@@ -5771,6 +5868,10 @@ msgstr "Einddatum"
 msgid "Disable SSL Verification"
 msgstr "SSL-verificatie uitschakelen"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:151
+msgid "Build"
+msgstr "Bouwen"
+
 #: screens/Job/Job.helptext.tsx:21
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:11
 msgid "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
@@ -5780,7 +5881,7 @@ msgstr "Selecteer een branch voor de workflow. Deze branch wordt toegepast op al
 msgid "Management job not found."
 msgstr "Beheertaak niet gevonden."
 
-#: components/JobList/JobList.tsx:238
+#: components/JobList/JobList.tsx:242
 #: components/Workflow/WorkflowNodeHelp.tsx:72
 msgid "New"
 msgstr "Nieuw"
@@ -5804,9 +5905,9 @@ msgstr "Typen verbindingstoestanden"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:101
+#: routeConfig.tsx:104
 #: screens/ActivityStream/ActivityStream.tsx:110
-#: screens/ActivityStream/ActivityStream.tsx:182
+#: screens/ActivityStream/ActivityStream.tsx:183
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:87
 #: screens/Template/Templates.tsx:19
@@ -5866,9 +5967,9 @@ msgstr "Broncontrolevertakking"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:168
+#: routeConfig.tsx:182
 #: screens/ActivityStream/ActivityStream.tsx:121
-#: screens/ActivityStream/ActivityStream.tsx:209
+#: screens/ActivityStream/ActivityStream.tsx:210
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
 #: screens/InstanceGroup/InstanceGroups.tsx:18
 #: screens/InstanceGroup/InstanceGroups.tsx:32
@@ -5958,6 +6059,7 @@ msgstr "Voorraaddefinitie geneste groepen:"
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "Vraag om limiet bij opstarten."
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:83
 #: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
@@ -6016,9 +6118,9 @@ msgid "Survey"
 msgstr "Vragenlijst"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:132
+#: routeConfig.tsx:135
 #: screens/ActivityStream/ActivityStream.tsx:115
-#: screens/ActivityStream/ActivityStream.tsx:193
+#: screens/ActivityStream/ActivityStream.tsx:194
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
 #: screens/Organization/OrganizationList/OrganizationList.tsx:161
 #: screens/Organization/Organizations.tsx:17
@@ -6128,6 +6230,7 @@ msgstr "Output"
 msgid "Denied"
 msgstr "Geweigerd"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:90
 #: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "Onbekende einddatum"
@@ -6171,9 +6274,9 @@ msgstr "Over te slaan tags zijn handig wanneer u een groot playbook heeft en spe
 msgid "View User Details"
 msgstr "Gebruikersdetails weergeven"
 
-#: routeConfig.tsx:75
+#: routeConfig.tsx:78
 #: screens/ActivityStream/ActivityStream.tsx:34
-#: screens/ActivityStream/ActivityStream.tsx:135
+#: screens/ActivityStream/ActivityStream.tsx:136
 #: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "Activiteitenlogboek"
@@ -6203,6 +6306,10 @@ msgstr "Labelnaam"
 #: screens/Inventory/shared/Inventory.helptext.tsx:64
 msgid "View YAML examples at"
 msgstr "Bekijk YAML-voorbeelden op"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:117
+msgid "Copy Execution Environment Builder"
+msgstr "Uitvoeringsomgevingsbouwer kopiëren"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:38
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:153
@@ -6239,6 +6346,10 @@ msgstr "Peers van control nodes"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
 msgid "Test passed"
 msgstr "Test geslaagd"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:90
+msgid "Execution environment builder not found."
+msgstr "Uitvoeringsomgevingsbouwer niet gevonden."
 
 #: screens/Job/Job.helptext.tsx:18
 #: screens/Template/shared/JobTemplate.helptext.tsx:22
@@ -6390,9 +6501,9 @@ msgstr "Hoe geconstrueerde voorraadplug-in te gebruiken"
 msgid "This field must not contain spaces"
 msgstr "Dit veld mag geen spaties bevatten"
 
-#: routeConfig.tsx:153
+#: routeConfig.tsx:167
 #: screens/ActivityStream/ActivityStream.tsx:118
-#: screens/ActivityStream/ActivityStream.tsx:202
+#: screens/ActivityStream/ActivityStream.tsx:203
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:158
 #: screens/CredentialType/CredentialTypes.tsx:15
@@ -6445,7 +6556,7 @@ msgstr "Visualizer"
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "Provisioning-callbacks: schakelt het maken van een provisioning-callback-URL in. Via de URL kan een host contact opnemen met Ascender en een configuratie-update aanvragen met dit taaksjabloon."
 
-#: components/JobList/JobListItem.tsx:159
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
@@ -6604,6 +6715,7 @@ msgstr "Taakinstellingen weergeven"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:137
 #: screens/Host/HostDetail/HostDetail.tsx:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
@@ -6637,9 +6749,9 @@ msgstr "Sjabloon niet gevonden."
 #~ msgid "Trial"
 #~ msgstr "Proefperiode"
 
-#: screens/ActivityStream/ActivityStream.tsx:246
-#: screens/ActivityStream/ActivityStream.tsx:252
-#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:254
+#: screens/ActivityStream/ActivityStream.tsx:260
+#: screens/ActivityStream/ActivityStream.tsx:272
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:54
 #: screens/ActivityStream/ActivityStreamListItem.tsx:48
 msgid "Time"
@@ -6648,6 +6760,10 @@ msgstr "Tijd"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
 msgid "Send HTML formatted body"
 msgstr "HTML-opgemaakte inhoud verzenden"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:64
+msgid "Back to execution environment builders"
+msgstr "Terug naar uitvoeringsomgevingsbouwers"
 
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
@@ -6754,8 +6870,8 @@ msgstr "Sectie samenvouwen"
 msgid "More information for {label}"
 msgstr "Meer informatie voor {label}"
 
-#: routeConfig.tsx:128
-#: screens/ActivityStream/ActivityStream.tsx:190
+#: routeConfig.tsx:131
+#: screens/ActivityStream/ActivityStream.tsx:191
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
 #: screens/Inventory/ConstructedInventory.tsx:76
@@ -6804,6 +6920,10 @@ msgstr "Inventarisbronnen"
 #: screens/Template/shared/JobTemplate.helptext.tsx:34
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "Indien ingeschakeld, zijn gelijktijdige uitvoeringen van dit taaksjabloon toegestaan."
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:6
+msgid "The image to tag the built execution environment as and push it to, including the container registry but not the tag. For example: quay.io/my-org/my-ee"
+msgstr "De image waarmee de gebouwde uitvoeringsomgeving wordt getagd en waarnaar deze wordt gepusht, inclusief het containerregister maar zonder de tag. Bijvoorbeeld: quay.io/my-org/my-ee"
 
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
@@ -6975,6 +7095,9 @@ msgstr "Ongeldig linkdoel. Kan niet linken aan onder- of bovenliggende knooppunt
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:100
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:173
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:112
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:166
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:156
 msgid "Registry credential"
 msgstr "Toegangsgegevens registreren"
 
@@ -7100,7 +7223,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Kies een draaiboekmap"
 
-#: components/JobList/JobListItem.tsx:254
+#: components/JobList/JobListItem.tsx:255
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7278,8 +7401,8 @@ msgstr "Maakt het maken van een provisioning-\n"
 "                              en een configuratie-update aanvragen met behulp van deze taak-\n"
 "                              sjabloon"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:132
+#: components/JobList/JobList.tsx:271
+#: components/JobList/JobListItem.tsx:133
 msgid "Finish Time"
 msgstr "Voltooiingstijd"
 
@@ -7337,7 +7460,7 @@ msgstr "Tijd in seconden om een project als actueel te beschouwen. Tijdens taaku
 msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 msgstr "{numJobsToCancel, plural, one {Deze actie annuleert de volgende taak:} other {Deze actie annuleert de volgende taken:}}"
 
-#: screens/ActivityStream/ActivityStream.tsx:237
+#: screens/ActivityStream/ActivityStream.tsx:245
 msgid "Keyword"
 msgstr "Trefwoord"
 
@@ -7507,6 +7630,8 @@ msgstr "Synchroniseren"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:68
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:157
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:157
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:70
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:101
 #: screens/Host/HostDetail/HostDetail.tsx:84
 #: screens/Host/HostList/HostList.tsx:154
 #: screens/Host/HostList/HostList.tsx:172
@@ -7661,6 +7786,8 @@ msgstr "Aanmelden met GitHub Enterprise"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:43
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:47
 #: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
@@ -7871,7 +7998,7 @@ msgstr "Tokeninformatie"
 msgid "Never Updated"
 msgstr "Nooit bijgewerkt"
 
-#: components/JobList/JobList.tsx:242
+#: components/JobList/JobList.tsx:246
 #: components/StatusLabel/StatusLabel.tsx:54
 #: components/Workflow/WorkflowNodeHelp.tsx:84
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
@@ -8127,7 +8254,7 @@ msgstr "Het is moeilijk om een specificatie te geven voor\n"
 "            de inventaris met `gather_facts: true`. De\n"
 "            werkelijke facts verschillen van systeem tot systeem."
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "Ouder taken verdelen"
@@ -8430,6 +8557,7 @@ msgstr "Verbositeit"
 msgid "Mattermost"
 msgstr "Mattermost"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:67
 #: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "Taak-id"
@@ -8452,7 +8580,7 @@ msgstr "Nieuwe toepassing maken"
 msgid "Plays"
 msgstr "Uitvoeringen van het draaiboek"
 
-#: screens/ActivityStream/ActivityStream.tsx:242
+#: screens/ActivityStream/ActivityStream.tsx:250
 msgid "Initiated by (username)"
 msgstr "Gestart door (gebruikersnaam)"
 
@@ -8479,7 +8607,7 @@ msgstr "Aanmelden met SAML "
 msgid "confirm delete"
 msgstr "verwijderen bevestigen"
 
-#: screens/ActivityStream/ActivityStream.tsx:138
+#: screens/ActivityStream/ActivityStream.tsx:139
 msgid "Activity Stream type selector"
 msgstr "Keuzeschakelaar type activiteitenlogboek"
 
@@ -8605,6 +8733,11 @@ msgstr "Update broncontrole"
 #~ "                   toekomstige releases van de software te verbeteren en om\n"
 #~ "                   Automation Analytics te leveren."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:186
+msgid "Deleting a builder also deletes all of its builds. Are you sure you want to delete it?"
+msgstr "Als u een bouwer verwijdert, worden ook al zijn builds verwijderd. Weet u zeker dat u deze wilt verwijderen?"
+
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
 msgid "Track submodules latest commit on branch"
@@ -8640,6 +8773,11 @@ msgstr "Modus Workflowlink"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:160
 msgid "Edit Inventory"
 msgstr "Inventaris bewerken"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:138
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:139
+msgid "Select an execution environment file"
+msgstr "Uitvoeringsomgevingsbestand selecteren"
 
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:94
 msgid "Failed to user token."
@@ -8683,6 +8821,10 @@ msgstr "Reset bevestigen"
 #: screens/Dashboard/DashboardGraph.tsx:128
 msgid "Past 24 hours"
 msgstr "Afgelopen 24 uur"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:125
+msgid "Failed to copy execution environment builder"
+msgstr "Kan uitvoeringsomgevingsbouwer niet kopiëren"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:223
@@ -8737,7 +8879,7 @@ msgstr "Workflow Berichtenbody in behandeling"
 msgid "Answer variable name"
 msgstr "Antwoord naam variabele"
 
-#: components/JobList/JobListItem.tsx:110
+#: components/JobList/JobListItem.tsx:111
 #: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
@@ -8774,7 +8916,7 @@ msgstr "IRC-bijnaam"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Elke keer dat een taak wordt uitgevoerd met behulp van deze inventaris, vernieuwt u de inventaris van de geselecteerde bron voordat u projecttaken uitvoert."
 
-#: components/JobList/JobList.tsx:241
+#: components/JobList/JobList.tsx:245
 #: components/StatusLabel/StatusLabel.tsx:59
 #: components/TemplateList/TemplateListItem.tsx:117
 #: components/Workflow/WorkflowNodeHelp.tsx:81
@@ -8922,9 +9064,9 @@ msgid "Content Loading"
 msgstr "Inhoud laden"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:116
+#: routeConfig.tsx:119
 #: screens/ActivityStream/ActivityStream.tsx:113
-#: screens/ActivityStream/ActivityStream.tsx:186
+#: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:78
 #: screens/Inventory/Inventories.tsx:55
 #: screens/Inventory/InventoryList/InventoryList.tsx:190
@@ -8960,8 +9102,8 @@ msgstr "Dit veld moet een geheel getal zijn"
 msgid "START"
 msgstr "BEGINNEN"
 
-#: routeConfig.tsx:92
-#: screens/ActivityStream/ActivityStream.tsx:179
+#: routeConfig.tsx:95
+#: screens/ActivityStream/ActivityStream.tsx:180
 msgid "Resources"
 msgstr "Hulpbronnen"
 
@@ -9052,7 +9194,7 @@ msgstr "Bij slagen"
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "Het inventarisbestand dat door deze bron moet worden gesynchroniseerd. U kunt kiezen uit de vervolgkeuzelijst of een bestand invoeren binnen de invoer."
 
-#: screens/Job/Job.tsx:179
+#: screens/Job/Job.tsx:181
 msgid "View all Jobs."
 msgstr "Geef alle taken weer."
 
@@ -9139,7 +9281,7 @@ msgid "Notification Type"
 msgstr "Berichttype"
 
 #: screens/ActivityStream/ActivityStream.tsx:106
-#: screens/ActivityStream/ActivityStream.tsx:170
+#: screens/ActivityStream/ActivityStream.tsx:171
 msgid "Dashboard (all activity)"
 msgstr "Dashboard (alle activiteit)"
 
@@ -9173,12 +9315,14 @@ msgstr "Update-opties"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:257
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:128
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:192
 #: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
@@ -9210,13 +9354,17 @@ msgstr "Opdracht"
 msgid "Access token"
 msgstr "Toegangstoken"
 
-#: components/JobList/JobList.tsx:244
+#: components/JobList/JobList.tsx:248
 #: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:90
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:171
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:182
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:218
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:133
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
@@ -9234,7 +9382,7 @@ msgstr "IRC-serverpoort"
 msgid "Back to Groups"
 msgstr "Terug naar groepen"
 
-#: components/LaunchButton/LaunchButton.tsx:108
+#: components/LaunchButton/LaunchButton.tsx:109
 msgid "A job has already been launched"
 msgstr "Er is al een opdracht gestart"
 
@@ -9247,7 +9395,7 @@ msgid "Recent Templates"
 msgstr "Recente sjablonen"
 
 #: screens/ActivityStream/ActivityStream.tsx:122
-#: screens/ActivityStream/ActivityStream.tsx:212
+#: screens/ActivityStream/ActivityStream.tsx:213
 msgid "Applications & Tokens"
 msgstr "Toepassingen en tokens"
 
@@ -9359,9 +9507,9 @@ msgstr "Geavanceerd"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:137
+#: routeConfig.tsx:140
 #: screens/ActivityStream/ActivityStream.tsx:116
-#: screens/ActivityStream/ActivityStream.tsx:195
+#: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Team/Teams.tsx:32
 #: screens/User/UserList/UserList.tsx:108
 #: screens/User/UserList/UserList.tsx:146
@@ -9436,6 +9584,11 @@ msgstr "Verwijderen"
 #: screens/Instances/Shared/InstanceForm.tsx:32
 msgid "Execution"
 msgstr "Uitvoering"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:136
+msgid "Failed to start the build."
+msgstr "Kan de build niet starten."
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:431
 msgid "The"
@@ -9619,10 +9772,10 @@ msgstr "Vul veld vanuit een extern geheimbeheersysteem"
 #~ msgstr "Toegangsgegevens voor Insights"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:65
+#: components/JobList/JobList.tsx:297
+#: routeConfig.tsx:68
 #: screens/ActivityStream/ActivityStream.tsx:107
-#: screens/ActivityStream/ActivityStream.tsx:172
+#: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Dashboard/shared/LineChart.tsx:118
 #: screens/Host/Host.tsx:81
 #: screens/Host/Hosts.tsx:34
@@ -9685,7 +9838,7 @@ msgstr "Koppelen peer mislukt."
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "Tags zijn handig wanneer u een groot playbook heeft en een specifiek deel van een play of taak wilt uitvoeren. Gebruik komma's om meerdere tags te scheiden. Raadpleeg de documentatie voor details over het gebruik van tags."
 
-#: screens/ActivityStream/ActivityStream.tsx:233
+#: screens/ActivityStream/ActivityStream.tsx:241
 msgid "Events"
 msgstr "Gebeurtenissen"
 
@@ -9754,11 +9907,11 @@ msgstr "Deze organisatie wordt momenteel door andere bronnen gebruikt. Weet u ze
 msgid "System Administrator"
 msgstr "Systeembeheerder"
 
-#: routeConfig.tsx:195
-#: routeConfig.tsx:199
-#: screens/ActivityStream/ActivityStream.tsx:124
-#: screens/ActivityStream/ActivityStream.tsx:219
-#: screens/ActivityStream/ActivityStream.tsx:221
+#: routeConfig.tsx:209
+#: routeConfig.tsx:213
+#: screens/ActivityStream/ActivityStream.tsx:125
+#: screens/ActivityStream/ActivityStream.tsx:227
+#: screens/ActivityStream/ActivityStream.tsx:229
 #: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "Instellingen"
@@ -9802,7 +9955,7 @@ msgstr "Juli"
 msgid "Failed to remove peers."
 msgstr "Kan peers niet verwijderen."
 
-#: screens/Job/Job.tsx:137
+#: screens/Job/Job.tsx:139
 msgid "Back to Jobs"
 msgstr "Terug naar taken"
 
@@ -9818,7 +9971,8 @@ msgstr "Geef alle workflowgoedkeuringen weer."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "Indien niet aangevinkt, wordt een samenvoeging uitgevoerd, waarbij lokale variabelen worden gecombineerd met die op de externe bron."
 
-#: components/JobList/JobListItem.tsx:144
+#: components/JobList/JobListItem.tsx:145
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:212
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9835,9 +9989,9 @@ msgstr "www.json.org"
 msgid "Inventory sources with failures"
 msgstr "Inventarisbronnen met fouten"
 
-#: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:123
+#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:124
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9847,6 +10001,7 @@ msgstr "Inventarisbronnen met fouten"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:71
 #: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:170
@@ -9868,7 +10023,7 @@ msgstr "Weet u zeker dat u dit wilt verwijderen:"
 msgid "Failed to retrieve full node resource object."
 msgstr "Kan geen volledig bronobject van knooppunt ophalen."
 
-#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:243
 #: components/StatusLabel/StatusLabel.tsx:60
 #: components/Workflow/WorkflowNodeHelp.tsx:75
 msgid "Pending"
@@ -9901,6 +10056,10 @@ msgstr "Gereedschap wisselen"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:153
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:166
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:75
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:152
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:79
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
@@ -9975,6 +10134,10 @@ msgstr "Broncodebeheerrevisie"
 msgid "Search is disabled while the job is running"
 msgstr "Zoeken is uitgeschakeld terwijl de taak wordt uitgevoerd"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:126
+msgid "Tag"
+msgstr "Tag"
+
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:443
 msgid "Third"
 msgstr "Derde"
@@ -10007,6 +10170,8 @@ msgstr "Opzoeken annuleren"
 #: screens/CredentialType/CredentialTypes.tsx:29
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:72
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:28
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:72
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:28
 #: screens/Host/Host.tsx:66
 #: screens/Host/Hosts.tsx:31
 #: screens/InstanceGroup/ContainerGroup.tsx:73
@@ -10026,7 +10191,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:86
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
 #: screens/Inventory/SmartInventory.tsx:75
-#: screens/Job/Job.tsx:145
+#: screens/Job/Job.tsx:147
 #: screens/Job/JobOutput/HostEventModal.tsx:155
 #: screens/Job/Jobs.tsx:52
 #: screens/ManagementJob/ManagementJobs.tsx:28
@@ -10098,7 +10263,7 @@ msgstr "Vijfde"
 msgid "Execution environment is missing or deleted."
 msgstr "Uitvoeringsomgeving ontbreekt of is verwijderd."
 
-#: components/JobList/JobList.tsx:240
+#: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:63
 #: components/Workflow/WorkflowNodeHelp.tsx:78
 msgid "Waiting"
@@ -10225,7 +10390,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {De inventaris blijft in de status in behandeling totdat de definitieve verwijdering is verwerkt.} other {De inventarissen blijven in de status in behandeling totdat de definitieve verwijdering is verwerkt.}}"
 
-#: components/JobList/JobListItem.tsx:157
+#: components/JobList/JobListItem.tsx:158
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "Opnieuw opstarten met hostparameters"
@@ -10304,9 +10469,9 @@ msgstr "Kan inventarisbron {name} niet verwijderen."
 msgid "On Condition"
 msgstr "Op voorwaarde"
 
-#: routeConfig.tsx:80
+#: routeConfig.tsx:83
 #: screens/ActivityStream/ActivityStream.tsx:109
-#: screens/ActivityStream/ActivityStream.tsx:175
+#: screens/ActivityStream/ActivityStream.tsx:176
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:195
 #: screens/WorkflowApproval/WorkflowApprovals.tsx:14
@@ -10335,6 +10500,7 @@ msgstr "SOCIAAL"
 
 #: screens/CredentialType/CredentialTypes.tsx:28
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:27
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:27
 #: screens/InstanceGroup/InstanceGroups.tsx:41
 #: screens/InstanceGroup/InstanceGroups.tsx:46
 #: screens/Inventory/Inventories.tsx:104
@@ -10596,7 +10762,7 @@ msgstr "Kon dashboard niet weergeven:"
 msgid "Use browser default"
 msgstr "Browserstandaard gebruiken"
 
-#: components/JobList/JobList.tsx:231
+#: components/JobList/JobList.tsx:235
 msgid "Launched By (Username)"
 msgstr "Opgestart door (gebruikersnaam)"
 
@@ -10634,7 +10800,7 @@ msgstr "Link verwijderen bevestigen"
 msgid "This field must be at least {0} characters"
 msgstr "Dit veld moet minimaal {0} tekens bevatten"
 
-#: components/JobList/JobListItem.tsx:220
+#: components/JobList/JobListItem.tsx:221
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10854,7 +11020,8 @@ msgid "Choose a job type"
 msgstr "Kies een soort taak"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:145
+#: components/JobList/JobListItem.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:213
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
@@ -10917,6 +11084,7 @@ msgstr "Knooppunt bewerken"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:128
 #: screens/Credential/shared/CredentialFormFields/CredentialField.tsx:93
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:150
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
 #: screens/Template/shared/PlaybookSelect.tsx:146
@@ -10929,6 +11097,8 @@ msgid "Expires on {0}"
 msgstr "Verloopt op {0}"
 
 #: components/Workflow/WorkflowTools.tsx:59
+#: routeConfig.tsx:152
+#: screens/ActivityStream/ActivityStream.tsx:220
 msgid "Tools"
 msgstr "Gereedschap"
 
@@ -10989,12 +11159,12 @@ msgid "Continue"
 msgstr "Doorgaan"
 
 #: components/ContentError/ContentError.tsx:55
-#: screens/Job/Job.tsx:178
+#: screens/Job/Job.tsx:180
 msgid "The page you requested could not be found."
 msgstr "De door u opgevraagde pagina kan niet worden gevonden."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:303
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11027,6 +11197,7 @@ msgstr "{draggedName} staat nu op positie {0}."
 msgid "Invalid date format"
 msgstr "Ongeldige datumnotatie"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:179
 #: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "Instantiegroep"
@@ -11102,6 +11273,10 @@ msgstr "Een of meer hosts kunnen niet worden verwijderd."
 #: screens/Job/JobOutput/HostEventModal.tsx:238
 msgid "Standard Error"
 msgstr "Standaardfout"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:8
+msgid "The project that holds the ansible-builder definition file."
+msgstr "Het project dat het ansible-builder-definitiebestand bevat."
 
 #: components/Pagination/Pagination.tsx:38
 msgid "Pagination"
@@ -11256,6 +11431,10 @@ msgstr "{0, plural, one {Weet u zeker dat u de onderstaande groep wilt verwijder
 msgid "Select Items"
 msgstr "Items selecteren"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:98
+msgid "Execution environment builder copied successfully"
+msgstr "Uitvoeringsomgevingsbouwer gekopieerd"
+
 #: components/JobList/JobListCancelButton.tsx:100
 msgid "{numJobsToCancel, plural, one {Cancel selected job} other {Cancel selected jobs}}"
 msgstr "{numJobsToCancel, plural, one {Geselecteerde taak annuleren} other {Geselecteerde taken annuleren}}"
@@ -11357,6 +11536,11 @@ msgstr "Goedkeuring"
 msgid "Failed to update instance."
 msgstr "Kan de vragenlijst niet bijwerken."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:104
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:109
+msgid "Edit Execution Environment Builder"
+msgstr "Uitvoeringsomgevingsbouwer bewerken"
+
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:323
 msgid "Hosts by processor type"
 msgstr "Hosts op processortype"
@@ -11377,6 +11561,10 @@ msgstr "Taak niet gevonden."
 #: screens/Dashboard/Dashboard.tsx:73
 msgid "Failed hosts"
 msgstr "Mislukte hosts"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:7
+msgid "The tag to give the built image."
+msgstr "De tag voor de gebouwde image."
 
 #: components/Search/AdvancedSearch.tsx:392
 msgid "Direct Keys"
@@ -11456,6 +11644,7 @@ msgstr "Kies het type bron dat de nieuwe rollen gaat ontvangen.  Als u bijvoorbe
 #: screens/Credential/CredentialList/CredentialListItem.tsx:68
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:76
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:64
 #: screens/Host/HostGroups/HostGroupItem.tsx:42
 #: screens/Host/HostList/HostListItem.tsx:47
 #: screens/HostMetrics/HostMetricsListItem.tsx:28
@@ -11578,7 +11767,7 @@ msgstr "Voer een taak uit om deze lijst te vullen."
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
-#: components/JobList/JobList.tsx:249
+#: components/JobList/JobList.tsx:253
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
@@ -11624,11 +11813,17 @@ msgstr "Dit project wordt momenteel gebruikt door andere resources. Weet u zeker
 msgid "Associate"
 msgstr "Associëren"
 
-#: components/JobList/JobListItem.tsx:199
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:174
+msgid "Failed to delete execution environment builder."
+msgstr "Kan uitvoeringsomgevingsbouwer niet verwijderen."
+
+#: components/JobList/JobListItem.tsx:200
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:196
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:204
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
@@ -11805,6 +12000,11 @@ msgstr "Type inventaris"
 msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
 msgstr "{numOccurrences, plural, one {Na # keer} other {Na # keer}}"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:102
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:112
+msgid "Execution Environment Builder"
+msgstr "Uitvoeringsomgevingsbouwer"
+
 #: components/Search/AdvancedSearch.tsx:284
 #: components/Search/AdvancedSearch.tsx:298
 msgid "First, select a key"
@@ -11832,7 +12032,7 @@ msgstr "Juni"
 msgid "Launch"
 msgstr "Starten"
 
-#: components/JobList/JobListItem.tsx:361
+#: components/JobList/JobListItem.tsx:362
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Uitleg"
@@ -11912,7 +12112,8 @@ msgid "Error message body"
 msgstr "Foutbericht body"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:146
+#: components/JobList/JobListItem.tsx:147
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:214
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
@@ -12076,7 +12277,7 @@ msgid "Toggle notification start"
 msgstr "Berichtstart wisselen"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:276
+#: components/JobList/JobListItem.tsx:277
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12141,6 +12342,11 @@ msgstr "Hosts toevoegen aan groep op basis van Jinja2-voorwaarden."
 msgid "Copy Template"
 msgstr "Sjabloon kopiëren"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:15
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:25
+msgid "Create new execution environment builder"
+msgstr "Nieuwe uitvoeringsomgevingsbouwer maken"
+
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "Berichtgoedkeuringen wisselen"
@@ -12168,6 +12374,10 @@ msgstr "Knooppunt verwijderen bevestigen"
 #: components/Schedule/shared/ScheduleFormFields.tsx:222
 msgid "Week"
 msgstr "Week"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:221
+msgid "Failed to delete one or more execution environment builders"
+msgstr "Een of meer uitvoeringsomgevingsbouwers kunnen niet worden verwijderd"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:351
 msgid "Send the message body as HTML (org.matrix.custom.html)\n"

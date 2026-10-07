@@ -35,6 +35,9 @@ from ascender.main.models import (
     CredentialType,
     CredentialInputSource,
     ExecutionEnvironment,
+    ExecutionEnvironmentBuilder,
+    ExecutionEnvironmentBuilderBuild,
+    ExecutionEnvironmentBuilderBuildEvent,
     Group,
     Host,
     Instance,
@@ -229,6 +232,7 @@ def consumer_access(group_name):
         'project_update_events': ProjectUpdateAccess,
         'inventory_update_events': InventoryUpdateAccess,
         'system_job_events': SystemJobAccess,
+        'execution_environment_builder_build_events': ExecutionEnvironmentBuilderBuildAccess,
     }
     return class_map.get(group_name)
 
@@ -1413,6 +1417,82 @@ class ExecutionEnvironmentAccess(BaseAccess):
         return self.can_change(obj, None)
 
 
+class ExecutionEnvironmentBuilderAccess(BaseAccess):
+    """
+    I can see an execution environment builder when:
+     - I'm a superuser or system auditor
+     - I'm an execution environment admin or auditor of its organization
+    I can create/change/delete/run one when:
+     - I'm a superuser
+     - I'm an execution environment admin of its organization, and I can use
+       its project and its registry credential
+    """
+
+    model = ExecutionEnvironmentBuilder
+    select_related = ('organization', 'project', 'credential')
+    prefetch_related = ('organization__admin_role', 'organization__execution_environment_admin_role')
+
+    read_via = (ExecutionEnvironmentBuilder, '')
+
+    @check_superuser
+    def can_add(self, data):
+        if not data:  # So the browseable API will work
+            return Organization.accessible_objects(self.user, 'execution_environment_admin_role').exists()
+        return bool(
+            self.check_related('organization', Organization, data, mandatory=True, role_field='execution_environment_admin_role')
+            and self.check_related('project', Project, data, role_field='use_role')
+            and self.check_related('credential', Credential, data, role_field='use_role')
+        )
+
+    @check_superuser
+    def can_change(self, obj, data):
+        if self.user not in obj.admin_role:
+            return False
+        return bool(
+            self.check_related('organization', Organization, data, obj=obj, mandatory=True, role_field='execution_environment_admin_role')
+            and self.check_related('project', Project, data, obj=obj, role_field='use_role')
+            and self.check_related('credential', Credential, data, obj=obj, role_field='use_role')
+        )
+
+    def can_delete(self, obj):
+        return self.can_change(obj, None)
+
+    @check_superuser
+    def can_start(self, obj):
+        return bool(obj and self.user in obj.admin_role)
+
+
+class ExecutionEnvironmentBuilderBuildAccess(BaseAccess):
+    """
+    I can see execution environment builds when I can see the builder.
+    I can cancel, relaunch or delete one when I can run the builder.
+    """
+
+    model = ExecutionEnvironmentBuilderBuild
+    select_related = (
+        'created_by',
+        'modified_by',
+        'execution_environment_builder',
+    )
+    prefetch_related = ('instance_group',)
+
+    read_via = (ExecutionEnvironmentBuilder, 'execution_environment_builder')
+
+    @check_superuser
+    def can_cancel(self, obj):
+        if self.user == obj.created_by:
+            return True
+        return self.user in obj.execution_environment_builder.admin_role
+
+    def can_start(self, obj):
+        # for relaunching
+        return bool(obj and self.user.can_access(ExecutionEnvironmentBuilder, 'start', obj.execution_environment_builder))
+
+    @check_superuser
+    def can_delete(self, obj):
+        return bool(obj and self.user in obj.execution_environment_builder.admin_role)
+
+
 class ProjectAccess(NotificationAttachMixin, BaseAccess):
     """
     I can see projects when:
@@ -2392,6 +2472,16 @@ class ReceptorAddressAccess(BaseAccess):
         return False
 
 
+class ExecutionEnvironmentBuilderBuildEventAccess(ReadOnlyAccess, BaseAccess):
+    """
+    I can see execution environment build events whenever I can see the build
+    """
+
+    model = ExecutionEnvironmentBuilderBuildEvent
+
+    read_via = (ExecutionEnvironmentBuilder, 'execution_environment_builder_build__execution_environment_builder')
+
+
 class SystemJobEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can only see manage System Jobs events if I'm a super user
@@ -2513,6 +2603,16 @@ class UnifiedJobAccess(BaseAccess):
             .distinct()
         )
 
+        builder_accessible = (
+            RoleAncestorEntry.objects.filter(
+                ancestor_id__in=user_role_ids,
+                role_field='read_role',
+                content_type_id=ContentType.objects.get_for_model(ExecutionEnvironmentBuilder).id,
+            )
+            .values_list('object_id')
+            .distinct()
+        )
+
         return self.model.objects.filter(
             Q(unified_job_template_id__in=ujt_accessible)
             | Q(
@@ -2523,6 +2623,11 @@ class UnifiedJobAccess(BaseAccess):
             | Q(
                 pk__in=AdHocCommand.objects.filter(
                     inventory_id__in=inv_accessible,
+                ).values('pk')
+            )
+            | Q(
+                pk__in=ExecutionEnvironmentBuilderBuild.objects.filter(
+                    execution_environment_builder_id__in=builder_accessible,
                 ).values('pk')
             )
             | Q(organization__in=Organization.objects.filter(Q(admin_role_id__in=user_role_ids) | Q(auditor_role_id__in=user_role_ids)))

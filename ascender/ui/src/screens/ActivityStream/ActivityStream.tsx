@@ -121,6 +121,7 @@ function ActivityStream() {
     instance_group: t`Instance Groups`,
     'o_auth2_application,o_auth2_access_token': t`Applications & Tokens`,
     execution_environment: t`Execution Environments`,
+    execution_environment_builder: t`Execution Environment Builders`,
     setting: t`Settings`,
   };
 
@@ -213,6 +214,13 @@ function ActivityStream() {
               </SelectOption>
               <SelectOption value="execution_environment">
                 {t`Execution Environments`}
+              </SelectOption>
+            </SelectList>
+          </SelectGroup>
+          <SelectGroup label={t`Tools`} key="tools">
+            <SelectList>
+              <SelectOption value="execution_environment_builder">
+                {t`Execution Environment Builders`}
               </SelectOption>
             </SelectList>
           </SelectGroup>

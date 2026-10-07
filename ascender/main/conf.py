@@ -819,6 +819,20 @@ register(
 )
 
 register(
+    'EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS',
+    field_class=fields.StringListField,
+    label=_('Execution Environment Builder Container Options'),
+    default=[],
+    help_text=_(
+        "List of options to pass to podman run for execution environment builds, in addition to the container run options. "
+        "When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime "
+        "and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']"
+    ),
+    category=('Jobs'),
+    category_slug='jobs',
+)
+
+register(
     'RECEPTOR_RELEASE_WORK',
     field_class=fields.BooleanField,
     label=_('Release Receptor Work'),

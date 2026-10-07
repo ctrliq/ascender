@@ -27,11 +27,11 @@ from django.db import connection
 from django.utils.timezone import now
 
 from ascender.main.management.commands.cleanup_jobs import partition_name_dt
-from ascender.main.models import AdHocCommand, InventoryUpdate, Job, ProjectUpdate, SystemJob
+from ascender.main.models import AdHocCommand, ExecutionEnvironmentBuilderBuild, InventoryUpdate, Job, ProjectUpdate, SystemJob
 from ascender.main.utils.common import unified_job_class_to_event_table_name
 
 #: every job type that writes events into a partitioned table
-EVENT_JOB_CLASSES = (Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand)
+EVENT_JOB_CLASSES = (Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand, ExecutionEnvironmentBuilderBuild)
 
 #: how many bytes to move out of the database at a time while archiving. The
 #: rows never all exist in this process at once, which is the point.

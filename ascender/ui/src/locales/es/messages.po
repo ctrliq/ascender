@@ -170,9 +170,9 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# tenedor} other {# tenedores}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:111
+#: routeConfig.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:112
-#: screens/ActivityStream/ActivityStream.tsx:185
+#: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:89
 #: screens/Project/ProjectList/ProjectList.tsx:181
 #: screens/Project/ProjectList/ProjectList.tsx:249
@@ -325,7 +325,7 @@ msgid "Click to download bundle"
 msgstr "Haga clic para descargar el paquete"
 
 #: components/AdHocCommands/AdHocCommands.tsx:127
-#: components/LaunchButton/LaunchButton.tsx:308
+#: components/LaunchButton/LaunchButton.tsx:315
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:135
 msgid "Failed to launch job."
 msgstr "No se pudo ejecutar la tarea."
@@ -338,8 +338,8 @@ msgstr "Seleccionar los roles para aplicar"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "Rama que se va a extraer. Además de las ramas, puede introducir etiquetas, hashes de commit y refs arbitrarias. Es posible que algunos hashes de commit y refs no estén disponibles a menos que también proporcione un refspec personalizado."
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:128
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -512,7 +512,7 @@ msgstr "No se ha podido ejecutar una comprobación de estado en una o más insta
 msgid "Launched By"
 msgstr "Ejecutado por"
 
-#: screens/ActivityStream/ActivityStream.tsx:268
+#: screens/ActivityStream/ActivityStream.tsx:276
 #: screens/ActivityStream/ActivityStreamListItem.tsx:52
 #: screens/Job/JobOutput/JobOutputSearch.tsx:109
 msgid "Event"
@@ -706,12 +706,16 @@ msgstr "No se pudo eliminar uno o más grupos de instancias."
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:56
-#: screens/ActivityStream/ActivityStream.tsx:167
+#: routeConfig.tsx:59
+#: screens/ActivityStream/ActivityStream.tsx:168
 msgid "Views"
 msgstr "Vistas"
 
-#: routeConfig.tsx:85
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:167
+msgid "No execution environment files found in this project. Sync the project after adding one."
+msgstr "No se encontraron archivos de entorno de ejecución en este proyecto. Sincronice el proyecto después de agregar uno."
+
+#: routeConfig.tsx:88
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -735,8 +739,8 @@ msgstr "Agregar nodo"
 msgid "JSON tab"
 msgstr "Pestaña JSON"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:270
+#: components/JobList/JobListItem.tsx:132
 msgid "Start Time"
 msgstr "Hora de inicio"
 
@@ -928,6 +932,11 @@ msgstr "Números SMS del destinatario"
 msgid "Source control branch"
 msgstr "Rama de fuente de control"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:77
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:29
+msgid "Builds"
+msgstr "Compilaciones"
+
 #: screens/Dashboard/Dashboard.tsx:103
 #: screens/Job/JobOutput/HostEventModal.tsx:146
 msgid "Tabs"
@@ -1015,6 +1024,16 @@ msgstr "Elija los recursos que recibirán nuevos roles. Podrá seleccionar los r
 msgid "May"
 msgstr "Mayo"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:157
+msgid "Delete Execution Environment Builder"
+msgstr "Eliminar constructor de entornos de ejecución"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:105
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:134
+msgid "Execution Environment File"
+msgstr "Archivo de entorno de ejecución"
+
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:540
 msgid "Destination channels"
 msgstr "Canales destinatarios"
@@ -1079,6 +1098,7 @@ msgstr "Volver a Credenciales"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:199
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:227
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:215
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:219
 msgid "Deletion error"
 msgstr "Error de eliminación"
@@ -1159,7 +1179,8 @@ msgstr "Error:"
 msgid "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 msgstr "Controla si esta instancia está gestionada por la directiva o no. Si está habilitada, la instancia estará disponible para la asignación automática y la desasignación de grupos de instancias en función de las reglas de la política."
 
-#: components/JobList/JobList.tsx:257
+#: components/JobList/JobList.tsx:261
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
@@ -1331,6 +1352,11 @@ msgstr "Aprobación del flujo de trabajo"
 msgid "Node types"
 msgstr "Tipos de nodo"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:91
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:96
+msgid "Build Execution Environment"
+msgstr "Compilar entorno de ejecución"
+
 #: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
@@ -1370,9 +1396,9 @@ msgstr "Playbook iniciado"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada por otros recursos. ¿Está seguro de que desea eliminarla?"
 
-#: routeConfig.tsx:121
+#: routeConfig.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:114
-#: screens/ActivityStream/ActivityStream.tsx:187
+#: screens/ActivityStream/ActivityStream.tsx:188
 #: screens/Dashboard/Dashboard.tsx:67
 #: screens/Host/HostList/HostList.tsx:144
 #: screens/Host/HostList/HostList.tsx:191
@@ -1411,6 +1437,7 @@ msgstr "Correo electrónico"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:95
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
@@ -1538,13 +1565,14 @@ msgstr "No se pudo eliminar la notificación."
 msgid "Show less"
 msgstr "Mostrar menos"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:150
 #: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
 msgstr "Revisión"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:341
 msgid "Failed to delete one or more jobs."
 msgstr "No se pudo eliminar una o más tareas."
 
@@ -1585,6 +1613,12 @@ msgstr "Tokens"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "Seleccione los inventarios de origen para este inventario federado. Cuando se lanza un trabajo, los hosts se enrutarán automáticamente al grupo de instancias de cada inventario de origen."
 
+#: components/JobList/JobList.tsx:230
+#: components/JobList/JobListItem.tsx:74
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:96
+msgid "Execution Environment Build"
+msgstr "Compilación de entorno de ejecución"
+
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
 msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
 msgstr "Nodo de salto de la malla de receptor que ejecuta los pods de este grupo en el clúster en el que se encuentra, usando su propia cuenta de servicio. El trabajo le llega a través de la malla, por lo que este clúster no necesita acceso a ese otro. Déjelo en blanco para ejecutar los pods a través de la API de este clúster."
@@ -1607,7 +1641,7 @@ msgstr "Minuto"
 msgid "Copied"
 msgstr "Copiado"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:352
 msgid "Failed to cancel one or more jobs."
 msgstr "No se pudo cancelar una o varias tareas."
 
@@ -1637,8 +1671,8 @@ msgstr "Crear nuevo inventario federado"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:112
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:113
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1731,6 +1765,11 @@ msgstr "Crear nuevo inventario federado"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:119
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:22
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:65
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:158
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:66
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:93
 #: screens/Host/HostDetail/HostDetail.tsx:78
 #: screens/Host/HostGroups/HostGroupItem.tsx:44
 #: screens/Host/HostGroups/HostGroupsList.tsx:167
@@ -1894,7 +1933,7 @@ msgstr "Detalles"
 #~ msgid "Subscription manifest"
 #~ msgstr "Manifiesto de suscripción"
 
-#: components/JobList/JobList.tsx:243
+#: components/JobList/JobList.tsx:247
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:87
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
@@ -1935,15 +1974,15 @@ msgid "Approved"
 msgstr "Aprobado"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:272
+#: components/JobList/JobListItem.tsx:136
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
 #: components/SelectedList/DraggableSelectedList.tsx:240
 #: components/TemplateList/TemplateList.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:172
-#: screens/ActivityStream/ActivityStream.tsx:269
+#: screens/ActivityStream/ActivityStream.tsx:277
 #: screens/ActivityStream/ActivityStreamListItem.tsx:55
 #: screens/Application/ApplicationsList/ApplicationListItem.tsx:58
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:151
@@ -1953,6 +1992,8 @@ msgstr "Aprobado"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:48
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:167
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:113
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:162
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:88
 #: screens/Host/HostGroups/HostGroupItem.tsx:50
 #: screens/Host/HostGroups/HostGroupsList.tsx:185
 #: screens/Host/HostList/HostList.tsx:174
@@ -2004,7 +2045,7 @@ msgstr "Acciones"
 msgid "Event summary not available"
 msgstr "Resumen del evento no disponible."
 
-#: routeConfig.tsx:60
+#: routeConfig.tsx:63
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2095,8 +2136,8 @@ msgstr "volver a ejecutar flujo de trabajo"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "Este proyecto está actualmente en sincronización y no se puede hacer clic hasta que se complete el proceso de sincronización"
 
-#: routeConfig.tsx:149
-#: screens/ActivityStream/ActivityStream.tsx:199
+#: routeConfig.tsx:163
+#: screens/ActivityStream/ActivityStream.tsx:200
 msgid "Administration"
 msgstr "Administración"
 
@@ -2140,7 +2181,7 @@ msgstr "Otros avisos"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Resultado del nodo primario necesario antes de evaluar la condición."
 
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:245
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2159,6 +2200,10 @@ msgstr "Plantilla de trabajo"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:216
 msgid "Install Bundle"
 msgstr "Instalar el paquete"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:92
+msgid "View all execution environment builders"
+msgstr "Ver todos los constructores de entornos de ejecución"
 
 #: screens/Project/shared/Project.helptext.tsx:18
 msgid "Example URLs for GIT Source Control include:"
@@ -2561,7 +2606,7 @@ msgstr "Detalles del usuario"
 msgid "Delete Execution Environment"
 msgstr "Eliminar entorno de ejecución"
 
-#: components/JobList/JobListItem.tsx:368
+#: components/JobList/JobListItem.tsx:369
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "Fracción de tareas"
@@ -2620,6 +2665,7 @@ msgstr "Use un canal de IRC o nombre de usuario por línea. El símbolo\n"
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:234
 #: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
@@ -2632,6 +2678,7 @@ msgstr "Error en la eliminación de tareas"
 msgid "On days"
 msgstr "En los días"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:173
 #: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "Nodo de ejecución"
@@ -2649,9 +2696,9 @@ msgstr "Selección múltiple"
 msgid "Zoom in"
 msgstr "Acercar"
 
-#: routeConfig.tsx:173
+#: routeConfig.tsx:187
 #: screens/ActivityStream/ActivityStream.tsx:120
-#: screens/ActivityStream/ActivityStream.tsx:207
+#: screens/ActivityStream/ActivityStream.tsx:208
 #: screens/InstanceGroup/InstanceGroup.tsx:81
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:198
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:81
@@ -2688,6 +2735,7 @@ msgstr "Copiar salida"
 #: components/Search/RelatedLookupTypeInput.tsx:129
 #: screens/Credential/shared/CredentialForm.tsx:265
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:153
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:168
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:224
 #: screens/Template/shared/PlaybookSelect.tsx:164
 msgid "No results found"
@@ -2726,7 +2774,7 @@ msgstr "No se pudo disociar uno o más hosts."
 msgid "JOB ID:"
 msgstr "ID DE TAREA:"
 
-#: routeConfig.tsx:163
+#: routeConfig.tsx:177
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "Trabajos de gestión"
@@ -3044,7 +3092,7 @@ msgstr "Ver detalles de la tarea"
 msgid "Azure AD settings"
 msgstr "Configuración de Azure AD"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3146,9 +3194,9 @@ msgstr "Servidor fallido"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:142
+#: routeConfig.tsx:145
 #: screens/ActivityStream/ActivityStream.tsx:117
-#: screens/ActivityStream/ActivityStream.tsx:196
+#: screens/ActivityStream/ActivityStream.tsx:197
 #: screens/Organization/Organization.tsx:139
 #: screens/Organization/OrganizationList/OrganizationList.tsx:143
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:51
@@ -3346,6 +3394,7 @@ msgstr "Escriba la respuesta y marque la casilla de verificación a la derecha p
 msgid "Survey Question Order"
 msgstr "Orden de las preguntas de la encuesta"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:84
 #: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "Fecha de inicio desconocida"
@@ -3370,6 +3419,7 @@ msgstr "Menor o igual que la comparación."
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:298
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:133
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:142
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:163
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
@@ -3386,6 +3436,7 @@ msgstr "Menor o igual que la comparación."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:225
 #: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
@@ -3516,7 +3567,7 @@ msgstr "Seleccionar hosts"
 msgid "GitHub Team"
 msgstr "Equipo GitHub"
 
-#: components/JobList/JobList.tsx:253
+#: components/JobList/JobList.tsx:257
 #: components/Lookup/ApplicationLookup.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:216
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:437
@@ -3525,6 +3576,8 @@ msgstr "Equipo GitHub"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:99
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:123
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:148
 #: screens/Host/HostDetail/HostDetail.tsx:95
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
@@ -3536,6 +3589,7 @@ msgstr "Equipo GitHub"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:188
 #: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
@@ -3730,6 +3784,7 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "Crear nuevo grupo de instancias"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:140
 #: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "Actualización del proyecto"
@@ -3877,6 +3932,16 @@ msgstr "Idioma preferido"
 msgid "Prompt Overrides"
 msgstr "Anulaciones de avisos"
 
+#: routeConfig.tsx:156
+#: screens/ActivityStream/ActivityStream.tsx:124
+#: screens/ActivityStream/ActivityStream.tsx:223
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:122
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:14
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:24
+msgid "Execution Environment Builders"
+msgstr "Constructores de entornos de ejecución"
+
 #: screens/Setting/SettingList.tsx:56
 msgid "TACACS+ settings"
 msgstr "Configuración de TACACS+"
@@ -3903,7 +3968,7 @@ msgstr "Deshabilitados"
 msgid "Default Execution Environment"
 msgstr "Entorno de ejecución predeterminado"
 
-#: components/JobList/JobListItem.tsx:292
+#: components/JobList/JobListItem.tsx:293
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3911,7 +3976,14 @@ msgstr "Entorno de ejecución predeterminado"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:142
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:94
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:138
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:160
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:72
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:124
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:130
 #: screens/Job/JobDetail/JobDetail.tsx:180
 #: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:227
@@ -4022,7 +4094,7 @@ msgstr "Respuesta(s) por defecto"
 msgid "Delete Job Template"
 msgstr "Eliminar plantilla de trabajo"
 
-#: routeConfig.tsx:188
+#: routeConfig.tsx:202
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4115,6 +4187,7 @@ msgstr "Eliminar credencial"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:287
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:141
 #: screens/Host/HostDetail/HostDetail.tsx:117
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
@@ -4313,6 +4386,10 @@ msgstr "Porcentaje mínimo de todas las instancias que se asignarán automática
 msgid "Confirm cancellation"
 msgstr "Confirmar cancelación"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:9
+msgid "The ansible-builder definition file to build, a version 3 execution-environment.yml from the project. A source control project lists the files its last sync found."
+msgstr "El archivo de definición de ansible-builder que se compilará, un execution-environment.yml de la versión 3 del proyecto. Un proyecto de fuente de control muestra los archivos que encontró su última sincronización."
+
 #: components/Sort/Sort.tsx:146
 msgid "Sort"
 msgstr "Ordenar"
@@ -4472,7 +4549,7 @@ msgid "Edit Template"
 msgstr "Modificar plantilla"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:178
+#: routeConfig.tsx:192
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4567,9 +4644,9 @@ msgstr "Ver detalles de la organización"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
-#: components/LaunchButton/LaunchButton.tsx:305
+#: components/JobList/JobList.tsx:338
+#: components/JobList/JobList.tsx:349
+#: components/LaunchButton/LaunchButton.tsx:312
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
@@ -4729,6 +4806,10 @@ msgstr "No se pudo eliminar uno o más proyectos."
 msgid "Set source path to"
 msgstr "Establecer la ruta de origen en"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:11
+msgid "The organization whose execution environment admins can manage and run this builder."
+msgstr "La organización cuyos administradores de entornos de ejecución pueden gestionar y ejecutar este constructor."
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4758,7 +4839,7 @@ msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Iniciar sesión con organizaciones GitHub Enterprise"
 
 #: screens/ActivityStream/ActivityStream.tsx:119
-#: screens/ActivityStream/ActivityStream.tsx:205
+#: screens/ActivityStream/ActivityStream.tsx:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:116
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:171
 #: screens/NotificationTemplate/NotificationTemplates.tsx:15
@@ -4776,8 +4857,8 @@ msgstr "Iniciar cuerpo del mensaje"
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Rama para usar en la sincronización del inventario. Se utiliza el valor predeterminado del proyecto si está en blanco. Solo se permite si el campo allow_override del proyecto está establecido en true."
 
-#: screens/ActivityStream/ActivityStream.tsx:256
-#: screens/ActivityStream/ActivityStream.tsx:266
+#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:274
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:57
 msgid "Initiated by"
 msgstr "Inicializado por"
@@ -4787,7 +4868,7 @@ msgstr "Inicializado por"
 msgid "Delete this node"
 msgstr "Eliminar este nodo"
 
-#: components/JobList/JobListItem.tsx:266
+#: components/JobList/JobListItem.tsx:267
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "Tarea del flujo de trabajo de origen"
@@ -4828,7 +4909,7 @@ msgstr "Oragnización"
 msgid "{brandName} logo"
 msgstr "{brandName} Logotipo"
 
-#: screens/Job/Job.tsx:238
+#: screens/Job/Job.tsx:244
 msgid "View Job Details"
 msgstr "Ver detalles de la tarea"
 
@@ -4853,14 +4934,14 @@ msgstr "Impedir el relanzamiento"
 msgid "View SAML settings"
 msgstr "Ver la configuración de SAML"
 
-#: components/JobList/JobList.tsx:245
+#: components/JobList/JobList.tsx:249
 #: components/StatusLabel/StatusLabel.tsx:65
 #: components/Workflow/WorkflowNodeHelp.tsx:93
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
 msgstr "Cancelado"
 
-#: screens/Job/Job.tsx:149
+#: screens/Job/Job.tsx:151
 #: screens/Job/JobOutput/HostEventModal.tsx:221
 #: screens/Job/Jobs.tsx:51
 msgid "Output"
@@ -4893,9 +4974,9 @@ msgstr "Mensaje de flujo de trabajo aprobado"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:70
+#: routeConfig.tsx:73
 #: screens/ActivityStream/ActivityStream.tsx:108
-#: screens/ActivityStream/ActivityStream.tsx:173
+#: screens/ActivityStream/ActivityStream.tsx:174
 #: screens/Inventory/Inventories.tsx:130
 #: screens/Inventory/InventorySource/InventorySource.tsx:110
 #: screens/ManagementJob/ManagementJob.tsx:121
@@ -4927,9 +5008,9 @@ msgstr "Advertencia del sistema"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:183
+#: routeConfig.tsx:197
 #: screens/ActivityStream/ActivityStream.tsx:123
-#: screens/ActivityStream/ActivityStream.tsx:215
+#: screens/ActivityStream/ActivityStream.tsx:216
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:190
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:14
@@ -4946,8 +5027,8 @@ msgstr "Entornos de ejecución"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Preguntar por el tipo de trabajo al ejecutar."
 
-#: components/JobList/JobListItem.tsx:232
-#: components/JobList/JobListItem.tsx:240
+#: components/JobList/JobListItem.tsx:233
+#: components/JobList/JobListItem.tsx:241
 msgid "Schedule"
 msgstr "Planificar"
 
@@ -5064,6 +5145,10 @@ msgstr "Hosts inaccesibles"
 msgid "On timeout"
 msgstr "En el tiempo de espera"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:10
+msgid "Credential for the container registry the image is pushed to."
+msgstr "Credencial del registro de contenedores al que se envía la imagen."
+
 #: screens/Team/Teams.tsx:17
 #: screens/Team/Teams.tsx:28
 msgid "Create New Team"
@@ -5152,7 +5237,7 @@ msgstr "Día"
 msgid "Collapse"
 msgstr "Contraer"
 
-#: components/JobList/JobListItem.tsx:337
+#: components/JobList/JobListItem.tsx:338
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5160,7 +5245,7 @@ msgstr "Contraer"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:96
+#: routeConfig.tsx:99
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5195,7 +5280,7 @@ msgstr "Seleccionar estado"
 msgid "Month"
 msgstr "Mes"
 
-#: components/JobList/JobListItem.tsx:313
+#: components/JobList/JobListItem.tsx:314
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5205,9 +5290,9 @@ msgstr "Mes"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:106
+#: routeConfig.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:111
-#: screens/ActivityStream/ActivityStream.tsx:184
+#: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
@@ -5266,6 +5351,7 @@ msgstr "Selecciona una fila para aprobar"
 #~ msgid "Unique Hosts"
 #~ msgstr "Anfitriones únicos"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:221
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
@@ -5313,6 +5399,13 @@ msgstr "Marzo"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:164
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:86
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:87
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:134
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:144
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:159
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:71
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:117
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:116
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:92
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:111
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:28
@@ -5604,7 +5697,7 @@ msgid "View Credential Details"
 msgstr "Ver detalles de la credencial"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:158
+#: routeConfig.tsx:172
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5670,6 +5763,10 @@ msgstr "Últimas dos semanas"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
 msgstr "Volver"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#~ msgid "Deleting the builder also deletes all of its builds. Are you sure you want to delete it?"
+#~ msgstr ""
 
 #: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
@@ -5773,6 +5870,10 @@ msgstr "Fecha de terminación"
 msgid "Disable SSL Verification"
 msgstr "Deshabilite la verificación de SSL"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:151
+msgid "Build"
+msgstr "Compilar"
+
 #: screens/Job/Job.helptext.tsx:21
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:11
 msgid "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
@@ -5782,7 +5883,7 @@ msgstr "Seleccione una rama para el flujo de trabajo. Esta rama se aplica a todo
 msgid "Management job not found."
 msgstr "No se encontró la tarea de gestión."
 
-#: components/JobList/JobList.tsx:238
+#: components/JobList/JobList.tsx:242
 #: components/Workflow/WorkflowNodeHelp.tsx:72
 msgid "New"
 msgstr "Nuevo"
@@ -5806,9 +5907,9 @@ msgstr "Tipos de estado de los enlaces"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:101
+#: routeConfig.tsx:104
 #: screens/ActivityStream/ActivityStream.tsx:110
-#: screens/ActivityStream/ActivityStream.tsx:182
+#: screens/ActivityStream/ActivityStream.tsx:183
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:87
 #: screens/Template/Templates.tsx:19
@@ -5868,9 +5969,9 @@ msgstr "rama de fuente de control"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:168
+#: routeConfig.tsx:182
 #: screens/ActivityStream/ActivityStream.tsx:121
-#: screens/ActivityStream/ActivityStream.tsx:209
+#: screens/ActivityStream/ActivityStream.tsx:210
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
 #: screens/InstanceGroup/InstanceGroups.tsx:18
 #: screens/InstanceGroup/InstanceGroups.tsx:32
@@ -5960,6 +6061,7 @@ msgstr "Definición de inventario de grupos anidados:"
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "Preguntar por el límite al ejecutar."
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:83
 #: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
@@ -6018,9 +6120,9 @@ msgid "Survey"
 msgstr "Encuesta"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:132
+#: routeConfig.tsx:135
 #: screens/ActivityStream/ActivityStream.tsx:115
-#: screens/ActivityStream/ActivityStream.tsx:193
+#: screens/ActivityStream/ActivityStream.tsx:194
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
 #: screens/Organization/OrganizationList/OrganizationList.tsx:161
 #: screens/Organization/Organizations.tsx:17
@@ -6130,6 +6232,7 @@ msgstr "Salida"
 msgid "Denied"
 msgstr "Denegado"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:90
 #: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "Fecha de finalización desconocida"
@@ -6173,9 +6276,9 @@ msgstr "Las etiquetas para omitir son útiles cuando tiene un playbook grande y 
 msgid "View User Details"
 msgstr "Ver detalles del usuario"
 
-#: routeConfig.tsx:75
+#: routeConfig.tsx:78
 #: screens/ActivityStream/ActivityStream.tsx:34
-#: screens/ActivityStream/ActivityStream.tsx:135
+#: screens/ActivityStream/ActivityStream.tsx:136
 #: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "Flujo de actividad"
@@ -6205,6 +6308,10 @@ msgstr "Nombre de la etiqueta"
 #: screens/Inventory/shared/Inventory.helptext.tsx:64
 msgid "View YAML examples at"
 msgstr "Ver ejemplos de YAML en"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:117
+msgid "Copy Execution Environment Builder"
+msgstr "Copiar constructor de entornos de ejecución"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:38
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:153
@@ -6241,6 +6348,10 @@ msgstr "Compañeros de nodos de control"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
 msgid "Test passed"
 msgstr "Prueba "
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:90
+msgid "Execution environment builder not found."
+msgstr "No se encontró el constructor de entornos de ejecución."
 
 #: screens/Job/Job.helptext.tsx:18
 #: screens/Template/shared/JobTemplate.helptext.tsx:22
@@ -6392,9 +6503,9 @@ msgstr "Cómo usar el plugin de inventario construido"
 msgid "This field must not contain spaces"
 msgstr "Este campo no debe contener espacios"
 
-#: routeConfig.tsx:153
+#: routeConfig.tsx:167
 #: screens/ActivityStream/ActivityStream.tsx:118
-#: screens/ActivityStream/ActivityStream.tsx:202
+#: screens/ActivityStream/ActivityStream.tsx:203
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:158
 #: screens/CredentialType/CredentialTypes.tsx:15
@@ -6447,7 +6558,7 @@ msgstr "Visualizador"
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "Devoluciones de llamada de aprovisionamiento: habilita la creación de una URL de devolución de llamada de aprovisionamiento. Mediante la URL, un host puede contactar con Ascender y solicitar una actualización de configuración utilizando esta plantilla de trabajo."
 
-#: components/JobList/JobListItem.tsx:159
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
@@ -6606,6 +6717,7 @@ msgstr "Ver la configuración de las tareas"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:137
 #: screens/Host/HostDetail/HostDetail.tsx:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
@@ -6639,9 +6751,9 @@ msgstr "No se encontró la plantilla."
 #~ msgid "Trial"
 #~ msgstr "Prueba"
 
-#: screens/ActivityStream/ActivityStream.tsx:246
-#: screens/ActivityStream/ActivityStream.tsx:252
-#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:254
+#: screens/ActivityStream/ActivityStream.tsx:260
+#: screens/ActivityStream/ActivityStream.tsx:272
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:54
 #: screens/ActivityStream/ActivityStreamListItem.tsx:48
 msgid "Time"
@@ -6650,6 +6762,10 @@ msgstr "Duración"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
 msgid "Send HTML formatted body"
 msgstr "Enviar cuerpo con formato HTML"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:64
+msgid "Back to execution environment builders"
+msgstr "Volver a los constructores de entornos de ejecución"
 
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
@@ -6756,8 +6872,8 @@ msgstr "Contraer sección"
 msgid "More information for {label}"
 msgstr "Más información para {label}"
 
-#: routeConfig.tsx:128
-#: screens/ActivityStream/ActivityStream.tsx:190
+#: routeConfig.tsx:131
+#: screens/ActivityStream/ActivityStream.tsx:191
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
 #: screens/Inventory/ConstructedInventory.tsx:76
@@ -6806,6 +6922,10 @@ msgstr "Fuentes de inventario"
 #: screens/Template/shared/JobTemplate.helptext.tsx:34
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "Si está habilitado, se permitirán ejecuciones simultáneas de esta plantilla de trabajo."
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:6
+msgid "The image to tag the built execution environment as and push it to, including the container registry but not the tag. For example: quay.io/my-org/my-ee"
+msgstr "La imagen con la que se etiqueta el entorno de ejecución compilado y a la que se envía, incluido el registro de contenedores pero no la etiqueta. Por ejemplo: quay.io/my-org/my-ee"
 
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
@@ -6977,6 +7097,9 @@ msgstr "Objetivo de enlace no válido. No se puede enlazar con nodos secundarios
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:100
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:173
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:112
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:166
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:156
 msgid "Registry credential"
 msgstr "Credencial de registro"
 
@@ -7102,7 +7225,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Elegir un directorio de playbook"
 
-#: components/JobList/JobListItem.tsx:254
+#: components/JobList/JobListItem.tsx:255
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7280,8 +7403,8 @@ msgstr "Permite la creación de una URL de devolución\n"
 "                              y solicitar una actualización de la configuración utilizando esta plantilla\n"
 "                              de trabajo"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:132
+#: components/JobList/JobList.tsx:271
+#: components/JobList/JobListItem.tsx:133
 msgid "Finish Time"
 msgstr "Hora de finalización"
 
@@ -7339,7 +7462,7 @@ msgstr "Tiempo en segundos para considerar que un proyecto está actualizado. Du
 msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 msgstr "{numJobsToCancel, plural, one {Esta acción cancelará el siguiente trabajo:} other {Esta acción cancelará los siguientes trabajos:}}"
 
-#: screens/ActivityStream/ActivityStream.tsx:237
+#: screens/ActivityStream/ActivityStream.tsx:245
 msgid "Keyword"
 msgstr "Palabra clave"
 
@@ -7509,6 +7632,8 @@ msgstr "Sincronizar"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:68
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:157
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:157
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:70
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:101
 #: screens/Host/HostDetail/HostDetail.tsx:84
 #: screens/Host/HostList/HostList.tsx:154
 #: screens/Host/HostList/HostList.tsx:172
@@ -7663,6 +7788,8 @@ msgstr "Iniciar sesión con GitHub Enterprise"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:43
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:47
 #: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
@@ -7873,7 +8000,7 @@ msgstr "Información del token"
 msgid "Never Updated"
 msgstr "Nunca actualizado"
 
-#: components/JobList/JobList.tsx:242
+#: components/JobList/JobList.tsx:246
 #: components/StatusLabel/StatusLabel.tsx:54
 #: components/Workflow/WorkflowNodeHelp.tsx:84
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
@@ -8129,7 +8256,7 @@ msgstr "Es difícil dar una especificación para\n"
 "            el inventario que tiene `gather_facts: true`. Los\n"
 "            hechos reales diferirán de un sistema a otro."
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "Fraccionamiento de los trabajos principales"
@@ -8432,6 +8559,7 @@ msgstr "Nivel de detalle"
 msgid "Mattermost"
 msgstr "Mattermost"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:67
 #: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "Identificación del trabajo"
@@ -8454,7 +8582,7 @@ msgstr "Crear una nueva aplicación"
 msgid "Plays"
 msgstr "Jugadas"
 
-#: screens/ActivityStream/ActivityStream.tsx:242
+#: screens/ActivityStream/ActivityStream.tsx:250
 msgid "Initiated by (username)"
 msgstr "Inicializado por (nombre de usuario)"
 
@@ -8481,7 +8609,7 @@ msgstr "Iniciar sesión con SAML "
 msgid "confirm delete"
 msgstr "confirmar eliminación"
 
-#: screens/ActivityStream/ActivityStream.tsx:138
+#: screens/ActivityStream/ActivityStream.tsx:139
 msgid "Activity Stream type selector"
 msgstr "Selector de tipo de flujo de actividad"
 
@@ -8607,6 +8735,11 @@ msgstr "Actualización de fuente de control"
 #~ "                   futuras versiones del software y para proporcionar\n"
 #~ "                   Automation Analytics."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:186
+msgid "Deleting a builder also deletes all of its builds. Are you sure you want to delete it?"
+msgstr "Al eliminar un constructor también se eliminan todas sus compilaciones. ¿Está seguro de que desea eliminarlo?"
+
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
 msgid "Track submodules latest commit on branch"
@@ -8642,6 +8775,11 @@ msgstr "Modal de enlace del flujo de trabajo"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:160
 msgid "Edit Inventory"
 msgstr "Editar inventario"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:138
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:139
+msgid "Select an execution environment file"
+msgstr "Seleccionar un archivo de entorno de ejecución"
 
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:94
 msgid "Failed to user token."
@@ -8685,6 +8823,10 @@ msgstr "Confirmar la reinicialización"
 #: screens/Dashboard/DashboardGraph.tsx:128
 msgid "Past 24 hours"
 msgstr "Últimas 24 horas"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:125
+msgid "Failed to copy execution environment builder"
+msgstr "No se pudo copiar el constructor de entornos de ejecución"
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:223
@@ -8739,7 +8881,7 @@ msgstr "Cuerpo del mensaje de flujo de trabajo pendiente"
 msgid "Answer variable name"
 msgstr "Nombre de la variable de respuesta"
 
-#: components/JobList/JobListItem.tsx:110
+#: components/JobList/JobListItem.tsx:111
 #: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
@@ -8776,7 +8918,7 @@ msgstr "Alias en IRC"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Cada vez que se ejecute un trabajo utilizando este inventario, actualice el inventario de la fuente seleccionada antes de ejecutar las tareas del trabajo."
 
-#: components/JobList/JobList.tsx:241
+#: components/JobList/JobList.tsx:245
 #: components/StatusLabel/StatusLabel.tsx:59
 #: components/TemplateList/TemplateListItem.tsx:117
 #: components/Workflow/WorkflowNodeHelp.tsx:81
@@ -8924,9 +9066,9 @@ msgid "Content Loading"
 msgstr "Carga de contenido"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:116
+#: routeConfig.tsx:119
 #: screens/ActivityStream/ActivityStream.tsx:113
-#: screens/ActivityStream/ActivityStream.tsx:186
+#: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:78
 #: screens/Inventory/Inventories.tsx:55
 #: screens/Inventory/InventoryList/InventoryList.tsx:190
@@ -8962,8 +9104,8 @@ msgstr "Este campo debe ser un número entero"
 msgid "START"
 msgstr "INICIAR"
 
-#: routeConfig.tsx:92
-#: screens/ActivityStream/ActivityStream.tsx:179
+#: routeConfig.tsx:95
+#: screens/ActivityStream/ActivityStream.tsx:180
 msgid "Resources"
 msgstr "Recursos"
 
@@ -9054,7 +9196,7 @@ msgstr "Con éxito"
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "El archivo de inventario a sincronizar por esta fuente. Puede seleccionar desde el menú desplegable o introducir un archivo dentro de la entrada."
 
-#: screens/Job/Job.tsx:179
+#: screens/Job/Job.tsx:181
 msgid "View all Jobs."
 msgstr "Ver todas las tareas."
 
@@ -9141,7 +9283,7 @@ msgid "Notification Type"
 msgstr "Tipo de notificación"
 
 #: screens/ActivityStream/ActivityStream.tsx:106
-#: screens/ActivityStream/ActivityStream.tsx:170
+#: screens/ActivityStream/ActivityStream.tsx:171
 msgid "Dashboard (all activity)"
 msgstr "Panel de control (toda la actividad)"
 
@@ -9175,12 +9317,14 @@ msgstr "Actualizar opciones"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:257
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:128
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:192
 #: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
@@ -9212,13 +9356,17 @@ msgstr "Comando"
 msgid "Access token"
 msgstr "Token de acceso"
 
-#: components/JobList/JobList.tsx:244
+#: components/JobList/JobList.tsx:248
 #: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:90
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:171
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:182
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:218
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:133
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
@@ -9236,7 +9384,7 @@ msgstr "Puerto del servidor IRC"
 msgid "Back to Groups"
 msgstr "Volver a Grupos"
 
-#: components/LaunchButton/LaunchButton.tsx:108
+#: components/LaunchButton/LaunchButton.tsx:109
 msgid "A job has already been launched"
 msgstr "Ya se ha lanzado un trabajo"
 
@@ -9249,7 +9397,7 @@ msgid "Recent Templates"
 msgstr "Plantillas recientes"
 
 #: screens/ActivityStream/ActivityStream.tsx:122
-#: screens/ActivityStream/ActivityStream.tsx:212
+#: screens/ActivityStream/ActivityStream.tsx:213
 msgid "Applications & Tokens"
 msgstr "Aplicaciones y tokens"
 
@@ -9361,9 +9509,9 @@ msgstr "Avanzado"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:137
+#: routeConfig.tsx:140
 #: screens/ActivityStream/ActivityStream.tsx:116
-#: screens/ActivityStream/ActivityStream.tsx:195
+#: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Team/Teams.tsx:32
 #: screens/User/UserList/UserList.tsx:108
 #: screens/User/UserList/UserList.tsx:146
@@ -9438,6 +9586,11 @@ msgstr "Eliminar"
 #: screens/Instances/Shared/InstanceForm.tsx:32
 msgid "Execution"
 msgstr "Ejecución"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:136
+msgid "Failed to start the build."
+msgstr "No se pudo iniciar la compilación."
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:431
 msgid "The"
@@ -9621,10 +9774,10 @@ msgstr "Completar el campo desde un sistema externo de gestión de claves secret
 #~ msgstr "Credencial de Insights"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:65
+#: components/JobList/JobList.tsx:297
+#: routeConfig.tsx:68
 #: screens/ActivityStream/ActivityStream.tsx:107
-#: screens/ActivityStream/ActivityStream.tsx:172
+#: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Dashboard/shared/LineChart.tsx:118
 #: screens/Host/Host.tsx:81
 #: screens/Host/Hosts.tsx:34
@@ -9687,7 +9840,7 @@ msgstr "Error al asociar a un compañero."
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "Las etiquetas son útiles cuando tiene un playbook grande y desea ejecutar una parte específica de un play o una tarea. Utilice comas para separar varias etiquetas. Consulte la documentación para obtener detalles sobre el uso de las etiquetas."
 
-#: screens/ActivityStream/ActivityStream.tsx:233
+#: screens/ActivityStream/ActivityStream.tsx:241
 msgid "Events"
 msgstr "Eventos"
 
@@ -9756,11 +9909,11 @@ msgstr "Esta organización está siendo utilizada por otros recursos. ¿Está se
 msgid "System Administrator"
 msgstr "Administrador del sistema"
 
-#: routeConfig.tsx:195
-#: routeConfig.tsx:199
-#: screens/ActivityStream/ActivityStream.tsx:124
-#: screens/ActivityStream/ActivityStream.tsx:219
-#: screens/ActivityStream/ActivityStream.tsx:221
+#: routeConfig.tsx:209
+#: routeConfig.tsx:213
+#: screens/ActivityStream/ActivityStream.tsx:125
+#: screens/ActivityStream/ActivityStream.tsx:227
+#: screens/ActivityStream/ActivityStream.tsx:229
 #: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "Ajustes"
@@ -9804,7 +9957,7 @@ msgstr "Julio"
 msgid "Failed to remove peers."
 msgstr "No se han podido eliminar los compañeros."
 
-#: screens/Job/Job.tsx:137
+#: screens/Job/Job.tsx:139
 msgid "Back to Jobs"
 msgstr "Volver a Tareas"
 
@@ -9820,7 +9973,8 @@ msgstr "Ver todas las aprobaciones del flujo de trabajo."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "Si no se marca, se realizará una fusión, combinando las variables locales con las que se encuentran en la fuente externa."
 
-#: components/JobList/JobListItem.tsx:144
+#: components/JobList/JobListItem.tsx:145
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:212
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9837,9 +9991,9 @@ msgstr "www.json.org"
 msgid "Inventory sources with failures"
 msgstr "Fuentes de inventario con fallas"
 
-#: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:123
+#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:124
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9849,6 +10003,7 @@ msgstr "Fuentes de inventario con fallas"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:71
 #: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:170
@@ -9870,7 +10025,7 @@ msgstr "¿Está seguro de que desea eliminar:"
 msgid "Failed to retrieve full node resource object."
 msgstr "No se pudo recuperar el objeto de recurso de nodo completo."
 
-#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:243
 #: components/StatusLabel/StatusLabel.tsx:60
 #: components/Workflow/WorkflowNodeHelp.tsx:75
 msgid "Pending"
@@ -9903,6 +10058,10 @@ msgstr "Alternar herramientas"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:153
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:166
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:75
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:152
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:79
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
@@ -9977,6 +10136,10 @@ msgstr "Revisión de fuente de control"
 msgid "Search is disabled while the job is running"
 msgstr "La búsqueda se desactiva durante la ejecución de la tarea"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:126
+msgid "Tag"
+msgstr "Etiqueta"
+
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:443
 msgid "Third"
 msgstr "Tercero"
@@ -10009,6 +10172,8 @@ msgstr "Cancelar búsqueda"
 #: screens/CredentialType/CredentialTypes.tsx:29
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:72
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:28
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:72
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:28
 #: screens/Host/Host.tsx:66
 #: screens/Host/Hosts.tsx:31
 #: screens/InstanceGroup/ContainerGroup.tsx:73
@@ -10028,7 +10193,7 @@ msgstr "Cancelar búsqueda"
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:86
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
 #: screens/Inventory/SmartInventory.tsx:75
-#: screens/Job/Job.tsx:145
+#: screens/Job/Job.tsx:147
 #: screens/Job/JobOutput/HostEventModal.tsx:155
 #: screens/Job/Jobs.tsx:52
 #: screens/ManagementJob/ManagementJobs.tsx:28
@@ -10100,7 +10265,7 @@ msgstr "Quinto"
 msgid "Execution environment is missing or deleted."
 msgstr "Falta el entorno de ejecución o se ha eliminado."
 
-#: components/JobList/JobList.tsx:240
+#: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:63
 #: components/Workflow/WorkflowNodeHelp.tsx:78
 msgid "Waiting"
@@ -10227,7 +10392,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {El inventario estará en estado pendiente hasta que se procese la eliminación final.} other {Los inventarios estarán en estado pendiente hasta que se procese la eliminación final.}}"
 
-#: components/JobList/JobListItem.tsx:157
+#: components/JobList/JobListItem.tsx:158
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "Relanzar utilizando los parámetros de host"
@@ -10306,9 +10471,9 @@ msgstr "No se pudo eliminar la fuente del inventario {name}."
 msgid "On Condition"
 msgstr "Con condición"
 
-#: routeConfig.tsx:80
+#: routeConfig.tsx:83
 #: screens/ActivityStream/ActivityStream.tsx:109
-#: screens/ActivityStream/ActivityStream.tsx:175
+#: screens/ActivityStream/ActivityStream.tsx:176
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:195
 #: screens/WorkflowApproval/WorkflowApprovals.tsx:14
@@ -10337,6 +10502,7 @@ msgstr "SOCIAL"
 
 #: screens/CredentialType/CredentialTypes.tsx:28
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:27
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:27
 #: screens/InstanceGroup/InstanceGroups.tsx:41
 #: screens/InstanceGroup/InstanceGroups.tsx:46
 #: screens/Inventory/Inventories.tsx:104
@@ -10598,7 +10764,7 @@ msgstr "No se pudo obtener el tablero:"
 msgid "Use browser default"
 msgstr "Usar predeterminado del navegador"
 
-#: components/JobList/JobList.tsx:231
+#: components/JobList/JobList.tsx:235
 msgid "Launched By (Username)"
 msgstr "Ejecutado por (nombre de usuario)"
 
@@ -10636,7 +10802,7 @@ msgstr "Confirmar eliminación de enlace"
 msgid "This field must be at least {0} characters"
 msgstr "Este campo debe tener al menos {0} caracteres"
 
-#: components/JobList/JobListItem.tsx:220
+#: components/JobList/JobListItem.tsx:221
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10856,7 +11022,8 @@ msgid "Choose a job type"
 msgstr "Seleccionar un tipo de tarea"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:145
+#: components/JobList/JobListItem.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:213
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
@@ -10919,6 +11086,7 @@ msgstr "Modificar nodo"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:128
 #: screens/Credential/shared/CredentialFormFields/CredentialField.tsx:93
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:150
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
 #: screens/Template/shared/PlaybookSelect.tsx:146
@@ -10931,6 +11099,8 @@ msgid "Expires on {0}"
 msgstr "Expira el {0}"
 
 #: components/Workflow/WorkflowTools.tsx:59
+#: routeConfig.tsx:152
+#: screens/ActivityStream/ActivityStream.tsx:220
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -10991,12 +11161,12 @@ msgid "Continue"
 msgstr "Continuar"
 
 #: components/ContentError/ContentError.tsx:55
-#: screens/Job/Job.tsx:178
+#: screens/Job/Job.tsx:180
 msgid "The page you requested could not be found."
 msgstr "No se pudo encontrar la página solicitada."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:303
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11029,6 +11199,7 @@ msgstr "{draggedName} está ahora en la posición {0}."
 msgid "Invalid date format"
 msgstr "Formato de fecha no válido"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:179
 #: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "Grupo de instancias"
@@ -11104,6 +11275,10 @@ msgstr "No se pudo eliminar uno o más hosts."
 #: screens/Job/JobOutput/HostEventModal.tsx:238
 msgid "Standard Error"
 msgstr "Error estándar"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:8
+msgid "The project that holds the ansible-builder definition file."
+msgstr "El proyecto que contiene el archivo de definición de ansible-builder."
 
 #: components/Pagination/Pagination.tsx:38
 msgid "Pagination"
@@ -11258,6 +11433,10 @@ msgstr "{0, plural, one {¿Está seguro de que desea eliminar el grupo siguiente
 msgid "Select Items"
 msgstr "Seleccionar elementos"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:98
+msgid "Execution environment builder copied successfully"
+msgstr "El constructor de entornos de ejecución se copió correctamente"
+
 #: components/JobList/JobListCancelButton.tsx:100
 msgid "{numJobsToCancel, plural, one {Cancel selected job} other {Cancel selected jobs}}"
 msgstr "{numJobsToCancel, plural, one {Cancelar el trabajo seleccionado} other {Cancelar los trabajos seleccionados}}"
@@ -11359,6 +11538,11 @@ msgstr "Aprobación"
 msgid "Failed to update instance."
 msgstr "No se pudo actualizar la encuesta."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:104
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:109
+msgid "Edit Execution Environment Builder"
+msgstr "Modificar constructor de entornos de ejecución"
+
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:323
 msgid "Hosts by processor type"
 msgstr "Anfitriones por tipo de procesador"
@@ -11379,6 +11563,10 @@ msgstr "No se encontró la tarea."
 #: screens/Dashboard/Dashboard.tsx:73
 msgid "Failed hosts"
 msgstr "Hosts fallidos"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:7
+msgid "The tag to give the built image."
+msgstr "La etiqueta que se asigna a la imagen compilada."
 
 #: components/Search/AdvancedSearch.tsx:392
 msgid "Direct Keys"
@@ -11458,6 +11646,7 @@ msgstr "Elija el tipo de recurso que recibirá los nuevos roles. Por ejemplo, si
 #: screens/Credential/CredentialList/CredentialListItem.tsx:68
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:76
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:64
 #: screens/Host/HostGroups/HostGroupItem.tsx:42
 #: screens/Host/HostList/HostListItem.tsx:47
 #: screens/HostMetrics/HostMetricsListItem.tsx:28
@@ -11580,7 +11769,7 @@ msgstr "Ejecute un trabajo para rellenar esta lista."
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
-#: components/JobList/JobList.tsx:249
+#: components/JobList/JobList.tsx:253
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
@@ -11626,11 +11815,17 @@ msgstr "Este proyecto está siendo utilizado actualmente por otros recursos. ¿E
 msgid "Associate"
 msgstr "Asociar"
 
-#: components/JobList/JobListItem.tsx:199
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:174
+msgid "Failed to delete execution environment builder."
+msgstr "No se pudo eliminar el constructor de entornos de ejecución."
+
+#: components/JobList/JobListItem.tsx:200
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:196
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:204
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
@@ -11807,6 +12002,11 @@ msgstr "Tipo de inventario"
 msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
 msgstr "{numOccurrences, plural, one {Después de # ocurrencia} other {Después de # ocurrencias}}"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:102
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:112
+msgid "Execution Environment Builder"
+msgstr "Constructor de entornos de ejecución"
+
 #: components/Search/AdvancedSearch.tsx:284
 #: components/Search/AdvancedSearch.tsx:298
 msgid "First, select a key"
@@ -11834,7 +12034,7 @@ msgstr "Junio"
 msgid "Launch"
 msgstr "Ejecutar"
 
-#: components/JobList/JobListItem.tsx:361
+#: components/JobList/JobListItem.tsx:362
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Explicación"
@@ -11914,7 +12114,8 @@ msgid "Error message body"
 msgstr "Cuerpo del mensaje de error"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:146
+#: components/JobList/JobListItem.tsx:147
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:214
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
@@ -12078,7 +12279,7 @@ msgid "Toggle notification start"
 msgstr "Iniciar alternancia de notificaciones"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:276
+#: components/JobList/JobListItem.tsx:277
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12143,6 +12344,11 @@ msgstr "Añade anfitriones al grupo según las condiciones de Jinja2."
 msgid "Copy Template"
 msgstr "Copiar plantilla"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:15
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:25
+msgid "Create new execution environment builder"
+msgstr "Crear un nuevo constructor de entornos de ejecución"
+
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "Aprobaciones para alternar las notificaciones"
@@ -12170,6 +12376,10 @@ msgstr "Confirmar eliminación de nodo"
 #: components/Schedule/shared/ScheduleFormFields.tsx:222
 msgid "Week"
 msgstr "Semana"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:221
+msgid "Failed to delete one or more execution environment builders"
+msgstr "No se pudo eliminar uno o más constructores de entornos de ejecución"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:351
 msgid "Send the message body as HTML (org.matrix.custom.html)\n"

@@ -13,6 +13,9 @@ const Dashboard = React.lazy(() => import('screens/Dashboard'));
 const ExecutionEnvironments = React.lazy(
   () => import('screens/ExecutionEnvironment')
 );
+const ExecutionEnvironmentBuilders = React.lazy(
+  () => import('screens/ExecutionEnvironmentBuilder')
+);
 const Hosts = React.lazy(() => import('screens/Host'));
 const Instances = React.lazy(() => import('screens/Instances'));
 const InstanceGroups = React.lazy(() => import('screens/InstanceGroup'));
@@ -146,6 +149,17 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
       ],
     },
     {
+      groupTitle: <Trans>Tools</Trans>,
+      groupId: 'tools_group',
+      routes: [
+        {
+          title: <Trans>Execution Environment Builders</Trans>,
+          path: '/execution_environment_builders',
+          screen: ExecutionEnvironmentBuilders,
+        },
+      ],
+    },
+    {
       groupTitle: <Trans>Administration</Trans>,
       groupId: 'administration_group',
       routes: [
@@ -221,6 +235,9 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
   deleteRoute('management_jobs');
   deleteRoute('topology_view');
   deleteRoute('instances');
+  // builders belong to organizations' execution environment admins, which an
+  // organization's admins are as well
+  if (!userProfile?.isExecEnvAdmin) deleteRouteGroup('tools_group');
   if (userProfile?.isOrgAdmin) return routeConfig;
   if (!userProfile?.isNotificationAdmin) deleteRoute('notification_templates');
 

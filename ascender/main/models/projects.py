@@ -227,6 +227,23 @@ class ProjectOptions(models.Model):
                     break
         return sorted(results, key=lambda x: smart_str(x).lower())
 
+    @property
+    def execution_environment_definitions(self):
+        """
+        The ansible-builder definition files in the project, which are the files
+        named execution-environment.yml (or .yaml), relative to the project root.
+        """
+        results = []
+        project_path = self.get_project_path()
+        if project_path:
+            for dirpath, dirnames, filenames in os.walk(smart_str(project_path)):
+                if skip_directory(dirpath):
+                    continue
+                for filename in filenames:
+                    if filename in ('execution-environment.yml', 'execution-environment.yaml'):
+                        results.append(smart_str(os.path.relpath(os.path.join(dirpath, filename), project_path)))
+        return sorted(results, key=lambda x: smart_str(x).lower())
+
     def get_lock_file(self):
         """
         We want the project path in name only, we don't care if it exists or
@@ -318,6 +335,14 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
         editable=False,
         verbose_name=_('Inventory Files'),
         help_text=_('Suggested list of content that could be Ansible inventory in the project'),
+    )
+
+    execution_environment_files = models.JSONField(
+        default=list,
+        blank=True,
+        editable=False,
+        verbose_name=_('Execution Environment Files'),
+        help_text=_('List of ansible-builder execution environment definition files found in the project'),
     )
 
     admin_role = ImplicitRoleField(

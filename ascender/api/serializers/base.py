@@ -31,6 +31,7 @@ from ascender.dab.lib.utils.models import get_type_for_model
 from ascender.main.access import get_user_capabilities
 from ascender.main.models import (
     AdHocCommand,
+    ExecutionEnvironmentBuilderBuild,
     InventorySource,
     InventoryUpdate,
     Job,
@@ -85,6 +86,7 @@ SUMMARIZABLE_FK_FIELDS = {
     'group': DEFAULT_SUMMARY_FIELDS,
     'default_environment': DEFAULT_SUMMARY_FIELDS + ('image',),
     'execution_environment': DEFAULT_SUMMARY_FIELDS + ('image',),
+    'execution_environment_builder': DEFAULT_SUMMARY_FIELDS + ('image', 'tag'),
     'project': DEFAULT_SUMMARY_FIELDS + ('status', 'scm_type', 'allow_override'),
     'source_project': DEFAULT_SUMMARY_FIELDS + ('status', 'scm_type', 'allow_override'),
     'project_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed'),
@@ -290,6 +292,7 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
             'workflow_job': _('Workflow Job'),
             'workflow_job_template': _('Workflow Template'),
             'job_template': _('Job Template'),
+            'execution_environment_builder_build': _('Execution Environment Build'),
         }
         choices = []
         for t in self.get_types():
@@ -750,7 +753,7 @@ class UnifiedJobSerializer(BaseSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobSerializer, self).get_types()
 
@@ -768,6 +771,8 @@ class UnifiedJobSerializer(BaseSerializer):
             res['stdout'] = self.reverse('api:job_stdout', kwargs={'pk': obj.pk})
         elif isinstance(obj, AdHocCommand):
             res['stdout'] = self.reverse('api:ad_hoc_command_stdout', kwargs={'pk': obj.pk})
+        elif isinstance(obj, ExecutionEnvironmentBuilderBuild):
+            res['stdout'] = self.reverse('api:execution_environment_builder_build_stdout', kwargs={'pk': obj.pk})
         if obj.workflow_job_id:
             res['source_workflow_job'] = self.reverse('api:workflow_job_detail', kwargs={'pk': obj.workflow_job_id})
         if obj.execution_environment_id:
@@ -802,6 +807,7 @@ class UnifiedJobSerializer(BaseSerializer):
 
     def get_sub_serializer(self, obj):
         from ascender.api.serializers.ad_hoc_command import AdHocCommandSerializer
+        from ascender.api.serializers.execution_environment_builder import ExecutionEnvironmentBuilderBuildSerializer
         from ascender.api.serializers.inventory import InventoryUpdateSerializer
         from ascender.api.serializers.job import JobSerializer
         from ascender.api.serializers.project import ProjectUpdateSerializer
@@ -824,6 +830,8 @@ class UnifiedJobSerializer(BaseSerializer):
                 serializer_class = WorkflowJobSerializer
             elif isinstance(obj, WorkflowApproval):
                 serializer_class = WorkflowApprovalSerializer
+            elif isinstance(obj, ExecutionEnvironmentBuilderBuild):
+                serializer_class = ExecutionEnvironmentBuilderBuildSerializer
         return serializer_class
 
     def to_representation(self, obj):
@@ -889,12 +897,13 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobListSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'workflow_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobListSerializer, self).get_types()
 
     def get_sub_serializer(self, obj):
         from ascender.api.serializers.ad_hoc_command import AdHocCommandListSerializer
+        from ascender.api.serializers.execution_environment_builder import ExecutionEnvironmentBuilderBuildListSerializer
         from ascender.api.serializers.inventory import InventoryUpdateListSerializer
         from ascender.api.serializers.job import JobListSerializer
         from ascender.api.serializers.project import ProjectUpdateListSerializer
@@ -917,6 +926,8 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
                 serializer_class = WorkflowJobListSerializer
             elif isinstance(obj, WorkflowApproval):
                 serializer_class = WorkflowApprovalListSerializer
+            elif isinstance(obj, ExecutionEnvironmentBuilderBuild):
+                serializer_class = ExecutionEnvironmentBuilderBuildListSerializer
         return serializer_class
 
     def to_representation(self, obj):
@@ -939,7 +950,7 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
 
     def get_types(self):
         if type(self) is UnifiedJobStdoutSerializer:
-            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job']
+            return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job', 'execution_environment_builder_build']
         else:
             return super(UnifiedJobStdoutSerializer, self).get_types()
 

@@ -41,6 +41,7 @@ from ascender.main.models.events import (  # noqa
     JobEvent,
     ProjectUpdateEvent,
     SystemJobEvent,
+    ExecutionEnvironmentBuilderBuildEvent,
     UnpartitionedAdHocCommandEvent,
     UnpartitionedInventoryUpdateEvent,
     UnpartitionedJobEvent,
@@ -50,6 +51,7 @@ from ascender.main.models.events import (  # noqa
 from ascender.main.models.ad_hoc_commands import AdHocCommand  # noqa
 from ascender.main.models.schedules import Schedule  # noqa
 from ascender.main.models.execution_environments import ExecutionEnvironment  # noqa
+from ascender.main.models.execution_environment_builders import ExecutionEnvironmentBuilder, ExecutionEnvironmentBuilderBuild  # noqa
 from ascender.main.models.activity_stream import ActivityStream  # noqa
 from ascender.main.models.ha import (  # noqa
     Instance,
@@ -269,6 +271,7 @@ activity_stream_registrar.connect(Team)
 activity_stream_registrar.connect(Project)
 # activity_stream_registrar.connect(ProjectUpdate)
 activity_stream_registrar.connect(ExecutionEnvironment)
+activity_stream_registrar.connect(ExecutionEnvironmentBuilder)
 activity_stream_registrar.connect(JobTemplate)
 activity_stream_registrar.connect(Job)
 activity_stream_registrar.connect(AdHocCommand)

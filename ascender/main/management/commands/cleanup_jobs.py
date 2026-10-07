@@ -16,7 +16,7 @@ from django.db.models.signals import pre_save, post_save, pre_delete, post_delet
 from django.utils.timezone import now
 
 # Ascender
-from ascender.main.models import Job, AdHocCommand, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, Notification
+from ascender.main.models import Job, AdHocCommand, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, Notification, ExecutionEnvironmentBuilderBuild
 from ascender.main.utils import unified_job_class_to_event_table_name
 
 
@@ -191,6 +191,13 @@ class Command(BaseCommand):
         parser.add_argument('--management-jobs', default=False, action='store_true', dest='only_management_jobs', help='Remove management jobs')
         parser.add_argument('--notifications', dest='only_notifications', action='store_true', default=False, help='Remove notifications')
         parser.add_argument('--workflow-jobs', default=False, action='store_true', dest='only_workflow_jobs', help='Remove workflow jobs')
+        parser.add_argument(
+            '--execution-environment-builder-builds',
+            default=False,
+            action='store_true',
+            dest='only_execution_environment_builder_builds',
+            help='Remove execution environment builds',
+        )
 
     def init_logging(self):
         log_levels = dict(enumerate([logging.ERROR, logging.INFO, logging.DEBUG, 0]))
@@ -221,6 +228,11 @@ class Command(BaseCommand):
 
     def cleanup_management_jobs_partition(self):
         return self.cleanup(SystemJob)
+
+    def cleanup_execution_environment_builder_builds(self):
+        # Builds were never in an unpartitioned event table, so the partition
+        # cleanup is all there is to do.
+        return self.cleanup(ExecutionEnvironmentBuilderBuild)
 
     def cleanup_workflow_jobs_partition(self):
         delete_meta = DeleteMeta(self.logger, WorkflowJob, self.cutoff, self.dry_run)
@@ -465,7 +477,16 @@ class Command(BaseCommand):
         except OverflowError:
             raise CommandError('--days specified is too large. Try something less than 99999 (about 270 years).')
 
-        model_names = ('jobs', 'ad_hoc_commands', 'project_updates', 'inventory_updates', 'management_jobs', 'workflow_jobs', 'notifications')
+        model_names = (
+            'jobs',
+            'ad_hoc_commands',
+            'project_updates',
+            'inventory_updates',
+            'management_jobs',
+            'workflow_jobs',
+            'notifications',
+            'execution_environment_builder_builds',
+        )
         models_to_cleanup = set()
         for m in model_names:
             if options.get('only_%s' % m, False):

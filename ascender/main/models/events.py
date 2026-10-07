@@ -28,7 +28,7 @@ analytics_logger = logging.getLogger('ascender.analytics.job_events')
 
 logger = logging.getLogger('ascender.main.models.events')
 
-__all__ = ['JobEvent', 'ProjectUpdateEvent', 'AdHocCommandEvent', 'InventoryUpdateEvent', 'SystemJobEvent']
+__all__ = ['JobEvent', 'ProjectUpdateEvent', 'AdHocCommandEvent', 'InventoryUpdateEvent', 'SystemJobEvent', 'ExecutionEnvironmentBuilderBuildEvent']
 
 
 def sanitize_event_keys(kwargs, valid_keys):
@@ -70,6 +70,7 @@ def emit_event_detail(event):
         ProjectUpdateEvent: 'project_update_id',
         InventoryUpdateEvent: 'inventory_update_id',
         SystemJobEvent: 'system_job_id',
+        ExecutionEnvironmentBuilderBuildEvent: 'execution_environment_builder_build_id',
     }[cls]
     url = ''
     if isinstance(event, JobEvent):
@@ -415,11 +416,11 @@ class BasePlaybookEvent(CreatedModifiedModel):
         # Proceed with caution!
         #
         pk = None
-        for key in ('job_id', 'project_update_id'):
+        for key in ('job_id', 'project_update_id', 'execution_environment_builder_build_id'):
             if key in kwargs:
                 pk = key
         if pk is None:
-            # payload must contain either a job_id or a project_update_id
+            # payload must contain a job_id, project_update_id or execution_environment_builder_build_id
             return
 
         # Convert the datetime for the job event's creation appropriately,
@@ -653,6 +654,46 @@ class UnpartitionedProjectUpdateEvent(ProjectUpdateEvent):
 
 
 UnpartitionedProjectUpdateEvent._meta.db_table = '_unpartitioned_' + ProjectUpdateEvent._meta.db_table  # noqa
+
+
+class ExecutionEnvironmentBuilderBuildEvent(BasePlaybookEvent):
+    # Builds only exist on partitioned installs, so unlike the older event
+    # tables there is no _unpartitioned_ counterpart for this one.
+    VALID_KEYS = BasePlaybookEvent.VALID_KEYS + ['execution_environment_builder_build_id', 'job_created']
+    JOB_REFERENCE = 'execution_environment_builder_build_id'
+
+    objects = DeferJobCreatedManager()
+
+    class Meta:
+        app_label = 'main'
+        ordering = ('pk',)
+        indexes = [
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'event']),
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'uuid']),
+            models.Index(fields=['execution_environment_builder_build', 'job_created', 'counter']),
+        ]
+
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    execution_environment_builder_build = models.ForeignKey(
+        'ExecutionEnvironmentBuilderBuild',
+        related_name='execution_environment_builder_build_events',
+        on_delete=models.DO_NOTHING,
+        editable=False,
+        db_index=False,
+        db_constraint=False,
+    )
+    # Runner only drops parent_uuid from the events of the job types it knows
+    # by an environment variable, so a build's events arrive carrying one.
+    parent_uuid = models.CharField(
+        max_length=1024,
+        default='',
+        editable=False,
+    )
+    job_created = models.DateTimeField(null=True, editable=False)
+
+    @property
+    def host_name(self):
+        return 'localhost'
 
 
 class BaseCommandEvent(CreatedModifiedModel):

@@ -1,5 +1,7 @@
 # Python
 from collections import OrderedDict
+import configparser
+import io
 import errno
 import functools
 import fcntl
@@ -49,11 +51,13 @@ from ascender.main.models import (
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
+    ExecutionEnvironmentBuilderBuild,
     JobEvent,
     ProjectUpdateEvent,
     InventoryUpdateEvent,
     AdHocCommandEvent,
     SystemJobEvent,
+    ExecutionEnvironmentBuilderBuildEvent,
     build_safe_env,
 )
 from ascender.main.tasks.callback import (
@@ -1524,7 +1528,8 @@ class RunProjectUpdate(BaseTask):
                     logger.error("{} Could not find scm revision in check".format(instance.log_format))
             p.playbook_files = p.playbooks
             p.inventory_files = p.inventories
-            p.save(update_fields=['scm_revision', 'playbook_files', 'inventory_files'])
+            p.execution_environment_files = p.execution_environment_definitions
+            p.save(update_fields=['scm_revision', 'playbook_files', 'inventory_files', 'execution_environment_files'])
 
     def build_execution_environment_params(self, instance, private_data_dir):
         if settings.IS_K8S:
@@ -1990,7 +1995,16 @@ class RunSystemJob(BaseTask):
                     args.extend(['--dry-run'])
             if system_job.job_type == 'cleanup_jobs':
                 args.extend(
-                    ['--jobs', '--project-updates', '--inventory-updates', '--management-jobs', '--ad-hoc-commands', '--workflow-jobs', '--notifications']
+                    [
+                        '--jobs',
+                        '--project-updates',
+                        '--inventory-updates',
+                        '--management-jobs',
+                        '--ad-hoc-commands',
+                        '--workflow-jobs',
+                        '--notifications',
+                        '--execution-environment-builder-builds',
+                    ]
                 )
         except Exception:
             logger.exception("{} Failed to parse system job".format(system_job.log_format))
@@ -2012,3 +2026,157 @@ class RunSystemJob(BaseTask):
 
     def build_inventory(self, instance, private_data_dir):
         return None
+
+
+@task(queue=get_task_queuename)
+class RunExecutionEnvironmentBuilderBuild(SourceControlMixin, BaseTask):
+    """
+    Build an execution environment image with ansible-builder and buildah from a
+    definition file in the builder's project, then push it to the registry.
+    """
+
+    model = ExecutionEnvironmentBuilderBuild
+    event_model = ExecutionEnvironmentBuilderBuildEvent
+    callback_class = RunnerCallback
+
+    # The playbook is not part of the user's project, so it is dropped into the
+    # copied project under a name that a project file is unlikely to have.
+    playbook_name = '.ascender_build_ee.yml'
+    # Written beside the user's definition when the organization has Galaxy
+    # credentials, so relative paths in the definition still resolve.
+    galaxy_config_name = '.ascender_galaxy.cfg'
+    build_definition_name = '.ascender-execution-environment.yml'
+    # set by build_project_dir to the definition the playbook builds
+    build_definition_file = None
+
+    def build_galaxy_config(self, organization):
+        """
+        The ansible.cfg that points ansible-galaxy at the organization's Galaxy
+        credentials, in their order, as a project update's environment does.
+        None when the organization has none, which leaves the definition alone.
+        """
+        credentials = list(organization.galaxy_credentials.all()) if organization else []
+        if not credentials:
+            return None
+        config = configparser.ConfigParser(interpolation=None)
+        config['galaxy'] = {'server_list': ','.join(f'server{i}' for i in range(len(credentials)))}
+        if settings.GALAXY_IGNORE_CERTS:
+            config['galaxy']['ignore_certs'] = 'True'
+        for i, cred in enumerate(credentials):
+            server = {'url': cred.get_input('url')}
+            token = cred.get_input('token', default=None)
+            auth_url = cred.get_input('auth_url', default=None)
+            if token:
+                server['token'] = token
+            if auth_url:
+                server['auth_url'] = auth_url
+            config[f'galaxy_server.server{i}'] = server
+        content = io.StringIO()
+        config.write(content)
+        return content.getvalue()
+
+    def add_galaxy_servers(self, builder, project_dir):
+        """
+        Return the definition file to build, relative to the project.
+
+        Collections and roles are installed by ansible-galaxy inside the image
+        build, which never sees the job's environment. So the Galaxy servers go
+        in as a config file: added to the build files of a copy of the user's
+        definition, with ANSIBLE_CONFIG pointed at it in the galaxy stage. Only
+        that intermediate stage holds the file; the final image copies nothing
+        from it but the installed content. It is set last, so the organization's
+        servers win over any config the definition names, as they do for a
+        project update. An ENV of the tokens themselves would be echoed by
+        buildah into the job's output; a file is only ever shown as its path.
+        """
+        definition_file = builder.execution_environment_file
+        galaxy_config = self.build_galaxy_config(builder.organization)
+        if galaxy_config is None:
+            return definition_file
+        definition_path = os.path.join(project_dir, definition_file)
+        try:
+            with open(definition_path) as f:
+                definition = yaml.safe_load(f)
+        except (OSError, yaml.YAMLError):
+            return definition_file  # the playbook reports what is wrong with it
+        if not isinstance(definition, dict):
+            return definition_file
+
+        definition_dir = os.path.dirname(definition_path)
+        self.write_private_data_file(definition_dir, self.galaxy_config_name, galaxy_config)
+        build_files = definition.get('additional_build_files') or []
+        build_files.append({'src': self.galaxy_config_name, 'dest': 'ascender'})
+        definition['additional_build_files'] = build_files
+        build_steps = definition.get('additional_build_steps') or {}
+        galaxy_steps = build_steps.get('prepend_galaxy') or []
+        if isinstance(galaxy_steps, str):
+            galaxy_steps = [galaxy_steps]
+        build_steps['prepend_galaxy'] = list(galaxy_steps) + [f'ENV ANSIBLE_CONFIG=/build/ascender/{self.galaxy_config_name}']
+        definition['additional_build_steps'] = build_steps
+        self.write_private_data_file(definition_dir, self.build_definition_name, yaml.safe_dump(definition, sort_keys=False))
+        return os.path.relpath(os.path.join(definition_dir, self.build_definition_name), project_dir)
+
+    def build_env(self, build, private_data_dir, private_data_files=None):
+        env = super(RunExecutionEnvironmentBuilderBuild, self).build_env(build, private_data_dir, private_data_files=private_data_files)
+        env['ANSIBLE_RETRY_FILES_ENABLED'] = str(False)
+        env['ANSIBLE_ASK_PASS'] = str(False)
+        env['ANSIBLE_BECOME_ASK_PASS'] = str(False)
+        env['DISPLAY'] = ''  # Prevent stupid password popup when running tests.
+        return env
+
+    def build_inventory(self, instance, private_data_dir):
+        return 'localhost,'
+
+    def build_args(self, build, private_data_dir, passwords):
+        return []
+
+    def build_playbook_path_relative_to_cwd(self, build, private_data_dir):
+        return self.playbook_name
+
+    def build_extra_vars_file(self, build, private_data_dir):
+        builder = build.execution_environment_builder
+        extra_vars = {
+            'execution_environment_image': builder.image,
+            'execution_environment_tag': builder.tag,
+            'execution_environment_file': builder.execution_environment_file,
+            'execution_environment_build_file': self.build_definition_file or builder.execution_environment_file,
+        }
+        if builder.credential:
+            cred = builder.credential
+            extra_vars['registry_credential'] = {
+                'host': cred.get_input('host', default=''),
+                'username': cred.get_input('username', default=''),
+                'password': cred.get_input('password', default=''),
+                'verify_ssl': cred.get_input('verify_ssl', default=True),
+            }
+        # Nothing here is a template, so every value is marked unsafe for Jinja.
+        self._write_extra_vars_file(private_data_dir, extra_vars)
+
+    def pre_run_hook(self, instance, private_data_dir):
+        super(RunExecutionEnvironmentBuilderBuild, self).pre_run_hook(instance, private_data_dir)
+        builder = instance.execution_environment_builder
+        if builder.project is None:
+            error = _('Execution environment build could not start because it does not have a valid project.')
+            self.update_model(instance.pk, status='failed', job_explanation=error)
+            raise RuntimeError(error)
+        if instance.execution_environment is None:
+            error = _('Execution environment build could not start because no Execution Environment could be found.')
+            self.update_model(instance.pk, status='error', job_explanation=error)
+            raise RuntimeError(error)
+
+    def build_project_dir(self, instance, private_data_dir):
+        # Sync (if needed) and copy the project as a job template launch does.
+        self.sync_and_copy(instance.execution_environment_builder.project, private_data_dir)
+        project_dir = os.path.join(private_data_dir, 'project')
+        if os.path.isdir(project_dir):
+            shutil.copy(os.path.join(self.get_path_to('../../', 'playbooks'), 'build_ee.yml'), os.path.join(project_dir, self.playbook_name))
+            self.build_definition_file = self.add_galaxy_servers(instance.execution_environment_builder, project_dir)
+
+    def build_execution_environment_params(self, instance, private_data_dir):
+        params = super(RunExecutionEnvironmentBuilderBuild, self).build_execution_environment_params(instance, private_data_dir)
+        # buildah needs more of the kernel than a job does. Without any setting the
+        # container is privileged; EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS
+        # replaces that with a tighter set where the runtime and kernel allow it.
+        if params and 'container_options' in params:
+            params['container_options'].extend(settings.EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS or ['--privileged'])
+        return params

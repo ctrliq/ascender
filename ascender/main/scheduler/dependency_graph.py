@@ -1,4 +1,5 @@
 from ascender.main.models import (
+    ExecutionEnvironmentBuilderBuild,
     Job,
     ProjectUpdate,
     InventoryUpdate,
@@ -24,6 +25,8 @@ class DependencyGraph(object):
 
     INVENTORY_SOURCES = 'inventory_source_ids'
 
+    EXECUTION_ENVIRONMENT_BUILDS = 'execution_environment_builds'
+
     def __init__(self):
         self.data = {}
         self.data[self.PROJECT_UPDATES] = {}
@@ -38,6 +41,7 @@ class DependencyGraph(object):
         self.data[self.JOB_TEMPLATE_JOBS] = {}
         self.data[self.SYSTEM_JOB] = {}
         self.data[self.WORKFLOW_JOB_TEMPLATES_JOBS] = {}
+        self.data[self.EXECUTION_ENVIRONMENT_BUILDS] = {}
 
     def mark_if_no_key(self, job_type, id, job):
         if id is None:
@@ -82,6 +86,9 @@ class DependencyGraph(object):
         elif job.unified_job_template_id:  # for sliced jobs
             self.mark_if_no_key(self.WORKFLOW_JOB_TEMPLATES_JOBS, job.unified_job_template_id, job)
 
+    def mark_execution_environment_build(self, job):
+        self.mark_if_no_key(self.EXECUTION_ENVIRONMENT_BUILDS, job.execution_environment_builder_id, job)
+
     def project_update_blocked_by(self, job):
         return self.get_item(self.PROJECT_UPDATES, job.project_id)
 
@@ -114,6 +121,10 @@ class DependencyGraph(object):
     def ad_hoc_command_blocked_by(self, job):
         return self.get_item(self.INVENTORY_UPDATES, job.inventory_id)
 
+    def execution_environment_build_blocked_by(self, job):
+        # Two builds of one builder would build and push the same image and tag.
+        return self.get_item(self.EXECUTION_ENVIRONMENT_BUILDS, job.execution_environment_builder_id)
+
     def task_blocked_by(self, job):
         if type(job) is ProjectUpdate:
             return self.project_update_blocked_by(job)
@@ -127,6 +138,8 @@ class DependencyGraph(object):
             return self.ad_hoc_command_blocked_by(job)
         elif type(job) is WorkflowJob:
             return self.workflow_job_blocked_by(job)
+        elif type(job) is ExecutionEnvironmentBuilderBuild:
+            return self.execution_environment_build_blocked_by(job)
 
     def add_job(self, job):
         if type(job) is ProjectUpdate:
@@ -142,6 +155,8 @@ class DependencyGraph(object):
             self.mark_system_job(job)
         elif type(job) is AdHocCommand:
             self.mark_inventory_update(job)
+        elif type(job) is ExecutionEnvironmentBuilderBuild:
+            self.mark_execution_environment_build(job)
 
     def add_jobs(self, jobs):
         for j in jobs:
