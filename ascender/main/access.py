@@ -7,7 +7,7 @@ from functools import reduce
 
 # Django
 from ascender.settings.typed import settings
-from django.db.models import Q, Prefetch
+from django.db.models import Exists, OuterRef, Q, Prefetch
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
@@ -2231,6 +2231,18 @@ class WorkflowJobAccess(BaseAccess):
         return obj.workflow_job_template is not None and self.user in obj.workflow_job_template.admin_role
 
 
+def annotate_unusable_instance_groups(qs, user):
+    """Mark each ad hoc command in qs with whether it was launched on an
+    instance group the user cannot use, which AdHocCommandAccess.can_start
+    reads instead of asking the database twice for every row of a list."""
+    if user.is_superuser:
+        return qs
+    unusable = AdHocCommand.instance_groups.through.objects.filter(adhoccommand=OuterRef('pk')).exclude(
+        instancegroup__in=InstanceGroup.accessible_pk_qs(user, 'use_role')
+    )
+    return qs.annotate(has_unusable_instance_group=Exists(unusable))
+
+
 class AdHocCommandAccess(BaseAccess):
     """
     I can only see/run ad hoc commands when:
@@ -2247,6 +2259,9 @@ class AdHocCommandAccess(BaseAccess):
     )
 
     read_via = (Inventory, 'inventory')
+
+    def get_queryset(self):
+        return annotate_unusable_instance_groups(super().get_queryset(), self.user)
 
     def can_add(self, data):
         if not data:  # So the browseable API will work
@@ -2295,7 +2310,13 @@ class AdHocCommandAccess(BaseAccess):
         }
         # Skip the extra query for superusers, can_add would not look at it
         if not self.user.is_superuser:
-            data['instance_groups'] = list(obj.instance_groups.values_list('pk', flat=True))
+            # Lists annotate this (see annotate_unusable_instance_groups);
+            # a command fetched any other way has its groups read here
+            unusable = getattr(obj, 'has_unusable_instance_group', None)
+            if unusable:
+                return False
+            if unusable is None:
+                data['instance_groups'] = list(obj.instance_groups.values_list('pk', flat=True))
         return self.can_add(data)
 
     def can_cancel(self, obj):
@@ -2549,7 +2570,10 @@ class UnifiedJobAccess(BaseAccess):
         )
 
     def get_queryset(self):
-        return super(UnifiedJobAccess, self).get_queryset().filter(workflowapproval__isnull=True)
+        qs = super(UnifiedJobAccess, self).get_queryset().filter(workflowapproval__isnull=True)
+        # django-polymorphic copies annotations onto the ad hoc commands it
+        # hands back, so their can_start reads this too
+        return annotate_unusable_instance_groups(qs, self.user)
 
 
 class ScheduleAccess(UnifiedCredentialsMixin, BaseAccess):

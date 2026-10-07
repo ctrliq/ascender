@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("main", "0225_jobtemplate_prevent_relaunch"),
+        ("main", "0226_workflow_force_node_success"),
     ]
 
     operations = [
