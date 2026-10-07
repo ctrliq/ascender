@@ -883,11 +883,19 @@ The request from the host must be a POST. Here is an example using curl (all on 
    curl -k -f -i -H 'Content-Type:application/json' -XPOST -d '{"host_config_key": "redhat"}' \ 
                     https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback/
 
-The requesting host must be defined in your inventory for the callback to succeed. If Ascender fails to locate the host either by name or IP address in one of your defined inventories, the request is denied. When running a Job Template in this way, the host initiating the playbook run against itself must be in the inventory. If the host is missing from the inventory, the Job Template will fail with a "No Hosts Matched" type error message.
+The requesting host must be defined in your inventory for the callback to succeed. If Ascender fails to locate the host either by name or IP address in one of your defined inventories, the request is denied. When running a Job Template in this way, the host initiating the playbook run against itself must be in the inventory. If the host is missing from the inventory, the request fails with a ``No matching host could be found!`` error message.
 
 
 .. note::
     If your host is not in inventory and ``Update on Launch`` is set for the inventory group, Ascender attempts to update cloud based inventory source before running the callback.
+
+Ascender identifies the calling host from the address of the request. It collects every address found in the headers listed in the **Remote Host Headers** setting, adds their reverse DNS names, and compares the results against each host's ``ansible_host`` value (or host name) in the job template's inventory. The job runs only if exactly one host matches. If no host matches, the request fails with ``No matching host could be found!``, and if more than one host matches, it fails with ``Multiple hosts matched the request!``.
+
+When Ascender runs on Kubernetes, it sits behind an ingress controller, so the default **Remote Host Headers** setting identifies every callback as coming from the ingress rather than from the calling host. To use provisioning callbacks, configure Ascender to read the client address from ``X-Forwarded-For`` and make sure your ingress passes the real client address. See :ref:`ag_proxy_support` for details, including the configuration needed on K3s.
+
+.. warning::
+
+   Do not include ingress controller or Kubernetes node addresses in an inventory used for provisioning callbacks. Depending on your configuration, Ascender can see the ingress address alongside the calling host's address and run the job against the ingress host instead.
 
 Successful requests result in an entry on the Jobs tab, where the results and history can be viewed.
 
