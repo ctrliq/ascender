@@ -35,8 +35,41 @@ describe('WorkflowRelaunchForceSuccessModal', () => {
       expect(WorkflowJobsAPI.readNodes).toHaveBeenCalledWith(7, {
         job__status__in: 'failed,error,canceled',
         page_size: 200,
+        page: 1,
         order_by: 'id',
       })
+    );
+  });
+
+  test('reads every page of failed nodes, not just the first', async () => {
+    vi.mocked(WorkflowJobsAPI.readNodes)
+      .mockResolvedValueOnce({
+        data: {
+          count: 2,
+          next: '/api/v2/workflow_jobs/7/workflow_nodes/?page=2',
+          results: [failedNode(31, 'confluence')],
+        },
+      } as unknown as ResponseOf<typeof WorkflowJobsAPI.readNodes>)
+      .mockResolvedValueOnce({
+        data: { count: 2, next: null, results: [failedNode(32, 'notify')] },
+      } as unknown as ResponseOf<typeof WorkflowJobsAPI.readNodes>);
+    renderWithContexts(
+      <WorkflowRelaunchForceSuccessModal
+        jobId={7}
+        onConfirm={() => {}}
+        onCancel={() => {}}
+      />
+    );
+
+    expect(
+      await screen.findByRole('checkbox', { name: 'notify (notify template)' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'confluence (confluence template)' })
+    ).toBeInTheDocument();
+    expect(WorkflowJobsAPI.readNodes).toHaveBeenLastCalledWith(
+      7,
+      expect.objectContaining({ page: 2 })
     );
   });
 

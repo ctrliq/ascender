@@ -38,6 +38,26 @@ export interface WorkflowRelaunchForceSuccessModalProps {
   isCanceled?: boolean;
 }
 
+// Every page of them: on page one alone, a large run could look as though it
+// had nothing to force.
+const fetchFailedNodes = async (
+  jobId: number,
+  pageNo = 1,
+  nodes: FailedNode[] = []
+): Promise<FailedNode[]> => {
+  const { data } = await WorkflowJobsAPI.readNodes(jobId, {
+    job__status__in: 'failed,error,canceled',
+    page_size: 200,
+    page: pageNo,
+    order_by: 'id',
+  });
+  const all = nodes.concat(data.results as unknown as FailedNode[]);
+  if (data.next) {
+    return fetchFailedNodes(jobId, pageNo + 1, all);
+  }
+  return all;
+};
+
 function nodeLabel(node: FailedNode) {
   const alias =
     node.identifier && !stringIsUUID(node.identifier) ? node.identifier : null;
@@ -69,17 +89,13 @@ function WorkflowRelaunchForceSuccessModal({
 
   const {
     result: failedNodes,
-    request: fetchFailedNodes,
+    request: loadFailedNodes,
     isLoading,
     error,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await WorkflowJobsAPI.readNodes(jobId, {
-        job__status__in: 'failed,error,canceled',
-        page_size: 200,
-        order_by: 'id',
-      });
-      return (data.results as unknown as FailedNode[]).filter(
+      const nodes = await fetchFailedNodes(jobId);
+      return nodes.filter(
         (node) => node.summary_fields?.job?.type !== 'workflow_approval'
       );
     }, [jobId]),
@@ -87,8 +103,8 @@ function WorkflowRelaunchForceSuccessModal({
   );
 
   useEffect(() => {
-    fetchFailedNodes();
-  }, [fetchFailedNodes]);
+    loadFailedNodes();
+  }, [loadFailedNodes]);
 
   useEffect(() => {
     // the usual case is a single failed node; have it ticked already

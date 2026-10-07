@@ -1099,9 +1099,11 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
         """Return the nodes of this run named by node_ids, or raise ValueError
         naming the first that cannot be forced as successful.
 
-        Only a node whose job failed for good can be forced. An approval never
-        can: forcing a denied or timed out approval would be a way around the
-        people who were asked to approve."""
+        Only a node whose job ended in failed, error or canceled, with no retry
+        left pending, can be forced, so a node canceled along with its run is
+        forceable just like one that failed. An approval never can: forcing a
+        denied or timed out approval would be a way around the people who were
+        asked to approve."""
         nodes = {n.id: n for n in self.workflow_job_nodes.filter(id__in=node_ids).select_related('job')}
         # A run that still has its template is relaunched from that template,
         # and its nodes are matched back to this run's by identifier: a node
