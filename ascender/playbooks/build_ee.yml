@@ -1,0 +1,134 @@
+---
+# Builds an execution environment with ansible-builder and buildah, then pushes
+# it. Run by RunExecutionEnvironmentBuilderBuild from the root of a copy of the
+# builder's project, with these extra vars:
+#
+#   execution_environment_file   the definition file, relative to the project
+#   execution_environment_build_file
+#                                the copy of it to build, which adds the
+#                                organization's Galaxy servers when it has any
+#   execution_environment_image  the image to tag and push as, with its registry
+#   execution_environment_tag    the tag to give it
+#   registry_credential          host, username, password and verify_ssl of the
+#                                builder's registry credential, when it has one
+
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Build the Execution Environment
+  vars:
+    image_reference: "{{ execution_environment_image }}:{{ execution_environment_tag }}"
+    tls_verify: "{{ registry_credential.verify_ssl | default(true) | bool }}"
+    auth_file: "{{ lookup('env', 'HOME') }}/.config/containers/auth.json"
+  tasks:
+    - name: Display EE build info
+      ansible.builtin.debug:
+        msg: "Building Execution Environment {{ image_reference }} from {{ execution_environment_file }}"
+
+    - name: Ensure the execution environment file exists in the project
+      ansible.builtin.stat:
+        path: "{{ execution_environment_file }}"
+      register: ee_file_stat
+
+    - name: Fail if the execution environment file is missing
+      ansible.builtin.assert:
+        that:
+          - ee_file_stat.stat.exists
+        fail_msg: "The execution environment file '{{ execution_environment_file }}' was not found in the project."
+
+    - name: Read the execution environment definition file
+      ansible.builtin.slurp:
+        src: "{{ execution_environment_file }}"
+      register: ee_file_raw
+
+    - name: Validate execution environment definition is version 3
+      ansible.builtin.assert:
+        that:
+          - eed is mapping
+          - eed.version is defined
+          - eed.version | int == 3
+        fail_msg: "The execution environment definition must define 'version: 3' at the top level."
+      vars:
+        eed: "{{ ee_file_raw.content | b64decode | from_yaml }}"
+
+    - name: Ensure the container config directory exists
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.config/containers"
+        state: directory
+        mode: '0700'
+
+    - name: Create registries.conf
+      ansible.builtin.copy:
+        dest: "{{ lookup('env', 'HOME') }}/.config/containers/registries.conf"
+        mode: '0600'
+        content: |
+          short-name-mode="permissive"
+          unqualified-search-registries = ["quay.io", "docker.io"]
+
+    - name: Check for ansible-builder command
+      ansible.builtin.shell: command -v ansible-builder
+      register: ansible_builder_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install ansible-builder via pip if not present
+      ansible.builtin.pip:
+        name: ansible-builder
+        state: present
+      when: ansible_builder_check.rc != 0
+
+    - name: Check for buildah command
+      ansible.builtin.shell: command -v buildah
+      register: buildah_check
+      changed_when: false
+      failed_when: false
+
+    - name: Check for microdnf command
+      ansible.builtin.shell: command -v microdnf
+      register: microdnf_check
+      changed_when: false
+      failed_when: false
+      when: buildah_check.rc != 0
+
+    - name: Install buildah via microdnf if not installed
+      ansible.builtin.command: microdnf install -y buildah
+      when:
+        - buildah_check.rc != 0
+        - microdnf_check.rc == 0
+
+    - name: Install buildah via dnf if not installed
+      ansible.builtin.command: dnf install -y buildah
+      when:
+        - buildah_check.rc != 0
+        - microdnf_check.rc != 0
+
+    - name: Create registry auth file
+      ansible.builtin.copy:
+        dest: "{{ auth_file }}"
+        mode: '0600'
+        content: "{{ {'auths': {registry_credential.host: {'auth': (registry_credential.username ~ ':' ~ registry_credential.password) | b64encode}}} | to_json }}"
+      no_log: true
+      when: registry_credential is defined
+
+    - name: Run ansible-builder to create the EE context
+      ansible.builtin.command:
+        argv:
+          - ansible-builder
+          - create
+          - --file
+          - "{{ execution_environment_build_file | default(execution_environment_file) }}"
+          - --context
+          - ./context
+          - -v3
+
+    - name: Run buildah to build the EE image
+      ansible.builtin.command:
+        argv: "{{ ['buildah', '--storage-driver=vfs', 'bud', '--network=host', '--tls-verify=' ~ (tls_verify | lower)]
+                  + (['--authfile', auth_file] if registry_credential is defined else [])
+                  + ['--tag', image_reference, './context'] }}"
+
+    - name: Push the EE image
+      ansible.builtin.command:
+        argv: "{{ ['buildah', '--storage-driver=vfs', 'push', '--tls-verify=' ~ (tls_verify | lower)]
+                  + (['--authfile', auth_file] if registry_credential is defined else [])
+                  + [image_reference, 'docker://' ~ image_reference] }}"

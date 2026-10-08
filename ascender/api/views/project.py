@@ -61,6 +61,11 @@ class ProjectInventories(RetrieveAPIView):
     serializer_class = serializers.ProjectInventoriesSerializer
 
 
+class ProjectExecutionEnvironmentFiles(RetrieveAPIView):
+    model = models.Project
+    serializer_class = serializers.ProjectExecutionEnvironmentFilesSerializer
+
+
 class ProjectTeamsList(ListAPIView):
     model = models.Team
     serializer_class = serializers.TeamSerializer

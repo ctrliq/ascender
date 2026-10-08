@@ -24,6 +24,8 @@ class Projects extends SchedulesMixin(
     this.readAccessOptions = this.readAccessOptions.bind(this);
     this.readInventories = this.readInventories.bind(this);
     this.readPlaybooks = this.readPlaybooks.bind(this);
+    this.readExecutionEnvironmentFiles =
+      this.readExecutionEnvironmentFiles.bind(this);
     this.readSync = this.readSync.bind(this);
     this.sync = this.sync.bind(this);
     this.createSchedule = this.createSchedule.bind(this);
@@ -72,6 +74,13 @@ class Projects extends SchedulesMixin(
   // The paths of the playbooks the project holds.
   readPlaybooks(id: number | string) {
     return this.http.get<string[]>(`${this.baseUrl}${id}/playbooks/`);
+  }
+
+  // The ansible-builder definition files the project holds.
+  readExecutionEnvironmentFiles(id: number | string) {
+    return this.http.get<string[]>(
+      `${this.baseUrl}${id}/execution_environment_files/`
+    );
   }
 
   readSync(id: number | string) {

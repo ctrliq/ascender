@@ -729,6 +729,20 @@
                   "read_only": false
               }
           },
+          "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": {
+              "type": "list",
+              "required": false,
+              "label": "Execution Environment Builder Container Options",
+              "help_text": "List of options to pass to podman run for execution environment builds, in addition to the container run options. When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "default": [],
+              "child": {
+                  "type": "string",
+                  "required": true,
+                  "read_only": false
+              }
+          },
           "RECEPTOR_RELEASE_WORK": {
               "type": "boolean",
               "required": false,
@@ -5258,6 +5272,17 @@
               "type": "list",
               "label": "Container Run Options",
               "help_text": "List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "defined_in_file": false,
+              "child": {
+                  "type": "string"
+              }
+          },
+          "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": {
+              "type": "list",
+              "label": "Execution Environment Builder Container Options",
+              "help_text": "List of options to pass to podman run for execution environment builds, in addition to the container run options. When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']",
               "category": "Jobs",
               "category_slug": "jobs",
               "defined_in_file": false,

@@ -74,6 +74,14 @@ export interface SummaryFields {
   unified_job_template?: SummaryFieldRef & { unified_job_type?: string };
   schedule?: SummaryFieldRef;
   execution_environment?: SummaryFieldRef & { image?: string };
+  /** Builds: the builder that ran, and what it builds from and pushes as. */
+  execution_environment_builder?: SummaryFieldRef & {
+    image?: string;
+    tag?: string;
+    execution_environment_file?: string;
+  };
+  /** Builds: the sync of the builder's project the build waited for, if any. */
+  source_project_update?: SummaryFieldRef & { status?: string };
   instance_group?: SummaryFieldRef;
   /** The hop node a container group hands its pods to, if any. */
   mesh_node?: SummaryFieldRef & { hostname?: string; node_state?: string };
@@ -249,6 +257,8 @@ export type AnyJob = Pick<UnifiedJob, 'id' | 'type'> &
     source_project_update?: number | null;
     /** Project updates: which kind of source control the project uses. */
     scm_type?: string | null;
+    /** Builds: the builder the build ran. */
+    execution_environment_builder?: number;
     /** Ad hoc commands: what was run, against what, and how. */
     module_name?: string | null;
     module_args?: string | null;
@@ -297,6 +307,20 @@ export type Team = WithNested<Schemas['Team']>;
 export type Label = WithNested<Schemas['Label']>;
 export type Schedule = WithNested<Schemas['Schedule']>;
 export type ExecutionEnvironment = WithNested<Schemas['ExecutionEnvironment']>;
+export type ExecutionEnvironmentBuilder = WithNested<
+  Schemas['ExecutionEnvironmentBuilder']
+>;
+/**
+ * `playbook_counts` is a SerializerMethodField the schema types as `string`;
+ * it is the play and task count every playbook job's detail carries.
+ */
+export type ExecutionEnvironmentBuilderBuild = Omit<
+  WithNested<Schemas['ExecutionEnvironmentBuilderBuildDetail']>,
+  'playbook_counts' | 'host_status_counts'
+> & {
+  playbook_counts?: { play_count: number; task_count: number };
+  host_status_counts?: Record<string, number> | null;
+};
 /**
  * An instance group. Its capacities and its job and instance counts are all
  * SerializerMethodFields, which the schema can only describe as strings where
@@ -850,7 +874,8 @@ export type JobType =
   | 'inventory_update'
   | 'project_update'
   | 'system_job'
-  | 'workflow_job';
+  | 'workflow_job'
+  | 'execution_environment_builder_build';
 
 /** The statuses a job moves through. isJobRunning covers the first four. */
 export type JobStatus =

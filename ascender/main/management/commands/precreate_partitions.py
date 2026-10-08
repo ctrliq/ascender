@@ -2,7 +2,7 @@ from django.utils.timezone import now
 from django.core.management.base import BaseCommand, CommandParser
 from datetime import timedelta
 from ascender.main.utils.common import create_partition, unified_job_class_to_event_table_name
-from ascender.main.models import Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand
+from ascender.main.models import Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand, ExecutionEnvironmentBuilderBuild
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
     def _create_partitioned_tables(self, count):
         tables = list()
-        for model in (Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand):
+        for model in (Job, SystemJob, ProjectUpdate, InventoryUpdate, AdHocCommand, ExecutionEnvironmentBuilderBuild):
             tables.append(unified_job_class_to_event_table_name(model))
         start = now()
         while count > 0:

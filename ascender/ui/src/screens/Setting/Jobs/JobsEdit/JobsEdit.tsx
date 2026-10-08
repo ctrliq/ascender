@@ -115,6 +115,10 @@ function JobsEdit() {
               config={jobs.DEFAULT_CONTAINER_RUN_OPTIONS}
             />
             <ObjectField
+              name="EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS"
+              config={jobs.EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS}
+            />
+            <ObjectField
               name="ASCENDER_ANSIBLE_CALLBACK_PLUGINS"
               config={jobs.ASCENDER_ANSIBLE_CALLBACK_PLUGINS}
             />

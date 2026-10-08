@@ -313,6 +313,104 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/v2/builds/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['builds_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/builds/{id}/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** @description Special handling when deleting a running unified job object. */
+    get: operations['builds_retrieve'];
+    put?: never;
+    post?: never;
+    /** @description Special handling when deleting a running unified job object. */
+    delete: operations['builds_destroy'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/builds/{id}/cancel/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['builds_cancel_retrieve'];
+    put?: never;
+    post: operations['builds_cancel_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/builds/{id}/events/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['builds_events_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/builds/{id}/relaunch/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['builds_relaunch_retrieve'];
+    put?: never;
+    post: operations['builds_relaunch_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/builds/{id}/stdout/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['builds_stdout_retrieve'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/v2/bulk/': {
     parameters: {
       query?: never;
@@ -757,6 +855,134 @@ export interface paths {
       cookie?: never;
     };
     get: operations['dashboard_graphs_jobs_retrieve'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_list'];
+    put?: never;
+    post: operations['execution_environment_builders_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_retrieve'];
+    put: operations['execution_environment_builders_update'];
+    post?: never;
+    delete: operations['execution_environment_builders_destroy'];
+    options?: never;
+    head?: never;
+    patch: operations['execution_environment_builders_partial_update'];
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/access_list/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_access_list_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/activity_stream/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_activity_stream_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/builds/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_builds_list'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/copy/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_copy_retrieve'];
+    put?: never;
+    post: operations['execution_environment_builders_copy_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/launch/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_launch_retrieve'];
+    put?: never;
+    post: operations['execution_environment_builders_launch_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/execution_environment_builders/{id}/object_roles/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['execution_environment_builders_object_roles_list'];
     put?: never;
     post?: never;
     delete?: never;
@@ -3695,6 +3921,22 @@ export interface paths {
     get: operations['projects_copy_retrieve'];
     put?: never;
     post: operations['projects_copy_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/v2/projects/{id}/execution_environment_files/': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['projects_execution_environment_files_retrieve'];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -7248,6 +7490,205 @@ export interface components {
           )
         | null;
     };
+    ExecutionEnvironmentBuilder: {
+      readonly id: number;
+      readonly type: string;
+      readonly url: string;
+      readonly related: string;
+      readonly summary_fields: string;
+      readonly created: string;
+      readonly modified: string;
+      name: string | null;
+      /** @default  */
+      description: string | null;
+      /** @description The organization used to determine access to this execution environment builder. */
+      organization: number;
+      /** @description The project that contains the execution environment definition file. */
+      project: number;
+      /** @description Path to the ansible-builder execution environment definition file within the project. */
+      execution_environment_file: string | null;
+      /**
+       * Image Name
+       * @description The image to tag the built execution environment as and push it to, including the container registry.
+       */
+      image: string | null;
+      /**
+       * Image Tag
+       * @description The tag for the built execution environment image.
+       * @default latest
+       */
+      tag: string | null;
+      /** @description Container registry credential used to push the built image. */
+      credential?: number | null;
+    };
+    ExecutionEnvironmentBuilderBuildCancel: {
+      readonly can_cancel: boolean;
+    };
+    ExecutionEnvironmentBuilderBuildDetail: {
+      readonly id: number;
+      readonly type: string;
+      readonly url: string;
+      readonly related: string;
+      readonly summary_fields: string;
+      readonly created: string;
+      readonly modified: string;
+      name: string | null;
+      /** @default  */
+      description: string | null;
+      readonly launch_type: components['schemas']['LaunchTypeEnum'];
+      readonly status: components['schemas']['Status602Enum'];
+      /** @description The container image to be used for execution. */
+      execution_environment?: number | null;
+      readonly failed: boolean;
+      /**
+       * Format: date-time
+       * @description The date and time the job was queued for starting.
+       */
+      readonly started: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time the job finished execution.
+       */
+      readonly finished: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time when the cancel request was sent.
+       */
+      readonly canceled_on: string | null;
+      /**
+       * Format: decimal
+       * @description Elapsed time in seconds that the job ran.
+       */
+      readonly elapsed: string;
+      readonly job_args: string;
+      readonly job_cwd: string;
+      readonly job_env: unknown;
+      /** @description A status field to indicate the state of the job if it wasn't able to run and capture stdout */
+      readonly job_explanation: string;
+      /** @description The node the job executed on. */
+      readonly execution_node: string;
+      readonly result_traceback: string;
+      /** @description Indicates whether all of the events generated by this unified job have been saved to the database. */
+      readonly event_processing_finished: boolean;
+      readonly launched_by: string;
+      /** @description The Receptor work unit ID associated with this job. */
+      readonly work_unit_id: string | null;
+      readonly execution_environment_builder: number;
+      /** @description The SCM Revision from the project the image was built from. */
+      readonly scm_revision: string;
+      /** @description The project update that synced the project for this build, if one was needed. */
+      readonly source_project_update: number | null;
+      /** @description Playbook stats from the Ansible playbook_on_stats event. */
+      readonly host_status_counts: unknown;
+      /** @description A count of all plays and tasks for the build run. */
+      readonly playbook_counts: string;
+    };
+    ExecutionEnvironmentBuilderBuildEvent: {
+      readonly id: number;
+      readonly type: string;
+      readonly url: string;
+      readonly related: string;
+      readonly summary_fields: string;
+      readonly created: string;
+      readonly modified: string;
+      event:
+        | (
+            | components['schemas']['EventC0bEnum']
+            | components['schemas']['NullEnum']
+          )
+        | null;
+      readonly counter: number;
+      readonly event_display: string;
+      /** @default {} */
+      event_data: unknown;
+      readonly event_level: number;
+      readonly failed: boolean;
+      readonly changed: boolean;
+      readonly uuid: string;
+      readonly host_name: string;
+      readonly playbook: string;
+      readonly play: string;
+      readonly task: string;
+      readonly role: string;
+      readonly stdout: string;
+      readonly start_line: number;
+      readonly end_line: number;
+      readonly verbosity: number;
+      readonly execution_environment_builder_build: number;
+    };
+    ExecutionEnvironmentBuilderBuildList: {
+      readonly id: number;
+      readonly type: string;
+      readonly url: string;
+      readonly related: string;
+      readonly summary_fields: string;
+      readonly created: string;
+      readonly modified: string;
+      name: string | null;
+      /** @default  */
+      description: string | null;
+      readonly launch_type: components['schemas']['LaunchTypeEnum'];
+      readonly status: components['schemas']['Status602Enum'];
+      /** @description The container image to be used for execution. */
+      execution_environment?: number | null;
+      readonly failed: boolean;
+      /**
+       * Format: date-time
+       * @description The date and time the job was queued for starting.
+       */
+      readonly started: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time the job finished execution.
+       */
+      readonly finished: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time when the cancel request was sent.
+       */
+      readonly canceled_on: string | null;
+      /**
+       * Format: decimal
+       * @description Elapsed time in seconds that the job ran.
+       */
+      readonly elapsed: string;
+      /** @description A status field to indicate the state of the job if it wasn't able to run and capture stdout */
+      readonly job_explanation: string;
+      /** @description The node the job executed on. */
+      readonly execution_node: string;
+      readonly launched_by: string;
+      /** @description The Receptor work unit ID associated with this job. */
+      readonly work_unit_id: string | null;
+      readonly execution_environment_builder: number;
+      /** @description The SCM Revision from the project the image was built from. */
+      readonly scm_revision: string;
+      /** @description The project update that synced the project for this build, if one was needed. */
+      readonly source_project_update: number | null;
+    };
+    ExecutionEnvironmentBuilderRequest: {
+      name: string | null;
+      /** @default  */
+      description: string | null;
+      /** @description The organization used to determine access to this execution environment builder. */
+      organization: number;
+      /** @description The project that contains the execution environment definition file. */
+      project: number;
+      /** @description Path to the ansible-builder execution environment definition file within the project. */
+      execution_environment_file: string | null;
+      /**
+       * Image Name
+       * @description The image to tag the built execution environment as and push it to, including the container registry.
+       */
+      image: string | null;
+      /**
+       * Image Tag
+       * @description The tag for the built execution environment image.
+       * @default latest
+       */
+      tag: string | null;
+      /** @description Container registry credential used to push the built image. */
+      credential?: number | null;
+    };
     ExecutionEnvironmentRequest: {
       name: string | null;
       /** @default  */
@@ -9687,6 +10128,51 @@ export interface components {
       previous?: string | null;
       results: components['schemas']['CredentialType'][];
     };
+    PaginatedExecutionEnvironmentBuilderBuildEventList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=4
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=2
+       */
+      previous?: string | null;
+      results: components['schemas']['ExecutionEnvironmentBuilderBuildEvent'][];
+    };
+    PaginatedExecutionEnvironmentBuilderBuildListList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=4
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=2
+       */
+      previous?: string | null;
+      results: components['schemas']['ExecutionEnvironmentBuilderBuildList'][];
+    };
+    PaginatedExecutionEnvironmentBuilderList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=4
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?page=2
+       */
+      previous?: string | null;
+      results: components['schemas']['ExecutionEnvironmentBuilder'][];
+    };
     PaginatedExecutionEnvironmentList: {
       /** @example 123 */
       count: number;
@@ -10509,6 +10995,30 @@ export interface components {
        * @default {}
        */
       injectors: unknown;
+    };
+    PatchedExecutionEnvironmentBuilderRequest: {
+      name?: string | null;
+      /** @default  */
+      description: string | null;
+      /** @description The organization used to determine access to this execution environment builder. */
+      organization?: number;
+      /** @description The project that contains the execution environment definition file. */
+      project?: number;
+      /** @description Path to the ansible-builder execution environment definition file within the project. */
+      execution_environment_file?: string | null;
+      /**
+       * Image Name
+       * @description The image to tag the built execution environment as and push it to, including the container registry.
+       */
+      image?: string | null;
+      /**
+       * Image Tag
+       * @description The tag for the built execution environment image.
+       * @default latest
+       */
+      tag: string | null;
+      /** @description Container registry credential used to push the built image. */
+      credential?: number | null;
     };
     PatchedExecutionEnvironmentRequest: {
       name?: string | null;
@@ -11626,6 +12136,11 @@ export interface components {
        *     ]
        */
       DEFAULT_CONTAINER_RUN_OPTIONS: string[];
+      /**
+       * @description List of options to pass to podman run for execution environment builds, in addition to the container run options. When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']
+       * @default []
+       */
+      EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS: string[];
       /**
        * Release Receptor Work
        * @description Release receptor work
@@ -13498,6 +14013,10 @@ export interface components {
       /** Format: date-time */
       readonly last_updated: string;
     };
+    ProjectExecutionEnvironmentFiles: {
+      /** @description Array of ansible-builder execution environment definition files available within this project. */
+      readonly execution_environment_files: string;
+    };
     ProjectInventories: {
       /** @description Array of inventory files and directories available within this project, not comprehensive. */
       readonly inventory_files: unknown;
@@ -14724,6 +15243,11 @@ export interface components {
        *     ]
        */
       DEFAULT_CONTAINER_RUN_OPTIONS: string[];
+      /**
+       * @description List of options to pass to podman run for execution environment builds, in addition to the container run options. When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']
+       * @default []
+       */
+      EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS: string[];
       /**
        * Release Receptor Work
        * @description Release receptor work
@@ -16811,6 +17335,11 @@ export interface components {
        *     ]
        */
       DEFAULT_CONTAINER_RUN_OPTIONS: string[];
+      /**
+       * @description List of options to pass to podman run for execution environment builds, in addition to the container run options. When empty (the default), builds run with --privileged. Set this to use a tighter set where the container runtime and kernel allow it, example: ['--cap-add=SYS_ADMIN', '--cap-add=MKNOD', '--device=/dev/fuse', '--security-opt=seccomp=unconfined']
+       * @default []
+       */
+      EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS: string[];
       /**
        * Release Receptor Work
        * @description Release receptor work
@@ -20645,6 +21174,209 @@ export interface operations {
       };
     };
   };
+  builds_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedExecutionEnvironmentBuilderBuildListList'];
+        };
+      };
+    };
+  };
+  builds_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilderBuildDetail'];
+        };
+      };
+    };
+  };
+  builds_destroy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  builds_cancel_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilderBuildCancel'];
+        };
+      };
+    };
+  };
+  builds_cancel_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilderBuildCancel'];
+        };
+      };
+    };
+  };
+  builds_events_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedExecutionEnvironmentBuilderBuildEventList'];
+        };
+      };
+    };
+  };
+  builds_relaunch_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  builds_relaunch_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  builds_stdout_retrieve: {
+    parameters: {
+      query?: {
+        format?:
+          'ansi' | 'ansi_download' | 'html' | 'json' | 'txt' | 'txt_download';
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': components['schemas']['UnifiedJobStdout'];
+          'text/plain': components['schemas']['UnifiedJobStdout'];
+          'application/json': components['schemas']['UnifiedJobStdout'];
+        };
+      };
+    };
+  };
   bulk_retrieve: {
     parameters: {
       query?: never;
@@ -21830,6 +22562,344 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+    };
+  };
+  execution_environment_builders_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedExecutionEnvironmentBuilderList'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExecutionEnvironmentBuilderRequest'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilder'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilder'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExecutionEnvironmentBuilderRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilder'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_destroy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  execution_environment_builders_partial_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['PatchedExecutionEnvironmentBuilderRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ExecutionEnvironmentBuilder'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_access_list_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedResourceAccessListElementList'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_activity_stream_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedActivityStreamList'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_builds_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedExecutionEnvironmentBuilderBuildListList'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_copy_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Copy'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_copy_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CopyRequest'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Copy'];
+        };
+      };
+    };
+  };
+  execution_environment_builders_launch_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  execution_environment_builders_launch_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  execution_environment_builders_object_roles_list: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+        /** @description Number of results to return per page. */
+        page_size?: number;
+        /** @description A search term. */
+        search?: string;
+      };
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PaginatedRoleList'];
+        };
       };
     };
   };
@@ -29359,6 +30429,27 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['Copy'];
+        };
+      };
+    };
+  };
+  projects_execution_environment_files_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProjectExecutionEnvironmentFiles'];
         };
       };
     };

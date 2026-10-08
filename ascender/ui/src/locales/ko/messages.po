@@ -170,9 +170,9 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# 포크} other {# 포크}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:111
+#: routeConfig.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:112
-#: screens/ActivityStream/ActivityStream.tsx:185
+#: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:89
 #: screens/Project/ProjectList/ProjectList.tsx:181
 #: screens/Project/ProjectList/ProjectList.tsx:249
@@ -325,7 +325,7 @@ msgid "Click to download bundle"
 msgstr "클릭하여 번들을 다운로드합니다"
 
 #: components/AdHocCommands/AdHocCommands.tsx:127
-#: components/LaunchButton/LaunchButton.tsx:308
+#: components/LaunchButton/LaunchButton.tsx:315
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:135
 msgid "Failed to launch job."
 msgstr "작업을 시작하지 못했습니다."
@@ -338,8 +338,8 @@ msgstr "적용할 역할 선택"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "체크아웃할 브랜치입니다. 브랜치 외에도 태그, 커밋 해시 및 임의의 참조를 입력할 수 있습니다. 사용자 지정 refspec을 제공하지 않으면 일부 커밋 해시 및 참조를 사용하지 못할 수 있습니다."
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:128
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -512,7 +512,7 @@ msgstr "하나 이상의 인스턴스에서 상태 확인을 실행하지 못했
 msgid "Launched By"
 msgstr "시작자"
 
-#: screens/ActivityStream/ActivityStream.tsx:268
+#: screens/ActivityStream/ActivityStream.tsx:276
 #: screens/ActivityStream/ActivityStreamListItem.tsx:52
 #: screens/Job/JobOutput/JobOutputSearch.tsx:109
 msgid "Event"
@@ -706,12 +706,16 @@ msgstr "하나 이상의 인스턴스 그룹을 삭제하지 못했습니다."
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:56
-#: screens/ActivityStream/ActivityStream.tsx:167
+#: routeConfig.tsx:59
+#: screens/ActivityStream/ActivityStream.tsx:168
 msgid "Views"
 msgstr "보기"
 
-#: routeConfig.tsx:85
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:167
+msgid "No execution environment files found in this project. Sync the project after adding one."
+msgstr "이 프로젝트에서 실행 환경 파일을 찾을 수 없습니다. 파일을 추가한 후 프로젝트를 동기화하십시오."
+
+#: routeConfig.tsx:88
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -735,8 +739,8 @@ msgstr "노드 추가"
 msgid "JSON tab"
 msgstr "JSON 탭"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:270
+#: components/JobList/JobListItem.tsx:132
 msgid "Start Time"
 msgstr "시작 시간"
 
@@ -928,6 +932,11 @@ msgstr "대상 SMS 번호"
 msgid "Source control branch"
 msgstr "소스 제어 분기"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:77
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:29
+msgid "Builds"
+msgstr "빌드"
+
 #: screens/Dashboard/Dashboard.tsx:103
 #: screens/Job/JobOutput/HostEventModal.tsx:146
 msgid "Tabs"
@@ -1015,6 +1024,16 @@ msgstr "새 역할을 받을 리소스를 선택합니다. 다음 단계에서 �
 msgid "May"
 msgstr "5월"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:157
+msgid "Delete Execution Environment Builder"
+msgstr "실행 환경 빌더 삭제"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:105
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:134
+msgid "Execution Environment File"
+msgstr "실행 환경 파일"
+
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:540
 msgid "Destination channels"
 msgstr "대상 채널"
@@ -1079,6 +1098,7 @@ msgstr "인증 정보로 돌아가기"
 
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:199
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:227
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:215
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:219
 msgid "Deletion error"
 msgstr "삭제 오류"
@@ -1159,7 +1179,8 @@ msgstr "오류:"
 msgid "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 msgstr "이 인스턴스가 정책에 의해 관리되는지 여부를 제어합니다. 활성화된 경우, 인스턴스는 정책 규칙에 따라 인스턴스 그룹에 대한 자동 할당 및 할당 해제에 사용할 수 있습니다."
 
-#: components/JobList/JobList.tsx:257
+#: components/JobList/JobList.tsx:261
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
@@ -1331,6 +1352,11 @@ msgstr "워크플로우 승인"
 msgid "Node types"
 msgstr "노드 유형"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:91
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:96
+msgid "Build Execution Environment"
+msgstr "실행 환경 빌드"
+
 #: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
@@ -1370,9 +1396,9 @@ msgstr "플레이북 시작됨"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 워크플로우 작업 템플릿은 현재 다른 리소스에서 사용되고 있습니다. 삭제하시겠습니까?"
 
-#: routeConfig.tsx:121
+#: routeConfig.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:114
-#: screens/ActivityStream/ActivityStream.tsx:187
+#: screens/ActivityStream/ActivityStream.tsx:188
 #: screens/Dashboard/Dashboard.tsx:67
 #: screens/Host/HostList/HostList.tsx:144
 #: screens/Host/HostList/HostList.tsx:191
@@ -1411,6 +1437,7 @@ msgstr "이메일"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:95
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:342
@@ -1538,13 +1565,14 @@ msgstr "알림을 삭제하지 못했습니다."
 msgid "Show less"
 msgstr "더 적은 수를 표시"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:150
 #: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
 msgstr "버전"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:341
 msgid "Failed to delete one or more jobs."
 msgstr "하나 이상의 작업을 삭제하지 못했습니다."
 
@@ -1585,6 +1613,12 @@ msgstr "토큰"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "이 페더레이션 인벤토리의 소스 인벤토리를 선택합니다. 작업이 시작되면 호스트가 각 소스 인벤토리의 인스턴스 그룹으로 자동으로 라우팅됩니다."
 
+#: components/JobList/JobList.tsx:230
+#: components/JobList/JobListItem.tsx:74
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:96
+msgid "Execution Environment Build"
+msgstr "실행 환경 빌드"
+
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:76
 msgid "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster."
 msgstr "자체 서비스 계정을 사용하여 자신이 있는 클러스터에서 이 그룹의 Pod를 실행하는 receptor 메시의 홉 노드입니다. 작업은 메시를 통해 전달되므로 이 클러스터는 해당 클러스터에 액세스할 필요가 없습니다. 이 클러스터의 API를 통해 Pod를 실행하려면 비워 두십시오."
@@ -1607,7 +1641,7 @@ msgstr "분"
 msgid "Copied"
 msgstr "복사됨"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:352
 msgid "Failed to cancel one or more jobs."
 msgstr "하나 이상의 작업을 취소하지 못했습니다."
 
@@ -1637,8 +1671,8 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:112
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:113
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1731,6 +1765,11 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:119
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:22
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:65
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:158
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:66
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:93
 #: screens/Host/HostDetail/HostDetail.tsx:78
 #: screens/Host/HostGroups/HostGroupItem.tsx:44
 #: screens/Host/HostGroups/HostGroupsList.tsx:167
@@ -1894,7 +1933,7 @@ msgstr "세부 정보"
 #~ msgid "Subscription manifest"
 #~ msgstr "서브스크립션 매니페스트"
 
-#: components/JobList/JobList.tsx:243
+#: components/JobList/JobList.tsx:247
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:87
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
@@ -1935,15 +1974,15 @@ msgid "Approved"
 msgstr "승인됨"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:272
+#: components/JobList/JobListItem.tsx:136
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
 #: components/SelectedList/DraggableSelectedList.tsx:240
 #: components/TemplateList/TemplateList.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:172
-#: screens/ActivityStream/ActivityStream.tsx:269
+#: screens/ActivityStream/ActivityStream.tsx:277
 #: screens/ActivityStream/ActivityStreamListItem.tsx:55
 #: screens/Application/ApplicationsList/ApplicationListItem.tsx:58
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:151
@@ -1953,6 +1992,8 @@ msgstr "승인됨"
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:48
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:167
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:113
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:162
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:88
 #: screens/Host/HostGroups/HostGroupItem.tsx:50
 #: screens/Host/HostGroups/HostGroupsList.tsx:185
 #: screens/Host/HostList/HostList.tsx:174
@@ -2004,7 +2045,7 @@ msgstr "동작"
 msgid "Event summary not available"
 msgstr "이벤트 요약을 사용할 수 없음"
 
-#: routeConfig.tsx:60
+#: routeConfig.tsx:63
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2095,8 +2136,8 @@ msgstr "워크플로우 다시 시작"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "이 프로젝트는 현재 동기화 중이며 동기화 프로세스가 완료될 때까지 클릭할 수 없습니다"
 
-#: routeConfig.tsx:149
-#: screens/ActivityStream/ActivityStream.tsx:199
+#: routeConfig.tsx:163
+#: screens/ActivityStream/ActivityStream.tsx:200
 msgid "Administration"
 msgstr "관리"
 
@@ -2140,7 +2181,7 @@ msgstr "기타 프롬프트"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "조건이 평가되기 전에 부모 노드 결과가 필요합니다."
 
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:245
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2159,6 +2200,10 @@ msgstr "작업 템플릿"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:216
 msgid "Install Bundle"
 msgstr "번들 설치"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:92
+msgid "View all execution environment builders"
+msgstr "모든 실행 환경 빌더 보기"
 
 #: screens/Project/shared/Project.helptext.tsx:18
 msgid "Example URLs for GIT Source Control include:"
@@ -2560,7 +2605,7 @@ msgstr "사용자 세부 정보"
 msgid "Delete Execution Environment"
 msgstr "실행 환경 삭제"
 
-#: components/JobList/JobListItem.tsx:368
+#: components/JobList/JobListItem.tsx:369
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "작업 분할"
@@ -2619,6 +2664,7 @@ msgstr "한 줄에 하나의 IRC 채널 또는 사용자 이름을 사용합니�
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:234
 #: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
@@ -2631,6 +2677,7 @@ msgstr "작업 삭제 오류"
 msgid "On days"
 msgstr "요일에"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:173
 #: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "실행 노드"
@@ -2648,9 +2695,9 @@ msgstr "다중 선택"
 msgid "Zoom in"
 msgstr "확대"
 
-#: routeConfig.tsx:173
+#: routeConfig.tsx:187
 #: screens/ActivityStream/ActivityStream.tsx:120
-#: screens/ActivityStream/ActivityStream.tsx:207
+#: screens/ActivityStream/ActivityStream.tsx:208
 #: screens/InstanceGroup/InstanceGroup.tsx:81
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:198
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:81
@@ -2687,6 +2734,7 @@ msgstr "출력 복사"
 #: components/Search/RelatedLookupTypeInput.tsx:129
 #: screens/Credential/shared/CredentialForm.tsx:265
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:153
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:168
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:224
 #: screens/Template/shared/PlaybookSelect.tsx:164
 msgid "No results found"
@@ -2725,7 +2773,7 @@ msgstr "하나 이상의 호스트를 연결 해제하지 못했습니다."
 msgid "JOB ID:"
 msgstr "작업 ID:"
 
-#: routeConfig.tsx:163
+#: routeConfig.tsx:177
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "관리 작업"
@@ -3043,7 +3091,7 @@ msgstr "워크플로우 작업 세부 정보"
 msgid "Azure AD settings"
 msgstr "Azure AD 설정"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3145,9 +3193,9 @@ msgstr "호스트 실패"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:142
+#: routeConfig.tsx:145
 #: screens/ActivityStream/ActivityStream.tsx:117
-#: screens/ActivityStream/ActivityStream.tsx:196
+#: screens/ActivityStream/ActivityStream.tsx:197
 #: screens/Organization/Organization.tsx:139
 #: screens/Organization/OrganizationList/OrganizationList.tsx:143
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:51
@@ -3345,6 +3393,7 @@ msgstr "답을 입력한 다음 확인란 오른쪽을 클릭하여 답변을 �
 msgid "Survey Question Order"
 msgstr "설문 조사 질문 순서"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:84
 #: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "알 수 없는 시작일"
@@ -3369,6 +3418,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:298
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:133
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:142
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:163
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:141
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:145
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
@@ -3385,6 +3435,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:225
 #: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
@@ -3515,7 +3566,7 @@ msgstr "호스트 선택"
 msgid "GitHub Team"
 msgstr "GitHub 팀"
 
-#: components/JobList/JobList.tsx:253
+#: components/JobList/JobList.tsx:257
 #: components/Lookup/ApplicationLookup.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:216
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:437
@@ -3524,6 +3575,8 @@ msgstr "GitHub 팀"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:99
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:123
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:148
 #: screens/Host/HostDetail/HostDetail.tsx:95
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:109
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
@@ -3535,6 +3588,7 @@ msgstr "GitHub 팀"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:188
 #: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
@@ -3729,6 +3783,7 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "새 인스턴스 만들기"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:140
 #: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "프로젝트 업데이트 상태"
@@ -3876,6 +3931,16 @@ msgstr "기본 언어"
 msgid "Prompt Overrides"
 msgstr "프롬프트 덮어쓰기"
 
+#: routeConfig.tsx:156
+#: screens/ActivityStream/ActivityStream.tsx:124
+#: screens/ActivityStream/ActivityStream.tsx:223
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:122
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:14
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:24
+msgid "Execution Environment Builders"
+msgstr "실행 환경 빌더"
+
 #: screens/Setting/SettingList.tsx:56
 msgid "TACACS+ settings"
 msgstr "TACACS + 설정"
@@ -3902,7 +3967,7 @@ msgstr "비활성화됨"
 msgid "Default Execution Environment"
 msgstr "기본 실행 환경"
 
-#: components/JobList/JobListItem.tsx:292
+#: components/JobList/JobListItem.tsx:293
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3910,7 +3975,14 @@ msgstr "기본 실행 환경"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:142
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:94
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:138
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:160
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:72
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:124
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:130
 #: screens/Job/JobDetail/JobDetail.tsx:180
 #: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:227
@@ -4021,7 +4093,7 @@ msgstr "기본 답변"
 msgid "Delete Job Template"
 msgstr "작업 템플릿 삭제"
 
-#: routeConfig.tsx:188
+#: routeConfig.tsx:202
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4114,6 +4186,7 @@ msgstr "인증 정보 삭제"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:287
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:141
 #: screens/Host/HostDetail/HostDetail.tsx:117
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:142
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
@@ -4312,6 +4385,10 @@ msgstr "새 인스턴스가 온라인 상태가 될 때 이 그룹에 자동으�
 msgid "Confirm cancellation"
 msgstr "취소 확인"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:9
+msgid "The ansible-builder definition file to build, a version 3 execution-environment.yml from the project. A source control project lists the files its last sync found."
+msgstr "빌드할 ansible-builder 정의 파일로, 프로젝트의 버전 3 execution-environment.yml입니다. 소스 제어 프로젝트는 마지막 동기화에서 찾은 파일을 나열합니다."
+
 #: components/Sort/Sort.tsx:146
 msgid "Sort"
 msgstr "분류"
@@ -4471,7 +4548,7 @@ msgid "Edit Template"
 msgstr "템플릿 편집"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:178
+#: routeConfig.tsx:192
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4566,9 +4643,9 @@ msgstr "조직 세부 정보 보기"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
-#: components/LaunchButton/LaunchButton.tsx:305
+#: components/JobList/JobList.tsx:338
+#: components/JobList/JobList.tsx:349
+#: components/LaunchButton/LaunchButton.tsx:312
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
@@ -4728,6 +4805,10 @@ msgstr "하나 이상의 프로젝트를 삭제하지 못했습니다."
 msgid "Set source path to"
 msgstr "소스 경로 설정"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:11
+msgid "The organization whose execution environment admins can manage and run this builder."
+msgstr "실행 환경 관리자가 이 빌더를 관리하고 실행할 수 있는 조직입니다."
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4757,7 +4838,7 @@ msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
 #: screens/ActivityStream/ActivityStream.tsx:119
-#: screens/ActivityStream/ActivityStream.tsx:205
+#: screens/ActivityStream/ActivityStream.tsx:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:116
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:171
 #: screens/NotificationTemplate/NotificationTemplates.tsx:15
@@ -4775,8 +4856,8 @@ msgstr "메시지 본문 시작"
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "인벤토리 동기화 시 사용할 분기. 비어 있는 경우 프로젝트 기본값이 사용됩니다. 프로젝트 allow_override 필드가 true로 설정된 경우에만 허용됩니다."
 
-#: screens/ActivityStream/ActivityStream.tsx:256
-#: screens/ActivityStream/ActivityStream.tsx:266
+#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:274
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:57
 msgid "Initiated by"
 msgstr "초기자"
@@ -4786,7 +4867,7 @@ msgstr "초기자"
 msgid "Delete this node"
 msgstr "이 노드 삭제"
 
-#: components/JobList/JobListItem.tsx:266
+#: components/JobList/JobListItem.tsx:267
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "소스 워크플로 작업"
@@ -4827,7 +4908,7 @@ msgstr "오라그니제이션"
 msgid "{brandName} logo"
 msgstr "{brandName} 로고"
 
-#: screens/Job/Job.tsx:238
+#: screens/Job/Job.tsx:244
 msgid "View Job Details"
 msgstr "작업 세부 정보보기"
 
@@ -4852,14 +4933,14 @@ msgstr "다시 시작 방지"
 msgid "View SAML settings"
 msgstr "SAML 설정 보기"
 
-#: components/JobList/JobList.tsx:245
+#: components/JobList/JobList.tsx:249
 #: components/StatusLabel/StatusLabel.tsx:65
 #: components/Workflow/WorkflowNodeHelp.tsx:93
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
 msgstr "취소됨"
 
-#: screens/Job/Job.tsx:149
+#: screens/Job/Job.tsx:151
 #: screens/Job/JobOutput/HostEventModal.tsx:221
 #: screens/Job/Jobs.tsx:51
 msgid "Output"
@@ -4892,9 +4973,9 @@ msgstr "워크플로우 승인 메시지"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:70
+#: routeConfig.tsx:73
 #: screens/ActivityStream/ActivityStream.tsx:108
-#: screens/ActivityStream/ActivityStream.tsx:173
+#: screens/ActivityStream/ActivityStream.tsx:174
 #: screens/Inventory/Inventories.tsx:130
 #: screens/Inventory/InventorySource/InventorySource.tsx:110
 #: screens/ManagementJob/ManagementJob.tsx:121
@@ -4926,9 +5007,9 @@ msgstr "시스템 경고"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:183
+#: routeConfig.tsx:197
 #: screens/ActivityStream/ActivityStream.tsx:123
-#: screens/ActivityStream/ActivityStream.tsx:215
+#: screens/ActivityStream/ActivityStream.tsx:216
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:190
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:14
@@ -4945,8 +5026,8 @@ msgstr "실행 환경"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "시작 시 작업 유형을 입력하라는 메시지를 표시합니다."
 
-#: components/JobList/JobListItem.tsx:232
-#: components/JobList/JobListItem.tsx:240
+#: components/JobList/JobListItem.tsx:233
+#: components/JobList/JobListItem.tsx:241
 msgid "Schedule"
 msgstr "스케줄"
 
@@ -5063,6 +5144,10 @@ msgstr "연결할 수 없는 호스트"
 msgid "On timeout"
 msgstr "시간 초과 시"
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:10
+msgid "Credential for the container registry the image is pushed to."
+msgstr "이미지를 푸시할 컨테이너 레지스트리의 인증 정보입니다."
+
 #: screens/Team/Teams.tsx:17
 #: screens/Team/Teams.tsx:28
 msgid "Create New Team"
@@ -5151,7 +5236,7 @@ msgstr "일"
 msgid "Collapse"
 msgstr "접기"
 
-#: components/JobList/JobListItem.tsx:337
+#: components/JobList/JobListItem.tsx:338
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5159,7 +5244,7 @@ msgstr "접기"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:96
+#: routeConfig.tsx:99
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5194,7 +5279,7 @@ msgstr "상태 선택"
 msgid "Month"
 msgstr "월"
 
-#: components/JobList/JobListItem.tsx:313
+#: components/JobList/JobListItem.tsx:314
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5204,9 +5289,9 @@ msgstr "월"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:106
+#: routeConfig.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:111
-#: screens/ActivityStream/ActivityStream.tsx:184
+#: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
@@ -5264,6 +5349,7 @@ msgstr "승인할 행 선택"
 #~ msgid "Unique Hosts"
 #~ msgstr "독특한 호스트"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:221
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:248
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:252
@@ -5311,6 +5397,13 @@ msgstr "3월"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:164
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:86
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:87
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:134
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:144
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:159
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:71
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:117
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:116
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:92
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:111
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:28
@@ -5602,7 +5695,7 @@ msgid "View Credential Details"
 msgstr "인증 정보 세부 정보보기"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:158
+#: routeConfig.tsx:172
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5668,6 +5761,10 @@ msgstr "지난 2주"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
 msgstr "뒤로"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#~ msgid "Deleting the builder also deletes all of its builds. Are you sure you want to delete it?"
+#~ msgstr ""
 
 #: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
@@ -5771,6 +5868,10 @@ msgstr "종료일"
 msgid "Disable SSL Verification"
 msgstr "SSL 확인 비활성화"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:151
+msgid "Build"
+msgstr "빌드"
+
 #: screens/Job/Job.helptext.tsx:21
 #: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:11
 msgid "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch."
@@ -5780,7 +5881,7 @@ msgstr "워크플로의 브랜치를 선택합니다. 이 브랜치는 브랜치
 msgid "Management job not found."
 msgstr "관리 작업을 찾을 수 없습니다."
 
-#: components/JobList/JobList.tsx:238
+#: components/JobList/JobList.tsx:242
 #: components/Workflow/WorkflowNodeHelp.tsx:72
 msgid "New"
 msgstr "새로운"
@@ -5804,9 +5905,9 @@ msgstr "링크 상태 유형"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:101
+#: routeConfig.tsx:104
 #: screens/ActivityStream/ActivityStream.tsx:110
-#: screens/ActivityStream/ActivityStream.tsx:182
+#: screens/ActivityStream/ActivityStream.tsx:183
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:87
 #: screens/Template/Templates.tsx:19
@@ -5866,9 +5967,9 @@ msgstr "소스 제어 분기"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:168
+#: routeConfig.tsx:182
 #: screens/ActivityStream/ActivityStream.tsx:121
-#: screens/ActivityStream/ActivityStream.tsx:209
+#: screens/ActivityStream/ActivityStream.tsx:210
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
 #: screens/InstanceGroup/InstanceGroups.tsx:18
 #: screens/InstanceGroup/InstanceGroups.tsx:32
@@ -5958,6 +6059,7 @@ msgstr "중첩된 그룹 인벤토리 정의:"
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "시작 시 제한을 입력하라는 메시지를 표시합니다."
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:83
 #: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
@@ -6016,9 +6118,9 @@ msgid "Survey"
 msgstr "설문 조사"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:132
+#: routeConfig.tsx:135
 #: screens/ActivityStream/ActivityStream.tsx:115
-#: screens/ActivityStream/ActivityStream.tsx:193
+#: screens/ActivityStream/ActivityStream.tsx:194
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
 #: screens/Organization/OrganizationList/OrganizationList.tsx:161
 #: screens/Organization/Organizations.tsx:17
@@ -6128,6 +6230,7 @@ msgstr "출력 탭"
 msgid "Denied"
 msgstr "거부됨"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:90
 #: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "알 수 없는 완료일"
@@ -6171,9 +6274,9 @@ msgstr "건너뛰기 태그는 대규모 playbook이 있고 play 또는 작업�
 msgid "View User Details"
 msgstr "사용자 세부 정보보기"
 
-#: routeConfig.tsx:75
+#: routeConfig.tsx:78
 #: screens/ActivityStream/ActivityStream.tsx:34
-#: screens/ActivityStream/ActivityStream.tsx:135
+#: screens/ActivityStream/ActivityStream.tsx:136
 #: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "활동 스트림"
@@ -6203,6 +6306,10 @@ msgstr "레이블 이름"
 #: screens/Inventory/shared/Inventory.helptext.tsx:64
 msgid "View YAML examples at"
 msgstr "에서 YAML 예제 보기"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:117
+msgid "Copy Execution Environment Builder"
+msgstr "실행 환경 빌더 복사"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:38
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:153
@@ -6239,6 +6346,10 @@ msgstr "제어 노드의 피어"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
 msgid "Test passed"
 msgstr "통과"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:90
+msgid "Execution environment builder not found."
+msgstr "실행 환경 빌더를 찾을 수 없습니다."
 
 #: screens/Job/Job.helptext.tsx:18
 #: screens/Template/shared/JobTemplate.helptext.tsx:22
@@ -6390,9 +6501,9 @@ msgstr "구성된 인벤토리 플러그인 사용 방법"
 msgid "This field must not contain spaces"
 msgstr "이 필드에는 공백을 포함할 수 없습니다"
 
-#: routeConfig.tsx:153
+#: routeConfig.tsx:167
 #: screens/ActivityStream/ActivityStream.tsx:118
-#: screens/ActivityStream/ActivityStream.tsx:202
+#: screens/ActivityStream/ActivityStream.tsx:203
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:158
 #: screens/CredentialType/CredentialTypes.tsx:15
@@ -6445,7 +6556,7 @@ msgstr "시각화 도구"
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "프로비저닝 콜백: 프로비저닝 콜백 URL 생성을 활성화합니다. 이 URL을 사용하여 호스트는 Ascender에 연결하고 이 작업 템플릿을 사용하여 구성 업데이트를 요청할 수 있습니다."
 
-#: components/JobList/JobListItem.tsx:159
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
@@ -6604,6 +6715,7 @@ msgstr "작업 설정 보기"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:137
 #: screens/Host/HostDetail/HostDetail.tsx:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:138
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
@@ -6637,9 +6749,9 @@ msgstr "템플릿을 찾을 수 없습니다."
 #~ msgid "Trial"
 #~ msgstr "평가판"
 
-#: screens/ActivityStream/ActivityStream.tsx:246
-#: screens/ActivityStream/ActivityStream.tsx:252
-#: screens/ActivityStream/ActivityStream.tsx:264
+#: screens/ActivityStream/ActivityStream.tsx:254
+#: screens/ActivityStream/ActivityStream.tsx:260
+#: screens/ActivityStream/ActivityStream.tsx:272
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:54
 #: screens/ActivityStream/ActivityStreamListItem.tsx:48
 msgid "Time"
@@ -6648,6 +6760,10 @@ msgstr "시간"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
 msgid "Send HTML formatted body"
 msgstr "HTML 형식 본문 보내기"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:64
+msgid "Back to execution environment builders"
+msgstr "실행 환경 빌더로 돌아가기"
 
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
@@ -6754,8 +6870,8 @@ msgstr "섹션 축소"
 msgid "More information for {label}"
 msgstr "{label}에 대한 추가 정보"
 
-#: routeConfig.tsx:128
-#: screens/ActivityStream/ActivityStream.tsx:190
+#: routeConfig.tsx:131
+#: screens/ActivityStream/ActivityStream.tsx:191
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
 #: screens/Inventory/ConstructedInventory.tsx:76
@@ -6804,6 +6920,10 @@ msgstr "인벤토리 소스"
 #: screens/Template/shared/JobTemplate.helptext.tsx:34
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "활성화하면 이 작업 템플릿의 동시 실행이 허용됩니다."
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:6
+msgid "The image to tag the built execution environment as and push it to, including the container registry but not the tag. For example: quay.io/my-org/my-ee"
+msgstr "빌드된 실행 환경에 태그를 지정하고 푸시할 이미지로, 컨테이너 레지스트리를 포함하지만 태그는 포함하지 않습니다. 예: quay.io/my-org/my-ee"
 
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
@@ -6975,6 +7095,9 @@ msgstr "잘못된 링크 대상입니다. 자식 또는 상위 노드에 연결�
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:100
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:173
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:112
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:166
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:156
 msgid "Registry credential"
 msgstr "레지스트리 인증 정보"
 
@@ -7100,7 +7223,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Playbook 디렉토리 선택"
 
-#: components/JobList/JobListItem.tsx:254
+#: components/JobList/JobListItem.tsx:255
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7278,8 +7401,8 @@ msgstr "프로비저닝 콜백 URL 생성을\n"
 "                              연결하고 이 작업 템플릿을 사용하여\n"
 "                              구성 업데이트를 요청할 수 있습니다"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:132
+#: components/JobList/JobList.tsx:271
+#: components/JobList/JobListItem.tsx:133
 msgid "Finish Time"
 msgstr "완료 시간"
 
@@ -7337,7 +7460,7 @@ msgstr "프로젝트를 최신으로 간주하는 시간(초)입니다. 작업 �
 msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 msgstr "{numJobsToCancel, plural, one {이 작업은 다음 작업을 취소합니다:} other {이 작업은 다음 작업을 취소합니다:}}"
 
-#: screens/ActivityStream/ActivityStream.tsx:237
+#: screens/ActivityStream/ActivityStream.tsx:245
 msgid "Keyword"
 msgstr "키워드"
 
@@ -7507,6 +7630,8 @@ msgstr "동기화"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:68
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:157
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:157
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:70
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:101
 #: screens/Host/HostDetail/HostDetail.tsx:84
 #: screens/Host/HostList/HostList.tsx:154
 #: screens/Host/HostList/HostList.tsx:172
@@ -7661,6 +7786,8 @@ msgstr "GitHub Enterprise로 로그인"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:43
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:47
 #: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
@@ -7871,7 +7998,7 @@ msgstr "토큰 정보"
 msgid "Never Updated"
 msgstr "업데이트되지 않음"
 
-#: components/JobList/JobList.tsx:242
+#: components/JobList/JobList.tsx:246
 #: components/StatusLabel/StatusLabel.tsx:54
 #: components/Workflow/WorkflowNodeHelp.tsx:84
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
@@ -8127,7 +8254,7 @@ msgstr "시스템 팩트를 채우려면 `gather_facts: true`가\n"
 "            어렵습니다. 실제 팩트는 시스템마다\n"
 "            다릅니다."
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:374
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "작업 분할 부모"
@@ -8430,6 +8557,7 @@ msgstr "상세 정보"
 msgid "Mattermost"
 msgstr "가장 중요"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:67
 #: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "작업 ID"
@@ -8452,7 +8580,7 @@ msgstr "새 애플리케이션 만들기"
 msgid "Plays"
 msgstr "플레이"
 
-#: screens/ActivityStream/ActivityStream.tsx:242
+#: screens/ActivityStream/ActivityStream.tsx:250
 msgid "Initiated by (username)"
 msgstr "초기자 (사용자 이름)"
 
@@ -8479,7 +8607,7 @@ msgstr "OIDC로 로그인"
 msgid "confirm delete"
 msgstr "삭제 확인"
 
-#: screens/ActivityStream/ActivityStream.tsx:138
+#: screens/ActivityStream/ActivityStream.tsx:139
 msgid "Activity Stream type selector"
 msgstr "활동 스트림 유형 선택기"
 
@@ -8605,6 +8733,11 @@ msgstr "소스 제어 업데이트"
 #~ "                   Automation Analytics를 제공하는 데\n"
 #~ "                   사용됩니다."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:186
+msgid "Deleting a builder also deletes all of its builds. Are you sure you want to delete it?"
+msgstr "빌더를 삭제하면 해당 빌드도 모두 삭제됩니다. 삭제하시겠습니까?"
+
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
 msgid "Track submodules latest commit on branch"
@@ -8640,6 +8773,11 @@ msgstr "워크플로우 링크 모달"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:160
 msgid "Edit Inventory"
 msgstr "인벤토리 편집"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:138
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:139
+msgid "Select an execution environment file"
+msgstr "실행 환경 파일 선택"
 
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:94
 msgid "Failed to user token."
@@ -8683,6 +8821,10 @@ msgstr "제거 확인"
 #: screens/Dashboard/DashboardGraph.tsx:128
 msgid "Past 24 hours"
 msgstr "지난 24 시간"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:125
+msgid "Failed to copy execution environment builder"
+msgstr "실행 환경 빌더를 복사하지 못했습니다."
 
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:223
@@ -8737,7 +8879,7 @@ msgstr "워크플로우 보류 메시지 본문"
 msgid "Answer variable name"
 msgstr "응답 변수 이름"
 
-#: components/JobList/JobListItem.tsx:110
+#: components/JobList/JobListItem.tsx:111
 #: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
@@ -8774,7 +8916,7 @@ msgstr "IRC 닉네임"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "작업이 이 인벤토리를 사용하여 실행될 때마다 작업 작업을 실행하기 전에 선택한 소스에서 인벤토리를 새로 고칩니다."
 
-#: components/JobList/JobList.tsx:241
+#: components/JobList/JobList.tsx:245
 #: components/StatusLabel/StatusLabel.tsx:59
 #: components/TemplateList/TemplateListItem.tsx:117
 #: components/Workflow/WorkflowNodeHelp.tsx:81
@@ -8922,9 +9064,9 @@ msgid "Content Loading"
 msgstr "콘텐츠 로딩 중"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:116
+#: routeConfig.tsx:119
 #: screens/ActivityStream/ActivityStream.tsx:113
-#: screens/ActivityStream/ActivityStream.tsx:186
+#: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:78
 #: screens/Inventory/Inventories.tsx:55
 #: screens/Inventory/InventoryList/InventoryList.tsx:190
@@ -8960,8 +9102,8 @@ msgstr "이 필드는 정수여야 합니다"
 msgid "START"
 msgstr "시작"
 
-#: routeConfig.tsx:92
-#: screens/ActivityStream/ActivityStream.tsx:179
+#: routeConfig.tsx:95
+#: screens/ActivityStream/ActivityStream.tsx:180
 msgid "Resources"
 msgstr "리소스"
 
@@ -9052,7 +9194,7 @@ msgstr "성공 시"
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "이 소스에 의해 동기화될 인벤토리 파일. 드롭다운에서 선택하거나 입력란에 파일을 입력할 수 있습니다."
 
-#: screens/Job/Job.tsx:179
+#: screens/Job/Job.tsx:181
 msgid "View all Jobs."
 msgstr "모든 작업 보기."
 
@@ -9139,7 +9281,7 @@ msgid "Notification Type"
 msgstr "알림 유형"
 
 #: screens/ActivityStream/ActivityStream.tsx:106
-#: screens/ActivityStream/ActivityStream.tsx:170
+#: screens/ActivityStream/ActivityStream.tsx:171
 msgid "Dashboard (all activity)"
 msgstr "대시보드(모든 활동)"
 
@@ -9173,12 +9315,14 @@ msgstr "업데이트 옵션"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:257
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:128
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:192
 #: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
@@ -9210,13 +9354,17 @@ msgstr "명령"
 msgid "Access token"
 msgstr "액세스 토큰"
 
-#: components/JobList/JobList.tsx:244
+#: components/JobList/JobList.tsx:248
 #: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:90
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:151
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:230
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:171
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:182
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:218
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:133
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:164
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:152
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:222
@@ -9234,7 +9382,7 @@ msgstr "IRC 서버 포트"
 msgid "Back to Groups"
 msgstr "그룹으로 돌아가기"
 
-#: components/LaunchButton/LaunchButton.tsx:108
+#: components/LaunchButton/LaunchButton.tsx:109
 msgid "A job has already been launched"
 msgstr "작업이 이미 시작되었습니다"
 
@@ -9247,7 +9395,7 @@ msgid "Recent Templates"
 msgstr "최근 템플릿"
 
 #: screens/ActivityStream/ActivityStream.tsx:122
-#: screens/ActivityStream/ActivityStream.tsx:212
+#: screens/ActivityStream/ActivityStream.tsx:213
 msgid "Applications & Tokens"
 msgstr "애플리케이션 및 토큰"
 
@@ -9359,9 +9507,9 @@ msgstr "고급"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:137
+#: routeConfig.tsx:140
 #: screens/ActivityStream/ActivityStream.tsx:116
-#: screens/ActivityStream/ActivityStream.tsx:195
+#: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Team/Teams.tsx:32
 #: screens/User/UserList/UserList.tsx:108
 #: screens/User/UserList/UserList.tsx:146
@@ -9436,6 +9584,11 @@ msgstr "제거"
 #: screens/Instances/Shared/InstanceForm.tsx:32
 msgid "Execution"
 msgstr "실행"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:185
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:136
+msgid "Failed to start the build."
+msgstr "빌드를 시작하지 못했습니다."
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:431
 msgid "The"
@@ -9619,10 +9772,10 @@ msgstr "외부 보안 관리 시스템에서 필드 채우기"
 #~ msgstr "Insights 인증 정보"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:65
+#: components/JobList/JobList.tsx:297
+#: routeConfig.tsx:68
 #: screens/ActivityStream/ActivityStream.tsx:107
-#: screens/ActivityStream/ActivityStream.tsx:172
+#: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Dashboard/shared/LineChart.tsx:118
 #: screens/Host/Host.tsx:81
 #: screens/Host/Hosts.tsx:34
@@ -9685,7 +9838,7 @@ msgstr "동료를 연결하지 못했습니다."
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "태그는 대규모 playbook이 있고 play 또는 작업의 특정 부분을 실행하려는 경우에 유용합니다. 여러 태그를 구분하려면 쉼표를 사용합니다. 태그 사용에 대한 자세한 내용은 설명서를 참조하십시오."
 
-#: screens/ActivityStream/ActivityStream.tsx:233
+#: screens/ActivityStream/ActivityStream.tsx:241
 msgid "Events"
 msgstr "이벤트"
 
@@ -9754,11 +9907,11 @@ msgstr "이 조직은 현재 다른 리소스에서 사용 중입니다. 삭제�
 msgid "System Administrator"
 msgstr "시스템 관리자"
 
-#: routeConfig.tsx:195
-#: routeConfig.tsx:199
-#: screens/ActivityStream/ActivityStream.tsx:124
-#: screens/ActivityStream/ActivityStream.tsx:219
-#: screens/ActivityStream/ActivityStream.tsx:221
+#: routeConfig.tsx:209
+#: routeConfig.tsx:213
+#: screens/ActivityStream/ActivityStream.tsx:125
+#: screens/ActivityStream/ActivityStream.tsx:227
+#: screens/ActivityStream/ActivityStream.tsx:229
 #: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "설정"
@@ -9802,7 +9955,7 @@ msgstr "7월"
 msgid "Failed to remove peers."
 msgstr "동료를 제거하지 못했습니다."
 
-#: screens/Job/Job.tsx:137
+#: screens/Job/Job.tsx:139
 msgid "Back to Jobs"
 msgstr "작업으로 돌아가기"
 
@@ -9818,7 +9971,8 @@ msgstr "모든 워크플로우 승인 보기."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "선택하지 않으면 병합이 수행되어 로컬 변수와 외부 소스에 있는 변수를 결합합니다."
 
-#: components/JobList/JobListItem.tsx:144
+#: components/JobList/JobListItem.tsx:145
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:212
 #: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9835,9 +9989,9 @@ msgstr "www.json.org"
 msgid "Inventory sources with failures"
 msgstr "실패가 있는 재고 소스"
 
-#: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:123
+#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:124
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9847,6 +10001,7 @@ msgstr "실패가 있는 재고 소스"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:71
 #: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:170
@@ -9868,7 +10023,7 @@ msgstr "삭제하시겠습니까"
 msgid "Failed to retrieve full node resource object."
 msgstr "전체 노드 리소스 오브젝트를 검색하지 못했습니다."
 
-#: components/JobList/JobList.tsx:239
+#: components/JobList/JobList.tsx:243
 #: components/StatusLabel/StatusLabel.tsx:60
 #: components/Workflow/WorkflowNodeHelp.tsx:75
 msgid "Pending"
@@ -9901,6 +10056,10 @@ msgstr "툴 전환"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:153
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:166
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:75
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:152
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:161
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:79
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
@@ -9975,6 +10134,10 @@ msgstr "소스 제어 버전"
 msgid "Search is disabled while the job is running"
 msgstr "작업이 실행되는 동안 검색이 비활성화됩니다."
 
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilderForm.tsx:126
+msgid "Tag"
+msgstr "태그"
+
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:443
 msgid "Third"
 msgstr "세 번째"
@@ -10007,6 +10170,8 @@ msgstr "검색 취소"
 #: screens/CredentialType/CredentialTypes.tsx:29
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:72
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:28
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilder.tsx:72
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:28
 #: screens/Host/Host.tsx:66
 #: screens/Host/Hosts.tsx:31
 #: screens/InstanceGroup/ContainerGroup.tsx:73
@@ -10026,7 +10191,7 @@ msgstr "검색 취소"
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:86
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
 #: screens/Inventory/SmartInventory.tsx:75
-#: screens/Job/Job.tsx:145
+#: screens/Job/Job.tsx:147
 #: screens/Job/JobOutput/HostEventModal.tsx:155
 #: screens/Job/Jobs.tsx:52
 #: screens/ManagementJob/ManagementJobs.tsx:28
@@ -10098,7 +10263,7 @@ msgstr "다섯 번째"
 msgid "Execution environment is missing or deleted."
 msgstr "실행 환경이 없거나 삭제되었습니다."
 
-#: components/JobList/JobList.tsx:240
+#: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:63
 #: components/Workflow/WorkflowNodeHelp.tsx:78
 msgid "Waiting"
@@ -10225,7 +10390,7 @@ msgstr "Webhook"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {최종 삭제가 처리될 때까지 인벤토리는 대기 상태가 됩니다.} other {최종 삭제가 처리될 때까지 인벤토리는 대기 상태가 됩니다.}}"
 
-#: components/JobList/JobListItem.tsx:157
+#: components/JobList/JobListItem.tsx:158
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "호스트 매개변수를 사용하여 다시 시작"
@@ -10304,9 +10469,9 @@ msgstr "인벤토리 소스 {name} 삭제에 실패했습니다."
 msgid "On Condition"
 msgstr "조건부"
 
-#: routeConfig.tsx:80
+#: routeConfig.tsx:83
 #: screens/ActivityStream/ActivityStream.tsx:109
-#: screens/ActivityStream/ActivityStream.tsx:175
+#: screens/ActivityStream/ActivityStream.tsx:176
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:195
 #: screens/WorkflowApproval/WorkflowApprovals.tsx:14
@@ -10335,6 +10500,7 @@ msgstr "SOCIAL"
 
 #: screens/CredentialType/CredentialTypes.tsx:28
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:27
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:27
 #: screens/InstanceGroup/InstanceGroups.tsx:41
 #: screens/InstanceGroup/InstanceGroups.tsx:46
 #: screens/Inventory/Inventories.tsx:104
@@ -10596,7 +10762,7 @@ msgstr "인스턴스를 가져오지 못했습니다."
 msgid "Use browser default"
 msgstr "브라우저 기본값 사용"
 
-#: components/JobList/JobList.tsx:231
+#: components/JobList/JobList.tsx:235
 msgid "Launched By (Username)"
 msgstr "(사용자 이름)에 의해 시작됨"
 
@@ -10634,7 +10800,7 @@ msgstr "링크 삭제 확인"
 msgid "This field must be at least {0} characters"
 msgstr "이 필드는 최소 {0}자 이상이어야 합니다"
 
-#: components/JobList/JobListItem.tsx:220
+#: components/JobList/JobListItem.tsx:221
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10854,7 +11020,8 @@ msgid "Choose a job type"
 msgstr "작업 유형 선택"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:145
+#: components/JobList/JobListItem.tsx:146
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:213
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
@@ -10917,6 +11084,7 @@ msgstr "노드 편집"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:128
 #: screens/Credential/shared/CredentialFormFields/CredentialField.tsx:93
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentFileSelect.tsx:150
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
 #: screens/Template/shared/PlaybookSelect.tsx:146
@@ -10929,6 +11097,8 @@ msgid "Expires on {0}"
 msgstr "{0}에 만료됨"
 
 #: components/Workflow/WorkflowTools.tsx:59
+#: routeConfig.tsx:152
+#: screens/ActivityStream/ActivityStream.tsx:220
 msgid "Tools"
 msgstr "툴"
 
@@ -10989,12 +11159,12 @@ msgid "Continue"
 msgstr "계속"
 
 #: components/ContentError/ContentError.tsx:55
-#: screens/Job/Job.tsx:178
+#: screens/Job/Job.tsx:180
 msgid "The page you requested could not be found."
 msgstr "요청하신 페이지를 찾을 수 없습니다."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:303
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11027,6 +11197,7 @@ msgstr "{draggedName}이(가) 이제 {0}번 위치에 있습니다."
 msgid "Invalid date format"
 msgstr "잘못된 날짜 형식"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:179
 #: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "인스턴스 그룹"
@@ -11102,6 +11273,10 @@ msgstr "하나 이상의 호스트를 삭제하지 못했습니다."
 #: screens/Job/JobOutput/HostEventModal.tsx:238
 msgid "Standard Error"
 msgstr "표준 오류"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:8
+msgid "The project that holds the ansible-builder definition file."
+msgstr "ansible-builder 정의 파일이 있는 프로젝트입니다."
 
 #: components/Pagination/Pagination.tsx:38
 msgid "Pagination"
@@ -11256,6 +11431,10 @@ msgstr "{0, plural, one {아래 그룹을 삭제하시겠습니까?} other {아�
 msgid "Select Items"
 msgstr "항목 선택"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:98
+msgid "Execution environment builder copied successfully"
+msgstr "실행 환경 빌더가 성공적으로 복사되었습니다"
+
 #: components/JobList/JobListCancelButton.tsx:100
 msgid "{numJobsToCancel, plural, one {Cancel selected job} other {Cancel selected jobs}}"
 msgstr "{numJobsToCancel, plural, one {선택한 작업 취소} other {선택한 작업 취소}}"
@@ -11357,6 +11536,11 @@ msgstr "승인"
 msgid "Failed to update instance."
 msgstr "인스턴스를 업데이트하지 못했습니다."
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:104
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:109
+msgid "Edit Execution Environment Builder"
+msgstr "실행 환경 빌더 편집"
+
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:323
 msgid "Hosts by processor type"
 msgstr "프로세서 유형별 호스트"
@@ -11377,6 +11561,10 @@ msgstr "팀을 찾을 수 없음"
 #: screens/Dashboard/Dashboard.tsx:73
 msgid "Failed hosts"
 msgstr "실패한 호스트"
+
+#: screens/ExecutionEnvironmentBuilder/shared/ExecutionEnvironmentBuilder.helptext.tsx:7
+msgid "The tag to give the built image."
+msgstr "빌드된 이미지에 지정할 태그입니다."
 
 #: components/Search/AdvancedSearch.tsx:392
 msgid "Direct Keys"
@@ -11456,6 +11644,7 @@ msgstr "새 역할을 받을 리소스 유형을 선택합니다. 예를 들어 
 #: screens/Credential/CredentialList/CredentialListItem.tsx:68
 #: screens/CredentialType/CredentialTypeList/CredentialTypeListItem.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:76
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderListItem.tsx:64
 #: screens/Host/HostGroups/HostGroupItem.tsx:42
 #: screens/Host/HostList/HostListItem.tsx:47
 #: screens/HostMetrics/HostMetricsListItem.tsx:28
@@ -11578,7 +11767,7 @@ msgstr "이 목록을 채우려면 작업을 실행하십시오."
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
-#: components/JobList/JobList.tsx:249
+#: components/JobList/JobList.tsx:253
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
@@ -11624,11 +11813,17 @@ msgstr "이 프로젝트는 현재 다른 리소스에서 사용되고 있습니
 msgid "Associate"
 msgstr "연결"
 
-#: components/JobList/JobListItem.tsx:199
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderDetails/ExecutionEnvironmentBuilderDetails.tsx:174
+msgid "Failed to delete execution environment builder."
+msgstr "실행 환경 빌더를 삭제하지 못했습니다."
+
+#: components/JobList/JobListItem.tsx:200
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:196
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:204
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:205
@@ -11805,6 +12000,11 @@ msgstr "인벤토리 유형"
 msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
 msgstr "{numOccurrences, plural, one {# 회 발생 후} other {# 회 발생 후}}"
 
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:102
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:112
+msgid "Execution Environment Builder"
+msgstr "실행 환경 빌더"
+
 #: components/Search/AdvancedSearch.tsx:284
 #: components/Search/AdvancedSearch.tsx:298
 msgid "First, select a key"
@@ -11832,7 +12032,7 @@ msgstr "6월"
 msgid "Launch"
 msgstr "시작"
 
-#: components/JobList/JobListItem.tsx:361
+#: components/JobList/JobListItem.tsx:362
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "설명"
@@ -11912,7 +12112,8 @@ msgid "Error message body"
 msgstr "오류 메시지 본문"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:146
+#: components/JobList/JobListItem.tsx:147
+#: screens/Job/ExecutionEnvironmentBuilderBuildDetail/ExecutionEnvironmentBuilderBuildDetail.tsx:214
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
@@ -12076,7 +12277,7 @@ msgid "Toggle notification start"
 msgstr "알림 시작 전환"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:276
+#: components/JobList/JobListItem.tsx:277
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12141,6 +12342,11 @@ msgstr "Jinja2 조건에 따라 호스트를 그룹에 추가하세요."
 msgid "Copy Template"
 msgstr "템플릿 복사"
 
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:15
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilders.tsx:25
+msgid "Create new execution environment builder"
+msgstr "새로운 실행 환경 빌더 만들기"
+
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "알림 승인 전환"
@@ -12168,6 +12374,10 @@ msgstr "노드 제거 확인"
 #: components/Schedule/shared/ScheduleFormFields.tsx:222
 msgid "Week"
 msgstr "주"
+
+#: screens/ExecutionEnvironmentBuilder/ExecutionEnvironmentBuilderList/ExecutionEnvironmentBuilderList.tsx:221
+msgid "Failed to delete one or more execution environment builders"
+msgstr "하나 이상의 실행 환경 빌더를 삭제하지 못했습니다."
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:351
 msgid "Send the message body as HTML (org.matrix.custom.html)\n"
