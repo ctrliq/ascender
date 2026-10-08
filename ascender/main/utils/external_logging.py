@@ -89,6 +89,7 @@ def construct_rsyslog_conf_template(settings=settings):
     keepalive_probes = getattr(settings, 'LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES', 3)
     action_queue_size = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_SIZE', 131072)
     max_disk_space_action_queue = getattr(settings, 'LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB', 1)
+    discard_severity = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY', 5)
     spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', DEFAULT_SPOOL_DIRECTORY).rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
 
@@ -119,7 +120,10 @@ def construct_rsyslog_conf_template(settings=settings):
         f'queue.size="{action_queue_size}"',  # max number of messages in queue
         f'queue.highwaterMark="{int(action_queue_size * 0.75)}"',  # 75% of queue.size
         f'queue.discardMark="{int(action_queue_size * 0.9)}"',  # 90% of queue.size
-        'queue.discardSeverity="5"',  # Only discard notice, info, debug if we must discard anything
+        # Messages whose severity number is >= this value are discarded once queue.discardMark is
+        # reached. 5 discards notice, info and debug; 8 is rsyslog's own default and discards nothing,
+        # at the cost of blocking the sender for queue.timeoutEnqueue when the queue is full.
+        f'queue.discardSeverity="{discard_severity}"',
     ]
 
     # Probes an idle connection rather than discovering it is dead on the next write. Firewalls and

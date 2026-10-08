@@ -89,6 +89,7 @@ def test_delivery_is_retried_forever(conf):
         ('LOG_AGGREGATOR_ACTION_QUEUE_SIZE', 'queue.size'),
         ('LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB', 'queue.maxDiskSpace'),
         ('LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', 'queue.spoolDirectory'),
+        ('LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY', 'queue.discardSeverity'),
     ],
 )
 def test_the_settings_users_can_set_reach_the_queue(conf, setting, appears_as):
