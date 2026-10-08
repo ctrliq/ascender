@@ -4,6 +4,7 @@ from unittest import mock
 import pytest
 
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.test.utils import override_settings
 
 from ascender.main.models import User
 from ascender.api.versioning import reverse
@@ -21,6 +22,28 @@ def test_user_create(post, admin):
     assert response.status_code == 201
     assert not response.data['is_superuser']
     assert not response.data['is_system_auditor']
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("password", [None, ""])
+def test_user_create_without_password(post, admin, password):
+    """A user created without a password gets an unusable one, for token-only accounts."""
+    user_attrs = {k: v for k, v in EXAMPLE_USER_DATA.items() if k != "password"}
+    if password is not None:
+        user_attrs["password"] = password
+    response = post(reverse('api:user_list'), user_attrs, admin, middleware=SessionMiddleware(mock.Mock()))
+    assert response.status_code == 201
+    assert not User.objects.get(username=user_attrs["username"]).has_usable_password()
+
+
+@pytest.mark.django_db
+@override_settings(LOCAL_PASSWORD_MIN_LENGTH=12)
+def test_user_create_without_password_ignores_complexity_settings(post, admin):
+    """The local password rules govern a password that is set; they don't require one."""
+    user_attrs = {k: v for k, v in EXAMPLE_USER_DATA.items() if k != "password"}
+    response = post(reverse('api:user_list'), user_attrs, admin, middleware=SessionMiddleware(mock.Mock()))
+    assert response.status_code == 201
+    assert not User.objects.get(username=user_attrs["username"]).has_usable_password()
 
 
 @pytest.mark.django_db
