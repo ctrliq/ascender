@@ -93,6 +93,7 @@ def construct_rsyslog_conf_template(settings=settings):
     discard_severity = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY', 5)
     spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', DEFAULT_SPOOL_DIRECTORY).rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
+    stats_interval = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL', 0)
 
     # Has to happen before queue.spoolDirectory is written below. The fallback used
     # to sit after it, where it changed a variable nothing read again, so a setting
@@ -151,6 +152,16 @@ def construct_rsyslog_conf_template(settings=settings):
             'template(name="ascender" type="string" string="%rawmsg-after-pri%")',
         ]
     )
+    # rsyslog already counts what the action queue discards (discarded.nf, discarded.full);
+    # impstats reports it, to rsyslogd's stdout, which is the container log. Its own ruleset
+    # keeps the statistics out of the external action, which sits in the default ruleset.
+    if enabled and stats_interval > 0:
+        parts.extend(
+            [
+                f'module(load="impstats" interval="{stats_interval}" format="json" resetCounters="off" ruleset="ascender_queue_stats")',
+                'ruleset(name="ascender_queue_stats") { action(type="omfile" file="/dev/stdout") }',
+            ]
+        )
 
     def escape_quotes(x):
         return x.replace('"', '\\"')
