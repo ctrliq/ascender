@@ -1017,6 +1017,10 @@ html[data-theme="awx"] {
   /* About modal */
   & .pf-v6-c-about-modal-box {
     --pf-v6-c-about-modal-box--BackgroundColor: #151515;
+    --pf-t--global--text--color--regular: #fff;
+    --pf-t--global--text--color--subtle: #d2d2d2;
+    --pf-v6-c-content--Color: #fff;
+    color: #fff;
   }
 
   /* Alert - PF4 style with colored left border */
