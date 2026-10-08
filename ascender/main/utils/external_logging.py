@@ -48,6 +48,10 @@ DEFAULT_SPOOL_DIRECTORY = '/var/lib/ascender'
 ACTION_QUEUE_FILENAME = 'ascender-external-logger-action-queue'
 LEGACY_ACTION_QUEUE_FILENAME = 'awx-external-logger-action-queue'
 
+# Operator drop-ins, read by the generated config as the image's static rsyslog.conf
+# reads them. The image creates the directory; optional, so an empty one is fine.
+CONF_D_INCLUDE = 'include(file="/var/lib/ascender/rsyslog/conf.d/*.conf" mode="optional")'
+
 
 def warn_about_abandoned_spool(spool_directory):
     """Log the queue files left under the previous name, if there are any.
@@ -120,6 +124,7 @@ def construct_rsyslog_conf_template(settings=settings):
     parts.extend(
         [
             f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/ascender/rsyslog")',
+            CONF_D_INCLUDE,
             'module(load="imptcp")',
             'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on")',
             'template(name="ascender" type="string" string="%rawmsg-after-pri%")',

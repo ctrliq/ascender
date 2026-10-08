@@ -214,3 +214,33 @@ def test_splunk_auth():
 
     tmpl = construct_rsyslog_conf_template(mock_settings)
     assert 'httpheaderkey="Authorization" httpheadervalue="Splunk SECRET-TOKEN"' in tmpl
+
+
+@pytest.mark.parametrize(
+    'enabled, protocol, host, port',
+    [
+        (False, None, None, None),  # external logging off: the /dev/null action
+        (True, 'tcp', 'localhost', 9000),  # omfwd
+        (True, 'https', 'logs.example.org', None),  # omhttp
+    ],
+)
+def test_rsyslog_conf_includes_conf_d(enabled, protocol, host, port):
+    # The generated file replaces the image's static rsyslog.conf, which includes conf.d/;
+    # the drop-ins have to keep being read, ahead of the inputs and the shipping action.
+    mock_settings, _ = _mock_logging_defaults()
+    setattr(mock_settings, 'LOGGING', getattr(settings, 'LOGGING'))
+    setattr(mock_settings, 'LOG_AGGREGATOR_ENABLED', enabled)
+    setattr(mock_settings, 'LOG_AGGREGATOR_TYPE', 'other')
+    if host:
+        setattr(mock_settings, 'LOG_AGGREGATOR_HOST', host)
+    if port:
+        setattr(mock_settings, 'LOG_AGGREGATOR_PORT', port)
+    if protocol:
+        setattr(mock_settings, 'LOG_AGGREGATOR_PROTOCOL', protocol)
+
+    lines = construct_rsyslog_conf_template(mock_settings).splitlines()
+
+    include = 'include(file="/var/lib/ascender/rsyslog/conf.d/*.conf" mode="optional")'
+    assert include in lines
+    assert lines.index(include) == next(i for i, line in enumerate(lines) if line.startswith('global')) + 1
+    assert lines.index(include) < lines.index('module(load="imptcp")')
