@@ -143,6 +143,12 @@ export interface ApiWorkflowNode extends Partial<
    */
   prior_run_succeeded?: boolean | null;
   prior_run_elapsed?: number | null;
+  /**
+   * Set on a carried node that had failed and was forced as successful by
+   * whoever relaunched the workflow, together with why.
+   */
+  forced_success?: boolean | null;
+  forced_success_reason?: string | null;
   workflowMakerNodeId?: number;
   [key: string]: unknown;
 }

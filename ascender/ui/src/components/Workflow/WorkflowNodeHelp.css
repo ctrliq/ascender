@@ -33,3 +33,9 @@
 .ascender-workflow-node-help__margin-top-10 {
   margin-top: 10px;
 }
+
+#workflow-node-help-forced-reason {
+  max-width: 320px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

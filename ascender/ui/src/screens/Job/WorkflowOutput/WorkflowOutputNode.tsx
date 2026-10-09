@@ -42,6 +42,14 @@ function WorkflowOutputNode({
   // run and spawns no job of its own; show it as successful (green).
   const priorRunSucceeded = node?.originalNodeObject?.prior_run_succeeded;
   const priorRunElapsed = node?.originalNodeObject?.prior_run_elapsed;
+  // A carried node that had failed and was forced as successful on relaunch.
+  // It is neither green nor red: it shows both, so it never reads as a plain
+  // success.
+  const forcedSuccess =
+    priorRunSucceeded && node?.originalNodeObject?.forced_success;
+  const forcedJob = node?.originalNodeObject?.summary_fields
+    ?.forced_success_job as { id?: number } | undefined;
+  const forcedGradientId = `ascender-workflow-output-node-forced-${node.id}`;
 
   // Live-ticking elapsed time while the node runs. Use the job's started time
   // when known; for a node that starts while watching (its websocket message
@@ -79,6 +87,8 @@ function WorkflowOutputNode({
     if (job.status === 'running') {
       borderColor = 'var(--ascender-status-running-color)';
     }
+  } else if (forcedSuccess) {
+    borderColor = `url(#${forcedGradientId})`;
   } else if (priorRunSucceeded) {
     borderColor = 'var(--pf-t--global--color--status--success--default)';
   }
@@ -88,6 +98,9 @@ function WorkflowOutputNode({
       const basePath =
         job.type !== 'workflow_approval' ? 'jobs' : 'workflow_approvals';
       navigate(`/${basePath}/${job.id}/details`);
+    } else if (forcedSuccess && forcedJob?.id) {
+      // the failure that was overridden, so it is one click away
+      navigate(`/jobs/${forcedJob.id}/details`);
     }
   };
 
@@ -118,12 +131,28 @@ function WorkflowOutputNode({
         nodePosition.y - rootPosition.y
       })`}
       className={
-        job ? 'ascender-workflow-output-node__node-g--has-job' : undefined
+        job || (forcedSuccess && forcedJob?.id)
+          ? 'ascender-workflow-output-node__node-g--has-job'
+          : undefined
       }
       onClick={handleNodeClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
+      {forcedSuccess && (
+        <defs>
+          <linearGradient id={forcedGradientId} x1="0" y1="0" x2="1" y2="1">
+            <stop
+              offset="50%"
+              stopColor="var(--pf-t--global--color--status--success--default)"
+            />
+            <stop
+              offset="50%"
+              stopColor="var(--pf-t--global--color--status--danger--default)"
+            />
+          </linearGradient>
+        </defs>
+      )}
       {(node.all_parents_must_converge ||
         node?.originalNodeObject?.all_parents_must_converge) && (
         <>
@@ -188,7 +217,16 @@ function WorkflowOutputNode({
               return (
                 <>
                   <div className="ascender-workflow-output-node__job-top-line">
-                    <StatusIcon status="successful" />
+                    {forcedSuccess ? (
+                      <span
+                        className="ascender-workflow-output-node__forced-icon"
+                        role="img"
+                        aria-label={t`Forced as successful`}
+                        data-job-status="forced"
+                      />
+                    ) : (
+                      <StatusIcon status="successful" />
+                    )}
                     <p>{nodeName}</p>
                   </div>
                   {priorRunElapsed != null && (

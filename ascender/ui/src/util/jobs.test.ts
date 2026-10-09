@@ -1,4 +1,43 @@
-import { canOfferCancel, getJobModel, isJobRunning } from './jobs';
+import {
+  canForceRelaunchNodeSuccess,
+  canOfferCancel,
+  getJobModel,
+  isJobRunning,
+} from './jobs';
+
+describe('canForceRelaunchNodeSuccess', () => {
+  test('follows the template as it is now, not the copy the run took', () => {
+    expect(
+      canForceRelaunchNodeSuccess({
+        allow_force_node_success_on_relaunch: false,
+        summary_fields: {
+          workflow_job_template: { allow_force_node_success_on_relaunch: true },
+        },
+      })
+    ).toBe(true);
+    expect(
+      canForceRelaunchNodeSuccess({
+        allow_force_node_success_on_relaunch: true,
+        summary_fields: {
+          workflow_job_template: {
+            allow_force_node_success_on_relaunch: false,
+          },
+        },
+      })
+    ).toBe(false);
+  });
+
+  test('falls back on the run once the template is gone', () => {
+    expect(
+      canForceRelaunchNodeSuccess({
+        allow_force_node_success_on_relaunch: true,
+        summary_fields: {},
+      })
+    ).toBe(true);
+    expect(canForceRelaunchNodeSuccess({ type: 'job' })).toBe(false);
+    expect(canForceRelaunchNodeSuccess(null)).toBe(false);
+  });
+});
 
 describe('isJobRunning', () => {
   test('should return true for new', () => {

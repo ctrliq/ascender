@@ -33,6 +33,27 @@ export function canOverwriteRelaunchVars(job: unknown): boolean {
 }
 
 /**
+ * Whether this job's relaunch may force failed nodes as successful. The api
+ * reads that off the workflow job template as it is now, so this does too,
+ * and only falls back on the run's own copy once the template is gone.
+ */
+export function canForceRelaunchNodeSuccess(job: unknown): boolean {
+  const workflowJob = job as {
+    allow_force_node_success_on_relaunch?: boolean | null;
+    summary_fields?: {
+      workflow_job_template?: {
+        allow_force_node_success_on_relaunch?: boolean | null;
+      };
+    };
+  } | null;
+  const template = workflowJob?.summary_fields?.workflow_job_template;
+  if (template) {
+    return Boolean(template.allow_force_node_success_on_relaunch);
+  }
+  return Boolean(workflowJob?.allow_force_node_success_on_relaunch);
+}
+
+/**
  * Whether a running job gets a Cancel button on its detail and output screens.
  * Those screens read this off the start capability, but the API turns start
  * off for every job whose template prevents relaunch, so those jobs are let

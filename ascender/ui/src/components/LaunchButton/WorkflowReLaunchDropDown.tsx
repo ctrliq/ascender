@@ -10,6 +10,7 @@ import {
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons';
 
+import WorkflowRelaunchForceSuccessModal from './WorkflowRelaunchForceSuccessModal';
 import WorkflowRelaunchVariablesModal from './WorkflowRelaunchVariablesModal';
 
 export interface WorkflowReLaunchDropDownProps {
@@ -18,6 +19,8 @@ export interface WorkflowReLaunchDropDownProps {
   handleRelaunch: (params?: {
     nodes?: string;
     extra_vars?: Record<string, unknown>;
+    force_success_nodes?: number[];
+    force_success_reason?: string;
   }) => void;
   isLaunching?: boolean;
   id?: string;
@@ -29,6 +32,11 @@ export interface WorkflowReLaunchDropDownProps {
    * for them first.
    */
   canOverwriteVars?: boolean;
+  /**
+   * Whether the workflow job template lets a relaunch force failed nodes as
+   * successful. Adds a from-failed entry that asks which nodes and why.
+   */
+  canForceSuccess?: boolean;
   /** The job being relaunched, which that entry reads its variables from. */
   jobId?: number;
   [key: string]: unknown;
@@ -42,11 +50,13 @@ function WorkflowReLaunchDropDown({
   ouiaId,
   status,
   canOverwriteVars = false,
+  canForceSuccess = false,
   jobId,
 }: WorkflowReLaunchDropDownProps) {
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [isAskingForVars, setIsAskingForVars] = useState(false);
+  const [isAskingToForce, setIsAskingToForce] = useState(false);
 
   // The "from failed" option re-runs every node that did not succeed and carries
   // the successful ones forward; word it to match how the workflow ended.
@@ -61,6 +71,12 @@ function WorkflowReLaunchDropDown({
   const newVarsAriaLabel = isCanceled
     ? t`Relaunch from canceled node with new variables`
     : t`Relaunch from failed node with new variables`;
+  const forceNodeLabel = isCanceled
+    ? t`Canceled node, forced as successful`
+    : t`Failed node, forced as successful`;
+  const forceAriaLabel = isCanceled
+    ? t`Relaunch forcing canceled nodes as successful`
+    : t`Relaunch forcing failed nodes as successful`;
 
   const dropdownItems = (
     <DropdownList>
@@ -111,6 +127,20 @@ function WorkflowReLaunchDropDown({
           {newVarsNodeLabel}
         </DropdownItem>
       )}
+      {canForceSuccess && jobId !== undefined && (
+        <DropdownItem
+          ouiaId={`${ouiaId}-failed-force-success`}
+          key="relaunch_failed_force_success"
+          aria-label={forceAriaLabel}
+          onClick={() => {
+            setIsOpen(false);
+            setIsAskingToForce(true);
+          }}
+          isDisabled={isLaunching}
+        >
+          {forceNodeLabel}
+        </DropdownItem>
+      )}
     </DropdownList>
   );
 
@@ -126,10 +156,27 @@ function WorkflowReLaunchDropDown({
     />
   );
 
+  const forceSuccessModal = isAskingToForce && jobId !== undefined && (
+    <WorkflowRelaunchForceSuccessModal
+      jobId={jobId}
+      isCanceled={isCanceled}
+      onCancel={() => setIsAskingToForce(false)}
+      onConfirm={({ nodes, reason }) => {
+        setIsAskingToForce(false);
+        handleRelaunch({
+          nodes: 'failed',
+          force_success_nodes: nodes,
+          force_success_reason: reason,
+        });
+      }}
+    />
+  );
+
   if (isPrimary) {
     return (
       <>
         {variablesModal}
+        {forceSuccessModal}
         <Dropdown
           ouiaId={ouiaId}
           popperProps={{ position: 'left', direction: 'up' }}
@@ -158,6 +205,7 @@ function WorkflowReLaunchDropDown({
   return (
     <>
       {variablesModal}
+      {forceSuccessModal}
       <Dropdown
         ouiaId={ouiaId}
         popperProps={{ position: 'right', appendTo: () => document.body }}

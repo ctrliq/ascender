@@ -417,6 +417,87 @@ class TestWorkflowDAGFunctional(TransactionTestCase):
         relaunched = wfj.create_relaunch_workflow_job(from_failed=True, extra_vars={'my_var': 'corrected'})
         assert relaunched.extra_vars_dict == {'my_var': 'corrected', 'kept': 1}
 
+    def _force(self, wfj, node, reason='confluence is down, the patching itself went fine'):
+        from django.contrib.auth.models import User
+
+        user = User.objects.create(username='forcer')
+        return wfj.create_relaunch_workflow_job(from_failed=True, forced={node.id: (user, reason)}), user
+
+    def test_relaunch_forcing_a_failed_node_follows_its_success_path(self):
+        # node[0] failed and would have gone down its failure path (node[3]);
+        # forcing it carries it as successful, so node[1] runs instead
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        old_root = wfj.workflow_nodes.order_by('id').first()
+        relaunched, user = self._force(wfj, old_root)
+
+        root = relaunched.workflow_nodes.get(prior_run_succeeded=True)
+        assert root.job is None
+        assert root.forced_success is True
+        assert root.forced_success_by == user
+        assert root.forced_success_reason == 'confluence is down, the patching itself went fine'
+        assert root.forced_success_job_id == old_root.job_id
+        success_child = root.success_nodes.first()
+        failure_child = root.failure_nodes.first()
+
+        dag = WorkflowDAG(workflow_job=relaunched)
+        assert failure_child in dag.mark_dnr_nodes()
+        assert success_child in dag.bfs_nodes_to_run()
+
+    def test_relaunch_without_forcing_leaves_the_failed_node_to_run_again(self):
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
+        assert not relaunched.workflow_nodes.filter(forced_success=True).exists()
+
+    def test_forced_node_hands_down_what_its_job_published(self):
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        old_root = wfj.workflow_nodes.order_by('id').first()
+        old_root.job.artifacts = {'ticket': 'CHG-1'}
+        old_root.job.save()
+        relaunched, _user = self._force(wfj, old_root)
+        assert relaunched.workflow_nodes.get(forced_success=True).ancestor_artifacts == {'ticket': 'CHG-1'}
+
+    def test_forced_node_stays_marked_on_the_next_relaunch(self):
+        # the run after a forced one fails further down; relaunching that one
+        # must not turn the forced node into a plain success
+        wfj = self.workflow_job(states=['failed', None, None, None, None])
+        old_root = wfj.workflow_nodes.order_by('id').first()
+        relaunch1, user = self._force(wfj, old_root)
+        child = relaunch1.workflow_nodes.get(forced_success=True).success_nodes.first()
+        child.job = JobTemplate.objects.first().create_job()
+        child.job.status = 'failed'
+        child.job.save()
+        child.save()
+
+        relaunch2 = relaunch1.create_relaunch_workflow_job(from_failed=True)
+        root = relaunch2.workflow_nodes.get(prior_run_succeeded=True)
+        assert root.forced_success is True
+        assert root.forced_success_by == user
+        assert root.forced_success_job_id == old_root.job_id
+        assert root.success_nodes.first().prior_run_succeeded is False
+
+    def test_forceable_failed_nodes_refuses_what_cannot_be_forced(self):
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        nodes = list(wfj.workflow_nodes.order_by('id'))
+        assert wfj.forceable_failed_nodes([nodes[1].id]) == [nodes[1]]
+        with pytest.raises(ValueError, match='did not fail'):
+            wfj.forceable_failed_nodes([nodes[0].id])
+        with pytest.raises(ValueError, match='did not fail'):
+            wfj.forceable_failed_nodes([nodes[2].id])
+        other = self.workflow_job(states=['failed', None, None, None, None])
+        with pytest.raises(ValueError, match='not part of this workflow job'):
+            wfj.forceable_failed_nodes([other.workflow_nodes.order_by('id').first().id])
+
+    def test_forceable_failed_nodes_refuses_an_approval(self):
+        wfj = WorkflowJob.objects.create()
+        approval_template = WorkflowApprovalTemplate.objects.create(name='approve patching')
+        node = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=approval_template)
+        node.job = approval_template.create_unified_job()
+        node.job.status = 'failed'
+        node.job.save()
+        node.save()
+        with pytest.raises(ValueError, match='approval'):
+            wfj.forceable_failed_nodes([node.id])
+
     def test_relaunch_from_failed_reruns_canceled_node(self):
         # a node canceled in the prior run (status 'canceled') is treated like a
         # failure: it re-runs while the successful node is carried forward
