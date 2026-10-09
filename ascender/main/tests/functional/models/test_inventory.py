@@ -6,7 +6,7 @@ import pytest
 from unittest import mock
 
 # Ascender
-from ascender.main.models import Host, Inventory, InventorySource, InventoryUpdate, CredentialType, Credential, Job
+from ascender.main.models import Host, Inventory, InventorySource, InventoryUpdate, CredentialType, Credential, Job, Organization
 from ascender.main.constants import CLOUD_PROVIDERS
 from ascender.main.utils.filters import SmartFilter
 
@@ -415,3 +415,40 @@ class TestHostManager:
         smart = Inventory.objects.get(name='smart_web')
 
         assert [host.name for host in smart.hosts.all()] == ['web_1', 'web_2']
+
+
+@pytest.mark.django_db
+class TestInventorySourceOrganization:
+    """An inventory source can't set its organization; it follows its inventory's."""
+
+    def test_new_source_takes_inventory_organization(self, inventory):
+        source = inventory.inventory_sources.create(name='source', source='ec2')
+        assert source.organization_id == inventory.organization_id
+
+    def test_moving_inventory_moves_its_sources(self, inventory, inventory_source):
+        other = Organization.objects.create(name='other-org')
+        inventory.organization = other
+        inventory.save()
+        inventory_source.refresh_from_db()
+        assert inventory_source.organization_id == other.id
+
+    def test_inventory_updates_carry_the_new_organization(self, inventory, inventory_source):
+        other = Organization.objects.create(name='other-org')
+        inventory.organization = other
+        inventory.save()
+        inventory_source.refresh_from_db()
+        assert inventory_source.create_unified_job().organization_id == other.id
+
+    def test_save_repairs_a_source_left_behind(self, inventory, inventory_source):
+        other = Organization.objects.create(name='other-org')
+        InventorySource.objects.filter(pk=inventory_source.pk).update(organization=other)
+        inventory.save()
+        inventory_source.refresh_from_db()
+        assert inventory_source.organization_id == inventory.organization_id
+
+    def test_partial_save_without_organization_leaves_sources_alone(self, inventory, inventory_source):
+        other = Organization.objects.create(name='other-org')
+        InventorySource.objects.filter(pk=inventory_source.pk).update(organization=other)
+        inventory.save(update_fields=['description'])
+        inventory_source.refresh_from_db()
+        assert inventory_source.organization_id == other.id

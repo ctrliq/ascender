@@ -499,6 +499,10 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         super(Inventory, self).save(*args, **kwargs)
         # An explicit update_fields=None is a full save, the same as leaving it out
         update_fields = kwargs.get('update_fields')
+        if update_fields is None or {'organization', 'organization_id'} & set(update_fields):
+            # An inventory source takes its organization from its inventory and can't set its own, so keep it in step
+            # when the inventory moves.
+            self.inventory_sources.exclude(organization_id=self.organization_id).update(organization_id=self.organization_id)
         if self.kind == 'smart' and (update_fields is None or 'host_filter' in update_fields):
             # Minimal update of host_count for smart inventory host filter changes
             self.update_computed_fields()
