@@ -644,12 +644,24 @@ class TestTaskNamePrefixes:
 def test_a_listener_on_the_django_connection_can_query_while_handling_an_event():
     """The loop body of events() has to run with the connection free.
 
-    run_rsyslog_configurer and run_cache_clear listen through pg_bus_conn(),
-    which is Django's own connection, and their handlers read settings from the
-    database. psycopg's notifies() holds the connection lock until its generator
-    finishes, so yielding from inside it left that first query waiting on a lock
-    its own thread held, forever. Run in a thread so a regression fails here
-    instead of hanging the suite.
+    psycopg's notifies() holds the connection lock until its generator finishes,
+    so yielding from inside it left any query in the loop body waiting on a lock
+    its own thread held, forever. Two daemons listen through pg_bus_conn(), which
+    is Django's own connection, and reach the database differently:
+
+    run_rsyslog_configurer always does. Its handler reads the LOG_AGGREGATOR
+    settings after clearing their cache, so it hung on every logging settings
+    change.
+
+    run_cache_clear does only sometimes. Its task, clear_setting_cache, makes no
+    query, but the daemon logs each request first, and the external logger's
+    filters read LOG_AGGREGATOR_LEVEL and LOG_AGGREGATOR_ENABLED. When a request
+    arrives after those have expired from its in-memory cache and before another
+    process has put them back in the shared one, which a change to them clears,
+    that read goes to the database and the daemon hung the same way. A race, so
+    it hung occasionally rather than every time.
+
+    Run in a thread so a regression fails here instead of hanging the suite.
     """
     channel = 'test_events_release_the_connection'
     handled = []
