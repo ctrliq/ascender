@@ -676,6 +676,16 @@ class WorkflowJobNodeBaseInstanceGroupMembership(models.Model):
     )
 
 
+class AdHocCommandInstanceGroupMembership(models.Model):
+    adhoccommand = models.ForeignKey('AdHocCommand', on_delete=models.CASCADE)
+    instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
+    position = models.PositiveIntegerField(
+        null=True,
+        default=None,
+        db_index=True,
+    )
+
+
 class WorkflowJobInstanceGroupMembership(models.Model):
     workflowjobnode = models.ForeignKey('WorkflowJob', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)

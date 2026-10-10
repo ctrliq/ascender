@@ -2,6 +2,7 @@ from unittest import mock  # noqa
 import pytest
 
 from ascender.api.versioning import reverse
+from ascender.main.models import AdHocCommand
 
 """
     def run_test_ad_hoc_command(self, **kwargs):
@@ -154,3 +155,135 @@ def test_bad_data3(admin, post_adhoc):
 @pytest.mark.django_db
 def test_bad_data4(admin, post_adhoc):
     post_adhoc(reverse('api:ad_hoc_command_list'), {'forks': -1}, admin, expect=400)
+
+
+@pytest.mark.django_db
+def test_post_with_instance_groups_keeps_order(admin, post_adhoc, inventory, instance_group_factory):
+    ig1 = instance_group_factory('ig1')
+    ig2 = instance_group_factory('ig2')
+    res = post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [ig2.id, ig1.id, ig2.id]}, admin, expect=201)
+    cmd = AdHocCommand.objects.get(pk=res.data['id'])
+    assert list(cmd.instance_groups.all()) == [ig2, ig1]
+    assert cmd.preferred_instance_groups_cache == [ig2.id, ig1.id]
+    assert cmd.preferred_instance_groups == [ig2, ig1]
+
+
+@pytest.mark.django_db
+def test_picked_instance_groups_win_over_inventory(admin, post_adhoc, inventory, instance_group_factory):
+    inv_ig = instance_group_factory('inventory-ig')
+    picked = instance_group_factory('picked')
+    inventory.instance_groups.add(inv_ig)
+
+    res = post_adhoc(reverse('api:ad_hoc_command_list'), {}, admin, expect=201)
+    assert AdHocCommand.objects.get(pk=res.data['id']).preferred_instance_groups_cache == [inv_ig.id]
+
+    res = post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [picked.id]}, admin, expect=201)
+    assert AdHocCommand.objects.get(pk=res.data['id']).preferred_instance_groups_cache == [picked.id]
+
+
+@pytest.mark.django_db
+def test_post_with_unknown_instance_group(admin, post_adhoc):
+    post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [999999]}, admin, expect=400)
+
+
+@pytest.mark.django_db
+def test_user_needs_use_on_instance_group(alice, post_adhoc, inventory, machine_credential, instance_group_factory):
+    ig = instance_group_factory('picked')
+    inventory.adhoc_role.members.add(alice)
+    machine_credential.use_role.members.add(alice)
+
+    ig.read_role.members.add(alice)
+    post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [ig.id]}, alice, expect=403)
+
+    ig.use_role.members.add(alice)
+    post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [ig.id]}, alice, expect=201)
+
+
+@pytest.mark.django_db
+def test_detail_shows_instance_groups(admin, get, post_adhoc, instance_group_factory):
+    ig1 = instance_group_factory('ig1')
+    ig2 = instance_group_factory('ig2')
+    res = post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [ig2.id, ig1.id]}, admin, expect=201)
+    assert 'instance_groups' not in res.data
+
+    detail = get(reverse('api:ad_hoc_command_detail', kwargs={'pk': res.data['id']}), admin, expect=200)
+    assert [ig['name'] for ig in detail.data['summary_fields']['instance_groups']] == ['ig2', 'ig1']
+
+    sublist = get(detail.data['related']['instance_groups'], admin, expect=200)
+    assert [ig['id'] for ig in sublist.data['results']] == [ig2.id, ig1.id]
+
+
+@pytest.mark.django_db
+def test_relaunch_keeps_instance_groups(admin, alice, post, post_adhoc, inventory, machine_credential, instance_group_factory):
+    ig1 = instance_group_factory('ig1')
+    ig2 = instance_group_factory('ig2')
+    inventory.adhoc_role.members.add(alice)
+    machine_credential.use_role.members.add(alice)
+    ig1.use_role.members.add(alice)
+    ig2.use_role.members.add(alice)
+    res = post_adhoc(reverse('api:ad_hoc_command_list'), {'instance_groups': [ig2.id, ig1.id]}, alice, expect=201)
+
+    relaunched = post(reverse('api:ad_hoc_command_relaunch', kwargs={'pk': res.data['id']}), {}, alice, expect=201)
+    new_cmd = AdHocCommand.objects.get(pk=relaunched.data['id'])
+    assert list(new_cmd.instance_groups.all()) == [ig2, ig1]
+    assert new_cmd.preferred_instance_groups_cache == [ig2.id, ig1.id]
+
+    # Losing use on one of the groups means the run can not be repeated as is
+    ig1.use_role.members.remove(alice)
+    post(reverse('api:ad_hoc_command_relaunch', kwargs={'pk': res.data['id']}), {}, alice, expect=403)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('list_view', ['api:ad_hoc_command_list', 'api:unified_job_list'])
+def test_list_does_not_query_instance_groups_per_row(alice, get, inventory, machine_credential, instance_group_factory, list_view):
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    ig = instance_group_factory('picked')
+    inventory.adhoc_role.members.add(alice)
+    machine_credential.use_role.members.add(alice)
+    ig.use_role.members.add(alice)
+
+    def add_commands(count):
+        for _ in range(count):
+            cmd = AdHocCommand.objects.create(inventory=inventory, credential=machine_credential, module_name='command', module_args='uptime')
+            cmd.instance_groups.add(ig)
+
+    def count_queries():
+        with CaptureQueriesContext(connection) as ctx:
+            res = get(reverse(list_view), alice, expect=200)
+        assert all(row['summary_fields']['user_capabilities']['start'] for row in res.data['results'])
+        # Only the queries about instance groups: the rest of the per row
+        # capability checks are not what this test is about
+        ig_queries = [q for q in ctx.captured_queries if 'instancegroup' in q['sql']]
+        return len(ig_queries), len(res.data['results'])
+
+    add_commands(2)
+    few, rows = count_queries()
+    assert rows == 2
+    add_commands(4)
+    many, rows = count_queries()
+    assert rows == 6
+    assert many == few
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('list_view', ['api:ad_hoc_command_list', 'api:unified_job_list', 'api:inventory_ad_hoc_commands_list'])
+def test_list_cannot_start_without_use_on_instance_group(alice, get, inventory, machine_credential, instance_group_factory, list_view):
+    usable = instance_group_factory('usable')
+    other = instance_group_factory('other')
+    inventory.adhoc_role.members.add(alice)
+    machine_credential.use_role.members.add(alice)
+    usable.use_role.members.add(alice)
+
+    plain = AdHocCommand.objects.create(inventory=inventory, credential=machine_credential, module_name='command', module_args='uptime')
+    on_usable = AdHocCommand.objects.create(inventory=inventory, credential=machine_credential, module_name='command', module_args='uptime')
+    on_usable.instance_groups.add(usable)
+    on_other = AdHocCommand.objects.create(inventory=inventory, credential=machine_credential, module_name='command', module_args='uptime')
+    on_other.instance_groups.add(usable)
+    on_other.instance_groups.add(other)
+
+    url = reverse(list_view, kwargs={'pk': inventory.pk}) if list_view.startswith('api:inventory') else reverse(list_view)
+    res = get(url, alice, expect=200)
+    can_start = {row['id']: row['summary_fields']['user_capabilities']['start'] for row in res.data['results']}
+    assert can_start == {plain.id: True, on_usable.id: True, on_other.id: False}
