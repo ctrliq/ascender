@@ -455,6 +455,43 @@ def test_workflow_job_relaunch_forces_a_failed_node(wfjt, job_template, post, ge
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize('nested', [False, True])
+def test_workflow_job_node_list_queries_do_not_grow_with_forced_nodes(wfjt, job_template, get, admin_user, nested):
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    wfj = wfjt.create_unified_job()
+    if nested:
+        url = reverse('api:workflow_job_workflow_nodes_list', kwargs={'pk': wfj.pk})
+    else:
+        url = reverse('api:workflow_job_node_list')
+
+    def add_forced_nodes(count):
+        for _ in range(count):
+            node = wfj.workflow_job_nodes.create(
+                unified_job_template=job_template,
+                forced_success=True,
+                forced_success_reason=FORCE_REASON,
+                forced_success_by=admin_user,
+                forced_success_job=job_template.create_job(),
+            )
+            node.retried_jobs.add(job_template.create_job())
+
+    def count_queries():
+        with CaptureQueriesContext(connection) as ctx:
+            data = get(url, admin_user, expect=200).data
+        assert all(node['summary_fields']['forced_success_by']['username'] == admin_user.username for node in data['results'])
+        assert all(len(node['retried_jobs']) == 1 for node in data['results'])
+        return len(ctx.captured_queries)
+
+    add_forced_nodes(2)
+    count_queries()  # the first request warms up caches the later ones skip
+    few = count_queries()
+    add_forced_nodes(4)
+    assert count_queries() == few
+
+
+@pytest.mark.django_db
 def test_workflow_job_relaunch_force_needs_the_template_to_allow_it(wfjt, job_template, post, admin_user):
     wfj, node = _forceable_workflow_job(wfjt, job_template, allowed=False)
     url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})

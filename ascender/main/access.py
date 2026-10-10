@@ -2008,6 +2008,9 @@ class WorkflowJobNodeAccess(BaseAccess):
         'always_nodes',
         'condition_nodes',
         'condition_links_from',
+        'retried_jobs',
+        'forced_success_by',
+        'forced_success_job',
     )
 
     def filtered_queryset(self):
