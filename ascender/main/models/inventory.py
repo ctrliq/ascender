@@ -1172,9 +1172,16 @@ class InventorySource(UnifiedJobTemplate, InventorySourceOptions, RelatedJobsMix
 
     def save(self, *args, **kwargs):
         # if this is a new object, inherit organization from its inventory
-        if not self.pk and self.inventory and self.inventory.organization_id and not self.organization_id:
-            self.organization_id = self.inventory.organization_id
+        if not self.pk and self.inventory_id and not self.organization_id:
+            # Read it under the inventory's row lock rather than from the inventory this object may have cached. Moving
+            # the inventory holds that lock from its row update until it commits, so a move either commits first and we
+            # read its new organization, or waits for this source to commit and then brings it along with the others.
+            with transaction.atomic():
+                self.organization_id = Inventory.objects.select_for_update().values_list('organization_id', flat=True).get(pk=self.inventory_id)
+                return self._save(*args, **kwargs)
+        return self._save(*args, **kwargs)
 
+    def _save(self, *args, **kwargs):
         # If update_fields has been specified, add our field names to it,
         # if it hasn't been specified, then we're just doing a normal save.
         update_fields = kwargs.get('update_fields') or []
