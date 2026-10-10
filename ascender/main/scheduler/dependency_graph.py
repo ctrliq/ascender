@@ -1,4 +1,5 @@
 from ascender.main.models import (
+    Inventory,
     Job,
     ProjectUpdate,
     InventoryUpdate,
@@ -15,6 +16,7 @@ logger = logging.getLogger('ascender.main.scheduler.dependency_graph')
 class DependencyGraph(object):
     PROJECT_UPDATES = 'project_updates'
     INVENTORY_UPDATES = 'inventory_updates'
+    INVENTORY_AD_HOC_COMMANDS = 'inventory_ad_hoc_commands'
 
     JOB_TEMPLATE_JOBS = 'job_template_jobs'
 
@@ -34,10 +36,16 @@ class DependencyGraph(object):
         # INVENTORY_UPDATES, instead of having to check for both entries in
         # INVENTORY_SOURCE_UPDATES.
         self.data[self.INVENTORY_UPDATES] = {}
+        # Ad hoc commands block jobs and other ad hoc commands on their inventory just like a sync
+        # does, but they are kept apart so that allow_jobs_while_syncing can let a job past a sync
+        # without also letting it past an ad hoc command.
+        self.data[self.INVENTORY_AD_HOC_COMMANDS] = {}
         self.data[self.INVENTORY_SOURCE_UPDATES] = {}
         self.data[self.JOB_TEMPLATE_JOBS] = {}
         self.data[self.SYSTEM_JOB] = {}
         self.data[self.WORKFLOW_JOB_TEMPLATES_JOBS] = {}
+        # inventory id -> allow_jobs_while_syncing, looked up only for inventories that are syncing
+        self._allow_jobs_while_syncing = {}
 
     def mark_if_no_key(self, job_type, id, job):
         if id is None:
@@ -61,14 +69,14 @@ class DependencyGraph(object):
         self.mark_if_no_key(self.PROJECT_UPDATES, job.project_id, job)
 
     def mark_inventory_update(self, job):
-        if type(job) is AdHocCommand:
-            self.mark_if_no_key(self.INVENTORY_UPDATES, job.inventory_id, job)
-        else:
-            # InventoryUpdate carries its own inventory FK (copied from the source at creation);
-            # use it so no related-object query is issued per active update. The field is
-            # nullable, so fall back to the source for any row that lacks it.
-            inventory_id = job.inventory_id or job.inventory_source.inventory_id
-            self.mark_if_no_key(self.INVENTORY_UPDATES, inventory_id, job)
+        # InventoryUpdate carries its own inventory FK (copied from the source at creation);
+        # use it so no related-object query is issued per active update. The field is
+        # nullable, so fall back to the source for any row that lacks it.
+        inventory_id = job.inventory_id or job.inventory_source.inventory_id
+        self.mark_if_no_key(self.INVENTORY_UPDATES, inventory_id, job)
+
+    def mark_ad_hoc_command(self, job):
+        self.mark_if_no_key(self.INVENTORY_AD_HOC_COMMANDS, job.inventory_id, job)
 
     def mark_inventory_source_update(self, job):
         self.mark_if_no_key(self.INVENTORY_SOURCE_UPDATES, job.inventory_source_id, job)
@@ -88,9 +96,30 @@ class DependencyGraph(object):
     def inventory_update_blocked_by(self, job):
         return self.get_item(self.INVENTORY_SOURCE_UPDATES, job.inventory_source_id)
 
+    def allows_jobs_while_syncing(self, inventory_id):
+        if inventory_id not in self._allow_jobs_while_syncing:
+            self._allow_jobs_while_syncing[inventory_id] = Inventory.objects.filter(pk=inventory_id, allow_jobs_while_syncing=True).exists()
+        return self._allow_jobs_while_syncing[inventory_id]
+
+    def inventory_blocked_by(self, job):
+        """What keeps a job or ad hoc command from running against its inventory right now.
+
+        A sync of the inventory blocks it unless the inventory has allow_jobs_while_syncing set,
+        in which case the task runs on the hosts as they were before the sync. A sync the task
+        itself depends on (update on launch) is not affected: the task manager waits for
+        dependent_jobs on its own, outside of this graph.
+        """
+        ad_hoc_block = self.get_item(self.INVENTORY_AD_HOC_COMMANDS, job.inventory_id)
+        if ad_hoc_block:
+            return ad_hoc_block
+        sync_block = self.get_item(self.INVENTORY_UPDATES, job.inventory_id)
+        if sync_block and self.allows_jobs_while_syncing(job.inventory_id):
+            return None
+        return sync_block
+
     def job_blocked_by(self, job):
         project_block = self.get_item(self.PROJECT_UPDATES, job.project_id)
-        inventory_block = self.get_item(self.INVENTORY_UPDATES, job.inventory_id)
+        inventory_block = self.inventory_blocked_by(job)
         if job.allow_simultaneous is False:
             job_block = self.get_item(self.JOB_TEMPLATE_JOBS, job.job_template_id)
         else:
@@ -112,7 +141,7 @@ class DependencyGraph(object):
         return self.get_item(self.SYSTEM_JOB, 'system_job')
 
     def ad_hoc_command_blocked_by(self, job):
-        return self.get_item(self.INVENTORY_UPDATES, job.inventory_id)
+        return self.inventory_blocked_by(job)
 
     def task_blocked_by(self, job):
         if type(job) is ProjectUpdate:
@@ -141,7 +170,7 @@ class DependencyGraph(object):
         elif type(job) is SystemJob:
             self.mark_system_job(job)
         elif type(job) is AdHocCommand:
-            self.mark_inventory_update(job)
+            self.mark_ad_hoc_command(job)
 
     def add_jobs(self, jobs):
         for j in jobs:
