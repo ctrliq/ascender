@@ -2,8 +2,13 @@
 #
 # Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 #
+import threading
+import time
+
 import pytest
 from unittest import mock
+
+from django.db import connection, transaction
 
 # Ascender
 from ascender.main.models import Host, Inventory, InventorySource, InventoryUpdate, CredentialType, Credential, Job, Organization
@@ -452,3 +457,97 @@ class TestInventorySourceOrganization:
         inventory.save(update_fields=['description'])
         inventory_source.refresh_from_db()
         assert inventory_source.organization_id == other.id
+
+
+@pytest.mark.django_db(transaction=True)
+class TestInventorySourceOrganizationConcurrency:
+    """A source created while its inventory moves to another organization must not be left in the old one.
+
+    Each side runs in its own thread and transaction, the way two API requests would."""
+
+    @pytest.fixture
+    def moving_inventory(self):
+        old_org = Organization.objects.create(name='old-org')
+        new_org = Organization.objects.create(name='new-org')
+        return Inventory.objects.create(name='moving', organization=old_org), new_org
+
+    @staticmethod
+    def run_in_thread(target):
+        errors = []
+
+        def wrapper():
+            try:
+                target()
+            except Exception as e:  # surfaced by the test after join
+                errors.append(e)
+            finally:
+                connection.close()
+
+        thread = threading.Thread(target=wrapper)
+        thread.start()
+        return thread, errors
+
+    @staticmethod
+    def move(inventory_pk, org):
+        with transaction.atomic():
+            inventory = Inventory.objects.get(pk=inventory_pk)
+            inventory.organization = org
+            inventory.save()
+
+    def test_source_created_from_a_stale_inventory_takes_the_new_organization(self, moving_inventory):
+        inventory, new_org = moving_inventory
+        loaded, moved = threading.Event(), threading.Event()
+        created = {}
+
+        def create():
+            with transaction.atomic():
+                stale_inventory = Inventory.objects.get(pk=inventory.pk)
+                loaded.set()
+                assert moved.wait(10)
+                created['pk'] = InventorySource.objects.create(inventory=stale_inventory, name='source', source='ec2').pk
+
+        def move():
+            assert loaded.wait(10)
+            self.move(inventory.pk, new_org)
+            moved.set()
+
+        threads = [self.run_in_thread(create), self.run_in_thread(move)]
+        for thread, errors in threads:
+            thread.join(30)
+            assert not errors
+        assert InventorySource.objects.get(pk=created['pk']).organization_id == new_org.id
+
+    def test_move_waits_for_a_source_being_created_and_brings_it_along(self, moving_inventory):
+        inventory, new_org = moving_inventory
+        locked, release = threading.Event(), threading.Event()
+        original_save = InventorySource._save
+
+        def save_holding_the_lock(source, *args, **kwargs):
+            locked.set()
+            assert release.wait(10)
+            return original_save(source, *args, **kwargs)
+
+        def create():
+            with mock.patch.object(InventorySource, '_save', autospec=True, side_effect=save_holding_the_lock):
+                InventorySource.objects.create(inventory=Inventory.objects.get(pk=inventory.pk), name='source', source='ec2')
+
+        def move():
+            assert locked.wait(10)
+            self.move(inventory.pk, new_org)
+
+        creator = self.run_in_thread(create)
+        mover = self.run_in_thread(move)
+        # Let the creation finish only once the move is waiting on the inventory's row lock
+        with connection.cursor() as cursor:
+            for _ in range(100):
+                cursor.execute("SELECT count(*) FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock'")
+                if cursor.fetchone()[0]:
+                    break
+                time.sleep(0.1)
+            else:
+                pytest.fail('the move never waited for the source being created')
+        release.set()
+        for thread, errors in (creator, mover):
+            thread.join(30)
+            assert not errors
+        assert InventorySource.objects.get(inventory=inventory).organization_id == new_org.id
