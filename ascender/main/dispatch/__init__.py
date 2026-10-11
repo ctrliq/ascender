@@ -94,8 +94,16 @@ class PubSub(object):
             # a socket select would never wake for), then waits up to timeout
             # for more; stop_after=1 returns after the first new batch so
             # select_timeout, which callers adjust in-loop, is re-read
-            # between batches
-            for notification in self.conn.notifies(timeout=self.select_timeout, stop_after=1):
+            # between batches.
+            #
+            # The batch is collected before anything is yielded: notifies()
+            # holds the connection's lock until its generator finishes, so
+            # yielding from inside it runs the caller's loop body under that
+            # lock. A caller listening on Django's own connection, as
+            # pg_bus_conn() does by default, then deadlocks on its first
+            # query, which is how run_rsyslog_configurer hung on every
+            # logging settings change.
+            for notification in list(self.conn.notifies(timeout=self.select_timeout, stop_after=1)):
                 got_events = True
                 yield notification
             if yield_timeouts and not got_events:

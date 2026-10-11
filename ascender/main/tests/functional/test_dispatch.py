@@ -2,6 +2,7 @@ import datetime
 import multiprocessing
 import random
 import signal
+import threading
 import time
 import yaml
 from unittest import mock
@@ -12,7 +13,7 @@ from django.utils.timezone import now as tz_now
 import pytest
 
 from ascender.main.models import Job, WorkflowJob, Instance
-from ascender.main.dispatch import reaper
+from ascender.main.dispatch import pg_bus_conn, reaper
 from ascender.main.dispatch.pool import StatefulPoolWorker, WorkerPool, AutoscalePool
 from ascender.main.dispatch.publish import task
 from ascender.main.dispatch.worker import BaseWorker, TaskWorker
@@ -637,3 +638,50 @@ class TestTaskNamePrefixes:
         with pytest.raises(ValueError) as e:
             TaskWorker.resolve_callable('os.system')
         assert 'not a valid Ascender task' in str(e.value)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_listener_on_the_django_connection_can_query_while_handling_an_event():
+    """The loop body of events() has to run with the connection free.
+
+    psycopg's notifies() holds the connection lock until its generator finishes,
+    so yielding from inside it left any query in the loop body waiting on a lock
+    its own thread held, forever. Two daemons listen through pg_bus_conn(), which
+    is Django's own connection, and reach the database differently:
+
+    run_rsyslog_configurer always does. Its handler reads the LOG_AGGREGATOR
+    settings after clearing their cache, so it hung on every logging settings
+    change.
+
+    run_cache_clear does only sometimes. Its task, clear_setting_cache, makes no
+    query, but the daemon logs each request first, and the external logger's
+    filters read LOG_AGGREGATOR_LEVEL and LOG_AGGREGATOR_ENABLED. When a request
+    arrives after those have expired from its in-memory cache and before another
+    process has put them back in the shared one, which a change to them clears,
+    that read goes to the database and the daemon hung the same way. A race, so
+    it hung occasionally rather than every time.
+
+    Run in a thread so a regression fails here instead of hanging the suite.
+    """
+    channel = 'test_events_release_the_connection'
+    handled = []
+
+    def listen_and_query():
+        try:
+            with pg_bus_conn(select_timeout=5) as conn:
+                conn.listen(channel)
+                conn.notify(channel, 'payload')
+                for event in conn.events(yield_timeouts=True):
+                    with connection.cursor() as cursor:
+                        cursor.execute('SELECT 1')
+                        handled.append((event and event.payload, cursor.fetchone()[0]))
+                    break
+        finally:
+            connection.close()
+
+    listener = threading.Thread(target=listen_and_query, daemon=True)
+    listener.start()
+    listener.join(timeout=15)
+
+    assert not listener.is_alive(), 'the query in the event handler is still waiting on the connection lock'
+    assert handled == [('payload', 1)]
