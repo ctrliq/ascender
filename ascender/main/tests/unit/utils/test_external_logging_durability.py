@@ -11,7 +11,7 @@ character config string, where a dropped guarantee reads as a diff rather than
 as a loss.
 
 Each test below is one promise the platform currently makes. A handler that
-replaced rsyslog would have to keep every one of them, or four settings that
+replaced rsyslog would have to keep every one of them, or five settings that
 users can see stop meaning anything.
 """
 

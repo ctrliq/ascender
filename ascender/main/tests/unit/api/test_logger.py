@@ -240,6 +240,7 @@ def test_rsyslog_conf_tcp_keepalive(protocol, keepalive, expected, not_expected)
         (None, 'queue.discardSeverity="5"'),  # registered default, unchanged from before the setting existed
         (8, 'queue.discardSeverity="8"'),  # rsyslog's own default: discard nothing
         (0, 'queue.discardSeverity="0"'),  # discard anything, including EMERGENCY
+        (3, 'queue.discardSeverity="3"'),  # neither the default nor a bound, so a hardcoded value fails
     ],
 )
 def test_rsyslog_conf_discard_severity(discard_severity, expected):

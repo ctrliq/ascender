@@ -9,9 +9,10 @@ messages, with back pressure at 75% and graded discarding at 90% that drops
 debug before it drops a warning, and retries that never give up on an
 aggregator that is down.
 
-Four settings a user can see are promises about exactly that:
+Five settings a user can see are promises about exactly that:
 LOG_AGGREGATOR_ACTION_QUEUE_SIZE, LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB,
-LOG_AGGREGATOR_MAX_DISK_USAGE_PATH and LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE.
+LOG_AGGREGATOR_MAX_DISK_USAGE_PATH, LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY
+and LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE.
 A handler that posts to the aggregator from the web process would have to
 provide all of it, or those settings stop meaning anything and logs are lost
 quietly on a restart.
@@ -121,8 +122,8 @@ def construct_rsyslog_conf_template(settings=settings):
         f'queue.highwaterMark="{int(action_queue_size * 0.75)}"',  # 75% of queue.size
         f'queue.discardMark="{int(action_queue_size * 0.9)}"',  # 90% of queue.size
         # Messages whose severity number is >= this value are discarded once queue.discardMark is
-        # reached. 5 discards notice, info and debug; 8 is rsyslog's own default and discards nothing,
-        # at the cost of blocking the sender for queue.timeoutEnqueue when the queue is full.
+        # reached. 5 discards notice, info and debug; 8 is rsyslog's own default and turns that off.
+        # A full queue drops any message that waits queue.timeoutEnqueue (2 s) for room, whatever this says.
         f'queue.discardSeverity="{discard_severity}"',
     ]
 
