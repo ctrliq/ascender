@@ -9152,9 +9152,10 @@ export interface components {
      * @description * `https` - HTTPS/HTTP
      *     * `tcp` - TCP
      *     * `udp` - UDP
+     *     * `relp` - RELP
      * @enum {string}
      */
-    LOGAGGREGATORPROTOCOLEnum: 'https' | 'tcp' | 'udp';
+    LOGAGGREGATORPROTOCOLEnum: 'https' | 'tcp' | 'udp' | 'relp';
     /**
      * @description * `logstash` - logstash
      *     * `splunk` - splunk
@@ -11580,23 +11581,24 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
        *     * `udp` - UDP
+       *     * `relp` - RELP
        * @default https
        */
       LOG_AGGREGATOR_PROTOCOL: components['schemas']['LOGAGGREGATORPROTOCOLEnum'];
       /**
        * TCP Connection Timeout
-       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS and TCP log aggregator protocols.
+       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.
        * @default 5
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
       /**
        * Enable TCP keepalives to the log aggregator
-       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.
        * @default true
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;
@@ -14714,23 +14716,24 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
        *     * `udp` - UDP
+       *     * `relp` - RELP
        * @default https
        */
       LOG_AGGREGATOR_PROTOCOL: components['schemas']['LOGAGGREGATORPROTOCOLEnum'];
       /**
        * TCP Connection Timeout
-       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS and TCP log aggregator protocols.
+       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.
        * @default 5
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
       /**
        * Enable TCP keepalives to the log aggregator
-       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.
        * @default true
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;
@@ -16842,23 +16845,24 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
        *     * `udp` - UDP
+       *     * `relp` - RELP
        * @default https
        */
       LOG_AGGREGATOR_PROTOCOL: components['schemas']['LOGAGGREGATORPROTOCOLEnum'];
       /**
        * TCP Connection Timeout
-       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS and TCP log aggregator protocols.
+       * @description Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.
        * @default 5
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
       /**
        * Enable TCP keepalives to the log aggregator
-       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.
        * @default true
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;

@@ -625,7 +625,7 @@ register(
     field_class=fields.IntegerField,
     default=5,
     label=_('TCP Connection Timeout'),
-    help_text=_('Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS and TCP log aggregator protocols.'),
+    help_text=_('Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.'),
     category=_('Logging'),
     category_slug='logging',
     unit=_('seconds'),
@@ -640,7 +640,7 @@ register(
         'aggregator. Firewalls and load balancers discard idle flows without '
         'notifying either end, and the connection is then found to be dead only when '
         'the next message is written to it, which loses that message. Applies to the '
-        'TCP log aggregator protocol; HTTPS and UDP ignore it.'
+        'TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.'
     ),
     category=_('Logging'),
     category_slug='logging',

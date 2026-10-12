@@ -182,7 +182,7 @@ function LoggingEdit() {
                   name="LOG_AGGREGATOR_LEVEL"
                   config={logging.LOG_AGGREGATOR_LEVEL}
                 />
-                {['tcp', 'https'].includes(
+                {['tcp', 'https', 'relp'].includes(
                   String(formik.values.LOG_AGGREGATOR_PROTOCOL)
                 ) && (
                   <InputField
