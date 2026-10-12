@@ -11656,7 +11656,7 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * Interval (in seconds) between rsyslogd queue statistics
-       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored.
        * @default 0
        */
       LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
@@ -14790,7 +14790,7 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * Interval (in seconds) between rsyslogd queue statistics
-       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored.
        * @default 0
        */
       LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
@@ -16918,7 +16918,7 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * Interval (in seconds) between rsyslogd queue statistics
-       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored.
        * @default 0
        */
       LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
