@@ -11655,6 +11655,12 @@ export interface components {
        */
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
+       * Interval (in seconds) between rsyslogd queue statistics
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @default 0
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
+      /**
        * File system location for rsyslogd disk persistence
        * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.
        * @default /var/lib/ascender
@@ -14783,6 +14789,12 @@ export interface components {
        */
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
+       * Interval (in seconds) between rsyslogd queue statistics
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @default 0
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
+      /**
        * File system location for rsyslogd disk persistence
        * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.
        * @default /var/lib/ascender
@@ -16904,6 +16916,12 @@ export interface components {
        * @default 1
        */
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
+      /**
+       * Interval (in seconds) between rsyslogd queue statistics
+       * @description When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default).
+       * @default 0
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL: number;
       /**
        * File system location for rsyslogd disk persistence
        * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.

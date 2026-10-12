@@ -154,12 +154,15 @@ def construct_rsyslog_conf_template(settings=settings):
     )
     # rsyslog already counts what the action queue discards (discarded.nf, discarded.full);
     # impstats reports it, to rsyslogd's stdout, which is the container log. Its own ruleset
-    # keeps the statistics out of the external action, which sits in the default ruleset.
+    # keeps the statistics out of the external action, which sits in the default ruleset, and
+    # a Direct queue keeps them off the main queue: a full action queue blocks the main queue's
+    # worker for queue.timeoutEnqueue per message, which would hold the statistics back exactly
+    # when they matter.
     if enabled and stats_interval > 0:
         parts.extend(
             [
                 f'module(load="impstats" interval="{stats_interval}" format="json" resetCounters="off" ruleset="ascender_queue_stats")',
-                'ruleset(name="ascender_queue_stats") { action(type="omfile" file="/dev/stdout") }',
+                'ruleset(name="ascender_queue_stats" queue.type="Direct") { action(type="omfile" file="/dev/stdout") }',
             ]
         )
 
