@@ -4,9 +4,11 @@ from unittest import mock
 import pytest
 
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.test.utils import override_settings
 
 from ascender.main.models import User
 from ascender.api.versioning import reverse
+from ascender.sso.backends import RADIUSBackend
 
 #
 # user creation
@@ -21,6 +23,42 @@ def test_user_create(post, admin):
     assert response.status_code == 201
     assert not response.data['is_superuser']
     assert not response.data['is_system_auditor']
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("password", [None, ""])
+def test_user_create_without_password(post, admin, password):
+    """A user created without a password gets an unusable one, for token-only accounts."""
+    user_attrs = {k: v for k, v in EXAMPLE_USER_DATA.items() if k != "password"}
+    if password is not None:
+        user_attrs["password"] = password
+    response = post(reverse('api:user_list'), user_attrs, admin, middleware=SessionMiddleware(mock.Mock()))
+    assert response.status_code == 201
+    assert not User.objects.get(username=user_attrs["username"]).has_usable_password()
+
+
+@pytest.mark.django_db
+@override_settings(LOCAL_PASSWORD_MIN_LENGTH=12)
+def test_user_create_without_password_ignores_complexity_settings(post, admin):
+    """The local password rules govern a password that is set; they don't require one."""
+    user_attrs = {k: v for k, v in EXAMPLE_USER_DATA.items() if k != "password"}
+    response = post(reverse('api:user_list'), user_attrs, admin, middleware=SessionMiddleware(mock.Mock()))
+    assert response.status_code == 201
+    assert not User.objects.get(username=user_attrs["username"]).has_usable_password()
+
+
+@pytest.mark.django_db
+@override_settings(RADIUS_SERVER='radius.example.org')
+def test_user_created_without_password_is_not_a_radius_user(post, admin):
+    """A RADIUS principal with the same username must not take over a password-less local account."""
+    user_attrs = {k: v for k, v in EXAMPLE_USER_DATA.items() if k != "password"}
+    user_attrs["is_superuser"] = True
+    response = post(reverse('api:user_list'), user_attrs, admin, middleware=SessionMiddleware(mock.Mock()))
+    assert response.status_code == 201
+    with mock.patch.object(RADIUSBackend, '_radius_auth', return_value=([], False, False)):
+        assert RADIUSBackend().authenticate(None, user_attrs["username"], "radius-password") is None
+        # The stubbed reply does log in a username that has no local account.
+        assert RADIUSBackend().authenticate(None, "radius-only", "radius-password").username == "radius-only"
 
 
 @pytest.mark.django_db
