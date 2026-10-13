@@ -182,6 +182,50 @@ describe('<JobDetail />', () => {
     expect(screen.queryByText('Project')).not.toBeInTheDocument();
   });
 
+  test('should list the instance groups picked for an ad hoc command', () => {
+    renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          type: 'ad_hoc_command',
+          module_name: 'command',
+          module_args: 'uptime',
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            instance_groups: [
+              { id: 8, name: 'IG west', is_container_group: false },
+              { id: 9, name: 'Pods', is_container_group: true },
+            ],
+          },
+        }}
+      />
+    );
+    const value = detailValue('Requested Instance Groups')!;
+    expect(
+      within(value as HTMLElement).getByRole('link', { name: 'IG west' })
+    ).toHaveAttribute('href', '/instance_groups/8');
+    expect(
+      within(value as HTMLElement).getByRole('link', { name: 'Pods' })
+    ).toHaveAttribute('href', '/instance_groups/container_group/9');
+  });
+
+  test('should not list requested instance groups for a playbook run', () => {
+    renderWithContexts(
+      <JobDetail
+        job={{
+          ...mockJobData,
+          summary_fields: {
+            ...mockJobData.summary_fields,
+            instance_groups: [{ id: 8, name: 'IG west' }],
+          },
+        }}
+      />
+    );
+    expect(
+      screen.queryByText('Requested Instance Groups')
+    ).not.toBeInTheDocument();
+  });
+
   test('should display source data', () => {
     renderWithContexts(
       <JobDetail

@@ -11,6 +11,7 @@ from ascender.api.views.ad_hoc_command import (
     AdHocCommandAdHocCommandEventsList,
     AdHocCommandActivityStreamList,
     AdHocCommandNotificationsList,
+    AdHocCommandInstanceGroupsList,
     AdHocCommandStdout,
 )
 
@@ -22,6 +23,7 @@ urls = [
     path('<int:pk>/events/', AdHocCommandAdHocCommandEventsList.as_view(), name='ad_hoc_command_ad_hoc_command_events_list'),
     path('<int:pk>/activity_stream/', AdHocCommandActivityStreamList.as_view(), name='ad_hoc_command_activity_stream_list'),
     path('<int:pk>/notifications/', AdHocCommandNotificationsList.as_view(), name='ad_hoc_command_notifications_list'),
+    path('<int:pk>/instance_groups/', AdHocCommandInstanceGroupsList.as_view(), name='ad_hoc_command_instance_groups_list'),
     path('<int:pk>/stdout/', AdHocCommandStdout.as_view(), name='ad_hoc_command_stdout'),
 ]
 

@@ -1,6 +1,11 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
+import {
+  CredentialsAPI,
+  ExecutionEnvironmentsAPI,
+  InstanceGroupsAPI,
+  RootAPI,
+} from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -12,6 +17,7 @@ vi.mock('../../api/models/CredentialTypes');
 vi.mock('../../api/models/Inventories');
 vi.mock('../../api/models/Credentials');
 vi.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/InstanceGroups');
 vi.mock('../../api/models/Root');
 
 const moduleOptions: [string, string][] = [
@@ -60,6 +66,18 @@ describe('<AdHocCommandsWizard/>', () => {
         BRAND_NAME: 'Ascender Automation',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
+      data: {
+        results: [
+          { id: 7, name: 'IG east', url: '' },
+          { id: 8, name: 'IG west', url: '' },
+        ],
+        count: 2,
+      },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
+    vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -93,6 +111,9 @@ describe('<AdHocCommandsWizard/>', () => {
     // unique marker that the wizard advanced to that step.
     await user.click(nextButton());
     await screen.findByText('No Execution Environments Found');
+    await user.click(nextButton());
+    // the instance groups step is optional, skip it
+    await screen.findByText('IG east');
     await user.click(nextButton());
     await screen.findByText('No Machine Credential Found');
     await user.click(nextButton());
@@ -144,6 +165,10 @@ describe('<AdHocCommandsWizard/>', () => {
     await waitFor(() => expect(eeRadios[0]).toBeChecked());
     await user.click(nextButton());
 
+    // optional instance groups step, left empty
+    await screen.findByText('IG east');
+    await user.click(nextButton());
+
     // step 3: machine credential list
     await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
     const credRadios = screen.getAllByRole('radio');
@@ -163,6 +188,7 @@ describe('<AdHocCommandsWizard/>', () => {
         credential_passwords: {},
         diff_mode: false,
         execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
+        instance_groups: [],
         extra_vars: '---',
         forks: 0,
         job_type: 'run',
@@ -171,6 +197,55 @@ describe('<AdHocCommandsWizard/>', () => {
         module_name: 'command',
         verbosity: '1',
       })
+    );
+  });
+
+  test('should launch with the picked instance groups in order', async () => {
+    vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
+    vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
+    vi.mocked(CredentialsAPI.read).mockResolvedValue({
+      data: { results: [{ id: 1, name: 'Cred 1', url: '' }], count: 1 },
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
+    vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
+    const { user } = renderWizard(onLaunch);
+    await fillDetails(user);
+    await user.click(nextButton());
+    await screen.findByText('No Execution Environments Found');
+    await user.click(nextButton());
+
+    // pick west first, then east: the order of the clicks is the preference
+    await screen.findByText('IG east');
+    const igBoxes = screen.getAllByRole('checkbox');
+    expect(igBoxes).toHaveLength(2);
+    await user.click(igBoxes[1]!);
+    await user.click(igBoxes[0]!);
+    await waitFor(() => expect(igBoxes[0]).toBeChecked());
+    await user.click(nextButton());
+
+    await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
+    await user.click(screen.getByRole('radio'));
+    await user.click(nextButton());
+
+    // the preview lists them by name
+    expect(await screen.findByText('IG west, IG east')).toBeInTheDocument();
+    await waitFor(() => expect(launchButton()).toBeEnabled());
+    await user.click(launchButton());
+
+    await waitFor(() =>
+      expect(onLaunch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          instance_groups: [
+            { id: 8, name: 'IG west', url: '' },
+            { id: 7, name: 'IG east', url: '' },
+          ],
+        })
+      )
     );
   });
 
@@ -217,6 +292,10 @@ describe('<AdHocCommandsWizard/>', () => {
     await waitFor(() => expect(eeRadios[0]).toBeChecked());
     await user.click(nextButton());
 
+    // optional instance groups step, left empty
+    await screen.findByText('IG east');
+    await user.click(nextButton());
+
     // step 3: credential (selecting a password-prompting cred adds step 4)
     await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
     const credRadios = screen.getAllByRole('radio');
@@ -255,6 +334,7 @@ describe('<AdHocCommandsWizard/>', () => {
         credential_passwords: { ssh_password: 'password' },
         diff_mode: false,
         execution_environment: [{ id: 1, name: 'EE 1', url: '' }],
+        instance_groups: [],
         extra_vars: '---',
         forks: 0,
         job_type: 'run',
@@ -323,6 +403,8 @@ describe('<AdHocCommandsWizard/>', () => {
     await user.click(nextButton());
 
     await waitFor(() => expect(screen.getByText('EE 1')).toBeInTheDocument());
+    await user.click(nextButton());
+    await screen.findByText('IG east');
     await user.click(nextButton());
 
     // the credential step's failed fetch renders ContentError

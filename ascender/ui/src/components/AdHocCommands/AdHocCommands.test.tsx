@@ -5,6 +5,7 @@ import {
   InventoriesAPI,
   CredentialsAPI,
   ExecutionEnvironmentsAPI,
+  InstanceGroupsAPI,
   RootAPI,
 } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
@@ -20,6 +21,7 @@ vi.mock('../../api/models/CredentialTypes');
 vi.mock('../../api/models/Inventories');
 vi.mock('../../api/models/Credentials');
 vi.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/InstanceGroups');
 vi.mock('../../api/models/Root');
 
 vi.mock('react-router', async () => ({
@@ -59,8 +61,9 @@ function renderAdHoc(props = {}) {
 }
 
 // Walk the open wizard from the details step through to launch, selecting the
-// EE row at index 2 (EE2) and the credential row at index 4 (Cred 4).
-async function runWizardToLaunch(user: TestUser) {
+// EE row at index 2 (EE2) and the credential row at index 4 (Cred 4), plus the
+// instance groups named in igNames, in that order.
+async function runWizardToLaunch(user: TestUser, igNames: string[] = []) {
   await user.selectOptions(document.querySelector('#module_name')!, 'command');
   await user.type(document.querySelector('#module_args')!, 'foo');
   // select verbosity by its stable option value ('1'), not the i18n label
@@ -79,7 +82,20 @@ async function runWizardToLaunch(user: TestUser) {
   );
   await user.click(screen.getByRole('button', { name: 'Next' }));
 
-  // step 3: machine credential - select Cred 4
+  // step 3: instance groups, optional
+  await screen.findByText('IG east');
+  // one click at a time, the order of the clicks is the preference
+  await igNames.reduce(async (previous, igName) => {
+    await previous;
+    await user.click(
+      screen
+        .getByRole('row', { name: new RegExp(igName) })
+        .querySelector('input')!
+    );
+  }, Promise.resolve());
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // step 4: machine credential - select Cred 4
   await screen.findByText('Cred 4');
   await user.click(
     screen.getByRole('row', { name: /Cred 4/ }).querySelector('input')!
@@ -120,6 +136,18 @@ describe('<AdHocCommands />', () => {
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
     } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
+      data: {
+        results: [
+          { id: 7, name: 'IG east', url: '' },
+          { id: 8, name: 'IG west', url: '' },
+        ],
+        count: 2,
+      },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
+    vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -199,6 +227,43 @@ describe('<AdHocCommands />', () => {
       })
     );
     // launch navigates away, unmounting the tooltip-wrapped Run Command button
+    await settleTooltips();
+  });
+
+  test('should send the picked instance groups as ids', async () => {
+    vi.mocked(InventoriesAPI.launchAdHocCommands).mockResolvedValue({
+      data: { id: 1 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.launchAdHocCommands>);
+    vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
+      data: { organization: 1 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
+    vi.mocked(CredentialsAPI.read).mockResolvedValue({
+      data: {
+        results: credentials,
+        count: 5,
+      },
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
+    vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
+    const { user } = renderAdHoc();
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Run Command',
+      })
+    );
+    await waitFor(() =>
+      expect(document.querySelector('#module_name')).toBeInTheDocument()
+    );
+
+    await runWizardToLaunch(user, ['IG west', 'IG east']);
+
+    await waitFor(() =>
+      expect(InventoriesAPI.launchAdHocCommands).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({ instance_groups: [8, 7] })
+      )
+    );
     await settleTooltips();
   });
 
