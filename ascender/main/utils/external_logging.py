@@ -25,7 +25,6 @@ that weakens one says which one.
 import glob
 import logging
 import os
-import re
 import shutil
 import tempfile
 import urllib.parse as urlparse
@@ -55,29 +54,9 @@ LEGACY_ACTION_QUEUE_FILENAME = 'awx-external-logger-action-queue'
 CONF_D_DIRECTORY = '/var/lib/ascender/rsyslog/conf.d'
 CONF_D_INCLUDE = f'include(file="{CONF_D_DIRECTORY}/*.conf" mode="optional")'
 
-# rsyslog loads a module once per config, so a second impstats load is an error (#1098).
-# Quoted strings are matched first so a '#' or '/*' inside one is not taken for a comment.
-_STRINGS_OR_COMMENTS = re.compile(r'"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'|/\*.*?\*/|#[^\n]*', re.DOTALL)
-_IMPSTATS_LOAD = re.compile(
-    r"""\bmodule\s*\([^)]*?\bload\s*=\s*["']?(?:[^"'\s)]*/)?impstats(?:\.so)?["'\s)]"""  # module(load="impstats" ...)
-    r'|^\s*\$ModLoad\s+(?:\S*/)?impstats(?:\.so)?\s*$',  # legacy $ModLoad impstats
-    re.IGNORECASE | re.MULTILINE,
-)
-
-
-def drop_ins_loading_impstats():
-    """The conf.d drop-ins, as the generated include reads them, that already load impstats."""
-    found = []
-    for path in sorted(glob.glob(os.path.join(CONF_D_DIRECTORY, '*.conf'))):
-        try:
-            with open(path, errors='replace') as f:
-                text = f.read()
-        except OSError:
-            continue
-        text = _STRINGS_OR_COMMENTS.sub(lambda m: m.group() if m.group()[0] in '"\'' else ' ', text)
-        if _IMPSTATS_LOAD.search(text):
-            found.append(path)
-    return found
+# run-rsyslogd sets it at every rsyslogd start: off when a conf.d drop-in already loads impstats,
+# which rsyslog refuses to load twice (#1098).
+QUEUE_STATS_ENABLED = 'config.enabled=`echo $ASCENDER_QUEUE_STATS`'
 
 
 def warn_about_abandoned_spool(spool_directory):
@@ -184,18 +163,11 @@ def construct_rsyslog_conf_template(settings=settings):
     # a Direct queue keeps them off the main queue: a full action queue blocks the main queue's
     # worker for queue.timeoutEnqueue per message, which would hold the statistics back exactly
     # when they matter.
-    # A drop-in that loads impstats wins: loading it again would fail rsyslogd -N1.
-    stats_drop_ins = drop_ins_loading_impstats() if enabled and stats_interval > 0 else []
-    if stats_drop_ins:
-        logger.warning(
-            'impstats is already loaded by %s, so LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL is ignored in favor of that drop-in.',
-            ', '.join(stats_drop_ins),
-        )
-    elif enabled and stats_interval > 0:
+    if enabled and stats_interval > 0:
         parts.extend(
             [
-                f'module(load="impstats" interval="{stats_interval}" format="json" resetCounters="off" ruleset="ascender_queue_stats")',
-                'ruleset(name="ascender_queue_stats" queue.type="Direct") { action(type="omfile" file="/dev/stdout") }',
+                f'module(load="impstats" interval="{stats_interval}" format="json" resetCounters="off" ruleset="ascender_queue_stats" {QUEUE_STATS_ENABLED})',
+                f'ruleset(name="ascender_queue_stats" queue.type="Direct" {QUEUE_STATS_ENABLED}) {{ action(type="omfile" file="/dev/stdout") }}',
             ]
         )
 
