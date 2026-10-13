@@ -11550,6 +11550,30 @@ export interface components {
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
       /**
+       * Enable TCP keepalives to the log aggregator
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @default true
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;
+      /**
+       * Idle time before the first TCP keepalive probe
+       * @description Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most.
+       * @default 120
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_TIME: number;
+      /**
+       * Interval between TCP keepalive probes
+       * @description Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter.
+       * @default 30
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL: number;
+      /**
+       * Number of unanswered TCP keepalive probes before the connection is dropped
+       * @description Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter.
+       * @default 3
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
+      /**
        * Enable/disable HTTPS certificate verification
        * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
        * @default true
@@ -14648,6 +14672,30 @@ export interface components {
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
       /**
+       * Enable TCP keepalives to the log aggregator
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @default true
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;
+      /**
+       * Idle time before the first TCP keepalive probe
+       * @description Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most.
+       * @default 120
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_TIME: number;
+      /**
+       * Interval between TCP keepalive probes
+       * @description Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter.
+       * @default 30
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL: number;
+      /**
+       * Number of unanswered TCP keepalive probes before the connection is dropped
+       * @description Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter.
+       * @default 3
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
+      /**
        * Enable/disable HTTPS certificate verification
        * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
        * @default true
@@ -16739,6 +16787,30 @@ export interface components {
        * @default 5
        */
       LOG_AGGREGATOR_TCP_TIMEOUT: number;
+      /**
+       * Enable TCP keepalives to the log aggregator
+       * @description Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS and UDP ignore it.
+       * @default true
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE: boolean;
+      /**
+       * Idle time before the first TCP keepalive probe
+       * @description Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most.
+       * @default 120
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_TIME: number;
+      /**
+       * Interval between TCP keepalive probes
+       * @description Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter.
+       * @default 30
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL: number;
+      /**
+       * Number of unanswered TCP keepalive probes before the connection is dropped
+       * @description Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter.
+       * @default 3
+       */
+      LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
       /**
        * Enable/disable HTTPS certificate verification
        * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
