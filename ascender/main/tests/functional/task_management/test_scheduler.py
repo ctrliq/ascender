@@ -854,13 +854,22 @@ class TestAllowJobsWhileSyncing:
         return job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred')
 
     @staticmethod
-    def running_sync(inventory, source_name='src', source='ec2'):
-        inv_source = InventorySource.objects.create(name=source_name, inventory=inventory, source=source)
+    def sync(inv_source, status):
         update = inv_source.create_inventory_update()
-        update.status = 'running'
+        update.status = status
         update.dependencies_processed = True
         update.save()
         return update
+
+    @classmethod
+    def running_sync(cls, inventory, source_name='src', source='ec2'):
+        inv_source = InventorySource.objects.create(name=source_name, inventory=inventory, source=source)
+        return cls.sync(inv_source, 'running')
+
+    @staticmethod
+    def process_dependencies():
+        with mock.patch.object(TaskManager, 'start_task'):
+            DependencyManager().schedule()
 
     @staticmethod
     def allow(inventory):
@@ -890,17 +899,42 @@ class TestAllowJobsWhileSyncing:
 
         assert self.started() == [job]
 
-    def test_job_on_constructed_inventory_starts_during_its_sync_when_allowed(self, controlplane_instance_group, objects):
+    @pytest.mark.parametrize('allowed', [False, True])
+    def test_job_on_constructed_inventory_and_its_running_sync(self, controlplane_instance_group, objects, allowed):
+        """The source of a constructed inventory always updates on launch, so a sync already in
+        flight is picked up as the job's dependency unless the flag says not to wait for it."""
         constructed = Inventory.objects.create(name='constructed', kind='constructed', organization=objects.inventory.organization)
+        inv_source = constructed.inventory_sources.get()
+        assert inv_source.update_on_launch
+        if allowed:
+            self.allow(constructed)
         objects.job_template.inventory = constructed
         objects.job_template.save()
-        self.running_sync(constructed, source='constructed')
-        job = create_job(objects.job_template)
+        self.sync(inv_source, 'successful')
+        running = self.sync(inv_source, 'running')
+        job = create_job(objects.job_template, dependencies_processed=False)
 
+        self.process_dependencies()
+
+        if allowed:
+            assert list(job.dependent_jobs.all()) == []
+            assert self.started() == [job]
+        else:
+            assert list(job.dependent_jobs.all()) == [running]
+            assert self.started() == []
+
+    def test_running_sync_with_nothing_to_fall_back_on_is_still_waited_for(self, controlplane_instance_group, objects):
+        """Without a successful sync before it, the running one is the only source of hosts the job could get."""
+        self.allow(objects.inventory)
+        inv_source = InventorySource.objects.create(name='src', inventory=objects.inventory, source='ec2', update_on_launch=True)
+        self.sync(inv_source, 'failed')
+        running = self.sync(inv_source, 'running')
+        job = create_job(objects.job_template, dependencies_processed=False)
+
+        self.process_dependencies()
+
+        assert list(job.dependent_jobs.all()) == [running]
         assert self.started() == []
-
-        self.allow(constructed)
-        assert self.started() == [job]
 
     def test_update_on_launch_still_waits_for_its_own_sync(self, controlplane_instance_group, objects):
         """The flag only lets a job past syncs it does not depend on."""
@@ -908,8 +942,7 @@ class TestAllowJobsWhileSyncing:
         inv_source = InventorySource.objects.create(name='src', inventory=objects.inventory, source='ec2', update_on_launch=True, update_cache_timeout=0)
         job = create_job(objects.job_template, dependencies_processed=False)
 
-        with mock.patch.object(TaskManager, 'start_task'):
-            DependencyManager().schedule()
+        self.process_dependencies()
         update = inv_source.inventory_updates.get()
         assert list(job.dependent_jobs.all()) == [update]
 

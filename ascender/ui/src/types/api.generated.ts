@@ -6942,7 +6942,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -6977,7 +6977,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -7367,7 +7367,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -7389,7 +7389,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -7887,7 +7887,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -7932,7 +7932,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -10515,7 +10515,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -10616,7 +10616,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
@@ -10788,7 +10788,7 @@ export interface components {
        */
       allow_deletes_while_in_use: boolean | null;
       /**
-       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;

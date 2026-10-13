@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             name="allow_jobs_while_syncing",
             field=models.BooleanField(
                 default=False,
-                help_text="If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.",
+                help_text="If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.",
             ),
         ),
     ]

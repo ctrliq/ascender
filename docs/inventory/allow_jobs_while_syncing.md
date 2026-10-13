@@ -41,14 +41,28 @@ The window where a job could see a mix of old and new data is the moment the syn
 commits while that job is building its inventory. It is short, but if a job cannot live
 with it, leave the flag off for that inventory.
 
+#### Update on launch
+
+When an inventory source has `update_on_launch` set, launching a job either starts a new
+sync of that source or, if one is already going, picks that one up as a dependency of
+the job. The flag changes only the second case:
+
+* **A sync started for the job** is always waited for. The job asked for fresh data, for
+  example because the last sync is older than the source's `update_cache_timeout`.
+* **A sync that was already running** when the job was launched is not waited for if the
+  flag is on. The job runs on the hosts from the last successful sync of that source, the
+  same as it would for a source without `update_on_launch`.
+* **If the source has never synced successfully**, there is nothing to fall back on, so
+  the job still waits for the running sync.
+
+This matters most for constructed inventories, because their source always has
+`update_on_launch` set and it cannot be turned off. It also matters for the many cloud
+sources that are set to update on launch.
+
 #### What still waits
 
-The flag only lets a job past syncs it did not ask for. It does not change:
+Besides the cases above, the flag does not change:
 
-* **Update on launch.** When an inventory source has `update_on_launch` set, the update
-  it starts for a job is a dependency of that job, and the job waits for it as before.
-  The same goes for a sync that is already running when such a job is launched and
-  that the job picks up as its dependency instead of starting a new one.
 * **Ad hoc commands.** A running ad hoc command still blocks jobs and other ad hoc
   commands on the same inventory, with or without the flag. Ad hoc commands themselves
   do follow the flag when what is running is a sync.
@@ -71,3 +85,13 @@ when it starts. With the flag on, some slices can start before a sync commits an
 after it, and if the sync added or removed hosts the split no longer lines up: a host
 can end up in two slices or in none. For sliced job templates on inventories that change
 often, leave the flag off.
+
+#### Fact caching
+
+A job that uses fact caching writes the facts it gathered back to the host rows when it
+finishes. A sync holds locks on the host rows it updates or deletes until it commits, so
+if the job finishes while the sync is still running, the fact write waits for the sync to
+commit. In the worst case the two deadlock and the database rolls one of them back. A job
+that was already running when a sync started could always run into this, but with the
+flag on the overlap becomes routine. If an inventory has long syncs and jobs that cache
+facts, keep that in mind before turning the flag on.

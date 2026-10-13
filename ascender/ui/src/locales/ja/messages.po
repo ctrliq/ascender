@@ -2725,10 +2725,6 @@ msgstr "オフ"
 msgid "Create new smart inventory"
 msgstr "新規スマートインベントリーの作成"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
-msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update."
-msgstr ""
-
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:664
 msgid "Delete Schedule"
 msgstr "スケジュールの削除"
@@ -10743,6 +10739,10 @@ msgstr "インベントリーの追加"
 #: components/Lookup/HostFilterLookup.tsx:130
 msgid "Inventory ID"
 msgstr "インベントリー ID"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:204
+msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully."
+msgstr ""
 
 #: components/DataListToolbar/DataListToolbar.tsx:158
 #: components/DataListToolbar/DataListToolbar.tsx:162
