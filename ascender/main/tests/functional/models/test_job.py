@@ -1,5 +1,8 @@
 import pytest
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
+
 from ascender.main.models import JobTemplate, Job, JobHostSummary, WorkflowJob, Inventory, Project, Organization
 from ascender.main.models.jobs import _federated_inventory_has_matching_hosts
 
@@ -398,3 +401,33 @@ class TestFederatedInventoryHasMatchingHosts:
         inv = self._make_inv(organization, host_names=['web01'])
         assert _federated_inventory_has_matching_hosts(inv, '~web\\d+') is True
         assert _federated_inventory_has_matching_hosts(inv, 'db01,~(web|app)01') is True
+
+    def test_comma_list_mixed_kinds(self, organization):
+        """Each kind of pattern in a list is checked; one match anywhere includes the inventory."""
+        inv = self._make_inv(organization, host_names=['web01', 'db01'], group_names=['appservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,q?q,web*01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,app*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,app?ervers') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,q?q,[xy]z') is False
+
+    @pytest.mark.parametrize(
+        'make_item',
+        [
+            pytest.param(lambda i: f'missing{i}', id='exact'),
+            pytest.param(lambda i: f'missing{i}*', id='trailing-star'),
+            pytest.param(lambda i: f'missing{i}?', id='glob'),
+            pytest.param(lambda i: f'missing{i}*,other{i},o?{i}', id='mixed'),
+        ],
+    )
+    def test_query_count_does_not_grow_with_list_length(self, organization, make_item):
+        """The pre-filter runs in the launch request and limit is unbounded, so an
+        inventory that matches nothing must cost the same for 1 item as for 500."""
+        inv = self._make_inv(organization, host_names=[f'web{i:02d}' for i in range(20)], group_names=['webservers'])
+
+        def queries(n):
+            limit = ','.join(make_item(i) for i in range(n))
+            with CaptureQueriesContext(connection) as ctx:
+                assert _federated_inventory_has_matching_hosts(inv, limit) is False
+            return len(ctx.captured_queries)
+
+        assert queries(500) == queries(1)
