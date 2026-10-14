@@ -395,15 +395,23 @@ def activity_stream_create(sender, instance, created, **kwargs):
             changes['labels'] = [label.name for label in instance.labels.iterator()]
             if 'extra_vars' in changes:
                 changes['extra_vars'] = instance.display_extra_vars()
+        actor = get_current_user_or_none()
+        # a token whose owner isn't the actor (issued by an admin, or with no request user) names the owner
+        token_owner = None
         if type(instance) == OAuth2AccessToken:
             changes['token'] = CENSOR_VALUE
-        activity_entry = get_activity_stream_class()(operation='create', object1=object1, changes=json.dumps(changes), actor=get_current_user_or_none())
+            if instance.user_id and (actor is None or instance.user_id != actor.pk):
+                token_owner = instance.user
+                changes['user'] = '{} ({})'.format(token_owner.username, token_owner.pk)
+        activity_entry = get_activity_stream_class()(operation='create', object1=object1, changes=json.dumps(changes), actor=actor)
         # TODO: Weird situation where cascade SETNULL doesn't work
         #      it might actually be a good idea to remove all of these FK references since
         #      we don't really use them anyway.
         if instance._meta.model_name != 'setting':  # Is not conf.Setting instance
             activity_entry.save()
             getattr(activity_entry, object1).add(instance.pk)
+            if token_owner is not None:
+                activity_entry.user.add(token_owner)
         else:
             activity_entry.setting = conf_to_dict(instance)
             activity_entry.save()

@@ -11,7 +11,9 @@ from django.utils.encoding import smart_str, smart_bytes
 
 from ascender.main.utils.encryption import decrypt_value, get_encryption_key
 from ascender.api.versioning import reverse, drf_reverse
+from ascender.main.models import ActivityStream
 from ascender.main.models.oauth import OAuth2Application as Application, OAuth2AccessToken as AccessToken
+from ascender.main.request_context import impersonate
 from ascender.main.tests.functional import immediate_on_commit
 from ascender.sso.models import UserEnterpriseAuth
 from ascender.main.models.oauth import OAuth2RefreshToken
@@ -390,3 +392,130 @@ def test_token_values_are_not_rendered_by_str(oauth_application, post, admin):
     for obj in (access_token, refresh_token):
         assert obj.token not in str(obj)
         assert obj.token not in repr(obj)
+
+
+@pytest.mark.django_db
+def test_superuser_issues_personal_token_for_another_user(post, get, admin, alice):
+    response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'description': 'ci', 'scope': 'read'}, admin, expect=201)
+    token = AccessToken.objects.get(token=response.data['token'])
+    assert token.user == alice
+    assert token.application is None
+    assert response.data['user'] == alice.pk
+    with immediate_on_commit():
+        resp = get(drf_reverse('api:user_me_list', kwargs={'version': 'v2'}), HTTP_AUTHORIZATION='Bearer ' + token.token, status=200)
+    assert json.loads(resp.content)['results'][0]['username'] == 'alice'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('requester', ['alice', 'org_admin', 'system_auditor'])
+def test_personal_token_for_another_user_needs_superuser(post, request, org_member, requester):
+    # org_admin may change org_member (UserAccess), but personal tokens stay owner-or-superuser (OAuth2TokenAccess)
+    user = request.getfixturevalue(requester)
+    post(reverse('api:user_personal_token_list', kwargs={'pk': org_member.pk}), {'scope': 'read'}, user, expect=403)
+    assert AccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_personal_token_for_missing_user(post, admin):
+    post(reverse('api:user_personal_token_list', kwargs={'pk': 9999}), {'scope': 'read'}, admin, expect=404)
+    assert AccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_personal_token_for_another_external_user(post, admin, alice):
+    # the external-account check applies to the owner, not to the superuser issuing it
+    UserEnterpriseAuth(user=alice, provider='radius').save()
+    with override_settings(RADIUS_SERVER='example.org', ALLOW_OAUTH2_FOR_EXTERNAL_USERS=False):
+        response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'scope': 'read'}, admin, expect=403)
+    assert 'external authentication provider' in str(response.data['detail'])
+    assert AccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_personal_token_for_another_inactive_user(post, admin, alice):
+    alice.is_active = False
+    alice.save()
+    response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'scope': 'read'}, admin, expect=400)
+    assert 'inactive user' in str(response.data)
+    assert AccessToken.objects.count() == 0
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('ldap_dn, status', [('', 400), ('cn=alice,dc=example,dc=org', 201)])
+def test_personal_token_for_another_user_with_local_auth_disabled(post, admin, alice, ldap_dn, status):
+    alice.profile.ldap_dn = ldap_dn
+    alice.profile.save()
+    with override_settings(DISABLE_LOCAL_AUTH=True):
+        response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'scope': 'read'}, admin, expect=status)
+    if status == 400:
+        assert 'local authentication is disabled' in str(response.data)
+    assert AccessToken.objects.filter(user=alice).count() == (1 if status == 201 else 0)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('requester', ['admin', 'alice'])
+def test_personal_token_for_self(post, request, requester):
+    user = request.getfixturevalue(requester)
+    for url in (reverse('api:user_personal_token_list', kwargs={'pk': user.pk}), reverse('api:o_auth2_token_list')):
+        response = post(url, {'scope': 'read'}, user, expect=201)
+        token = AccessToken.objects.get(token=response.data['token'])
+        assert token.user == user
+        assert token.application is None
+
+
+@pytest.mark.django_db
+def test_other_token_sub_urls_still_issue_to_the_requester(post, admin, org_admin, org_member, organization):
+    # users/<id>/tokens/ and authorized_tokens/ share the permission check, but keep issuing to the requester
+    app = Application.objects.create(name='app', client_type='confidential', authorization_grant_type='password', organization=organization)
+    urls = [
+        (reverse('api:o_auth2_token_list', kwargs={'pk': org_member.pk}), {'scope': 'read'}),
+        (reverse('api:user_authorized_token_list', kwargs={'pk': org_member.pk}), {'scope': 'read', 'application': app.pk}),
+    ]
+    for url, data in urls:
+        post(url, data, org_admin, expect=403)
+        response = post(url, data, admin, expect=201)
+        assert AccessToken.objects.get(token=response.data['token']).user == admin
+    assert not AccessToken.objects.filter(user=org_member).exists()
+
+
+@pytest.mark.django_db
+def test_personal_token_list_is_the_url_users(oauth_application, post, get, admin, alice, bob, system_auditor):
+    for user in (admin, alice):
+        post(reverse('api:user_personal_token_list', kwargs={'pk': user.pk}), {'scope': 'read'}, user, expect=201)
+    # an application token is not a personal one
+    post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
+
+    def owners(owner, requester):
+        response = get(reverse('api:user_personal_token_list', kwargs={'pk': owner.pk}), requester, expect=200)
+        return [t['user'] for t in response.data['results']]
+
+    assert owners(alice, admin) == [alice.pk]
+    assert owners(alice, alice) == [alice.pk]
+    assert owners(alice, system_auditor) == [alice.pk]
+    assert owners(admin, admin) == [admin.pk]
+    # alice can see the admin user, but not the admin's tokens
+    assert owners(admin, alice) == []
+    # bob can't see alice at all
+    get(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), bob, expect=403)
+
+
+@pytest.mark.django_db
+def test_personal_token_for_another_user_activity_stream(post, get, admin, alice, settings):
+    settings.ACTIVITY_STREAM_ENABLED = True
+    # the request middleware sets the actor in production; the test client calls the view directly
+    with impersonate(admin):
+        response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'scope': 'read'}, admin, expect=201)
+        own = post(reverse('api:user_personal_token_list', kwargs={'pk': admin.pk}), {'scope': 'read'}, admin, expect=201)
+
+    entry = ActivityStream.objects.get(operation='create', o_auth2_access_token__token=response.data['token'])
+    assert entry.actor == admin
+    assert json.loads(entry.changes)['user'] == 'alice ({})'.format(alice.pk)
+    assert list(entry.user.all()) == [alice]
+    alice_stream = get(reverse('api:user_activity_stream_list', kwargs={'pk': alice.pk}), admin, expect=200)
+    assert entry.pk in [e['id'] for e in alice_stream.data['results']]
+
+    # a token the actor issues for themselves records nothing extra
+    own_entry = ActivityStream.objects.get(operation='create', o_auth2_access_token__token=own.data['token'])
+    assert own_entry.actor == admin
+    assert 'user' not in json.loads(own_entry.changes)
+    assert not own_entry.user.exists()

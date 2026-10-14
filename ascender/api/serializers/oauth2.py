@@ -82,8 +82,11 @@ class BaseOAuth2TokenSerializer(BaseSerializer):
             raise serializers.ValidationError(_('Must be a simple space-separated string with allowed scopes {}.').format(self.ALLOWED_SCOPES))
         return value
 
+    def get_owner(self, validated_data):
+        return self.context['request'].user
+
     def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
+        validated_data['user'] = self.get_owner(validated_data)
         try:
             return super(BaseOAuth2TokenSerializer, self).create(validated_data)
         except oauth2.AccessDeniedError as e:

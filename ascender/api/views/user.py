@@ -86,7 +86,8 @@ class UserPersonalTokenList(SubListCreateAPIView):
     swagger_topic = 'Authentication'
 
     def get_queryset(self):
-        return get_access_token_model().objects.filter(application__isnull=True, user=self.request.user)
+        # the URL user's tokens, limited to those the requester may read (OAuth2TokenAccess)
+        return super(UserPersonalTokenList, self).get_queryset().filter(application__isnull=True)
 
 
 class UserTeamsList(SubListAPIView):

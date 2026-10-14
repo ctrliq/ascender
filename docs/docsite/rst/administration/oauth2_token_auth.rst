@@ -154,6 +154,8 @@ The easiest and most common way to obtain an OAuth 2 token is to create a person
 
 You could also pipe the JSON output through ``jq``, if installed.
 
+The token belongs to the user whose ID is in the URL. Users can create tokens only for themselves; a System Administrator can also create one for another user, for example a service account created without a password, which cannot log in to create its own. Any other request for someone else's ID is refused with ``403``. ``GET`` on the same endpoint lists that user's personal tokens, as far as the requester is allowed to see them.
+
 
 Following is an example of using the personal token to access an API endpoint using curl:
 
