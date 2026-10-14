@@ -173,17 +173,38 @@ describe('<JobList />', () => {
   test('initially renders successfully', async () => {
     renderWithContexts(<JobList />);
     await waitFor(() =>
-      expect(screen.getAllByRole('link', { name: /— job \d/ })).toHaveLength(6)
+      expect(screen.getAllByRole('link', { name: /^job \d/ })).toHaveLength(6)
+    );
+  });
+
+  test('should sort by ID when the ID header is clicked', async () => {
+    const { history, user } = renderWithContexts(<JobList />);
+    await screen.findByRole('link', { name: 'job 1' });
+
+    const idHeader = screen.getByRole('columnheader', { name: 'ID' });
+    await user.click(within(idHeader).getByRole('button', { name: 'ID' }));
+    expect(history.location.search).toContain('job.order_by=id');
+    await waitFor(() =>
+      expect(UnifiedJobsAPI.read).toHaveBeenLastCalledWith(
+        expect.objectContaining({ order_by: 'id' })
+      )
+    );
+
+    // a second click on the now-sorted column flips it to descending
+    await user.click(within(idHeader).getByRole('button', { name: 'ID' }));
+    expect(history.location.search).toContain('job.order_by=-id');
+    await waitFor(() =>
+      expect(UnifiedJobsAPI.read).toHaveBeenLastCalledWith(
+        expect.objectContaining({ order_by: '-id' })
+      )
     );
   });
 
   test('should select and un-select items', async () => {
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
 
-    const firstRow = screen
-      .getByRole('link', { name: '1 — job 1' })
-      .closest('tr');
+    const firstRow = screen.getByRole('link', { name: 'job 1' }).closest('tr');
     const checkbox = within(firstRow as unknown as HTMLElement).getByRole(
       'checkbox'
     );
@@ -197,7 +218,7 @@ describe('<JobList />', () => {
 
   test('should select and deselect all', async () => {
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
 
     const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
     const rowCheckboxes = getRowCheckboxes();
@@ -227,7 +248,7 @@ describe('<JobList />', () => {
     const destroyWorkflowJob = mockInherited(WorkflowJobsAPI, 'destroy');
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -280,7 +301,7 @@ describe('<JobList />', () => {
     };
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
     expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(1);
     expect(UnifiedJobsAPI.read).toHaveBeenCalledWith(jobListParams);
 
@@ -337,7 +358,7 @@ describe('<JobList />', () => {
     } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
 
@@ -362,9 +383,9 @@ describe('<JobList />', () => {
     });
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '2 — job 2' });
+    await screen.findByRole('link', { name: 'job 2' });
 
-    const row = screen.getByRole('link', { name: '2 — job 2' }).closest('tr');
+    const row = screen.getByRole('link', { name: 'job 2' }).closest('tr');
     await user.click(
       within(row as unknown as HTMLElement).getByRole('checkbox')
     );
@@ -410,7 +431,7 @@ describe('<JobList />', () => {
     const cancelWorkflowJob = mockInherited(WorkflowJobsAPI, 'cancel');
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '1 — job 1' });
+    await screen.findByRole('link', { name: 'job 1' });
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Cancel jobs' }));
@@ -442,9 +463,9 @@ describe('<JobList />', () => {
     });
 
     const { user } = renderWithContexts(<JobList />);
-    await screen.findByRole('link', { name: '2 — job 2' });
+    await screen.findByRole('link', { name: 'job 2' });
 
-    const row = screen.getByRole('link', { name: '2 — job 2' }).closest('tr');
+    const row = screen.getByRole('link', { name: 'job 2' }).closest('tr');
     await user.click(
       within(row as unknown as HTMLElement).getByRole('checkbox')
     );

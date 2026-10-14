@@ -260,6 +260,7 @@ function JobList({
           ]}
           headerRow={
             <HeaderRow qsConfig={qsConfig} isExpandable>
+              <HeaderCell sortKey="id">{t`ID`}</HeaderCell>
               <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
               <HeaderCell sortKey="status">{t`Status`}</HeaderCell>
               {showTypeColumn && <HeaderCell>{t`Type`}</HeaderCell>}
