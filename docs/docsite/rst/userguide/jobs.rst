@@ -9,7 +9,9 @@ Jobs
 A :term:`job` is an instance of Ascender launching an Ansible playbook against an inventory of hosts.
 
 The **Jobs** link displays a list of jobs and their statuses--shown as completed successfully or failed, or as an active (running) job. 
-The default view is collapsed (**Compact**) with the job name, status, job type, and start/finish times, but you can expand to see more information. You can sort this list by various criteria, and perform a search to filter the jobs of interest.
+The default view is collapsed (**Compact**) with the job ID, job name, status, job type, and start/finish times, but you can expand to see more information. You can also perform a search to filter the jobs of interest.
+
+By default, the list is sorted by finish time, newest first. Jobs that have not finished yet (new, pending, waiting, or running) appear at the top. Click the **ID**, **Name**, **Status**, **Start Time**, or **Finish Time** column header to sort by that column instead, and click it again to reverse the order.
 
 |Jobs - home with example job|
 

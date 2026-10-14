@@ -113,14 +113,13 @@ function JobListItem({
           }}
           dataLabel={t`Select`}
         />
+        <Td dataLabel={t`ID`} modifier="fitContent">
+          {job.id}
+        </Td>
         <TdBreakWord id={labelId} dataLabel={t`Name`}>
           <span>
             <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
-              <b>
-                {job.id}{' '}
-                <span className="ascender-job-list-item__dash">&mdash;</span>{' '}
-                {job.name}
-              </b>
+              <b>{job.name || job.id}</b>
             </Link>
           </span>
         </TdBreakWord>
@@ -216,7 +215,7 @@ function JobListItem({
         ouiaId={`expanded-job-row-${job.id}`}
       >
         <Td colSpan={2} />
-        <Td colSpan={showTypeColumn ? 6 : 5}>
+        <Td colSpan={showTypeColumn ? 7 : 6}>
           <ExpandableRowContent>
             <DetailList>
               {job.type === 'inventory_update' && (
