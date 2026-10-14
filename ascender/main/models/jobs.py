@@ -3,7 +3,10 @@
 
 # Python
 import fnmatch
+import functools
 import logging
+import operator
+import re
 import time
 from urllib.parse import urljoin
 
@@ -11,6 +14,7 @@ from urllib.parse import urljoin
 from ascender.settings.typed import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.db.models.functions import Cast
 
 # from django.core.cache import cache
@@ -204,42 +208,71 @@ class JobOptions(BaseModel):
         return needed
 
 
+# Ansible's subscript rule (PATTERN_WITH_SUBSCRIPT in ansible/inventory/manager.py): name[N], name[N:M], name[N:]
+# or name[N-M] selects hosts of the pattern 'name' by position, so the brackets aren't an fnmatch character class.
+_FEDERATED_LIMIT_SUBSCRIPT = re.compile(r'^(.+)\[(?:-?[0-9]+|[0-9]+[:-][0-9]*)\]$')
+
+
 def _federated_inventory_has_matching_hosts(inv, limit):
     """Return True if *inv* has hosts that would be targeted by *limit*.
 
     Used at WorkflowJobNode creation time to skip source inventories that
     contribute no hosts to a federated job launch, avoiding spurious empty jobs.
 
-    Handles:
+    A comma-separated limit is a list of patterns, as in Ansible; the inventory
+    matches if any of them does. Each pattern is handled as follows:
     - No limit / 'all' / '*' → just checks that the inventory is non-empty.
     - 'ungrouped'            → checks for hosts with no group membership.
-    - Complex patterns (containing ':', '&', '!') → delegates to Ansible at run time;
-      included only if the inventory is non-empty (same rule as the no-limit case).
+    - Complex patterns (containing ':', '&', '!', a '~' regex or an '@' limit file) → delegates
+      to Ansible at run time; included only if the inventory is non-empty (same rule as the no-limit case).
+    - Subscripts ('webservers[0]', 'webservers[0:2]') → the base pattern is matched; Ansible picks
+      the hosts by position at run time.
     - Simple glob patterns   → fnmatch against host names then group names.
+
+    The patterns are classified first and each kind is checked for all of them
+    at once, so the number of queries doesn't grow with the length of the list.
     """
-    pat = (limit or '').strip()
-    if not pat or pat in ('all', '*'):
+    patterns = [p.strip() for p in (limit or '').split(',') if p.strip()]
+    if not patterns:
         return inv.hosts.exists()
-    # Complex operator patterns: let Ansible sort it out at run time
-    if any(c in pat for c in (':', '&', '!')):
-        return inv.hosts.exists()
-    if pat == 'ungrouped':
-        return inv.hosts.filter(groups__isnull=True).exists()
-    # Exact match (no glob metacharacters) — resolved entirely in the DB via an index lookup.
-    if not any(c in pat for c in ('*', '?', '[')):
-        return inv.hosts.filter(name=pat).exists() or inv.groups.filter(name=pat).exists()
-    # Glob pattern.
-    # Fast path: trailing-star-only glob (e.g. "web*") — the prefix is a plain
-    # string so the DB can resolve it with an indexed startswith/LIKE query and
-    # short-circuit via EXISTS, avoiding a full table scan on large inventories.
-    if pat.endswith('*') and not any(c in pat[:-1] for c in ('*', '?', '[')):
-        prefix = pat[:-1]
-        return inv.hosts.filter(name__startswith=prefix).exists() or inv.groups.filter(name__startswith=prefix).exists()
-    # Arbitrary glob — stream names one at a time so any() can short-circuit without
-    # materialising the full list into memory.
-    if any(fnmatch.fnmatch(name, pat) for name in inv.hosts.values_list('name', flat=True).iterator()):
+    exact, prefixes, globs = set(), set(), []
+    ungrouped = False
+    for pat in patterns:
+        # Regexes and @ limit files (Ansible reads the file at run time) can't be evaluated here
+        if pat[0] in ('~', '@'):
+            return inv.hosts.exists()
+        subscript = _FEDERATED_LIMIT_SUBSCRIPT.match(pat)
+        if subscript:
+            pat = subscript.group(1)
+        # 'all', and complex operator patterns: let Ansible sort it out at run time
+        if pat in ('all', '*') or any(c in pat for c in (':', '&', '!')):
+            return inv.hosts.exists()
+        if pat == 'ungrouped':
+            ungrouped = True
+        elif not any(c in pat for c in ('*', '?', '[')):
+            exact.add(pat)
+        elif pat.endswith('*') and not any(c in pat[:-1] for c in ('*', '?', '[')):
+            # Trailing-star-only glob (e.g. "web*"): the prefix is a plain string, so the
+            # DB can resolve it with an indexed startswith/LIKE query.
+            prefixes.add(pat[:-1])
+        else:
+            globs.append(pat)
+    if exact and (inv.hosts.filter(name__in=exact).exists() or inv.groups.filter(name__in=exact).exists()):
         return True
-    return any(fnmatch.fnmatch(name, pat) for name in inv.groups.values_list('name', flat=True).iterator())
+    if ungrouped and inv.hosts.filter(groups__isnull=True).exists():
+        return True
+    if prefixes:
+        q = functools.reduce(operator.or_, (Q(name__startswith=prefix) for prefix in prefixes))
+        if inv.hosts.filter(q).exists() or inv.groups.filter(q).exists():
+            return True
+    if globs:
+        # Arbitrary globs: one pass over host names, then group names, against all of
+        # them at once. Names are streamed so the scan stops at the first match.
+        match = re.compile('|'.join(fnmatch.translate(pat) for pat in globs)).match
+        if any(match(name) for name in inv.hosts.values_list('name', flat=True).iterator()):
+            return True
+        return any(match(name) for name in inv.groups.values_list('name', flat=True).iterator())
+    return False
 
 
 class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, ResourceMixin, RelatedJobsMixin, WebhookTemplateMixin):
