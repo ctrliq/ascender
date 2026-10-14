@@ -191,7 +191,8 @@ def construct_rsyslog_conf_template(settings=settings):
             if parsed.port:
                 port = parsed.port
         except ValueError:
-            port = settings.LOG_AGGREGATOR_PORT
+            # getattr: a port stored before the 1-65535 bound fails validation on read and is then unset
+            port = getattr(settings, 'LOG_AGGREGATOR_PORT', '')
 
         # https://github.com/rsyslog/rsyslog-doc/blob/master/source/configuration/modules/omhttp.rst
         ssl = 'on' if parsed.scheme == 'https' else 'off'
@@ -241,6 +242,22 @@ def construct_rsyslog_conf_template(settings=settings):
                 params.append(f'pwd="{password}"')
         params = ' '.join(params)
         parts.extend(['module(load="omhttp")', f'action({params})'])
+    elif protocol == 'relp' and host and port:
+        # RELP acknowledges each message at the application layer and retransmits anything the
+        # aggregator did not confirm. omfwd over plain TCP cannot: rsyslog reconnects after a reset
+        # but does not resend, so whatever the dead connection had already accepted is lost.
+        #
+        # Requires the rsyslog-relp package, which supplies omrelp.so.
+        params = [
+            'type="omrelp"',
+            f'target="{host}"',
+            f'port="{port}"',
+            'action.resumeRetryCount="-1"',
+            f'action.resumeInterval="{timeout}"',
+            'template="ascender"',
+        ] + queue_options
+        params = ' '.join(params)
+        parts.extend(['module(load="omrelp")', f'action({params})'])
     elif protocol and host and port:
         params = [
             'type="omfwd"',

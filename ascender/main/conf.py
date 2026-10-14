@@ -515,6 +515,8 @@ register(
     field_class=fields.IntegerField,
     allow_null=True,
     default=None,
+    min_value=1,
+    max_value=65535,
     label=_('Logging Aggregator Port'),
     help_text=_('Port on Logging Aggregator to send logs to (if required and not provided in Logging Aggregator).'),
     category=_('Logging'),
@@ -609,11 +611,13 @@ register(
 register(
     'LOG_AGGREGATOR_PROTOCOL',
     field_class=fields.ChoiceField,
-    choices=[('https', 'HTTPS/HTTP'), ('tcp', 'TCP'), ('udp', 'UDP')],
+    choices=[('https', 'HTTPS/HTTP'), ('tcp', 'TCP'), ('udp', 'UDP'), ('relp', 'RELP')],
     default='https',
     label=_('Logging Aggregator Protocol'),
     help_text=_(
-        'Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.'
+        'Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  '
+        'RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection '
+        'resets.  It does not currently support TLS.'
     ),
     category=_('Logging'),
     category_slug='logging',
@@ -623,7 +627,7 @@ register(
     field_class=fields.IntegerField,
     default=5,
     label=_('TCP Connection Timeout'),
-    help_text=_('Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS and TCP log aggregator protocols.'),
+    help_text=_('Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.'),
     category=_('Logging'),
     category_slug='logging',
     unit=_('seconds'),
@@ -638,7 +642,7 @@ register(
         'aggregator. Firewalls and load balancers discard idle flows without '
         'notifying either end, and the connection is then found to be dead only when '
         'the next message is written to it, which loses that message. Applies to the '
-        'TCP log aggregator protocol; HTTPS and UDP ignore it.'
+        'TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.'
     ),
     category=_('Logging'),
     category_slug='logging',

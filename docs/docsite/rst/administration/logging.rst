@@ -259,7 +259,7 @@ To set up logging to any of the aggregator types:
 
 .. note::
 
-  When the connection type is HTTPS, you can enter the hostname as a URL with a port number and therefore, you are not required to enter the port again. But TCP and UDP connections are determined by the hostname and port number combination, rather than URL. So in the case of TCP/UDP connection, supply the port in the specified field. If instead a URL is entered in host field (**Logging Aggregator** field), its hostname portion will be extracted as the actual hostname.
+  When the connection type is HTTPS, you can enter the hostname as a URL with a port number and therefore, you are not required to enter the port again. But TCP, UDP and RELP connections are determined by the hostname and port number combination, rather than URL. So in the case of a TCP, UDP or RELP connection, supply the port in the specified field. If instead a URL is entered in host field (**Logging Aggregator** field), its hostname portion will be extracted as the actual hostname.
 
 - **Logging Aggregator Type**: Click to select the aggregator service from the drop-down menu:
 
@@ -270,7 +270,7 @@ To set up logging to any of the aggregator types:
 - **Log System Tracking Facts Individually**: Click the tooltip |help| icon for additional information whether or not you want to turn it on, or leave it off by default.
 - **Logging Aggregator Protocol**: Click to select a connection type (protocol) to communicate with the log aggregator. Subsequent options vary depending on the selected protocol.
 - **Logging Aggregator Level Threshold**: Select the level of severity you want the log handler to report.
-- **TCP Connection Timeout**: Specify the connection timeout in seconds. This option is only applicable to HTTPS and TCP log aggregator protocols. 
+- **TCP Connection Timeout**: Specify the connection timeout in seconds. This option is only applicable to HTTPS, TCP and RELP log aggregator protocols.
 - **Enable/disable HTTPS certificate verification**: Certificate verification is enabled by default for HTTPS log protocol. Click the toggle button to **OFF** if you do not want the log handler to verify the HTTPS certificate sent by the external log aggregator before establishing a connection.
 - **Loggers to Send Data to the Log Aggregator Form**: All four types of data are pre-populated by default. Click the tooltip |help| icon next to the field for additional information on each data type. Delete the data types you do not want.
 - **Log Format For API 4XX Errors**: Configure a specific error message. See :ref:`logging-api-400-error-config` for further detail.

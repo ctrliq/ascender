@@ -181,6 +181,24 @@ describe('<LoggingEdit />', () => {
     ).toHaveLength(1);
   });
 
+  test('TCP connection timeout should be required when protocol is relp', async () => {
+    // omrelp takes the timeout as action.resumeInterval, the same as omfwd over tcp
+    const { container } = await renderEdit();
+    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
+      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'relp' },
+    });
+    await waitFor(() =>
+      expect(screen.getByText('TCP Connection Timeout')).toBeInTheDocument()
+    );
+    const tcpGroup = getFormGroup(container, 'TCP Connection Timeout');
+    expect(
+      tcpGroup!.querySelectorAll('.pf-v6-c-form__label-required')
+    ).toHaveLength(1);
+    expect(
+      screen.queryByText('Enable/disable HTTPS certificate verification')
+    ).not.toBeInTheDocument();
+  });
+
   test('TCP connection timeout and https certificate toggle should be hidden when protocol is udp', async () => {
     const { container } = await renderEdit();
     fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {

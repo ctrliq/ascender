@@ -3,6 +3,8 @@
 # All Rights Reserved.
 
 # Python
+import socket
+
 import pytest
 
 # Ascender
@@ -308,6 +310,21 @@ def test_logging_aggregator_missing_settings(put, post, admin, key, value, error
     assert error in str(response.data)
 
 
+@pytest.mark.django_db
+def test_logging_aggregator_port_bounds(get, patch, admin):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'logging'})
+    for port in (1, 65535, None):
+        patch(url, user=admin, data={'LOG_AGGREGATOR_PORT': port}, expect=200)
+        assert get(url, user=admin, expect=200).data['LOG_AGGREGATOR_PORT'] == port
+    patch(url, user=admin, data={'LOG_AGGREGATOR_PORT': 8080}, expect=200)
+    # rsyslogd -N1 accepts these, so the connection test can't catch them
+    for port in (0, -1, 65536, 99999999999):
+        response = patch(url, user=admin, data={'LOG_AGGREGATOR_PORT': port}, expect=400)
+        assert 'LOG_AGGREGATOR_PORT' in response.data
+    # a rejected value is not stored
+    assert get(url, user=admin, expect=200).data['LOG_AGGREGATOR_PORT'] == 8080
+
+
 @pytest.mark.parametrize(
     'type, host, port, username, password',
     [
@@ -459,6 +476,31 @@ def test_logging_aggregator_queue_stats_interval_is_listed_without_a_database_ro
     assert not Setting.objects.filter(key='LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL').exists()
     assert 'LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL' in dir(settings)
     assert settings.LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL == 0
+
+
+@pytest.mark.django_db
+def test_logging_aggregator_connection_test_relp(put, post, admin):
+    # RELP runs over TCP, so the connectivity test needs a port and connects to it
+    listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    listener.bind(('127.0.0.1', 0))
+    listener.listen(1)
+    try:
+        _, mock_settings = _mock_logging_defaults()
+        mock_settings['LOG_AGGREGATOR_ENABLED'] = True
+        mock_settings['LOG_AGGREGATOR_TYPE'] = 'other'
+        mock_settings['LOG_AGGREGATOR_HOST'] = '127.0.0.1'
+        mock_settings['LOG_AGGREGATOR_PROTOCOL'] = 'relp'
+        url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'logging'})
+        test_url = reverse('api:setting_logging_test')
+        put(url, data=mock_settings, user=admin, expect=200)
+        resp = post(test_url, {}, user=admin, expect=400)
+        assert resp.data['error'] == 'Port required for relp'
+
+        mock_settings['LOG_AGGREGATOR_PORT'] = listener.getsockname()[1]
+        put(url, data=mock_settings, user=admin, expect=200)
+        post(test_url, {}, user=admin, expect=202)
+    finally:
+        listener.close()
 
 
 @pytest.mark.django_db
