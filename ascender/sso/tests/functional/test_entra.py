@@ -401,7 +401,7 @@ class TestEnabled:
             assert not self.enabled()
 
 
-GRAPH_GROUPS = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$select=id,displayName&$top=999'
+GRAPH_GROUPS = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'
 GRAPH_PAGE_2 = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$skiptoken=2'
 
 
@@ -472,6 +472,15 @@ class TestGroupsFromGraph:
             {GRAPH_GROUPS: ConnectionError('unreachable')},
             {GRAPH_GROUPS: {'value': [], '@odata.nextLink': 'https://evil.example.com/steal'}},
             {GRAPH_GROUPS: {'value': [], '@odata.nextLink': 'http://graph.microsoft.com/v1.0/x'}},
+            # Answers that are not what Graph documents, which must not read as no groups.
+            {GRAPH_GROUPS: {}},
+            {GRAPH_GROUPS: {'value': None}},
+            {GRAPH_GROUPS: {'value': {'id': 'g1'}}},
+            {GRAPH_GROUPS: []},
+            {GRAPH_GROUPS: {'value': [{'id': 'g1', 'displayName': 'employees'}, {'displayName': 'contractors'}]}},
+            {GRAPH_GROUPS: {'value': [{'id': '', 'displayName': 'contractors'}]}},
+            {GRAPH_GROUPS: {'value': ['contractors']}},
+            {GRAPH_GROUPS: {'value': [{'id': 'g1'}], '@odata.nextLink': GRAPH_PAGE_2}, GRAPH_PAGE_2: {'value': [{'id': None, 'displayName': 'contractors'}]}},
         ],
     )
     def test_when_graph_cannot_say_the_groups_are_unknown(self, settings, graph):
@@ -495,6 +504,14 @@ class TestGroupsFromGraph:
         with mock.patch.object(EntraIDOAuth2, 'get_json', return_value={'value': []}) as get_json:
             backend.fetch_graph_groups('the-access-token')
         assert get_json.call_args.kwargs['headers']['Authorization'] == 'Bearer the-access-token'
+
+    def test_every_page_is_an_advanced_query(self):
+        # The cast to groups is only served with $count=true and eventual consistency.
+        pages = {GRAPH_GROUPS: {'value': [{'id': 'g1'}], '@odata.nextLink': GRAPH_PAGE_2}, GRAPH_PAGE_2: {'value': [{'id': 'g2'}]}}
+        with mock.patch.object(EntraIDOAuth2, 'get_json', side_effect=lambda url, **kwargs: pages[url]) as get_json:
+            assert entra_backend().fetch_graph_groups('the-access-token') == ['g1', 'g2']
+        assert '$count=true' in get_json.call_args_list[0].args[0]
+        assert [call.kwargs['headers']['ConsistencyLevel'] for call in get_json.call_args_list] == ['eventual', 'eventual']
 
     def test_off_leaves_graph_alone(self, settings):
         settings.SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH = False

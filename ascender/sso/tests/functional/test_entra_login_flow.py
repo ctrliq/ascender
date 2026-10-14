@@ -88,6 +88,7 @@ class FakeMicrosoft:
             )
         if url in self.graph_pages:
             assert headers['Authorization'] == 'Bearer graph-access-token'
+            assert headers['ConsistencyLevel'] == 'eventual'
             return self.respond(200, self.graph_pages[url])
         # Generic OIDC.
         if path == OIDC_ISSUER + '/.well-known/openid-configuration':
@@ -219,8 +220,37 @@ class TestEntraLogin:
     def test_a_reused_upn_does_not_open_the_old_account(self, entra):
         claims = {'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}
         old, _, _, _ = log_in('entra-id', FakeMicrosoft(dict(claims, oid='oid-old')))
-        new, _, _, _ = log_in('entra-id', FakeMicrosoft(dict(claims, oid='oid-new', email='jane.new@contoso.com')))
+        new, _, _, _ = log_in('entra-id', FakeMicrosoft(dict(claims, oid='oid-new')))
         assert logged_in_user(old) != logged_in_user(new)
+        assert logged_in_user(old).social_auth.get().uid == 'oid-old'
+
+    def test_a_reused_address_does_not_open_the_old_account(self, entra):
+        # The same email claim too, which is what linking by email goes by.
+        claims = {'preferred_username': 'jane@contoso.com', 'email': 'jane@contoso.com', 'groups': ['ascender-users', 'ascender-admins']}
+        old, _, _, _ = log_in('entra-id', FakeMicrosoft(dict(claims, oid='oid-old')))
+        new, _, _, _ = log_in('entra-id', FakeMicrosoft(dict(claims, oid='oid-new', groups=['ascender-users'])))
+        old_user, new_user = logged_in_user(old), logged_in_user(new)
+        assert old_user != new_user
+        assert new_user.social_auth.get().uid == 'oid-new'
+        assert new_user not in Organization.objects.get(name='Default').admin_role
+
+    def test_an_account_from_before_entra_id_is_linked_by_email(self, entra):
+        # Someone moving over from the legacy Azure AD login, or a local account.
+        existing = User.objects.create(username='jane', email='jane@contoso.com')
+        existing.social_auth.create(provider='azuread-oauth2', uid='jane@contoso.com')
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': 'oid-jane', 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
+        assert logged_in_user(client) == existing
+        assert existing.social_auth.get(provider='entra-id').uid == 'oid-jane'
+
+    def test_other_logins_still_link_by_email(self, entra):
+        existing = User.objects.create(username='someone', email='someone@example.com')
+        fake = FakeMicrosoft({}, oidc_claims={'email': 'someone@example.com', 'preferred_username': 'someone-else'})
+        entra.SOCIAL_AUTH_OIDC_KEY = 'ascender-client'
+        entra.SOCIAL_AUTH_OIDC_SECRET = 'oidc-secret'
+        entra.SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = OIDC_ISSUER
+        with mock.patch('social_core.backends.base.requests.request', side_effect=fake):
+            client, _, _, _ = log_in('oidc', fake, nonce_from_authorize=True)
+        assert logged_in_user(client) == existing
 
     def test_the_login_rule_turns_away_before_an_account_exists(self, entra):
         fake = FakeMicrosoft({'oid': 'oid-x', 'preferred_username': 'mallory@contoso.com', 'groups': ['contractors']})
@@ -236,7 +266,7 @@ class TestEntraLogin:
 
     def test_groups_from_graph(self, entra):
         entra.SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH = True
-        first = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$select=id,displayName&$top=999'
+        first = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'
         second = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$skiptoken=X'
         many = [{'id': 'g{}'.format(i), 'displayName': 'other-{}'.format(i)} for i in range(250)]
         fake = FakeMicrosoft(

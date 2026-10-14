@@ -20,6 +20,7 @@ from urllib.parse import urlsplit
 
 from social_core.backends.azuread_tenant import AzureADV2TenantOAuth2
 from social_core.exceptions import AuthMissingParameter
+from social_core.pipeline import social_auth
 
 logger = logging.getLogger('ascender.sso.entra')
 
@@ -119,14 +120,26 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
 
     def fetch_graph_groups(self, access_token):
         """Every group the signed in user is a member of, directly or not, by ID and by name."""
-        url = 'https://{}/v1.0/me/transitiveMemberOf/microsoft.graph.group?$select=id,displayName&$top=999'.format(self.graph_host)
+        # Casting the list down to groups is an advanced query in Graph, which
+        # wants $count=true in the URL and the ConsistencyLevel header on every
+        # page.
+        url = 'https://{}/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'.format(self.graph_host)
+        headers = {'Authorization': 'Bearer {}'.format(access_token), 'Accept': 'application/json', 'ConsistencyLevel': 'eventual'}
         groups = {}
         for _ in range(GRAPH_MAX_PAGES):
-            page = self.get_json(url, headers={'Authorization': 'Bearer {}'.format(access_token), 'Accept': 'application/json'})
-            for group in page.get('value') or []:
-                for value in (group.get('id'), group.get('displayName')):
-                    if isinstance(value, str) and value:
-                        groups[value] = None
+            page = self.get_json(url, headers=headers)
+            # A page that is not what Graph documents is no proof of having no
+            # groups, so it fails the lookup instead of reading as empty.
+            if not isinstance(page, dict) or not isinstance(page.get('value'), list):
+                raise ValueError('Microsoft Graph answered with no list of groups')
+            for group in page['value']:
+                group_id = group.get('id') if isinstance(group, dict) else None
+                if not isinstance(group_id, str) or not group_id:
+                    raise ValueError('Microsoft Graph listed a group with no ID')
+                groups[group_id] = None
+                name = group.get('displayName')
+                if isinstance(name, str) and name:
+                    groups[name] = None
             url = page.get('@odata.nextLink')
             if not url:
                 return list(groups)
@@ -162,3 +175,24 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
             'first_name': response.get('given_name', ''),
             'last_name': response.get('family_name', ''),
         }
+
+
+def associate_by_email(backend, details, user=None, *args, **kwargs):
+    """
+    social_core's associate_by_email, except that an Entra ID login is never
+    linked to an account that already belongs to another Entra ID user.
+
+    Linking by email is what moves people over from the Azure AD logins, or
+    from local accounts, the first time they log in with Entra ID.  But a user
+    principal name, and the address that goes with it, is often handed to
+    someone else once its owner leaves.  The newcomer has another object ID,
+    so the old account is not found by its identity, and without this the
+    email would open it for them.
+    """
+    result = social_auth.associate_by_email(backend, details, user, *args, **kwargs)
+    if result and backend.name == ENTRA_ID_BACKEND_NAME and result['user'].social_auth.filter(provider=ENTRA_ID_BACKEND_NAME).exists():
+        logger.warning(
+            "Not linking the Entra ID user %s to the account %s by their email, it belongs to another Entra ID user", kwargs.get('uid'), result['user'].username
+        )
+        return None
+    return result

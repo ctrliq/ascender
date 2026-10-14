@@ -78,7 +78,8 @@ or else the user principal name when it looks like an address.
 Whatever the username ends up being, the account is linked to the user's object
 ID. Renaming someone in Entra, or changing their UPN, does not give them a new
 account, and a UPN that is later given to another person does not open the old
-one.
+one, even with the same email: an account that already has an Entra ID user
+is never linked to another one by email.
 
 ## Groups and app roles
 
@@ -128,6 +129,10 @@ What it needs:
   (`graph.microsoft.com`, `graph.microsoft.us` or
   `microsoftgraph.chinacloudapi.cn`); set `SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST` for
   any other, such as `dod-graph.microsoft.us`.
+
+Asking only for groups is what Graph calls an advanced query, which it answers
+from an index that can be a few minutes behind. Someone just added to a group
+may need a few minutes before a new login picks it up.
 
 If Graph cannot be asked at login, because it is down, the consent is missing
 or it answers something odd, the user's groups are treated as unknown, the same
@@ -187,6 +192,8 @@ run next to an Azure AD one while you move over:
 2. Fill in the Entra ID settings and move the maps over, now with rules on groups
    or roles where you need them.
 3. Log in with the new button. A user who already has an account with the same
-   email gets linked to it.
+   email, and no Entra ID user linked to it yet, gets linked to it. That is
+   only by email, so remove the accounts of people who have left before their
+   address goes to someone else.
 4. Once everyone is on it, clear the client ID of the Azure AD login so its
    button goes away.
