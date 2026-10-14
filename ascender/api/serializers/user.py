@@ -280,6 +280,22 @@ class UserPersonalTokenSerializer(BaseOAuth2TokenSerializer):
     class Meta:
         read_only_fields = ('user', 'token', 'expires', 'application')
 
+    def validate(self, attrs):
+        attrs = super(UserPersonalTokenSerializer, self).validate(attrs)
+        # owned by the user in the URL; OAuth2TokenAccess.can_add decides whether the requester may issue it
+        owner = self.context['view'].get_parent_object()
+        if owner != self.context['request'].user:
+            if not owner.is_active:
+                raise serializers.ValidationError(_('Cannot create a token for an inactive user.'))
+            # local as DisableLocalAuthMiddleware decides it
+            if settings.DISABLE_LOCAL_AUTH and not (owner.profile.ldap_dn or owner.social_auth.exists() or owner.enterprise_auth.exists()):
+                raise serializers.ValidationError(_('Cannot create a token for a local user while local authentication is disabled.'))
+        attrs['user'] = owner
+        return attrs
+
+    def get_owner(self, validated_data):
+        return validated_data['user']
+
     def create(self, validated_data):
         validated_data['token'] = generate_token()
         validated_data['expires'] = now() + timedelta(seconds=settings.OAUTH2_PROVIDER['ACCESS_TOKEN_EXPIRE_SECONDS'])

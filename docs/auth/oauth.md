@@ -188,8 +188,13 @@ token can be obtained by doing a curl to the `/api/o/token/` endpoint. For examp
 ```
 curl -ku <user>:<password> -H "Content-Type: application/json" -X POST \
 -d '{"description":"Tower CLI", "application":null, "scope":"write"}' \
-https://<awx>/api/v2/users/1/personal_tokens/ | python -m json.tool
+https://<awx>/api/v2/users/<user_id>/personal_tokens/ | python -m json.tool
 ```
+
+`<user_id>` is the token's owner. Users create tokens for themselves; a System Administrator may also
+create one for another user, such as a service account that has no password. The activity stream
+entry for such a token names both the administrator (`actor`) and the owner (`changes.user`).
+
 Here is an example of using that PAT to access an API endpoint using `curl`:
 ```
 curl -H "Authorization: Bearer kqHqxfpHGRRBXLNCOXxT5Zt3tpJogn" http://<awx>/api/v2/credentials/

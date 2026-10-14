@@ -791,7 +791,8 @@ class OAuth2TokenAccess(BaseAccess):
      - I am the user of the token
      - I am the superuser
     I can create an OAuth2 Personal Access Token when:
-     - I am a user.  But I can only create a PAT for myself.
+     - I am a user, for myself.
+     - I am a superuser, for any user.
     """
 
     model = OAuth2AccessToken
@@ -814,6 +815,11 @@ class OAuth2TokenAccess(BaseAccess):
         return self.can_delete(obj)
 
     def can_add(self, data):
+        if 'user' in data:
+            # a token for someone else (the user in a users/<id>/ token URL) is for superusers only
+            owner = get_object_from_data('user', User, data)
+            if owner is not None and owner != self.user and not self.user.is_superuser:
+                return False
         if 'application' in data:
             app = get_object_from_data('application', OAuth2Application, data)
             if app is None:
