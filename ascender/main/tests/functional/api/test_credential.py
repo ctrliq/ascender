@@ -1281,6 +1281,25 @@ def test_create_credential_with_invalid_url_xfail(post, organization, admin, url
 
 
 @pytest.mark.django_db
+def test_aws_secretsmanager_test_endpoint_without_keys(post, organization, admin):
+    """A Secrets Manager lookup saved without keys uses boto3's default credential chain."""
+    asm = CredentialType.defaults['aws_secretsmanager_credential']()
+    asm.save()
+    params = {'credential_type': asm.pk, 'name': 'secrets-manager', 'organization': organization.pk, 'inputs': {}}
+    response = post(reverse('api:credential_list'), params, admin)
+    assert response.status_code == 201
+
+    url = reverse('api:credential_external_test', kwargs={'pk': response.data['id']})
+    with mock.patch('boto3.session.Session') as session:
+        client = session.return_value.client
+        client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
+        response = post(url, {'metadata': {'region_name': 'us-west-2', 'secret_name': 'some/secret'}}, admin)
+    assert response.status_code == 202, response.data
+    assert client.call_args.kwargs['aws_access_key_id'] is None
+    assert client.call_args.kwargs['aws_secret_access_key'] is None
+
+
+@pytest.mark.django_db
 def test_external_credential_rbac_test_endpoint(post, alice, external_credential):
     url = reverse('api:credential_external_test', kwargs={'pk': external_credential.pk})
     data = {'metadata': {'key': 'some_key'}}

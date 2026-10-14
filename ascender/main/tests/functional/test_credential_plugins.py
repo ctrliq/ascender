@@ -52,6 +52,40 @@ def test_azure_authority_hosts_match_the_sdk():
     assert azure_kv.AUTHORITY_HOSTS['AzureUSGovernment'] == AzureAuthorityHosts.AZURE_GOVERNMENT
 
 
+AWS_SM_METADATA = {'region_name': 'us-west-2', 'secret_name': 'some/secret'}
+AWS_ACCESS_KEY, AWS_SECRET_KEY = 'AKIAIOSFODNN7EXAMPLE', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+
+
+def test_aws_secretsmanager_keys_are_optional():
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    inputs = aws_secretsmanager.secrets_manager_inputs
+    assert inputs['required'] == ['region_name', 'secret_name']
+    assert [field['default'] for field in inputs['fields']] == ['', '']
+
+
+@pytest.mark.parametrize(
+    'keys, expected_key_id, expected_secret_key',
+    [
+        ({'aws_access_key': AWS_ACCESS_KEY, 'aws_secret_key': AWS_SECRET_KEY}, AWS_ACCESS_KEY, AWS_SECRET_KEY),
+        ({}, None, None),
+        ({'aws_access_key': '', 'aws_secret_key': ''}, None, None),
+    ],
+    ids=['supplied', 'absent', 'empty'],
+)
+def test_aws_secretsmanager_backend_keys(keys, expected_key_id, expected_secret_key):
+    """Absent or empty keys reach boto3 as None, so its default credential chain (IRSA, instance role) applies."""
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    # boto3 is imported inside the backend, so patch it where it is imported from
+    with mock.patch('boto3.session.Session') as session:
+        client = session.return_value.client
+        client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
+        assert aws_secretsmanager.aws_secretsmanager_backend(**AWS_SM_METADATA, **keys) == 'sentinel'
+    assert client.call_args.kwargs['aws_access_key_id'] == expected_key_id
+    assert client.call_args.kwargs['aws_secret_access_key'] == expected_secret_key
+
+
 def test_hashivault_approle_auth():
     kwargs = {
         'role_id': 'the_role_id',
