@@ -52,7 +52,7 @@ msgstr "Workflowgoedkeuring niet gevonden."
 msgid "Browse…"
 msgstr "Bladeren..."
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -235,7 +235,7 @@ msgstr "Laatste gezondheidscontrole"
 msgid "Failed to copy inventory."
 msgstr "Kan inventaris niet kopiëren."
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -674,7 +674,7 @@ msgstr "Uitbreiden"
 msgid "Promote Child Groups and Hosts"
 msgstr "Onderliggende groepen en hosts promoveren"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -774,7 +774,7 @@ msgstr "Selecteer een getal tussen 1 en 31."
 msgid "No"
 msgstr "Geen"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "Divers systeem"
 
@@ -874,7 +874,7 @@ msgstr "Terug naar tokens"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhooks: Webhook inschakelen voor dit sjabloon."
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1212,7 +1212,7 @@ msgstr "Storing Verklaring:"
 msgid "February"
 msgstr "Februari"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "Alle instellingen weergeven"
 
@@ -1489,7 +1489,7 @@ msgstr "Beheertaak opstarten"
 msgid "Add existing group"
 msgstr "Bestaande groep toevoegen"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2033,7 +2033,7 @@ msgstr "Sleutel"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2207,7 +2207,7 @@ msgstr "Het veld komt overeen met de opgegeven reguliere expressie."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2517,7 +2517,7 @@ msgstr "{0} (verwijderd)"
 msgid "The inventory that this host belongs to."
 msgstr "Selecteer de inventaris waartoe deze host zal behoren."
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "Inloggen"
 
@@ -3022,7 +3022,7 @@ msgstr "{0, plural, one {Voer een geldig telefoonnummer in.} other {Voer geldige
 msgid "Facts"
 msgstr "Feiten"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "of"
 
@@ -3057,8 +3057,8 @@ msgid "Workflow job details"
 msgstr "Taakdetails weergeven"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "Azure AD-instellingen"
+#~ msgid "Azure AD settings"
+#~ msgstr "Azure AD-instellingen"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3260,11 +3260,11 @@ msgstr "Deze inventarisbron wordt momenteel door andere bronnen gebruikt die ero
 msgid "Deny"
 msgstr "Weigeren"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "Generieke OIDC"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3532,7 +3532,7 @@ msgid "Select Hosts"
 msgstr "Hosts selecteren"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub-team"
 
@@ -3642,7 +3642,7 @@ msgstr "Augustus"
 msgid "View smart inventory host details"
 msgstr "Hostdetails Smart-inventaris weergeven"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "Aanmelden met Google"
 
@@ -3744,8 +3744,8 @@ msgstr "Alles synchroniseren"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4164,8 +4164,8 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4538,7 +4538,7 @@ msgstr "Herziening vernieuwing project"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "Selecteer optioneel de toegangsgegevens die moeten worden gebruikt om statusupdates terug te sturen naar de webhook-service."
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4792,7 +4792,7 @@ msgstr "Kan niet van host wisselen."
 msgid "denied"
 msgstr "geweigerd"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Aanmelden met GitHub Enterprise-organisaties"
 
@@ -5109,6 +5109,10 @@ msgstr "Bij time-out"
 msgid "Create New Team"
 msgstr "Nieuw team maken"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "Aanmelden met Microsoft Entra ID"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "in de documentatie en de"
@@ -5127,7 +5131,7 @@ msgstr "Tekstgebied"
 msgid "View User Interface settings"
 msgstr "Instellingen gebruikersinterface weergeven"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "Aanmelden met GitHub-teams"
 
@@ -6043,6 +6047,10 @@ msgstr "Verlopen"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3 (Foutopsporing)"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "Microsoft Entra ID (Azure AD)-instellingen"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7109,7 +7117,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "Opmerking: dit veld gaat ervan uit dat de naam van de remote «origin» is."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub-standaard"
 
@@ -7174,6 +7182,11 @@ msgstr "Workflowtaaksjabloon"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "Vraag om labels bij opstarten."
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant (verouderd)"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7490,7 +7503,7 @@ msgstr "Afmelden"
 msgid "sec"
 msgstr "sec"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "Aanmelden met {label}"
 
@@ -7717,11 +7730,11 @@ msgid "Edit Team"
 msgstr "Team bewerken"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "Gebruikersinterface"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "Aanmelden met GitHub Enterprise"
 
@@ -7769,7 +7782,7 @@ msgstr "Verloopt nooit"
 msgid "View job {0}"
 msgstr "Taak {0} weergeven"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Aanmelden met SAML {samlIDP}"
 
@@ -7882,7 +7895,7 @@ msgstr "Hoofdletterongevoelige versie van startswith."
 msgid "Unsaved changes modal"
 msgstr "Modus Niet-opgeslagen wijzigingen"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Aanmelden met GitHub Enterprise-teams"
 
@@ -7916,7 +7929,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub-instellingen"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "Aanmelden met GitHub-organisaties"
 
@@ -8010,8 +8023,8 @@ msgstr "Host OK"
 #~ msgstr "Resterende dagen"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "Azure AD-instellingen weergeven"
+#~ msgid "View Azure AD settings"
+#~ msgstr "Azure AD-instellingen weergeven"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8032,7 +8045,7 @@ msgstr "Alle filters wissen"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere resources. Weet u zeker dat u deze wilt verwijderen?} other {Het deprovisioneren van deze instanties kan gevolgen hebben voor andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8542,7 +8555,7 @@ msgstr "Opmerking: de volgorde waarin deze worden geselecteerd bepaalt de voorra
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "Toegangsgegevens waarvoor wachtwoorden nodig zijn bij het starten, zijn niet toegestaan. Verwijder of vervang de volgende toegangsgegevens door één van hetzelfde type om door te gaan: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "Aanmelden met SAML "
 
@@ -8576,7 +8589,7 @@ msgid "Remote Archive"
 msgstr "Extern archief"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "Probleemoplossen"
 
@@ -8631,7 +8644,7 @@ msgid "Destination Channels or Users"
 msgstr "Bestemmingskanalen of -gebruikers"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8651,7 +8664,7 @@ msgstr "Het project dat het playbook bevat dat deze taak zal uitvoeren."
 msgid "Select Credential Type"
 msgstr "Type toegangsgegevens selecteren"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8718,7 +8731,7 @@ msgstr "Inventaris bewerken"
 msgid "Failed to user token."
 msgstr "Kan gebruikerstoken niet bijwerken."
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "Aanmelden met SAML"
 
@@ -8986,7 +8999,7 @@ msgstr "Synchronisatie van inventarisbron annuleren"
 msgid "Failed to delete one or more applications."
 msgstr "Een of meer toepassingen kunnen niet worden verwijderd."
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "Diversen authenticatie"
 
@@ -9492,7 +9505,7 @@ msgstr "Vorken"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "Deze limiet wordt toegepast op alle workflowknooppunten in deze workflow ({0}) die om een limiet vragen, in plaats van de limiet die op elk knooppunt is ingesteld."
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP-standaard"
 
@@ -9560,7 +9573,7 @@ msgid "Play"
 msgstr "Afspelen"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise-team"
 
@@ -9724,7 +9737,7 @@ msgstr "Vul veld vanuit een extern geheimbeheersysteem"
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10017,7 +10030,7 @@ msgstr "Gereedschap wisselen"
 msgid "Organization"
 msgstr "Organisatie"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Uw sessie is verlopen. Log in om verder te gaan waar u gebleven was."
 
@@ -10073,8 +10086,8 @@ msgstr "Aanmelden met Azure AD Tenant"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD-standaard"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD-standaard"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10135,7 +10148,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10144,13 +10157,13 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10158,6 +10171,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10328,7 +10342,7 @@ msgstr "Met deze actie wordt het volgende zacht verwijderd:"
 msgid "Listener Addresses"
 msgstr "Adressen van luisteraars"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10607,7 +10621,7 @@ msgid "An error occurred"
 msgstr "Er is een fout opgetreden"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub-organisatie"
 
@@ -10943,7 +10957,7 @@ msgstr "Kan organisatie niet verwijderen."
 #~ msgid "Hosts available"
 #~ msgstr "Beschikbare hosts"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "Logboekregistratie"
 
@@ -11243,7 +11257,7 @@ msgstr "Een of meer inventarisbronnen kunnen niet worden verwijderd."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "Indien gespecificeerd, zal dit veld worden getoond op het knooppunt in plaats van de resourcenaam bij het bekijken van de workflow"
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "Aanmelden met GitHub"
 
@@ -11291,7 +11305,7 @@ msgid "All job types"
 msgstr "Alle taaktypen"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise-organisatie"
 
@@ -11350,6 +11364,10 @@ msgstr "Het patroon dat gebruikt wordt om hosts in de inventaris te targeten. Do
 msgid "Timeout"
 msgstr "Time-out"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "Microsoft Entra ID-instellingen weergeven"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "Wacht totdat de topologie-weergave is ingevuld..."
@@ -11378,7 +11396,7 @@ msgstr "{numJobsToCancel, plural, one {Geselecteerde taak annuleren} other {Gese
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11387,12 +11405,12 @@ msgstr "{numJobsToCancel, plural, one {Geselecteerde taak annuleren} other {Gese
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11401,6 +11419,7 @@ msgstr "{numJobsToCancel, plural, one {Geselecteerde taak annuleren} other {Gese
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11852,6 +11871,11 @@ msgstr "Webhookservice"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "Schakelt het maken van een provisioning-callback-URL in. Via de URL kan een host contact opnemen met {brandName} en een configuratie-update aanvragen met dit taaksjabloon."
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD-standaard (verouderd)"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "Geannuleerde node, geforceerd als geslaagd"
@@ -12257,6 +12281,11 @@ msgstr "Sjabloon kopiëren"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "Berichtgoedkeuringen wisselen"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"

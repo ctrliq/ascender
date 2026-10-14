@@ -25,10 +25,38 @@ Azure, RADIUS, SAML, and TACACS+ users are categorized as 'Enterprise' users. Th
 - If enterprise backends are disabled, an enterprise user can be converted to a normal Ascender user by setting the password field. However, this operation is irreversible, as the converted Ascender user can no longer be treated as enterprise user.
 
 
+.. _ag_auth_entra_id:
+
+Microsoft Entra ID settings
+-----------------------------
+
+.. index::
+    pair: authentication; Microsoft Entra ID
+    pair: authentication; Entra ID
+
+Microsoft Entra ID is the name Azure Active Directory has had since 2023. Ascender has a dedicated login for it that uses the v2.0 endpoints of a single tenant, works in the sovereign clouds, and can map users to organizations, teams, superusers and system auditors from their groups, app roles or any other claim of their token.
+
+1. Register an application in Entra ID for accounts in your directory only, add the **Entra ID Callback URL** shown in the settings as a *Web* redirect URI, and create a client secret (not needed when Ascender runs with Azure Workload Identity).
+
+2. Click **Settings** from the left navigation bar, then **Microsoft Entra ID (Azure AD) settings**, and stay on the **Microsoft Entra ID** tab.
+
+3. Click **Edit** and fill in the **Entra ID Client ID**, **Entra ID Client Secret** and **Entra ID Tenant** fields. The tenant is the Directory (tenant) ID or one of its domains. ``common``, ``organizations`` and ``consumers`` are refused, since they would let in users of any directory.
+
+4. If the tenant is not in the public cloud, set **Entra ID Authority Host**, for example ``login.microsoftonline.us`` for Azure Government.
+
+5. To map users from their groups, either add a groups claim in the *Token configuration* of the app registration, define app roles and set **Entra ID Groups Claim** to ``roles``, or turn on **Read Entra ID Groups from Microsoft Graph**. The last one has no limit on the number of groups and gives their names, and needs the delegated Microsoft Graph permission ``GroupMember.Read.All`` with admin consent. Then fill in the login rule, organization map, team map and user flags as needed.
+
+6. Click **Save**. The login screen now offers **Sign in with Microsoft Entra ID**.
+
+The full reference, including group overage and how to move from the Azure AD settings, is in ``docs/auth/entra_id.md`` in the source tree.
+
+
 .. _ag_auth_azure:
 
-Azure AD settings
--------------------
+Azure AD settings (legacy)
+----------------------------
+
+These settings are kept so existing configurations keep working. For a new setup use :ref:`ag_auth_entra_id`.
 
 .. index::
     pair: authentication; Azure AD
@@ -37,7 +65,7 @@ To set up enterprise authentication for Microsoft Azure Active Directory (AD), y
 
 1. Click **Settings** from the left navigation bar.
 
-2. On the left side of the Settings window, click **Azure AD settings** from the list of Authentication options. 
+2. On the left side of the Settings window, click **Microsoft Entra ID (Azure AD) settings** from the list of Authentication options, then the **Azure AD Default (legacy)** tab. 
 
 3. The **Azure AD OAuth2 Callback URL** field is already pre-populated and non-editable.
    Once the application is registered, Azure displays the Application ID and Object ID.

@@ -550,6 +550,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.open_id_connect.OpenIdConnectAuth',
     'social_core.backends.azuread.AzureADOAuth2',
     'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
+    'ascender.sso.entra.EntraIDOAuth2',
     'ascender.sso.backends.SAMLAuth',
     'ascender.main.backends.AWXModelBackend',
 )
@@ -730,6 +731,10 @@ SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = ''
+
+SOCIAL_AUTH_ENTRA_ID_KEY = ''
+SOCIAL_AUTH_ENTRA_ID_SECRET = ''
+SOCIAL_AUTH_ENTRA_ID_TENANT_ID = ''
 
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = ''
 SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = ''

@@ -52,7 +52,7 @@ msgstr "未找到工作流批准。"
 msgid "Browse…"
 msgstr "浏览..."
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -235,7 +235,7 @@ msgstr "运行健康检查"
 msgid "Failed to copy inventory."
 msgstr "复制清单失败。"
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -674,7 +674,7 @@ msgstr "展开"
 msgid "Promote Child Groups and Hosts"
 msgstr "提升子组和主机"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -774,7 +774,7 @@ msgstr "选择的日数字应介于 1 到 31 之间。"
 msgid "No"
 msgstr "否"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "杂项系统"
 
@@ -874,7 +874,7 @@ msgstr "返回到令牌"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhook：为此模板启用 webhook。"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1212,7 +1212,7 @@ msgstr "解释失败："
 msgid "February"
 msgstr "2 月"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "查看所有设置"
 
@@ -1489,7 +1489,7 @@ msgstr "启动管理作业"
 msgid "Add existing group"
 msgstr "添加现有组"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2033,7 +2033,7 @@ msgstr "密钥"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2207,7 +2207,7 @@ msgstr "字段与给出的正则表达式匹配。"
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2517,7 +2517,7 @@ msgstr "{0}（已删除）"
 msgid "The inventory that this host belongs to."
 msgstr "此主机要属于的清单。"
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "登录"
 
@@ -3022,7 +3022,7 @@ msgstr "{0, plural, one {请输入有效的电话号码。} other {请输入有�
 msgid "Facts"
 msgstr "事实"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "或"
 
@@ -3057,8 +3057,8 @@ msgid "Workflow job details"
 msgstr "工作流作业详情"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "Azure AD 设置"
+#~ msgid "Azure AD settings"
+#~ msgstr "Azure AD 设置"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3260,11 +3260,11 @@ msgstr "依赖该清单源的其他资源目前正在使用此清单源。确定
 msgid "Deny"
 msgstr "拒绝"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "通用 OIDC"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3532,7 +3532,7 @@ msgid "Select Hosts"
 msgstr "选择主机"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3642,7 +3642,7 @@ msgstr "8 月"
 msgid "View smart inventory host details"
 msgstr "查看智能清单主机详情"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "使用 Google 登录"
 
@@ -3744,8 +3744,8 @@ msgstr "全部同步"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4164,8 +4164,8 @@ msgstr "删除凭证"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4538,7 +4538,7 @@ msgstr "重新刷新项目修订版本"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "（可选）选择用于将状态更新发送回 webhook 服务的凭证。"
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4792,7 +4792,7 @@ msgstr "切换主机失败。"
 msgid "denied"
 msgstr "拒绝"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "使用 GitHub Enterprise Organizations 登录"
 
@@ -5109,6 +5109,10 @@ msgstr "超时时"
 msgid "Create New Team"
 msgstr "创建新团队"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "使用 Microsoft Entra ID 登陆"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "在文档和"
@@ -5127,7 +5131,7 @@ msgstr "文本区"
 msgid "View User Interface settings"
 msgstr "查看用户界面设置"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "使用 GitHub Teams 登录"
 
@@ -6043,6 +6047,10 @@ msgstr "已经过"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3（调试）"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "Microsoft Entra ID (Azure AD) 设置"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7109,7 +7117,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "注意：此字段假定远程名称为 “origin”。"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub Default"
 
@@ -7174,6 +7182,11 @@ msgstr "工作流作业模板"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "启动时提示输入标签。"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant（旧版）"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7490,7 +7503,7 @@ msgstr "退出"
 msgid "sec"
 msgstr "秒"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "使用 {label} 登陆"
 
@@ -7717,11 +7730,11 @@ msgid "Edit Team"
 msgstr "编辑团队"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "用户界面"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "使用 GitHub Enterprise 登录"
 
@@ -7769,7 +7782,7 @@ msgstr "永不过期"
 msgid "View job {0}"
 msgstr "查看作业 {0}"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "使用 SAML {samlIDP} 登陆"
 
@@ -7882,7 +7895,7 @@ msgstr "开头不区分大小写的版本。"
 msgid "Unsaved changes modal"
 msgstr "未保存的修改 modal"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "使用 GitHub Enterprise Teams 登录"
 
@@ -7916,7 +7929,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 设置"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "使用 GitHub Organizations 登录"
 
@@ -8010,8 +8023,8 @@ msgstr "主机正常"
 #~ msgstr "剩余的天数"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "查看 Azure AD 设置"
+#~ msgid "View Azure AD settings"
+#~ msgstr "查看 Azure AD 设置"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8032,7 +8045,7 @@ msgstr "清除所有过滤器"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {此实例当前正被其他资源使用。确定要删除它吗?} other {取消置备这些实例可能会影响依赖它们的其他资源。确定仍要删除吗?}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8542,7 +8555,7 @@ msgstr "注：选择它们的顺序设定执行优先级。选择多个来启用
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "不允许在启动时需要密码的凭证。请删除以下凭证或将其替换为相同类型的凭证以继续: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "使用 OIDC 登陆"
 
@@ -8576,7 +8589,7 @@ msgid "Remote Archive"
 msgstr "远程归档"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "故障排除"
 
@@ -8631,7 +8644,7 @@ msgid "Destination Channels or Users"
 msgstr "目标频道或用户"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8651,7 +8664,7 @@ msgstr "包含此任务将执行的 playbook 的项目。"
 msgid "Select Credential Type"
 msgstr "编辑凭证类型"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8718,7 +8731,7 @@ msgstr "编辑清单"
 msgid "Failed to user token."
 msgstr "用户令牌失败。"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "使用 SAML 登陆"
 
@@ -8986,7 +8999,7 @@ msgstr "取消清单源同步"
 msgid "Failed to delete one or more applications."
 msgstr "删除一个或多个应用程序失败。"
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "其它身份验证"
 
@@ -9492,7 +9505,7 @@ msgstr "Forks"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "此限制将应用于此工作流 ({0}) 中所有提示输入限制的工作流节点，以代替在每个节点上设置的限制。"
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP 默认"
 
@@ -9560,7 +9573,7 @@ msgid "Play"
 msgstr "播放"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -9724,7 +9737,7 @@ msgstr "从外部 secret 管理系统填充字段"
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10017,7 +10030,7 @@ msgstr "切换工具"
 msgid "Organization"
 msgstr "机构（Organization）"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "您的会话已过期。请登录以继续使用会话过期前所在的位置。"
 
@@ -10073,8 +10086,8 @@ msgstr "使用 Azure AD Tenant 登录"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD 默认"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD 默认"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10135,7 +10148,7 @@ msgstr "取消查找"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10144,13 +10157,13 @@ msgstr "取消查找"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10158,6 +10171,7 @@ msgstr "取消查找"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10328,7 +10342,7 @@ msgstr "此操作将软删除以下内容："
 msgid "Listener Addresses"
 msgstr "侦听器地址"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10607,7 +10621,7 @@ msgid "An error occurred"
 msgstr "发生错误"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -10943,7 +10957,7 @@ msgstr "删除机构失败。"
 #~ msgid "Hosts available"
 #~ msgstr "可用主机"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "日志记录"
 
@@ -11243,7 +11257,7 @@ msgstr "删除一个或多个清单源失败。"
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "如果指定，则在查看工作流时此字段将显示在节点上，而不是资源名称"
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "使用 GitHub 登陆"
 
@@ -11291,7 +11305,7 @@ msgid "All job types"
 msgstr "作业作业类型"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
@@ -11350,6 +11364,10 @@ msgstr "用于将字段保留为清单中的目标主机的模式。留空、所
 msgid "Timeout"
 msgstr "超时"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "查看 Microsoft Entra ID 设置"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "请等到拓扑视图被填充..."
@@ -11378,7 +11396,7 @@ msgstr "{numJobsToCancel, plural, one {取消所选作业} other {取消所选�
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11387,12 +11405,12 @@ msgstr "{numJobsToCancel, plural, one {取消所选作业} other {取消所选�
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11401,6 +11419,7 @@ msgstr "{numJobsToCancel, plural, one {取消所选作业} other {取消所选�
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11852,6 +11871,11 @@ msgstr "Webhook 服务"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "启用创建置备回调 URL。使用该 URL，主机可以联系 {brandName} 并使用此任务模板请求配置更新。"
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD 默认（旧版）"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "已取消的节点，强制为成功"
@@ -12257,6 +12281,11 @@ msgstr "复制模板"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "切换通知批准"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"
