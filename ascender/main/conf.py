@@ -733,9 +733,39 @@ register(
         'Defines how large the rsyslog action queue can grow in number of messages '
         'stored. This can have an impact on memory utilization. When the queue '
         'reaches 75% of this number, the queue will start writing to disk '
-        '(queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and '
-        'DEBUG messages will start to be discarded (queue.discardMark with '
-        'queue.discardSeverity=5).'
+        '(queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), '
+        'messages start to be discarded, according to '
+        'LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new '
+        'message, whatever its severity, is dropped if no room frees up within 2 seconds.'
+    ),
+    category=_('Logging'),
+    category_slug='logging',
+)
+# 0-8 covers every distinct behavior: rsyslog range-checks nothing here, so 9 and up discard
+# nothing like 8 does, and below 0 discards everything like 0 does. A number, never a name:
+# rsyslog decodes queue.discardSeverity with its facility table (runtime/queue.c), so "debug"
+# or "info" becomes -1 and silently discards every message.
+register(
+    'LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY',
+    field_class=fields.IntegerField,
+    default=5,
+    min_value=0,
+    max_value=8,
+    label=_('Severity at which messages are discarded when the log action queue is nearly full'),
+    help_text=_(
+        'Messages whose syslog severity number is greater than or equal to this value '
+        'are discarded while the action queue holds 90% or more of '
+        'LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from '
+        '0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, '
+        'the rsyslog default, turns this discarding off. Equivalent to the rsyslogd '
+        'queue.discardSeverity setting on the action. '
+        'Job events and activity stream entries are logged at INFO (6), so '
+        'once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every '
+        'one of them to be discarded. '
+        'This setting does not apply once the queue is completely full: each new message, '
+        'whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room '
+        'and is dropped if none frees up. So 8 prevents loss only while the queue has room. '
+        'Neither kind of discard is logged as an error or a warning.'
     ),
     category=_('Logging'),
     category_slug='logging',

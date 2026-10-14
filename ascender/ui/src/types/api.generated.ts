@@ -6941,6 +6941,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -6971,6 +6976,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -7356,6 +7366,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     FederatedInventoryRequest: {
       name: string | null;
@@ -7373,6 +7388,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     Group: {
       readonly id: number;
@@ -7866,6 +7886,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     InventoryRequest: {
       name: string | null;
@@ -7906,6 +7931,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     InventorySource: {
       readonly id: number;
@@ -10484,6 +10514,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -10580,6 +10615,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     PatchedGroupRequest: {
       name?: string | null;
@@ -10747,6 +10787,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     PatchedInventorySourceRequest: {
       name?: string | null;
@@ -11593,10 +11638,16 @@ export interface components {
       LOG_AGGREGATOR_LEVEL: components['schemas']['LOGAGGREGATORLEVELEnum'];
       /**
        * Maximum number of messages that can be stored in the log action queue
-       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG messages will start to be discarded (queue.discardMark with queue.discardSeverity=5).
+       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.
        * @default 131072
        */
       LOG_AGGREGATOR_ACTION_QUEUE_SIZE: number;
+      /**
+       * Severity at which messages are discarded when the log action queue is nearly full
+       * @description Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.
+       * @default 5
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY: number;
       /**
        * Maximum disk persistence for rsyslogd action queuing (in GB)
        * @description Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH.
@@ -14715,10 +14766,16 @@ export interface components {
       LOG_AGGREGATOR_LEVEL: components['schemas']['LOGAGGREGATORLEVELEnum'];
       /**
        * Maximum number of messages that can be stored in the log action queue
-       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG messages will start to be discarded (queue.discardMark with queue.discardSeverity=5).
+       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.
        * @default 131072
        */
       LOG_AGGREGATOR_ACTION_QUEUE_SIZE: number;
+      /**
+       * Severity at which messages are discarded when the log action queue is nearly full
+       * @description Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.
+       * @default 5
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY: number;
       /**
        * Maximum disk persistence for rsyslogd action queuing (in GB)
        * @description Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH.
@@ -16831,10 +16888,16 @@ export interface components {
       LOG_AGGREGATOR_LEVEL: components['schemas']['LOGAGGREGATORLEVELEnum'];
       /**
        * Maximum number of messages that can be stored in the log action queue
-       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG messages will start to be discarded (queue.discardMark with queue.discardSeverity=5).
+       * @description Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.
        * @default 131072
        */
       LOG_AGGREGATOR_ACTION_QUEUE_SIZE: number;
+      /**
+       * Severity at which messages are discarded when the log action queue is nearly full
+       * @description Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.
+       * @default 5
+       */
+      LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY: number;
       /**
        * Maximum disk persistence for rsyslogd action queuing (in GB)
        * @description Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH.

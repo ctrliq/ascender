@@ -6,7 +6,7 @@ from datetime import timedelta
 from ascender.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 from ascender.main.utils import encrypt_field
 from ascender.main.middleware import impersonate
-from ascender.main.models import WorkflowJobTemplate, JobTemplate, Job
+from ascender.main.models import AdHocCommand, Inventory, InventorySource, WorkflowJobTemplate, JobTemplate, Job
 from ascender.main.models.ha import Instance
 from . import create_job
 from django.conf import settings
@@ -843,3 +843,147 @@ def test_active_inventory_updates_do_not_lazy_load_inventory_source(controlplane
 
     assert (running_one, running_four) == (1, 4)
     assert queries_four == queries_one
+
+
+@pytest.mark.django_db
+class TestAllowJobsWhileSyncing:
+    """A sync blocks jobs on its inventory unless the inventory sets allow_jobs_while_syncing."""
+
+    @pytest.fixture
+    def objects(self, job_template_factory):
+        return job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred')
+
+    @staticmethod
+    def sync(inv_source, status):
+        update = inv_source.create_inventory_update()
+        update.status = status
+        update.dependencies_processed = True
+        update.save()
+        return update
+
+    @classmethod
+    def running_sync(cls, inventory, source_name='src', source='ec2'):
+        inv_source = InventorySource.objects.create(name=source_name, inventory=inventory, source=source)
+        return cls.sync(inv_source, 'running')
+
+    @staticmethod
+    def process_dependencies():
+        with mock.patch.object(TaskManager, 'start_task'):
+            DependencyManager().schedule()
+
+    @staticmethod
+    def allow(inventory):
+        inventory.allow_jobs_while_syncing = True
+        inventory.save(update_fields=['allow_jobs_while_syncing'])
+
+    @staticmethod
+    def started():
+        with mock.patch.object(TaskManager, 'start_task') as mock_start:
+            TaskManager().schedule()
+        return [call.args[0] for call in mock_start.call_args_list]
+
+    def test_sync_blocks_job_by_default(self, controlplane_instance_group, objects):
+        update = self.running_sync(objects.inventory)
+        job = create_job(objects.job_template)
+        # the reason is only written on jobs that have been waiting a while
+        Job.objects.filter(pk=job.pk).update(created=job.created - timedelta(minutes=1))
+
+        assert self.started() == []
+        job.refresh_from_db()
+        assert job.job_explanation == f'waiting for inventoryupdate-{update.id} to finish'
+
+    def test_job_starts_during_sync_when_allowed(self, controlplane_instance_group, objects):
+        self.allow(objects.inventory)
+        self.running_sync(objects.inventory)
+        job = create_job(objects.job_template)
+
+        assert self.started() == [job]
+
+    @pytest.mark.parametrize('allowed', [False, True])
+    def test_job_on_constructed_inventory_and_its_running_sync(self, controlplane_instance_group, objects, allowed):
+        """The source of a constructed inventory always updates on launch, so a sync already in
+        flight is picked up as the job's dependency unless the flag says not to wait for it."""
+        constructed = Inventory.objects.create(name='constructed', kind='constructed', organization=objects.inventory.organization)
+        inv_source = constructed.inventory_sources.get()
+        assert inv_source.update_on_launch
+        if allowed:
+            self.allow(constructed)
+        objects.job_template.inventory = constructed
+        objects.job_template.save()
+        self.sync(inv_source, 'successful')
+        running = self.sync(inv_source, 'running')
+        job = create_job(objects.job_template, dependencies_processed=False)
+
+        self.process_dependencies()
+
+        if allowed:
+            assert list(job.dependent_jobs.all()) == []
+            assert self.started() == [job]
+        else:
+            assert list(job.dependent_jobs.all()) == [running]
+            assert self.started() == []
+
+    def test_running_sync_with_nothing_to_fall_back_on_is_still_waited_for(self, controlplane_instance_group, objects):
+        """Without a successful sync before it, the running one is the only source of hosts the job could get."""
+        self.allow(objects.inventory)
+        inv_source = InventorySource.objects.create(name='src', inventory=objects.inventory, source='ec2', update_on_launch=True)
+        self.sync(inv_source, 'failed')
+        running = self.sync(inv_source, 'running')
+        job = create_job(objects.job_template, dependencies_processed=False)
+
+        self.process_dependencies()
+
+        assert list(job.dependent_jobs.all()) == [running]
+        assert self.started() == []
+
+    def test_update_on_launch_still_waits_for_its_own_sync(self, controlplane_instance_group, objects):
+        """The flag only lets a job past syncs it does not depend on."""
+        self.allow(objects.inventory)
+        inv_source = InventorySource.objects.create(name='src', inventory=objects.inventory, source='ec2', update_on_launch=True, update_cache_timeout=0)
+        job = create_job(objects.job_template, dependencies_processed=False)
+
+        self.process_dependencies()
+        update = inv_source.inventory_updates.get()
+        assert list(job.dependent_jobs.all()) == [update]
+
+        update.status = 'running'
+        update.save()
+        assert self.started() == []
+
+        update.status = 'successful'
+        update.save()
+        assert self.started() == [job]
+
+    def test_ad_hoc_command_still_blocks_job(self, controlplane_instance_group, objects):
+        self.allow(objects.inventory)
+        AdHocCommand.objects.create(inventory=objects.inventory, status='running', dependencies_processed=True)
+        create_job(objects.job_template)
+
+        assert self.started() == []
+
+    def test_ad_hoc_command_starts_during_sync_when_allowed(self, controlplane_instance_group, objects):
+        self.running_sync(objects.inventory)
+        ad_hoc = AdHocCommand.objects.create(inventory=objects.inventory, status='pending', dependencies_processed=True)
+
+        assert self.started() == []
+
+        self.allow(objects.inventory)
+        assert self.started() == [ad_hoc]
+
+    def test_flag_is_read_once_per_cycle(self, controlplane_instance_group, objects):
+        """Looking the flag up must not cost a query per blocked job."""
+        self.running_sync(objects.inventory)
+        objects.job_template.allow_simultaneous = True
+        objects.job_template.save()
+
+        def run_and_count():
+            with mock.patch.object(TaskManager, 'start_task'):
+                with CaptureQueriesContext(connection) as ctx:
+                    TaskManager().schedule()
+            return len([q for q in ctx.captured_queries if 'allow_jobs_while_syncing' in q['sql']])
+
+        create_job(objects.job_template)
+        assert run_and_count() == 1
+        for _ in range(3):
+            create_job(objects.job_template)
+        assert run_and_count() == 1
