@@ -51,7 +51,12 @@ LEGACY_ACTION_QUEUE_FILENAME = 'awx-external-logger-action-queue'
 
 # Operator drop-ins, read by the generated config as the image's static rsyslog.conf
 # reads them. The image creates the directory; optional, so an empty one is fine.
-CONF_D_INCLUDE = 'include(file="/var/lib/ascender/rsyslog/conf.d/*.conf" mode="optional")'
+CONF_D_DIRECTORY = '/var/lib/ascender/rsyslog/conf.d'
+CONF_D_INCLUDE = f'include(file="{CONF_D_DIRECTORY}/*.conf" mode="optional")'
+
+# run-rsyslogd sets it at every rsyslogd start: off when a conf.d drop-in already loads impstats,
+# which rsyslog refuses to load twice (#1098).
+QUEUE_STATS_ENABLED = 'config.enabled=`echo $ASCENDER_QUEUE_STATS`'
 
 
 def warn_about_abandoned_spool(spool_directory):
@@ -93,6 +98,7 @@ def construct_rsyslog_conf_template(settings=settings):
     discard_severity = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY', 5)
     spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', DEFAULT_SPOOL_DIRECTORY).rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
+    stats_interval = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL', 0)
 
     # Has to happen before queue.spoolDirectory is written below. The fallback used
     # to sit after it, where it changed a variable nothing read again, so a setting
@@ -151,6 +157,19 @@ def construct_rsyslog_conf_template(settings=settings):
             'template(name="ascender" type="string" string="%rawmsg-after-pri%")',
         ]
     )
+    # rsyslog already counts what the action queue discards (discarded.nf, discarded.full);
+    # impstats reports it, to rsyslogd's stdout, which is the container log. Its own ruleset
+    # keeps the statistics out of the external action, which sits in the default ruleset, and
+    # a Direct queue keeps them off the main queue: a full action queue blocks the main queue's
+    # worker for queue.timeoutEnqueue per message, which would hold the statistics back exactly
+    # when they matter.
+    if enabled and stats_interval > 0:
+        parts.extend(
+            [
+                f'module(load="impstats" interval="{stats_interval}" format="json" resetCounters="off" ruleset="ascender_queue_stats" {QUEUE_STATS_ENABLED})',
+                f'ruleset(name="ascender_queue_stats" queue.type="Direct" {QUEUE_STATS_ENABLED}) {{ action(type="omfile" file="/dev/stdout") }}',
+            ]
+        )
 
     def escape_quotes(x):
         return x.replace('"', '\\"')

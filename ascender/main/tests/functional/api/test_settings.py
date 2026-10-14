@@ -431,6 +431,37 @@ def test_logging_aggregator_discard_severity_is_listed_without_a_database_row():
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    'value, expected',
+    [
+        (0, 200),
+        (17, 200),
+        (2147483647, 200),
+        (-1, 400),  # impstats would write statistics as fast as it can
+        (2147483648, 400),  # wraps negative in impstats' C int, the same as -1
+    ],
+)
+def test_logging_aggregator_queue_stats_interval_bounds(get, patch, admin, value, expected):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'logging'})
+    patch(url, user=admin, data={'LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL': value}, expect=expected)
+
+    stored = get(url, user=admin).data['LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL']
+    assert stored == (value if expected == 200 else 0)
+
+
+@pytest.mark.django_db
+def test_logging_aggregator_queue_stats_interval_is_listed_without_a_database_row():
+    """run_rsyslog_configurer clears cached LOG_AGGREGATOR_* values by the names dir(settings) returns: settings
+    with a database row, plus those the settings files define. Once a revert deletes the row, only the entry in
+    defaults.py keeps this one on that list, so a reconfigure cannot render a stale cached value."""
+    from django.conf import settings
+
+    assert not Setting.objects.filter(key='LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL').exists()
+    assert 'LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL' in dir(settings)
+    assert settings.LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL == 0
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize('headers', [True, False])
 def test_saml_x509cert_validation(patch, get, admin, headers):
     cert = "MIIEogIBAAKCAQEA1T4za6qBbHxFpN5f9eFvA74MFjrsjcp1uvzOaE23AYKMDEJghJ6dqQ7GwHLNIeIeumqDFmODauIzrgSDJTT5+NG30Rr+rRi0zDkrkBAj/AtA+SaVhbzqB6ZSd7LaMly9XAc+82OKlNpuWS9hPmFaSShzDTXRu5RRyvm4NDCAOGDu5hyVR2pV/ffKDNfNkChnqzvRRW9laQcVmliZhlTGn7nPZ+JbjpwEy0nwW+4zoAiEvwnT52N4xTqIcYOnXtGiaf13dh7FkUfYmS0tzF3+h8QRKwtIm4y+sq84R/kr79/0t5aRUpJynNrECajzmArpL4IjXKTPIyUpTKirJgGnCwIDAQABAoIBAC6bbbm2hpsjfkVOpUKkhxMWUqX5MwK6oYjBAIwjkEAwPFPhnh7eXC87H42oidVCCt1LsmMOVQbjcdAzBEb5kTkk/Twi3k8O+1U3maHfJT5NZ2INYNjeNXh+jb/Dw5UGWAzpOIUR2JQ4Oa4cgPCVbppW0O6uOKz6+fWXJv+hKiUoBCC0TiY52iseHJdUOaKNxYRD2IyIzCAxFSd5tZRaARIYDsugXp3E/TdbsVWA7bmjIBOXq+SquTrlB8x7j3B7+Pi09nAJ2U/uV4PHE+/2Fl009ywfmqancvnhwnz+GQ5jjP+gTfghJfbO+Z6M346rS0Vw+osrPgfyudNHlCswHOECgYEA/Cfq25gDP07wo6+wYWbx6LIzj/SSZy/Ux9P8zghQfoZiPoaq7BQBPAzwLNt7JWST8U11LZA8/wo6ch+HSTMk+m5ieVuru2cHxTDqeNlh94eCrNwPJ5ayA5U6LxAuSCTAzp+rv6KQUx1JcKSEHuh+nRYTKvUDE6iA6YtPLO96lLUCgYEA2H5rOPX2M4w1Q9zjol77lplbPRdczXNd0PIzhy8Z2ID65qvmr1nxBG4f2H96ykW8CKLXNvSXreNZ1BhOXc/3Hv+3mm46iitB33gDX4mlV4Jyo/w5IWhUKRyoW6qXquFFsScxRzTrx/9M+aZeRRLdsBk27HavFEg6jrbQ0SleZL8CgYAaM6Op8d/UgkVrHOR9Go9kmK/W85kK8+NuaE7Ksf57R0eKK8AzC9kc/lMuthfTyOG+n0ff1i8gaVWtai1Ko+/hvfqplacAsDIUgYK70AroB8LCZ5ODj5sr2CPVpB7LDFakod7c6O2KVW6+L7oy5AHUHOkc+5y4PDg5DGrLxo68SQKBgAlGoWF3aG0c/MtDk51JZI43U+lyLs++ua5SMlMAeaMFI7rucpvgxqrh7Qthqukvw7a7A22fXUBeFWM5B2KNnpD9c+hyAKAa6l+gzMQzKZpuRGsyS2BbEAAS8kO7M3Rm4o2MmFfstI2FKs8nibJ79HOvIONQ0n+T+K5Utu2/UAQRAoGAFB4fiIyQ0nYzCf18Z4Wvi/qeIOW+UoBonIN3y1h4wruBywINHxFMHx4aVImJ6R09hoJ9D3Mxli3xF/8JIjfTG5fBSGrGnuofl14d/XtRDXbT2uhVXrIkeLL/ojODwwEx0VhxIRUEjPTvEl6AFSRRcBp3KKzQ/cu7ENDY6GTlOUI="  # noqa
