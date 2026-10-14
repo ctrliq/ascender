@@ -402,6 +402,35 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, '~web\\d+') is True
         assert _federated_inventory_has_matching_hosts(inv, 'db01,~(web|app)01') is True
 
+    def test_subscript_matches_base_pattern(self, organization):
+        """'name[N]', 'name[N:M]' and 'name[N-M]' select hosts of 'name' by position, as in
+        Ansible; the brackets are not an fnmatch character class."""
+        webs = self._make_inv(organization, host_names=['web01', 'web02'], group_names=['webservers'])
+        dbs = Inventory.objects.create(name='test-src-db', kind='', organization=organization)
+        dbs.groups.create(name='databases').hosts.add(dbs.hosts.create(name='db01'))
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[-1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0:1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[1:]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0-1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'web*[0]') is True
+        assert _federated_inventory_has_matching_hosts(dbs, 'databases[0],app01') is True
+        # The base pattern still has to match for the inventory to be included
+        assert _federated_inventory_has_matching_hosts(dbs, 'webservers[0]') is False
+        assert _federated_inventory_has_matching_hosts(webs, 'databases[0],app01') is False
+        # Brackets that aren't a trailing numeric subscript stay a character class; a numeric
+        # one is a subscript even where a class was meant ('web0' is not in the inventory)
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[a1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[ab]') is False
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[12]') is False
+
+    def test_limit_file_failsafe(self, organization):
+        """'@file' items are read by Ansible at run time, so the inventory is included."""
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, '@hosts.txt') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,@hosts.txt') is True
+
     def test_comma_list_mixed_kinds(self, organization):
         """Each kind of pattern in a list is checked; one match anywhere includes the inventory."""
         inv = self._make_inv(organization, host_names=['web01', 'db01'], group_names=['appservers'])
@@ -416,6 +445,7 @@ class TestFederatedInventoryHasMatchingHosts:
             pytest.param(lambda i: f'missing{i}', id='exact'),
             pytest.param(lambda i: f'missing{i}*', id='trailing-star'),
             pytest.param(lambda i: f'missing{i}?', id='glob'),
+            pytest.param(lambda i: f'missing{i}[0]', id='subscript'),
             pytest.param(lambda i: f'missing{i}*,other{i},o?{i}', id='mixed'),
         ],
     )

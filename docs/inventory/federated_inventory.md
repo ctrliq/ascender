@@ -48,8 +48,10 @@ job naturally inherits that inventory's instance group assignments.
   job is created for them.
 - A comma-separated limit is a list of patterns, as in Ansible: a source inventory
   is included if any pattern in the list matches it.
-- Complex limit patterns containing `:`, `&`, or `!`, and `~` regular expressions, are
-  passed through to all source inventories and let Ansible resolve them at run time.
+- A subscripted pattern such as `webservers[0]` or `webservers[0:2]` is matched by
+  its base name; Ansible picks the hosts by position at run time.
+- Complex limit patterns containing `:`, `&`, or `!`, `~` regular expressions, and `@`
+  limit files are passed through to all source inventories and let Ansible resolve them at run time.
 - The federated inventory itself holds no hosts or groups directly. The Hosts and
   Groups tabs in the UI aggregate data from all input inventories for visibility.
 
@@ -85,8 +87,8 @@ field on the federated inventory itself — those are on the job template.
 - **Constructed/smart inputs not supported**: input inventories must be plain
   (kind `''`) inventories. Smart and constructed inventories are excluded from the
   input inventory picker.
-- **Complex limit patterns**: patterns using `:`, `&`, or `!` operators, and `~` regular
-  expressions, are passed through to all input inventories without pre-filtering, since Ansible resolves
+- **Complex limit patterns**: patterns using `:`, `&`, or `!` operators, `~` regular
+  expressions, and `@` limit files are passed through to all input inventories without pre-filtering, since Ansible resolves
   them at run time. This means child jobs may be created for inventories that end
   up matching no hosts after Ansible applies the limit.
 

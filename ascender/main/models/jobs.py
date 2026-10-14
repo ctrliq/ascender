@@ -208,6 +208,11 @@ class JobOptions(BaseModel):
         return needed
 
 
+# Ansible's subscript rule (PATTERN_WITH_SUBSCRIPT in ansible/inventory/manager.py): name[N], name[N:M], name[N:]
+# or name[N-M] selects hosts of the pattern 'name' by position, so the brackets aren't an fnmatch character class.
+_FEDERATED_LIMIT_SUBSCRIPT = re.compile(r'^(.+)\[(?:-?[0-9]+|[0-9]+[:-][0-9]*)\]$')
+
+
 def _federated_inventory_has_matching_hosts(inv, limit):
     """Return True if *inv* has hosts that would be targeted by *limit*.
 
@@ -218,8 +223,10 @@ def _federated_inventory_has_matching_hosts(inv, limit):
     matches if any of them does. Each pattern is handled as follows:
     - No limit / 'all' / '*' → just checks that the inventory is non-empty.
     - 'ungrouped'            → checks for hosts with no group membership.
-    - Complex patterns (containing ':', '&', '!', or a '~' regex) → delegates to Ansible
-      at run time; included only if the inventory is non-empty (same rule as the no-limit case).
+    - Complex patterns (containing ':', '&', '!', a '~' regex or an '@' limit file) → delegates
+      to Ansible at run time; included only if the inventory is non-empty (same rule as the no-limit case).
+    - Subscripts ('webservers[0]', 'webservers[0:2]') → the base pattern is matched; Ansible picks
+      the hosts by position at run time.
     - Simple glob patterns   → fnmatch against host names then group names.
 
     The patterns are classified first and each kind is checked for all of them
@@ -231,8 +238,14 @@ def _federated_inventory_has_matching_hosts(inv, limit):
     exact, prefixes, globs = set(), set(), []
     ungrouped = False
     for pat in patterns:
+        # Regexes and @ limit files (Ansible reads the file at run time) can't be evaluated here
+        if pat[0] in ('~', '@'):
+            return inv.hosts.exists()
+        subscript = _FEDERATED_LIMIT_SUBSCRIPT.match(pat)
+        if subscript:
+            pat = subscript.group(1)
         # 'all', and complex operator patterns: let Ansible sort it out at run time
-        if pat in ('all', '*') or any(c in pat for c in (':', '&', '!')) or pat.startswith('~'):
+        if pat in ('all', '*') or any(c in pat for c in (':', '&', '!')):
             return inv.hosts.exists()
         if pat == 'ungrouped':
             ungrouped = True
