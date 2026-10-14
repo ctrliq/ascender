@@ -213,6 +213,23 @@ class TestFederatedInventoryLaunch:
         assert job.workflow_nodes.count() == 1
         assert job.workflow_nodes.first().ancestor_artifacts['source_inventory_id'] == src_web.id
 
+    def test_limit_comma_list_includes_each_listed_inventory(self, organization):
+        """A comma-separated limit is a list of patterns; every inventory matching one of them gets a node."""
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        src_web = Inventory.objects.create(name='src-web', kind='', organization=organization)
+        src_web.hosts.create(name='web01')
+        src_db = Inventory.objects.create(name='src-db', kind='', organization=organization)
+        src_db.hosts.create(name='db01')
+        src_app = Inventory.objects.create(name='src-app', kind='', organization=organization)
+        src_app.hosts.create(name='app01')
+        for src in (src_web, src_db, src_app):
+            fed.input_inventories.add(src)
+
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job(limit='web01,db01')
+        node_inv_ids = {n.ancestor_artifacts['source_inventory_id'] for n in job.workflow_nodes.all()}
+        assert node_inv_ids == {src_web.id, src_db.id}
+
     def test_limit_all_includes_all_non_empty(self, federated_inv_factory, organization):
         """No limit (or 'all') includes every non-empty source inventory."""
         fed, sources = federated_inv_factory(3)
@@ -359,3 +376,25 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, 'web:db') is True
         assert _federated_inventory_has_matching_hosts(inv, 'web&db') is True
         assert _federated_inventory_has_matching_hosts(inv, '!web') is True
+
+    def test_comma_separated_list(self, organization):
+        """A comma-separated limit matches if any of its patterns does, as in Ansible."""
+        inv = self._make_inv(organization, host_names=['web01'], group_names=['webservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web01,db01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01, web01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'dbservers,webservers') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,app01') is False
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,,') is False
+
+    def test_comma_list_complex_item_failsafe(self, organization):
+        """A list containing a pattern that can't be pre-evaluated includes the inventory."""
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,!web') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,&web') is True
+
+    def test_regex_pattern_failsafe(self, organization):
+        """'~' patterns are regular expressions, evaluated by Ansible at run time."""
+        inv = self._make_inv(organization, host_names=['web01'])
+        assert _federated_inventory_has_matching_hosts(inv, '~web\\d+') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,~(web|app)01') is True

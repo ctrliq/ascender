@@ -210,18 +210,26 @@ def _federated_inventory_has_matching_hosts(inv, limit):
     Used at WorkflowJobNode creation time to skip source inventories that
     contribute no hosts to a federated job launch, avoiding spurious empty jobs.
 
-    Handles:
+    A comma-separated limit is a list of patterns, as in Ansible; the inventory
+    matches if any of them does. Each pattern is handled as follows:
     - No limit / 'all' / '*' → just checks that the inventory is non-empty.
     - 'ungrouped'            → checks for hosts with no group membership.
-    - Complex patterns (containing ':', '&', '!') → delegates to Ansible at run time;
-      included only if the inventory is non-empty (same rule as the no-limit case).
+    - Complex patterns (containing ':', '&', '!', or a '~' regex) → delegates to Ansible
+      at run time; included only if the inventory is non-empty (same rule as the no-limit case).
     - Simple glob patterns   → fnmatch against host names then group names.
     """
-    pat = (limit or '').strip()
-    if not pat or pat in ('all', '*'):
+    patterns = [p.strip() for p in (limit or '').split(',') if p.strip()]
+    if not patterns:
+        return inv.hosts.exists()
+    return any(_federated_inventory_matches_pattern(inv, pat) for pat in patterns)
+
+
+def _federated_inventory_matches_pattern(inv, pat):
+    """Return True if *inv* has hosts matching the single host pattern *pat*."""
+    if pat in ('all', '*'):
         return inv.hosts.exists()
     # Complex operator patterns: let Ansible sort it out at run time
-    if any(c in pat for c in (':', '&', '!')):
+    if any(c in pat for c in (':', '&', '!')) or pat.startswith('~'):
         return inv.hosts.exists()
     if pat == 'ungrouped':
         return inv.hosts.filter(groups__isnull=True).exists()
