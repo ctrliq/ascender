@@ -24,6 +24,7 @@ from ascender.dab.lib.utils.models import get_type_for_model
 from ascender.main.dispatch.reaper import reap_job
 from ascender.main.models import (
     Instance,
+    Inventory,
     InventorySource,
     InventoryUpdate,
     Job,
@@ -324,6 +325,7 @@ class DependencyManager(TaskBase):
         super().__init__(prefix="dependency_manager")
         self.all_projects = {}
         self.all_inventory_sources = {}
+        self.inventories_allowing_jobs_while_syncing = set()
 
     def cache_projects_and_sources(self, task_list):
         project_ids = set()
@@ -344,6 +346,11 @@ class DependencyManager(TaskBase):
         for invsrc in InventorySource.objects.filter(inventory_id__in=inventory_ids, update_on_launch=True):
             self.all_inventory_sources.setdefault(invsrc.inventory_id, [])
             self.all_inventory_sources[invsrc.inventory_id].append(invsrc)
+
+        if self.all_inventory_sources:
+            self.inventories_allowing_jobs_while_syncing = set(
+                Inventory.objects.filter(id__in=self.all_inventory_sources.keys(), allow_jobs_while_syncing=True).values_list('id', flat=True)
+            )
 
     @staticmethod
     def should_update_again(update, cache_timeout):
@@ -372,6 +379,19 @@ class DependencyManager(TaskBase):
                 return [latest_project_update]
         return []
 
+    def can_skip_running_sync(self, task, inventory_source, inventory_update):
+        '''
+        A sync that is already in flight when the job is launched was not started for this job.
+        If the inventory has allow_jobs_while_syncing set, the job runs on the hosts from the
+        last successful sync instead of waiting for it, the same as it would with a source that
+        does not update on launch. With no successful sync to fall back on it still waits.
+        '''
+        if task.inventory_id not in self.inventories_allowing_jobs_while_syncing:
+            return False
+        if inventory_update.status not in ('waiting', 'pending', 'running'):
+            return False
+        return inventory_source.inventory_updates.filter(status='successful').exists()
+
     def gen_dep_for_job(self, task):
         dependencies = self.get_or_create_project_update(task.project_id)
 
@@ -388,6 +408,8 @@ class DependencyManager(TaskBase):
                 inventory_task = inventory_source.create_inventory_update(_eager_fields=dict(launch_type='dependency'))
                 inventory_task.signal_start()
                 dependencies.append(inventory_task)
+            elif self.can_skip_running_sync(task, inventory_source, latest_inventory_update):
+                continue
             else:
                 dependencies.append(latest_inventory_update)
 

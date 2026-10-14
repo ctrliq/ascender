@@ -1,6 +1,6 @@
 import type { AnyInventory } from 'types/api';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { LabelsAPI, OrganizationsAPI, InstanceGroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -125,6 +125,23 @@ describe('<InventoryForm />', () => {
     // Driving the full org-lookup modal through the real DOM is
     // heavy and debounces 1000ms, so the OrganizationLookup.onChange
     // sub-assertion is intentionally dropped here per the migration guidance.
+  });
+
+  test('should submit allow_jobs_while_syncing from its checkbox', async () => {
+    const { user, container, onSubmit } = await renderForm();
+
+    const checkbox = container.querySelector(
+      '#option-allow-jobs-while-syncing'
+    );
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox!);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ allow_jobs_while_syncing: true })
+      )
+    );
   });
 
   test('should call onCancel when Cancel button is clicked', async () => {

@@ -111,6 +111,12 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
               label={t`Allow Deletes While In Use`}
               tooltip={helpText.allowDeletesWhileInUse}
             />
+            <CheckboxField
+              id="option-allow-jobs-while-syncing"
+              name="allow_jobs_while_syncing"
+              label={t`Allow Jobs While Syncing`}
+              tooltip={helpText.allowJobsWhileSyncing}
+            />
           </FormCheckboxLayout>
         </FormGroup>
         <VariablesField
@@ -134,6 +140,7 @@ export interface InventoryFormValues {
   labels: SummaryFieldRef[];
   prevent_instance_group_fallback: boolean;
   allow_deletes_while_in_use: boolean;
+  allow_jobs_while_syncing: boolean;
 }
 
 export interface InventoryFormProps {
@@ -167,6 +174,7 @@ function InventoryForm({
     prevent_instance_group_fallback:
       inventory.prevent_instance_group_fallback || false,
     allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
+    allow_jobs_while_syncing: inventory.allow_jobs_while_syncing || false,
   };
   return (
     <FormRoot

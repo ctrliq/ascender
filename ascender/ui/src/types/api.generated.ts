@@ -6941,6 +6941,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -6971,6 +6976,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -7356,6 +7366,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     FederatedInventoryRequest: {
       name: string | null;
@@ -7373,6 +7388,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     Group: {
       readonly id: number;
@@ -7866,6 +7886,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     InventoryRequest: {
       name: string | null;
@@ -7906,6 +7931,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     InventorySource: {
       readonly id: number;
@@ -10484,6 +10514,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -10580,6 +10615,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     PatchedGroupRequest: {
       name?: string | null;
@@ -10747,6 +10787,11 @@ export interface components {
        * @default false
        */
       allow_deletes_while_in_use: boolean | null;
+      /**
+       * @description If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.
+       * @default false
+       */
+      allow_jobs_while_syncing: boolean | null;
     };
     PatchedInventorySourceRequest: {
       name?: string | null;

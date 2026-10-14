@@ -63,14 +63,19 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
   const { organization, user_capabilities: userCapabilities } =
     inventory.summary_fields;
 
-  const { prevent_instance_group_fallback, allow_deletes_while_in_use } =
-    inventory;
+  const {
+    prevent_instance_group_fallback,
+    allow_deletes_while_in_use,
+    allow_jobs_while_syncing,
+  } = inventory;
 
   const deleteDetailsRequests =
     relatedResourceDeleteRequests.inventory(inventory);
 
   const renderOptionsField =
-    prevent_instance_group_fallback || allow_deletes_while_in_use;
+    prevent_instance_group_fallback ||
+    allow_deletes_while_in_use ||
+    allow_jobs_while_syncing;
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
@@ -82,6 +87,11 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
       {allow_deletes_while_in_use && (
         <Content component={ContentVariants.li}>
           {t`Allow Deletes While In Use`}
+        </Content>
+      )}
+      {allow_jobs_while_syncing && (
+        <Content component={ContentVariants.li}>
+          {t`Allow Jobs While Syncing`}
         </Content>
       )}
     </Content>
