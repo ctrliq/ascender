@@ -8,6 +8,7 @@ from ascender.main.models import (
     Inventory,
     Host,
 )
+from ascender.main.tasks import facts
 from ascender.main.tasks.facts import start_fact_cache, finish_fact_cache
 
 from django.utils.timezone import now
@@ -112,9 +113,10 @@ def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
     os.remove(os.path.join(fact_cache_dir, hosts[1].name))
 
     hosts_qs = mock.MagicMock()
-    # The new code calls host_qs.filter(name__in=...).select_related('inventory')
+    # The clear phase locks the hosts: host_qs.filter(name__in=...).select_related(...).select_for_update(...).order_by(...)
     # Only hosts[1] needs clearing (its file was removed), so return just that host
-    hosts_qs.filter.return_value.select_related.return_value = [hosts[1]]
+    hosts_qs.filter.return_value.select_related.return_value.select_for_update.return_value.order_by.return_value = [hosts[1]]
+    mocker.patch('ascender.main.tasks.facts.transaction')
 
     finish_fact_cache(hosts_qs, artifacts_dir=artifacts_dir, inventory_id=inventory_id)
 
@@ -136,19 +138,24 @@ def test_finish_job_fact_cache_with_bad_data(hosts, mocker, tmpdir):
 
     bulk_update = mocker.patch('ascender.main.tasks.facts.bulk_update_sorted_by_id')
 
-    # Overwrite fact files with invalid JSON and set future mtime
+    # Overwrite fact files (both cache formats) with invalid JSON and set future mtime
     fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
     for h in hosts:
-        filepath = os.path.join(fact_cache_dir, h.name)
-        with open(filepath, 'w') as f:
-            f.write('not valid json!')
-            f.flush()
-            new_modification_time = time.time() + 3600
-            os.utime(filepath, (new_modification_time, new_modification_time))
+        for filename, content in ((h.name, 'not valid json!'), ('s1_' + h.name, '{"__payload__": "not valid json!"}')):
+            filepath = os.path.join(fact_cache_dir, filename)
+            with open(filepath, 'w') as f:
+                f.write(content)
+                f.flush()
+                new_modification_time = time.time() + 3600
+                os.utime(filepath, (new_modification_time, new_modification_time))
 
     hosts_qs = mock.MagicMock()
+    # Every host has updated files, so all of them must be read (and rejected)
+    hosts_qs.filter.return_value.select_related.return_value.iterator.return_value = hosts
+    read_facts = mocker.spy(facts, '_read_facts')
 
     finish_fact_cache(hosts_qs, artifacts_dir=artifacts_dir, inventory_id=inventory_id)
 
     # Invalid JSON should be skipped — no hosts updated, bulk_update never called
+    assert read_facts.call_count == 2 * len(hosts)
     bulk_update.assert_not_called()

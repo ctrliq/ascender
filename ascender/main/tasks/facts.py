@@ -5,6 +5,7 @@ import logging
 
 # Django
 from ascender.settings.typed import settings
+from django.db import transaction
 from django.utils.encoding import smart_str
 from django.utils.timezone import now
 
@@ -104,36 +105,44 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
     if timeout is None:
         timeout = settings.ANSIBLE_FACT_CACHE_TIMEOUT
 
+    # A file named "s1_<name>" is the older ansible-core cache file of host "s1_<name>"
+    # and the newer ansible-core cache file of host "<name>". Nobody owns it until
+    # ansible runs, so it is never written for either host.
+    all_names = {host.name for host in hosts}
+    ambiguous = {name for name in all_names if name.startswith(SCHEMA_KEY_PREFIX) and name[len(SCHEMA_KEY_PREFIX) :] in all_names}
+    if ambiguous:
+        logger.warning(
+            f'Inventory {inventory_id}: no cached facts are provided for host names that collide with the ansible-core 2.19+ cache format: {sorted(ambiguous)}'
+        )
+
     last_write_time = None
-    to_write = []
+    written_files = []
     for host in hosts:
+        hosts_cached[host.name] = False
         if not host.ansible_facts_modified or (timeout and host.ansible_facts_modified < now() - datetime.timedelta(seconds=timeout)):
-            hosts_cached[host.name] = False
             continue  # facts are expired - do not write them
 
         filepath = os.path.join(fact_cache_dir, host.name)
         if not os.path.realpath(filepath).startswith(fact_cache_dir):
             logger.error(f'facts for host {smart_str(host.name)} could not be cached')
-            hosts_cached[host.name] = False
             continue
-        hosts_cached[host.name] = True
-        to_write.append((host.name, host.ansible_facts))
 
-    for name, facts in to_write:
-        try:
-            last_write_time = _write_facts(os.path.join(fact_cache_dir, name), facts)
+        schema_file = SCHEMA_KEY_PREFIX + host.name
+        for filename, data in (
+            (host.name, host.ansible_facts),
+            (schema_file, {PAYLOAD_KEY: json.dumps(_add_ansible_types(host.ansible_facts))}),
+        ):
+            if filename in ambiguous:
+                continue
+            try:
+                last_write_time = _write_facts(os.path.join(fact_cache_dir, filename), data)
+            except IOError:
+                logger.error(f'facts for host {smart_str(host.name)} could not be cached')
+                continue
+            written_files.append(filename)
+            hosts_cached[host.name] = True
+        if hosts_cached[host.name]:
             log_data['written_ct'] += 1
-        except IOError:
-            logger.error(f'facts for host {smart_str(name)} could not be cached')
-            hosts_cached[name] = False
-            continue
-        # A host literally named "s1_<name>" owns that file for older ansible-core
-        if SCHEMA_KEY_PREFIX + name in hosts_cached:
-            continue
-        try:
-            _write_facts(os.path.join(fact_cache_dir, SCHEMA_KEY_PREFIX + name), {PAYLOAD_KEY: json.dumps(_add_ansible_types(facts))})
-        except IOError:
-            logger.error(f'facts for host {smart_str(name)} could not be cached')
 
     # Write summary file directly to the artifacts_dir
     if inventory_id is not None:
@@ -141,6 +150,7 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
         summary_data = {
             'last_write_time': last_write_time,
             'hosts_cached': hosts_cached,
+            'written_files': written_files,
         }
         with open(summary_file, 'w', encoding='utf-8') as f:
             json.dump(summary_data, f, indent=2)
@@ -195,15 +205,31 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
             if modified >= facts_write_time:
                 updated.add(filename)
 
-    # hostname -> candidate file names, newest ansible-core format first
-    hosts_with_updates = {}
-    hosts_to_clear = []  # hostnames where Ansible removed the fact file
-    for hostname, was_written in hosts_cached_map.items():
-        schema_file = SCHEMA_KEY_PREFIX + hostname
-        candidates = [f for f in (schema_file, hostname) if f in updated]
-        if candidates:
-            hosts_with_updates[hostname] = candidates
-        elif was_written and (hostname not in present or (schema_file not in hosts_cached_map and schema_file not in present)):
+    # Attribute each updated file to the host whose facts it holds. Older ansible-core
+    # writes "<host>" with plain JSON, newer writes "s1_<host>" with a payload wrapper,
+    # and a name that fits both hosts is settled by its content.
+    hosts_with_updates = {}  # hostname -> [(filename, schema_qualified)], newest format first
+    for filename in updated:
+        owners = []
+        if filename.startswith(SCHEMA_KEY_PREFIX) and filename[len(SCHEMA_KEY_PREFIX) :] in hosts_cached_map:
+            owners.append((filename[len(SCHEMA_KEY_PREFIX) :], True))
+        if filename in hosts_cached_map:
+            owners.append((filename, False))
+        if len(owners) > 1:
+            is_wrapper = _read_facts(os.path.join(fact_cache_dir, filename), schema_qualified=True) is not None
+            owners = [owner for owner in owners if owner[1] == is_wrapper]
+        for hostname, schema_qualified in owners:
+            hosts_with_updates.setdefault(hostname, []).append((filename, schema_qualified))
+    for candidates in hosts_with_updates.values():
+        candidates.sort(key=lambda candidate: not candidate[1])
+
+    # Summaries from before written_files existed only had the plain file
+    written_files = set(summary.get('written_files', [hostname for hostname, was_written in hosts_cached_map.items() if was_written]))
+    hosts_to_clear = []  # hostnames where Ansible removed a fact file written for them
+    for hostname in hosts_cached_map:
+        if hostname in hosts_with_updates:
+            continue
+        if any(filename in written_files and filename not in present for filename in (hostname, SCHEMA_KEY_PREFIX + hostname)):
             hosts_to_clear.append(hostname)
         else:
             log_data['unmodified_ct'] += 1
@@ -213,11 +239,12 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
         hosts_to_save = []
         total_rows_updated = 0
         for host in host_qs.filter(name__in=list(hosts_with_updates)).select_related('inventory').iterator():
-            for filename in hosts_with_updates[host.name]:
-                new_facts = _read_facts(os.path.join(fact_cache_dir, filename), schema_qualified=filename != host.name)
+            for filename, schema_qualified in hosts_with_updates[host.name]:
+                new_facts = _read_facts(os.path.join(fact_cache_dir, filename), schema_qualified=schema_qualified)
                 if new_facts is not None:
                     break
             else:
+                log_data['unmodified_ct'] += 1
                 continue
 
             if new_facts != host.ansible_facts:
@@ -251,30 +278,36 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
                 f'Fact update for inventory {inventory_id} job {job_id}: expected to update {log_data["updated_ct"]} hosts but {total_rows_updated} rows were changed'
             )
 
-    # Phase 3: Clear facts for hosts whose files were removed by Ansible
+    # Phase 3: Clear facts for hosts whose files were removed by Ansible.
+    # The rows stay locked (in id order, like bulk_update_sorted_by_id) from the
+    # concurrent-update check until the clear is saved, so facts a concurrent job
+    # saves in between can't be wiped.
     if hosts_to_clear:
-        hosts = list(host_qs.filter(name__in=hosts_to_clear).select_related('inventory'))
-        clear_hosts = []
-        for host in hosts:
-            if job_created and host.ansible_facts_modified and host.ansible_facts_modified > job_created:
-                logger.warning(
-                    f'Skipping fact clear for host {smart_str(host.name)} in job {job_id} '
-                    f'inventory {inventory_id}: host ansible_facts_modified '
-                    f'({host.ansible_facts_modified.isoformat()}) is after this job\'s '
-                    f'created time ({job_created.isoformat()}). '
-                    f'A concurrent job likely updated this host\'s facts while this job was running.'
-                )
-                log_data['unmodified_ct'] += 1
-            else:
-                host.ansible_facts = {}
-                host.ansible_facts_modified = now()
-                clear_hosts.append(host)
-                logger.info(f'Facts cleared for inventory {smart_str(host.inventory.name)} host {smart_str(host.name)}')
-                log_data['cleared_ct'] += 1
+        with transaction.atomic():
+            hosts = list(host_qs.filter(name__in=hosts_to_clear).select_related('inventory').select_for_update(of=('self',)).order_by('id'))
+            clear_hosts = []
+            for host in hosts:
+                if job_created and host.ansible_facts_modified and host.ansible_facts_modified > job_created:
+                    logger.warning(
+                        f'Skipping fact clear for host {smart_str(host.name)} in job {job_id} '
+                        f'inventory {inventory_id}: host ansible_facts_modified '
+                        f'({host.ansible_facts_modified.isoformat()}) is after this job\'s '
+                        f'created time ({job_created.isoformat()}). '
+                        f'A concurrent job likely updated this host\'s facts while this job was running.'
+                    )
+                    log_data['unmodified_ct'] += 1
+                else:
+                    host.ansible_facts = {}
+                    host.ansible_facts_modified = now()
+                    clear_hosts.append(host)
+                    logger.info(f'Facts cleared for inventory {smart_str(host.inventory.name)} host {smart_str(host.name)}')
+                    log_data['cleared_ct'] += 1
 
-        if clear_hosts:
-            rows = bulk_update_sorted_by_id(Host, clear_hosts, fields=['ansible_facts', 'ansible_facts_modified'])
-            if rows != len(clear_hosts):
-                logger.warning(f'Fact clear for inventory {inventory_id} job {job_id}: expected to clear {len(clear_hosts)} hosts but {rows} rows were changed')
+            if clear_hosts:
+                rows = bulk_update_sorted_by_id(Host, clear_hosts, fields=['ansible_facts', 'ansible_facts_modified'])
+                if rows != len(clear_hosts):
+                    logger.warning(
+                        f'Fact clear for inventory {inventory_id} job {job_id}: expected to clear {len(clear_hosts)} hosts but {rows} rows were changed'
+                    )
 
     logger.debug(f'Updated {log_data["updated_ct"]} host facts for inventory {inventory_id} in job {job_id}')
