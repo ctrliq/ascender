@@ -11283,6 +11283,12 @@ export interface components {
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -14396,6 +14402,12 @@ export interface components {
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -16532,6 +16544,12 @@ export interface components {
        * @default false
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
       /**
        * Base URL of the service
        * Format: uri

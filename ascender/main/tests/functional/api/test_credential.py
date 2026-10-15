@@ -3,6 +3,7 @@ import re
 from unittest import mock  # noqa
 import pytest
 
+from django.test.utils import override_settings
 from django.utils.encoding import smart_str
 
 from ascender.main.models import AdHocCommand, Credential, CredentialType, Job, JobTemplate, InventorySource, Project, WorkflowJobNode
@@ -1280,23 +1281,75 @@ def test_create_credential_with_invalid_url_xfail(post, organization, admin, url
         assert response.data['inputs']['server_url'] == [msg]
 
 
-@pytest.mark.django_db
-def test_aws_secretsmanager_test_endpoint_without_keys(post, organization, admin):
-    """A Secrets Manager lookup saved without keys uses boto3's default credential chain."""
+AWS_SM_METADATA = {'region_name': 'us-west-2', 'secret_name': 'some/secret'}
+
+
+def create_keyless_aws_secretsmanager_lookup(post, requester, **owner):
+    """Create an AWS Secrets Manager lookup with no keys through the API, as `requester`, and return its test URL."""
     asm = CredentialType.defaults['aws_secretsmanager_credential']()
     asm.save()
-    params = {'credential_type': asm.pk, 'name': 'secrets-manager', 'organization': organization.pk, 'inputs': {}}
-    response = post(reverse('api:credential_list'), params, admin)
-    assert response.status_code == 201
+    params = {'credential_type': asm.pk, 'name': 'secrets-manager', 'inputs': {}, **owner}
+    response = post(reverse('api:credential_list'), params, requester, expect=201)
+    return reverse('api:credential_external_test', kwargs={'pk': response.data['id']})
 
-    url = reverse('api:credential_external_test', kwargs={'pk': response.data['id']})
+
+def post_keyless_aws_secretsmanager_test(post, url, user):
+    """POST the test endpoint with boto3's Session mocked; return the response and that mock."""
     with mock.patch('boto3.session.Session') as session:
-        client = session.return_value.client
-        client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
-        response = post(url, {'metadata': {'region_name': 'us-west-2', 'secret_name': 'some/secret'}}, admin)
+        session.return_value.client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
+        response = post(url, {'metadata': AWS_SM_METADATA}, user)
+    return response, session
+
+
+@pytest.mark.django_db
+def test_aws_secretsmanager_test_endpoint_refuses_a_non_admin_without_keys(post, alice):
+    """Any user can save a keyless lookup as their own credential; with the setting at its default, testing it must not run
+    as the controller's AWS identity."""
+    url = create_keyless_aws_secretsmanager_lookup(post, alice, user=alice.pk)
+    response, session = post_keyless_aws_secretsmanager_test(post, url, alice)
+    assert response.status_code == 400
+    assert response.data == {'inputs': 'DefaultCredentialsNotAllowed'}
+    session.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_aws_secretsmanager_test_endpoint_without_keys_once_an_admin_allows_it(patch, post, admin, alice):
+    """Only an administrator can turn the setting on; once the stored value is on, the same lookup reaches boto3's default chain."""
+    url = create_keyless_aws_secretsmanager_lookup(post, alice, user=alice.pk)
+    settings_url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'system'})
+    patch(settings_url, {'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS': True}, alice, expect=403)
+    assert post_keyless_aws_secretsmanager_test(post, url, alice)[0].status_code == 400
+
+    patch(settings_url, {'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS': True}, admin, expect=200)
+    response, session = post_keyless_aws_secretsmanager_test(post, url, alice)
     assert response.status_code == 202, response.data
-    assert client.call_args.kwargs['aws_access_key_id'] is None
-    assert client.call_args.kwargs['aws_secret_access_key'] is None
+    client_kwargs = session.return_value.client.call_args.kwargs
+    assert client_kwargs['aws_access_key_id'] is None
+    assert client_kwargs['aws_secret_access_key'] is None
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('allow_default_credentials, expected', [(False, 400), (True, 202)], ids=['off', 'on'])
+def test_aws_secretsmanager_test_endpoint_without_keys_as_admin(post, organization, admin, allow_default_credentials, expected):
+    """The setting binds superusers too: it decides whether the controller's identity is used at all."""
+    url = create_keyless_aws_secretsmanager_lookup(post, admin, organization=organization.pk)
+    with override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials):
+        response, session = post_keyless_aws_secretsmanager_test(post, url, admin)
+    assert response.status_code == expected, response.data
+    assert session.called is allow_default_credentials
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('allow_default_credentials, expected', [(False, 400), (True, 202)], ids=['off', 'on'])
+def test_aws_secretsmanager_credential_type_test_endpoint_without_keys(post, admin, allow_default_credentials, expected):
+    """The other test endpoint, which takes the inputs in the request rather than from a saved credential."""
+    asm = CredentialType.defaults['aws_secretsmanager_credential']()
+    asm.save()
+    url = reverse('api:credential_type_external_test', kwargs={'pk': asm.pk})
+    with override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials):
+        response, session = post_keyless_aws_secretsmanager_test(post, url, admin)
+    assert response.status_code == expected, response.data
+    assert session.called is allow_default_credentials
 
 
 @pytest.mark.django_db
