@@ -666,7 +666,7 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'ascender.sso.entra.associate_by_email',
+    'ascender.sso.entra.associate_existing_account',
     'social_core.pipeline.user.create_user',
     'ascender.sso.social_base_pipeline.check_user_found_or_created',
     'social_core.pipeline.social_auth.associate_user',

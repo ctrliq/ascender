@@ -12,19 +12,26 @@ tenant, on whichever Microsoft cloud the tenant lives in, and knows a user by
 their object ID, which never changes nor is reused.  Groups, app roles and the
 rest of the token's claims are handed to the same maps and rules as generic
 OIDC, in ascender.sso.oidc.  The groups can also be read from Microsoft Graph
-instead of the token, which has room for 200 of them and names them by ID.
+instead of the token, which has room for 200 of them.
 """
 
 import logging
 from urllib.parse import urlsplit
 
+import jwt
+from django.db.models import Q
 from social_core.backends.azuread_tenant import AzureADV2TenantOAuth2
 from social_core.exceptions import AuthMissingParameter
 from social_core.pipeline import social_auth
+from social_django.models import UserSocialAuth
 
 logger = logging.getLogger('ascender.sso.entra')
 
 ENTRA_ID_BACKEND_NAME = 'entra-id'
+
+#: The Azure AD logins Entra ID replaces, whose accounts a first Entra ID login
+#: can take over.
+LEGACY_AZURE_AD_BACKEND_NAMES = ('azuread-oauth2', 'azuread-tenant-oauth2')
 
 #: The public cloud's sign in host.  Sovereign clouds and External ID tenants
 #: have their own.
@@ -43,8 +50,7 @@ GRAPH_HOSTS = {
 }
 DEFAULT_GRAPH_HOST = 'graph.microsoft.com'
 
-#: The delegated permission that lets the signed in user's groups be read with
-#: their names.
+#: The delegated permission that lets the signed in user's groups be read.
 GRAPH_GROUPS_PERMISSION = 'GroupMember.Read.All'
 
 #: Graph hands out up to 999 groups a page.  This many pages is far more groups
@@ -97,8 +103,7 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
         """
         The claims with the groups the token carries replaced by the ones Graph knows.
 
-        The groups end up in the groups claim, every one of them both by its
-        object ID and by its name, so rules can name either.  Graph lists nested
+        The groups end up in the groups claim by their object IDs.  Graph lists nested
         memberships too and has no limit on how many, where a token stops at
         200 and then names no group at all.  If Graph cannot be asked, the
         groups are left out altogether, so that rules on them treat the user's
@@ -119,11 +124,17 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
         return claims
 
     def fetch_graph_groups(self, access_token):
-        """Every group the signed in user is a member of, directly or not, by ID and by name."""
+        """
+        The object ID of every group the signed in user is a member of, directly or not.
+
+        Never their names: a display name is not unique, and in most tenants
+        any user can create a group, call it whatever an admin group is called
+        and put themselves in it.
+        """
         # Casting the list down to groups is an advanced query in Graph, which
         # wants $count=true in the URL and the ConsistencyLevel header on every
         # page.
-        url = 'https://{}/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'.format(self.graph_host)
+        url = 'https://{}/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id&$top=999'.format(self.graph_host)
         headers = {'Authorization': 'Bearer {}'.format(access_token), 'Accept': 'application/json', 'ConsistencyLevel': 'eventual'}
         groups = {}
         for _ in range(GRAPH_MAX_PAGES):
@@ -137,9 +148,6 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
                 if not isinstance(group_id, str) or not group_id:
                     raise ValueError('Microsoft Graph listed a group with no ID')
                 groups[group_id] = None
-                name = group.get('displayName')
-                if isinstance(name, str) and name:
-                    groups[name] = None
             url = page.get('@odata.nextLink')
             if not url:
                 return list(groups)
@@ -166,7 +174,8 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
         username = response.get(self.setting('USERNAME_KEY', '') or 'preferred_username') or preferred_username
         # The email claim is optional in Entra and only there for users with a
         # mailbox.  The user principal name looks like an address and very often
-        # is one, so it stands in.
+        # is one, so it stands in.  Neither is verified, so the email only ever
+        # fills in the account, it never picks which account to log in to.
         email = response.get('email') or (preferred_username if isinstance(preferred_username, str) and '@' in preferred_username else '')
         return {
             'username': username,
@@ -177,22 +186,74 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
         }
 
 
-def associate_by_email(backend, details, user=None, *args, **kwargs):
+def associate_existing_account(backend, details, user=None, *args, **kwargs):
     """
-    social_core's associate_by_email, except that an Entra ID login is never
-    linked to an account that already belongs to another Entra ID user.
+    Link a first login to an account that already exists.
 
-    Linking by email is what moves people over from the Azure AD logins, or
-    from local accounts, the first time they log in with Entra ID.  But a user
-    principal name, and the address that goes with it, is often handed to
-    someone else once its owner leaves.  The newcomer has another object ID,
-    so the old account is not found by its identity, and without this the
-    email would open it for them.
+    Every login but Entra ID's does it by email, as social_core does.  Entra
+    ID's email is not verified, it is whatever is in the user's mail attribute
+    or their user principal name, and both can be set to someone else's
+    address, or be handed to someone else once their owner leaves.  So an Entra
+    ID login only takes over an account of the legacy Azure AD logins, and only
+    when that one is the same person: the ID token kept from its last login has
+    the same object ID and tenant.
     """
-    result = social_auth.associate_by_email(backend, details, user, *args, **kwargs)
-    if result and backend.name == ENTRA_ID_BACKEND_NAME and result['user'].social_auth.filter(provider=ENTRA_ID_BACKEND_NAME).exists():
-        logger.warning(
-            "Not linking the Entra ID user %s to the account %s by their email, it belongs to another Entra ID user", kwargs.get('uid'), result['user'].username
-        )
+    if backend.name != ENTRA_ID_BACKEND_NAME:
+        return social_auth.associate_by_email(backend, details, user, *args, **kwargs)
+    if user:
         return None
-    return result
+    legacy_user = legacy_azure_ad_user(kwargs.get('response') or {})
+    if legacy_user is None:
+        return None
+    return {'user': legacy_user, 'is_new': False}
+
+
+def legacy_azure_ad_user(claims):
+    """The user of the legacy Azure AD account of the same person as these Entra ID claims, if there is exactly one."""
+    oid, tid = claims.get('oid'), claims.get('tid')
+    if not oid or not tid:
+        return None
+    # The Azure AD login knows a user by their user principal name, which the
+    # v2.0 token has as preferred_username, and the tenant one by a subject
+    # that differs from app to app, but both keep the UPN or the address as
+    # the account's email.  That only narrows down where to look, the object
+    # ID is what has to match.
+    names = {claims.get(key) for key in ('upn', 'preferred_username', 'email')}
+    names = [name for name in names if isinstance(name, str) and name]
+    if not names:
+        return None
+    by_name = Q()
+    for name in names:
+        by_name |= Q(uid__iexact=name) | Q(user__email__iexact=name)
+    users = set()
+    for social in UserSocialAuth.objects.filter(by_name, provider__in=LEGACY_AZURE_AD_BACKEND_NAMES).select_related('user'):
+        stored = legacy_id_token_claims(social)
+        if stored.get('oid') == oid and stored.get('tid') == tid:
+            users.add(social.user)
+    if len(users) != 1:
+        if users:
+            logger.warning("Not linking the Entra ID user %s to an account, %d legacy Azure AD accounts are theirs", oid, len(users))
+        return None
+    (legacy_user,) = users
+    if legacy_user.social_auth.filter(provider=ENTRA_ID_BACKEND_NAME).exists():
+        # Its object ID matched, but it already has another Entra ID user.
+        logger.warning("Not linking the Entra ID user %s to the account %s, it already has an Entra ID user", oid, legacy_user.username)
+        return None
+    return legacy_user
+
+
+def legacy_id_token_claims(social):
+    """
+    The claims of the ID token a legacy Azure AD login kept.
+
+    It was checked when it was handed over, straight from Microsoft's token
+    endpoint, so it is only read back here.
+    """
+    token = (social.extra_data or {}).get('id_token')
+    if not isinstance(token, str):
+        return {}
+    try:
+        claims = jwt.decode(token, options={'verify_signature': False})
+    except jwt.InvalidTokenError:
+        return {}
+    return claims if isinstance(claims, dict) else {}

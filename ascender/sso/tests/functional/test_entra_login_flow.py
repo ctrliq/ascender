@@ -18,7 +18,7 @@ import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
 from django.test import Client
 
-from ascender.main.middleware import MigrationRanCheckMiddleware, SettingsCacheMiddleware
+from ascender.main.middleware import MigrationRanCheckMiddleware, SettingsCacheMiddleware, URLModificationMiddleware
 from ascender.main.models import Organization, Team, User
 
 TENANT = '72f988bf-86f1-41af-91ab-2d7cd011db47'
@@ -26,11 +26,15 @@ CLIENT_ID = '11111111-2222-3333-4444-555555555555'
 AUTHORITY = 'https://login.microsoftonline.com/{}'.format(TENANT)
 ISSUER = AUTHORITY + '/v2.0'
 OIDC_ISSUER = 'https://idp.example.com'
+LEGACY_AUTHORITY = 'https://login.microsoftonline.com/common'
+LEGACY_CLIENT_ID = 'legacy-client'
 
 PRIVATE_KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 JWK = dict(json.loads(jwt.algorithms.RSAAlgorithm.to_jwk(PRIVATE_KEY.public_key())), kid='key-1', use='sig', alg='RS256')
 
 ADMINS = {'groups': {'has_or': ['ascender-admins']}}
+
+GRAPH_FIRST_PAGE = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id&$top=999'
 
 
 def signed(claims, issuer, audience):
@@ -43,8 +47,9 @@ def signed(claims, issuer, audience):
 class FakeMicrosoft:
     """Answers the requests social auth makes, and remembers them."""
 
-    def __init__(self, id_token_claims, graph_pages=None, oidc_claims=None):
+    def __init__(self, id_token_claims, graph_pages=None, oidc_claims=None, legacy_claims=None):
         self.id_token_claims = id_token_claims
+        self.legacy_claims = legacy_claims or {}
         self.graph_pages = graph_pages or {}
         self.oidc_claims = oidc_claims or {}
         self.requests = []
@@ -90,6 +95,18 @@ class FakeMicrosoft:
             assert headers['Authorization'] == 'Bearer graph-access-token'
             assert headers['ConsistencyLevel'] == 'eventual'
             return self.respond(200, self.graph_pages[url])
+        # The legacy Azure AD logins, on the v1 endpoints of every tenant or of ours.
+        for legacy in (LEGACY_AUTHORITY, AUTHORITY):
+            if path == legacy + '/.well-known/openid-configuration':
+                issuer = 'https://sts.windows.net/{}/'.format('{tenantid}' if legacy == LEGACY_AUTHORITY else TENANT)
+                return self.respond(200, {'issuer': issuer, 'jwks_uri': legacy + '/discovery/keys'})
+            if path == legacy + '/discovery/keys':
+                return self.respond(200, {'keys': [JWK]})
+        if path in (LEGACY_AUTHORITY + '/oauth2/token', AUTHORITY + '/oauth2/token'):
+            assert data['client_id'] == LEGACY_CLIENT_ID
+            claims = dict({'tid': TENANT, 'sub': 'pairwise-subject'}, **self.legacy_claims)
+            id_token = signed(claims, 'https://sts.windows.net/{}/'.format(claims['tid']), LEGACY_CLIENT_ID)
+            return self.respond(200, {'token_type': 'Bearer', 'access_token': 'legacy-access-token', 'id_token': id_token})
         # Generic OIDC.
         if path == OIDC_ISSUER + '/.well-known/openid-configuration':
             return self.respond(
@@ -112,6 +129,17 @@ class FakeMicrosoft:
         if path == OIDC_ISSUER + '/userinfo':
             return self.respond(200, dict({'sub': 'oidc-sub'}, **self.oidc_claims))
         raise AssertionError('unexpected request {} {}'.format(method, url))
+
+
+@pytest.fixture(scope='module', autouse=True)
+def named_url_settings(django_db_setup, django_db_blocker):
+    # The test client builds the middleware chain, which registers the named url
+    # settings and fills them in. Inside the settings fixture those values are
+    # dropped when the test ends while the registration stays, and any later
+    # test that reads them finds nothing. Building it once out here first keeps
+    # them.
+    with django_db_blocker.unblock():
+        URLModificationMiddleware(lambda request: None)
 
 
 @pytest.fixture
@@ -144,6 +172,18 @@ def entra(settings, monkeypatch):
     settings.SOCIAL_AUTH_ENTRA_ID_USER_FLAGS = {'triggers_system_auditor': {'groups': {'has_or': ['ascender-auditors']}}}
     settings.SOCIAL_AUTH_RAISE_EXCEPTIONS = True
     return settings
+
+
+def legacy_azure_ad_account(username, upn, provider='azuread-oauth2', **id_token_claims):
+    """An account of the legacy Azure AD login, with the ID token it keeps from its last login."""
+    user = User.objects.create(username=username, email=upn)
+    extra_data = {}
+    if id_token_claims:
+        # Long expired, as a kept token always is by the time anyone moves over.
+        claims = dict({'upn': upn, 'exp': int(time.time()) - 86400 * 365}, **id_token_claims)
+        extra_data['id_token'] = jwt.encode(claims, 'legacy-key-that-nobody-checks-at-all', algorithm='HS256')
+    user.social_auth.create(provider=provider, uid=upn, extra_data=extra_data)
+    return user
 
 
 def log_in(backend, fake, nonce_from_authorize=False):
@@ -234,13 +274,81 @@ class TestEntraLogin:
         assert new_user.social_auth.get().uid == 'oid-new'
         assert new_user not in Organization.objects.get(name='Default').admin_role
 
-    def test_an_account_from_before_entra_id_is_linked_by_email(self, entra):
-        # Someone moving over from the legacy Azure AD login, or a local account.
-        existing = User.objects.create(username='jane', email='jane@contoso.com')
-        existing.social_auth.create(provider='azuread-oauth2', uid='jane@contoso.com')
+    def test_a_legacy_azure_ad_account_of_the_same_person_is_taken_over(self, entra):
+        existing = legacy_azure_ad_account('jane', 'jane@contoso.com', oid='oid-jane', tid=TENANT)
         client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': 'oid-jane', 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
         assert logged_in_user(client) == existing
         assert existing.social_auth.get(provider='entra-id').uid == 'oid-jane'
+
+    @pytest.mark.parametrize('same_person', [True, False])
+    @pytest.mark.parametrize('legacy_backend, legacy_uid', [('azuread-oauth2', 'jane@contoso.com'), ('azuread-tenant-oauth2', 'pairwise-subject')])
+    def test_moving_over_from_a_real_legacy_login(self, entra, legacy_backend, legacy_uid, same_person):
+        # What the legacy login keeps of its ID token is what tells who it was.
+        prefix = 'SOCIAL_AUTH_{}_'.format(legacy_backend.upper().replace('-', '_'))
+        setattr(entra, prefix + 'KEY', LEGACY_CLIENT_ID)
+        setattr(entra, prefix + 'SECRET', 'legacy-secret')
+        setattr(entra, prefix + 'TENANT_ID', TENANT)
+        entra.AUTHENTICATION_BACKENDS = entra.AUTHENTICATION_BACKENDS + ['social_core.backends.azuread_tenant.AzureADTenantOAuth2']
+        legacy_claims = {'oid': 'oid-jane', 'upn': 'jane@contoso.com', 'name': 'Jane Doe'}
+        legacy, _, _, callback = log_in(legacy_backend, FakeMicrosoft({}, legacy_claims=legacy_claims))
+        assert callback['Location'] == '/sso/complete/'
+        old_account = logged_in_user(legacy)
+        assert old_account.social_auth.get().uid == legacy_uid
+
+        oid = 'oid-jane' if same_person else 'oid-new-jane'
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': oid, 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
+        assert (logged_in_user(client) == old_account) is same_person
+
+    def test_both_legacy_logins_of_the_same_person(self, entra):
+        existing = legacy_azure_ad_account('jane', 'jane@contoso.com', oid='oid-jane', tid=TENANT)
+        existing.social_auth.create(provider='azuread-tenant-oauth2', uid='pairwise-subject', extra_data=existing.social_auth.get().extra_data)
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': 'oid-jane', 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
+        assert logged_in_user(client) == existing
+
+    @pytest.mark.parametrize(
+        'kept',
+        [
+            # The UPN went to someone else after its owner used the legacy login.
+            {'oid': 'oid-old', 'tid': TENANT},
+            # The same object ID in another directory is not the same person.
+            {'oid': 'oid-new', 'tid': '9188040d-6c67-4c5b-b112-36a304b66dad'},
+            # Nothing to tell who it was.
+            {'oid': 'oid-new'},
+            {},
+        ],
+    )
+    def test_a_legacy_azure_ad_account_of_someone_else_is_not_opened(self, entra, kept):
+        existing = legacy_azure_ad_account('jane', 'jane@contoso.com', **kept)
+        Organization.objects.get_or_create(name='Default')[0].admin_role.members.add(existing)
+        claims = {'oid': 'oid-new', 'preferred_username': 'jane@contoso.com', 'email': 'jane@contoso.com', 'groups': ['ascender-users']}
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft(claims))
+        newcomer = logged_in_user(client)
+        assert newcomer != existing
+        assert newcomer.social_auth.get().uid == 'oid-new'
+        assert newcomer not in Organization.objects.get(name='Default').admin_role
+        assert not existing.social_auth.filter(provider='entra-id').exists()
+
+    def test_a_legacy_account_that_already_has_an_entra_id_user_is_not_taken_twice(self, entra):
+        existing = legacy_azure_ad_account('jane', 'jane@contoso.com', oid='oid-jane', tid=TENANT)
+        existing.social_auth.create(provider='entra-id', uid='oid-other')
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': 'oid-jane', 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
+        assert logged_in_user(client) != existing
+
+    def test_an_address_does_not_open_a_local_account(self, entra):
+        # Entra does not verify the email claim, so whoever can set a user's
+        # mail attribute could otherwise walk into any local account.
+        boss = User.objects.create(username='localboss', email='boss@contoso.com', is_superuser=True)
+        claims = {'oid': 'oid-intruder', 'preferred_username': 'intruder@contoso.com', 'email': 'boss@contoso.com', 'groups': ['ascender-users']}
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft(claims))
+        intruder = logged_in_user(client)
+        assert intruder != boss
+        assert not intruder.is_superuser
+        assert not boss.social_auth.exists()
+
+    def test_nor_does_a_upn(self, entra):
+        local = User.objects.create(username='jane', email='jane@contoso.com')
+        client, _, _, _ = log_in('entra-id', FakeMicrosoft({'oid': 'oid-jane', 'preferred_username': 'jane@contoso.com', 'groups': ['ascender-users']}))
+        assert logged_in_user(client) != local
 
     def test_other_logins_still_link_by_email(self, entra):
         existing = User.objects.create(username='someone', email='someone@example.com')
@@ -266,7 +374,9 @@ class TestEntraLogin:
 
     def test_groups_from_graph(self, entra):
         entra.SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH = True
-        first = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'
+        entra.SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS = {'groups': {'has_or': ['admins-id']}}
+        entra.SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP = {'Default': {'triggers_admins': {'groups': {'has_or': ['admins-id']}}}}
+        first = GRAPH_FIRST_PAGE
         second = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$skiptoken=X'
         many = [{'id': 'g{}'.format(i), 'displayName': 'other-{}'.format(i)} for i in range(250)]
         fake = FakeMicrosoft(
@@ -282,6 +392,21 @@ class TestEntraLogin:
         assert callback['Location'] == '/sso/complete/'
         user = logged_in_user(client)
         assert user in Organization.objects.get(name='Default').admin_role
+
+    def test_a_graph_group_named_like_the_admins_grants_nothing(self, entra):
+        # One a user created and joined themselves, which tenants allow by default.
+        entra.SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH = True
+        entra.SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS = {}
+        entra.SOCIAL_AUTH_ENTRA_ID_USER_FLAGS = {'triggers_superuser': ADMINS}
+        fake = FakeMicrosoft(
+            {'oid': 'oid-eve', 'preferred_username': 'eve@contoso.com'},
+            graph_pages={GRAPH_FIRST_PAGE: {'value': [{'id': '00000000-dead-beef-0000-000000000000', 'displayName': 'ascender-admins'}]}},
+        )
+        client, _, _, callback = log_in('entra-id', fake)
+        assert callback['Location'] == '/sso/complete/'
+        eve = logged_in_user(client)
+        assert not eve.is_superuser
+        assert not Organization.objects.filter(name='Default', admin_role__members=eve).exists()
 
     def test_logout_ends_the_microsoft_session(self, entra):
         entra.SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP = True

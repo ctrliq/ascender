@@ -15,8 +15,7 @@ the one to pick for a new setup:
   handed to someone else, instead of a name that can be
 * it can map users from their groups, their app roles or any other claim, the
   same way generic OIDC does (see [oidc.md](oidc.md))
-* it can read the groups from Microsoft Graph, with their names and with no
-  limit on how many
+* it can read the groups from Microsoft Graph, with no limit on how many
 * it has a login rule, superuser and auditor flags, can strip the domain off
   usernames and can log the user out of Microsoft too
 * it works in the sovereign clouds and in External ID tenants
@@ -78,8 +77,16 @@ or else the user principal name when it looks like an address.
 Whatever the username ends up being, the account is linked to the user's object
 ID. Renaming someone in Entra, or changing their UPN, does not give them a new
 account, and a UPN that is later given to another person does not open the old
-one, even with the same email: an account that already has an Entra ID user
-is never linked to another one by email.
+one.
+
+Unlike the other logins, Entra ID never links a first login to an existing
+account by email. Entra does not verify the `email` claim: anyone who can edit a
+user's mail attribute can put any address there, and a UPN, with the address
+that goes with it, is often given to someone else once its owner leaves.
+Linking by it would let that person into whichever Ascender account has the
+address, a local superuser included. The only accounts an Entra ID login takes
+over are those of the legacy Azure AD logins, and only when they belong to the
+same person (see [Moving from the Azure AD logins](#moving-from-the-azure-ad-logins)).
 
 ## Groups and app roles
 
@@ -88,7 +95,8 @@ configuration > Add groups claim*. A few things to know:
 
 * By default groups come as object IDs, so the rules have to use those IDs:
   `{"groups": {"has_or": ["9f1b7c2e-..."]}}`. For groups synced from on-premises
-  AD you can choose `sAMAccountName` instead and use names.
+  AD you can choose `sAMAccountName` instead and use names, since those are
+  unique and only change in AD.
 * A token only fits 200 groups. A user in more than that gets no groups at all
   and a pointer to Microsoft Graph instead. Ascender does not treat that as "no
   groups": every rule on groups is skipped for that user, so the login rule
@@ -111,13 +119,17 @@ login. What you get:
 
 * no limit on how many groups
 * nested groups too, since the membership is transitive
-* every group both by its object ID and by its display name, so a rule can say
-  `{"groups": {"has_or": ["ascender-admins"]}}` or use the ID when two groups
-  share a name
 * no groups claim to set up in the token configuration
 
-Those groups go in the `groups` claim, replacing whatever the token had there,
-so leave `SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM` at `groups` to match on them.
+Those groups go in the `groups` claim by their object IDs, replacing whatever the
+token had there, so leave `SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM` at `groups` and
+write the rules with the IDs: `{"groups": {"has_or": ["9f1b7c2e-..."]}}`.
+
+Display names are left out on purpose. They are not unique, and in a tenant with
+the default settings any user can create a group, give it the name of your admin
+group and add themselves to it. A rule on the name would make them an admin. If
+you would rather write rules with names, use app roles: only admins can assign
+them.
 
 What it needs:
 
@@ -191,9 +203,14 @@ run next to an Azure AD one while you move over:
    one.
 2. Fill in the Entra ID settings and move the maps over, now with rules on groups
    or roles where you need them.
-3. Log in with the new button. A user who already has an account with the same
-   email, and no Entra ID user linked to it yet, gets linked to it. That is
-   only by email, so remove the accounts of people who have left before their
-   address goes to someone else.
+3. Log in with the new button. An Azure AD account is taken over by the first
+   Entra ID login of the same person, which Ascender knows by the object ID and
+   tenant in the ID token it kept from that account's last Azure AD login, so a
+   reused UPN or address never gets someone else's account.
 4. Once everyone is on it, clear the client ID of the Azure AD login so its
    button goes away.
+
+Anyone who cannot be matched that way gets a new account on their first Entra
+ID login: local accounts, Azure AD accounts with no ID token kept, or ones whose
+UPN has changed since. Grant the new account what the old one had, or let the
+maps do it, and remove the old one.

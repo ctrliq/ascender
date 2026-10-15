@@ -4024,7 +4024,7 @@
               "type": "boolean",
               "required": false,
               "label": "Read Entra ID Groups from Microsoft Graph",
-              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups, includes nested ones and gives each group by name as well as by object ID, so rules can use either. The groups claim then holds these groups. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
               "category": "Microsoft Entra ID",
               "category_slug": "entra-id",
               "default": false
@@ -4048,8 +4048,8 @@
               "placeholder": {
                   "groups": {
                       "has_or": [
-                          "ascender-users",
-                          "ascender-admins"
+                          "11111111-0000-0000-0000-000000000001",
+                          "11111111-0000-0000-0000-000000000002"
                       ]
                   }
               },
@@ -4072,14 +4072,14 @@
                       "triggers_admins": {
                           "groups": {
                               "has_or": [
-                                  "ascender-admins"
+                                  "11111111-0000-0000-0000-000000000002"
                               ]
                           }
                       },
                       "triggers_users": {
                           "groups": {
                               "has_or": [
-                                  "ascender-users"
+                                  "11111111-0000-0000-0000-000000000001"
                               ]
                           }
                       },
@@ -4112,7 +4112,7 @@
                       "triggers": {
                           "groups": {
                               "has_or": [
-                                  "ascender-operators"
+                                  "11111111-0000-0000-0000-000000000003"
                               ]
                           }
                       },
@@ -4142,14 +4142,14 @@
                   "triggers_superuser": {
                       "groups": {
                           "has_or": [
-                              "ascender-superusers"
+                              "11111111-0000-0000-0000-000000000005"
                           ]
                       }
                   },
                   "triggers_system_auditor": {
                       "groups": {
                           "has_or": [
-                              "ascender-auditors"
+                              "11111111-0000-0000-0000-000000000004"
                           ]
                       }
                   },
@@ -7760,7 +7760,7 @@
           "SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH": {
               "type": "boolean",
               "label": "Read Entra ID Groups from Microsoft Graph",
-              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups, includes nested ones and gives each group by name as well as by object ID, so rules can use either. The groups claim then holds these groups. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
               "category": "Microsoft Entra ID",
               "category_slug": "entra-id",
               "defined_in_file": false

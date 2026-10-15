@@ -44,7 +44,7 @@ Microsoft Entra ID is the name Azure Active Directory has had since 2023. Ascend
 
 4. If the tenant is not in the public cloud, set **Entra ID Authority Host**, for example ``login.microsoftonline.us`` for Azure Government.
 
-5. To map users from their groups, either add a groups claim in the *Token configuration* of the app registration, define app roles and set **Entra ID Groups Claim** to ``roles``, or turn on **Read Entra ID Groups from Microsoft Graph**. The last one has no limit on the number of groups and gives their names, and needs the delegated Microsoft Graph permission ``GroupMember.Read.All`` with admin consent. Then fill in the login rule, organization map, team map and user flags as needed.
+5. To map users from their groups, either add a groups claim in the *Token configuration* of the app registration, define app roles and set **Entra ID Groups Claim** to ``roles``, or turn on **Read Entra ID Groups from Microsoft Graph**. The last one has no limit on the number of groups and gives them by object ID, never by name, since any user who can create a group can copy a name. It needs the delegated Microsoft Graph permission ``GroupMember.Read.All`` with admin consent. Then fill in the login rule, organization map, team map and user flags as needed.
 
 6. Click **Save**. The login screen now offers **Sign in with Microsoft Entra ID**.
 

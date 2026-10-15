@@ -401,7 +401,7 @@ class TestEnabled:
             assert not self.enabled()
 
 
-GRAPH_GROUPS = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id,displayName&$top=999'
+GRAPH_GROUPS = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$select=id&$top=999'
 GRAPH_PAGE_2 = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$skiptoken=2'
 
 
@@ -439,7 +439,7 @@ class TestGroupsFromGraph:
         assert backend.graph_host == 'dod-graph.microsoft.us'
         assert backend.get_scope()[-1] == 'https://dod-graph.microsoft.us/GroupMember.Read.All'
 
-    def test_groups_by_id_and_name_over_every_page(self):
+    def test_groups_by_id_over_every_page(self):
         _, response = entra_response(
             graph={
                 GRAPH_GROUPS: {'value': [{'id': 'g1', 'displayName': 'ascender-admins'}, {'id': 'g2', 'displayName': None}], '@odata.nextLink': GRAPH_PAGE_2},
@@ -447,7 +447,7 @@ class TestGroupsFromGraph:
             },
             groups=['token-group'],
         )
-        assert response['groups'] == ['g1', 'ascender-admins', 'g2', 'g3', 'ascender-users']
+        assert response['groups'] == ['g1', 'g2', 'g3']
 
     def test_a_user_in_too_many_groups_for_the_token(self, settings):
         settings.SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS = GROUP_RULE
@@ -457,14 +457,31 @@ class TestGroupsFromGraph:
             _claim_names={'groups': 'src1'},
             _claim_sources={'src1': {'endpoint': 'https://graph.microsoft.com/v1.0/users/x/getMemberObjects'}},
         )
-        assert len(response['groups']) == 602
+        assert len(response['groups']) == 301
+        settings.SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS = {'groups': {'has_or': ['admins']}}
         assert check_login_allowed(backend, {'username': 'x'}, response=response) is None
 
-    def test_maps_use_the_group_names(self, settings, user):
-        settings.SOCIAL_AUTH_ENTRA_ID_TEAM_MAP = {'Operators': {'organization': 'Default', 'triggers': {'groups': {'has_or': ['ascender-operators']}}}}
+    def test_maps_use_the_group_ids(self, settings, user):
+        settings.SOCIAL_AUTH_ENTRA_ID_TEAM_MAP = {'Operators': {'organization': 'Default', 'triggers': {'groups': {'has_or': ['g1']}}}}
         backend, response = entra_response(graph={GRAPH_GROUPS: {'value': [{'id': 'g1', 'displayName': 'ascender-operators'}]}})
         update_user_org_team_mappings(backend, {}, user=user, response=response)
         assert user in Team.objects.get(name='Operators').member_role
+
+    def test_a_group_named_like_the_admins_grants_nothing(self, settings, user):
+        # Any user can create a group and call it anything, so its name is no
+        # proof of being in the real one.
+        admins = {'groups': {'has_or': ['ascender-admins']}}
+        settings.SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS = admins
+        settings.SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP = {'Default': {'triggers_admins': admins}}
+        settings.SOCIAL_AUTH_ENTRA_ID_USER_FLAGS = {'triggers_superuser': admins}
+        backend, response = entra_response(graph={GRAPH_GROUPS: {'value': [{'id': '00000000-dead-beef-0000-000000000000', 'displayName': 'ascender-admins'}]}})
+        assert response['groups'] == ['00000000-dead-beef-0000-000000000000']
+        with pytest.raises(AuthForbidden):
+            check_login_allowed(backend, {'username': 'eve'}, response=response)
+        update_user_org_team_mappings(backend, {}, user=user, response=response)
+        update_user_flags(backend, {}, user=user, response=response)
+        assert user not in Organization.objects.get(name='Default').admin_role
+        assert not user.is_superuser
 
     @pytest.mark.parametrize(
         'graph',

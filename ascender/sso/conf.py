@@ -1301,9 +1301,9 @@ register(
     label=_('Read Entra ID Groups from Microsoft Graph'),
     help_text=_(
         'Read the user\'s groups from Microsoft Graph at login instead of from '
-        'the token. Graph has no limit on how many groups, includes nested ones '
-        'and gives each group by name as well as by object ID, so rules can use '
-        'either. The groups claim then holds these groups. The app registration '
+        'the token. Graph has no limit on how many groups and includes nested '
+        'ones. The groups claim then holds their object IDs, never their names, '
+        'which any user who can create a group can copy. The app registration '
         'needs the delegated Microsoft Graph permission GroupMember.Read.All, '
         'with admin consent. If Graph cannot be reached at login, rules on groups '
         'treat the user\'s groups as unknown.'
@@ -1343,7 +1343,9 @@ register(
     ),
     category=_('Microsoft Entra ID'),
     category_slug='entra-id',
-    placeholder=collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-users', 'ascender-admins'])]))]),
+    placeholder=collections.OrderedDict(
+        [('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000001', '11111111-0000-0000-0000-000000000002'])]))]
+    ),
 )
 
 register(
@@ -1367,8 +1369,14 @@ register(
                 'Default',
                 collections.OrderedDict(
                     [
-                        ('triggers_admins', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-admins'])]))])),
-                        ('triggers_users', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-users'])]))])),
+                        (
+                            'triggers_admins',
+                            collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000002'])]))]),
+                        ),
+                        (
+                            'triggers_users',
+                            collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000001'])]))]),
+                        ),
                         ('remove_admins', True),
                         ('remove_users', True),
                     ]
@@ -1398,7 +1406,7 @@ register(
                 collections.OrderedDict(
                     [
                         ('organization', 'Default'),
-                        ('triggers', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-operators'])]))])),
+                        ('triggers', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000003'])]))])),
                         ('remove', True),
                     ]
                 ),
@@ -1423,8 +1431,8 @@ register(
     category_slug='entra-id',
     placeholder=collections.OrderedDict(
         [
-            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-superusers'])]))])),
-            ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-auditors'])]))])),
+            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000005'])]))])),
+            ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000004'])]))])),
             ('remove_superusers', True),
             ('remove_system_auditors', True),
         ]
@@ -1814,7 +1822,7 @@ register(
     category_slug='oidc',
     placeholder=collections.OrderedDict(
         [
-            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-superusers'])]))])),
+            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000005'])]))])),
             ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-auditors'])]))])),
             ('remove_superusers', True),
             ('remove_system_auditors', True),

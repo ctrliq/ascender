@@ -13045,7 +13045,7 @@ export interface components {
       SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
       /**
        * Read Entra ID Groups from Microsoft Graph
-       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups, includes nested ones and gives each group by name as well as by object ID, so rules can use either. The groups claim then holds these groups. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
        * @default false
        */
       SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
@@ -16334,7 +16334,7 @@ export interface components {
       SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
       /**
        * Read Entra ID Groups from Microsoft Graph
-       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups, includes nested ones and gives each group by name as well as by object ID, so rules can use either. The groups claim then holds these groups. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
        * @default false
        */
       SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
@@ -18518,7 +18518,7 @@ export interface components {
       SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
       /**
        * Read Entra ID Groups from Microsoft Graph
-       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups, includes nested ones and gives each group by name as well as by object ID, so rules can use either. The groups claim then holds these groups. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
        * @default false
        */
       SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
