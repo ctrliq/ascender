@@ -157,7 +157,7 @@ msgstr "Maximaal aantal forks dat is toegestaan voor alle taken die gelijktijdig
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "Kan de synchronisatie van de inventarisbron niet annuleren"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:368
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:376
 msgid "Delete Project"
 msgstr "Project verwijderen"
 
@@ -338,8 +338,8 @@ msgstr "Rollen selecteren om toe te passen"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "Uit te checken branch. Naast branches kunt u tags, commit-hashes en willekeurige refs invoeren. Sommige commit-hashes en refs zijn mogelijk niet beschikbaar tenzij u ook een aangepaste refspec opgeeft."
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:266
+#: components/JobList/JobListItem.tsx:130
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -395,7 +395,7 @@ msgstr "Inventaris kopiëren"
 msgid "Removing"
 msgstr "Verwijderen van"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:213
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:106
 msgid "The project must be synced before a revision is available."
 msgstr "Het project moet zijn gesynchroniseerd voordat een revisie beschikbaar is."
@@ -615,7 +615,7 @@ msgstr "U kunt niet meerdere kluisreferenties met delfde kluis-ID selecteren. Al
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:357
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:365
 msgid "Cancel Sync"
 msgstr "Synchronisatie annuleren"
 
@@ -634,10 +634,10 @@ msgid "GPG Public Key"
 msgstr "GPG openbare sleutel"
 
 #: components/Lookup/ProjectLookup.tsx:169
-#: components/PromptDetail/PromptProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:108
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:170
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:238
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:227
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:235
 #: screens/Project/ProjectList/ProjectList.tsx:205
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:25
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:109
@@ -740,8 +740,8 @@ msgstr "Knooppunt toevoegen"
 msgid "JSON tab"
 msgstr "JSON-tabblad"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:134
 msgid "Start Time"
 msgstr "Starttijd"
 
@@ -778,7 +778,7 @@ msgstr "Geen"
 msgid "Miscellaneous System"
 msgstr "Divers systeem"
 
-#: screens/Project/shared/ProjectForm.tsx:325
+#: screens/Project/shared/ProjectForm.tsx:326
 msgid "Choose a Source Control Type"
 msgstr "Kies een broncontroletype"
 
@@ -826,7 +826,7 @@ msgstr "Terug naar projecten"
 msgid "Exception Frequency"
 msgstr "Uitzonderingsfrequentie"
 
-#: screens/Project/shared/ProjectForm.tsx:306
+#: screens/Project/shared/ProjectForm.tsx:307
 msgid "Select an organization before editing the default execution environment."
 msgstr "Selecteer een organisatie voordat u de standaard uitvoeringsomgeving bewerkt."
 
@@ -1129,7 +1129,7 @@ msgstr "Gezondheidscontroles zijn asynchrone taken. Zie de"
 msgid "Edit group"
 msgstr "Groep bewerken"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:203
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:211
 #: screens/Project/ProjectList/ProjectListItem.tsx:96
 msgid "Copy full revision to clipboard."
 msgstr "Volledige herziening kopiëren naar klembord."
@@ -1549,7 +1549,7 @@ msgstr "Minder tonen"
 msgid "Revision"
 msgstr "Herziening"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:338
 msgid "Failed to delete one or more jobs."
 msgstr "Een of meer taken kunnen niet worden verwijderd."
 
@@ -1612,7 +1612,7 @@ msgstr "Minuut"
 msgid "Copied"
 msgstr "Gekopieerd"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:349
 msgid "Failed to cancel one or more jobs."
 msgstr "Kan een of meer taken niet annuleren."
 
@@ -1642,8 +1642,8 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:264
+#: components/JobList/JobListItem.tsx:119
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1822,11 +1822,11 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
 #: screens/Organization/shared/OrganizationForm.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:177
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:185
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:176
-#: screens/Project/shared/ProjectForm.tsx:275
+#: screens/Project/shared/ProjectForm.tsx:276
 #: screens/Team/shared/TeamForm.tsx:35
 #: screens/Team/TeamDetail/TeamDetail.tsx:44
 #: screens/Team/TeamList/TeamList.tsx:115
@@ -1940,8 +1940,8 @@ msgid "Approved"
 msgstr "Goedgekeurd"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:139
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:138
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2015,8 +2015,8 @@ msgstr "Samenvatting van de gebeurtenis niet beschikbaar"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:66
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:122
+#: components/PromptDetail/PromptProjectDetail.tsx:68
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:124
 msgid "Allow branch override"
 msgstr "Overschrijven van vertakking toelaten"
 
@@ -2105,7 +2105,7 @@ msgstr "Dit project wordt momenteel gesynchroniseerd en kan niet worden aangekli
 msgid "Administration"
 msgstr "Beheer"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:385
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:393
 msgid "Failed to delete project."
 msgstr "Kan project niet verwijderen."
 
@@ -2132,7 +2132,7 @@ msgstr "Diverse systeeminstellingen weergeven"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
-#: screens/Project/shared/ProjectForm.tsx:365
+#: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
 msgstr "Soortdetails"
 
@@ -2145,7 +2145,7 @@ msgstr "Overige meldingen"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Uitkomst van bovenliggend knooppunt vereist voordat de voorwaarde wordt geëvalueerd."
 
-#: components/JobList/JobListItem.tsx:249
+#: components/JobList/JobListItem.tsx:248
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2377,8 +2377,8 @@ msgstr "Ongedaan maken"
 msgid "Pending delete"
 msgstr "In afwachting om verwijderd te worden"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:117
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:258
+#: components/PromptDetail/PromptProjectDetail.tsx:124
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:266
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:71
 msgid "Source Control Credential"
 msgstr "Toegangsgegevens bronbeheer"
@@ -2474,7 +2474,7 @@ msgstr "Gefedereerde inventaris toevoegen"
 msgid "View Host Details"
 msgstr "Hostdetails weergeven"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:215
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:223
 #: screens/Project/ProjectList/ProjectListItem.tsx:108
 msgid "Sync for revision"
 msgstr "Synchroniseren voor revisie"
@@ -2556,7 +2556,7 @@ msgstr "Externe logboekregistratie inschakelen"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:60
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:192
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:43
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:136
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:144
 #: screens/Project/ProjectList/ProjectListItem.tsx:71
 msgid "STATUS:"
 msgstr "STATUS:"
@@ -2573,7 +2573,7 @@ msgstr "Gebruikersdetails"
 msgid "Delete Execution Environment"
 msgstr "Uitvoeringsomgeving verwijderen"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:372
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "Taken verdelen"
@@ -2613,8 +2613,8 @@ msgstr "voor meer informatie."
 msgid "Delete Inventory"
 msgstr "Inventaris verwijderen"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:111
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:237
+#: components/PromptDetail/PromptProjectDetail.tsx:118
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:245
 #: screens/Project/shared/ProjectSubForms/GitSubForm.tsx:41
 msgid "Source Control Refspec"
 msgstr "Refspec broncontrole"
@@ -2737,7 +2737,7 @@ msgstr "Een of meer hosts kunnen niet worden losgekoppeld."
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:57
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:189
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:40
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:133
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "TAAK-ID:"
@@ -2843,10 +2843,10 @@ msgstr "Time-out van updatecache"
 msgid "Question"
 msgstr "Vraag"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:96
+#: components/PromptDetail/PromptProjectDetail.tsx:103
 #: screens/Job/JobDetail/JobDetail.tsx:314
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:192
-#: screens/Project/shared/ProjectForm.tsx:316
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:200
+#: screens/Project/shared/ProjectForm.tsx:317
 msgid "Source Control Type"
 msgstr "Type broncontrole"
 
@@ -2971,7 +2971,7 @@ msgid "Action"
 msgstr "Actie"
 
 #: components/Lookup/ProjectLookup.tsx:162
-#: components/PromptDetail/PromptProjectDetail.tsx:98
+#: components/PromptDetail/PromptProjectDetail.tsx:105
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:163
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:231
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
@@ -2980,7 +2980,7 @@ msgstr "Actie"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:245
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:100
 #: screens/Job/JobDetail/JobDetail.tsx:78
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:193
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:201
 #: screens/Project/ProjectList/ProjectList.tsx:198
 #: screens/Project/ProjectList/ProjectListItem.tsx:205
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:102
@@ -3060,7 +3060,7 @@ msgstr "Taakdetails weergeven"
 msgid "Azure AD settings"
 msgstr "Azure AD-instellingen"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3131,7 +3131,7 @@ msgstr "Kan inventarisbron niet synchroniseren."
 msgid "Failed to deny {0}."
 msgstr "Kan {0} niet verwijderen."
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:196
 #: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
@@ -3409,7 +3409,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Job/JobDetail/JobDetail.tsx:679
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:374
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
@@ -3459,8 +3459,8 @@ msgstr "Lezen"
 #~ msgid "View Settings"
 #~ msgstr "Instellingen weergeven"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:159
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:162
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
@@ -3559,7 +3559,7 @@ msgstr "GitHub-team"
 #: screens/Job/JobDetail/JobDetail.tsx:603
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:326
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:334
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
@@ -3809,7 +3809,7 @@ msgstr "Taken verdelen"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:199
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:286
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:354
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:202
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:210
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "Succesvol gekopieerd naar klembord!"
@@ -3925,7 +3925,7 @@ msgstr "Uitgeschakeld"
 msgid "Default Execution Environment"
 msgstr "Standaarduitvoeringsomgeving"
 
-#: components/JobList/JobListItem.tsx:297
+#: components/JobList/JobListItem.tsx:296
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4163,7 +4163,7 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:347
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
@@ -4601,8 +4601,8 @@ msgstr "Organisatiedetails weergeven"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
+#: components/JobList/JobList.tsx:335
+#: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
@@ -4661,7 +4661,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:390
 #: screens/Project/ProjectList/ProjectList.tsx:294
 #: screens/Project/ProjectList/ProjectList.tsx:306
 #: screens/Project/shared/ProjectSyncButton.tsx:70
@@ -4763,6 +4763,11 @@ msgstr "Een of meer projecten kunnen niet worden verwijderd."
 msgid "Set source path to"
 msgstr "Stel bronpad in op"
 
+#: components/PromptDetail/PromptProjectDetail.tsx:73
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:130
+msgid "Reuse downloaded requirements"
+msgstr "Gedownloade vereisten hergebruiken"
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4821,7 +4826,7 @@ msgstr "Gestart door"
 msgid "Delete this node"
 msgstr "Dit knooppunt verwijderen"
 
-#: components/JobList/JobListItem.tsx:271
+#: components/JobList/JobListItem.tsx:270
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "Taak bronworkflow"
@@ -4981,8 +4986,8 @@ msgstr "Uitvoeringsomgevingen"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Vraag om taaktype bij opstarten."
 
-#: components/JobList/JobListItem.tsx:237
-#: components/JobList/JobListItem.tsx:245
+#: components/JobList/JobListItem.tsx:236
+#: components/JobList/JobListItem.tsx:244
 msgid "Schedule"
 msgstr "Schema"
 
@@ -5064,7 +5069,7 @@ msgstr "Kenmerken en functies op systeemniveau definiëren"
 msgid "Run a health check on the instance"
 msgstr "Een gezondheidscontrole op de instantie uitvoeren"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:363
 #: screens/Project/ProjectList/ProjectListItem.tsx:216
 msgid "Cancel Project Sync"
 msgstr "Projectsynchronisatie annuleren"
@@ -5110,7 +5115,7 @@ msgstr "in de documentatie en de"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:169
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:217
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:162
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:170
 msgid "Last Job Status"
 msgstr "Laatste taakstatus"
 
@@ -5187,7 +5192,7 @@ msgstr "Dag"
 msgid "Collapse"
 msgstr "Samenvouwen"
 
-#: components/JobList/JobListItem.tsx:342
+#: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5230,7 +5235,7 @@ msgstr "Status selecteren"
 msgid "Month"
 msgstr "Maand"
 
-#: components/JobList/JobListItem.tsx:318
+#: components/JobList/JobListItem.tsx:317
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5323,8 +5328,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "Verwijder de huidige zoekopdracht die gerelateerd is aan ansible-feiten om een andere zoekopdracht met deze sleutel mogelijk te maken."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:162
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:315
+#: components/PromptDetail/PromptProjectDetail.tsx:169
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:323
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:76
 msgid "Project Base Path"
 msgstr "Basispad project"
@@ -5415,9 +5420,9 @@ msgstr "Bronnaam"
 msgid "select module"
 msgstr "module selecteren"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:130
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:242
-#: screens/Project/shared/ProjectForm.tsx:357
+#: components/PromptDetail/PromptProjectDetail.tsx:137
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:250
+#: screens/Project/shared/ProjectForm.tsx:358
 msgid "Content Signature Validation Credential"
 msgstr "Content Signature Validation Credential"
 
@@ -5448,7 +5453,7 @@ msgstr "Voorkeursthema"
 
 #: screens/Instances/Shared/InstanceForm.tsx:38
 #: screens/Inventory/shared/InventorySourceForm.tsx:110
-#: screens/Project/shared/ProjectForm.tsx:167
+#: screens/Project/shared/ProjectForm.tsx:168
 msgid "Set a value for this field"
 msgstr "Waarde instellen voor dit veld"
 
@@ -5597,7 +5602,7 @@ msgstr "Er ontbreekt een regel in het schema"
 msgid "Write"
 msgstr "Schrijven"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:174
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "Optie Details"
 
@@ -5687,7 +5692,7 @@ msgstr "Inventarisdetails weergeven"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "Deze inventaris wordt toegepast op alle workflowknooppunten binnen deze workflow ({0}) die vragen naar een inventaris."
 
-#: screens/Project/shared/Project.helptext.tsx:103
+#: screens/Project/shared/Project.helptext.tsx:104
 msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
 msgstr "Geheim dat wordt gedeeld met de webhook-service. De service gebruikt dit om zijn verzoeken te ondertekenen, zodat alleen uw repository een projectsynchronisatie kan activeren. Typ uw eigen geheim om het als configuratie te beheren, of laat het veld leeg om er een te laten genereren bij het opslaan."
 
@@ -5862,13 +5867,13 @@ msgstr "Testbericht"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:116
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:195
-#: components/PromptDetail/PromptProjectDetail.tsx:143
+#: components/PromptDetail/PromptProjectDetail.tsx:150
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:336
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
@@ -6127,7 +6132,7 @@ msgstr "Bijwerken"
 msgid "Failed to delete one or more schedules."
 msgstr "Een of meer schema's kunnen niet worden verwijderd."
 
-#: screens/Project/shared/Project.helptext.tsx:101
+#: screens/Project/shared/Project.helptext.tsx:102
 msgid "Service that webhook requests will be accepted from."
 msgstr "Service waarvan webhook-verzoeken worden geaccepteerd."
 
@@ -6160,7 +6165,7 @@ msgstr "hier."
 msgid "Unavailable"
 msgstr "Niet beschikbaar"
 
-#: screens/Project/shared/Project.helptext.tsx:99
+#: screens/Project/shared/Project.helptext.tsx:100
 msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
 msgstr "Synchroniseer het project wanneer er een push plaatsvindt in de broncodebeheer-repository, zodat de lokale kopie altijd up-to-date is zonder polling of updates bij elke taakstart."
 
@@ -6501,7 +6506,7 @@ msgstr "Deze uitvoering heeft geen mislukte nodes die geforceerd kunnen worden. 
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "Provisioning-callbacks: schakelt het maken van een provisioning-callback-URL in. Via de URL kan een host contact opnemen met Ascender en een configuratie-update aanvragen met dit taaksjabloon."
 
-#: components/JobList/JobListItem.tsx:163
+#: components/JobList/JobListItem.tsx:162
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6618,8 +6623,8 @@ msgstr "Groep"
 #~ msgid "Request subscription"
 #~ msgstr "Abonnement aanvragen"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:152
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:272
+#: components/PromptDetail/PromptProjectDetail.tsx:159
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:280
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 
@@ -6667,7 +6672,7 @@ msgstr "Taakinstellingen weergeven"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:343
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:351
 #: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "bewerken"
@@ -6931,7 +6936,7 @@ msgstr "Toegangsgegevens om te verifiëren bij een beveiligd containerregister."
 msgid "Context"
 msgstr "Context"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:302
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:310
 #: screens/Template/shared/WebhookSubForm.tsx:238
 msgid "Webhook Ref Filter"
 msgstr "Webhook-reffilter"
@@ -7139,7 +7144,7 @@ msgstr "De volledige imagelocatie, inclusief het containerregister, de imagenaam
 msgid "Node state types"
 msgstr "Typen knooppuntstatus"
 
-#: screens/Project/shared/Project.helptext.tsx:102
+#: screens/Project/shared/Project.helptext.tsx:103
 msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
 msgstr "Het webhook-eindpunt van dit project. Voeg het toe aan de webhook-configuratie van de repository zodat pushes een projectsynchronisatie activeren."
 
@@ -7156,7 +7161,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Kies een draaiboekmap"
 
-#: components/JobList/JobListItem.tsx:259
+#: components/JobList/JobListItem.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7323,6 +7328,10 @@ msgstr "Mislukte nodes als geslaagd forceren bij opnieuw starten"
 msgid "Host Failure"
 msgstr "Hostmislukking"
 
+#: screens/Project/shared/Project.helptext.tsx:98
+msgid "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."
+msgstr "Hergebruikt rollen en collecties die voor een eerdere herziening zijn gedownload, zolang de vereistenbestanden en de Galaxy-toegangsgegevens ongewijzigd zijn. Synchronisaties die voor een taak of workflow worden uitgevoerd, zoals Herziening updaten bij opstarten, hergebruiken ze. Synchronisaties die u zelf start, geplande synchronisaties en opnieuw gestarte taken downloaden altijd nieuwe kopieën. Vereisten uit bronbeheer, een URL, een bestand of een projectmap worden nooit hergebruikt."
+
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:40
 #: screens/ActivityStream/ActivityStreamListItem.tsx:56
 msgid "View event details"
@@ -7342,8 +7351,8 @@ msgstr "Maakt het maken van een provisioning-\n"
 "                              en een configuratie-update aanvragen met behulp van deze taak-\n"
 "                              sjabloon"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:136
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:135
 msgid "Finish Time"
 msgstr "Voltooiingstijd"
 
@@ -7393,7 +7402,7 @@ msgstr "Naam van organisatie"
 msgid "Host Filter"
 msgstr "Hostfilter"
 
-#: screens/Project/shared/Project.helptext.tsx:98
+#: screens/Project/shared/Project.helptext.tsx:99
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "Tijd in seconden om een project als actueel te beschouwen. Tijdens taakuitvoeringen en callbacks evalueert het taaksysteem de tijdstempel van de laatste projectupdate. Als deze ouder is dan de cachetime-out, wordt deze niet als actueel beschouwd en wordt er een nieuwe projectupdate uitgevoerd."
 
@@ -7405,8 +7414,8 @@ msgstr "{numJobsToCancel, plural, one {Deze actie annuleert de volgende taak:} o
 msgid "Keyword"
 msgstr "Trefwoord"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:51
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:53
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:103
 msgid "Delete the project before syncing"
 msgstr "Verwijder het project alvorens te synchroniseren"
 
@@ -7533,9 +7542,9 @@ msgstr "Verwante sleutels"
 #~ msgstr "Terug naar abonnementenbeheer."
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:98
-#: components/PromptDetail/PromptProjectDetail.tsx:149
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:270
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:181
+#: components/PromptDetail/PromptProjectDetail.tsx:156
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:278
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:187
 msgid "Cache Timeout"
 msgstr "Cache time-out"
 
@@ -7605,10 +7614,10 @@ msgstr "Synchroniseren"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
 #: screens/Organization/shared/OrganizationForm.tsx:69
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:178
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
-#: screens/Project/shared/ProjectForm.tsx:283
+#: screens/Project/shared/ProjectForm.tsx:284
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
@@ -7639,7 +7648,7 @@ msgstr "Kies de rollen die op de geselecteerde bronnen moeten worden toegepast. 
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:295
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:303
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
@@ -7741,7 +7750,7 @@ msgstr "Aanmelden met GitHub Enterprise"
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
-#: screens/Project/shared/ProjectForm.tsx:295
+#: screens/Project/shared/ProjectForm.tsx:296
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
@@ -8062,7 +8071,7 @@ msgstr "Instantiegroep toevoegen"
 msgid "Sender Email"
 msgstr "Afzender e-mail"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:354
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:362
 #: screens/Project/ProjectList/ProjectListItem.tsx:215
 msgid "Project Sync Error"
 msgstr "Fout tijdens projectsynchronisatie"
@@ -8191,7 +8200,7 @@ msgstr "Het is moeilijk om een specificatie te geven voor\n"
 "            de inventaris met `gather_facts: true`. De\n"
 "            werkelijke facts verschillen van systeem tot systeem."
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "Ouder taken verdelen"
@@ -8211,7 +8220,7 @@ msgstr "Zat"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:55
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:187
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:38
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:131
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:139
 #: screens/Project/ProjectList/ProjectListItem.tsx:66
 msgid "MOST RECENT SYNC"
 msgstr "MEEST RECENTE SYNCHRONISATIE"
@@ -8669,8 +8678,8 @@ msgstr "Update broncontrole"
 #~ "                   toekomstige releases van de software te verbeteren en om\n"
 #~ "                   Automation Analytics te leveren."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:56
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:110
+#: components/PromptDetail/PromptProjectDetail.tsx:58
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:112
 msgid "Track submodules latest commit on branch"
 msgstr "Submodules laatste binding op vertakking tracken"
 
@@ -8888,7 +8897,7 @@ msgstr "Feitenopslag: indien ingeschakeld, worden de verzamelde feiten opgeslage
 msgid "Delete credential type"
 msgstr "Soort toegangsgegevens verwijderen"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:284
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
@@ -9035,6 +9044,8 @@ msgid "Resources"
 msgstr "Hulpbronnen"
 
 #: components/JobList/JobList.tsx:211
+#: components/JobList/JobList.tsx:263
+#: components/JobList/JobListItem.tsx:116
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9255,7 +9266,7 @@ msgstr "Update-opties"
 #: screens/Job/JobDetail/JobDetail.tsx:607
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:331
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:339
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
@@ -9355,8 +9366,8 @@ msgstr "Verwijdering van knooppunt annuleren"
 msgid "Deprecated"
 msgstr "Afgeschaft"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:116
+#: components/PromptDetail/PromptProjectDetail.tsx:63
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:118
 msgid "Update revision on job launch"
 msgstr "Herziening bijwerken bij starten taak"
 
@@ -9692,7 +9703,7 @@ msgstr "Vul veld vanuit een extern geheimbeheersysteem"
 #~ msgstr "Toegangsgegevens voor Insights"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
+#: components/JobList/JobList.tsx:294
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
@@ -9802,12 +9813,12 @@ msgstr "Er moet een inventaris worden gekozen"
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
-#: components/PromptDetail/PromptProjectDetail.tsx:106
+#: components/PromptDetail/PromptProjectDetail.tsx:113
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:348
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:232
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:240
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
@@ -9891,7 +9902,7 @@ msgstr "Geef alle workflowgoedkeuringen weer."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "Indien niet aangevinkt, wordt een samenvoeging uitgevoerd, waarbij lokale variabelen worden gecombineerd met die op de externe bron."
 
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:147
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9909,8 +9920,8 @@ msgid "Inventory sources with failures"
 msgstr "Inventarisbronnen met fouten"
 
 #: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:265
+#: components/JobList/JobListItem.tsx:126
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9966,8 +9977,8 @@ msgstr "Gereedschap wisselen"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:69
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:114
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:124
-#: components/PromptDetail/PromptProjectDetail.tsx:78
-#: components/PromptDetail/PromptProjectDetail.tsx:89
+#: components/PromptDetail/PromptProjectDetail.tsx:85
+#: components/PromptDetail/PromptProjectDetail.tsx:96
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:80
 #: components/TemplateList/TemplateListItem.tsx:251
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:79
@@ -9989,7 +10000,7 @@ msgstr "Gereedschap wisselen"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:181
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:189
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
@@ -10044,7 +10055,7 @@ msgstr "Bericht Workflow in behandeling"
 msgid "Errors"
 msgstr "Fouten"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:196
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:204
 msgid "Source Control Revision"
 msgstr "Broncodebeheerrevisie"
 
@@ -10302,7 +10313,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {De inventaris blijft in de status in behandeling totdat de definitieve verwijdering is verwerkt.} other {De inventarissen blijven in de status in behandeling totdat de definitieve verwijdering is verwerkt.}}"
 
-#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "Opnieuw opstarten met hostparameters"
@@ -10365,7 +10376,7 @@ msgstr "Nieuwe containergroep maken"
 msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
 msgstr "Indien ingeschakeld, kan een herstart vanaf de mislukte node gekozen mislukte nodes overnemen alsof ze geslaagd waren, zodat de workflow verdergaat langs hun succespaden. Bedoeld voor een node die mislukt om een reden die niet op tijd te verhelpen is en die geen invloed heeft op wat erna komt. Er is altijd een reden nodig, en de node blijft gemarkeerd als geforceerd, met wie het deed. Goedkeuringen kunnen nooit worden geforceerd. Wordt gecontroleerd bij het opnieuw starten, dus uitschakelen stopt het ook voor al gestarte uitvoeringen."
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:286
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:294
 #: screens/Template/shared/WebhookSubForm.tsx:138
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket-datacenter"
@@ -10617,7 +10628,7 @@ msgstr "Teams selecteren"
 msgid "Elapsed time that the job ran"
 msgstr "Verstreken tijd in seconden dat de taak is uitgevoerd"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:285
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:293
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
@@ -10722,7 +10733,7 @@ msgstr "Link verwijderen bevestigen"
 msgid "This field must be at least {0} characters"
 msgstr "Dit veld moet minimaal {0} tekens bevatten"
 
-#: components/JobList/JobListItem.tsx:225
+#: components/JobList/JobListItem.tsx:224
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10946,7 +10957,7 @@ msgid "Choose a job type"
 msgstr "Kies een soort taak"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11086,7 +11097,7 @@ msgid "The page you requested could not be found."
 msgstr "De door u opgevraagde pagina kan niet worden gevonden."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:300
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11118,6 +11129,10 @@ msgstr "{draggedName} staat nu op positie {0}."
 #: util/validators.ts:43
 msgid "Invalid date format"
 msgstr "Ongeldige datumnotatie"
+
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:155
+msgid "Reuse Downloaded Requirements"
+msgstr "Gedownloade vereisten hergebruiken"
 
 #: screens/Job/JobDetail/JobDetail.tsx:399
 msgid "Instance Group"
@@ -11260,7 +11275,7 @@ msgstr "Google Compute Engine"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:64
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:196
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:47
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:140
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:148
 #: screens/Project/ProjectList/ProjectListItem.tsx:75
 msgid "FINISHED:"
 msgstr "VOLTOOID:"
@@ -11706,7 +11721,7 @@ msgstr "Stelt het huidige levenscyclusstadium van deze instantie in. Standaard i
 msgid "View inventory source details"
 msgstr "Details inventarisbron weergeven"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:372
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:380
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Dit project wordt momenteel gebruikt door andere resources. Weet u zeker dat u het wilt verwijderen?"
 
@@ -11716,7 +11731,7 @@ msgstr "Dit project wordt momenteel gebruikt door andere resources. Weet u zeker
 msgid "Associate"
 msgstr "Associëren"
 
-#: components/JobList/JobListItem.tsx:204
+#: components/JobList/JobListItem.tsx:203
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11806,7 +11821,7 @@ msgstr "versleuteld"
 msgid "Unknown Inventory"
 msgstr "Onbekende inventaris"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:356
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:364
 #: screens/Project/ProjectList/ProjectListItem.tsx:218
 msgid "Failed to cancel Project Sync"
 msgstr "Kan projectsynchronisatie niet annuleren"
@@ -11826,7 +11841,7 @@ msgstr "Host opnieuw proberen"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:281
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:289
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -11930,7 +11945,7 @@ msgstr "Juni"
 msgid "Launch"
 msgstr "Starten"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:365
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Uitleg"
@@ -12010,15 +12025,15 @@ msgid "Error message body"
 msgstr "Foutbericht body"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:150
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "Kan {0} niet annuleren"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:46
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:95
+#: components/PromptDetail/PromptProjectDetail.tsx:48
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:97
 msgid "Discard local changes before syncing"
 msgstr "Alle lokale wijzigingen vernietigen alvorens te synchroniseren"
 
@@ -12099,8 +12114,8 @@ msgstr "Ongeldige gebruikersnaam of wachtwoord. Probeer het opnieuw."
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "Peers-update op {0}. Zorg ervoor dat u de installatiebundel voor {1} opnieuw uitvoert om de wijzigingen van kracht te zien worden."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:169
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:322
+#: components/PromptDetail/PromptProjectDetail.tsx:176
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:330
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:85
 msgid "Playbook Directory"
 msgstr "Draaiboekmap"
@@ -12174,7 +12189,7 @@ msgid "Toggle notification start"
 msgstr "Berichtstart wisselen"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:281
+#: components/JobList/JobListItem.tsx:280
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444

@@ -45,6 +45,19 @@ def test_changing_overwrite_behavior_okay_if_not_used(post, patch, organization,
 
 
 @pytest.mark.django_db
+def test_reuse_requirements_defaults_on_and_can_be_turned_off(post, patch, organization, admin_user):
+    r1 = post(
+        url=reverse('api:project_list'),
+        data={'name': 'fooo', 'organization': organization.id, 'scm_type': 'git', 'scm_url': 'https://github.com/ansible/test-playbooks.git'},
+        user=admin_user,
+        expect=201,
+    )
+    assert r1.data['reuse_requirements'] is True
+    patch(url=reverse('api:project_detail', kwargs={'pk': r1.data['id']}), data={'reuse_requirements': False}, user=admin_user, expect=200)
+    assert Project.objects.get(pk=r1.data['id']).reuse_requirements is False
+
+
+@pytest.mark.django_db
 def test_scm_project_local_path_invalid(get, patch, project, admin):
     url = reverse('api:project_detail', kwargs={'pk': project.id})
     resp = patch(url, {'local_path': '/foo/bar'}, user=admin, expect=400)

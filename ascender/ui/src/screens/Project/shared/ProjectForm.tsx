@@ -157,6 +157,7 @@ function ProjectFormFields({
     scm_track_submodules: false,
     scm_update_on_launch: false,
     allow_override: false,
+    reuse_requirements: true,
     scm_update_cache_timeout: 0,
   };
   const { setFieldValue, setFieldTouched } =
@@ -434,6 +435,7 @@ function ProjectForm({
     scm_track_submodules: false,
     scm_update_on_launch: false,
     allow_override: false,
+    reuse_requirements: true,
     scm_update_cache_timeout: 0,
   });
   const [scmTypeOptions, setScmTypeOptions] = useState<
@@ -495,6 +497,7 @@ function ProjectForm({
         local_path: project.local_path ?? '',
         name: project.name || '',
         organization: project.summary_fields?.organization || null,
+        reuse_requirements: project.reuse_requirements ?? true,
         scm_branch: project.scm_branch || '',
         scm_clean: project.scm_clean || false,
         scm_delete_on_update: project.scm_delete_on_update || false,

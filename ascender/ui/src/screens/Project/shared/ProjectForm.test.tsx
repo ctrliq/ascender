@@ -163,6 +163,41 @@ describe('<ProjectForm />', () => {
     expect(document.querySelector('input#organization')).toBeInTheDocument();
   });
 
+  test('reuse downloaded requirements is checked for a new project', async () => {
+    const { user } = renderWithContexts(
+      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
+    );
+    await screen.findByText('Source Control Type');
+    await user.selectOptions(document.querySelector('#scm_type')!, 'git');
+
+    expect(
+      await screen.findByRole('checkbox', {
+        name: /Reuse Downloaded Requirements/,
+      })
+    ).toBeChecked();
+  });
+
+  test('reuse downloaded requirements reflects a project that turned it off', async () => {
+    renderWithContexts(
+      <ProjectForm
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
+        project={
+          {
+            ...mockData,
+            reuse_requirements: false,
+          } as unknown as Partial<Project>
+        }
+      />
+    );
+
+    expect(
+      await screen.findByRole('checkbox', {
+        name: /Reuse Downloaded Requirements/,
+      })
+    ).not.toBeChecked();
+  });
+
   test('git project with a webhook service mounts with the webhook subform open', async () => {
     renderWithContexts(
       <ProjectForm

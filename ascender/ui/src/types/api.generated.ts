@@ -11169,6 +11169,11 @@ export interface components {
        * @default false
        */
       allow_override: boolean | null;
+      /**
+       * @description Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update.
+       * @default true
+       */
+      reuse_requirements: boolean | null;
       /** @description The default execution environment for jobs run using this project. */
       default_environment?: number | null;
       /** @description An optional credential used for validating files in the project against unexpected changes. */
@@ -13585,6 +13590,11 @@ export interface components {
        * @default false
        */
       allow_override: boolean | null;
+      /**
+       * @description Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update.
+       * @default true
+       */
+      reuse_requirements: boolean | null;
       /** @description The default execution environment for jobs run using this project. */
       default_environment?: number | null;
       /** @description An optional credential used for validating files in the project against unexpected changes. */
@@ -13695,6 +13705,11 @@ export interface components {
        * @default false
        */
       allow_override: boolean | null;
+      /**
+       * @description Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update.
+       * @default true
+       */
+      reuse_requirements: boolean | null;
       /** @description The default execution environment for jobs run using this project. */
       default_environment?: number | null;
       /** @description An optional credential used for validating files in the project against unexpected changes. */

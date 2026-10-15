@@ -274,6 +274,13 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
         default=False,
         help_text=_('Allow changing the SCM branch or revision in a job template that uses this project.'),
     )
+    reuse_requirements = models.BooleanField(
+        default=True,
+        help_text=_(
+            'Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files '
+            'and Galaxy credentials are unchanged, instead of downloading them again on every project update.'
+        ),
+    )
     webhook_ref_filter = models.CharField(
         max_length=1024,
         blank=True,

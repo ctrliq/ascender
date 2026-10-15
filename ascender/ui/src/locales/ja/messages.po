@@ -157,7 +157,7 @@ msgstr "このグループで同時に実行されるすべてのジョブ全体
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "インベントリーソースの同期の取り消しに失敗しました。"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:368
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:376
 msgid "Delete Project"
 msgstr "プロジェクトの削除"
 
@@ -338,8 +338,8 @@ msgstr "適用するロールの選択"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "チェックアウトするブランチ。ブランチに加えて、タグ、コミットハッシュ、任意の参照を入力できます。カスタム refspec を指定しない限り、一部のコミットハッシュや参照は利用できない場合があります。"
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:266
+#: components/JobList/JobListItem.tsx:130
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -395,7 +395,7 @@ msgstr "インベントリーのコピー"
 msgid "Removing"
 msgstr "削除"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:213
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:106
 msgid "The project must be synced before a revision is available."
 msgstr "リビジョンが利用可能になる前に、プロジェクトを同期する必要があります。"
@@ -615,7 +615,7 @@ msgstr "同じ Vault ID を持つ複数の Vault 認証情報を選択するこ�
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:357
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:365
 msgid "Cancel Sync"
 msgstr "同期の取り消し"
 
@@ -634,10 +634,10 @@ msgid "GPG Public Key"
 msgstr "GPG 公開鍵"
 
 #: components/Lookup/ProjectLookup.tsx:169
-#: components/PromptDetail/PromptProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:108
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:170
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:238
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:227
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:235
 #: screens/Project/ProjectList/ProjectList.tsx:205
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:25
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:109
@@ -740,8 +740,8 @@ msgstr "ノードの追加"
 msgid "JSON tab"
 msgstr "JSON タブ"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:134
 msgid "Start Time"
 msgstr "開始時刻"
 
@@ -778,7 +778,7 @@ msgstr "不可"
 msgid "Miscellaneous System"
 msgstr "その他のシステム"
 
-#: screens/Project/shared/ProjectForm.tsx:325
+#: screens/Project/shared/ProjectForm.tsx:326
 msgid "Choose a Source Control Type"
 msgstr "ソースコントロールタイプの選択"
 
@@ -826,7 +826,7 @@ msgstr "プロジェクトに戻る"
 msgid "Exception Frequency"
 msgstr "例外頻度"
 
-#: screens/Project/shared/ProjectForm.tsx:306
+#: screens/Project/shared/ProjectForm.tsx:307
 msgid "Select an organization before editing the default execution environment."
 msgstr "デフォルトの実行環境を編集する前に、組織を選択してください。"
 
@@ -1129,7 +1129,7 @@ msgstr "ヘルスチェックは非同期タスクです。"
 msgid "Edit group"
 msgstr "グループの編集"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:203
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:211
 #: screens/Project/ProjectList/ProjectListItem.tsx:96
 msgid "Copy full revision to clipboard."
 msgstr "完全なリビジョンをクリップボードにコピーします。"
@@ -1549,7 +1549,7 @@ msgstr "簡易表示"
 msgid "Revision"
 msgstr "リビジョン"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:338
 msgid "Failed to delete one or more jobs."
 msgstr "1 つ以上のジョブを削除できませんでした。"
 
@@ -1612,7 +1612,7 @@ msgstr "分"
 msgid "Copied"
 msgstr "コピーしました"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:349
 msgid "Failed to cancel one or more jobs."
 msgstr "1 つ以上のジョブを取り消すことができませんでした。"
 
@@ -1642,8 +1642,8 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:264
+#: components/JobList/JobListItem.tsx:119
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1822,11 +1822,11 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
 #: screens/Organization/shared/OrganizationForm.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:177
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:185
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:176
-#: screens/Project/shared/ProjectForm.tsx:275
+#: screens/Project/shared/ProjectForm.tsx:276
 #: screens/Team/shared/TeamForm.tsx:35
 #: screens/Team/TeamDetail/TeamDetail.tsx:44
 #: screens/Team/TeamList/TeamList.tsx:115
@@ -1940,8 +1940,8 @@ msgid "Approved"
 msgstr "承認済"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:139
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:138
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2015,8 +2015,8 @@ msgstr "イベントの概要はありません"
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:66
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:122
+#: components/PromptDetail/PromptProjectDetail.tsx:68
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:124
 msgid "Allow branch override"
 msgstr "ブランチの上書き許可"
 
@@ -2105,7 +2105,7 @@ msgstr "このプロジェクトは現在同期中であり、同期プロセス
 msgid "Administration"
 msgstr "管理"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:385
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:393
 msgid "Failed to delete project."
 msgstr "プロジェクトの削除に失敗しました。"
 
@@ -2132,7 +2132,7 @@ msgstr "その他のシステム設定の表示"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
-#: screens/Project/shared/ProjectForm.tsx:365
+#: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
 msgstr "タイプの詳細"
 
@@ -2145,7 +2145,7 @@ msgstr "他のプロンプト"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "条件が評価される前に、親ノードの結果が必要です。"
 
-#: components/JobList/JobListItem.tsx:249
+#: components/JobList/JobListItem.tsx:248
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2377,8 +2377,8 @@ msgstr "元に戻す"
 msgid "Pending delete"
 msgstr "保留中の削除"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:117
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:258
+#: components/PromptDetail/PromptProjectDetail.tsx:124
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:266
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:71
 msgid "Source Control Credential"
 msgstr "ソースコントロール認証情報"
@@ -2474,7 +2474,7 @@ msgstr "フェデレーションインベントリーの追加"
 msgid "View Host Details"
 msgstr "ホストの詳細の表示"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:215
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:223
 #: screens/Project/ProjectList/ProjectListItem.tsx:108
 msgid "Sync for revision"
 msgstr "リビジョンの同期"
@@ -2556,7 +2556,7 @@ msgstr "外部ログの有効化"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:60
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:192
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:43
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:136
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:144
 #: screens/Project/ProjectList/ProjectListItem.tsx:71
 msgid "STATUS:"
 msgstr "ステータス:"
@@ -2573,7 +2573,7 @@ msgstr "ユーザーの詳細"
 msgid "Delete Execution Environment"
 msgstr "実行環境の削除"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:372
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "ジョブスライス"
@@ -2613,8 +2613,8 @@ msgstr "(詳細情報)"
 msgid "Delete Inventory"
 msgstr "インベントリーの削除"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:111
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:237
+#: components/PromptDetail/PromptProjectDetail.tsx:118
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:245
 #: screens/Project/shared/ProjectSubForms/GitSubForm.tsx:41
 msgid "Source Control Refspec"
 msgstr "ソースコントロールの Refspec"
@@ -2737,7 +2737,7 @@ msgstr "1 つ以上のホストの関連付けを解除できませんでした�
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:57
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:189
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:40
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:133
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "ジョブ ID:"
@@ -2843,10 +2843,10 @@ msgstr "更新キャッシュのタイムアウト"
 msgid "Question"
 msgstr "質問"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:96
+#: components/PromptDetail/PromptProjectDetail.tsx:103
 #: screens/Job/JobDetail/JobDetail.tsx:314
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:192
-#: screens/Project/shared/ProjectForm.tsx:316
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:200
+#: screens/Project/shared/ProjectForm.tsx:317
 msgid "Source Control Type"
 msgstr "ソースコントロールのタイプ"
 
@@ -2971,7 +2971,7 @@ msgid "Action"
 msgstr "アクション"
 
 #: components/Lookup/ProjectLookup.tsx:162
-#: components/PromptDetail/PromptProjectDetail.tsx:98
+#: components/PromptDetail/PromptProjectDetail.tsx:105
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:163
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:231
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
@@ -2980,7 +2980,7 @@ msgstr "アクション"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:245
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:100
 #: screens/Job/JobDetail/JobDetail.tsx:78
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:193
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:201
 #: screens/Project/ProjectList/ProjectList.tsx:198
 #: screens/Project/ProjectList/ProjectListItem.tsx:205
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:102
@@ -3060,7 +3060,7 @@ msgstr "ワークフロージョブの詳細"
 msgid "Azure AD settings"
 msgstr "Azure AD の設定"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3131,7 +3131,7 @@ msgstr "インベントリーソースを同期できませんでした。"
 msgid "Failed to deny {0}."
 msgstr "{0} を拒否できませんでした。"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:196
 #: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
@@ -3409,7 +3409,7 @@ msgstr "Less than or equal to の比較条件"
 #: screens/Job/JobDetail/JobDetail.tsx:679
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:374
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
@@ -3459,8 +3459,8 @@ msgstr "読み込み"
 #~ msgid "View Settings"
 #~ msgstr "設定の表示"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:159
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:162
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
@@ -3559,7 +3559,7 @@ msgstr "GitHub チーム"
 #: screens/Job/JobDetail/JobDetail.tsx:603
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:326
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:334
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
@@ -3809,7 +3809,7 @@ msgstr "ジョブスライス"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:199
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:286
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:354
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:202
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:210
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "クリップボードへのコピーに成功しました!"
@@ -3925,7 +3925,7 @@ msgstr "無効化"
 msgid "Default Execution Environment"
 msgstr "デフォルトの実行環境"
 
-#: components/JobList/JobListItem.tsx:297
+#: components/JobList/JobListItem.tsx:296
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4163,7 +4163,7 @@ msgstr "認証情報の削除"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:347
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
@@ -4601,8 +4601,8 @@ msgstr "組織の詳細の表示"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
+#: components/JobList/JobList.tsx:335
+#: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
@@ -4661,7 +4661,7 @@ msgstr "組織の詳細の表示"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:390
 #: screens/Project/ProjectList/ProjectList.tsx:294
 #: screens/Project/ProjectList/ProjectList.tsx:306
 #: screens/Project/shared/ProjectSyncButton.tsx:70
@@ -4763,6 +4763,11 @@ msgstr "1 つ以上のプロジェクトを削除できませんでした。"
 msgid "Set source path to"
 msgstr "ソースパスの設定:"
 
+#: components/PromptDetail/PromptProjectDetail.tsx:73
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:130
+msgid "Reuse downloaded requirements"
+msgstr "ダウンロード済みの要件を再利用する"
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4821,7 +4826,7 @@ msgstr "開始ユーザー"
 msgid "Delete this node"
 msgstr "このノードの削除"
 
-#: components/JobList/JobListItem.tsx:271
+#: components/JobList/JobListItem.tsx:270
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "ソースワークフローのジョブ"
@@ -4981,8 +4986,8 @@ msgstr "実行環境"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "起動時にジョブタイプを要求します。"
 
-#: components/JobList/JobListItem.tsx:237
-#: components/JobList/JobListItem.tsx:245
+#: components/JobList/JobListItem.tsx:236
+#: components/JobList/JobListItem.tsx:244
 msgid "Schedule"
 msgstr "スケジュール"
 
@@ -5064,7 +5069,7 @@ msgstr "システムレベルの機能および関数の定義"
 msgid "Run a health check on the instance"
 msgstr "インスタンスでの可用性チェック実行"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:363
 #: screens/Project/ProjectList/ProjectListItem.tsx:216
 msgid "Cancel Project Sync"
 msgstr "プロジェクトの同期の取り消し"
@@ -5110,7 +5115,7 @@ msgstr "ドキュメンテーションと"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:169
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:217
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:162
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:170
 msgid "Last Job Status"
 msgstr "最終ジョブステータス"
 
@@ -5187,7 +5192,7 @@ msgstr "日"
 msgid "Collapse"
 msgstr "折りたたむ"
 
-#: components/JobList/JobListItem.tsx:342
+#: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5230,7 +5235,7 @@ msgstr "状態の選択"
 msgid "Month"
 msgstr "月"
 
-#: components/JobList/JobListItem.tsx:318
+#: components/JobList/JobListItem.tsx:317
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5323,8 +5328,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "Ansible ファクトに関連する現在の検索を削除して、このキーを使用して別の検索ができるようにします。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:162
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:315
+#: components/PromptDetail/PromptProjectDetail.tsx:169
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:323
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:76
 msgid "Project Base Path"
 msgstr "プロジェクトのベースパス"
@@ -5415,9 +5420,9 @@ msgstr "リソース名"
 msgid "select module"
 msgstr "モジュールの選択"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:130
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:242
-#: screens/Project/shared/ProjectForm.tsx:357
+#: components/PromptDetail/PromptProjectDetail.tsx:137
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:250
+#: screens/Project/shared/ProjectForm.tsx:358
 msgid "Content Signature Validation Credential"
 msgstr "コンテンツ署名検証の認証情報"
 
@@ -5448,7 +5453,7 @@ msgstr "優先テーマ"
 
 #: screens/Instances/Shared/InstanceForm.tsx:38
 #: screens/Inventory/shared/InventorySourceForm.tsx:110
-#: screens/Project/shared/ProjectForm.tsx:167
+#: screens/Project/shared/ProjectForm.tsx:168
 msgid "Set a value for this field"
 msgstr "このフィールドに値を設定します"
 
@@ -5597,7 +5602,7 @@ msgstr "スケジュールにルールがありません"
 msgid "Write"
 msgstr "書き込み"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:174
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "オプションの詳細"
 
@@ -5687,7 +5692,7 @@ msgstr "インベントリーの詳細の表示"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "このインベントリーが、このワークフロー ({0}) 内の、インベントリーをプロンプトするすべてのワークフローノードに適用されます。"
 
-#: screens/Project/shared/Project.helptext.tsx:103
+#: screens/Project/shared/Project.helptext.tsx:104
 msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
 msgstr "webhook サービスと共有されるシークレット。サービスはこれを使用してリクエストに署名するため、お使いのリポジトリーのみがプロジェクトの同期をトリガーできます。設定として管理するために独自のシークレットを入力するか、フィールドを空白のままにして保存時に生成させます。"
 
@@ -5862,13 +5867,13 @@ msgstr "テスト通知"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:116
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:195
-#: components/PromptDetail/PromptProjectDetail.tsx:143
+#: components/PromptDetail/PromptProjectDetail.tsx:150
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:336
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
@@ -6127,7 +6132,7 @@ msgstr "更新中"
 msgid "Failed to delete one or more schedules."
 msgstr "1 つ以上のスケジュールを削除できませんでした。"
 
-#: screens/Project/shared/Project.helptext.tsx:101
+#: screens/Project/shared/Project.helptext.tsx:102
 msgid "Service that webhook requests will be accepted from."
 msgstr "webhook リクエストを受け入れるサービス。"
 
@@ -6160,7 +6165,7 @@ msgstr "ここ。"
 msgid "Unavailable"
 msgstr "利用不可"
 
-#: screens/Project/shared/Project.helptext.tsx:99
+#: screens/Project/shared/Project.helptext.tsx:100
 msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
 msgstr "ソースコントロールリポジトリーでプッシュが発生したときにプロジェクトを同期し、ジョブの起動ごとにポーリングや更新を行わなくても、ローカルコピーが常に最新の状態になるようにします。"
 
@@ -6501,7 +6506,7 @@ msgstr "この実行には強制できる失敗ノードがありません。承
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "プロビジョニングコールバック: プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは Ascender に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
 
-#: components/JobList/JobListItem.tsx:163
+#: components/JobList/JobListItem.tsx:162
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6618,8 +6623,8 @@ msgstr "グループ"
 #~ msgid "Request subscription"
 #~ msgstr "サブスクリプションの要求"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:152
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:272
+#: components/PromptDetail/PromptProjectDetail.tsx:159
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:280
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
@@ -6667,7 +6672,7 @@ msgstr "ジョブ設定の表示"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:343
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:351
 #: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "編集"
@@ -6931,7 +6936,7 @@ msgstr "保護されたコンテナーレジストリーで認証するための
 msgid "Context"
 msgstr "コンテキスト"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:302
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:310
 #: screens/Template/shared/WebhookSubForm.tsx:238
 msgid "Webhook Ref Filter"
 msgstr "Webhook 参照フィルター"
@@ -7139,7 +7144,7 @@ msgstr "コンテナーレジストリー、イメージ名、およびバージ
 msgid "Node state types"
 msgstr "ノード状態のタイプ"
 
-#: screens/Project/shared/Project.helptext.tsx:102
+#: screens/Project/shared/Project.helptext.tsx:103
 msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
 msgstr "このプロジェクトの webhook エンドポイント。プッシュがプロジェクトの同期をトリガーするように、リポジトリーの webhook 設定に追加します。"
 
@@ -7156,7 +7161,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Playbook ディレクトリーの選択"
 
-#: components/JobList/JobListItem.tsx:259
+#: components/JobList/JobListItem.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7323,6 +7328,10 @@ msgstr "再起動時に失敗したノードを成功として強制"
 msgid "Host Failure"
 msgstr "ホストの障害"
 
+#: screens/Project/shared/Project.helptext.tsx:98
+msgid "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."
+msgstr "要件ファイルと Galaxy 認証情報が変更されていない間は、以前のリビジョン用にダウンロードしたロールとコレクションを再利用します。起動時のリビジョン更新など、ジョブまたはワークフローのために実行される同期ではこれらを再利用します。手動で開始した同期、スケジュールされた同期、および再起動では常に新しいコピーをダウンロードします。ソースコントロール、URL、ファイル、またはプロジェクトディレクトリーからの要件は再利用されません。"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:40
 #: screens/ActivityStream/ActivityStreamListItem.tsx:56
 msgid "View event details"
@@ -7342,8 +7351,8 @@ msgstr "プロビジョニングコールバック URL の作成を\n"
 "                              接続し、このジョブテンプレートを使用して\n"
 "                              設定の更新を要求できます"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:136
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:135
 msgid "Finish Time"
 msgstr "終了時刻"
 
@@ -7393,7 +7402,7 @@ msgstr "組織名"
 msgid "Host Filter"
 msgstr "ホストフィルター"
 
-#: screens/Project/shared/Project.helptext.tsx:98
+#: screens/Project/shared/Project.helptext.tsx:99
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "プロジェクトを最新と見なす時間 (秒単位)。ジョブの実行およびコールバック中に、タスクシステムは最新のプロジェクト更新のタイムスタンプを評価します。キャッシュタイムアウトよりも古い場合は最新とは見なされず、新しいプロジェクト更新が実行されます。"
 
@@ -7405,8 +7414,8 @@ msgstr "{numJobsToCancel, plural, one {この操作により、次のジョブ�
 msgid "Keyword"
 msgstr "キーワード"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:51
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:53
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:103
 msgid "Delete the project before syncing"
 msgstr "プロジェクトを削除してから同期する"
 
@@ -7533,9 +7542,9 @@ msgstr "関連するキー"
 #~ msgstr "サブスクリプション管理へ戻る"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:98
-#: components/PromptDetail/PromptProjectDetail.tsx:149
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:270
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:181
+#: components/PromptDetail/PromptProjectDetail.tsx:156
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:278
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:187
 msgid "Cache Timeout"
 msgstr "キャッシュタイムアウト"
 
@@ -7605,10 +7614,10 @@ msgstr "同期"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
 #: screens/Organization/shared/OrganizationForm.tsx:69
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:178
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
-#: screens/Project/shared/ProjectForm.tsx:283
+#: screens/Project/shared/ProjectForm.tsx:284
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
@@ -7639,7 +7648,7 @@ msgstr "選択済みのリソースに適用するロールを選択します。
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:295
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:303
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
@@ -7741,7 +7750,7 @@ msgstr "GitHub Enterprise でサインイン"
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
-#: screens/Project/shared/ProjectForm.tsx:295
+#: screens/Project/shared/ProjectForm.tsx:296
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
@@ -8062,7 +8071,7 @@ msgstr "インスタンスグループの追加"
 msgid "Sender Email"
 msgstr "送信者のメール"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:354
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:362
 #: screens/Project/ProjectList/ProjectListItem.tsx:215
 msgid "Project Sync Error"
 msgstr "プロジェクトの同期エラー"
@@ -8191,7 +8200,7 @@ msgstr "システムのファクトを設定するには、`gather_facts: true`\
 "            困難です。実際のファクトはシステムごとに\n"
 "            異なります。"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "ジョブスライスの親"
@@ -8211,7 +8220,7 @@ msgstr "土"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:55
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:187
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:38
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:131
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:139
 #: screens/Project/ProjectList/ProjectListItem.tsx:66
 msgid "MOST RECENT SYNC"
 msgstr "直近の同期"
@@ -8669,8 +8678,8 @@ msgstr "ソースコントロールの更新"
 #~ "                   Automation Analytics を提供するために\n"
 #~ "                   使用されます。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:56
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:110
+#: components/PromptDetail/PromptProjectDetail.tsx:58
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:112
 msgid "Track submodules latest commit on branch"
 msgstr "ブランチでのサブモジュールの最新のコミットを追跡する"
 
@@ -8888,7 +8897,7 @@ msgstr "ファクトストレージ: 有効にすると、収集されたファ�
 msgid "Delete credential type"
 msgstr "認証情報タイプの削除"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:284
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
@@ -9035,6 +9044,8 @@ msgid "Resources"
 msgstr "リソース"
 
 #: components/JobList/JobList.tsx:211
+#: components/JobList/JobList.tsx:263
+#: components/JobList/JobListItem.tsx:116
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9255,7 +9266,7 @@ msgstr "オプションの更新"
 #: screens/Job/JobDetail/JobDetail.tsx:607
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:331
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:339
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
@@ -9355,8 +9366,8 @@ msgstr "ノード削除の取り消し"
 msgid "Deprecated"
 msgstr "非推奨"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:116
+#: components/PromptDetail/PromptProjectDetail.tsx:63
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:118
 msgid "Update revision on job launch"
 msgstr "ジョブ起動時のリビジョン更新"
 
@@ -9692,7 +9703,7 @@ msgstr "外部のシークレット管理システムからフィールドにデ
 #~ msgstr "Insights 認証情報"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
+#: components/JobList/JobList.tsx:294
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
@@ -9802,12 +9813,12 @@ msgstr "インベントリーを選択する必要があります"
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
-#: components/PromptDetail/PromptProjectDetail.tsx:106
+#: components/PromptDetail/PromptProjectDetail.tsx:113
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:348
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:232
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:240
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
@@ -9891,7 +9902,7 @@ msgstr "すべてのワークフロー承認を表示します。"
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "チェックされていない場合、ローカル変数と外部ソースで見つかったものを組み合わせてマージが実行されます。"
 
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:147
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9909,8 +9920,8 @@ msgid "Inventory sources with failures"
 msgstr "障害のある在庫ソース"
 
 #: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:265
+#: components/JobList/JobListItem.tsx:126
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9966,8 +9977,8 @@ msgstr "ツールの切り替え"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:69
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:114
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:124
-#: components/PromptDetail/PromptProjectDetail.tsx:78
-#: components/PromptDetail/PromptProjectDetail.tsx:89
+#: components/PromptDetail/PromptProjectDetail.tsx:85
+#: components/PromptDetail/PromptProjectDetail.tsx:96
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:80
 #: components/TemplateList/TemplateListItem.tsx:251
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:79
@@ -9989,7 +10000,7 @@ msgstr "ツールの切り替え"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:181
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:189
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
@@ -10044,7 +10055,7 @@ msgstr "ワークフロー保留メッセージ"
 msgid "Errors"
 msgstr "エラー"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:196
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:204
 msgid "Source Control Revision"
 msgstr "ソースコントロールのリビジョン"
 
@@ -10302,7 +10313,7 @@ msgstr "Webhook"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {最終的な削除が処理されるまで、インベントリーは保留状態になります。} other {最終的な削除が処理されるまで、インベントリーは保留状態になります。}}"
 
-#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "ホストパラメーターを使用した再起動"
@@ -10365,7 +10376,7 @@ msgstr "新規コンテナーグループの作成"
 msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
 msgstr "有効にすると、失敗したノードからの再起動時に、選択した失敗ノードを成功したものとして引き継ぎ、ワークフローはその成功パスを進みます。時間内に修正できず、後続に影響しない理由で失敗するノードを想定しています。理由は常に必須で、ノードには強制したユーザーとともに強制済みの印が残ります。承認は強制できません。再起動時に確認されるため、無効にすると開始済みの実行でも使えなくなります。"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:286
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:294
 #: screens/Template/shared/WebhookSubForm.tsx:138
 msgid "Bitbucket Data Center"
 msgstr "Bitbucketデータセンター"
@@ -10617,7 +10628,7 @@ msgstr "チームの選択"
 msgid "Elapsed time that the job ran"
 msgstr "ジョブ実行の経過時間"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:285
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:293
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
@@ -10722,7 +10733,7 @@ msgstr "リンク削除の確認"
 msgid "This field must be at least {0} characters"
 msgstr "このフィールドは {0} 文字以上でなければなりません"
 
-#: components/JobList/JobListItem.tsx:225
+#: components/JobList/JobListItem.tsx:224
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10946,7 +10957,7 @@ msgid "Choose a job type"
 msgstr "ジョブタイプの選択"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11086,7 +11097,7 @@ msgid "The page you requested could not be found."
 msgstr "要求したページが見つかりませんでした。"
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:300
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11118,6 +11129,10 @@ msgstr "{draggedName} は現在位置 {0} にあります。"
 #: util/validators.ts:43
 msgid "Invalid date format"
 msgstr "日付の形式が無効です"
+
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:155
+msgid "Reuse Downloaded Requirements"
+msgstr "ダウンロード済みの要件を再利用"
 
 #: screens/Job/JobDetail/JobDetail.tsx:399
 msgid "Instance Group"
@@ -11260,7 +11275,7 @@ msgstr "Google Compute Engine"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:64
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:196
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:47
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:140
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:148
 #: screens/Project/ProjectList/ProjectListItem.tsx:75
 msgid "FINISHED:"
 msgstr "終了日時:"
@@ -11706,7 +11721,7 @@ msgstr "このインスタンスの現在のライフサイクルステージを
 msgid "View inventory source details"
 msgstr "インベントリソース詳細の表示"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:372
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:380
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "このプロジェクトは現在、他のリソースで使用されています。削除してもよろしいですか?"
 
@@ -11716,7 +11731,7 @@ msgstr "このプロジェクトは現在、他のリソースで使用されて
 msgid "Associate"
 msgstr "関連付け"
 
-#: components/JobList/JobListItem.tsx:204
+#: components/JobList/JobListItem.tsx:203
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11806,7 +11821,7 @@ msgstr "暗号化"
 msgid "Unknown Inventory"
 msgstr "不明なインベントリ"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:356
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:364
 #: screens/Project/ProjectList/ProjectListItem.tsx:218
 msgid "Failed to cancel Project Sync"
 msgstr "プロジェクトの同期の取り消しに失敗しました。"
@@ -11826,7 +11841,7 @@ msgstr "ホストの再試行"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:281
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:289
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -11930,7 +11945,7 @@ msgstr "6 月"
 msgid "Launch"
 msgstr "起動"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:365
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "説明"
@@ -12010,15 +12025,15 @@ msgid "Error message body"
 msgstr "エラーメッセージボディー"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:150
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "{0} を取り消すことができませんでした。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:46
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:95
+#: components/PromptDetail/PromptProjectDetail.tsx:48
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:97
 msgid "Discard local changes before syncing"
 msgstr "同期する前にローカル変更を破棄する"
 
@@ -12099,8 +12114,8 @@ msgstr "無効なユーザー名またはパスワードです。やり直して
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "ピアは {0} に更新されます。変更を有効にするには、 {1} のインストールバンドルを再度実行してください。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:169
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:322
+#: components/PromptDetail/PromptProjectDetail.tsx:176
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:330
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:85
 msgid "Playbook Directory"
 msgstr "Playbook ディレクトリー"
@@ -12174,7 +12189,7 @@ msgid "Toggle notification start"
 msgstr "通知開始の切り替え"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:281
+#: components/JobList/JobListItem.tsx:280
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444

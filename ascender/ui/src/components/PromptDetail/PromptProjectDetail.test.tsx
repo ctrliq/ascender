@@ -55,6 +55,9 @@ describe('PromptProjectDetail', () => {
       screen.getByText('Update revision on job launch')
     ).toBeInTheDocument();
     expect(screen.getByText('Allow branch override')).toBeInTheDocument();
+    expect(
+      screen.getByText('Reuse downloaded requirements')
+    ).toBeInTheDocument();
   });
 
   test('should render "Deleted" details', () => {
