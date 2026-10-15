@@ -49,6 +49,7 @@ from ascender.main.models import (
     InventorySource,
     Job,
     AdHocCommand,
+    Project,
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
@@ -1417,6 +1418,13 @@ class RunProjectUpdate(BaseTask):
                     # fingerprints only: these hold tokens, and module arguments are recorded in job events
                     'galaxy_auth': _fingerprint(galaxy_creds),
                     'galaxy_task_env': _fingerprint(settings.GALAXY_TASK_ENV),
+                    # build_env hands these to every task, ansible-galaxy included
+                    'task_env': _fingerprint(
+                        {
+                            'ASCENDER_TASK_ENV': settings.ASCENDER_TASK_ENV,
+                            'settings': {attr: getattr(settings, attr) for attr in dir(settings) if attr.startswith('ANSIBLE_GALAXY_')},
+                        }
+                    ),
                     'refresh_generation': self.requirements_generation,
                 },
             }
@@ -1498,10 +1506,14 @@ class RunProjectUpdate(BaseTask):
 
         Every node keys its requirements caches and revision caches by this, so a refresh on one
         node makes the others install afresh too instead of reusing what they installed before it.
+        It is read from the project, which a refresh sets before releasing the project lock, so it
+        never goes back when job history is deleted. The newest refresh in job history covers a
+        concurrent save of the project writing back an older value.
         """
         if project_update is not None and project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES:
             return project_update.pk
-        return (
+        recorded = Project.objects.filter(pk=project.pk).values_list('requirements_generation', flat=True).first() or 0
+        latest = (
             ProjectUpdate.objects.filter(
                 project=project, launch_type__in=REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES, status='successful', job_tags__contains='install_'
             )
@@ -1510,6 +1522,7 @@ class RunProjectUpdate(BaseTask):
             .first()
             or 0
         )
+        return max(recorded, latest)
 
     @staticmethod
     def read_requirements_generation(cache_path):
@@ -1698,7 +1711,13 @@ class RunProjectUpdate(BaseTask):
                         shutil.rmtree(cache_path)
                     os.rename(stage_path, cache_path)
                     logger.debug('{0} wrote to cache at {1}'.format(instance.log_format, cache_path))
-                    self.sync_requirements_cache(base_path, cache_path, refresh=instance.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES)
+                    refresh = instance.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES
+                    self.sync_requirements_cache(base_path, cache_path, refresh=refresh)
+                    if refresh:
+                        # Publish the refresh before the lock is released: the update is only saved as
+                        # successful after this hook, and a job waiting on the lock must not key its
+                        # requirements by the generation this refresh replaces
+                        Project.objects.filter(pk=instance.project_id, requirements_generation__lt=instance.pk).update(requirements_generation=instance.pk)
                     if self.requirements_generation is not None:
                         try:
                             with open(os.path.join(cache_path, '.requirements_generation'), 'w') as f:

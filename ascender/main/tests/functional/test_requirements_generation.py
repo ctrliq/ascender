@@ -1,6 +1,6 @@
 import pytest
 
-from ascender.main.models import ProjectUpdate
+from ascender.main.models import Project, ProjectUpdate
 from ascender.main.tasks.jobs import RunProjectUpdate
 
 
@@ -31,3 +31,27 @@ def test_requirements_generation_of_an_update(project):
     # a refresh keys by itself, anything else by the latest successful refresh
     assert RunProjectUpdate.current_requirements_generation(project, running_refresh) == running_refresh.pk
     assert RunProjectUpdate.current_requirements_generation(project, dependency) == refresh.pk
+
+
+@pytest.mark.django_db
+def test_requirements_generation_survives_deleted_history(project):
+    """Deleting the newest refresh (by hand or cleanup_jobs) must not make older caches valid again"""
+    _update(project, 'manual')
+    newest = _update(project, 'manual')
+    newest_id = newest.pk
+    Project.objects.filter(pk=project.pk).update(requirements_generation=newest_id)
+
+    newest.delete()
+    assert RunProjectUpdate.current_requirements_generation(project) == newest_id
+
+
+@pytest.mark.django_db
+def test_requirements_generation_survives_a_stale_project_save(project):
+    """A concurrent full save of a project loaded before the refresh writes back the old value"""
+    refresh = _update(project, 'manual')
+    stale = Project.objects.get(pk=project.pk)
+    Project.objects.filter(pk=project.pk).update(requirements_generation=refresh.pk)
+    stale.save()
+
+    assert Project.objects.get(pk=project.pk).requirements_generation == 0
+    assert RunProjectUpdate.current_requirements_generation(project) == refresh.pk

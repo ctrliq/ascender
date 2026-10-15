@@ -1514,6 +1514,13 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         assert task.__vars__['requirements_cache_salt']['galaxy_task_env'] != fingerprint
         assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
 
+        # ASCENDER_TASK_ENV reaches ansible-galaxy through build_env, e.g. a token for a URL-only credential
+        task_env_fingerprint = task.__vars__['requirements_cache_salt']['task_env']
+        with mock.patch.object(settings, 'ASCENDER_TASK_ENV', {'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}):
+            task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['requirements_cache_salt']['task_env'] != task_env_fingerprint
+        assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
+
         # a refresh keys its own install, so every node installs afresh after it
         assert task.__vars__['requirements_cache_salt']['refresh_generation'] == project_update.pk
         assert sorted([(k, v) for k, v in env.items() if k.startswith('ANSIBLE_GALAXY')]) == [
@@ -2933,13 +2940,29 @@ def test_project_update_post_run_hook_requirements_cache_refresh(tmp_path, launc
     instance.get_cache_path.return_value = str(tmp_path)
     (tmp_path / 'stage').mkdir()
 
-    task.requirements_generation = 42
+    instance.pk = 42
+    instance.project_id = 7
+    task.requirements_generation = 42 if refresh else 30
+    lock_released = []
+    task.release_lock = lambda project: lock_released.append(True)
+    task.lock_fd = 3
+    instance.launch_type = launch_type
 
-    with mock.patch.object(jobs.RunProjectUpdate, 'sync_requirements_cache') as sync:
+    def record_generation(**kwargs):
+        # the refresh must be visible to other jobs before they can take the project lock
+        assert not lock_released
+        return mock.Mock(update=mock.Mock())
+
+    with mock.patch.object(jobs.RunProjectUpdate, 'sync_requirements_cache') as sync, mock.patch.object(jobs.Project, 'objects') as projects:
+        projects.filter.side_effect = record_generation
         task.post_run_hook(instance, 'successful')
 
     sync.assert_called_once_with(str(tmp_path), str(tmp_path / 'rev1'), refresh=refresh)
-    assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == 42
+    assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == task.requirements_generation
+    if refresh:
+        projects.filter.assert_called_once_with(pk=7, requirements_generation__lt=42)
+    else:
+        projects.filter.assert_not_called()
 
 
 @pytest.mark.parametrize('enabled', [True, False])

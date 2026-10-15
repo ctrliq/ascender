@@ -245,7 +245,7 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
 
     SOFT_UNIQUE_TOGETHER = [('polymorphic_ctype', 'name', 'organization')]
     FIELDS_TO_PRESERVE_AT_COPY = ['labels', 'instance_groups', 'credentials']
-    FIELDS_TO_DISCARD_AT_COPY = ['local_path', 'webhook_key']
+    FIELDS_TO_DISCARD_AT_COPY = ['local_path', 'webhook_key', 'requirements_generation']
     FIELDS_TRIGGER_UPDATE = frozenset(['scm_url', 'scm_branch', 'scm_type', 'scm_refspec'])
 
     class Meta:
@@ -280,6 +280,11 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
             'Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files '
             'and Galaxy credentials are unchanged, instead of downloading them again on every project update.'
         ),
+    )
+    requirements_generation = models.PositiveBigIntegerField(
+        default=0,
+        editable=False,
+        help_text=_('Id of the latest successful project update that downloaded the requirements afresh. Cached requirements from before it are not reused.'),
     )
     webhook_ref_filter = models.CharField(
         max_length=1024,
