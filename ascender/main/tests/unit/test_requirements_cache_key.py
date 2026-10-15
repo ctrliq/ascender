@@ -21,7 +21,7 @@ def write(root, relpath, content):
 
 
 def key(root, salt=None):
-    return requirements_cache_key.compute_key(str(root), FILES, salt)
+    return requirements_cache_key.compute_key(str(root), FILES, salt, ['ansible.cfg'])
 
 
 def test_no_requirements(tmp_path):
@@ -107,3 +107,39 @@ def test_galaxy_collection_with_explicit_server_is_cacheable(tmp_path):
 def test_explicit_galaxy_type_is_cacheable(tmp_path):
     write(tmp_path, 'collections/requirements.yml', 'collections:\n  - name: ns.coll\n    type: galaxy\n  - ansible.posix:>=1.5.0\n')
     assert key(tmp_path)[1] is True
+
+
+@pytest.mark.parametrize(
+    'content',
+    [
+        '- src: vendor/role.tar.bz2\n',
+        '- vendor/role.tar.bz2\n',
+        '- src: vendor/role.tar.bz2\n  name: myrole\n',
+        '- name: vendor/role.tar.bz2\n',
+    ],
+)
+def test_role_from_a_project_file_is_not_cacheable(tmp_path, content):
+    """ansible-galaxy installs a role from any src naming an existing file, whatever its suffix"""
+    write(tmp_path, 'vendor/role.tar.bz2', 'archive')
+    write(tmp_path, 'roles/requirements.yml', content)
+    assert key(tmp_path)[1] is False
+
+
+def test_role_named_like_a_missing_file_is_cacheable(tmp_path):
+    write(tmp_path, 'roles/requirements.yml', '- src: geerlingguy.java\n')
+    assert key(tmp_path)[1] is True
+
+
+def test_project_ansible_cfg_is_part_of_the_key(tmp_path):
+    write(tmp_path, 'collections/requirements.yml', 'collections: [community.general]\n')
+    without_cfg = key(tmp_path)[0]
+    write(tmp_path, 'ansible.cfg', '[galaxy]\nrequired_valid_signature_count = 1\n')
+    with_cfg = key(tmp_path)[0]
+    assert with_cfg != without_cfg
+    write(tmp_path, 'ansible.cfg', '[galaxy]\nrequired_valid_signature_count = all\n')
+    assert key(tmp_path)[0] != with_cfg
+
+
+def test_ansible_cfg_alone_is_not_a_requirements_file(tmp_path):
+    write(tmp_path, 'ansible.cfg', '[defaults]\n')
+    assert key(tmp_path) == ('', False, 'no requirements files')

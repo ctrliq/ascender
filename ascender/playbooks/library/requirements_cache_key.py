@@ -22,6 +22,11 @@ options:
       - Requirements file paths, relative to I(project_path), that Galaxy may read.
         Missing files are ignored.
     required: true
+  config_files:
+    description:
+      - Files, relative to I(project_path), whose content changes how Galaxy installs, such as the
+        project's C(ansible.cfg). They are part of the key but do not count as requirements.
+    required: false
   salt:
     description:
       - Any other install input to fold into the key, such as the Galaxy server list.
@@ -79,7 +84,13 @@ def _looks_like_location(value):
     return value.startswith(('/', '.', '~')) or value.endswith(('.tar.gz', '.tgz', '.tar'))
 
 
-def non_galaxy_reason(entries, kind):
+def _is_project_file(project_path, value):
+    # ansible-galaxy installs a role from any src naming an existing file, relative to the project
+    name = str(value).strip().split(',')[0]
+    return bool(name) and os.path.isfile(os.path.join(project_path, name))
+
+
+def non_galaxy_reason(entries, kind, project_path='.'):
     """Return why a list of requirement entries cannot be keyed by content, or None"""
     for entry in entries or []:
         if not isinstance(entry, (str, dict)):
@@ -91,28 +102,33 @@ def non_galaxy_reason(entries, kind):
                 name = entry if isinstance(entry, str) else entry.get('name')
                 return f'collection requirement {name!r} is not installed from Galaxy'
         elif isinstance(entry, str):
-            if _looks_like_location(entry):
+            if _looks_like_location(entry) or _is_project_file(project_path, entry):
                 return f'role requirement {entry!r} is not a Galaxy name'
         else:
             if entry.get('scm'):
                 return f'role requirement {entry.get("src") or entry.get("name")!r} comes from {entry["scm"]}'
             for key in ('src', 'name'):
-                if key in entry and _looks_like_location(entry[key]):
+                if key in entry and (_looks_like_location(entry[key]) or _is_project_file(project_path, entry[key])):
                     return f'role requirement {entry[key]!r} is not a Galaxy name'
     return None
 
 
-def requirements_reason(data):
+def requirements_reason(data, project_path='.'):
     if data is None:
         return None
     if isinstance(data, list):  # legacy role-only format
-        return non_galaxy_reason(data, 'role')
+        return non_galaxy_reason(data, 'role', project_path)
     if not isinstance(data, dict):
         return 'requirements file is not a list or mapping'
-    return non_galaxy_reason(data.get('roles'), 'role') or non_galaxy_reason(data.get('collections'), 'collection')
+    return non_galaxy_reason(data.get('roles'), 'role', project_path) or non_galaxy_reason(data.get('collections'), 'collection', project_path)
 
 
-def compute_key(project_path, files, salt=None):
+def _file_digest(path):
+    with open(path, 'rb') as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+
+def compute_key(project_path, files, salt=None, config_files=()):
     """Return (requirements_hash, cacheable, reason) for the project's requirements files"""
     import yaml
 
@@ -127,7 +143,7 @@ def compute_key(project_path, files, salt=None):
         found.append([relpath, hashlib.sha256(content).hexdigest()])
         if reason is None:
             try:
-                reason = requirements_reason(yaml.safe_load(content))
+                reason = requirements_reason(yaml.safe_load(content), project_path)
             except yaml.YAMLError:
                 reason = f'{relpath} could not be parsed'
             if reason:
@@ -135,7 +151,8 @@ def compute_key(project_path, files, salt=None):
 
     if not found:
         return '', False, 'no requirements files'
-    key = json.dumps({'files': found, 'salt': salt}, sort_keys=True)
+    config = [[relpath, _file_digest(os.path.join(project_path, relpath))] for relpath in config_files if os.path.isfile(os.path.join(project_path, relpath))]
+    key = json.dumps({'files': found, 'config': config, 'salt': salt}, sort_keys=True)
     return hashlib.sha256(key.encode('utf-8')).hexdigest(), reason is None, reason
 
 
@@ -146,11 +163,14 @@ def main():
         argument_spec=dict(
             project_path=dict(type='path', required=True),
             files=dict(type='list', elements='str', required=True),
+            config_files=dict(type='list', elements='str', required=False, default=[]),
             salt=dict(type='raw', required=False, default=None),
         ),
         supports_check_mode=True,
     )
-    requirements_hash, cacheable, reason = compute_key(module.params['project_path'], module.params['files'], module.params['salt'])
+    requirements_hash, cacheable, reason = compute_key(
+        module.params['project_path'], module.params['files'], module.params['salt'], module.params['config_files']
+    )
     result = dict(changed=False, requirements_hash=requirements_hash, cacheable=cacheable)
     if reason:
         result['reason'] = reason

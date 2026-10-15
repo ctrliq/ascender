@@ -204,6 +204,9 @@
               - roles/requirements.yaml
               - requirements.yml
               - requirements.yaml
+            # ansible-galaxy runs in the project directory, so the project's ansible.cfg applies to the install
+            config_files:
+              - ansible.cfg
             salt:
               roles_enabled: "{{ roles_enabled | bool }}"
               collections_enabled: "{{ collections_enabled | bool }}"

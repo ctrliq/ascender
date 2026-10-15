@@ -1513,6 +1513,9 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
             task.build_extra_vars_file(project_update, private_data_dir)
         assert task.__vars__['requirements_cache_salt']['galaxy_task_env'] != fingerprint
         assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
+
+        # a refresh keys its own install, so every node installs afresh after it
+        assert task.__vars__['requirements_cache_salt']['refresh_generation'] == project_update.pk
         assert sorted([(k, v) for k, v in env.items() if k.startswith('ANSIBLE_GALAXY')]) == [
             ('ANSIBLE_GALAXY_SERVER_LIST', 'server0'),
             ('ANSIBLE_GALAXY_SERVER_SERVER0_URL', 'https://galaxy.ansible.com/'),
@@ -1548,6 +1551,29 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
             ('ANSIBLE_GALAXY_SERVER_SERVER1_TOKEN', 'secret123'),
             ('ANSIBLE_GALAXY_SERVER_SERVER1_URL', 'https://cloud.redhat.com/api/automation-hub/'),
         ]
+
+    def test_galaxy_credential_auth_is_part_of_requirements_key(self, private_data_dir, project_update, mock_me):
+        class RunProjectUpdate(jobs.RunProjectUpdate):
+            __vars__ = {}
+
+            def _write_extra_vars_file(self, private_data_dir, extra_vars, *kw):
+                self.__vars__ = extra_vars
+
+        credential_type = CredentialType.defaults['galaxy_api_token']()
+        hub = Credential(pk=2, credential_type=credential_type, inputs={'url': 'https://hub.example.com/', 'token': 'secret123'})
+        project_update.project.organization.galaxy_credentials.add(hub)
+        task = RunProjectUpdate()
+        task.instance = project_update
+
+        task.build_extra_vars_file(project_update, private_data_dir)
+        before = task.__vars__['requirements_cache_salt']['galaxy_auth']
+        hub.inputs['token'] = 'other-account'
+        task.build_extra_vars_file(project_update, private_data_dir)
+
+        # a new token at the same URL can see different content, so it must not reuse the old install
+        assert task.__vars__['requirements_cache_salt']['galaxy_auth'] != before
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == ['https://hub.example.com/']
+        assert 'other-account' not in json.dumps(task.__vars__['requirements_cache_salt'])
 
 
 @pytest.mark.usefixtures("patch_Organization")
@@ -2842,6 +2868,20 @@ class TestProjectCacheIsComplete:
     def test_missing_revision(self, project):
         assert jobs.RunProjectUpdate.project_cache_is_complete(project) is False
 
+    @pytest.mark.parametrize('recorded,current,expected', [(7, 7, True), (7, 9, False), (0, 0, True)])
+    def test_revision_installed_before_a_refresh_on_any_node(self, project, tmp_path, recorded, current, expected):
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_generation').write_text(str(recorded))
+        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation', return_value=current):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is expected
+
+    def test_revision_without_generation_skips_the_lookup(self, project, tmp_path):
+        """Revision caches written before generations existed stay usable, as on earlier releases"""
+        (tmp_path / 'rev2').mkdir()
+        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation') as current:
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
+        current.assert_not_called()
+
     def test_revision_without_requirements_hash(self, project, tmp_path):
         (tmp_path / 'rev2').mkdir()
         assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
@@ -2893,10 +2933,13 @@ def test_project_update_post_run_hook_requirements_cache_refresh(tmp_path, launc
     instance.get_cache_path.return_value = str(tmp_path)
     (tmp_path / 'stage').mkdir()
 
+    task.requirements_generation = 42
+
     with mock.patch.object(jobs.RunProjectUpdate, 'sync_requirements_cache') as sync:
         task.post_run_hook(instance, 'successful')
 
     sync.assert_called_once_with(str(tmp_path), str(tmp_path / 'rev1'), refresh=refresh)
+    assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == 42
 
 
 @pytest.mark.parametrize('enabled', [True, False])

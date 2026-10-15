@@ -115,6 +115,10 @@ REQUIREMENTS_HASH_RE = re.compile(r'[0-9a-f]{64}')
 REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES = ('manual', 'scheduled', 'relaunch')
 
 
+def _fingerprint(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode('utf-8')).hexdigest()
+
+
 def _link_or_copy(src, dst):
     try:
         os.link(src, dst)
@@ -1240,6 +1244,8 @@ class RunProjectUpdate(BaseTask):
     def __init__(self, *args, job_private_data_dir=None, **kwargs):
         super(RunProjectUpdate, self).__init__(*args, **kwargs)
         self.job_private_data_dir = job_private_data_dir
+        # set while the extra vars are built, then recorded with the revision cache
+        self.requirements_generation = None
 
     def build_private_data(self, project_update, private_data_dir):
         """
@@ -1377,6 +1383,14 @@ class RunProjectUpdate(BaseTask):
             scm_branch = 'HEAD'
 
         galaxy_creds_are_defined = project_update.project.organization and project_update.project.organization.galaxy_credentials.exists()
+        galaxy_creds = []
+        if galaxy_creds_are_defined:
+            # the same inputs build_env hands to ansible-galaxy, in server order
+            galaxy_creds = [
+                {field: cred.get_input(field, default=None) for field in ('url', 'auth_url', 'token')}
+                for cred in project_update.project.organization.galaxy_credentials.all()
+            ]
+        self.requirements_generation = self.current_requirements_generation(project_update.project, project_update)
         if not galaxy_creds_are_defined and (settings.ASCENDER_ROLES_ENABLED or settings.ASCENDER_COLLECTIONS_ENABLED):
             logger.warning(f'Galaxy role/collection syncing is enabled, but no credentials are configured for {project_update.project.organization}.')
 
@@ -1396,13 +1410,14 @@ class RunProjectUpdate(BaseTask):
                 'requirements_cache_enabled': project_update.project.reuse_requirements,
                 # an update someone asked for installs afresh, picking up new releases of unpinned requirements
                 'requirements_cache_refresh': project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES,
-                # reused requirements are only valid for the Galaxy servers and environment they were installed with
+                # reused requirements are only valid for the Galaxy servers, credentials and environment they were
+                # installed with, and only until the next refresh on any node
                 'requirements_cache_salt': {
-                    'galaxy_servers': (
-                        [cred.get_input('url') for cred in project_update.project.organization.galaxy_credentials.all()] if galaxy_creds_are_defined else []
-                    ),
-                    # fingerprint only: GALAXY_TASK_ENV can hold tokens, and module arguments are recorded in job events
-                    'galaxy_task_env': hashlib.sha256(json.dumps(settings.GALAXY_TASK_ENV, sort_keys=True, default=str).encode()).hexdigest(),
+                    'galaxy_servers': [cred.get('url') for cred in galaxy_creds],
+                    # fingerprints only: these hold tokens, and module arguments are recorded in job events
+                    'galaxy_auth': _fingerprint(galaxy_creds),
+                    'galaxy_task_env': _fingerprint(settings.GALAXY_TASK_ENV),
+                    'refresh_generation': self.requirements_generation,
                 },
             }
         )
@@ -1478,6 +1493,33 @@ class RunProjectUpdate(BaseTask):
         return None
 
     @staticmethod
+    def current_requirements_generation(project, project_update=None):
+        """Id of the latest successful update that refreshed the project's requirements, or 0
+
+        Every node keys its requirements caches and revision caches by this, so a refresh on one
+        node makes the others install afresh too instead of reusing what they installed before it.
+        """
+        if project_update is not None and project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES:
+            return project_update.pk
+        return (
+            ProjectUpdate.objects.filter(
+                project=project, launch_type__in=REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES, status='successful', job_tags__contains='install_'
+            )
+            .order_by('-id')
+            .values_list('id', flat=True)
+            .first()
+            or 0
+        )
+
+    @staticmethod
+    def read_requirements_generation(cache_path):
+        try:
+            with open(os.path.join(cache_path, '.requirements_generation')) as f:
+                return int(f.read().strip())
+        except (OSError, ValueError):
+            return None
+
+    @staticmethod
     def reqcache_path(base_path, req_hash):
         return os.path.join(base_path, f'reqcache_{req_hash}')
 
@@ -1491,6 +1533,10 @@ class RunProjectUpdate(BaseTask):
         base_path = project.get_cache_path()
         cache_path = os.path.join(base_path, project.cache_id)
         if not os.path.exists(cache_path):
+            return False
+        # installed before a refresh that ran since, possibly on another node
+        generation = cls.read_requirements_generation(cache_path)
+        if generation is not None and generation != cls.current_requirements_generation(project):
             return False
         req_hash = cls.read_requirements_hash(cache_path)
         if req_hash is None or os.path.exists(cls.reqcache_path(base_path, req_hash)):
@@ -1653,6 +1699,12 @@ class RunProjectUpdate(BaseTask):
                     os.rename(stage_path, cache_path)
                     logger.debug('{0} wrote to cache at {1}'.format(instance.log_format, cache_path))
                     self.sync_requirements_cache(base_path, cache_path, refresh=instance.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES)
+                    if self.requirements_generation is not None:
+                        try:
+                            with open(os.path.join(cache_path, '.requirements_generation'), 'w') as f:
+                                f.write(str(self.requirements_generation))
+                        except OSError:
+                            logger.warning(f'Could not record the requirements generation in {cache_path}')
             elif os.path.exists(stage_path):
                 shutil.rmtree(stage_path)  # cannot trust content update produced
 
