@@ -1472,7 +1472,7 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
 
         assert task.__vars__['roles_enabled'] is False
         assert task.__vars__['collections_enabled'] is False
-        assert task.__vars__['requirements_cache_salt'] == []
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == []
         for k in env:
             assert not k.startswith('ANSIBLE_GALAXY_SERVER')
 
@@ -1504,7 +1504,15 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         project_update.project.reuse_requirements = False
         task.build_extra_vars_file(project_update, private_data_dir)
         assert task.__vars__['requirements_cache_enabled'] is False
-        assert task.__vars__['requirements_cache_salt'] == ['https://galaxy.ansible.com/']
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == ['https://galaxy.ansible.com/']
+
+        # GALAXY_TASK_ENV reaches the install commands, so it is part of the key, as a fingerprint only
+        fingerprint = task.__vars__['requirements_cache_salt']['galaxy_task_env']
+        task_env = {'ANSIBLE_GALAXY_SERVER_SERVER0_URL': 'https://hub.example.com/', 'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}
+        with mock.patch.object(settings, 'GALAXY_TASK_ENV', task_env):
+            task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['requirements_cache_salt']['galaxy_task_env'] != fingerprint
+        assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
         assert sorted([(k, v) for k, v in env.items() if k.startswith('ANSIBLE_GALAXY')]) == [
             ('ANSIBLE_GALAXY_SERVER_LIST', 'server0'),
             ('ANSIBLE_GALAXY_SERVER_SERVER0_URL', 'https://galaxy.ansible.com/'),

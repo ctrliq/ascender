@@ -2,6 +2,7 @@
 from collections import OrderedDict
 import errno
 import functools
+import hashlib
 import fcntl
 import json
 import logging
@@ -1395,10 +1396,14 @@ class RunProjectUpdate(BaseTask):
                 'requirements_cache_enabled': project_update.project.reuse_requirements,
                 # an update someone asked for installs afresh, picking up new releases of unpinned requirements
                 'requirements_cache_refresh': project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES,
-                # reused requirements are only valid for the Galaxy servers they were installed from
-                'requirements_cache_salt': (
-                    [cred.get_input('url') for cred in project_update.project.organization.galaxy_credentials.all()] if galaxy_creds_are_defined else []
-                ),
+                # reused requirements are only valid for the Galaxy servers and environment they were installed with
+                'requirements_cache_salt': {
+                    'galaxy_servers': (
+                        [cred.get_input('url') for cred in project_update.project.organization.galaxy_credentials.all()] if galaxy_creds_are_defined else []
+                    ),
+                    # fingerprint only: GALAXY_TASK_ENV can hold tokens, and module arguments are recorded in job events
+                    'galaxy_task_env': hashlib.sha256(json.dumps(settings.GALAXY_TASK_ENV, sort_keys=True, default=str).encode()).hexdigest(),
+                },
             }
         )
         # apply custom refspec from user for PR refs and the like

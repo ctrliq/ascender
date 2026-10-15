@@ -207,7 +207,7 @@
             salt:
               roles_enabled: "{{ roles_enabled | bool }}"
               collections_enabled: "{{ collections_enabled | bool }}"
-              galaxy_servers: "{{ requirements_cache_salt | default('') }}"
+              galaxy: "{{ requirements_cache_salt | default({}) }}"
           register: requirements_key
 
         - name: Explain why requirements are installed on every update

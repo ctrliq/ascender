@@ -84,6 +84,11 @@ def test_dangling_symlink_is_ignored(tmp_path):
         ('requirements.yml', 'roles:\n  - src: https://example.com/role.tar.gz\n'),
         ('requirements.yml', 'collections: [ok.fine]\nroles:\n  - name: myrole\n    src: git@github.com:org/role.git\n    scm: git\n'),
         ('requirements.yml', 'collections: [unclosed\n'),
+        # ansible-galaxy installs a non-FQCN name from the path it points at, prefixed or not
+        ('collections/requirements.yml', 'collections:\n  - name: vendor/my_collection\n'),
+        ('collections/requirements.yml', 'collections:\n  - vendor/my_collection\n'),
+        ('collections/requirements.yml', 'collections:\n  - name: my_collection\n'),
+        ('collections/requirements.yml', 'collections:\n  - name: ns-coll-1.0.0.tar.gz\n'),
     ],
 )
 def test_non_galaxy_sources_are_not_cacheable(tmp_path, relpath, content):
@@ -96,4 +101,9 @@ def test_non_galaxy_sources_are_not_cacheable(tmp_path, relpath, content):
 
 def test_galaxy_collection_with_explicit_server_is_cacheable(tmp_path):
     write(tmp_path, 'collections/requirements.yml', 'collections:\n  - name: ns.coll\n    source: https://galaxy.ansible.com\n    type: galaxy\n')
+    assert key(tmp_path)[1] is True
+
+
+def test_explicit_galaxy_type_is_cacheable(tmp_path):
+    write(tmp_path, 'collections/requirements.yml', 'collections:\n  - name: ns.coll\n    type: galaxy\n  - ansible.posix:>=1.5.0\n')
     assert key(tmp_path)[1] is True

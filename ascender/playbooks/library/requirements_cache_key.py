@@ -48,14 +48,30 @@ reason:
 import hashlib
 import json
 import os
+import re
 
 
 NON_GALAXY_COLLECTION_TYPES = ('dir', 'file', 'git', 'subdirs', 'url')
+# ansible-galaxy installs an untyped collection from Galaxy only when its name is a valid FQCN;
+# any other name that points at a path, URL or archive (e.g. vendor/my_collection) is installed from there
+COLLECTION_FQCN_RE = re.compile(r'^\w+\.\w+$')
+
+
+def _is_galaxy_collection(entry):
+    if isinstance(entry, str):
+        name = entry.partition(':')[0]  # name:version shorthand
+        entry_type = None
+    else:
+        name = entry.get('name', '')
+        entry_type = entry.get('type')
+    if entry_type is not None:
+        return entry_type not in NON_GALAXY_COLLECTION_TYPES
+    return bool(COLLECTION_FQCN_RE.match(str(name).strip()))
 
 
 def _looks_like_location(value):
-    # Galaxy names are namespace.name; anything shaped like a path, URL, archive or scm spec is not.
-    # A role may be written 'name,version' and a collection 'name:version', so check only the name part.
+    # Galaxy role names are namespace.name; anything shaped like a path, URL, archive or scm spec is not.
+    # A role may be written 'name,version', so check only the name part.
     value = str(value).strip()
     if '://' in value or value.startswith(('git+', 'file:')):
         return True
@@ -66,19 +82,17 @@ def _looks_like_location(value):
 def non_galaxy_reason(entries, kind):
     """Return why a list of requirement entries cannot be keyed by content, or None"""
     for entry in entries or []:
-        if isinstance(entry, str):
-            if _looks_like_location(entry):
-                return f'{kind} requirement {entry!r} is not a Galaxy name'
-            continue
-        if not isinstance(entry, dict):
+        if not isinstance(entry, (str, dict)):
             return f'unrecognised {kind} requirement {entry!r}'
-        if 'include' in entry:
+        if isinstance(entry, dict) and 'include' in entry:
             return f'{kind} requirements include {entry["include"]!r}'
         if kind == 'collection':
-            if entry.get('type', 'galaxy') in NON_GALAXY_COLLECTION_TYPES:
-                return f'collection requirement {entry.get("name")!r} has type {entry["type"]!r}'
-            if _looks_like_location(entry.get('name', '')):
-                return f'collection requirement {entry.get("name")!r} is not a Galaxy name'
+            if not _is_galaxy_collection(entry):
+                name = entry if isinstance(entry, str) else entry.get('name')
+                return f'collection requirement {name!r} is not installed from Galaxy'
+        elif isinstance(entry, str):
+            if _looks_like_location(entry):
+                return f'role requirement {entry!r} is not a Galaxy name'
         else:
             if entry.get('scm'):
                 return f'role requirement {entry.get("src") or entry.get("name")!r} comes from {entry["scm"]}'
