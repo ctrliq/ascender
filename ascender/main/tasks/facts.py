@@ -59,6 +59,19 @@ def _add_ansible_types(value):
     return {k: _add_ansible_types(v) for k, v in value.items()}
 
 
+def _shared_file_names(host_names):
+    """File names that are both one host's older-format file and another host's newer-format file."""
+    return {name for name in host_names if name.startswith(SCHEMA_KEY_PREFIX) and name[len(SCHEMA_KEY_PREFIX) :] in host_names}
+
+
+def _has_ansible_type_key(value):
+    if isinstance(value, list):
+        return any(_has_ansible_type_key(v) for v in value)
+    if isinstance(value, dict):
+        return ANSIBLE_TYPE_KEY in value or any(_has_ansible_type_key(v) for v in value.values())
+    return False
+
+
 def _is_payload_wrapper(data):
     return isinstance(data, dict) and list(data) == [PAYLOAD_KEY] and isinstance(data[PAYLOAD_KEY], str)
 
@@ -105,14 +118,18 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
     if timeout is None:
         timeout = settings.ANSIBLE_FACT_CACHE_TIMEOUT
 
+    hosts = list(hosts)
+
     # A file named "s1_<name>" is the older ansible-core cache file of host "s1_<name>"
-    # and the newer ansible-core cache file of host "<name>". Nobody owns it until
-    # ansible runs, so it is never written for either host.
+    # and the newer ansible-core cache file of host "<name>". It is written for host
+    # "s1_<name>" so older ansible-core behaves as it always has; host "<name>" gets no
+    # cached facts from newer ansible-core, which ignores a file without a payload.
     all_names = {host.name for host in hosts}
-    ambiguous = {name for name in all_names if name.startswith(SCHEMA_KEY_PREFIX) and name[len(SCHEMA_KEY_PREFIX) :] in all_names}
-    if ambiguous:
+    shared_files = _shared_file_names(all_names)
+    if shared_files:
         logger.warning(
-            f'Inventory {inventory_id}: no cached facts are provided for host names that collide with the ansible-core 2.19+ cache format: {sorted(ambiguous)}'
+            f'Inventory {inventory_id}: host names {sorted(shared_files)} collide with the ansible-core 2.19+ cache files of other hosts, '
+            f'which get no cached facts from ansible-core 2.19+'
         )
 
     last_write_time = None
@@ -127,13 +144,17 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
             logger.error(f'facts for host {smart_str(host.name)} could not be cached')
             continue
 
-        schema_file = SCHEMA_KEY_PREFIX + host.name
-        for filename, data in (
-            (host.name, host.ansible_facts),
-            (schema_file, {PAYLOAD_KEY: json.dumps(_add_ansible_types(host.ansible_facts))}),
-        ):
-            if filename in ambiguous:
-                continue
+        files = [(host.name, host.ansible_facts)]
+        if SCHEMA_KEY_PREFIX + host.name in shared_files:
+            pass  # that file holds the facts of host "s1_<name>"
+        elif _has_ansible_type_key(host.ansible_facts):
+            # ansible-core 2.19+ treats any dict with this key as serialized type
+            # metadata and has no escape for it: a value it doesn't know aborts the
+            # whole playbook, and one it does know is silently turned into that type.
+            logger.warning(f'facts for host {smart_str(host.name)} contain the reserved key {ANSIBLE_TYPE_KEY} and are not cached for ansible-core 2.19+')
+        else:
+            files.append((SCHEMA_KEY_PREFIX + host.name, {PAYLOAD_KEY: json.dumps(_add_ansible_types(host.ansible_facts))}))
+        for filename, data in files:
             try:
                 last_write_time = _write_facts(os.path.join(fact_cache_dir, filename), data)
             except IOError:
@@ -225,11 +246,15 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
 
     # Summaries from before written_files existed only had the plain file
     written_files = set(summary.get('written_files', [hostname for hostname, was_written in hosts_cached_map.items() if was_written]))
+    shared_files = _shared_file_names(hosts_cached_map)
     hosts_to_clear = []  # hostnames where Ansible removed a fact file written for them
     for hostname in hosts_cached_map:
         if hostname in hosts_with_updates:
             continue
-        if any(filename in written_files and filename not in present for filename in (hostname, SCHEMA_KEY_PREFIX + hostname)):
+        removed = [filename for filename in (hostname, SCHEMA_KEY_PREFIX + hostname) if filename in written_files and filename not in present]
+        # A shared file going missing is either older ansible-core clearing host
+        # "s1_<name>" or newer ansible-core clearing host "<name>"; keep both hosts' facts
+        if any(filename not in shared_files for filename in removed):
             hosts_to_clear.append(hostname)
         else:
             log_data['unmodified_ct'] += 1
@@ -284,7 +309,10 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
     # saves in between can't be wiped.
     if hosts_to_clear:
         with transaction.atomic():
-            hosts = list(host_qs.filter(name__in=hosts_to_clear).select_related('inventory').select_for_update(of=('self',)).order_by('id'))
+            # host_qs may be a smart inventory's DISTINCT ON queryset, which can be
+            # neither reordered nor locked, so lock the matching rows by id instead
+            host_ids = list(host_qs.filter(name__in=hosts_to_clear).values_list('pk', flat=True))
+            hosts = list(Host.objects.filter(pk__in=host_ids).select_related('inventory').select_for_update(of=('self',)).order_by('id'))
             clear_hosts = []
             for host in hosts:
                 if job_created and host.ansible_facts_modified and host.ansible_facts_modified > job_created:

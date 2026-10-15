@@ -113,9 +113,10 @@ def test_finish_job_fact_cache_clear(hosts, mocker, ref_time, tmpdir):
     os.remove(os.path.join(fact_cache_dir, hosts[1].name))
 
     hosts_qs = mock.MagicMock()
-    # The clear phase locks the hosts: host_qs.filter(name__in=...).select_related(...).select_for_update(...).order_by(...)
+    # The clear phase locks the matching hosts by id: Host.objects.filter(pk__in=...).select_related(...).select_for_update(...).order_by(...)
     # Only hosts[1] needs clearing (its file was removed), so return just that host
-    hosts_qs.filter.return_value.select_related.return_value.select_for_update.return_value.order_by.return_value = [hosts[1]]
+    host_model = mocker.patch('ascender.main.tasks.facts.Host')
+    host_model.objects.filter.return_value.select_related.return_value.select_for_update.return_value.order_by.return_value = [hosts[1]]
     mocker.patch('ascender.main.tasks.facts.transaction')
 
     finish_fact_cache(hosts_qs, artifacts_dir=artifacts_dir, inventory_id=inventory_id)

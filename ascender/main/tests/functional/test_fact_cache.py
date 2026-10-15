@@ -359,6 +359,20 @@ class TestSchemaQualifiedFactCache:
         host.refresh_from_db()
         assert host.ansible_facts == {'keep': True}
 
+    def test_reserved_key_facts_are_not_put_in_the_schema_payload(self, inv, artifacts_dir):
+        """ansible-core 2.19+ would read the dict as type metadata (or abort on an unknown type)."""
+        facts = {'x': {'__ansible_type': '_AnsibleTaggedStr', 'value': 'original', 'tags': []}, 'y': [{'__ansible_type': 'bogus'}]}
+        host = self._host(inv, 'web1', facts)
+        start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
+        assert os.listdir(os.path.join(artifacts_dir, 'fact_cache')) == ['web1']
+
+        # older ansible-core still round-trips the dict untouched
+        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 'web1'), dict(facts, z=1))
+        finish_fact_cache(inv.hosts, artifacts_dir=artifacts_dir, inventory_id=inv.id)
+
+        host.refresh_from_db()
+        assert host.ansible_facts == dict(facts, z=1)
+
     def test_corrupt_schema_file_falls_back_to_plain(self, inv, artifacts_dir):
         host = self._host(inv, 'web1', {'old': True})
         start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
@@ -374,7 +388,7 @@ class TestSchemaQualifiedFactCache:
 @pytest.mark.django_db
 class TestSchemaFileNameCollision:
     """Hosts web1 and s1_web1 both claim the file s1_web1: it is the older ansible-core
-    file of s1_web1 and the newer ansible-core file of web1."""
+    file of s1_web1 and the newer ansible-core file of web1. Older ansible-core gets it."""
 
     @pytest.fixture
     def hosts(self, organization, artifacts_dir):
@@ -390,9 +404,23 @@ class TestSchemaFileNameCollision:
         web.refresh_from_db()
         prefixed.refresh_from_db()
 
-    def test_shared_file_is_not_written(self, hosts, artifacts_dir):
-        """Writing it for either host would hand that host's facts to the other one."""
-        assert sorted(os.listdir(os.path.join(artifacts_dir, 'fact_cache'))) == ['s1_s1_web1', 'web1']
+    def test_shared_file_belongs_to_older_format(self, hosts, artifacts_dir):
+        """Older ansible-core (the stock EE) keeps reading s1_web1's facts as it always has;
+        web1 gets no schema copy, so newer ansible-core sees no cached facts for it."""
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        assert sorted(os.listdir(fact_cache_dir)) == ['s1_s1_web1', 's1_web1', 'web1']
+        with open(os.path.join(fact_cache_dir, 's1_web1')) as f:
+            assert json.load(f) == {'prefixed': True}
+
+    def test_shared_file_removed_keeps_both_hosts_facts(self, hosts, artifacts_dir):
+        """Older ansible-core clearing s1_web1 and newer ansible-core clearing web1 look the same."""
+        inv, web, prefixed = hosts
+        os.remove(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'))
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {'web': True}
+        assert prefixed.ansible_facts == {'prefixed': True}
 
     def test_old_ansible_clears_one_and_updates_the_other(self, hosts, artifacts_dir):
         inv, web, prefixed = hosts
@@ -478,3 +506,53 @@ class TestFactClearConcurrency:
 
         host.refresh_from_db()
         assert host.ansible_facts == {'from_concurrent_job': True}
+
+
+@pytest.mark.django_db
+def test_clear_through_smart_inventory(organization, artifacts_dir):
+    """Smart inventory host querysets use DISTINCT ON (name), which can't be reordered or locked."""
+    inv = Inventory.objects.create(organization=organization, name='smart-src')
+    host = inv.hosts.create(name='target', ansible_facts={'stale': True}, ansible_facts_modified=now() - timedelta(hours=1))
+    inv.hosts.create(name='other', ansible_facts={'keep': True}, ansible_facts_modified=now() - timedelta(hours=1))
+    smart = Inventory.objects.create(organization=organization, name='smart', kind='smart', host_filter='name=target or name=other')
+    start_fact_cache(smart.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=smart.id)
+    os.remove(os.path.join(artifacts_dir, 'fact_cache', 'target'))
+
+    finish_fact_cache(smart.hosts, artifacts_dir=artifacts_dir, inventory_id=smart.id, job_created=now() - timedelta(minutes=5))
+
+    host.refresh_from_db()
+    assert host.ansible_facts == {}
+    assert inv.hosts.get(name='other').ansible_facts == {'keep': True}
+
+
+@pytest.mark.django_db
+def test_constructed_inventory_inputs_share_one_collision_check(organization, tmp_path):
+    """Input inventories write to the same cache directory, so a host s1_web1 in one input
+    and a host web1 in another must not overwrite each other's files."""
+    from ascender.main.models import InventorySource, InventoryUpdate
+    from ascender.main.tasks.jobs import RunInventoryUpdate
+
+    old = now() - timedelta(minutes=1)
+    first = Inventory.objects.create(organization=organization, name='input-1')
+    first.hosts.create(name='s1_web1', ansible_facts={'prefixed': True}, ansible_facts_modified=old)
+    second = Inventory.objects.create(organization=organization, name='input-2')
+    second.hosts.create(name='web1', ansible_facts={'web': True}, ansible_facts_modified=old)
+    constructed = Inventory.objects.create(organization=organization, name='constructed', kind='constructed')
+    constructed.input_inventories.add(first)
+    constructed.input_inventories.add(second)
+    source = InventorySource.objects.create(inventory=constructed, name='constructed-src', source='constructed', source_vars='plugin: constructed')
+    inventory_update = InventoryUpdate.objects.create(inventory_source=source, inventory=constructed, source='constructed')
+
+    private_data_dir = str(tmp_path / 'pdd')
+    for subdir in ('inventory', 'env'):
+        os.makedirs(os.path.join(private_data_dir, subdir))
+    task = RunInventoryUpdate()
+    task.instance = inventory_update
+    task.build_args(inventory_update, private_data_dir, {})
+
+    fact_cache_dir = os.path.join(private_data_dir, 'artifacts', str(inventory_update.id), 'fact_cache')
+    assert sorted(os.listdir(fact_cache_dir)) == ['s1_s1_web1', 's1_web1', 'web1']
+    with open(os.path.join(fact_cache_dir, 's1_web1')) as f:
+        assert json.load(f) == {'prefixed': True}
+    with open(os.path.join(fact_cache_dir, 'web1')) as f:
+        assert json.load(f) == {'web': True}

@@ -1653,17 +1653,21 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
         # these must come in order, and in order _before_ the constructed inventory itself
         if inventory_update.inventory.kind == 'constructed':
             inventory_update.log_lifecycle("start_job_fact_cache")
+            input_hosts = []
             for input_inventory in inventory_update.inventory.input_inventories.all():
                 args.append('-i')
                 script_params = dict(hostvars=True, ascendervars=True)
                 source_inv_path = self.write_inventory_file(input_inventory, private_data_dir, f'hosts_{input_inventory.id}', script_params)
                 args.append(to_container_path(source_inv_path, private_data_dir))
-                # Include any facts from input inventories so they can be used in filters
-                start_fact_cache(
-                    input_inventory.hosts.only(*HOST_FACTS_FIELDS),
-                    artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(inventory_update.id)),
-                    inventory_id=input_inventory.id,
-                )
+                input_hosts.extend(input_inventory.hosts.only(*HOST_FACTS_FIELDS))
+            # Include any facts from input inventories so they can be used in filters.
+            # They share one cache directory, so they are written together: host names
+            # from different inputs can collide in the ansible-core 2.19+ cache format.
+            start_fact_cache(
+                input_hosts,
+                artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(inventory_update.id)),
+                inventory_id=inventory_update.inventory_id,
+            )
 
         # Add arguments for the source inventory file/script/thing
         rel_path = self.pseudo_build_inventory(inventory_update, private_data_dir)
