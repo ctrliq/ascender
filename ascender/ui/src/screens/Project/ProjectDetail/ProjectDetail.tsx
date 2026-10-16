@@ -42,6 +42,7 @@ function ProjectDetail({ project }: ProjectDetailProps) {
   const projectHelpText = getProjectHelpText();
   const {
     allow_override,
+    reuse_requirements,
     created,
     description,
     id,
@@ -86,7 +87,8 @@ function ProjectDetail({ project }: ProjectDetailProps) {
     scm_delete_on_update ||
     scm_track_submodules ||
     scm_update_on_launch ||
-    allow_override
+    allow_override ||
+    (scm_type && reuse_requirements)
   ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
@@ -121,6 +123,12 @@ function ProjectDetail({ project }: ProjectDetailProps) {
           <Content component={ContentVariants.li}>
             {t`Allow branch override`}{' '}
             <Popover content={projectHelpText.options.allowBranchOverride} />
+          </Content>
+        )}
+        {scm_type && reuse_requirements && (
+          <Content component={ContentVariants.li}>
+            {t`Reuse downloaded requirements`}{' '}
+            <Popover content={projectHelpText.options.reuseRequirements} />
           </Content>
         )}
       </Content>

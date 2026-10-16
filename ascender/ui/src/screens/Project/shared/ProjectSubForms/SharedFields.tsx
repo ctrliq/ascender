@@ -149,6 +149,12 @@ export const ScmTypeOptions = ({
               tooltip={projectHelpStrings.options.allowBranchOverride}
             />
           )}
+          <CheckboxField
+            id="option-reuse-requirements"
+            name="reuse_requirements"
+            label={t`Reuse Downloaded Requirements`}
+            tooltip={projectHelpStrings.options.reuseRequirements}
+          />
           <Checkbox
             aria-label={t`Enable Webhook`}
             label={

@@ -103,6 +103,7 @@ class ProjectSerializer(UnifiedJobTemplateSerializer, ProjectOptionsSerializer):
             'scm_update_on_launch',
             'scm_update_cache_timeout',
             'allow_override',
+            'reuse_requirements',
             'default_environment',
             'signature_validation_credential',
             'webhook_service',

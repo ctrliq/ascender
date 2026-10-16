@@ -55,10 +55,8 @@ Example of the resultant job `tmp` directory where job is running:
 
 Every time a project is updated as a "check" job
 (via `/api/v2/projects/N/update/` or by a schedule, workflow, etc.),
-the roles and collections are downloaded and saved to the project's content cache.
-In other words, the cache is invalidated every time a project is updated.
-That means that the `ansible-galaxy` commands are ran to download content
-even if the project revision does not change in the course of the update.
+the roles and collections are saved to the project's content cache, either freshly
+downloaded or reused from the requirements cache described below.
 
 Project updates all initially target a staging directory at a path like:
 
@@ -77,6 +75,41 @@ For instance, if the cache id is determined to be 63:
 
 The cache may be updated by project syncs (the "run" type) which happen before
 job runs. It will populate the cache id set by the last "check" type update.
+
+### Requirements Cache
+
+Installed roles and collections are also kept for reuse across project revisions in
+a folder keyed by a SHA256 of the requirements files, the project's `ansible.cfg`,
+the organization's Galaxy credentials (URL, auth URL and token, the latter two only as
+a fingerprint), the `GALAXY_TASK_ENV`, `ASCENDER_TASK_ENV` and `GALAXY_IGNORE_CERTS` settings and the latest
+refresh (see below):
+
+```
+/var/lib/ascender/projects/.__awx_cache/_42__project_name/reqcache_<hash>
+```
+
+Before running `ansible-galaxy`, the project update computes that key. When the folder
+already exists, installation is skipped, the revision's cache folder holds only a
+`.requirements_hash` file, and jobs copy (or extract the `.tar` archive of) the
+content from `reqcache_<hash>` instead. Otherwise the freshly installed content
+is published there after a successful update.
+
+- Reuse is controlled per project by the **Reuse Downloaded Requirements** option
+  (`reuse_requirements`, on by default). When it is off, every update of that project
+  installs afresh and the next successful update removes the requirements caches that
+  the kept revision does not rely on.
+- Updates that run for a job or workflow (update on launch, job project syncs, workflow
+  project nodes) reuse the requirements cache. Updates you start, scheduled updates and
+  relaunches always install fresh copies and replace it, which picks up new releases of
+  unpinned requirements. A refresh applies to every node: other nodes install afresh on
+  their next update instead of reusing what they installed before it.
+- Requirements files that reference a source control repository, URL, file, directory
+  or `include:` are not keyed by their content and are never reused. This includes any
+  collection whose name is not a `namespace.collection` name and any role whose source
+  is a file in the project.
+- Up to 10 requirements caches are kept per project. The least recently used are evicted,
+  except one that a kept revision still relies on. A revision whose requirements cache is
+  gone is treated as uncached, so the next job sync installs again.
 
 ### Galaxy Server Selection
 

@@ -157,7 +157,7 @@ msgstr "此组上同时运行的所有作业允许的最大分叉数。\n"
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "取消清单源同步失败"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:368
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:376
 msgid "Delete Project"
 msgstr "删除项目"
 
@@ -338,8 +338,8 @@ msgstr "选择要应用的角色"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "要检出的分支。除了分支之外，您还可以输入标签、提交哈希和任意引用。除非您还提供自定义 refspec，否则某些提交哈希和引用可能不可用。"
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:266
+#: components/JobList/JobListItem.tsx:130
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -395,7 +395,7 @@ msgstr "复制清单"
 msgid "Removing"
 msgstr "删除"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:213
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:106
 msgid "The project must be synced before a revision is available."
 msgstr "项目必须在修订可用前同步。"
@@ -615,7 +615,7 @@ msgstr "您不能选择具有相同 vault ID 的多个 vault 凭证。这样做�
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:357
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:365
 msgid "Cancel Sync"
 msgstr "取消同步"
 
@@ -634,10 +634,10 @@ msgid "GPG Public Key"
 msgstr "GPG 公钥"
 
 #: components/Lookup/ProjectLookup.tsx:169
-#: components/PromptDetail/PromptProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:108
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:170
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:238
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:227
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:235
 #: screens/Project/ProjectList/ProjectList.tsx:205
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:25
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:109
@@ -740,8 +740,8 @@ msgstr "添加节点"
 msgid "JSON tab"
 msgstr "JSON 标签页"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:134
 msgid "Start Time"
 msgstr "开始时间"
 
@@ -778,7 +778,7 @@ msgstr "否"
 msgid "Miscellaneous System"
 msgstr "杂项系统"
 
-#: screens/Project/shared/ProjectForm.tsx:325
+#: screens/Project/shared/ProjectForm.tsx:326
 msgid "Choose a Source Control Type"
 msgstr "选择源控制类型"
 
@@ -826,7 +826,7 @@ msgstr "返回到项目"
 msgid "Exception Frequency"
 msgstr "例外频率"
 
-#: screens/Project/shared/ProjectForm.tsx:306
+#: screens/Project/shared/ProjectForm.tsx:307
 msgid "Select an organization before editing the default execution environment."
 msgstr "在编辑默认执行环境前选择一个机构。"
 
@@ -1129,7 +1129,7 @@ msgstr "运行状况检查是异步任务。请参阅"
 msgid "Edit group"
 msgstr "编辑组"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:203
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:211
 #: screens/Project/ProjectList/ProjectListItem.tsx:96
 msgid "Copy full revision to clipboard."
 msgstr "将完整修订复制到剪贴板。"
@@ -1549,7 +1549,7 @@ msgstr "显示更少"
 msgid "Revision"
 msgstr "修订"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:338
 msgid "Failed to delete one or more jobs."
 msgstr "删除一个或多个作业失败。"
 
@@ -1612,7 +1612,7 @@ msgstr "分钟"
 msgid "Copied"
 msgstr "复制"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:349
 msgid "Failed to cancel one or more jobs."
 msgstr "取消一个或多个作业失败。"
 
@@ -1642,8 +1642,8 @@ msgstr "创建新联邦库存"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:264
+#: components/JobList/JobListItem.tsx:119
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1822,11 +1822,11 @@ msgstr "创建新联邦库存"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
 #: screens/Organization/shared/OrganizationForm.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:177
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:185
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:176
-#: screens/Project/shared/ProjectForm.tsx:275
+#: screens/Project/shared/ProjectForm.tsx:276
 #: screens/Team/shared/TeamForm.tsx:35
 #: screens/Team/TeamDetail/TeamDetail.tsx:44
 #: screens/Team/TeamList/TeamList.tsx:115
@@ -1940,8 +1940,8 @@ msgid "Approved"
 msgstr "已批准"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:139
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:138
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2015,8 +2015,8 @@ msgstr "事件摘要不可用"
 msgid "Dashboard"
 msgstr "仪表盘"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:66
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:122
+#: components/PromptDetail/PromptProjectDetail.tsx:68
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:124
 msgid "Allow branch override"
 msgstr "允许分支覆写"
 
@@ -2105,7 +2105,7 @@ msgstr "此项目当前正在同步，在同步过程完成之前无法单击"
 msgid "Administration"
 msgstr "管理"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:385
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:393
 msgid "Failed to delete project."
 msgstr "删除项目失败。"
 
@@ -2132,7 +2132,7 @@ msgstr "查看杂项系统设置"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
-#: screens/Project/shared/ProjectForm.tsx:365
+#: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
 msgstr "类型详情"
 
@@ -2145,7 +2145,7 @@ msgstr "其他提示"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "在评估条件之前需要父节点的结果。"
 
-#: components/JobList/JobListItem.tsx:249
+#: components/JobList/JobListItem.tsx:248
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2377,8 +2377,8 @@ msgstr "撤消"
 msgid "Pending delete"
 msgstr "等待删除"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:117
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:258
+#: components/PromptDetail/PromptProjectDetail.tsx:124
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:266
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:71
 msgid "Source Control Credential"
 msgstr "源控制凭证"
@@ -2474,7 +2474,7 @@ msgstr "添加联邦库存"
 msgid "View Host Details"
 msgstr "查看主机详情"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:215
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:223
 #: screens/Project/ProjectList/ProjectListItem.tsx:108
 msgid "Sync for revision"
 msgstr "修订版本同步"
@@ -2556,7 +2556,7 @@ msgstr "启用外部日志记录"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:60
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:192
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:43
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:136
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:144
 #: screens/Project/ProjectList/ProjectListItem.tsx:71
 msgid "STATUS:"
 msgstr "状态："
@@ -2573,7 +2573,7 @@ msgstr "用户详情"
 msgid "Delete Execution Environment"
 msgstr "删除执行环境"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:372
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "作业分片"
@@ -2613,8 +2613,8 @@ msgstr "更多信息。"
 msgid "Delete Inventory"
 msgstr "删除清单"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:111
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:237
+#: components/PromptDetail/PromptProjectDetail.tsx:118
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:245
 #: screens/Project/shared/ProjectSubForms/GitSubForm.tsx:41
 msgid "Source Control Refspec"
 msgstr "源控制 Refspec"
@@ -2737,7 +2737,7 @@ msgstr "解除关联一个或多个主机失败。"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:57
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:189
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:40
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:133
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "作业 ID："
@@ -2843,10 +2843,10 @@ msgstr "更新缓存超时"
 msgid "Question"
 msgstr "问题"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:96
+#: components/PromptDetail/PromptProjectDetail.tsx:103
 #: screens/Job/JobDetail/JobDetail.tsx:314
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:192
-#: screens/Project/shared/ProjectForm.tsx:316
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:200
+#: screens/Project/shared/ProjectForm.tsx:317
 msgid "Source Control Type"
 msgstr "源控制类型"
 
@@ -2971,7 +2971,7 @@ msgid "Action"
 msgstr "操作"
 
 #: components/Lookup/ProjectLookup.tsx:162
-#: components/PromptDetail/PromptProjectDetail.tsx:98
+#: components/PromptDetail/PromptProjectDetail.tsx:105
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:163
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:231
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
@@ -2980,7 +2980,7 @@ msgstr "操作"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:245
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:100
 #: screens/Job/JobDetail/JobDetail.tsx:78
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:193
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:201
 #: screens/Project/ProjectList/ProjectList.tsx:198
 #: screens/Project/ProjectList/ProjectListItem.tsx:205
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:102
@@ -3060,7 +3060,7 @@ msgstr "工作流作业详情"
 msgid "Azure AD settings"
 msgstr "Azure AD 设置"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3131,7 +3131,7 @@ msgstr "同步清单源失败。"
 msgid "Failed to deny {0}."
 msgstr "拒绝 {0} 失败。"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:196
 #: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
@@ -3409,7 +3409,7 @@ msgstr "小于或等于比较。"
 #: screens/Job/JobDetail/JobDetail.tsx:679
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:374
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
@@ -3459,8 +3459,8 @@ msgstr "读取"
 #~ msgid "View Settings"
 #~ msgstr "查看设置"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:159
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:162
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
@@ -3559,7 +3559,7 @@ msgstr "GitHub Team"
 #: screens/Job/JobDetail/JobDetail.tsx:603
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:326
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:334
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
@@ -3809,7 +3809,7 @@ msgstr "作业分片"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:199
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:286
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:354
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:202
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:210
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "成功复制至剪贴板！"
@@ -3925,7 +3925,7 @@ msgstr "禁用"
 msgid "Default Execution Environment"
 msgstr "默认执行环境"
 
-#: components/JobList/JobListItem.tsx:297
+#: components/JobList/JobListItem.tsx:296
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4163,7 +4163,7 @@ msgstr "删除凭证"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:347
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
@@ -4601,8 +4601,8 @@ msgstr "查看机构详情"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
+#: components/JobList/JobList.tsx:335
+#: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
@@ -4661,7 +4661,7 @@ msgstr "查看机构详情"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:390
 #: screens/Project/ProjectList/ProjectList.tsx:294
 #: screens/Project/ProjectList/ProjectList.tsx:306
 #: screens/Project/shared/ProjectSyncButton.tsx:70
@@ -4763,6 +4763,11 @@ msgstr "删除一个或多个项目失败。"
 msgid "Set source path to"
 msgstr "设置源路径为"
 
+#: components/PromptDetail/PromptProjectDetail.tsx:73
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:130
+msgid "Reuse downloaded requirements"
+msgstr "重用已下载的要求"
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4821,7 +4826,7 @@ msgstr "启动者"
 msgid "Delete this node"
 msgstr "删除此节点"
 
-#: components/JobList/JobListItem.tsx:271
+#: components/JobList/JobListItem.tsx:270
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "源工作流作业"
@@ -4981,8 +4986,8 @@ msgstr "执行环境"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "启动时提示输入作业类型。"
 
-#: components/JobList/JobListItem.tsx:237
-#: components/JobList/JobListItem.tsx:245
+#: components/JobList/JobListItem.tsx:236
+#: components/JobList/JobListItem.tsx:244
 msgid "Schedule"
 msgstr "调度"
 
@@ -5064,7 +5069,7 @@ msgstr "定义系统级的特性和功能"
 msgid "Run a health check on the instance"
 msgstr "对实例运行健康检查"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:363
 #: screens/Project/ProjectList/ProjectListItem.tsx:216
 msgid "Cancel Project Sync"
 msgstr "取消项目同步"
@@ -5110,7 +5115,7 @@ msgstr "在文档和"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:169
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:217
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:162
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:170
 msgid "Last Job Status"
 msgstr "最后的作业状态"
 
@@ -5187,7 +5192,7 @@ msgstr "天"
 msgid "Collapse"
 msgstr "折叠"
 
-#: components/JobList/JobListItem.tsx:342
+#: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5230,7 +5235,7 @@ msgstr "选择状态"
 msgid "Month"
 msgstr "月"
 
-#: components/JobList/JobListItem.tsx:318
+#: components/JobList/JobListItem.tsx:317
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5323,8 +5328,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "删除与 ansible 事实相关的当前搜索，以启用使用此键的另一个搜索。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:162
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:315
+#: components/PromptDetail/PromptProjectDetail.tsx:169
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:323
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:76
 msgid "Project Base Path"
 msgstr "项目基本路径"
@@ -5415,9 +5420,9 @@ msgstr "资源名称"
 msgid "select module"
 msgstr "选择模块"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:130
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:242
-#: screens/Project/shared/ProjectForm.tsx:357
+#: components/PromptDetail/PromptProjectDetail.tsx:137
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:250
+#: screens/Project/shared/ProjectForm.tsx:358
 msgid "Content Signature Validation Credential"
 msgstr "内容签名验证凭证"
 
@@ -5448,7 +5453,7 @@ msgstr "首选主题"
 
 #: screens/Instances/Shared/InstanceForm.tsx:38
 #: screens/Inventory/shared/InventorySourceForm.tsx:110
-#: screens/Project/shared/ProjectForm.tsx:167
+#: screens/Project/shared/ProjectForm.tsx:168
 msgid "Set a value for this field"
 msgstr "为这个字段设置值"
 
@@ -5597,7 +5602,7 @@ msgstr "调度缺少规则"
 msgid "Write"
 msgstr "写入"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:174
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "选项详情"
 
@@ -5687,7 +5692,7 @@ msgstr "查看清单脚本"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "此清单会应用到在这个工作流 ({0}) 中的所有作业模板，它会提示输入一个清单。"
 
-#: screens/Project/shared/Project.helptext.tsx:103
+#: screens/Project/shared/Project.helptext.tsx:104
 msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
 msgstr "与 webhook 服务共享的密钥。该服务使用它来签署其请求，以便只有您的存储库才能触发项目同步。键入您自己的密钥以将其作为配置进行管理，或将该字段留空以在保存时生成一个。"
 
@@ -5862,13 +5867,13 @@ msgstr "测试通知"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:116
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:195
-#: components/PromptDetail/PromptProjectDetail.tsx:143
+#: components/PromptDetail/PromptProjectDetail.tsx:150
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:336
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
@@ -6127,7 +6132,7 @@ msgstr "更新"
 msgid "Failed to delete one or more schedules."
 msgstr "删除一个或多个调度失败。"
 
-#: screens/Project/shared/Project.helptext.tsx:101
+#: screens/Project/shared/Project.helptext.tsx:102
 msgid "Service that webhook requests will be accepted from."
 msgstr "将接受 webhook 请求的来源服务。"
 
@@ -6160,7 +6165,7 @@ msgstr "此处。"
 msgid "Unavailable"
 msgstr "不可用"
 
-#: screens/Project/shared/Project.helptext.tsx:99
+#: screens/Project/shared/Project.helptext.tsx:100
 msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
 msgstr "当源代码控制存储库中发生推送时同步项目，以便本地副本始终保持最新，而无需在每次任务启动时轮询或更新。"
 
@@ -6501,7 +6506,7 @@ msgstr "此运行没有可强制的失败节点。审批永远不能被强制为
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "置备回调：启用创建置备回调 URL。使用该 URL，主机可以联系 Ascender 并使用此任务模板请求配置更新。"
 
-#: components/JobList/JobListItem.tsx:163
+#: components/JobList/JobListItem.tsx:162
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6618,8 +6623,8 @@ msgstr "组"
 #~ msgid "Request subscription"
 #~ msgstr "请求订阅"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:152
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:272
+#: components/PromptDetail/PromptProjectDetail.tsx:159
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:280
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
@@ -6667,7 +6672,7 @@ msgstr "查看作业设置"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:343
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:351
 #: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "编辑"
@@ -6931,7 +6936,7 @@ msgstr "用于向受保护的容器注册表进行身份验证的凭证。"
 msgid "Context"
 msgstr "上下文"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:302
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:310
 #: screens/Template/shared/WebhookSubForm.tsx:238
 msgid "Webhook Ref Filter"
 msgstr "Webhook 引用过滤器"
@@ -7139,7 +7144,7 @@ msgstr "完整镜像位置，包括容器注册表、镜像名称和版本标签
 msgid "Node state types"
 msgstr "节点状态类型"
 
-#: screens/Project/shared/Project.helptext.tsx:102
+#: screens/Project/shared/Project.helptext.tsx:103
 msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
 msgstr "此项目的 webhook 端点。将其添加到存储库的 webhook 配置中，以便推送触发项目同步。"
 
@@ -7156,7 +7161,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "选择 Playbook 目录"
 
-#: components/JobList/JobListItem.tsx:259
+#: components/JobList/JobListItem.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7323,6 +7328,10 @@ msgstr "重新启动时将失败的节点强制为成功"
 msgid "Host Failure"
 msgstr "主机故障"
 
+#: screens/Project/shared/Project.helptext.tsx:98
+msgid "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."
+msgstr "当要求文件和 Galaxy 凭证未更改时，重用为早期修订下载的角色和集合。为作业或工作流运行的同步（例如启动时更新修订）会重用它们。您启动的同步、调度的同步和重新启动始终会下载新副本。来自源控制、URL、文件或项目目录的要求永远不会被重用。"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:40
 #: screens/ActivityStream/ActivityStreamListItem.tsx:56
 msgid "View event details"
@@ -7342,8 +7351,8 @@ msgstr "启用置备回调 URL 的创建。\n"
 "                              并使用此作业模板请求配置\n"
 "                              更新"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:136
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:135
 msgid "Finish Time"
 msgstr "完成时间"
 
@@ -7393,7 +7402,7 @@ msgstr "机构名称"
 msgid "Host Filter"
 msgstr "主机过滤器"
 
-#: screens/Project/shared/Project.helptext.tsx:98
+#: screens/Project/shared/Project.helptext.tsx:99
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "将项目视为最新的时间（以秒为单位）。在任务运行和回调期间，任务系统将评估最新项目更新的时间戳。如果它早于缓存超时，则不将其视为最新，并将执行新的项目更新。"
 
@@ -7405,8 +7414,8 @@ msgstr "{numJobsToCancel, plural, one {此操作将取消以下作业:} other {�
 msgid "Keyword"
 msgstr "关键字"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:51
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:53
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:103
 msgid "Delete the project before syncing"
 msgstr "在同步前删除项目"
 
@@ -7533,9 +7542,9 @@ msgstr "相关密钥"
 #~ msgstr "返回到订阅管理。"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:98
-#: components/PromptDetail/PromptProjectDetail.tsx:149
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:270
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:181
+#: components/PromptDetail/PromptProjectDetail.tsx:156
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:278
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:187
 msgid "Cache Timeout"
 msgstr "缓存超时"
 
@@ -7605,10 +7614,10 @@ msgstr "同步"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
 #: screens/Organization/shared/OrganizationForm.tsx:69
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:178
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
-#: screens/Project/shared/ProjectForm.tsx:283
+#: screens/Project/shared/ProjectForm.tsx:284
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
@@ -7639,7 +7648,7 @@ msgstr "选择应用到所选资源的角色。请注意，所有选择的角色
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:295
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:303
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
@@ -7741,7 +7750,7 @@ msgstr "使用 GitHub Enterprise 登录"
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
-#: screens/Project/shared/ProjectForm.tsx:295
+#: screens/Project/shared/ProjectForm.tsx:296
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
@@ -8062,7 +8071,7 @@ msgstr "添加实例组"
 msgid "Sender Email"
 msgstr "发件人电子邮件"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:354
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:362
 #: screens/Project/ProjectList/ProjectListItem.tsx:215
 msgid "Project Sync Error"
 msgstr "项目同步错误"
@@ -8191,7 +8200,7 @@ msgstr "很难为 Ansible 事实的清单提供\n"
 "            playbook。实际事实\n"
 "            会因系统而异。"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "任务分片父级"
@@ -8211,7 +8220,7 @@ msgstr "周六"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:55
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:187
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:38
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:131
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:139
 #: screens/Project/ProjectList/ProjectListItem.tsx:66
 msgid "MOST RECENT SYNC"
 msgstr "最新同步"
@@ -8669,8 +8678,8 @@ msgstr "源控制更新"
 #~ "                   软件的未来版本，并提供\n"
 #~ "                   Automation Analytics。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:56
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:110
+#: components/PromptDetail/PromptProjectDetail.tsx:58
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:112
 msgid "Track submodules latest commit on branch"
 msgstr "跟踪分支中的最新提交"
 
@@ -8888,7 +8897,7 @@ msgstr "事实存储：如果启用，这将存储收集的事实，以便可以
 msgid "Delete credential type"
 msgstr "删除凭证类型"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:284
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
@@ -9035,6 +9044,8 @@ msgid "Resources"
 msgstr "资源"
 
 #: components/JobList/JobList.tsx:211
+#: components/JobList/JobList.tsx:263
+#: components/JobList/JobListItem.tsx:116
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9255,7 +9266,7 @@ msgstr "更新选项"
 #: screens/Job/JobDetail/JobDetail.tsx:607
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:331
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:339
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
@@ -9355,8 +9366,8 @@ msgstr "取消节点删除"
 msgid "Deprecated"
 msgstr "已弃用"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:116
+#: components/PromptDetail/PromptProjectDetail.tsx:63
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:118
 msgid "Update revision on job launch"
 msgstr "启动作业时更新修订"
 
@@ -9692,7 +9703,7 @@ msgstr "从外部 secret 管理系统填充字段"
 #~ msgstr "Insights 凭证"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
+#: components/JobList/JobList.tsx:294
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
@@ -9802,12 +9813,12 @@ msgstr "必须选择一个清单"
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
-#: components/PromptDetail/PromptProjectDetail.tsx:106
+#: components/PromptDetail/PromptProjectDetail.tsx:113
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:348
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:232
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:240
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
@@ -9891,7 +9902,7 @@ msgstr "查看所有工作流批准。"
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "未选中时，将执行合并，将局部变量与外部源上的局部变量相结合。"
 
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:147
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9909,8 +9920,8 @@ msgid "Inventory sources with failures"
 msgstr "出现故障的库存源"
 
 #: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:265
+#: components/JobList/JobListItem.tsx:126
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9966,8 +9977,8 @@ msgstr "切换工具"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:69
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:114
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:124
-#: components/PromptDetail/PromptProjectDetail.tsx:78
-#: components/PromptDetail/PromptProjectDetail.tsx:89
+#: components/PromptDetail/PromptProjectDetail.tsx:85
+#: components/PromptDetail/PromptProjectDetail.tsx:96
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:80
 #: components/TemplateList/TemplateListItem.tsx:251
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:79
@@ -9989,7 +10000,7 @@ msgstr "切换工具"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:181
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:189
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
@@ -10044,7 +10055,7 @@ msgstr "工作流待处理信息"
 msgid "Errors"
 msgstr "错误"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:196
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:204
 msgid "Source Control Revision"
 msgstr "源控制修订"
 
@@ -10302,7 +10313,7 @@ msgstr "Webhook"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {在处理最终删除之前，清单将处于待处理状态。} other {在处理最终删除之前，清单将处于待处理状态。}}"
 
-#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "使用主机参数重新启动"
@@ -10365,7 +10376,7 @@ msgstr "创建新容器组"
 msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
 msgstr "如果启用，从失败节点重新启动时可以将选定的失败节点视为已成功，使工作流沿其成功路径继续。适用于因无法及时修复且不影响后续步骤的原因而失败的节点。始终需要填写原因，节点会保留强制标记及强制者。审批永远不能被强制。在重新启动时检查，因此关闭后对已启动的运行同样生效。"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:286
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:294
 #: screens/Template/shared/WebhookSubForm.tsx:138
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket数据中心"
@@ -10617,7 +10628,7 @@ msgstr "选择团队"
 msgid "Elapsed time that the job ran"
 msgstr "作业运行所经过的时间"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:285
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:293
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
@@ -10722,7 +10733,7 @@ msgstr "确认链接删除"
 msgid "This field must be at least {0} characters"
 msgstr "此字段必须至少包含 {0} 个字符"
 
-#: components/JobList/JobListItem.tsx:225
+#: components/JobList/JobListItem.tsx:224
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10946,7 +10957,7 @@ msgid "Choose a job type"
 msgstr "选择作业类型"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11086,7 +11097,7 @@ msgid "The page you requested could not be found."
 msgstr "您请求的页面无法找到。"
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:300
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11118,6 +11129,10 @@ msgstr "{draggedName} 现在位于位置 {0}。"
 #: util/validators.ts:43
 msgid "Invalid date format"
 msgstr "日期格式无效"
+
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:155
+msgid "Reuse Downloaded Requirements"
+msgstr "重用已下载的要求"
 
 #: screens/Job/JobDetail/JobDetail.tsx:399
 msgid "Instance Group"
@@ -11260,7 +11275,7 @@ msgstr "Google Compute Engine"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:64
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:196
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:47
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:140
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:148
 #: screens/Project/ProjectList/ProjectListItem.tsx:75
 msgid "FINISHED:"
 msgstr "完成："
@@ -11706,7 +11721,7 @@ msgstr "设置此实例的当前生命周期阶段。默认为\"installed\"。"
 msgid "View inventory source details"
 msgstr "查看清单源详情"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:372
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:380
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此项目。您确定要删除它吗？"
 
@@ -11716,7 +11731,7 @@ msgstr "其他资源目前正在使用此项目。您确定要删除它吗？"
 msgid "Associate"
 msgstr "关联"
 
-#: components/JobList/JobListItem.tsx:204
+#: components/JobList/JobListItem.tsx:203
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11806,7 +11821,7 @@ msgstr "加密"
 msgid "Unknown Inventory"
 msgstr "未知库存"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:356
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:364
 #: screens/Project/ProjectList/ProjectListItem.tsx:218
 msgid "Failed to cancel Project Sync"
 msgstr "取消项目同步失败"
@@ -11826,7 +11841,7 @@ msgstr "主机重试"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:281
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:289
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -11930,7 +11945,7 @@ msgstr "6 月"
 msgid "Launch"
 msgstr "启动"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:365
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "解释"
@@ -12010,15 +12025,15 @@ msgid "Error message body"
 msgstr "错误消息正文"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:150
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "取消 {0} 失败"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:46
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:95
+#: components/PromptDetail/PromptProjectDetail.tsx:48
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:97
 msgid "Discard local changes before syncing"
 msgstr "在同步前丢弃本地更改"
 
@@ -12099,8 +12114,8 @@ msgstr "无效的用户名或密码。请重试。"
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "同行在 {0} 上更新。请务必再次运行 {1} 的安装包，以便看到更改生效。"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:169
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:322
+#: components/PromptDetail/PromptProjectDetail.tsx:176
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:330
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:85
 msgid "Playbook Directory"
 msgstr "Playbook 目录"
@@ -12174,7 +12189,7 @@ msgid "Toggle notification start"
 msgstr "切换通知开始"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:281
+#: components/JobList/JobListItem.tsx:280
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444

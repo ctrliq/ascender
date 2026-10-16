@@ -2,6 +2,7 @@
 import json
 import os
 import shutil
+import tarfile
 import tempfile
 from pathlib import Path
 
@@ -1471,6 +1472,7 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
 
         assert task.__vars__['roles_enabled'] is False
         assert task.__vars__['collections_enabled'] is False
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == []
         for k in env:
             assert not k.startswith('ANSIBLE_GALAXY_SERVER')
 
@@ -1498,6 +1500,35 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
 
         assert task.__vars__['roles_enabled'] is True
         assert task.__vars__['collections_enabled'] is True
+        assert task.__vars__['requirements_cache_enabled'] is True
+        project_update.project.reuse_requirements = False
+        task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['requirements_cache_enabled'] is False
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == ['https://galaxy.ansible.com/']
+
+        # GALAXY_TASK_ENV reaches the install commands, so it is part of the key, as a fingerprint only
+        fingerprint = task.__vars__['requirements_cache_salt']['galaxy_task_env']
+        task_env = {'ANSIBLE_GALAXY_SERVER_SERVER0_URL': 'https://hub.example.com/', 'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}
+        with mock.patch.object(settings, 'GALAXY_TASK_ENV', task_env):
+            task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['requirements_cache_salt']['galaxy_task_env'] != fingerprint
+        assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
+
+        # build_env turns this into ANSIBLE_GALAXY_IGNORE, so turning verification back on must not reuse
+        for ignore in (True, False):
+            with mock.patch.object(settings, 'GALAXY_IGNORE_CERTS', ignore):
+                task.build_extra_vars_file(project_update, private_data_dir)
+            assert task.__vars__['requirements_cache_salt']['galaxy_ignore_certs'] is ignore
+
+        # ASCENDER_TASK_ENV reaches ansible-galaxy through build_env, e.g. a token for a URL-only credential
+        task_env_fingerprint = task.__vars__['requirements_cache_salt']['task_env']
+        with mock.patch.object(settings, 'ASCENDER_TASK_ENV', {'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}):
+            task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['requirements_cache_salt']['task_env'] != task_env_fingerprint
+        assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
+
+        # a refresh keys its own install, so every node installs afresh after it
+        assert task.__vars__['requirements_cache_salt']['refresh_generation'] == project_update.pk
         assert sorted([(k, v) for k, v in env.items() if k.startswith('ANSIBLE_GALAXY')]) == [
             ('ANSIBLE_GALAXY_SERVER_LIST', 'server0'),
             ('ANSIBLE_GALAXY_SERVER_SERVER0_URL', 'https://galaxy.ansible.com/'),
@@ -1533,6 +1564,29 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
             ('ANSIBLE_GALAXY_SERVER_SERVER1_TOKEN', 'secret123'),
             ('ANSIBLE_GALAXY_SERVER_SERVER1_URL', 'https://cloud.redhat.com/api/automation-hub/'),
         ]
+
+    def test_galaxy_credential_auth_is_part_of_requirements_key(self, private_data_dir, project_update, mock_me):
+        class RunProjectUpdate(jobs.RunProjectUpdate):
+            __vars__ = {}
+
+            def _write_extra_vars_file(self, private_data_dir, extra_vars, *kw):
+                self.__vars__ = extra_vars
+
+        credential_type = CredentialType.defaults['galaxy_api_token']()
+        hub = Credential(pk=2, credential_type=credential_type, inputs={'url': 'https://hub.example.com/', 'token': 'secret123'})
+        project_update.project.organization.galaxy_credentials.add(hub)
+        task = RunProjectUpdate()
+        task.instance = project_update
+
+        task.build_extra_vars_file(project_update, private_data_dir)
+        before = task.__vars__['requirements_cache_salt']['galaxy_auth']
+        hub.inputs['token'] = 'other-account'
+        task.build_extra_vars_file(project_update, private_data_dir)
+
+        # a new token at the same URL can see different content, so it must not reuse the old install
+        assert task.__vars__['requirements_cache_salt']['galaxy_auth'] != before
+        assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == ['https://hub.example.com/']
+        assert 'other-account' not in json.dumps(task.__vars__['requirements_cache_salt'])
 
 
 @pytest.mark.usefixtures("patch_Organization")
@@ -2509,9 +2563,10 @@ def _source_control_project(revision='abc123'):
         (jobs.RunJob, False, 'old456', ['update_git', 'install_roles', 'install_collections']),
     ],
 )
+@mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0)
 @mock.patch('ascender.main.tasks.jobs.os.path.exists', return_value=True)
 @mock.patch('ascender.main.tasks.jobs.git.Repo')
-def test_get_sync_needs_reuses_dependency_project_update(repo, path_exists, task_class, has_dependency, local_revision, expected):
+def test_get_sync_needs_reuses_dependency_project_update(repo, path_exists, recorded_generation, task_class, has_dependency, local_revision, expected):
     repo.return_value.head.commit.hexsha = local_revision
     task = task_class()
     task.instance = mock.Mock(spec=InventoryUpdate if task_class is jobs.RunInventoryUpdate else Job)
@@ -2558,3 +2613,403 @@ def test_sync_and_copy_without_lock_job_sets_only_revision(get_sync_needs, make_
     task.sync_and_copy_without_lock(project, '/fake/private_data_dir')
 
     task.update_model.assert_called_once_with(7, scm_revision='abc123')
+
+
+REQ_HASH = 'a' * 64
+OTHER_HASH = 'b' * 64
+
+
+def _make_tree(root, files):
+    for relpath, content in files.items():
+        path = os.path.join(root, relpath)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w') as f:
+            f.write(content)
+
+
+class TestClearProjectCacheReqcache:
+    def test_reqcache_entries_preserved(self, tmp_path):
+        for entry in ('abc123', f'reqcache_{REQ_HASH}', f'reqcache_{OTHER_HASH}', 'old_revision', 'stage'):
+            (tmp_path / entry).mkdir()
+
+        jobs.RunProjectUpdate.clear_project_cache(str(tmp_path), 'abc123')
+
+        assert set(os.listdir(tmp_path)) == {'abc123', 'stage', f'reqcache_{REQ_HASH}', f'reqcache_{OTHER_HASH}'}
+
+    def test_leftover_temp_dirs_removed(self, tmp_path):
+        (tmp_path / 'keep').mkdir()
+        (tmp_path / '.~~delete~~reqcache_tmp_x').mkdir()
+
+        jobs.RunProjectUpdate.clear_project_cache(str(tmp_path), 'keep')
+
+        assert os.listdir(tmp_path) == ['keep']
+
+    def test_evicts_least_recently_used_when_over_limit(self, tmp_path):
+        (tmp_path / 'current').mkdir()
+        for i in range(12):
+            entry = tmp_path / f'reqcache_{i:064x}'
+            entry.mkdir()
+            os.utime(entry, (1000 + i, 1000 + i))
+
+        jobs.RunProjectUpdate.clear_project_cache(str(tmp_path), 'current', max_reqcache=10)
+
+        remaining = set(os.listdir(tmp_path))
+        assert f'reqcache_{0:064x}' not in remaining
+        assert f'reqcache_{1:064x}' not in remaining
+        assert len([e for e in remaining if e.startswith('reqcache_')]) == 10
+
+    @pytest.mark.parametrize('referenced_by', ['stage', 'current'])
+    def test_eviction_protects_reqcache_of_kept_directories(self, tmp_path, referenced_by):
+        """Neither the reqcache this update reused nor the one the kept revision relies on may go"""
+        (tmp_path / 'current').mkdir()
+        (tmp_path / 'stage').mkdir()
+        oldest = f'{0:064x}'
+        (tmp_path / referenced_by / '.requirements_hash').write_text(oldest)
+        for i in range(12):
+            entry = tmp_path / f'reqcache_{i:064x}'
+            entry.mkdir()
+            os.utime(entry, (1000 + i, 1000 + i))
+
+        jobs.RunProjectUpdate.clear_project_cache(str(tmp_path), 'current', max_reqcache=10)
+
+        remaining = set(os.listdir(tmp_path))
+        assert f'reqcache_{oldest}' in remaining
+        # the next two oldest are evicted instead, keeping the count at the limit
+        assert f'reqcache_{1:064x}' not in remaining
+        assert f'reqcache_{2:064x}' not in remaining
+        assert len([e for e in remaining if e.startswith('reqcache_')]) == 10
+
+
+class TestReadRequirementsHash:
+    @pytest.mark.parametrize(
+        'content,expected',
+        [
+            (REQ_HASH, REQ_HASH),
+            (REQ_HASH + '\n', REQ_HASH),
+            ('', None),
+            ('../../etc', None),
+            ('A' * 64, None),
+        ],
+    )
+    def test_only_hex_digests_accepted(self, tmp_path, content, expected):
+        (tmp_path / '.requirements_hash').write_text(content)
+        assert jobs.RunProjectUpdate.read_requirements_hash(str(tmp_path)) == expected
+
+    def test_missing_file(self, tmp_path):
+        assert jobs.RunProjectUpdate.read_requirements_hash(str(tmp_path)) is None
+
+
+class TestSyncRequirementsCache:
+    def _promoted_stage(self, tmp_path, req_hash=REQ_HASH, files=None):
+        cache_path = tmp_path / 'rev1'
+        _make_tree(str(cache_path), files if files is not None else {'requirements_collections/ansible_collections/ns/coll/MANIFEST.json': '{}'})
+        cache_path.mkdir(exist_ok=True)
+        if req_hash is not None:
+            (cache_path / '.requirements_hash').write_text(req_hash)
+        return cache_path
+
+    def test_saves_installed_content_with_archive(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path)
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        reqcache = tmp_path / f'reqcache_{REQ_HASH}'
+        assert (reqcache / 'requirements_collections/ansible_collections/ns/coll/MANIFEST.json').read_text() == '{}'
+        assert not (reqcache / 'requirements_roles').exists()
+        with tarfile.open(reqcache / 'requirements_collections.tar') as tar:
+            assert 'requirements_collections/ansible_collections/ns/coll/MANIFEST.json' in tar.getnames()
+        # the revision keeps its own copy
+        assert (cache_path / 'requirements_collections/ansible_collections/ns/coll/MANIFEST.json').exists()
+
+    def test_hard_links_instead_of_copying(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path)
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        relpath = 'requirements_collections/ansible_collections/ns/coll/MANIFEST.json'
+        assert os.stat(cache_path / relpath).st_ino == os.stat(tmp_path / f'reqcache_{REQ_HASH}' / relpath).st_ino
+
+    def test_publishes_empty_cache_when_nothing_was_installed(self, tmp_path):
+        """Otherwise requirements that install nothing would miss the cache on every update"""
+        cache_path = self._promoted_stage(tmp_path, files={})
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        assert os.listdir(tmp_path / f'reqcache_{REQ_HASH}') == []
+
+    def test_skips_without_hash(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path, req_hash=None)
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        assert not [e for e in os.listdir(tmp_path) if 'reqcache' in e]
+
+    def test_reuse_marks_cache_used_without_rewriting(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path, files={})
+        reqcache = tmp_path / f'reqcache_{REQ_HASH}'
+        _make_tree(str(reqcache), {'requirements_collections/old': 'old'})
+        os.utime(reqcache, (1000, 1000))
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        assert (reqcache / 'requirements_collections/old').read_text() == 'old'
+        assert os.path.getmtime(reqcache) > 1000
+
+    def test_refresh_replaces_existing_cache(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path, files={'requirements_collections/new': 'new'})
+        reqcache = tmp_path / f'reqcache_{REQ_HASH}'
+        _make_tree(str(reqcache), {'requirements_collections/old': 'old', 'requirements_roles/r/x': 'x'})
+
+        jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path), refresh=True)
+
+        assert sorted(os.listdir(reqcache)) == ['requirements_collections', 'requirements_collections.tar']
+        assert os.listdir(reqcache / 'requirements_collections') == ['new']
+        assert not [e for e in os.listdir(tmp_path) if e.startswith('.~~delete~~')]
+
+    def test_failed_copy_publishes_nothing_and_does_not_raise(self, tmp_path):
+        """A partial reqcache would be taken as complete, and raising would skip the job's copy"""
+        cache_path = self._promoted_stage(tmp_path, files={'requirements_collections/a': 'a', 'requirements_roles/r/b': 'b'})
+        real_copytree = shutil.copytree
+
+        def copytree(src, dst, **kw):
+            if src.endswith('requirements_roles'):
+                raise OSError('disk full')
+            return real_copytree(src, dst, **kw)
+
+        with mock.patch('ascender.main.tasks.jobs.shutil.copytree', side_effect=copytree):
+            jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        assert os.listdir(tmp_path) == ['rev1']
+
+    def test_failed_archive_still_publishes_folder(self, tmp_path):
+        cache_path = self._promoted_stage(tmp_path)
+
+        with mock.patch('ascender.main.tasks.jobs.tarfile.open', side_effect=OSError('nope')):
+            jobs.RunProjectUpdate.sync_requirements_cache(str(tmp_path), str(cache_path))
+
+        assert os.listdir(tmp_path / f'reqcache_{REQ_HASH}') == ['requirements_collections']
+
+
+class TestMakeLocalCopyReqcache:
+    @pytest.fixture
+    def project(self, tmp_path):
+        project_path = tmp_path / 'projects' / '_1__demo'
+        _make_tree(str(project_path), {'site.yml': '---'})
+        base_path = tmp_path / 'projects' / '.__awx_cache' / '_1__demo'
+        base_path.mkdir(parents=True)
+        project = mock.Mock(pk=1, cache_id='rev2')
+        project.get_project_path.return_value = str(project_path)
+        project.get_cache_path.return_value = str(base_path)
+        return project
+
+    @pytest.fixture(autouse=True)
+    def enabled(self, settings):
+        settings.ASCENDER_COLLECTIONS_ENABLED = True
+        settings.ASCENDER_ROLES_ENABLED = True
+
+    def _reuse_revision(self, project, req_hash=REQ_HASH):
+        base_path = project.get_cache_path()
+        cache_path = os.path.join(base_path, project.cache_id)
+        os.makedirs(cache_path)
+        with open(os.path.join(cache_path, '.requirements_hash'), 'w') as f:
+            f.write(req_hash)
+
+    def _publish(self, project, files):
+        rev1 = os.path.join(project.get_cache_path(), 'rev1')
+        _make_tree(rev1, files)
+        with open(os.path.join(rev1, '.requirements_hash'), 'w') as f:
+            f.write(REQ_HASH)
+        jobs.RunProjectUpdate.sync_requirements_cache(project.get_cache_path(), rev1)
+
+    def test_uses_archive_from_reqcache(self, project, tmp_path):
+        self._publish(project, {'requirements_collections/ansible_collections/ns/c/x': 'x', 'requirements_roles/r/tasks/main.yml': '---'})
+        self._reuse_revision(project)
+        dest = tmp_path / 'job'
+
+        with mock.patch('ascender.main.tasks.jobs.shutil.copytree', wraps=shutil.copytree) as copytree:
+            jobs.RunProjectUpdate.make_local_copy(project, str(dest))
+
+        assert (dest / 'requirements_collections/ansible_collections/ns/c/x').read_text() == 'x'
+        assert (dest / 'requirements_roles/r/tasks/main.yml').exists()
+        assert (dest / 'project/site.yml').exists()
+        # only the project itself was copied file by file
+        assert [c.args[0] for c in copytree.call_args_list] == [project.get_project_path.return_value]
+
+    def test_falls_back_to_folder_when_archive_cannot_be_extracted(self, project, tmp_path):
+        self._publish(project, {'requirements_collections/ansible_collections/ns/c/x': 'x'})
+        self._reuse_revision(project)
+        dest = tmp_path / 'job'
+
+        def partial_extract(*a, **kw):
+            os.makedirs(dest / 'requirements_collections' / 'partial')
+            raise tarfile.TarError('broken')
+
+        with mock.patch('ascender.main.tasks.jobs.tarfile.open', side_effect=partial_extract):
+            jobs.RunProjectUpdate.make_local_copy(project, str(dest))
+
+        assert sorted(os.listdir(dest / 'requirements_collections')) == ['ansible_collections']
+
+    def test_folder_used_when_no_archive(self, project, tmp_path):
+        self._publish(project, {'requirements_collections/ansible_collections/ns/c/x': 'x'})
+        os.remove(os.path.join(project.get_cache_path(), f'reqcache_{REQ_HASH}', 'requirements_collections.tar'))
+        self._reuse_revision(project)
+        dest = tmp_path / 'job'
+
+        jobs.RunProjectUpdate.make_local_copy(project, str(dest))
+
+        assert (dest / 'requirements_collections/ansible_collections/ns/c/x').read_text() == 'x'
+
+    def test_revision_with_own_content_ignores_reqcache(self, project, tmp_path):
+        self._publish(project, {'requirements_collections/from_reqcache': 'stale'})
+        cache_path = os.path.join(project.get_cache_path(), project.cache_id)
+        _make_tree(cache_path, {'requirements_collections/direct': 'direct'})
+        with open(os.path.join(cache_path, '.requirements_hash'), 'w') as f:
+            f.write(REQ_HASH)
+        dest = tmp_path / 'job'
+
+        jobs.RunProjectUpdate.make_local_copy(project, str(dest))
+
+        assert os.listdir(dest / 'requirements_collections') == ['direct']
+
+
+class TestProjectCacheIsComplete:
+    @pytest.fixture(autouse=True)
+    def no_refresh_since_upgrade(self):
+        with mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0):
+            yield
+
+    @pytest.fixture
+    def project(self, tmp_path):
+        project = mock.Mock(cache_id='rev2')
+        project.get_cache_path.return_value = str(tmp_path)
+        return project
+
+    def test_missing_revision(self, project):
+        assert jobs.RunProjectUpdate.project_cache_is_complete(project) is False
+
+    @pytest.mark.parametrize('recorded,current,expected', [(7, 7, True), (7, 9, False), (0, 0, True)])
+    def test_revision_installed_before_a_refresh_on_any_node(self, project, tmp_path, recorded, current, expected):
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_generation').write_text(str(recorded))
+        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation', return_value=current):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is expected
+
+    @pytest.mark.parametrize('recorded,expected', [(0, True), (38526, False)])
+    def test_revision_from_before_the_upgrade(self, project, tmp_path, recorded, expected):
+        """Usable as on earlier releases until a refresh after the upgrade, on any node, records a generation"""
+        (tmp_path / 'rev2').mkdir()
+        with (
+            mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=recorded),
+            mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation') as current,
+        ):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is expected
+        # job history alone would make every node reinstall every project right after the upgrade
+        current.assert_not_called()
+
+    def test_revision_with_unreadable_generation(self, project, tmp_path):
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_generation').write_text('garbage')
+        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation', return_value=5):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is False
+
+    def test_revision_without_requirements_hash(self, project, tmp_path):
+        (tmp_path / 'rev2').mkdir()
+        assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
+
+    def test_revision_reusing_existing_reqcache(self, project, tmp_path):
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_hash').write_text(REQ_HASH)
+        (tmp_path / f'reqcache_{REQ_HASH}').mkdir()
+        assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
+
+    def test_revision_reusing_evicted_reqcache(self, project, tmp_path):
+        """Jobs would otherwise run without the collections the project requires"""
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_hash').write_text(REQ_HASH)
+        assert jobs.RunProjectUpdate.project_cache_is_complete(project) is False
+
+    def test_revision_with_own_content_after_reqcache_evicted(self, project, tmp_path):
+        _make_tree(str(tmp_path / 'rev2'), {'requirements_collections/x': 'x', '.requirements_hash': REQ_HASH})
+        assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
+
+
+@mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0)
+@mock.patch('ascender.main.tasks.jobs.git.Repo')
+def test_get_sync_needs_installs_when_reused_reqcache_was_evicted(repo, recorded_generation, tmp_path):
+    repo.return_value.head.commit.hexsha = 'abc123'
+    project = _source_control_project()
+    project.get_project_path.return_value = str(tmp_path)
+    project.get_cache_path.return_value = str(tmp_path / 'cache')
+    _make_tree(str(tmp_path / 'cache' / 'abc123'), {'.requirements_hash': REQ_HASH})
+    task = jobs.RunJob()
+    task.instance = mock.Mock(spec=Job)
+
+    assert task.get_sync_needs(project) == ['install_roles', 'install_collections']
+
+    (tmp_path / 'cache' / f'reqcache_{REQ_HASH}').mkdir()
+    assert task.get_sync_needs(project) == []
+
+
+@pytest.mark.parametrize(
+    'launch_type,refresh', [('manual', True), ('scheduled', True), ('relaunch', True), ('dependency', False), ('sync', False), ('workflow', False)]
+)
+def test_project_update_post_run_hook_requirements_cache_refresh(tmp_path, launch_type, refresh, mock_me):
+    task = jobs.RunProjectUpdate()
+    task.lock_fd = None
+    task.runner_callback = mock.Mock(playbook_new_revision=None)
+    task.job_private_data_dir = None
+    instance = mock.Mock(
+        launch_type=launch_type, job_type='run', job_tags='update_git,install_roles,install_collections', branch_override=False, cache_id='rev1'
+    )
+    instance.get_cache_path.return_value = str(tmp_path)
+    (tmp_path / 'stage').mkdir()
+
+    instance.pk = 42
+    instance.project_id = 7
+    task.requirements_generation = 42 if refresh else 30
+    lock_released = []
+    task.release_lock = lambda project: lock_released.append(True)
+    task.lock_fd = 3
+    instance.launch_type = launch_type
+
+    def record_generation(**kwargs):
+        # the refresh must be visible to other jobs before they can take the project lock
+        assert not lock_released
+        return mock.Mock(update=mock.Mock())
+
+    with mock.patch.object(jobs.RunProjectUpdate, 'sync_requirements_cache') as sync, mock.patch.object(jobs.Project, 'objects') as projects:
+        projects.filter.side_effect = record_generation
+        task.post_run_hook(instance, 'successful')
+
+    sync.assert_called_once_with(str(tmp_path), str(tmp_path / 'rev1'), refresh=refresh)
+    assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == task.requirements_generation
+    if refresh:
+        projects.filter.assert_called_once_with(pk=7, requirements_generation__lt=42)
+    else:
+        projects.filter.assert_not_called()
+
+
+@pytest.mark.parametrize('enabled', [True, False])
+def test_project_update_post_run_hook_drops_reqcaches_when_reuse_disabled(tmp_path, enabled, mock_me):
+    """Turning reuse off leaves only the requirements cache the kept revision still relies on"""
+    task = jobs.RunProjectUpdate()
+    task.lock_fd = None
+    task.runner_callback = mock.Mock(playbook_new_revision=None)
+    task.job_private_data_dir = None
+    instance = mock.Mock(
+        launch_type='dependency', job_type='run', job_tags='update_git,install_roles,install_collections', branch_override=False, cache_id='rev1'
+    )
+    instance.project.reuse_requirements = enabled
+    instance.get_cache_path.return_value = str(tmp_path)
+    (tmp_path / 'stage').mkdir()
+    (tmp_path / 'stage' / '.requirements_hash').write_text(REQ_HASH)
+    (tmp_path / f'reqcache_{REQ_HASH}').mkdir()
+    (tmp_path / f'reqcache_{OTHER_HASH}').mkdir()
+
+    task.post_run_hook(instance, 'successful')
+
+    reqcaches = sorted(e for e in os.listdir(tmp_path) if e.startswith('reqcache_'))
+    if enabled:
+        assert reqcaches == [f'reqcache_{REQ_HASH}', f'reqcache_{OTHER_HASH}']
+    else:
+        assert reqcaches == [f'reqcache_{REQ_HASH}']

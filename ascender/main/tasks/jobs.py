@@ -2,13 +2,16 @@
 from collections import OrderedDict
 import errno
 import functools
+import hashlib
 import fcntl
 import json
 import logging
 import os
 from pathlib import Path
 import shutil
+import re
 import stat
+import tarfile
 import yaml
 import tempfile
 import traceback
@@ -46,6 +49,7 @@ from ascender.main.models import (
     InventorySource,
     Job,
     AdHocCommand,
+    Project,
     ProjectUpdate,
     InventoryUpdate,
     SystemJob,
@@ -104,6 +108,23 @@ def with_path_cleanup(f):
             self.cleanup_paths = []
 
     return _wrapped
+
+
+REQUIREMENTS_SUBFOLDERS = ('requirements_collections', 'requirements_roles')
+REQUIREMENTS_HASH_RE = re.compile(r'[0-9a-f]{64}')
+# Project update launch types that install requirements afresh instead of reusing a requirements cache
+REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES = ('manual', 'scheduled', 'relaunch')
+
+
+def _fingerprint(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode('utf-8')).hexdigest()
+
+
+def _link_or_copy(src, dst):
+    try:
+        os.link(src, dst)
+    except OSError:
+        shutil.copy2(src, dst)
 
 
 class BaseTask(object):
@@ -735,7 +756,7 @@ class SourceControlMixin(BaseTask):
             logger.debug(f'Project not available locally, {self.instance.id} will sync with remote')
             sync_needs.append(source_update_tag)
 
-        has_cache = os.path.exists(os.path.join(project.get_cache_path(), project.cache_id))
+        has_cache = RunProjectUpdate.project_cache_is_complete(project)
         # Galaxy requirements are not supported for manual projects
         # If a source update is scheduled, always include roles/collections because
         # the new revision may have different requirements.
@@ -1224,6 +1245,8 @@ class RunProjectUpdate(BaseTask):
     def __init__(self, *args, job_private_data_dir=None, **kwargs):
         super(RunProjectUpdate, self).__init__(*args, **kwargs)
         self.job_private_data_dir = job_private_data_dir
+        # set while the extra vars are built, then recorded with the revision cache
+        self.requirements_generation = None
 
     def build_private_data(self, project_update, private_data_dir):
         """
@@ -1361,6 +1384,14 @@ class RunProjectUpdate(BaseTask):
             scm_branch = 'HEAD'
 
         galaxy_creds_are_defined = project_update.project.organization and project_update.project.organization.galaxy_credentials.exists()
+        galaxy_creds = []
+        if galaxy_creds_are_defined:
+            # the same inputs build_env hands to ansible-galaxy, in server order
+            galaxy_creds = [
+                {field: cred.get_input(field, default=None) for field in ('url', 'auth_url', 'token')}
+                for cred in project_update.project.organization.galaxy_credentials.all()
+            ]
+        self.requirements_generation = self.current_requirements_generation(project_update.project, project_update)
         if not galaxy_creds_are_defined and (settings.ASCENDER_ROLES_ENABLED or settings.ASCENDER_COLLECTIONS_ENABLED):
             logger.warning(f'Galaxy role/collection syncing is enabled, but no credentials are configured for {project_update.project.organization}.')
 
@@ -1377,6 +1408,27 @@ class RunProjectUpdate(BaseTask):
                 'roles_enabled': galaxy_creds_are_defined and settings.ASCENDER_ROLES_ENABLED,
                 'collections_enabled': galaxy_creds_are_defined and settings.ASCENDER_COLLECTIONS_ENABLED,
                 'galaxy_task_env': settings.GALAXY_TASK_ENV,
+                'requirements_cache_enabled': project_update.project.reuse_requirements,
+                # an update someone asked for installs afresh, picking up new releases of unpinned requirements
+                'requirements_cache_refresh': project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES,
+                # reused requirements are only valid for the Galaxy servers, credentials and environment they were
+                # installed with, and only until the next refresh on any node
+                'requirements_cache_salt': {
+                    'galaxy_servers': [cred.get('url') for cred in galaxy_creds],
+                    # fingerprints only: these hold tokens, and module arguments are recorded in job events
+                    'galaxy_auth': _fingerprint(galaxy_creds),
+                    'galaxy_task_env': _fingerprint(settings.GALAXY_TASK_ENV),
+                    # content downloaded without certificate verification is not reused once it is required
+                    'galaxy_ignore_certs': bool(settings.GALAXY_IGNORE_CERTS),
+                    # build_env hands these to every task, ansible-galaxy included
+                    'task_env': _fingerprint(
+                        {
+                            'ASCENDER_TASK_ENV': settings.ASCENDER_TASK_ENV,
+                            'settings': {attr: getattr(settings, attr) for attr in dir(settings) if attr.startswith('ANSIBLE_GALAXY_')},
+                        }
+                    ),
+                    'refresh_generation': self.requirements_generation,
+                },
             }
         )
         # apply custom refspec from user for PR refs and the like
@@ -1438,18 +1490,175 @@ class RunProjectUpdate(BaseTask):
         shutil.copytree(awx_playbooks, os.path.join(private_data_dir, 'project'))
 
     @staticmethod
-    def clear_project_cache(cache_dir, keep_value):
-        if os.path.isdir(cache_dir):
-            for entry in os.listdir(cache_dir):
-                old_path = os.path.join(cache_dir, entry)
-                if entry not in (keep_value, 'stage'):
-                    # invalidate, then delete
-                    new_path = os.path.join(cache_dir, '.~~delete~~' + entry)
-                    try:
-                        os.rename(old_path, new_path)
-                        shutil.rmtree(new_path)
-                    except OSError:
-                        logger.warning(f"Could not remove cache directory {old_path}")
+    def read_requirements_hash(cache_path):
+        """Return the requirements cache key recorded in a project cache directory, or None"""
+        try:
+            with open(os.path.join(cache_path, '.requirements_hash')) as f:
+                req_hash = f.read().strip()
+        except OSError:
+            return None
+        # the key becomes part of a path, so accept only what the playbook writes
+        if REQUIREMENTS_HASH_RE.fullmatch(req_hash):
+            return req_hash
+        return None
+
+    @staticmethod
+    def current_requirements_generation(project, project_update=None):
+        """Id of the latest successful update that refreshed the project's requirements, or 0
+
+        Every node keys its requirements caches and revision caches by this, so a refresh on one
+        node makes the others install afresh too instead of reusing what they installed before it.
+        It is read from the project, which a refresh sets before releasing the project lock, so it
+        never goes back when job history is deleted. The newest refresh in job history covers a
+        concurrent save of the project writing back an older value.
+        """
+        if project_update is not None and project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES:
+            return project_update.pk
+        recorded = RunProjectUpdate.recorded_requirements_generation(project)
+        latest = (
+            ProjectUpdate.objects.filter(
+                project=project, launch_type__in=REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES, status='successful', job_tags__contains='install_'
+            )
+            .order_by('-id')
+            .values_list('id', flat=True)
+            .first()
+            or 0
+        )
+        return max(recorded, latest)
+
+    @staticmethod
+    def recorded_requirements_generation(project):
+        """The refresh generation stored on the project, 0 until a refresh has run since the upgrade"""
+        return Project.objects.filter(pk=project.pk).values_list('requirements_generation', flat=True).first() or 0
+
+    @staticmethod
+    def read_requirements_generation(cache_path):
+        """The generation a revision cache was installed under, None when it predates generations"""
+        try:
+            with open(os.path.join(cache_path, '.requirements_generation')) as f:
+                content = f.read()
+        except OSError:
+            return None
+        try:
+            return int(content.strip())
+        except ValueError:
+            return 0  # unreadable, so older than any refresh
+
+    @staticmethod
+    def reqcache_path(base_path, req_hash):
+        return os.path.join(base_path, f'reqcache_{req_hash}')
+
+    @classmethod
+    def project_cache_is_complete(cls, project):
+        """Whether the project's cache directory exists and can provide its roles and collections
+
+        A revision whose update reused a requirements cache holds no roles or collections of its own,
+        so it is only usable while that requirements cache still exists.
+        """
+        base_path = project.get_cache_path()
+        cache_path = os.path.join(base_path, project.cache_id)
+        if not os.path.exists(cache_path):
+            return False
+        # installed before a refresh that ran since, possibly on another node
+        generation = cls.read_requirements_generation(cache_path)
+        if generation is None:
+            # Written before generations existed. Usable, as on earlier releases, until the first refresh
+            # after the upgrade records one on the project; job history alone does not count, since
+            # nearly every project has refreshed at some point and every node would reinstall at once.
+            if cls.recorded_requirements_generation(project):
+                return False
+        elif generation != cls.current_requirements_generation(project):
+            return False
+        req_hash = cls.read_requirements_hash(cache_path)
+        if req_hash is None or os.path.exists(cls.reqcache_path(base_path, req_hash)):
+            return True
+        return any(os.path.exists(os.path.join(cache_path, subfolder)) for subfolder in REQUIREMENTS_SUBFOLDERS)
+
+    @classmethod
+    def clear_project_cache(cls, cache_dir, keep_value, max_reqcache=10):
+        if not os.path.isdir(cache_dir):
+            return
+        # Requirements caches still referenced by a cache directory that is kept are never evicted
+        protected = set()
+        for kept in ('stage', keep_value):
+            req_hash = cls.read_requirements_hash(os.path.join(cache_dir, kept))
+            if req_hash:
+                protected.add(f'reqcache_{req_hash}')
+
+        reqcache_entries = []
+        for entry in os.listdir(cache_dir):
+            if entry.startswith('reqcache_'):
+                reqcache_entries.append(entry)
+            elif entry not in (keep_value, 'stage'):
+                cls._remove_cache_entry(cache_dir, entry)
+
+        excess = len(reqcache_entries) - max_reqcache
+        if excess > 0:
+            # least recently used first, a reuse touches the directory
+            evictable = sorted((e for e in reqcache_entries if e not in protected), key=lambda e: os.path.getmtime(os.path.join(cache_dir, e)))
+            for entry in evictable[:excess]:
+                cls._remove_cache_entry(cache_dir, entry)
+                logger.debug(f'Evicted requirements cache {os.path.join(cache_dir, entry)}')
+
+    @staticmethod
+    def _remove_cache_entry(cache_dir, entry):
+        # invalidate, then delete, so a partial delete never looks like a usable cache
+        old_path = os.path.join(cache_dir, entry)
+        new_path = os.path.join(cache_dir, '.~~delete~~' + entry)
+        try:
+            os.rename(old_path, new_path)
+            shutil.rmtree(new_path)
+        except OSError:
+            logger.warning(f"Could not remove cache directory {old_path}")
+
+    @classmethod
+    def sync_requirements_cache(cls, base_path, cache_path, refresh=False):
+        """Publish the roles and collections of a successful update for reuse by later revisions
+
+        Runs under the project lock after stage has been promoted to cache_path. Galaxy ran unless
+        the playbook found an existing requirements cache, which is then only marked as used. A
+        refresh replaces it with what Galaxy just installed. Failures are logged, never raised:
+        the update itself succeeded and its own cache directory is complete.
+        """
+        req_hash = cls.read_requirements_hash(cache_path)
+        if req_hash is None:
+            return
+        reqcache_path = cls.reqcache_path(base_path, req_hash)
+        if os.path.exists(reqcache_path) and not refresh:
+            try:
+                os.utime(reqcache_path)
+            except OSError:
+                pass
+            return
+
+        tmp_path = None
+        try:
+            tmp_path = tempfile.mkdtemp(dir=base_path, prefix='.~~delete~~reqcache_tmp_')
+            for subfolder in REQUIREMENTS_SUBFOLDERS:
+                src = os.path.join(cache_path, subfolder)
+                if not os.path.exists(src):
+                    continue
+                dst = os.path.join(tmp_path, subfolder)
+                # Hard link rather than copy: both trees are on the same volume and neither is modified in place
+                shutil.copytree(src, dst, symlinks=True, copy_function=_link_or_copy)
+                # One archive per folder lets each job read a single file instead of thousands
+                try:
+                    with tarfile.open(dst + '.tar', 'w') as tar:
+                        tar.add(dst, arcname=subfolder)
+                except Exception:
+                    logger.warning(f'Could not archive {subfolder} for requirements cache {reqcache_path}, jobs will copy the folder')
+                    if os.path.exists(dst + '.tar'):
+                        os.remove(dst + '.tar')
+            if os.path.exists(reqcache_path):
+                cls._remove_cache_entry(base_path, os.path.basename(reqcache_path))
+            os.rename(tmp_path, reqcache_path)
+            tmp_path = None
+            logger.debug(f'Saved requirements cache {reqcache_path}')
+        except Exception:
+            logger.exception(f'Could not save requirements cache {reqcache_path}')
+        finally:
+            if tmp_path:
+                shutil.rmtree(tmp_path, ignore_errors=True)
 
     @staticmethod
     def make_local_copy(project, job_private_data_dir):
@@ -1469,10 +1678,24 @@ class RunProjectUpdate(BaseTask):
             subfolders.append('requirements_collections')
         if settings.ASCENDER_ROLES_ENABLED:
             subfolders.append('requirements_roles')
+        req_hash = RunProjectUpdate.read_requirements_hash(cache_path)
         for subfolder in subfolders:
             cache_subpath = os.path.join(cache_path, subfolder)
+            dest_subpath = os.path.join(job_private_data_dir, subfolder)
+            if not os.path.exists(cache_subpath) and req_hash:
+                # This revision reused the requirements installed for an earlier one
+                reqcache_subpath = os.path.join(RunProjectUpdate.reqcache_path(project.get_cache_path(), req_hash), subfolder)
+                if os.path.exists(reqcache_subpath + '.tar'):
+                    try:
+                        with tarfile.open(reqcache_subpath + '.tar') as tar:
+                            tar.extractall(path=job_private_data_dir, filter='data')
+                        logger.debug('{0} {1} prepared {2} from requirements cache archive'.format(type(project).__name__, project.pk, dest_subpath))
+                        continue
+                    except Exception:
+                        logger.warning(f'Could not extract {reqcache_subpath}.tar, copying the folder instead')
+                        shutil.rmtree(dest_subpath, ignore_errors=True)
+                cache_subpath = reqcache_subpath
             if os.path.exists(cache_subpath):
-                dest_subpath = os.path.join(job_private_data_dir, subfolder)
                 shutil.copytree(cache_subpath, dest_subpath, symlinks=True)
                 logger.debug('{0} {1} prepared {2} from cache'.format(type(project).__name__, project.pk, dest_subpath))
 
@@ -1496,7 +1719,9 @@ class RunProjectUpdate(BaseTask):
                     # Keep the directory about to be written; the project's scm_revision (and
                     # therefore project.cache_id) is only updated further below.
                     keep_value = instance.cache_id
-                self.clear_project_cache(base_path, keep_value=keep_value)
+                # with reuse turned off, drop every requirements cache the kept revision does not rely on
+                max_reqcache = 10 if instance.project.reuse_requirements else 0
+                self.clear_project_cache(base_path, keep_value=keep_value, max_reqcache=max_reqcache)
                 cache_path = os.path.join(base_path, instance.cache_id)
                 if os.path.exists(stage_path):
                     if os.path.exists(cache_path):
@@ -1504,6 +1729,19 @@ class RunProjectUpdate(BaseTask):
                         shutil.rmtree(cache_path)
                     os.rename(stage_path, cache_path)
                     logger.debug('{0} wrote to cache at {1}'.format(instance.log_format, cache_path))
+                    refresh = instance.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES
+                    self.sync_requirements_cache(base_path, cache_path, refresh=refresh)
+                    if refresh:
+                        # Publish the refresh before the lock is released: the update is only saved as
+                        # successful after this hook, and a job waiting on the lock must not key its
+                        # requirements by the generation this refresh replaces
+                        Project.objects.filter(pk=instance.project_id, requirements_generation__lt=instance.pk).update(requirements_generation=instance.pk)
+                    if self.requirements_generation is not None:
+                        try:
+                            with open(os.path.join(cache_path, '.requirements_generation'), 'w') as f:
+                                f.write(str(self.requirements_generation))
+                        except OSError:
+                            logger.warning(f'Could not record the requirements generation in {cache_path}')
             elif os.path.exists(stage_path):
                 shutil.rmtree(stage_path)  # cannot trust content update produced
 

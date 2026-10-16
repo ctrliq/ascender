@@ -95,6 +95,7 @@ const getProjectHelpText = () => ({
     trackSubModules: t`Submodules will track the latest commit on their master branch (or other branch specified in .gitmodules). If no, submodules will be kept at the revision specified by the main project. This is equivalent to specifying the --remote flag to git submodule update.`,
     updateOnLaunch: t`Each time a job runs using this project, update the revision of the project prior to starting the job.`,
     allowBranchOverride: t`Allow changing the Source Control branch or revision in a job template that uses this project.`,
+    reuseRequirements: t`Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused.`,
     cacheTimeout: t`Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed.`,
     enableWebhook: t`Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch.`,
   },

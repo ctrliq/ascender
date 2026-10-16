@@ -159,7 +159,7 @@ msgstr "الحد الأقصى لعدد التفريعات المسموح بها 
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "فشل إلغاء مزامنة مصدر المخزون"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:368
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:376
 msgid "Delete Project"
 msgstr "حذف المشروع"
 
@@ -340,8 +340,8 @@ msgstr "حدد الأدوار المراد تطبيقها"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "الفرع المراد سحبه. بالإضافة إلى الفروع، يمكنك إدخال العلامات وتجزئات الالتزام والمراجع العشوائية. قد لا تتوفر بعض تجزئات الالتزام والمراجع ما لم تقدم أيضًا refspec مخصصًا."
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:266
+#: components/JobList/JobListItem.tsx:130
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -397,7 +397,7 @@ msgstr "نسخ المخزون"
 msgid "Removing"
 msgstr "جارٍ الإزالة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:213
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:106
 msgid "The project must be synced before a revision is available."
 msgstr "يجب مزامنة المشروع قبل أن تتوفر مراجعة."
@@ -617,7 +617,7 @@ msgstr "لا يمكنك تحديد عدة بيانات اعتماد vault بنف
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:357
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:365
 msgid "Cancel Sync"
 msgstr "إلغاء المزامنة"
 
@@ -636,10 +636,10 @@ msgid "GPG Public Key"
 msgstr "مفتاح GPG العام"
 
 #: components/Lookup/ProjectLookup.tsx:169
-#: components/PromptDetail/PromptProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:108
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:170
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:238
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:227
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:235
 #: screens/Project/ProjectList/ProjectList.tsx:205
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:25
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:109
@@ -742,8 +742,8 @@ msgstr "إضافة عقدة"
 msgid "JSON tab"
 msgstr "علامة تبويب JSON"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:134
 msgid "Start Time"
 msgstr "وقت البدء"
 
@@ -780,7 +780,7 @@ msgstr "لا"
 msgid "Miscellaneous System"
 msgstr "النظام المتنوع"
 
-#: screens/Project/shared/ProjectForm.tsx:325
+#: screens/Project/shared/ProjectForm.tsx:326
 msgid "Choose a Source Control Type"
 msgstr "اختر نوع التحكم بالمصدر"
 
@@ -828,7 +828,7 @@ msgstr "العودة إلى المشاريع"
 msgid "Exception Frequency"
 msgstr "تردد الاستثناء"
 
-#: screens/Project/shared/ProjectForm.tsx:306
+#: screens/Project/shared/ProjectForm.tsx:307
 msgid "Select an organization before editing the default execution environment."
 msgstr "حدد مؤسسة قبل تحرير بيئة التنفيذ الافتراضية."
 
@@ -1131,7 +1131,7 @@ msgstr "فحوصات الصحة هي مهام غير متزامنة. انظر"
 msgid "Edit group"
 msgstr "تحرير المجموعة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:203
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:211
 #: screens/Project/ProjectList/ProjectListItem.tsx:96
 msgid "Copy full revision to clipboard."
 msgstr "نسخ المراجعة الكاملة إلى الحافظة."
@@ -1551,7 +1551,7 @@ msgstr "عرض أقل"
 msgid "Revision"
 msgstr "المراجعة"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:338
 msgid "Failed to delete one or more jobs."
 msgstr "فشل حذف مهمة واحدة أو أكثر."
 
@@ -1614,7 +1614,7 @@ msgstr "دقيقة"
 msgid "Copied"
 msgstr "تم النسخ"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:349
 msgid "Failed to cancel one or more jobs."
 msgstr "فشل إلغاء مهمة واحدة أو أكثر."
 
@@ -1644,8 +1644,8 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:264
+#: components/JobList/JobListItem.tsx:119
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1824,11 +1824,11 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
 #: screens/Organization/shared/OrganizationForm.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:177
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:185
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:176
-#: screens/Project/shared/ProjectForm.tsx:275
+#: screens/Project/shared/ProjectForm.tsx:276
 #: screens/Team/shared/TeamForm.tsx:35
 #: screens/Team/TeamDetail/TeamDetail.tsx:44
 #: screens/Team/TeamList/TeamList.tsx:115
@@ -1942,8 +1942,8 @@ msgid "Approved"
 msgstr "تمت الموافقة"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:139
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:138
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2017,8 +2017,8 @@ msgstr "ملخص الحدث غير متاح"
 msgid "Dashboard"
 msgstr "لوحة المعلومات"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:66
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:122
+#: components/PromptDetail/PromptProjectDetail.tsx:68
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:124
 msgid "Allow branch override"
 msgstr "السماح بتجاوز الفرع"
 
@@ -2107,7 +2107,7 @@ msgstr "هذا المشروع قيد المزامنة حاليًا ولا يمك
 msgid "Administration"
 msgstr "الإدارة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:385
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:393
 msgid "Failed to delete project."
 msgstr "فشل حذف المشروع."
 
@@ -2134,7 +2134,7 @@ msgstr "عرض إعدادات النظام المتنوعة"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
-#: screens/Project/shared/ProjectForm.tsx:365
+#: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
 msgstr "تفاصيل النوع"
 
@@ -2147,7 +2147,7 @@ msgstr "مطالبات أخرى"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "نتيجة العقدة الأصل مطلوبة قبل تقييم الشرط."
 
-#: components/JobList/JobListItem.tsx:249
+#: components/JobList/JobListItem.tsx:248
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2379,8 +2379,8 @@ msgstr "تراجع"
 msgid "Pending delete"
 msgstr "حذف معلّق"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:117
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:258
+#: components/PromptDetail/PromptProjectDetail.tsx:124
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:266
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:71
 msgid "Source Control Credential"
 msgstr "بيانات اعتماد التحكم بالمصدر"
@@ -2476,7 +2476,7 @@ msgstr "إضافة مخزون موحّد"
 msgid "View Host Details"
 msgstr "عرض تفاصيل المضيف"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:215
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:223
 #: screens/Project/ProjectList/ProjectListItem.tsx:108
 msgid "Sync for revision"
 msgstr "مزامنة للحصول على مراجعة"
@@ -2558,7 +2558,7 @@ msgstr "تمكين التسجيل الخارجي"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:60
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:192
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:43
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:136
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:144
 #: screens/Project/ProjectList/ProjectListItem.tsx:71
 msgid "STATUS:"
 msgstr "الحالة:"
@@ -2575,7 +2575,7 @@ msgstr "تفاصيل المستخدم"
 msgid "Delete Execution Environment"
 msgstr "حذف بيئة التنفيذ"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:372
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "شريحة المهمة"
@@ -2615,8 +2615,8 @@ msgstr "لمزيد من المعلومات."
 msgid "Delete Inventory"
 msgstr "حذف المخزون"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:111
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:237
+#: components/PromptDetail/PromptProjectDetail.tsx:118
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:245
 #: screens/Project/shared/ProjectSubForms/GitSubForm.tsx:41
 msgid "Source Control Refspec"
 msgstr "Refspec التحكم بالمصدر"
@@ -2739,7 +2739,7 @@ msgstr "فشل إلغاء ربط مضيف واحد أو أكثر."
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:57
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:189
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:40
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:133
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "معرّف المهمة:"
@@ -2845,10 +2845,10 @@ msgstr "تحديث مهلة ذاكرة التخزين المؤقت"
 msgid "Question"
 msgstr "سؤال"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:96
+#: components/PromptDetail/PromptProjectDetail.tsx:103
 #: screens/Job/JobDetail/JobDetail.tsx:314
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:192
-#: screens/Project/shared/ProjectForm.tsx:316
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:200
+#: screens/Project/shared/ProjectForm.tsx:317
 msgid "Source Control Type"
 msgstr "نوع التحكم بالمصدر"
 
@@ -2973,7 +2973,7 @@ msgid "Action"
 msgstr "إجراء"
 
 #: components/Lookup/ProjectLookup.tsx:162
-#: components/PromptDetail/PromptProjectDetail.tsx:98
+#: components/PromptDetail/PromptProjectDetail.tsx:105
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:163
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:231
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
@@ -2982,7 +2982,7 @@ msgstr "إجراء"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:245
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:100
 #: screens/Job/JobDetail/JobDetail.tsx:78
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:193
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:201
 #: screens/Project/ProjectList/ProjectList.tsx:198
 #: screens/Project/ProjectList/ProjectListItem.tsx:205
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:102
@@ -3062,7 +3062,7 @@ msgstr "تفاصيل مهمة سير العمل"
 msgid "Azure AD settings"
 msgstr "إعدادات Azure AD"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3133,7 +3133,7 @@ msgstr "فشل مزامنة مصدر المخزون."
 msgid "Failed to deny {0}."
 msgstr "فشل رفض {0}."
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:196
 #: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
@@ -3412,7 +3412,7 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/Job/JobDetail/JobDetail.tsx:679
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:374
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
@@ -3462,8 +3462,8 @@ msgstr "قراءة"
 #~ msgid "View Settings"
 #~ msgstr "عرض الإعدادات"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:159
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:162
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
@@ -3562,7 +3562,7 @@ msgstr "GitHub Team"
 #: screens/Job/JobDetail/JobDetail.tsx:603
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:326
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:334
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
@@ -3812,7 +3812,7 @@ msgstr "تقطيع المهمة"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:199
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:286
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:354
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:202
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:210
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "تم النسخ إلى الحافظة بنجاح!"
@@ -3928,7 +3928,7 @@ msgstr "مُعطّل"
 msgid "Default Execution Environment"
 msgstr "بيئة التنفيذ الافتراضية"
 
-#: components/JobList/JobListItem.tsx:297
+#: components/JobList/JobListItem.tsx:296
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4166,7 +4166,7 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:347
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
@@ -4604,8 +4604,8 @@ msgstr "عرض تفاصيل المؤسسة"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
+#: components/JobList/JobList.tsx:335
+#: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
@@ -4664,7 +4664,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:390
 #: screens/Project/ProjectList/ProjectList.tsx:294
 #: screens/Project/ProjectList/ProjectList.tsx:306
 #: screens/Project/shared/ProjectSyncButton.tsx:70
@@ -4766,6 +4766,11 @@ msgstr "فشل حذف مشروع واحد أو أكثر."
 msgid "Set source path to"
 msgstr "تعيين مسار المصدر إلى"
 
+#: components/PromptDetail/PromptProjectDetail.tsx:73
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:130
+msgid "Reuse downloaded requirements"
+msgstr "إعادة استخدام المتطلبات التي تم تنزيلها"
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4824,7 +4829,7 @@ msgstr "بدأ بواسطة"
 msgid "Delete this node"
 msgstr "حذف هذه العقدة"
 
-#: components/JobList/JobListItem.tsx:271
+#: components/JobList/JobListItem.tsx:270
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "مهمة سير العمل المصدر"
@@ -4984,8 +4989,8 @@ msgstr "بيئات التنفيذ"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "المطالبة بنوع المهمة عند الإطلاق."
 
-#: components/JobList/JobListItem.tsx:237
-#: components/JobList/JobListItem.tsx:245
+#: components/JobList/JobListItem.tsx:236
+#: components/JobList/JobListItem.tsx:244
 msgid "Schedule"
 msgstr "الجدول"
 
@@ -5067,7 +5072,7 @@ msgstr "تحديد الميزات والوظائف على مستوى النظا�
 msgid "Run a health check on the instance"
 msgstr "تشغيل فحص صحة على المثيل"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:363
 #: screens/Project/ProjectList/ProjectListItem.tsx:216
 msgid "Cancel Project Sync"
 msgstr "إلغاء مزامنة المشروع"
@@ -5113,7 +5118,7 @@ msgstr "في التوثيق و"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:169
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:217
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:162
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:170
 msgid "Last Job Status"
 msgstr "حالة آخر مهمة"
 
@@ -5190,7 +5195,7 @@ msgstr "يوم"
 msgid "Collapse"
 msgstr "طي"
 
-#: components/JobList/JobListItem.tsx:342
+#: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5233,7 +5238,7 @@ msgstr "حدد الحالة"
 msgid "Month"
 msgstr "شهر"
 
-#: components/JobList/JobListItem.tsx:318
+#: components/JobList/JobListItem.tsx:317
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5326,8 +5331,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "أزل البحث الحالي المتعلق بحقائق ansible لتمكين بحث آخر باستخدام هذا المفتاح."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:162
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:315
+#: components/PromptDetail/PromptProjectDetail.tsx:169
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:323
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:76
 msgid "Project Base Path"
 msgstr "المسار الأساسي للمشروع"
@@ -5418,9 +5423,9 @@ msgstr "اسم المورد"
 msgid "select module"
 msgstr "حدد وحدة"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:130
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:242
-#: screens/Project/shared/ProjectForm.tsx:357
+#: components/PromptDetail/PromptProjectDetail.tsx:137
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:250
+#: screens/Project/shared/ProjectForm.tsx:358
 msgid "Content Signature Validation Credential"
 msgstr "بيانات اعتماد التحقق من توقيع المحتوى"
 
@@ -5451,7 +5456,7 @@ msgstr "السمة المفضّلة"
 
 #: screens/Instances/Shared/InstanceForm.tsx:38
 #: screens/Inventory/shared/InventorySourceForm.tsx:110
-#: screens/Project/shared/ProjectForm.tsx:167
+#: screens/Project/shared/ProjectForm.tsx:168
 msgid "Set a value for this field"
 msgstr "تعيين قيمة لهذا الحقل"
 
@@ -5600,7 +5605,7 @@ msgstr "الجدول يفتقد rrule"
 msgid "Write"
 msgstr "كتابة"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:174
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "تفاصيل الخيار"
 
@@ -5690,7 +5695,7 @@ msgstr "عرض تفاصيل المخزون"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "يتم تطبيق هذا المخزون على جميع عقد سير العمل ضمن سير العمل هذا ({0}) التي تطالب بمخزون."
 
-#: screens/Project/shared/Project.helptext.tsx:103
+#: screens/Project/shared/Project.helptext.tsx:104
 msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
 msgstr "السر المشترك مع خدمة Webhook. تستخدمه الخدمة لتوقيع طلباتها، بحيث يتمكن مستودعك فقط من تشغيل مزامنة المشروع. اكتب السر الخاص بك لإدارته كتكوين، أو اترك الحقل فارغًا ليتم إنشاء واحد عند الحفظ."
 
@@ -5865,13 +5870,13 @@ msgstr "إشعار الاختبار"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:116
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:195
-#: components/PromptDetail/PromptProjectDetail.tsx:143
+#: components/PromptDetail/PromptProjectDetail.tsx:150
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:336
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
@@ -6130,7 +6135,7 @@ msgstr "جارٍ التحديث"
 msgid "Failed to delete one or more schedules."
 msgstr "فشل حذف جدول واحد أو أكثر."
 
-#: screens/Project/shared/Project.helptext.tsx:101
+#: screens/Project/shared/Project.helptext.tsx:102
 msgid "Service that webhook requests will be accepted from."
 msgstr "الخدمة التي سيتم قبول طلبات Webhook منها."
 
@@ -6163,7 +6168,7 @@ msgstr "هنا."
 msgid "Unavailable"
 msgstr "غير متاح"
 
-#: screens/Project/shared/Project.helptext.tsx:99
+#: screens/Project/shared/Project.helptext.tsx:100
 msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
 msgstr "قم بمزامنة المشروع عند حدوث دفع في مستودع التحكم في المصدر، بحيث تكون النسخة المحلية محدثة دائمًا دون استقصاء أو تحديث عند كل تشغيل للمهمة."
 
@@ -6504,7 +6509,7 @@ msgstr "لا يحتوي هذا التشغيل على عقد فاشلة يمكن 
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "استدعاءات التزويد: تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ Ascender وطلب تحديث التكوين باستخدام قالب المهمة هذا."
 
-#: components/JobList/JobListItem.tsx:163
+#: components/JobList/JobListItem.tsx:162
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6621,8 +6626,8 @@ msgstr "المجموعة"
 #~ msgid "Request subscription"
 #~ msgstr "طلب اشتراك"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:152
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:272
+#: components/PromptDetail/PromptProjectDetail.tsx:159
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:280
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# ثانية} other {# ثوانٍ}}"
 
@@ -6670,7 +6675,7 @@ msgstr "عرض إعدادات المهام"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:343
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:351
 #: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "تحرير"
@@ -6934,7 +6939,7 @@ msgstr "بيانات الاعتماد للمصادقة مع سجل حاويات 
 msgid "Context"
 msgstr "السياق"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:302
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:310
 #: screens/Template/shared/WebhookSubForm.tsx:238
 msgid "Webhook Ref Filter"
 msgstr "مرشح Ref لـ Webhook"
@@ -7142,7 +7147,7 @@ msgstr "موقع الصورة الكامل، بما في ذلك سجل الحا�
 msgid "Node state types"
 msgstr "أنواع حالة العقدة"
 
-#: screens/Project/shared/Project.helptext.tsx:102
+#: screens/Project/shared/Project.helptext.tsx:103
 msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
 msgstr "نقطة نهاية Webhook لهذا المشروع. أضفها إلى تكوين Webhook للمستودع لجعل عمليات الدفع تؤدي إلى تشغيل مزامنة المشروع."
 
@@ -7159,7 +7164,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "اختر دليل Playbook"
 
-#: components/JobList/JobListItem.tsx:259
+#: components/JobList/JobListItem.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7326,6 +7331,10 @@ msgstr "فرض العقد الفاشلة كناجحة عند إعادة التش
 msgid "Host Failure"
 msgstr "فشل المضيف"
 
+#: screens/Project/shared/Project.helptext.tsx:98
+msgid "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."
+msgstr "يعيد استخدام الأدوار والمجموعات التي تم تنزيلها لمراجعة سابقة ما دامت ملفات المتطلبات وبيانات اعتماد Galaxy دون تغيير. عمليات المزامنة التي تعمل من أجل مهمة أو سير عمل، مثل تحديث المراجعة عند الإطلاق، تعيد استخدامها. عمليات المزامنة التي تبدأها بنفسك والمزامنة المجدولة وعمليات إعادة الإطلاق تنزّل دائمًا نسخًا جديدة. لا يُعاد أبدًا استخدام المتطلبات القادمة من التحكم بالمصدر أو من عنوان URL أو من ملف أو من دليل في المشروع."
+
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:40
 #: screens/ActivityStream/ActivityStreamListItem.tsx:56
 msgid "View event details"
@@ -7345,8 +7354,8 @@ msgstr "يُمكّن من إنشاء عنوان URL\n"
 "                              وطلب تحديث تكوين باستخدام قالب المهمة\n"
 "                              هذا"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:136
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:135
 msgid "Finish Time"
 msgstr "وقت الانتهاء"
 
@@ -7396,7 +7405,7 @@ msgstr "اسم المؤسسة"
 msgid "Host Filter"
 msgstr "مرشح المضيف"
 
-#: screens/Project/shared/Project.helptext.tsx:98
+#: screens/Project/shared/Project.helptext.tsx:99
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "الوقت بالثواني لاعتبار المشروع حاليًا. أثناء عمليات تشغيل المهام والاستدعاءات، سيقوم نظام المهام بتقييم الطابع الزمني لآخر تحديث للمشروع. إذا كان أقدم من مهلة ذاكرة التخزين المؤقت، فلا يُعتبر حاليًا، وسيتم إجراء تحديث جديد للمشروع."
 
@@ -7408,8 +7417,8 @@ msgstr "{numJobsToCancel, plural, one {سيؤدي هذا الإجراء إلى �
 msgid "Keyword"
 msgstr "كلمة مفتاحية"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:51
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:53
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:103
 msgid "Delete the project before syncing"
 msgstr "حذف المشروع قبل المزامنة"
 
@@ -7536,9 +7545,9 @@ msgstr "المفاتيح ذات الصلة"
 #~ msgstr "العودة إلى إدارة الاشتراك."
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:98
-#: components/PromptDetail/PromptProjectDetail.tsx:149
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:270
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:181
+#: components/PromptDetail/PromptProjectDetail.tsx:156
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:278
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:187
 msgid "Cache Timeout"
 msgstr "مهلة ذاكرة التخزين المؤقت"
 
@@ -7608,10 +7617,10 @@ msgstr "مزامنة"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
 #: screens/Organization/shared/OrganizationForm.tsx:69
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:178
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
-#: screens/Project/shared/ProjectForm.tsx:283
+#: screens/Project/shared/ProjectForm.tsx:284
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
@@ -7642,7 +7651,7 @@ msgstr "اختر الأدوار المراد تطبيقها على الموار�
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:295
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:303
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
@@ -7744,7 +7753,7 @@ msgstr "تسجيل الدخول باستخدام GitHub Enterprise"
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
-#: screens/Project/shared/ProjectForm.tsx:295
+#: screens/Project/shared/ProjectForm.tsx:296
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
@@ -8065,7 +8074,7 @@ msgstr "إضافة مجموعة مثيلات"
 msgid "Sender Email"
 msgstr "بريد المرسل الإلكتروني"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:354
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:362
 #: screens/Project/ProjectList/ProjectListItem.tsx:215
 msgid "Project Sync Error"
 msgstr "خطأ في مزامنة المشروع"
@@ -8194,7 +8203,7 @@ msgstr "من الصعب تقديم مواصفات\n"
 "            المخزون الذي يحتوي على `gather_facts: true`. ستختلف\n"
 "            الحقائق الفعلية من نظام إلى آخر."
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "أصل شريحة المهمة"
@@ -8214,7 +8223,7 @@ msgstr "السبت"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:55
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:187
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:38
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:131
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:139
 #: screens/Project/ProjectList/ProjectListItem.tsx:66
 msgid "MOST RECENT SYNC"
 msgstr "أحدث مزامنة"
@@ -8673,8 +8682,8 @@ msgstr "تحديث التحكم بالمصدر"
 #~ "                   الإصدارات المستقبلية من البرنامج ولتوفير\n"
 #~ "                   Automation Analytics."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:56
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:110
+#: components/PromptDetail/PromptProjectDetail.tsx:58
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:112
 msgid "Track submodules latest commit on branch"
 msgstr "تتبع أحدث التزام للوحدات الفرعية على الفرع"
 
@@ -8892,7 +8901,7 @@ msgstr "تخزين الحقائق: إذا تم التمكين، فسيؤدي ذ�
 msgid "Delete credential type"
 msgstr "حذف نوع بيانات الاعتماد"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:284
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
@@ -9039,6 +9048,8 @@ msgid "Resources"
 msgstr "الموارد"
 
 #: components/JobList/JobList.tsx:211
+#: components/JobList/JobList.tsx:263
+#: components/JobList/JobListItem.tsx:116
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9259,7 +9270,7 @@ msgstr "خيارات التحديث"
 #: screens/Job/JobDetail/JobDetail.tsx:607
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:331
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:339
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
@@ -9359,8 +9370,8 @@ msgstr "إلغاء إزالة العقدة"
 msgid "Deprecated"
 msgstr "مهمل"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:116
+#: components/PromptDetail/PromptProjectDetail.tsx:63
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:118
 msgid "Update revision on job launch"
 msgstr "تحديث المراجعة عند إطلاق المهمة"
 
@@ -9696,7 +9707,7 @@ msgstr "ملء الحقل من نظام إدارة أسرار خارجي"
 #~ msgstr "بيانات اعتماد Insights"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
+#: components/JobList/JobList.tsx:294
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
@@ -9806,12 +9817,12 @@ msgstr "يجب تحديد مخزون"
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
-#: components/PromptDetail/PromptProjectDetail.tsx:106
+#: components/PromptDetail/PromptProjectDetail.tsx:113
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:348
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:232
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:240
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
@@ -9895,7 +9906,7 @@ msgstr "عرض جميع موافقات سير العمل."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "عند عدم التحديد، سيتم إجراء دمج، يجمع بين المتغيرات المحلية وتلك الموجودة في المصدر الخارجي."
 
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:147
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9913,8 +9924,8 @@ msgid "Inventory sources with failures"
 msgstr "مصادر المخزون التي بها إخفاقات"
 
 #: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:265
+#: components/JobList/JobListItem.tsx:126
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9970,8 +9981,8 @@ msgstr "تبديل الأدوات"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:69
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:114
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:124
-#: components/PromptDetail/PromptProjectDetail.tsx:78
-#: components/PromptDetail/PromptProjectDetail.tsx:89
+#: components/PromptDetail/PromptProjectDetail.tsx:85
+#: components/PromptDetail/PromptProjectDetail.tsx:96
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:80
 #: components/TemplateList/TemplateListItem.tsx:251
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:79
@@ -9993,7 +10004,7 @@ msgstr "تبديل الأدوات"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:181
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:189
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
@@ -10048,7 +10059,7 @@ msgstr "رسالة سير العمل المعلّق"
 msgid "Errors"
 msgstr "الأخطاء"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:196
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:204
 msgid "Source Control Revision"
 msgstr "مراجعة التحكم بالمصدر"
 
@@ -10306,7 +10317,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {سيكون المخزون في حالة معلقة حتى تتم معالجة الحذف النهائي.} other {ستكون المخزونات في حالة معلقة حتى تتم معالجة الحذف النهائي.}}"
 
-#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "إعادة الإطلاق باستخدام معلمات المضيف"
@@ -10369,7 +10380,7 @@ msgstr "إنشاء مجموعة حاويات جديدة"
 msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
 msgstr "عند التمكين، يمكن لإعادة التشغيل من العقدة الفاشلة أن تعامل العقد الفاشلة المختارة كأنها نجحت، فيتابع سير العمل عبر مسارات النجاح الخاصة بها. مخصص لعقدة تفشل لسبب لا يمكن إصلاحه في الوقت المناسب ولا يؤثر على ما يليها. السبب مطلوب دائمًا، وتبقى العقدة معلّمة كمفروضة مع من فرضها. لا يمكن أبدًا فرض الموافقات. يتم التحقق عند إعادة التشغيل، لذا فإن إيقافه يمنعه أيضًا للتشغيلات التي بدأت بالفعل."
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:286
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:294
 #: screens/Template/shared/WebhookSubForm.tsx:138
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket Data Center"
@@ -10621,7 +10632,7 @@ msgstr "حدد الفرق"
 msgid "Elapsed time that the job ran"
 msgstr "الوقت المنقضي لتشغيل المهمة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:285
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:293
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
@@ -10726,7 +10737,7 @@ msgstr "تأكيد إزالة الرابط"
 msgid "This field must be at least {0} characters"
 msgstr "يجب أن يحتوي هذا الحقل على {0} أحرف على الأقل"
 
-#: components/JobList/JobListItem.tsx:225
+#: components/JobList/JobListItem.tsx:224
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10950,7 +10961,7 @@ msgid "Choose a job type"
 msgstr "اختر نوع مهمة"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11090,7 +11101,7 @@ msgid "The page you requested could not be found."
 msgstr "تعذر العثور على الصفحة التي طلبتها."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:300
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {لا يمكن حذف المهمة المحددة بسبب إذن غير كافٍ أو حالة مهمة قيد التشغيل} other {لا يمكن حذف المهام المحددة بسبب أذونات غير كافية أو حالة مهمة قيد التشغيل}}"
 
@@ -11122,6 +11133,10 @@ msgstr "{draggedName} الآن في الموضع {0}."
 #: util/validators.ts:43
 msgid "Invalid date format"
 msgstr "تنسيق التاريخ غير صالح"
+
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:155
+msgid "Reuse Downloaded Requirements"
+msgstr "إعادة استخدام المتطلبات التي تم تنزيلها"
 
 #: screens/Job/JobDetail/JobDetail.tsx:399
 msgid "Instance Group"
@@ -11264,7 +11279,7 @@ msgstr "Google Compute Engine"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:64
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:196
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:47
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:140
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:148
 #: screens/Project/ProjectList/ProjectListItem.tsx:75
 msgid "FINISHED:"
 msgstr "انتهى:"
@@ -11710,7 +11725,7 @@ msgstr "يحدد مرحلة دورة الحياة الحالية لهذا الم
 msgid "View inventory source details"
 msgstr "عرض تفاصيل مصدر المخزون"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:372
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:380
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "هذا المشروع قيد الاستخدام حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟"
 
@@ -11720,7 +11735,7 @@ msgstr "هذا المشروع قيد الاستخدام حاليًا من قبل
 msgid "Associate"
 msgstr "ربط"
 
-#: components/JobList/JobListItem.tsx:204
+#: components/JobList/JobListItem.tsx:203
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11810,7 +11825,7 @@ msgstr "مشفّر"
 msgid "Unknown Inventory"
 msgstr "مخزون غير معروف"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:356
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:364
 #: screens/Project/ProjectList/ProjectListItem.tsx:218
 msgid "Failed to cancel Project Sync"
 msgstr "فشل إلغاء مزامنة المشروع"
@@ -11830,7 +11845,7 @@ msgstr "إعادة محاولة المضيف"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:281
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:289
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -11934,7 +11949,7 @@ msgstr "يونيو"
 msgid "Launch"
 msgstr "إطلاق"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:365
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "الشرح"
@@ -12014,15 +12029,15 @@ msgid "Error message body"
 msgstr "نص رسالة الخطأ"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:150
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "فشل إلغاء {0}"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:46
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:95
+#: components/PromptDetail/PromptProjectDetail.tsx:48
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:97
 msgid "Discard local changes before syncing"
 msgstr "تجاهل التغييرات المحلية قبل المزامنة"
 
@@ -12103,8 +12118,8 @@ msgstr "اسم مستخدم أو كلمة مرور غير صالحة. يرجى �
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "يتم تحديث الأقران على {0}. يرجى التأكد من تشغيل حزمة التثبيت لـ {1} مرة أخرى لرؤية التغييرات سارية المفعول."
 
-#: components/PromptDetail/PromptProjectDetail.tsx:169
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:322
+#: components/PromptDetail/PromptProjectDetail.tsx:176
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:330
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:85
 msgid "Playbook Directory"
 msgstr "دليل Playbook"
@@ -12178,7 +12193,7 @@ msgid "Toggle notification start"
 msgstr "تبديل بدء الإشعار"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:281
+#: components/JobList/JobListItem.tsx:280
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444

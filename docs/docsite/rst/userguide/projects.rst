@@ -176,6 +176,7 @@ To configure playbooks to use source control, in the Project **Details** tab:
   -  **Track submodules** - Tracks the latest commit. See more details in the tooltip |tooltip|.
   -  **Update Revision on Launch** - Updates the revision of the project to the current revision in the remote source control, as well as cache the roles directory from :ref:`Galaxy <ug_galaxy>` or :ref:`Collections <ug_collections>`. Ascender ensures that the local revision matches and that the roles and collections are up-to-date with the last update. Also, to avoid job overflows if jobs are spawned faster than the project can sync, selecting this allows you to configure a Cache Timeout to cache prior project syncs for a certain number of seconds.
   -  **Allow Branch Override** - Allows a job template or an inventory source that uses this project to launch with a specified SCM branch or revision other than that of the project's. For more detail, see :ref:`job branch overriding <ug_job_branching>`.
+  -  **Reuse Downloaded Requirements** - Selected by default. Reuses the roles and collections downloaded for an earlier revision of the project while its requirements files and the organization's Galaxy credentials are unchanged, instead of downloading them in every update. See :ref:`Galaxy <ug_galaxy>` for when they are downloaded again.
 
     .. image:: ../common/images/projects-create-scm-project-branch-override-checked.png
        :alt: create scm project branch override checked
@@ -213,6 +214,7 @@ To configure playbooks to use a remote archive, in the Project **Details** tab:
   -  **Delete** - Deletes the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update.
   -  **Update Revision on Launch** - Not recommended, as this option updates the revision of the project to the current revision in the remote source control, as well as cache the roles directory from :ref:`Galaxy <ug_galaxy>` or :ref:`Collections <ug_collections>`.
   -  **Allow Branch Override** - Not recommended, as this option allows a job template that uses this project to launch with a specified SCM branch or revision other than that of the project's.
+  -  **Reuse Downloaded Requirements** - Selected by default. Reuses the roles and collections downloaded for an earlier revision of the project while its requirements files and the organization's Galaxy credentials are unchanged.
 
   .. image:: ../common/images/projects-create-scm-rm-archive.png
      :alt: Create New Project form for Remote Archive Source Control Credential Type.
@@ -378,6 +380,8 @@ In short, jobs would download the most recent roles before every job run. Roles 
    :alt: SCM update options Update Revision on Launch checked.
 
 .. end reused section
+
+Requirements that come from Galaxy or Automation Hub are installed once and reused by later project revisions for as long as the requirements files and the organization's Galaxy credentials stay the same, so a commit that does not touch them does not download them again. Syncs that run for a job or workflow, such as **Update Revision on Launch**, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies and replace the reused ones, so use one of these to pick up a new release of a requirement that is not pinned to a version. Requirements that point to a source control repository (like *provision-role* above), a URL, a file, or a directory in the project are never reused and are downloaded by every update. To download requirements in every update instead, clear the **Reuse Downloaded Requirements** option of the project.
 
 The update happens much earlier in the process than the sync, so this surfaces errors and details faster and in a more logic place.
 

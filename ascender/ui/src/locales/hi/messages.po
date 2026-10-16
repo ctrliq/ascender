@@ -159,7 +159,7 @@ msgstr "इस समूह पर एक साथ चल रहे सभी �
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "इन्वेंटरी स्रोत सिंक रद्द करने में विफल"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:368
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:376
 msgid "Delete Project"
 msgstr "प्रोजेक्ट हटाएं"
 
@@ -340,8 +340,8 @@ msgstr "लागू करने के लिए भूमिकाएं च�
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "चेकआउट करने के लिए ब्रांच। ब्रांच के अलावा, आप टैग, कमिट हैश और मनमाने refs दर्ज कर सकते हैं। कुछ कमिट हैश और refs तब तक उपलब्ध नहीं हो सकते जब तक आप एक कस्टम refspec भी प्रदान न करें।"
 
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:131
+#: components/JobList/JobList.tsx:266
+#: components/JobList/JobListItem.tsx:130
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -397,7 +397,7 @@ msgstr "इन्वेंटरी कॉपी करें"
 msgid "Removing"
 msgstr "हटाया जा रहा है"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:213
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:106
 msgid "The project must be synced before a revision is available."
 msgstr "रिवीज़न उपलब्ध होने से पहले प्रोजेक्ट को सिंक किया जाना चाहिए।"
@@ -617,7 +617,7 @@ msgstr "आप समान वॉल्ट ID के साथ एकाधि�
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:357
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:365
 msgid "Cancel Sync"
 msgstr "सिंक रद्द करें"
 
@@ -636,10 +636,10 @@ msgid "GPG Public Key"
 msgstr "GPG सार्वजनिक कुंजी"
 
 #: components/Lookup/ProjectLookup.tsx:169
-#: components/PromptDetail/PromptProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:108
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:170
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:238
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:227
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:235
 #: screens/Project/ProjectList/ProjectList.tsx:205
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:25
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:109
@@ -742,8 +742,8 @@ msgstr "नोड जोड़ें"
 msgid "JSON tab"
 msgstr "JSON टैब"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:267
+#: components/JobList/JobListItem.tsx:134
 msgid "Start Time"
 msgstr "प्रारंभ समय"
 
@@ -780,7 +780,7 @@ msgstr "नहीं"
 msgid "Miscellaneous System"
 msgstr "विविध सिस्टम"
 
-#: screens/Project/shared/ProjectForm.tsx:325
+#: screens/Project/shared/ProjectForm.tsx:326
 msgid "Choose a Source Control Type"
 msgstr "एक सोर्स कंट्रोल प्रकार चुनें"
 
@@ -828,7 +828,7 @@ msgstr "प्रोजेक्ट्स पर वापस"
 msgid "Exception Frequency"
 msgstr "अपवाद आवृत्ति"
 
-#: screens/Project/shared/ProjectForm.tsx:306
+#: screens/Project/shared/ProjectForm.tsx:307
 msgid "Select an organization before editing the default execution environment."
 msgstr "डिफ़ॉल्ट निष्पादन वातावरण संपादित करने से पहले एक संगठन चुनें।"
 
@@ -1131,7 +1131,7 @@ msgstr "हेल्थ चेक एसिंक्रोनस कार्य
 msgid "Edit group"
 msgstr "समूह संपादित करें"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:203
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:211
 #: screens/Project/ProjectList/ProjectListItem.tsx:96
 msgid "Copy full revision to clipboard."
 msgstr "पूर्ण रिवीज़न क्लिपबोर्ड पर कॉपी करें।"
@@ -1551,7 +1551,7 @@ msgstr "कम दिखाएं"
 msgid "Revision"
 msgstr "रिवीज़न"
 
-#: components/JobList/JobList.tsx:337
+#: components/JobList/JobList.tsx:338
 msgid "Failed to delete one or more jobs."
 msgstr "एक या अधिक जॉब्स हटाने में विफल।"
 
@@ -1614,7 +1614,7 @@ msgstr "मिनट"
 msgid "Copied"
 msgstr "कॉपी किया गया"
 
-#: components/JobList/JobList.tsx:348
+#: components/JobList/JobList.tsx:349
 msgid "Failed to cancel one or more jobs."
 msgstr "एक या अधिक जॉब्स रद्द करने में विफल।"
 
@@ -1644,8 +1644,8 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
 #: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:264
+#: components/JobList/JobListItem.tsx:119
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1824,11 +1824,11 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
 #: screens/Organization/shared/OrganizationForm.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:177
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:185
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
 #: screens/Project/ProjectList/ProjectListItem.tsx:176
-#: screens/Project/shared/ProjectForm.tsx:275
+#: screens/Project/shared/ProjectForm.tsx:276
 #: screens/Team/shared/TeamForm.tsx:35
 #: screens/Team/TeamDetail/TeamDetail.tsx:44
 #: screens/Team/TeamList/TeamList.tsx:115
@@ -1942,8 +1942,8 @@ msgid "Approved"
 msgstr "अनुमोदित"
 
 #: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:139
+#: components/JobList/JobList.tsx:269
+#: components/JobList/JobListItem.tsx:138
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2017,8 +2017,8 @@ msgstr "इवेंट सारांश उपलब्ध नहीं"
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:66
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:122
+#: components/PromptDetail/PromptProjectDetail.tsx:68
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:124
 msgid "Allow branch override"
 msgstr "ब्रांच ओवरराइड की अनुमति दें"
 
@@ -2107,7 +2107,7 @@ msgstr "यह प्रोजेक्ट वर्तमान में स�
 msgid "Administration"
 msgstr "प्रशासन"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:385
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:393
 msgid "Failed to delete project."
 msgstr "प्रोजेक्ट हटाने में विफल।"
 
@@ -2134,7 +2134,7 @@ msgstr "विविध सिस्टम सेटिंग्स देखे
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
-#: screens/Project/shared/ProjectForm.tsx:365
+#: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
 msgstr "प्रकार विवरण"
 
@@ -2147,7 +2147,7 @@ msgstr "अन्य संकेत"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "स्थिति का मूल्यांकन करने से पहले मूल नोड परिणाम आवश्यक है।"
 
-#: components/JobList/JobListItem.tsx:249
+#: components/JobList/JobListItem.tsx:248
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2379,8 +2379,8 @@ msgstr "पूर्ववत करें"
 msgid "Pending delete"
 msgstr "हटाना लंबित"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:117
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:258
+#: components/PromptDetail/PromptProjectDetail.tsx:124
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:266
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:71
 msgid "Source Control Credential"
 msgstr "सोर्स कंट्रोल क्रेडेंशियल"
@@ -2476,7 +2476,7 @@ msgstr "फ़ेडरेटेड इन्वेंटरी जोड़े�
 msgid "View Host Details"
 msgstr "होस्ट विवरण देखें"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:215
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:223
 #: screens/Project/ProjectList/ProjectListItem.tsx:108
 msgid "Sync for revision"
 msgstr "रिवीज़न के लिए सिंक करें"
@@ -2558,7 +2558,7 @@ msgstr "बाहरी लॉगिंग सक्षम करें"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:60
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:192
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:43
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:136
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:144
 #: screens/Project/ProjectList/ProjectListItem.tsx:71
 msgid "STATUS:"
 msgstr "स्थिति:"
@@ -2575,7 +2575,7 @@ msgstr "उपयोगकर्ता विवरण"
 msgid "Delete Execution Environment"
 msgstr "निष्पादन वातावरण हटाएं"
 
-#: components/JobList/JobListItem.tsx:373
+#: components/JobList/JobListItem.tsx:372
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "जॉब स्लाइस"
@@ -2615,8 +2615,8 @@ msgstr "अधिक जानकारी के लिए।"
 msgid "Delete Inventory"
 msgstr "इन्वेंटरी हटाएं"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:111
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:237
+#: components/PromptDetail/PromptProjectDetail.tsx:118
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:245
 #: screens/Project/shared/ProjectSubForms/GitSubForm.tsx:41
 msgid "Source Control Refspec"
 msgstr "सोर्स कंट्रोल Refspec"
@@ -2739,7 +2739,7 @@ msgstr "एक या अधिक होस्ट्स को अलग कर
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:57
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:189
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:40
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:133
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "जॉब ID:"
@@ -2845,10 +2845,10 @@ msgstr "कैश टाइमआउट अपडेट करें"
 msgid "Question"
 msgstr "प्रश्न"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:96
+#: components/PromptDetail/PromptProjectDetail.tsx:103
 #: screens/Job/JobDetail/JobDetail.tsx:314
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:192
-#: screens/Project/shared/ProjectForm.tsx:316
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:200
+#: screens/Project/shared/ProjectForm.tsx:317
 msgid "Source Control Type"
 msgstr "सोर्स कंट्रोल प्रकार"
 
@@ -2973,7 +2973,7 @@ msgid "Action"
 msgstr "क्रिया"
 
 #: components/Lookup/ProjectLookup.tsx:162
-#: components/PromptDetail/PromptProjectDetail.tsx:98
+#: components/PromptDetail/PromptProjectDetail.tsx:105
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:163
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:231
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:230
@@ -2982,7 +2982,7 @@ msgstr "क्रिया"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:245
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:100
 #: screens/Job/JobDetail/JobDetail.tsx:78
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:193
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:201
 #: screens/Project/ProjectList/ProjectList.tsx:198
 #: screens/Project/ProjectList/ProjectListItem.tsx:205
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:102
@@ -3062,7 +3062,7 @@ msgstr "वर्कफ़्लो जॉब विवरण"
 msgid "Azure AD settings"
 msgstr "Azure AD सेटिंग्स"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3133,7 +3133,7 @@ msgstr "इन्वेंटरी स्रोत सिंक करने �
 msgid "Failed to deny {0}."
 msgstr "{0} को अस्वीकार करने में विफल।"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:196
 #: screens/Template/shared/JobTemplateForm.tsx:756
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:334
 msgid "Webhook details"
@@ -3412,7 +3412,7 @@ msgstr "इससे कम या बराबर तुलना।"
 #: screens/Job/JobDetail/JobDetail.tsx:679
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:374
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:533
@@ -3462,8 +3462,8 @@ msgstr "पढ़ें"
 #~ msgid "View Settings"
 #~ msgstr "सेटिंग्स देखें"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:159
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:162
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:295
@@ -3562,7 +3562,7 @@ msgstr "GitHub Team"
 #: screens/Job/JobDetail/JobDetail.tsx:603
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:326
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:334
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:202
@@ -3812,7 +3812,7 @@ msgstr "जॉब स्लाइसिंग"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:199
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:286
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:354
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:202
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:210
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "सफलतापूर्वक क्लिपबोर्ड पर कॉपी किया गया!"
@@ -3928,7 +3928,7 @@ msgstr "अक्षम"
 msgid "Default Execution Environment"
 msgstr "डिफ़ॉल्ट निष्पादन वातावरण"
 
-#: components/JobList/JobListItem.tsx:297
+#: components/JobList/JobListItem.tsx:296
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4166,7 +4166,7 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:347
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
@@ -4604,8 +4604,8 @@ msgstr "संगठन विवरण देखें"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:334
-#: components/JobList/JobList.tsx:345
+#: components/JobList/JobList.tsx:335
+#: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
 #: components/NotificationList/NotificationList.tsx:293
@@ -4664,7 +4664,7 @@ msgstr "संगठन विवरण देखें"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:382
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:390
 #: screens/Project/ProjectList/ProjectList.tsx:294
 #: screens/Project/ProjectList/ProjectList.tsx:306
 #: screens/Project/shared/ProjectSyncButton.tsx:70
@@ -4766,6 +4766,11 @@ msgstr "एक या अधिक प्रोजेक्ट हटाने �
 msgid "Set source path to"
 msgstr "स्रोत पथ को इस पर सेट करें"
 
+#: components/PromptDetail/PromptProjectDetail.tsx:73
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:130
+msgid "Reuse downloaded requirements"
+msgstr "डाउनलोड की गई आवश्यकताओं का पुन: उपयोग करें"
+
 #: screens/Project/ProjectList/ProjectListItem.tsx:234
 #: screens/Project/ProjectList/ProjectListItem.tsx:240
 msgid "Edit Project"
@@ -4824,7 +4829,7 @@ msgstr "द्वारा आरंभ किया गया"
 msgid "Delete this node"
 msgstr "इस नोड को हटाएं"
 
-#: components/JobList/JobListItem.tsx:271
+#: components/JobList/JobListItem.tsx:270
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "स्रोत वर्कफ़्लो जॉब"
@@ -4984,8 +4989,8 @@ msgstr "निष्पादन वातावरण"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "लॉन्च पर जॉब प्रकार के लिए संकेत दें।"
 
-#: components/JobList/JobListItem.tsx:237
-#: components/JobList/JobListItem.tsx:245
+#: components/JobList/JobListItem.tsx:236
+#: components/JobList/JobListItem.tsx:244
 msgid "Schedule"
 msgstr "शेड्यूल"
 
@@ -5067,7 +5072,7 @@ msgstr "सिस्टम-स्तरीय सुविधाओं और �
 msgid "Run a health check on the instance"
 msgstr "इंस्टेंस पर हेल्थ चेक चलाएं"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:355
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:363
 #: screens/Project/ProjectList/ProjectListItem.tsx:216
 msgid "Cancel Project Sync"
 msgstr "प्रोजेक्ट सिंक रद्द करें"
@@ -5113,7 +5118,7 @@ msgstr "दस्तावेज़ीकरण में और"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:169
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:217
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:162
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:170
 msgid "Last Job Status"
 msgstr "अंतिम जॉब स्थिति"
 
@@ -5190,7 +5195,7 @@ msgstr "दिन"
 msgid "Collapse"
 msgstr "संक्षिप्त करें"
 
-#: components/JobList/JobListItem.tsx:342
+#: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5233,7 +5238,7 @@ msgstr "स्थिति चुनें"
 msgid "Month"
 msgstr "माह"
 
-#: components/JobList/JobListItem.tsx:318
+#: components/JobList/JobListItem.tsx:317
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5326,8 +5331,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "इस कुंजी का उपयोग करके एक और खोज सक्षम करने के लिए ansible फ़ैक्ट्स से संबंधित वर्तमान खोज हटाएं।"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:162
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:315
+#: components/PromptDetail/PromptProjectDetail.tsx:169
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:323
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:76
 msgid "Project Base Path"
 msgstr "प्रोजेक्ट बेस पथ"
@@ -5418,9 +5423,9 @@ msgstr "संसाधन नाम"
 msgid "select module"
 msgstr "मॉड्यूल चुनें"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:130
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:242
-#: screens/Project/shared/ProjectForm.tsx:357
+#: components/PromptDetail/PromptProjectDetail.tsx:137
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:250
+#: screens/Project/shared/ProjectForm.tsx:358
 msgid "Content Signature Validation Credential"
 msgstr "सामग्री हस्ताक्षर सत्यापन क्रेडेंशियल"
 
@@ -5451,7 +5456,7 @@ msgstr "पसंदीदा थीम"
 
 #: screens/Instances/Shared/InstanceForm.tsx:38
 #: screens/Inventory/shared/InventorySourceForm.tsx:110
-#: screens/Project/shared/ProjectForm.tsx:167
+#: screens/Project/shared/ProjectForm.tsx:168
 msgid "Set a value for this field"
 msgstr "इस फ़ील्ड के लिए एक मान सेट करें"
 
@@ -5600,7 +5605,7 @@ msgstr "शेड्यूल में rrule अनुपस्थित है
 msgid "Write"
 msgstr "लिखें"
 
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:174
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "विकल्प विवरण"
 
@@ -5690,7 +5695,7 @@ msgstr "इन्वेंटरी विवरण देखें"
 msgid "This inventory is applied to all workflow nodes within this workflow ({0}) that prompt for an inventory."
 msgstr "यह इन्वेंटरी इस वर्कफ़्लो ({0}) के भीतर उन सभी वर्कफ़्लो नोड्स पर लागू होती है जो इन्वेंटरी के लिए संकेत देते हैं।"
 
-#: screens/Project/shared/Project.helptext.tsx:103
+#: screens/Project/shared/Project.helptext.tsx:104
 msgid "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save."
 msgstr "वेबहुक सेवा के साथ साझा किया गया सीक्रेट। सेवा इसका उपयोग अपने अनुरोधों पर हस्ताक्षर करने के लिए करती है, ताकि केवल आपकी रिपॉजिटरी ही प्रोजेक्ट सिंक ट्रिगर कर सके। इसे कॉन्फ़िगरेशन के रूप में प्रबंधित करने के लिए अपना स्वयं का सीक्रेट टाइप करें, या सहेजने पर एक जनरेट करने के लिए फ़ील्ड को खाली छोड़ दें।"
 
@@ -5865,13 +5870,13 @@ msgstr "परीक्षण सूचना"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:116
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:195
-#: components/PromptDetail/PromptProjectDetail.tsx:143
+#: components/PromptDetail/PromptProjectDetail.tsx:150
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:336
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:214
 msgid "Enabled Options"
@@ -6130,7 +6135,7 @@ msgstr "अपडेट हो रहा है"
 msgid "Failed to delete one or more schedules."
 msgstr "एक या अधिक शेड्यूल हटाने में विफल।"
 
-#: screens/Project/shared/Project.helptext.tsx:101
+#: screens/Project/shared/Project.helptext.tsx:102
 msgid "Service that webhook requests will be accepted from."
 msgstr "वह सेवा जिससे वेबहुक अनुरोध स्वीकार किए जाएंगे।"
 
@@ -6163,7 +6168,7 @@ msgstr "यहां।"
 msgid "Unavailable"
 msgstr "अनुपलब्ध"
 
-#: screens/Project/shared/Project.helptext.tsx:99
+#: screens/Project/shared/Project.helptext.tsx:100
 msgid "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch."
 msgstr "जब स्रोत नियंत्रण रिपॉजिटरी में कोई पुश होता है तो प्रोजेक्ट को सिंक करें, ताकि हर जॉब लॉन्च पर पोलिंग या अपडेट किए बिना स्थानीय प्रति हमेशा अद्यतित रहे।"
 
@@ -6504,7 +6509,7 @@ msgstr "इस रन में कोई विफल नोड नहीं �
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "प्रोविज़निंग कॉलबैक: प्रोविज़निंग कॉलबैक URL के निर्माण को सक्षम करता है। URL का उपयोग करके, एक होस्ट Ascender से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है।"
 
-#: components/JobList/JobListItem.tsx:163
+#: components/JobList/JobListItem.tsx:162
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6621,8 +6626,8 @@ msgstr "समूह"
 #~ msgid "Request subscription"
 #~ msgstr "सदस्यता अनुरोध करें"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:152
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:272
+#: components/PromptDetail/PromptProjectDetail.tsx:159
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:280
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# सेकंड} other {# सेकंड}}"
 
@@ -6670,7 +6675,7 @@ msgstr "जॉब्स सेटिंग्स देखें"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:106
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:343
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:351
 #: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "संपादित करें"
@@ -6934,7 +6939,7 @@ msgstr "संरक्षित कंटेनर रजिस्ट्री 
 msgid "Context"
 msgstr "संदर्भ"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:302
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:310
 #: screens/Template/shared/WebhookSubForm.tsx:238
 msgid "Webhook Ref Filter"
 msgstr "वेबहुक Ref फ़िल्टर"
@@ -7142,7 +7147,7 @@ msgstr "पूर्ण इमेज स्थान, जिसमें कं�
 msgid "Node state types"
 msgstr "नोड स्थिति प्रकार"
 
-#: screens/Project/shared/Project.helptext.tsx:102
+#: screens/Project/shared/Project.helptext.tsx:103
 msgid "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync."
 msgstr "इस प्रोजेक्ट का वेबहुक एंडपॉइंट। पुश को प्रोजेक्ट सिंक ट्रिगर करने के लिए इसे रिपॉजिटरी के वेबहुक कॉन्फ़िगरेशन में जोड़ें।"
 
@@ -7159,7 +7164,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "एक प्लेबुक निर्देशिका चुनें"
 
-#: components/JobList/JobListItem.tsx:259
+#: components/JobList/JobListItem.tsx:258
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7326,6 +7331,10 @@ msgstr "फिर से लॉन्च करने पर विफल नो
 msgid "Host Failure"
 msgstr "होस्ट विफलता"
 
+#: screens/Project/shared/Project.helptext.tsx:98
+msgid "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."
+msgstr "जब तक आवश्यकता फ़ाइलें और Galaxy क्रेडेंशियल नहीं बदलते, पिछले रिवीज़न के लिए डाउनलोड की गई भूमिकाओं और संग्रहों का पुन: उपयोग करता है। किसी जॉब या वर्कफ़्लो के लिए चलने वाले सिंक, जैसे लॉन्च पर रिवीज़न अपडेट करें, उनका पुन: उपयोग करते हैं। आपके द्वारा शुरू किए गए सिंक, शेड्यूल किए गए सिंक और रीलॉन्च हमेशा नई प्रतियाँ डाउनलोड करते हैं। सोर्स कंट्रोल, URL, फ़ाइल या प्रोजेक्ट डायरेक्टरी से आने वाली आवश्यकताओं का कभी पुन: उपयोग नहीं होता।"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.tsx:40
 #: screens/ActivityStream/ActivityStreamListItem.tsx:56
 msgid "View event details"
@@ -7345,8 +7354,8 @@ msgstr "एक प्रोविज़निंग\n"
 "                              से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके एक\n"
 "                              कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:136
+#: components/JobList/JobList.tsx:268
+#: components/JobList/JobListItem.tsx:135
 msgid "Finish Time"
 msgstr "समाप्ति समय"
 
@@ -7396,7 +7405,7 @@ msgstr "संगठन नाम"
 msgid "Host Filter"
 msgstr "होस्ट फ़िल्टर"
 
-#: screens/Project/shared/Project.helptext.tsx:98
+#: screens/Project/shared/Project.helptext.tsx:99
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "किसी प्रोजेक्ट को वर्तमान मानने के लिए सेकंड में समय। जॉब रन और कॉलबैक के दौरान, कार्य प्रणाली नवीनतम प्रोजेक्ट अपडेट के टाइमस्टैम्प का मूल्यांकन करेगी। यदि यह कैश टाइमआउट से पुराना है, तो इसे वर्तमान नहीं माना जाता है, और एक नया प्रोजेक्ट अपडेट किया जाएगा।"
 
@@ -7408,8 +7417,8 @@ msgstr "{numJobsToCancel, plural, one {यह क्रिया निम्न
 msgid "Keyword"
 msgstr "कीवर्ड"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:51
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:101
+#: components/PromptDetail/PromptProjectDetail.tsx:53
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:103
 msgid "Delete the project before syncing"
 msgstr "सिंक करने से पहले प्रोजेक्ट हटाएं"
 
@@ -7536,9 +7545,9 @@ msgstr "संबंधित कुंजियां"
 #~ msgstr "सदस्यता प्रबंधन पर लौटें।"
 
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:98
-#: components/PromptDetail/PromptProjectDetail.tsx:149
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:270
-#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:181
+#: components/PromptDetail/PromptProjectDetail.tsx:156
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:278
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:187
 msgid "Cache Timeout"
 msgstr "कैश टाइमआउट"
 
@@ -7608,10 +7617,10 @@ msgstr "सिंक करें"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
 #: screens/Organization/shared/OrganizationForm.tsx:69
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:178
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
-#: screens/Project/shared/ProjectForm.tsx:283
+#: screens/Project/shared/ProjectForm.tsx:284
 #: screens/Team/shared/TeamForm.tsx:43
 #: screens/Team/TeamDetail/TeamDetail.tsx:45
 #: screens/Team/TeamList/TeamList.tsx:120
@@ -7642,7 +7651,7 @@ msgstr "चयनित संसाधनों पर लागू करन�
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:177
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:108
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:295
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:303
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:322
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
@@ -7744,7 +7753,7 @@ msgstr "GitHub Enterprise से साइन इन करें"
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
-#: screens/Project/shared/ProjectForm.tsx:295
+#: screens/Project/shared/ProjectForm.tsx:296
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:181
@@ -8065,7 +8074,7 @@ msgstr "इंस्टेंस समूह जोड़ें"
 msgid "Sender Email"
 msgstr "प्रेषक ईमेल"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:354
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:362
 #: screens/Project/ProjectList/ProjectListItem.tsx:215
 msgid "Project Sync Error"
 msgstr "प्रोजेक्ट सिंक त्रुटि"
@@ -8194,7 +8203,7 @@ msgstr "Ansible फ़ैक्ट्स के लिए इन्वेंट�
 "            `gather_facts: true` हो। वास्तविक\n"
 "            फ़ैक्ट्स सिस्टम-से-सिस्टम भिन्न होंगे।"
 
-#: components/JobList/JobListItem.tsx:378
+#: components/JobList/JobListItem.tsx:377
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "जॉब स्लाइस मूल"
@@ -8214,7 +8223,7 @@ msgstr "शनि"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:55
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:187
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:38
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:131
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:139
 #: screens/Project/ProjectList/ProjectListItem.tsx:66
 msgid "MOST RECENT SYNC"
 msgstr "सबसे हाल का सिंक"
@@ -8673,8 +8682,8 @@ msgstr "सोर्स कंट्रोल अपडेट"
 #~ "                   रिलीज़ को बेहतर बनाने और Automation Analytics\n"
 #~ "                   प्रदान करने के लिए किया जाता है।"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:56
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:110
+#: components/PromptDetail/PromptProjectDetail.tsx:58
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:112
 msgid "Track submodules latest commit on branch"
 msgstr "ब्रांच पर सबमॉड्यूल का नवीनतम कमिट ट्रैक करें"
 
@@ -8892,7 +8901,7 @@ msgstr "फ़ैक्ट संग्रहण: यदि सक्षम ह�
 msgid "Delete credential type"
 msgstr "क्रेडेंशियल प्रकार हटाएं"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:284
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:126
 msgid "GitHub"
@@ -9039,6 +9048,8 @@ msgid "Resources"
 msgstr "संसाधन"
 
 #: components/JobList/JobList.tsx:211
+#: components/JobList/JobList.tsx:263
+#: components/JobList/JobListItem.tsx:116
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9259,7 +9270,7 @@ msgstr "अपडेट विकल्प"
 #: screens/Job/JobDetail/JobDetail.tsx:607
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:331
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:339
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:361
 #: screens/User/UserDetail/UserDetail.tsx:115
@@ -9359,8 +9370,8 @@ msgstr "नोड हटाना रद्द करें"
 msgid "Deprecated"
 msgstr "बहिष्कृत"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:61
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:116
+#: components/PromptDetail/PromptProjectDetail.tsx:63
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:118
 msgid "Update revision on job launch"
 msgstr "जॉब लॉन्च पर रिवीज़न अपडेट करें"
 
@@ -9696,7 +9707,7 @@ msgstr "बाहरी सीक्रेट प्रबंधन सिस्
 #~ msgstr "Insights क्रेडेंशियल"
 
 #: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:293
+#: components/JobList/JobList.tsx:294
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
@@ -9806,12 +9817,12 @@ msgstr "एक इन्वेंटरी चुनी जानी चाह�
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
-#: components/PromptDetail/PromptProjectDetail.tsx:106
+#: components/PromptDetail/PromptProjectDetail.tsx:113
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
 #: screens/Job/JobDetail/JobDetail.tsx:348
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:232
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:240
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:423
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:148
@@ -9895,7 +9906,7 @@ msgstr "सभी वर्कफ़्लो अनुमोदन देखे
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "जब चेक नहीं किया जाता है, तो एक मर्ज किया जाएगा, स्थानीय वेरिएबल्स को बाहरी स्रोत पर पाए गए वेरिएबल्स के साथ संयोजित किया जाएगा।"
 
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:147
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9913,8 +9924,8 @@ msgid "Inventory sources with failures"
 msgstr "विफलताओं वाले इन्वेंटरी स्रोत"
 
 #: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:127
+#: components/JobList/JobList.tsx:265
+#: components/JobList/JobListItem.tsx:126
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -9970,8 +9981,8 @@ msgstr "टूल टॉगल करें"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:69
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:114
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:124
-#: components/PromptDetail/PromptProjectDetail.tsx:78
-#: components/PromptDetail/PromptProjectDetail.tsx:89
+#: components/PromptDetail/PromptProjectDetail.tsx:85
+#: components/PromptDetail/PromptProjectDetail.tsx:96
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:80
 #: components/TemplateList/TemplateListItem.tsx:251
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:79
@@ -9993,7 +10004,7 @@ msgstr "टूल टॉगल करें"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:181
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:189
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
 #: screens/Team/TeamDetail/TeamDetail.tsx:47
@@ -10048,7 +10059,7 @@ msgstr "वर्कफ़्लो लंबित संदेश"
 msgid "Errors"
 msgstr "त्रुटियां"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:196
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:204
 msgid "Source Control Revision"
 msgstr "सोर्स कंट्रोल रिवीज़न"
 
@@ -10306,7 +10317,7 @@ msgstr "वेबहुक"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {अंतिम विलोपन संसाधित होने तक इन्वेंट्री लंबित स्थिति में रहेगी।} other {अंतिम विलोपन संसाधित होने तक इन्वेंट्रीज़ लंबित स्थिति में रहेंगी।}}"
 
-#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:160
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "होस्ट पैरामीटर का उपयोग करके पुनः लॉन्च करें"
@@ -10369,7 +10380,7 @@ msgstr "नया कंटेनर समूह बनाएं"
 msgid "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."
 msgstr "सक्षम होने पर, विफल नोड से फिर से लॉन्च करते समय चुने गए विफल नोड को सफल मानकर आगे ले जाया जा सकता है, ताकि वर्कफ़्लो उनके सफलता पथों पर चले। यह ऐसे नोड के लिए है जो किसी ऐसे कारण से विफल होता है जिसे समय पर ठीक नहीं किया जा सकता और जिसका आगे के चरणों पर असर नहीं पड़ता। कारण हमेशा आवश्यक है, और नोड पर बाध्य होने का चिह्न व बाध्य करने वाले का नाम रहता है। अनुमोदनों को कभी बाध्य नहीं किया जा सकता। फिर से लॉन्च करते समय जाँचा जाता है, इसलिए इसे बंद करने पर पहले से शुरू हुए रन पर भी यह लागू नहीं होता।"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:286
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:294
 #: screens/Template/shared/WebhookSubForm.tsx:138
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket Data Center"
@@ -10621,7 +10632,7 @@ msgstr "टीमें चुनें"
 msgid "Elapsed time that the job ran"
 msgstr "जॉब के चलने का बीता हुआ समय"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:285
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:293
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:315
 #: screens/Template/shared/WebhookSubForm.tsx:132
 msgid "GitLab"
@@ -10726,7 +10737,7 @@ msgstr "लिंक हटाने की पुष्टि करें"
 msgid "This field must be at least {0} characters"
 msgstr "इस फ़ील्ड में कम से कम {0} वर्ण होने चाहिए"
 
-#: components/JobList/JobListItem.tsx:225
+#: components/JobList/JobListItem.tsx:224
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10950,7 +10961,7 @@ msgid "Choose a job type"
 msgstr "एक जॉब प्रकार चुनें"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:148
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11090,7 +11101,7 @@ msgid "The page you requested could not be found."
 msgstr "आपके द्वारा अनुरोधित पृष्ठ नहीं मिला।"
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:299
+#: components/JobList/JobList.tsx:300
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {अपर्याप्त अनुमति या चल रही जॉब स्थिति के कारण चयनित जॉब हटाई नहीं जा सकती} other {अपर्याप्त अनुमतियों या चल रही जॉब स्थिति के कारण चयनित जॉब्स हटाई नहीं जा सकतीं}}"
 
@@ -11122,6 +11133,10 @@ msgstr "{draggedName} अब स्थिति {0} पर है।"
 #: util/validators.ts:43
 msgid "Invalid date format"
 msgstr "अमान्य दिनांक स्वरूप"
+
+#: screens/Project/shared/ProjectSubForms/SharedFields.tsx:155
+msgid "Reuse Downloaded Requirements"
+msgstr "डाउनलोड की गई आवश्यकताओं का पुन: उपयोग करें"
 
 #: screens/Job/JobDetail/JobDetail.tsx:399
 msgid "Instance Group"
@@ -11264,7 +11279,7 @@ msgstr "Google Compute Engine"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:64
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:196
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:47
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:140
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:148
 #: screens/Project/ProjectList/ProjectListItem.tsx:75
 msgid "FINISHED:"
 msgstr "समाप्त:"
@@ -11710,7 +11725,7 @@ msgstr "इस इंस्टेंस का वर्तमान जीव�
 msgid "View inventory source details"
 msgstr "इन्वेंटरी स्रोत विवरण देखें"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:372
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:380
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह प्रोजेक्ट वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
@@ -11720,7 +11735,7 @@ msgstr "यह प्रोजेक्ट वर्तमान में अ�
 msgid "Associate"
 msgstr "संबद्ध करें"
 
-#: components/JobList/JobListItem.tsx:204
+#: components/JobList/JobListItem.tsx:203
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11810,7 +11825,7 @@ msgstr "एन्क्रिप्टेड"
 msgid "Unknown Inventory"
 msgstr "अज्ञात इन्वेंटरी"
 
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:356
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:364
 #: screens/Project/ProjectList/ProjectListItem.tsx:218
 msgid "Failed to cancel Project Sync"
 msgstr "प्रोजेक्ट सिंक रद्द करने में विफल"
@@ -11830,7 +11845,7 @@ msgstr "होस्ट पुनः प्रयास"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:174
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:104
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:281
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:289
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:314
 #: screens/Template/shared/WebhookSubForm.tsx:154
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
@@ -11934,7 +11949,7 @@ msgstr "जून"
 msgid "Launch"
 msgstr "लॉन्च करें"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:365
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "स्पष्टीकरण"
@@ -12014,15 +12029,15 @@ msgid "Error message body"
 msgstr "त्रुटि संदेश मुख्य भाग"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:150
+#: components/JobList/JobListItem.tsx:149
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
 msgid "Failed to cancel {0}"
 msgstr "{0} रद्द करने में विफल"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:46
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:95
+#: components/PromptDetail/PromptProjectDetail.tsx:48
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:97
 msgid "Discard local changes before syncing"
 msgstr "सिंक करने से पहले स्थानीय परिवर्तन त्यागें"
 
@@ -12103,8 +12118,8 @@ msgstr "अमान्य उपयोगकर्ता नाम या प�
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "{0} पर पीयर अपडेट होते हैं। परिवर्तन प्रभावी होते देखने के लिए कृपया {1} के लिए इंस्टॉल बंडल फिर से चलाना सुनिश्चित करें।"
 
-#: components/PromptDetail/PromptProjectDetail.tsx:169
-#: screens/Project/ProjectDetail/ProjectDetail.tsx:322
+#: components/PromptDetail/PromptProjectDetail.tsx:176
+#: screens/Project/ProjectDetail/ProjectDetail.tsx:330
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:85
 msgid "Playbook Directory"
 msgstr "प्लेबुक निर्देशिका"
@@ -12178,7 +12193,7 @@ msgid "Toggle notification start"
 msgstr "सूचना प्रारंभ टॉगल करें"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:281
+#: components/JobList/JobListItem.tsx:280
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444

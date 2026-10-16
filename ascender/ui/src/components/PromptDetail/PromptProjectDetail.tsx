@@ -18,6 +18,7 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
   const { t } = useLingui();
   const {
     allow_override,
+    reuse_requirements,
     local_path,
     scm_branch,
     scm_clean,
@@ -37,7 +38,8 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
     scm_delete_on_update ||
     scm_track_submodules ||
     scm_update_on_launch ||
-    allow_override
+    allow_override ||
+    (scm_type && reuse_requirements)
   ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
@@ -64,6 +66,11 @@ function PromptProjectDetail({ resource }: PromptProjectDetailProps) {
         {allow_override && (
           <Content component={ContentVariants.li}>
             {t`Allow branch override`}
+          </Content>
+        )}
+        {scm_type && reuse_requirements && (
+          <Content component={ContentVariants.li}>
+            {t`Reuse downloaded requirements`}
           </Content>
         )}
       </Content>

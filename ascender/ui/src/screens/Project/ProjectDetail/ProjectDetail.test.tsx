@@ -85,6 +85,7 @@ const mockProject = {
   scm_update_on_launch: true,
   scm_update_cache_timeout: 5,
   allow_override: true,
+  reuse_requirements: true,
   default_environment: 1,
 } as unknown as Project & {
   summary_fields: Required<
@@ -166,13 +167,14 @@ describe('<ProjectDetail />', () => {
     const optionsList = within(
       optionsTerm.nextElementSibling as unknown as HTMLElement
     ).getAllByRole('listitem');
-    expect(optionsList).toHaveLength(5);
+    expect(optionsList).toHaveLength(6);
     [
       'Discard local changes before syncing',
       'Delete the project before syncing',
       'Track submodules latest commit on branch',
       'Update revision on job launch',
       'Allow branch override',
+      'Reuse downloaded requirements',
     ].forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
   });
 
@@ -184,6 +186,7 @@ describe('<ProjectDetail />', () => {
       scm_track_submodules: false,
       scm_update_on_launch: false,
       allow_override: false,
+      reuse_requirements: true,
       created: '',
       modified: '',
     };

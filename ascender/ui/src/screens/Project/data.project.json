@@ -116,6 +116,7 @@
   "scm_update_on_launch": false,
   "scm_update_cache_timeout": 0,
   "allow_override": false,
+  "reuse_requirements": true,
   "last_update_failed": false,
   "last_updated": "2019-09-30T18:06:34.713654Z",
   "execution_environment": 1
