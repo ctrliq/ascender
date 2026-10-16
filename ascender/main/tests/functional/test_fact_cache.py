@@ -17,6 +17,7 @@ from datetime import timedelta
 import pytest
 
 from django.db import connection, transaction
+from django.test.utils import CaptureQueriesContext
 from django.utils.timezone import now
 
 from ascender.main.models import Host, Inventory
@@ -291,7 +292,9 @@ class TestSchemaQualifiedFactCache:
         with open(os.path.join(fact_cache_dir, 's1_web1')) as f:
             wrapped = json.load(f)
         assert list(wrapped) == ['__payload__']
-        assert json.loads(wrapped['__payload__']) == {'a': 1, 'secret': {'value': 'CIPHER', 'tags': [], '__ansible_type': 'EncryptedString'}}
+        # ansible-core 2.19+ can't cache a value it hasn't decrypted (EncryptedString decodes
+        # to its ciphertext as a plain string), so the vault marker is passed through as a dict
+        assert json.loads(wrapped['__payload__']) == facts
 
     def test_finish_reads_schema_file_and_strips_tags(self, inv, artifacts_dir):
         host = self._host(inv, 'web1', {'old': True})
@@ -302,6 +305,28 @@ class TestSchemaQualifiedFactCache:
 
         host.refresh_from_db()
         assert host.ansible_facts == TAGGED_PAYLOAD_PLAIN
+
+    def test_decrypted_vault_values_are_stored_encrypted(self, inv, artifacts_dir):
+        """ansible-core 2.19+ caches a decrypted vaulted value as plaintext tagged with its ciphertext."""
+        host = self._host(inv, 'web1', {'old': True})
+        start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
+
+        # captured from ansible-core 2.21: set_fact from a vaulted var and from an inline !vault
+        vaulted = {
+            'value': 's3cret',
+            'tags': [
+                {'ciphertext': '$ANSIBLE_VAULT;1.1;AES256\nabc', '__ansible_type': 'VaultedValue'},
+                {'path': '/v/vars.yml', 'line_num': 1, 'col_num': 10, '__ansible_type': 'Origin'},
+            ],
+            '__ansible_type': '_AnsibleTaggedStr',
+        }
+        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'), _schema_payload({'templated': vaulted, 'nested': [{'secret': vaulted}]}))
+        finish_fact_cache(inv.hosts, artifacts_dir=artifacts_dir, inventory_id=inv.id)
+
+        host.refresh_from_db()
+        marker = {'__ansible_vault': '$ANSIBLE_VAULT;1.1;AES256\nabc'}
+        assert host.ansible_facts == {'templated': marker, 'nested': [{'secret': marker}]}
+        assert 's3cret' not in json.dumps(host.ansible_facts)
 
     def test_finish_reads_schema_file_for_host_without_prior_facts(self, inv, artifacts_dir):
         host = inv.hosts.create(name='fresh')
@@ -423,7 +448,10 @@ class TestSchemaFileNameCollision:
         with open(os.path.join(fact_cache_dir, 's1_web1')) as f:
             assert json.load(f) == {'prefixed': True}
 
-    def test_shared_file_removed_keeps_both_hosts_facts(self, hosts, artifacts_dir):
+    # The shared file s1_web1 is settled by the files only one ansible-core touches:
+    # older ansible-core writes/removes web1, newer writes/removes s1_s1_web1.
+
+    def test_shared_file_removed_without_evidence_keeps_both_hosts_facts(self, hosts, artifacts_dir):
         """Older ansible-core clearing s1_web1 and newer ansible-core clearing web1 look the same."""
         inv, web, prefixed = hosts
         os.remove(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'))
@@ -432,6 +460,28 @@ class TestSchemaFileNameCollision:
 
         assert web.ansible_facts == {'web': True}
         assert prefixed.ansible_facts == {'prefixed': True}
+
+    def test_old_ansible_clears_both_hosts(self, hosts, artifacts_dir):
+        inv, web, prefixed = hosts
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        os.remove(os.path.join(fact_cache_dir, 'web1'))
+        os.remove(os.path.join(fact_cache_dir, 's1_web1'))
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {}
+        assert prefixed.ansible_facts == {}
+
+    def test_new_ansible_clears_both_hosts(self, hosts, artifacts_dir):
+        inv, web, prefixed = hosts
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        os.remove(os.path.join(fact_cache_dir, 's1_web1'))
+        os.remove(os.path.join(fact_cache_dir, 's1_s1_web1'))
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {}
+        assert prefixed.ansible_facts == {}
 
     def test_old_ansible_clears_one_and_updates_the_other(self, hosts, artifacts_dir):
         inv, web, prefixed = hosts
@@ -444,24 +494,38 @@ class TestSchemaFileNameCollision:
         assert web.ansible_facts == {}
         assert prefixed.ansible_facts == {'prefixed': 'new'}
 
-    def test_old_ansible_payload_fact_in_shared_file(self, hosts, artifacts_dir):
-        """A __payload__ fact that isn't a JSON-encoded payload keeps the file with the older format."""
+    @pytest.mark.parametrize('payload', ['run-7', '{"x": 1}'])
+    def test_old_ansible_payload_fact_in_shared_file(self, hosts, artifacts_dir, payload):
+        """A cacheable fact named __payload__ looks like a wrapper, even a valid one."""
         inv, web, prefixed = hosts
-        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'), {'__payload__': 'run-7'})
-
-        self._finish(inv, artifacts_dir, web, prefixed)
-
-        assert web.ansible_facts == {'web': True}
-        assert prefixed.ansible_facts == {'__payload__': 'run-7'}
-
-    def test_new_ansible_updates_the_unprefixed_host(self, hosts, artifacts_dir):
-        inv, web, prefixed = hosts
-        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'), _schema_payload({'web': 'new'}))
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        _write_as_ansible(os.path.join(fact_cache_dir, 'web1'), {'web': 'new'})
+        _write_as_ansible(os.path.join(fact_cache_dir, 's1_web1'), {'__payload__': payload})
 
         self._finish(inv, artifacts_dir, web, prefixed)
 
         assert web.ansible_facts == {'web': 'new'}
+        assert prefixed.ansible_facts == {'__payload__': payload}
+
+    def test_shared_file_updated_without_evidence_is_left_alone(self, hosts, artifacts_dir):
+        inv, web, prefixed = hosts
+        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'), {'__payload__': '{"x": 1}'})
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {'web': True}
         assert prefixed.ansible_facts == {'prefixed': True}
+
+    def test_new_ansible_updates_both_hosts(self, hosts, artifacts_dir):
+        inv, web, prefixed = hosts
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        _write_as_ansible(os.path.join(fact_cache_dir, 's1_web1'), _schema_payload({'web': 'new'}))
+        _write_as_ansible(os.path.join(fact_cache_dir, 's1_s1_web1'), _schema_payload({'prefixed': 'new'}))
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {'web': 'new'}
+        assert prefixed.ansible_facts == {'prefixed': 'new'}
 
     def test_new_ansible_clears_the_prefixed_host_only(self, hosts, artifacts_dir):
         inv, web, prefixed = hosts
@@ -577,3 +641,21 @@ def test_constructed_inventory_inputs_share_one_collision_check(organization, tm
         assert json.load(f) == {'prefixed': True}
     with open(os.path.join(fact_cache_dir, 'web1')) as f:
         assert json.load(f) == {'web': True}
+
+
+@pytest.mark.django_db
+def test_clear_does_not_load_facts(organization, artifacts_dir):
+    """Clearing only needs names and timestamps; loading every cleared host's facts can exhaust memory."""
+    inv = Inventory.objects.create(organization=organization, name='clear-memory-inv')
+    host = inv.hosts.create(name='target', ansible_facts={'big': 'x' * 1000}, ansible_facts_modified=now() - timedelta(hours=1))
+    start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
+    os.remove(os.path.join(artifacts_dir, 'fact_cache', 'target'))
+
+    with CaptureQueriesContext(connection) as queries:
+        finish_fact_cache(inv.hosts, artifacts_dir=artifacts_dir, inventory_id=inv.id)
+
+    locking = [q['sql'] for q in queries.captured_queries if 'FOR UPDATE' in q['sql']]
+    assert len(locking) == 1
+    assert '"main_host"."ansible_facts",' not in locking[0] and '"main_host"."ansible_facts" ' not in locking[0]
+    host.refresh_from_db()
+    assert host.ansible_facts == {}

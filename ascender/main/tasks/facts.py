@@ -38,25 +38,18 @@ def _strip_ansible_types(value):
     type_name = value.get(ANSIBLE_TYPE_KEY)
     if type_name is None:
         return {k: _strip_ansible_types(v) for k, v in value.items()}
-    if type_name == 'EncryptedString':
+    if type_name == 'EncryptedString':  # always serialized as its ciphertext
         # keep the representation older ansible-core used for vaulted values
         return {LEGACY_VAULT_KEY: value.get('value')}
     if 'value' in value:  # _AnsibleTagged{Str,Int,Float,List,Dict,Set,Tuple,...}
+        for tag in value.get('tags') or []:
+            # a decrypted vaulted value carries its ciphertext; never store the plaintext
+            if isinstance(tag, dict) and tag.get(ANSIBLE_TYPE_KEY) == 'VaultedValue' and isinstance(tag.get('ciphertext'), str):
+                return {LEGACY_VAULT_KEY: tag['ciphertext']}
         return _strip_ansible_types(value['value'])
     if 'iso8601' in value:  # AnsibleSerializable{Date,Time,DateTime}
         return value['iso8601']
     return {k: _strip_ansible_types(v) for k, v in value.items() if k != ANSIBLE_TYPE_KEY}
-
-
-def _add_ansible_types(value):
-    """Convert legacy vault markers so ansible-core 2.19+ decodes them as vaulted strings."""
-    if isinstance(value, list):
-        return [_add_ansible_types(v) for v in value]
-    if not isinstance(value, dict):
-        return value
-    if len(value) == 1 and isinstance(value.get(LEGACY_VAULT_KEY), str):
-        return {'value': value[LEGACY_VAULT_KEY], 'tags': [], ANSIBLE_TYPE_KEY: 'EncryptedString'}
-    return {k: _add_ansible_types(v) for k, v in value.items()}
 
 
 def _shared_file_names(host_names):
@@ -158,7 +151,7 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
             # whole playbook, and one it does know is silently turned into that type.
             logger.warning(f'facts for host {smart_str(host.name)} contain the reserved key {ANSIBLE_TYPE_KEY} and are not cached for ansible-core 2.19+')
         else:
-            files.append((SCHEMA_KEY_PREFIX + host.name, {PAYLOAD_KEY: json.dumps(_add_ansible_types(host.ansible_facts))}))
+            files.append((SCHEMA_KEY_PREFIX + host.name, {PAYLOAD_KEY: json.dumps(host.ansible_facts)}))
         for filename, data in files:
             try:
                 last_write_time = _write_facts(os.path.join(fact_cache_dir, filename), data)
@@ -231,35 +224,59 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
             if modified >= facts_write_time:
                 updated.add(filename)
 
-    # Attribute each updated file to the host whose facts it holds. Older ansible-core
-    # writes "<host>" with plain JSON, newer writes "s1_<host>" with a payload wrapper,
-    # and a name that fits both hosts is settled by its content.
+    # Summaries from before written_files existed only had the plain file
+    written_files = set(summary.get('written_files', [hostname for hostname, was_written in hosts_cached_map.items() if was_written]))
+    shared_files = _shared_file_names(hosts_cached_map)
+    removed = written_files - present
+
+    # Older ansible-core writes and removes "<host>", newer writes and removes "s1_<host>".
+    # Any file only one of them could have touched shows which one ran; that settles
+    # the files shared by hosts "<name>" and "s1_<name>", whose content can't.
+    formats_seen = set()
+    for filename in (updated | removed) - shared_files:
+        if filename.startswith(SCHEMA_KEY_PREFIX) and filename[len(SCHEMA_KEY_PREFIX) :] in hosts_cached_map:
+            formats_seen.add('schema')
+        elif filename in hosts_cached_map:
+            formats_seen.add('plain')
+    shared_format = formats_seen.pop() if len(formats_seen) == 1 else None
+
+    def owner_of_shared_file(filename):
+        """(hostname, schema_qualified) of a shared file in this run, or None if unknown."""
+        if shared_format is None:
+            logger.warning(f'Job {job_id}: cannot tell which host the facts file {filename} belongs to, leaving both hosts\' facts unchanged')
+            return None
+        if shared_format == 'schema':
+            return filename[len(SCHEMA_KEY_PREFIX) :], True
+        return filename, False
+
+    # Attribute each updated file to the host whose facts it holds
     hosts_with_updates = {}  # hostname -> [(filename, schema_qualified)], newest format first
     for filename in updated:
-        owners = []
-        if filename.startswith(SCHEMA_KEY_PREFIX) and filename[len(SCHEMA_KEY_PREFIX) :] in hosts_cached_map:
-            owners.append((filename[len(SCHEMA_KEY_PREFIX) :], True))
-        if filename in hosts_cached_map:
-            owners.append((filename, False))
-        if len(owners) > 1:
-            is_wrapper = _read_facts(os.path.join(fact_cache_dir, filename), schema_qualified=True) is not None
-            owners = [owner for owner in owners if owner[1] == is_wrapper]
+        if filename in shared_files:
+            owners = [owner for owner in [owner_of_shared_file(filename)] if owner]
+        else:
+            owners = []
+            if filename.startswith(SCHEMA_KEY_PREFIX) and filename[len(SCHEMA_KEY_PREFIX) :] in hosts_cached_map:
+                owners.append((filename[len(SCHEMA_KEY_PREFIX) :], True))
+            if filename in hosts_cached_map:
+                owners.append((filename, False))
         for hostname, schema_qualified in owners:
             hosts_with_updates.setdefault(hostname, []).append((filename, schema_qualified))
     for candidates in hosts_with_updates.values():
         candidates.sort(key=lambda candidate: not candidate[1])
 
-    # Summaries from before written_files existed only had the plain file
-    written_files = set(summary.get('written_files', [hostname for hostname, was_written in hosts_cached_map.items() if was_written]))
-    shared_files = _shared_file_names(hosts_cached_map)
-    hosts_to_clear = []  # hostnames where Ansible removed a fact file written for them
+    # Hosts whose fact file Ansible removed
+    cleared = {filename for filename in removed - shared_files if filename in hosts_cached_map}
+    cleared |= {filename[len(SCHEMA_KEY_PREFIX) :] for filename in removed - shared_files if filename.startswith(SCHEMA_KEY_PREFIX)}
+    for filename in removed & shared_files:
+        owner = owner_of_shared_file(filename)
+        if owner:
+            cleared.add(owner[0])
+    hosts_to_clear = []
     for hostname in hosts_cached_map:
         if hostname in hosts_with_updates:
             continue
-        removed = [filename for filename in (hostname, SCHEMA_KEY_PREFIX + hostname) if filename in written_files and filename not in present]
-        # A shared file going missing is either older ansible-core clearing host
-        # "s1_<name>" or newer ansible-core clearing host "<name>"; keep both hosts' facts
-        if any(filename not in shared_files for filename in removed):
+        if hostname in cleared:
             hosts_to_clear.append(hostname)
         else:
             log_data['unmodified_ct'] += 1
@@ -317,7 +334,14 @@ def finish_fact_cache(host_qs, artifacts_dir, job_id=None, inventory_id=None, jo
             # host_qs may be a smart inventory's DISTINCT ON queryset, which can be
             # neither reordered nor locked, so lock the matching rows by id instead
             host_ids = list(host_qs.filter(name__in=hosts_to_clear).values_list('pk', flat=True))
-            hosts = list(Host.objects.filter(pk__in=host_ids).select_related('inventory').select_for_update(of=('self',)).order_by('id'))
+            # the facts themselves aren't needed to clear them
+            hosts = list(
+                Host.objects.filter(pk__in=host_ids)
+                .select_related('inventory')
+                .only('id', 'name', 'ansible_facts_modified', 'inventory__id', 'inventory__name')
+                .select_for_update(of=('self',))
+                .order_by('id')
+            )
             clear_hosts = []
             for host in hosts:
                 if job_created and host.ansible_facts_modified and host.ansible_facts_modified > job_created:
