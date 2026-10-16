@@ -1418,6 +1418,8 @@ class RunProjectUpdate(BaseTask):
                     # fingerprints only: these hold tokens, and module arguments are recorded in job events
                     'galaxy_auth': _fingerprint(galaxy_creds),
                     'galaxy_task_env': _fingerprint(settings.GALAXY_TASK_ENV),
+                    # content downloaded without certificate verification is not reused once it is required
+                    'galaxy_ignore_certs': bool(settings.GALAXY_IGNORE_CERTS),
                     # build_env hands these to every task, ansible-galaxy included
                     'task_env': _fingerprint(
                         {

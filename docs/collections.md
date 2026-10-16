@@ -81,7 +81,7 @@ job runs. It will populate the cache id set by the last "check" type update.
 Installed roles and collections are also kept for reuse across project revisions in
 a folder keyed by a SHA256 of the requirements files, the project's `ansible.cfg`,
 the organization's Galaxy credentials (URL, auth URL and token, the latter two only as
-a fingerprint), the `GALAXY_TASK_ENV` and `ASCENDER_TASK_ENV` settings and the latest
+a fingerprint), the `GALAXY_TASK_ENV`, `ASCENDER_TASK_ENV` and `GALAXY_IGNORE_CERTS` settings and the latest
 refresh (see below):
 
 ```

@@ -1514,6 +1514,12 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         assert task.__vars__['requirements_cache_salt']['galaxy_task_env'] != fingerprint
         assert 'sekrit' not in json.dumps(task.__vars__['requirements_cache_salt'])
 
+        # build_env turns this into ANSIBLE_GALAXY_IGNORE, so turning verification back on must not reuse
+        for ignore in (True, False):
+            with mock.patch.object(settings, 'GALAXY_IGNORE_CERTS', ignore):
+                task.build_extra_vars_file(project_update, private_data_dir)
+            assert task.__vars__['requirements_cache_salt']['galaxy_ignore_certs'] is ignore
+
         # ASCENDER_TASK_ENV reaches ansible-galaxy through build_env, e.g. a token for a URL-only credential
         task_env_fingerprint = task.__vars__['requirements_cache_salt']['task_env']
         with mock.patch.object(settings, 'ASCENDER_TASK_ENV', {'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}):
