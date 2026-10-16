@@ -373,6 +373,17 @@ class TestSchemaQualifiedFactCache:
         host.refresh_from_db()
         assert host.ansible_facts == dict(facts, z=1)
 
+    def test_plain_file_with_a_payload_fact(self, inv, artifacts_dir):
+        """Older ansible-core caches a lone cacheable fact named __payload__ exactly like a wrapper."""
+        host = self._host(inv, 'web1', {'old': True})
+        start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
+
+        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 'web1'), {'__payload__': 'run-7'})
+        finish_fact_cache(inv.hosts, artifacts_dir=artifacts_dir, inventory_id=inv.id)
+
+        host.refresh_from_db()
+        assert host.ansible_facts == {'__payload__': 'run-7'}
+
     def test_corrupt_schema_file_falls_back_to_plain(self, inv, artifacts_dir):
         host = self._host(inv, 'web1', {'old': True})
         start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
@@ -432,6 +443,16 @@ class TestSchemaFileNameCollision:
 
         assert web.ansible_facts == {}
         assert prefixed.ansible_facts == {'prefixed': 'new'}
+
+    def test_old_ansible_payload_fact_in_shared_file(self, hosts, artifacts_dir):
+        """A __payload__ fact that isn't a JSON-encoded payload keeps the file with the older format."""
+        inv, web, prefixed = hosts
+        _write_as_ansible(os.path.join(artifacts_dir, 'fact_cache', 's1_web1'), {'__payload__': 'run-7'})
+
+        self._finish(inv, artifacts_dir, web, prefixed)
+
+        assert web.ansible_facts == {'web': True}
+        assert prefixed.ansible_facts == {'__payload__': 'run-7'}
 
     def test_new_ansible_updates_the_unprefixed_host(self, hosts, artifacts_dir):
         inv, web, prefixed = hosts

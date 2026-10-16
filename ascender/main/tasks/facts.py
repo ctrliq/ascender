@@ -77,13 +77,18 @@ def _is_payload_wrapper(data):
 
 
 def _read_facts(filepath, schema_qualified):
-    """Return the facts stored in filepath, or None if the file isn't in the expected format."""
+    """Return the facts stored in filepath, or None if the file isn't in the expected format.
+
+    Plain files are only written by older ansible-core, so any dict is facts there, including
+    one that looks like a payload wrapper (a cacheable fact named __payload__). A file name
+    shared by both formats is attributed to one of them before it is read.
+    """
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        if _is_payload_wrapper(data) != schema_qualified:
-            return None
         if schema_qualified:
+            if not _is_payload_wrapper(data):
+                return None
             data = _strip_ansible_types(json.loads(data[PAYLOAD_KEY]))
     except (ValueError, OSError):
         return None
