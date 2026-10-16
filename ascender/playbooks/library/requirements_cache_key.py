@@ -107,7 +107,8 @@ def non_galaxy_reason(entries, kind, project_path='.'):
         else:
             if entry.get('scm'):
                 return f'role requirement {entry.get("src") or entry.get("name")!r} comes from {entry["scm"]}'
-            for key in ('src', 'name'):
+            # the legacy role key is read as the name, and the name is the source when src is absent
+            for key in ('src', 'name', 'role'):
                 if key in entry and (_looks_like_location(entry[key]) or _is_project_file(project_path, entry[key])):
                     return f'role requirement {entry[key]!r} is not a Galaxy name'
     return None

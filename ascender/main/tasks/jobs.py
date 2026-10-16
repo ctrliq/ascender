@@ -1512,7 +1512,7 @@ class RunProjectUpdate(BaseTask):
         """
         if project_update is not None and project_update.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES:
             return project_update.pk
-        recorded = Project.objects.filter(pk=project.pk).values_list('requirements_generation', flat=True).first() or 0
+        recorded = RunProjectUpdate.recorded_requirements_generation(project)
         latest = (
             ProjectUpdate.objects.filter(
                 project=project, launch_type__in=REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES, status='successful', job_tags__contains='install_'
@@ -1525,12 +1525,22 @@ class RunProjectUpdate(BaseTask):
         return max(recorded, latest)
 
     @staticmethod
+    def recorded_requirements_generation(project):
+        """The refresh generation stored on the project, 0 until a refresh has run since the upgrade"""
+        return Project.objects.filter(pk=project.pk).values_list('requirements_generation', flat=True).first() or 0
+
+    @staticmethod
     def read_requirements_generation(cache_path):
+        """The generation a revision cache was installed under, None when it predates generations"""
         try:
             with open(os.path.join(cache_path, '.requirements_generation')) as f:
-                return int(f.read().strip())
-        except (OSError, ValueError):
+                content = f.read()
+        except OSError:
             return None
+        try:
+            return int(content.strip())
+        except ValueError:
+            return 0  # unreadable, so older than any refresh
 
     @staticmethod
     def reqcache_path(base_path, req_hash):
@@ -1549,7 +1559,13 @@ class RunProjectUpdate(BaseTask):
             return False
         # installed before a refresh that ran since, possibly on another node
         generation = cls.read_requirements_generation(cache_path)
-        if generation is not None and generation != cls.current_requirements_generation(project):
+        if generation is None:
+            # Written before generations existed. Usable, as on earlier releases, until the first refresh
+            # after the upgrade records one on the project; job history alone does not count, since
+            # nearly every project has refreshed at some point and every node would reinstall at once.
+            if cls.recorded_requirements_generation(project):
+                return False
+        elif generation != cls.current_requirements_generation(project):
             return False
         req_hash = cls.read_requirements_hash(cache_path)
         if req_hash is None or os.path.exists(cls.reqcache_path(base_path, req_hash)):

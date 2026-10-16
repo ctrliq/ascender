@@ -116,6 +116,8 @@ def test_explicit_galaxy_type_is_cacheable(tmp_path):
         '- vendor/role.tar.bz2\n',
         '- src: vendor/role.tar.bz2\n  name: myrole\n',
         '- name: vendor/role.tar.bz2\n',
+        # legacy key: ansible reads it as the name, which is the source when src is absent
+        '- role: vendor/role.tar.bz2\n',
     ],
 )
 def test_role_from_a_project_file_is_not_cacheable(tmp_path, content):

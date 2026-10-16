@@ -2557,9 +2557,10 @@ def _source_control_project(revision='abc123'):
         (jobs.RunJob, False, 'old456', ['update_git', 'install_roles', 'install_collections']),
     ],
 )
+@mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0)
 @mock.patch('ascender.main.tasks.jobs.os.path.exists', return_value=True)
 @mock.patch('ascender.main.tasks.jobs.git.Repo')
-def test_get_sync_needs_reuses_dependency_project_update(repo, path_exists, task_class, has_dependency, local_revision, expected):
+def test_get_sync_needs_reuses_dependency_project_update(repo, path_exists, recorded_generation, task_class, has_dependency, local_revision, expected):
     repo.return_value.head.commit.hexsha = local_revision
     task = task_class()
     task.instance = mock.Mock(spec=InventoryUpdate if task_class is jobs.RunInventoryUpdate else Job)
@@ -2866,6 +2867,11 @@ class TestMakeLocalCopyReqcache:
 
 
 class TestProjectCacheIsComplete:
+    @pytest.fixture(autouse=True)
+    def no_refresh_since_upgrade(self):
+        with mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0):
+            yield
+
     @pytest.fixture
     def project(self, tmp_path):
         project = mock.Mock(cache_id='rev2')
@@ -2882,12 +2888,23 @@ class TestProjectCacheIsComplete:
         with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation', return_value=current):
             assert jobs.RunProjectUpdate.project_cache_is_complete(project) is expected
 
-    def test_revision_without_generation_skips_the_lookup(self, project, tmp_path):
-        """Revision caches written before generations existed stay usable, as on earlier releases"""
+    @pytest.mark.parametrize('recorded,expected', [(0, True), (38526, False)])
+    def test_revision_from_before_the_upgrade(self, project, tmp_path, recorded, expected):
+        """Usable as on earlier releases until a refresh after the upgrade, on any node, records a generation"""
         (tmp_path / 'rev2').mkdir()
-        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation') as current:
-            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
+        with (
+            mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=recorded),
+            mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation') as current,
+        ):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is expected
+        # job history alone would make every node reinstall every project right after the upgrade
         current.assert_not_called()
+
+    def test_revision_with_unreadable_generation(self, project, tmp_path):
+        (tmp_path / 'rev2').mkdir()
+        (tmp_path / 'rev2' / '.requirements_generation').write_text('garbage')
+        with mock.patch.object(jobs.RunProjectUpdate, 'current_requirements_generation', return_value=5):
+            assert jobs.RunProjectUpdate.project_cache_is_complete(project) is False
 
     def test_revision_without_requirements_hash(self, project, tmp_path):
         (tmp_path / 'rev2').mkdir()
@@ -2910,8 +2927,9 @@ class TestProjectCacheIsComplete:
         assert jobs.RunProjectUpdate.project_cache_is_complete(project) is True
 
 
+@mock.patch.object(jobs.RunProjectUpdate, 'recorded_requirements_generation', return_value=0)
 @mock.patch('ascender.main.tasks.jobs.git.Repo')
-def test_get_sync_needs_installs_when_reused_reqcache_was_evicted(repo, tmp_path):
+def test_get_sync_needs_installs_when_reused_reqcache_was_evicted(repo, recorded_generation, tmp_path):
     repo.return_value.head.commit.hexsha = 'abc123'
     project = _source_control_project()
     project.get_project_path.return_value = str(tmp_path)
