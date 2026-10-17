@@ -98,6 +98,35 @@ register(
 )
 
 register(
+    'WORKLOAD_IDENTITY_ENABLED',
+    field_class=fields.BooleanField,
+    label=_('Enable Workload Identity'),
+    help_text=_(
+        'Sign a short lived token for each job that uses a workload identity credential, and publish the keys '
+        'that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. '
+        'The issuer is the Base URL of the service followed by /api/o.'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
+    'WORKLOAD_IDENTITY_DEFAULT_TTL',
+    field_class=fields.IntegerField,
+    min_value=1,
+    max_value=86400,
+    default=300,
+    label=_('Workload Identity Token Lifetime'),
+    help_text=_(
+        'How long a workload identity token lasts for a job with no timeout. A job with a timeout gets a token '
+        'that lasts as long as the timeout. A minute is always added to allow for clock drift.'
+    ),
+    category=_('System'),
+    category_slug='system',
+    unit=_('seconds'),
+)
+
+register(
     'REMOTE_HOST_HEADERS',
     field_class=fields.StringListField,
     label=_('Remote Host Headers'),

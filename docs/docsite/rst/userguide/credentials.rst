@@ -321,6 +321,16 @@ HashiCorp Vault Signed SSH
 This is considered part of the secret management capability. See :ref:`ug_credentials_hashivaultssh` for more detail.
 
 
+HashiCorp Vault Secret Lookup (OIDC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is considered part of the secret management capability. It logs in to Vault as the job, with no stored secret. See :ref:`ug_credentials_hashivault_oidc` for more detail.
+
+
+HashiCorp Vault Signed SSH (OIDC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is considered part of the secret management capability. It logs in to Vault as the job, with no stored secret. See :ref:`ug_credentials_hashivaultssh_oidc` for more detail.
+
+
 Machine
 ^^^^^^^^
 
@@ -476,6 +486,40 @@ Network credentials have several attributes that may be configured:
 For more information, refer to the *Inside Playbook* blog, `Porting Ansible Network Playbooks with New Connection Plugins`_.
 
 .. _`Porting Ansible Network Playbooks with New Connection Plugins`: https://www.ansible.com/blog/porting-ansible-network-playbooks-with-new-connection-plugins 
+
+.. _ug_credentials_oidc_workload_identity:
+
+OIDC Workload Identity Token
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. index::
+   pair: credential types; OIDC Workload Identity Token
+   pair: workload identity; playbook
+
+Gives the job a short lived token, signed by Ascender for that job, for the playbook to trade with a system that trusts Ascender as an OIDC issuer: an AWS role through ``AssumeRoleWithWebIdentity``, an Azure federated credential, a Google workload identity pool, or the JWT login of Vault from the playbook itself. Workload identity has to be turned on, see :ref:`ag_workload_identity`.
+
+The only attribute is **Audience** (required): who the token is for, as that system expects it in the ``aud`` claim, for example ``sts.amazonaws.com`` or ``api://AzureADTokenExchange``.
+
+The job finds the token in two environment variables:
+
+- ``ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE``: the path of a file holding the token
+- ``ASCENDER_WORKLOAD_IDENTITY_TOKEN``: the token itself
+
+Neither is stored with the job. The token lasts as long as the timeout of the job, or the **Workload Identity Token Lifetime** setting when the job has no timeout.
+
+For example, to assume an AWS role with it:
+
+.. code-block:: yaml
+
+    - name: Assume the deployment role
+      environment:
+        AWS_ROLE_ARN: arn:aws:iam::123456789012:role/ascender-deploy
+        AWS_WEB_IDENTITY_TOKEN_FILE: "{{ lookup('env', 'ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE') }}"
+      amazon.aws.s3_object_info:
+        bucket_name: releases
+
+.. note::
+   The playbook holds the token and can send it anywhere. Only bind roles to the templates whose project you trust.
 
 .. _ug_credentials_ocp_k8s:
 

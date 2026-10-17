@@ -184,6 +184,20 @@ class TestKeyRegeneration:
         with override_settings(SECRET_KEY=new_key):
             assert models.OAuth2Application.objects.get(pk=oauth_application.pk).client_secret == secret
 
+    def test_workload_identity_key(self):
+        from ascender.main.utils import workload_identity
+
+        key = workload_identity._signing_key()
+        pem = key.get_private_key()
+
+        new_key = regenerate_secret_key.Command().handle()
+
+        with pytest.raises(InvalidToken):
+            models.WorkloadIdentityKey.objects.get(pk=key.pk).get_private_key()
+
+        with override_settings(SECRET_KEY=new_key):
+            assert models.WorkloadIdentityKey.objects.get(pk=key.pk).get_private_key() == pem
+
     def test_use_custom_key_with_ascender_secret_key_env_var(self):
         custom_key = 'MXSq9uqcwezBOChl/UfmbW1k4op+bC+FQtwPqgJ1u9XV'
         os.environ['TOWER_SECRET_KEY'] = custom_key

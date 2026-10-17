@@ -38,6 +38,7 @@ from ascender.main.constants import RESERVED_NAMESPACE_NAMES
 from ascender.main.utils import decrypt_field, classproperty, set_environ
 from ascender.main.utils.safe_yaml import safe_dump
 from ascender.main.utils.execution_environments import to_container_path
+from ascender.main.utils import workload_identity
 from ascender.main.validators import validate_ssh_private_key
 from ascender.main.models.base import CommonModelNameNotUnique, PasswordFieldsModel, PrimordialModel
 from ascender.main.models.mixins import ResourceMixin
@@ -416,6 +417,10 @@ class CredentialType(CommonModelNameNotUnique):
     @property
     def secret_fields(self):
         return [field['id'] for field in self.inputs.get('fields', []) if field.get('secret', False) is True]
+
+    @property
+    def wants_workload_identity_token(self):
+        return any(field.get('internal') and field['id'] == workload_identity.TOKEN_FIELD for field in self.inputs.get('fields', []))
 
     @property
     def askable_fields(self):
@@ -1314,6 +1319,27 @@ ManagedCredentialType(
     },
 )
 
+ManagedCredentialType(
+    namespace='oidc_workload_identity',
+    kind='cloud',
+    name=gettext_noop('OIDC Workload Identity Token'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'audience',
+                'label': gettext_noop('Audience'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'Who the token is for, as the system that will accept it expects to see it in the aud claim, '
+                    'e.g. sts.amazonaws.com, api://AzureADTokenExchange or the address of a Vault server.'
+                ),
+            },
+        ],
+        'required': ['audience'],
+    },
+)
+
 
 class CredentialInputSource(PrimordialModel):
     class Meta:
@@ -1396,6 +1422,12 @@ class CredentialInputSource(PrimordialModel):
                 backend_kwargs[field_name] = self.source_credential._get_dynamic_input(field_name)
 
         backend_kwargs.update(self.metadata)
+
+        # A plugin that authenticates as the job itself declares an internal
+        # field for the token, which is signed here for the job being run,
+        # with the plugin's server as the audience
+        if self.source_credential.credential_type.wants_workload_identity_token:
+            backend_kwargs[workload_identity.TOKEN_FIELD] = workload_identity.token_for_current_workload(backend_kwargs.get('url'))
 
         with set_environ(**settings.ASCENDER_TASK_ENV):
             return backend(**backend_kwargs)

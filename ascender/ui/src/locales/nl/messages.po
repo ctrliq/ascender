@@ -530,7 +530,7 @@ msgstr "Frequentie herhalen"
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "Variabelen die worden gebruikt om de geconstrueerde voorraadplug-in te configureren. Zie voor een gedetailleerde beschrijving van het configureren van deze plug-in"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:58
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:75
 msgid "Something went wrong with the request to test this credential and metadata."
 msgstr "Er is iets misgegaan met het verzoek om deze inloggegevens en metagegevens te testen."
 
@@ -590,7 +590,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 
 #: components/NotificationList/NotificationList.tsx:265
 #: components/NotificationList/NotificationListItem.tsx:64
-#: screens/Credential/shared/TypeInputsSubForm.tsx:52
+#: screens/Credential/shared/TypeInputsSubForm.tsx:60
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/shared/ConstructedInventoryForm.tsx:177
@@ -1004,7 +1004,7 @@ msgstr "Deze planning gebruikt complexe regels die niet worden ondersteund in de
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:102
+#: screens/Credential/shared/ExternalTestModal.tsx:114
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1509,7 +1509,7 @@ msgstr "Stdout"
 msgid "Only if Missing"
 msgstr "Alleen indien ontbrekend"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:146
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:153
 msgid "Metadata"
 msgstr "Metadata"
 
@@ -1521,6 +1521,10 @@ msgstr "Verhoging van rechten inschakelen"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:200
 msgid "Filter..."
 msgstr "Filteren..."
+
+#: screens/Credential/shared/ExternalTestModal.tsx:188
+msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
+msgstr "De test meldt zich bij Vault aan zoals een taak van deze sjabloon dat zou doen, met een token dat de claims ervan bevat."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
@@ -1605,6 +1609,8 @@ msgstr "Service-/integratiesleutel API"
 msgid "Minute"
 msgstr "Minuut"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1671,6 +1677,8 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
+#: components/Lookup/JobTemplateLookup.tsx:119
+#: components/Lookup/JobTemplateLookup.tsx:129
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2130,7 +2138,7 @@ msgstr "Diverse systeeminstellingen weergeven"
 #~ msgid "Select your Ansible Automation Platform subscription to use."
 #~ msgstr "Selecteer het Ansible Automation Platform-abonnement dat u wilt gebruiken."
 
-#: screens/Credential/shared/TypeInputsSubForm.tsx:30
+#: screens/Credential/shared/TypeInputsSubForm.tsx:35
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
 #: screens/Project/shared/ProjectForm.tsx:366
 msgid "Type Details"
@@ -2146,6 +2154,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Uitkomst van bovenliggend knooppunt vereist voordat de voorwaarde wordt geëvalueerd."
 
 #: components/JobList/JobListItem.tsx:248
+#: components/Lookup/JobTemplateLookup.tsx:100
+#: components/Lookup/JobTemplateLookup.tsx:105
+#: components/Lookup/JobTemplateLookup.tsx:135
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2164,6 +2175,10 @@ msgstr "Taaksjabloon"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:216
 msgid "Install Bundle"
 msgstr "Bundel installeren"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
+msgstr "Een systeembeheerder kan het inschakelen onder Instellingen, Systeem (overig), waar ook de basis-URL van de service moet zijn ingesteld."
 
 #: screens/Project/shared/Project.helptext.tsx:18
 msgid "Example URLs for GIT Source Control include:"
@@ -2512,6 +2527,10 @@ msgstr "Bereik"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0} (verwijderd)"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
+msgstr "De taak vindt het token in het bestand dat ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE aangeeft, en in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -3436,7 +3455,7 @@ msgstr "Bewaartermijn van gegevens"
 msgid "This workflow does not have any nodes configured."
 msgstr "Er zijn voor deze workflow geen knooppunten geconfigureerd."
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:72
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:78
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "Klik op deze knop om de verbinding met het geheimbeheersysteem te verifiëren met behulp van de geselecteerde referenties en de opgegeven inputs."
 
@@ -3692,8 +3711,8 @@ msgstr "Deze actie ontkoppelt alle rollen voor deze gebruiker van de geselecteer
 #: components/Schedule/shared/UnsupportedScheduleForm.tsx:37
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:101
-#: screens/Credential/shared/ExternalTestModal.tsx:111
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
+#: screens/Credential/shared/ExternalTestModal.tsx:123
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -4178,8 +4197,8 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:122
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -5318,6 +5337,8 @@ msgid "Delete Job"
 msgstr "Taak verwijderen"
 
 #: components/CopyButton/CopyButton.tsx:54
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5548,7 +5569,7 @@ msgstr "Frequentie-informatie"
 #: components/AdHocCommands/useAdHocInstanceGroupsStep.tsx:27
 #: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "Volgende"
@@ -5609,6 +5630,10 @@ msgstr "Schrijven"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:180
 msgid "Option Details"
 msgstr "Optie Details"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
+msgstr "Schakel voor HashiCorp Vault de JWT-authenticatiemethode in en laat die naar de uitgever wijzen:"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
@@ -5709,7 +5734,7 @@ msgstr "Afgelopen twee weken"
 #: components/AdHocCommands/AdHocCommandsWizard.tsx:68
 #: components/LaunchPrompt/LaunchPrompt.tsx:180
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:91
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:97
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -6301,7 +6326,7 @@ msgstr "Peers van control nodes"
 #~ msgid "Clear subscription selection"
 #~ msgstr "Abonnementskeuze wissen"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:80
 msgid "Test passed"
 msgstr "Test geslaagd"
 
@@ -6584,7 +6609,7 @@ msgstr "{label} opnieuw ordenen"
 #: components/AdHocCommands/AdHocPreviewStep.tsx:58
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:109
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:139
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:146
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:94
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:318
@@ -7051,6 +7076,10 @@ msgstr "Toegangsgegevens registreren"
 msgid "Host Details"
 msgstr "Hostdetails"
 
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
+msgstr "Alleen gebruikt door de test, die zich bij Vault aanmeldt zoals een taak van deze sjabloon dat zou doen. Taken melden zich als zichzelf aan."
+
 #: screens/User/UserDetail/UserDetail.tsx:88
 msgid "Browser default"
 msgstr "Browserstandaard"
@@ -7469,7 +7498,7 @@ msgstr "Ingeschakelde variabele"
 
 #: screens/Credential/shared/CredentialForm.tsx:450
 #: screens/Credential/shared/CredentialForm.tsx:456
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:81
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:87
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:512
 msgid "Test"
 msgstr "Test"
@@ -7847,7 +7876,7 @@ msgstr "Wanneer is de host voor het laatst geautomatiseerd"
 msgid "Provide a value for this field or select the Prompt on launch option."
 msgstr "Geef een waarde op voor dit veld of selecteer de optie Melding bij opstarten."
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:158
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:165
 msgid "External Secret Management System"
 msgstr "Extern geheimbeheersysteem"
 
@@ -8052,7 +8081,7 @@ msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere res
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:84
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8835,6 +8864,10 @@ msgstr "Antwoord naam variabele"
 msgid "Select"
 msgstr "Selecteren"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
+msgstr "Het systeem dat het accepteert moet deze uitgever vertrouwen, die ook de OIDC-discovery-URL is:"
+
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:76
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:106
@@ -9348,6 +9381,10 @@ msgstr "Recente sjablonen"
 msgid "Applications & Tokens"
 msgstr "Toepassingen en tokens"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+msgid "Workload identity is not available"
+msgstr "Workload-identiteit is niet beschikbaar"
+
 #: screens/Dashboard/shared/LineChart.tsx:193
 msgid "Job Runs"
 msgstr "Taakuitvoeringen"
@@ -9527,6 +9564,10 @@ msgstr "Parameter"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeDeleteModal.tsx:46
 msgid "Remove"
 msgstr "Verwijderen"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:103
+msgid "Claims sent"
+msgstr "Verzonden claims"
 
 #: screens/InstanceGroup/Instances/InstanceList.tsx:249
 #: screens/Instances/InstanceList/InstanceList.tsx:179
@@ -10054,7 +10095,7 @@ msgstr "Fout tijdens inventarissynchronisatie"
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Deze inventaris wordt momenteel door andere bronnen gebruikt. Weet u zeker dat u hem wilt verwijderen?"
 
-#: screens/Credential/shared/ExternalTestModal.tsx:90
+#: screens/Credential/shared/ExternalTestModal.tsx:102
 msgid "Test External Credential"
 msgstr "Externe inloggegevens testen"
 
@@ -10141,7 +10182,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:91
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -11273,6 +11314,10 @@ msgstr "Ongeldige tijdnotatie"
 msgid "Unknown Project"
 msgstr "Onbekend project"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+msgid "Each job gets a short lived token signed for it, with no secret stored here"
+msgstr "Elke taak krijgt een kortlevend token dat voor die taak is ondertekend, zonder dat hier een geheim wordt opgeslagen"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:304
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "Voorwaarden voor het uitvoeren van dit knooppunt wanneer er meerdere bovenliggende elementen zijn. Raadpleeg de"
@@ -11443,6 +11488,7 @@ msgstr "Succesvol geweigerd"
 msgid "Not configured for inventory sync."
 msgstr "Niet geconfigureerd voor inventarissynchronisatie."
 
+#: components/Lookup/JobTemplateLookup.tsx:121
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11992,7 +12038,7 @@ msgstr "Modus Voorbeeld van vragenlijst"
 
 #: components/StatusLabel/StatusLabel.tsx:55
 #: components/Workflow/WorkflowNodeHelp.tsx:113
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:25
 msgid "OK"
 msgstr "OK"
@@ -12084,6 +12130,7 @@ msgstr "Kan host niet verwijderen."
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
+#: components/Lookup/JobTemplateLookup.tsx:125
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

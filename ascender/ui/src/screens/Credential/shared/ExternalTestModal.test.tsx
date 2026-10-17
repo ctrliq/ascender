@@ -1,7 +1,7 @@
 import type { Credential, CredentialType } from 'types/api';
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { act, screen, waitFor } from '@testing-library/react';
+import { CredentialsAPI, CredentialTypesAPI, JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -10,6 +10,7 @@ import credentialTypesArr from './data.credentialTypes.json';
 
 vi.mock('../../../api/models/Credentials');
 vi.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/JobTemplates');
 
 const credentialType = credentialTypesArr.find(
   (credType) => credType.namespace === 'hashivault_kv'
@@ -153,5 +154,82 @@ describe('<ExternalTestModal />', () => {
         "HTTP 404: no handler for route '/secret/foo/bar/baz'"
       )
     ).toBeInTheDocument();
+  });
+
+  test('tests a workload identity lookup as the job template picked', async () => {
+    const oidcType = {
+      ...credentialType,
+      id: 42,
+      namespace: 'hashivault_kv_oidc',
+      inputs: {
+        fields: [
+          { id: 'url', label: 'Server URL', type: 'string' },
+          { id: 'jwt_role', label: 'JWT Role', type: 'string' },
+        ],
+        metadata: [
+          { id: 'secret_path', label: 'Path to Secret', type: 'string' },
+          { id: 'secret_key', label: 'Key Name', type: 'string' },
+        ],
+        required: ['url', 'jwt_role', 'secret_path', 'secret_key'],
+      },
+    };
+    vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+      data: { count: 1, results: [{ id: 7, name: 'patch' }] },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: {} }, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
+
+    const { user } = renderWithContexts(
+      <ExternalTestModal
+        credentialType={oidcType as unknown as CredentialType}
+        credentialFormValues={{
+          ...credentialFormValues,
+          inputs: { url: 'http://hashivault:8200', jwt_role: 'infra' },
+        }}
+        onClose={vi.fn()}
+      />
+    );
+    const jobTemplateInput = document.querySelector(
+      'input#job_template'
+    ) as HTMLInputElement;
+    // disabled while the lookup reads its first page
+    await waitFor(() => expect(jobTemplateInput).toBeEnabled());
+    await user.type(jobTemplateInput, 'patch');
+    // the lookup resolves what was typed a second after typing stops
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1300);
+      });
+    });
+    expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+      name: 'patch',
+      role_level: 'execute_role',
+    });
+    await user.type(getInput('secret_path'), '/secret/linux/root');
+    await user.type(getInput('secret_key'), 'password');
+    await user.click(getRunButton());
+
+    await waitFor(() =>
+      expect(CredentialTypesAPI.test).toHaveBeenCalledWith(42, {
+        inputs: { url: 'http://hashivault:8200', jwt_role: 'infra' },
+        metadata: {
+          secret_path: '/secret/linux/root',
+          secret_key: 'password',
+          job_template_id: 7,
+        },
+      })
+    );
+  });
+
+  test('a lookup that does not log in as the job asks for no template', () => {
+    renderWithContexts(
+      <ExternalTestModal
+        credentialType={credentialType as unknown as CredentialType}
+        credentialFormValues={credentialFormValues}
+        onClose={vi.fn()}
+      />
+    );
+    expect(document.querySelector('input#job_template')).toBeNull();
   });
 });

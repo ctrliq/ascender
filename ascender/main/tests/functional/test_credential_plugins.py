@@ -334,6 +334,66 @@ def test_hashivault_handle_auth_not_enough_args():
         hashivault.handle_auth()
 
 
+class TestHashivaultOIDC:
+    kwargs = {
+        'url': 'https://vault.example.com:8200',
+        'default_auth_path': 'jwt',
+        'jwt_role': 'infra',
+        'workload_identity_token': 'the.jwt',
+        'api_version': 'v2',
+        'secret_path': '/secret/linux/root',
+        'secret_key': 'password',
+    }
+
+    def test_no_stored_secrets(self):
+        for inputs in (hashivault.hashi_kv_oidc_inputs, hashivault.hashi_ssh_oidc_inputs):
+            ids = [field['id'] for field in inputs['fields']]
+            for stored in ('token', 'role_id', 'secret_id', 'username', 'password', 'client_cert_private', 'kubernetes_role'):
+                assert stored not in ids
+            token_field = next(field for field in inputs['fields'] if field['id'] == 'workload_identity_token')
+            assert token_field['internal'] is True and token_field['secret'] is True
+            assert 'jwt_role' in inputs['required']
+
+    def test_old_types_are_untouched(self):
+        ids = [field['id'] for field in hashivault.hashi_kv_inputs['fields']]
+        assert 'workload_identity_token' not in ids and 'jwt_role' not in ids
+
+    def test_logs_in_as_the_job_reads_and_revokes(self):
+        with mock.patch.object(hashivault, 'method_auth', return_value='vault-token') as login, mock.patch.object(hashivault, 'revoke_self') as revoke:
+            backend = mock.Mock(return_value='S3cr3to!')
+            assert hashivault.with_workload_identity_login(backend)(**self.kwargs) == 'S3cr3to!'
+        assert login.call_args.kwargs['auth_param'] == {'role': 'infra', 'jwt': 'the.jwt'}
+        assert backend.call_args.kwargs['token'] == 'vault-token'
+        assert revoke.call_args.args == ('vault-token',)
+
+    def test_revokes_when_the_lookup_fails(self):
+        with mock.patch.object(hashivault, 'method_auth', return_value='vault-token'), mock.patch.object(hashivault, 'revoke_self') as revoke:
+            with pytest.raises(RuntimeError):
+                hashivault.with_workload_identity_login(mock.Mock(side_effect=RuntimeError('password is not present')))(**self.kwargs)
+        revoke.assert_called_once()
+
+    def test_needs_a_token(self):
+        with pytest.raises(Exception, match='workload identity token'):
+            hashivault.with_workload_identity_login(mock.Mock())(**dict(self.kwargs, workload_identity_token=None))
+
+    @pytest.mark.django_db
+    def test_revoke_failure_is_swallowed(self):
+        with mock.patch('requests.post', side_effect=Exception('batch tokens cannot be revoked')):
+            hashivault.revoke_self('vault-token', **self.kwargs)
+
+    def test_revoke_request(self):
+        with mock.patch('requests.post') as post:
+            hashivault.revoke_self('vault-token', **dict(self.kwargs, namespace='team'))
+        assert post.call_args.args == ('https://vault.example.com:8200/v1/auth/token/revoke-self',)
+        assert post.call_args.kwargs['headers'] == {'X-Vault-Token': 'vault-token', 'X-Vault-Namespace': 'team'}
+
+    def test_auth_path_from_metadata_wins(self):
+        with mock.patch.object(hashivault, 'revoke_self'), mock.patch('requests.Session.post') as post:
+            post.return_value.json.return_value = {'auth': {'client_token': 'vault-token'}}
+            hashivault.with_workload_identity_login(mock.Mock())(**dict(self.kwargs, auth_path='jwt-ascender'))
+        assert post.call_args.args == ('https://vault.example.com:8200/v1/auth/jwt-ascender/login',)
+
+
 class TestDelineaImports:
     """
     These module have a try-except for ImportError which will allow using the older library

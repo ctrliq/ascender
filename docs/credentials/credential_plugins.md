@@ -51,6 +51,33 @@ Example plugins officially supported in Ascender can be found in the source code
 
 For instructions on writing and installing your own custom credential plugin, see: https://github.com/ansible/awx-custom-credential-plugin-example
 
+Logging In as the Job
+---------------------
+
+A plugin can ask to be handed a workload identity token for the job it is
+resolving a secret for, instead of storing a secret of its own to log in with.
+It declares an input field with the id `workload_identity_token` and
+`"internal": True`:
+
+```python
+{
+    'id': 'workload_identity_token',
+    'label': _('Workload Identity Token'),
+    'type': 'string',
+    'secret': True,
+    'internal': True,
+}
+```
+
+The field is hidden by the API and refuses a value. When a job resolves a
+lookup through the plugin, the backend gets `workload_identity_token=<jwt>`: a
+token signed for that job, with the plugin's `url` input as its audience. The
+lookups of the HashiCorp Vault OIDC types are built this way, see
+`ascender/main/credential_plugins/hashivault.py`. Outside a running job (and
+outside the credential test, which signs for a job template the user picks) no
+token is issued and the lookup fails. See the Workload Identity page of the
+administration guide for how the token is issued and verified.
+
 Programmatic Secret Fetching
 ----------------------------
 If you want to programmatically fetch secrets from a supported external secret

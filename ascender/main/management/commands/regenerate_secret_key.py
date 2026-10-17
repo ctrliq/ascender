@@ -10,7 +10,17 @@ from django.db.models.signals import post_save
 from ascender.conf import settings_registry
 from ascender.conf.models import Setting
 from ascender.conf.signals import on_post_save_setting
-from ascender.main.models import UnifiedJob, Credential, NotificationTemplate, Job, JobTemplate, WorkflowJob, WorkflowJobTemplate, OAuth2Application
+from ascender.main.models import (
+    UnifiedJob,
+    Credential,
+    NotificationTemplate,
+    Job,
+    JobTemplate,
+    WorkflowJob,
+    WorkflowJobTemplate,
+    OAuth2Application,
+    WorkloadIdentityKey,
+)
 from ascender.main.utils.encryption import encrypt_field, decrypt_field, encrypt_value, decrypt_value, get_encryption_key
 
 
@@ -47,6 +57,7 @@ class Command(BaseCommand):
         self._credentials()
         self._unified_jobs()
         self._oauth2_app_secrets()
+        self._workload_identity_keys()
         self._settings()
         self._survey_passwords()
         return self.new_key
@@ -81,6 +92,12 @@ class Command(BaseCommand):
             app.client_secret = raw
             encrypted = encrypt_value(raw, secret_key=self.new_key)
             OAuth2Application.objects.filter(pk=app.pk).update(client_secret=encrypted)
+
+    def _workload_identity_keys(self):
+        for key in WorkloadIdentityKey.objects.iterator():
+            raw = decrypt_value(get_encryption_key('value', None, secret_key=self.old_key), key.private_key)
+            encrypted = encrypt_value(raw, secret_key=self.new_key)
+            WorkloadIdentityKey.objects.filter(pk=key.pk).update(private_key=encrypted)
 
     def _settings(self):
         # don't update the cache, the *actual* value isn't changing

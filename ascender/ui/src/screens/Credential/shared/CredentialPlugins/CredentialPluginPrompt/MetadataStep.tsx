@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { useLingui } from '@lingui/react/macro';
 
 import { useField, useFormContext } from 'components/Form';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -7,19 +8,22 @@ import AnsibleSelect from 'components/AnsibleSelect';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import FormField from 'components/FormField';
+import { JobTemplateLookup } from 'components/Lookup';
 import { FormFullWidthLayout } from 'components/FormLayout';
 import Popover from 'components/Popover';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
 import type { CredentialPluginValues } from './CredentialPluginPrompt';
+import { isWorkloadIdentityLookup } from '../../workloadIdentity';
 
 function MetadataStep() {
+  const { t } = useLingui();
   const form = useFormContext<CredentialPluginValues>();
   const [selectedCredential] = useField('credential');
   const [inputValues] = useField('inputs');
 
   const {
-    result: fields,
+    result: { fields, asJob },
     error,
     isLoading,
     request: fetchMetadataOptions,
@@ -44,10 +48,13 @@ function MetadataStep() {
           field.required = true;
         }
       });
-      return metadata;
+      return {
+        fields: metadata,
+        asJob: isWorkloadIdentityLookup(credentialType),
+      };
       /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, []),
-    []
+    { fields: [], asJob: false }
   );
 
   useEffect(() => {
@@ -115,6 +122,13 @@ function MetadataStep() {
 
               return null;
             })}
+            {asJob && (
+              <JobTemplateLookup
+                value={form.values.job_template}
+                onChange={(value) => form.setFieldValue('job_template', value)}
+                tooltip={t`Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves.`}
+              />
+            )}
           </FormFullWidthLayout>
         </Form>
       )}

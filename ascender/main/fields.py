@@ -595,6 +595,10 @@ class CredentialInputField(JSONSchemaField):
         # determine the defined fields for the associated credential type
         properties = {}
         for field in model_instance.credential_type.inputs.get('fields', []):
+            # An internal field is filled in by the platform when the
+            # credential is used, never stored: refuse a value for it
+            if field.get('internal'):
+                continue
             field = field.copy()
             properties[field['id']] = field
             if field.get('choices', []):
