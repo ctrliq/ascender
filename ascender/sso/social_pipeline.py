@@ -11,7 +11,7 @@ from ascender.sso.common import (
     create_org_and_teams,
     reconcile_users_org_team_mappings,
 )
-from ascender.sso.oidc import OIDCIdentity, is_oidc
+from ascender.sso.oidc import OIDC_BACKEND_NAME, OIDCIdentity, is_oidc
 
 logger = logging.getLogger('ascender.sso.social_pipeline')
 
@@ -54,9 +54,9 @@ def _update_m2m_from_map(user, opts, remove, triggers, identity, map_id):
     """
     Evaluate one role of one map entry.
 
-    Only an OIDC login has claims for a trigger rule to match against, so for
-    every other backend, and for an entry without a rule, this is exactly
-    _update_m2m_from_expression.
+    Only an OIDC or Entra ID login has claims for a trigger rule to match
+    against, so for every other backend, and for an entry without a rule, this
+    is exactly _update_m2m_from_expression.
     """
     if not triggers or identity is None:
         return _update_m2m_from_expression(user, opts, remove)
@@ -175,10 +175,11 @@ def _backend_map(backend, name):
 
     OIDC used to have no maps of its own and read the shared SOCIAL_AUTH_ ones.
     Now that it has, an unset OIDC map still falls back to the shared one, so a
-    configuration written before keeps working.
+    configuration written before keeps working.  Entra ID came with maps of its
+    own and has nothing to stay compatible with.
     """
     value = backend.setting(name)
-    if value is None and is_oidc(backend):
+    if value is None and getattr(backend, 'name', None) == OIDC_BACKEND_NAME:
         value = getattr(settings, 'SOCIAL_AUTH_{}'.format(name), None)
     return value or {}
 

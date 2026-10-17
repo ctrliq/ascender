@@ -30,18 +30,20 @@ function AzureADDetail() {
     result: azureDetails,
   } = useRequest(
     useCallback(async () => {
-      const [{ data: azureDefault }, { data: azureTenant }] = await Promise.all(
-        [
+      const [{ data: entra }, { data: azureDefault }, { data: azureTenant }] =
+        await Promise.all([
+          SettingsAPI.readCategory('entra-id'),
           SettingsAPI.readCategory('azuread-oauth2'),
           SettingsAPI.readCategory('azuread-oauth2-tenant'),
-        ]
-      );
+        ]);
       return {
+        entra,
         default: azureDefault,
         tenant: azureTenant,
       };
     }, []),
     {
+      entra: null,
       default: null,
       tenant: null,
     }
@@ -63,19 +65,24 @@ function AzureADDetail() {
       id: 99,
     },
     {
-      name: t`Azure AD Default`,
-      link: `${baseURL}/default/details`,
+      name: t`Microsoft Entra ID`,
+      link: `${baseURL}/entra/details`,
       id: 0,
     },
     {
-      name: t`Azure AD Tenant`,
-      link: `${baseURL}/tenant/details`,
+      name: t`Azure AD Default (legacy)`,
+      link: `${baseURL}/default/details`,
       id: 1,
+    },
+    {
+      name: t`Azure AD Tenant (legacy)`,
+      link: `${baseURL}/tenant/details`,
+      id: 2,
     },
   ];
 
   if (!Object.keys(azureDetails).includes(category)) {
-    return <Navigate to={`${baseURL}/default/details`} replace />;
+    return <Navigate to={`${baseURL}/entra/details`} replace />;
   }
 
   return (

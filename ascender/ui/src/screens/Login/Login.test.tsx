@@ -448,6 +448,33 @@ describe('<Login />', () => {
     ).toHaveLength(0);
   });
 
+  test('Entra ID auth button shown', async () => {
+    vi.mocked(AuthAPI.read).mockResolvedValue({
+      data: {
+        'entra-id': {
+          login_url: '/sso/login/entra-id/',
+          complete_url: 'https://localhost:8043/sso/complete/entra-id/',
+        },
+      },
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
+
+    const { container } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-entra-id"]')
+      ).toHaveLength(1)
+    );
+    expect(
+      screen.getByRole('button', { name: /Sign in with Microsoft Entra ID/ })
+    ).toBeInTheDocument();
+    expect(
+      container.querySelectorAll('[data-cy="social-auth-azure"]')
+    ).toHaveLength(0);
+  });
+
   test('social auth button starts login with a POSTed form', async () => {
     vi.mocked(AuthAPI.read).mockResolvedValue({
       data: {

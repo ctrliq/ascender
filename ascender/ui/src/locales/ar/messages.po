@@ -54,7 +54,7 @@ msgstr "لم يتم العثور على موافقة سير العمل."
 msgid "Browse…"
 msgstr "تصفح…"
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -237,7 +237,7 @@ msgstr "جارٍ تشغيل فحص الصحة"
 msgid "Failed to copy inventory."
 msgstr "فشل نسخ المخزون."
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -676,7 +676,7 @@ msgstr "توسيع"
 msgid "Promote Child Groups and Hosts"
 msgstr "ترقية المجموعات الفرعية والمضيفين"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -776,7 +776,7 @@ msgstr "يرجى تحديد رقم يوم بين 1 و 31."
 msgid "No"
 msgstr "لا"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "النظام المتنوع"
 
@@ -876,7 +876,7 @@ msgstr "العودة إلى الرموز المميزة"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhooks: تمكين webhook لهذا القالب."
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1214,7 +1214,7 @@ msgstr "شرح الفشل:"
 msgid "February"
 msgstr "فبراير"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "عرض جميع الإعدادات"
 
@@ -1491,7 +1491,7 @@ msgstr "إطلاق مهمة الإدارة"
 msgid "Add existing group"
 msgstr "إضافة مجموعة موجودة"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2035,7 +2035,7 @@ msgstr "المفتاح"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2209,7 +2209,7 @@ msgstr "الحقل يطابق التعبير النمطي المحدد."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {نوع بيانات الاعتماد هذا قيد الاستخدام حاليًا من قبل بعض بيانات الاعتماد ولا يمكن حذفه.} other {لا يمكن حذف أنواع بيانات الاعتماد التي تستخدمها بيانات الاعتماد. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2519,7 +2519,7 @@ msgstr "{0} (محذوف)"
 msgid "The inventory that this host belongs to."
 msgstr "المخزون الذي ينتمي إليه هذا المضيف."
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "تسجيل الدخول"
 
@@ -3024,7 +3024,7 @@ msgstr "{0, plural, one {يرجى إدخال رقم هاتف صالح.} other {�
 msgid "Facts"
 msgstr "الحقائق"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "أو"
 
@@ -3059,8 +3059,8 @@ msgid "Workflow job details"
 msgstr "تفاصيل مهمة سير العمل"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "إعدادات Azure AD"
+#~ msgid "Azure AD settings"
+#~ msgstr "إعدادات Azure AD"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3262,11 +3262,11 @@ msgstr "مصدر المخزون هذا قيد الاستخدام حاليًا م
 msgid "Deny"
 msgstr "رفض"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "OIDC عام"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3535,7 +3535,7 @@ msgid "Select Hosts"
 msgstr "حدد المضيفين"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3645,7 +3645,7 @@ msgstr "أغسطس"
 msgid "View smart inventory host details"
 msgstr "عرض تفاصيل مضيف المخزون الذكي"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "تسجيل الدخول باستخدام Google"
 
@@ -3747,8 +3747,8 @@ msgstr "مزامنة الكل"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4167,8 +4167,8 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4541,7 +4541,7 @@ msgstr "تحديث مراجعة المشروع"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "اختياريًا، حدد بيانات الاعتماد المراد استخدامها لإرسال تحديثات الحالة مرة أخرى إلى خدمة webhook."
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4795,7 +4795,7 @@ msgstr "فشل تبديل المضيف."
 msgid "denied"
 msgstr "مرفوض"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise Organizations"
 
@@ -5112,6 +5112,10 @@ msgstr "عند انتهاء المهلة"
 msgid "Create New Team"
 msgstr "إنشاء فريق جديد"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "تسجيل الدخول باستخدام Microsoft Entra ID"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "في التوثيق و"
@@ -5130,7 +5134,7 @@ msgstr "منطقة نص"
 msgid "View User Interface settings"
 msgstr "عرض إعدادات واجهة المستخدم"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "تسجيل الدخول باستخدام GitHub Teams"
 
@@ -6046,6 +6050,10 @@ msgstr "منقضٍ"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3 (تصحيح)"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "إعدادات Microsoft Entra ID (Azure AD)"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7112,7 +7120,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "ملاحظة: يفترض هذا الحقل أن اسم الجهاز البعيد هو “origin”."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub Default"
 
@@ -7177,6 +7185,11 @@ msgstr "قالب مهمة سير العمل"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "المطالبة بالتسميات عند الإطلاق."
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant (قديم)"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7493,7 +7506,7 @@ msgstr "تسجيل الخروج"
 msgid "sec"
 msgstr "ثانية"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "تسجيل الدخول باستخدام {label}"
 
@@ -7720,11 +7733,11 @@ msgid "Edit Team"
 msgstr "تحرير الفريق"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "واجهة المستخدم"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise"
 
@@ -7772,7 +7785,7 @@ msgstr "لا تنتهي صلاحيته أبدًا"
 msgid "View job {0}"
 msgstr "عرض المهمة {0}"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "تسجيل الدخول باستخدام SAML {samlIDP}"
 
@@ -7885,7 +7898,7 @@ msgstr "نسخة غير حساسة لحالة الأحرف من startswith."
 msgid "Unsaved changes modal"
 msgstr "نافذة التغييرات غير المحفوظة"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise Teams"
 
@@ -7919,7 +7932,7 @@ msgstr "عنوان URL لـ Grafana"
 msgid "GitHub settings"
 msgstr "إعدادات GitHub"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "تسجيل الدخول باستخدام GitHub Organizations"
 
@@ -8013,8 +8026,8 @@ msgstr "المضيف جيد"
 #~ msgstr "الأيام المتبقية"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "عرض إعدادات Azure AD"
+#~ msgid "View Azure AD settings"
+#~ msgstr "عرض إعدادات Azure AD"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8035,7 +8048,7 @@ msgstr "مسح جميع المرشحات"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {يتم استخدام هذا المثيل حاليًا بواسطة موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟} other {قد يؤثر إلغاء توفير هذه المثيلات على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8546,7 +8559,7 @@ msgstr "ملاحظة: الترتيب الذي يتم به تحديد هذه يح
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "بيانات الاعتماد التي تتطلب كلمات مرور عند التشغيل غير مسموح بها. يرجى إزالة أو استبدال بيانات الاعتماد التالية بأخرى من النوع نفسه للمتابعة: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "تسجيل الدخول باستخدام OIDC"
 
@@ -8580,7 +8593,7 @@ msgid "Remote Archive"
 msgstr "أرشيف بعيد"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "استكشاف الأخطاء وإصلاحها"
 
@@ -8635,7 +8648,7 @@ msgid "Destination Channels or Users"
 msgstr "قنوات أو مستخدمو الوجهة"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8655,7 +8668,7 @@ msgstr "المشروع الذي يحتوي على Playbook الذي ستنفذه
 msgid "Select Credential Type"
 msgstr "حدد نوع بيانات الاعتماد"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8722,7 +8735,7 @@ msgstr "تحرير المخزون"
 msgid "Failed to user token."
 msgstr "فشل رمز المستخدم المميز."
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "تسجيل الدخول باستخدام SAML"
 
@@ -8990,7 +9003,7 @@ msgstr "إلغاء مزامنة مصدر المخزون"
 msgid "Failed to delete one or more applications."
 msgstr "فشل حذف تطبيق واحد أو أكثر."
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "المصادقة المتنوعة"
 
@@ -9496,7 +9509,7 @@ msgstr "التفريعات"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "يُطبق هذا الحد على جميع عقد سير العمل داخل سير العمل هذا ({0}) التي تطلب حدًا، بدلاً من الحد المحدد في كل عقدة."
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP Default"
 
@@ -9564,7 +9577,7 @@ msgid "Play"
 msgstr "تشغيل"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -9728,7 +9741,7 @@ msgstr "ملء الحقل من نظام إدارة أسرار خارجي"
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10021,7 +10034,7 @@ msgstr "تبديل الأدوات"
 msgid "Organization"
 msgstr "المؤسسة"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "انتهت جلستك. يرجى تسجيل الدخول للمتابعة من حيث توقفت."
 
@@ -10077,8 +10090,8 @@ msgstr "تسجيل الدخول باستخدام Azure AD Tenant"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD Default"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD Default"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10139,7 +10152,7 @@ msgstr "إلغاء البحث"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10148,13 +10161,13 @@ msgstr "إلغاء البحث"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10162,6 +10175,7 @@ msgstr "إلغاء البحث"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10332,7 +10346,7 @@ msgstr "سيؤدي هذا الإجراء إلى الحذف المؤقت لما �
 msgid "Listener Addresses"
 msgstr "عناوين المستمع"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10611,7 +10625,7 @@ msgid "An error occurred"
 msgstr "حدث خطأ"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -10947,7 +10961,7 @@ msgstr "فشل حذف المؤسسة."
 #~ msgid "Hosts available"
 #~ msgstr "المضيفون المتاحون"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "التسجيل"
 
@@ -11247,7 +11261,7 @@ msgstr "فشل حذف مصدر مخزون واحد أو أكثر."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "إذا تم تحديده، فسيتم عرض هذا الحقل على العقدة بدلاً من اسم المورد عند عرض سير العمل"
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "تسجيل الدخول باستخدام GitHub"
 
@@ -11295,7 +11309,7 @@ msgid "All job types"
 msgstr "جميع أنواع المهام"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
@@ -11354,6 +11368,10 @@ msgstr "النمط المستخدم لاستهداف المضيفين في ال�
 msgid "Timeout"
 msgstr "المهلة"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "عرض إعدادات Microsoft Entra ID"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "يرجى الانتظار حتى يتم ملء عرض الطوبولوجيا..."
@@ -11382,7 +11400,7 @@ msgstr "{numJobsToCancel, plural, one {إلغاء المهمة المحددة} o
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11391,12 +11409,12 @@ msgstr "{numJobsToCancel, plural, one {إلغاء المهمة المحددة} o
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11405,6 +11423,7 @@ msgstr "{numJobsToCancel, plural, one {إلغاء المهمة المحددة} o
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11856,6 +11875,11 @@ msgstr "خدمة Webhook"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ {brandName} وطلب تحديث التكوين باستخدام قالب المهمة هذا."
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD Default (قديم)"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "العقدة الملغاة، مفروضة كناجحة"
@@ -12261,6 +12285,11 @@ msgstr "نسخ القالب"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "تبديل موافقات الإشعار"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"

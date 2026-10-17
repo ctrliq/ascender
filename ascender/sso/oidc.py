@@ -2,10 +2,13 @@
 # All Rights Reserved.
 
 """
-What the generic OIDC login knows about a user, and what it does with it.
+What an OIDC login knows about a user, and what it does with it.
 
-The social auth pipeline is shared by every social backend, so each step here
-does nothing unless the login is coming through the generic OIDC backend.
+Both the generic OIDC backend and the Microsoft Entra ID one hand over the
+claims of a validated ID token, so the steps here serve both, each reading its
+own SOCIAL_AUTH_OIDC_ or SOCIAL_AUTH_ENTRA_ID_ settings.  The social auth
+pipeline is shared by every social backend, so each step does nothing for a
+login through any other.
 """
 
 import logging
@@ -15,25 +18,50 @@ from django.conf import settings
 
 from social_core.backends.open_id_connect import OpenIdConnectAuth
 from social_core.exceptions import AuthForbidden
+from social_core.utils import setting_name
 from social_django.utils import load_strategy
 
 from ascender.main.constants import ASCENDER_URL_BASE_PLACEHOLDER
+from ascender.sso.entra import ENTRA_ID_BACKEND_NAME, EntraIDOAuth2
 from ascender.sso.triggers import UNUSABLE_RULE, evaluate_trigger_rule, resolve_membership
 
 logger = logging.getLogger('ascender.sso.oidc')
 
 OIDC_BACKEND_NAME = 'oidc'
 
+#: The backends whose logins the steps here act on, by name.
+OIDC_BACKENDS = {
+    OIDC_BACKEND_NAME: OpenIdConnectAuth,
+    ENTRA_ID_BACKEND_NAME: EntraIDOAuth2,
+}
+
 #: What the token endpoint hands back next to the userinfo claims.  None of it
 #: is a fact about the user, the tokens are credentials, and the rest would
 #: otherwise shadow ID token claims of the same name.
 TOKEN_RESPONSE_KEYS = frozenset(
-    ('access_token', 'id_token', 'refresh_token', 'token_type', 'expires_in', 'refresh_expires_in', 'scope', 'session_state', 'not-before-policy')
+    (
+        'access_token',
+        'id_token',
+        'refresh_token',
+        'token_type',
+        'expires_in',
+        'ext_expires_in',
+        'refresh_expires_in',
+        'scope',
+        'session_state',
+        'not-before-policy',
+    )
 )
 
 
 def is_oidc(backend):
-    return getattr(backend, 'name', None) == OIDC_BACKEND_NAME
+    """True for a login through generic OIDC or Entra ID."""
+    return getattr(backend, 'name', None) in OIDC_BACKENDS
+
+
+def _setting_name(backend, name):
+    # For log lines, which should name the setting an admin has to go and fix.
+    return setting_name(backend.name, name)
 
 
 def oidc_claims(backend, response):
@@ -42,7 +70,8 @@ def oidc_claims(backend, response):
 
     The ID token is validated by the backend before the pipeline runs and kept on
     it.  The response is the token endpoint's reply with the userinfo reply laid
-    over it.  Providers disagree about which of the two carries groups, so both
+    over it, or for Entra ID, which has no userinfo worth asking, the ID token's
+    claims.  Providers disagree about which of the two carries groups, so both
     are read, the userinfo answer winning where they overlap.
     """
     claims = {}
@@ -129,6 +158,7 @@ class OIDCIdentity:
     """The groups and attributes an OIDC login offers to trigger rules."""
 
     def __init__(self, backend, response):
+        self.label = 'Entra ID' if backend.name == ENTRA_ID_BACKEND_NAME else 'OIDC'
         self.claims = oidc_claims(backend, response)
         self.groups_claim = backend.setting('GROUPS_CLAIM', 'groups')
         self._attributes = None
@@ -150,7 +180,7 @@ class OIDCIdentity:
 
 def check_login_allowed(backend, details, response=None, *args, **kwargs):
     """
-    Refuse an OIDC login that SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS does not match.
+    Refuse an OIDC login that the backend's LOGIN_TRIGGERS rule does not match.
 
     This runs before the user is looked up or created, so someone the rule turns
     away does not get an account out of trying.  A rule that cannot be evaluated
@@ -164,12 +194,13 @@ def check_login_allowed(backend, details, response=None, *args, **kwargs):
         return
 
     username = details.get('username') or details.get('email') or kwargs.get('uid')
-    state = OIDCIdentity(backend, response).evaluate(triggers, 'OIDC login')
+    identity = OIDCIdentity(backend, response)
+    state = identity.evaluate(triggers, '{} login'.format(identity.label))
     if state is UNUSABLE_RULE:
-        logger.error("Refusing the OIDC login of %s because SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS cannot be evaluated", username)
+        logger.error("Refusing the %s login of %s because %s cannot be evaluated", identity.label, username, _setting_name(backend, 'LOGIN_TRIGGERS'))
         raise AuthForbidden(backend)
     if state is not True:
-        logger.info("Refusing the OIDC login of %s, who does not match SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS", username)
+        logger.info("Refusing the %s login of %s, who does not match %s", identity.label, username, _setting_name(backend, 'LOGIN_TRIGGERS'))
         raise AuthForbidden(backend)
 
 
@@ -177,7 +208,7 @@ def strip_username_domain(backend, details, *args, **kwargs):
     """
     Keep only the part before the @ of a new OIDC user's username.
 
-    With SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN on, fernando.roca@example.com
+    With the backend's USERNAME_STRIP_DOMAIN on, fernando.roca@example.com
     becomes fernando.roca.  That is for providers such as Entra ID, whose
     tokens carry the user principal name or the email but not the short name
     people use.  It runs before the username is picked, so it only shapes
@@ -197,7 +228,7 @@ def strip_username_domain(backend, details, *args, **kwargs):
     return {'details': dict(details, username=local_part)}
 
 
-#: The user flags SOCIAL_AUTH_OIDC_USER_FLAGS manages, by the name its keys use.
+#: The user flags the USER_FLAGS setting manages, by the name its keys use.
 USER_FLAGS = (
     ('superuser', 'is_superuser'),
     ('system_auditor', 'is_system_auditor'),
@@ -206,7 +237,7 @@ USER_FLAGS = (
 
 def update_user_flags(backend, details, user=None, response=None, *args, **kwargs):
     """
-    Grant or revoke superuser and system auditor from SOCIAL_AUTH_OIDC_USER_FLAGS.
+    Grant or revoke superuser and system auditor from the backend's USER_FLAGS.
 
     A flag without a rule is left alone, so turning this on for auditors does
     not touch who is a superuser.  With a rule, a user who matches gets the flag,
@@ -225,10 +256,10 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
         if not triggers:
             continue
         remove = bool(user_flags.get('remove_{}s'.format(flag), True))
-        state = identity.resolve(triggers, 'OIDC user flag {}'.format(flag), lambda: None, remove)
+        state = identity.resolve(triggers, '{} user flag {}'.format(identity.label, flag), lambda: None, remove)
         if state is None or state == bool(getattr(user, attribute)):
             continue
-        logger.info("%s %s %s from the OIDC user flags", 'Granting' if state else 'Revoking', flag, user.username)
+        logger.info("%s %s %s from the %s user flags", 'Granting' if state else 'Revoking', flag, user.username, identity.label)
         setattr(user, attribute, state)
         # is_system_auditor is a role, which its setter writes on its own.
         save = save or attribute == 'is_superuser'
@@ -236,8 +267,10 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
         user.save(update_fields=['is_superuser'])
 
 
-def _post_logout_redirect_url(request):
-    url = getattr(settings, 'SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL', '')
+def _post_logout_redirect_url(backend, request):
+    # Read straight from the settings: social auth's strategy takes any setting
+    # whose name ends in _URL for a view to reverse, and an empty one breaks it.
+    url = getattr(settings, _setting_name(backend, 'POST_LOGOUT_REDIRECT_URL'), '')
     if url:
         return url
     base = getattr(settings, 'ASCENDER_URL_BASE', '')
@@ -248,30 +281,40 @@ def _post_logout_redirect_url(request):
     return base.rstrip('/') + '/'
 
 
+def _provider_configuration(backend):
+    # The two backends keep their copy of the discovery document under
+    # different names.
+    if isinstance(backend, EntraIDOAuth2):
+        return backend.openid_configuration()
+    return backend.oidc_config()
+
+
 def idp_logout_url(request):
     """
     Where to send the browser to end the user's session at the OIDC provider too.
 
-    None unless SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP is on and this session was
-    opened through OIDC.  Must be called before the local session is flushed,
-    since both what backend logged the user in and who the user is live there.
+    None unless this session was opened through generic OIDC or Entra ID and
+    that backend's LOGOUT_FROM_IDP is on.  Must be called before the local
+    session is flushed, since both what backend logged the user in and who the
+    user is live there.
     """
-    if not getattr(settings, 'SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP', False):
-        return None
     user = getattr(request, 'user', None)
     if not user or not user.is_authenticated:
         return None
-    if request.session.get('social_auth_last_login_backend') != OIDC_BACKEND_NAME:
+    backend_name = request.session.get('social_auth_last_login_backend')
+    if backend_name not in OIDC_BACKENDS:
+        return None
+    backend = OIDC_BACKENDS[backend_name](load_strategy(request))
+    if not backend.setting('LOGOUT_FROM_IDP', False):
         return None
 
-    backend = OpenIdConnectAuth(load_strategy(request))
     try:
-        end_session_endpoint = backend.oidc_config().get('end_session_endpoint')
+        end_session_endpoint = _provider_configuration(backend).get('end_session_endpoint')
     except Exception:
-        logger.exception("Could not read the OIDC provider configuration, %s is only logged out of Ascender", user.username)
+        logger.exception("Could not read the %s provider configuration, %s is only logged out of Ascender", backend_name, user.username)
         return None
     if not end_session_endpoint:
-        logger.warning("The OIDC provider does not advertise an end_session_endpoint, %s is only logged out of Ascender", user.username)
+        logger.warning("The %s provider does not advertise an end_session_endpoint, %s is only logged out of Ascender", backend_name, user.username)
         return None
     # The browser is sent wherever this points, so it has to be a web address.
     # A discovery document is the provider's to get wrong, and whatever it says
@@ -281,14 +324,14 @@ def idp_logout_url(request):
     except ValueError:
         endpoint = None
     if endpoint is None or endpoint.scheme not in ('https', 'http') or not endpoint.netloc:
-        logger.warning("The OIDC provider's end_session_endpoint is not an http(s) URL, %s is only logged out of Ascender", user.username)
+        logger.warning("The %s provider's end_session_endpoint is not an http(s) URL, %s is only logged out of Ascender", backend_name, user.username)
         return None
 
     params = {
         'client_id': backend.get_key_and_secret()[0],
-        'post_logout_redirect_uri': _post_logout_redirect_url(request),
+        'post_logout_redirect_uri': _post_logout_redirect_url(backend, request),
     }
-    social = user.social_auth.filter(provider=OIDC_BACKEND_NAME).order_by('-modified').first()
+    social = user.social_auth.filter(provider=backend_name).order_by('-modified').first()
     id_token = social.extra_data.get('id_token') if social else None
     if id_token:
         params['id_token_hint'] = id_token

@@ -52,7 +52,7 @@ msgstr "워크플로우 승인을 찾을 수 없습니다."
 msgid "Browse…"
 msgstr "검색 중..."
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -235,7 +235,7 @@ msgstr "실행 중인 상태 점검"
 msgid "Failed to copy inventory."
 msgstr "인벤토리를 복사하지 못했습니다."
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -674,7 +674,7 @@ msgstr "확장"
 msgid "Promote Child Groups and Hosts"
 msgstr "하위 그룹 및 호스트 승격"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -774,7 +774,7 @@ msgstr "1에서 31 사이의 날짜 번호를 선택하십시오."
 msgid "No"
 msgstr "제공되지 않음"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "기타 시스템"
 
@@ -874,7 +874,7 @@ msgstr "토큰으로 돌아가기"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhook: 이 템플릿에 대한 webhook을 활성화합니다."
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1212,7 +1212,7 @@ msgstr "실패 설명:"
 msgid "February"
 msgstr "2월"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "모든 설정 보기"
 
@@ -1489,7 +1489,7 @@ msgstr "관리 작업 시작"
 msgid "Add existing group"
 msgstr "기존 그룹 추가"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2033,7 +2033,7 @@ msgstr "키"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2207,7 +2207,7 @@ msgstr "필드는 지정된 정규식과 일치합니다."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2517,7 +2517,7 @@ msgstr "{0} (삭제됨)"
 msgid "The inventory that this host belongs to."
 msgstr "이 호스트가 속할 인벤토리입니다."
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "로그인"
 
@@ -3022,7 +3022,7 @@ msgstr "{0, plural, one {유효한 전화번호를 입력하십시오.} other {�
 msgid "Facts"
 msgstr "팩트"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "또는"
 
@@ -3057,8 +3057,8 @@ msgid "Workflow job details"
 msgstr "워크플로우 작업 세부 정보"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "Azure AD 설정"
+#~ msgid "Azure AD settings"
+#~ msgstr "Azure AD 설정"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3260,11 +3260,11 @@ msgstr "이 인벤토리 소스는 현재 이를 사용하는 다른 리소스�
 msgid "Deny"
 msgstr "거부"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "일반 OIDC"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3532,7 +3532,7 @@ msgid "Select Hosts"
 msgstr "호스트 선택"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub 팀"
 
@@ -3642,7 +3642,7 @@ msgstr "8월"
 msgid "View smart inventory host details"
 msgstr "스마트 인벤토리 호스트 세부 정보 보기"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "Google로 로그인"
 
@@ -3744,8 +3744,8 @@ msgstr "모두 동기화"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4164,8 +4164,8 @@ msgstr "인증 정보 삭제"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4538,7 +4538,7 @@ msgstr "프로젝트 버전 새로 고침"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "선택적으로 상태 업데이트를 webhook 서비스로 다시 보내는 데 사용할 인증 정보를 선택합니다."
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4792,7 +4792,7 @@ msgstr "호스트를 전환하지 못했습니다."
 msgid "denied"
 msgstr "거부됨"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 조직으로 로그인"
 
@@ -5109,6 +5109,10 @@ msgstr "시간 초과 시"
 msgid "Create New Team"
 msgstr "새 팀 만들기"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "Microsoft Entra ID로 로그인"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "설명서 및"
@@ -5127,7 +5131,7 @@ msgstr "텍스트 영역"
 msgid "View User Interface settings"
 msgstr "사용자 인터페이스 설정 보기"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub 팀으로 로그인"
 
@@ -6043,6 +6047,10 @@ msgstr "경과됨"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3 (디버그)"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "Microsoft Entra ID (Azure AD) 설정"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7109,7 +7117,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "참고: 이 필드는 원격 이름이 “origin”이라고 가정합니다."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub 기본값"
 
@@ -7174,6 +7182,11 @@ msgstr "워크플로우 작업 템플릿"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "시작 시 레이블을 입력하라는 메시지를 표시합니다."
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant (레거시)"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7490,7 +7503,7 @@ msgstr "로그 아웃"
 msgid "sec"
 msgstr "초"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "{label}(으)로 로그인"
 
@@ -7717,11 +7730,11 @@ msgid "Edit Team"
 msgstr "팀 편집"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "사용자 인터페이스"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise로 로그인"
 
@@ -7769,7 +7782,7 @@ msgstr "만료되지 않음"
 msgid "View job {0}"
 msgstr "작업 {0} 보기 "
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP}으로 로그인"
 
@@ -7882,7 +7895,7 @@ msgstr "처음에 대소문자를 구분하지 않는 버전입니다."
 msgid "Unsaved changes modal"
 msgstr "저장되지 않은 변경 사항 모달"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
@@ -7916,7 +7929,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 설정"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 조직으로 로그인"
 
@@ -8010,8 +8023,8 @@ msgstr "호스트 확인"
 #~ msgstr "남은 일수"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "Azure AD 설정 보기"
+#~ msgid "View Azure AD settings"
+#~ msgstr "Azure AD 설정 보기"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8032,7 +8045,7 @@ msgstr "모든 필터 지우기"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사용 중입니다. 정말 삭제하시겠습니까?} other {이 인스턴스의 프로비저닝을 해제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8542,7 +8555,7 @@ msgstr "참고: 선택한 순서에 따라 실행 우선 순위가 설정됩니�
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "실행 시 암호가 필요한 인증 정보는 허용되지 않습니다. 계속하려면 다음 인증 정보를 제거하거나 동일한 유형의 인증 정보로 교체하십시오: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "OIDC로 로그인"
 
@@ -8576,7 +8589,7 @@ msgid "Remote Archive"
 msgstr "원격 아카이브"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "문제 해결"
 
@@ -8631,7 +8644,7 @@ msgid "Destination Channels or Users"
 msgstr "대상 채널 또는 사용자"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8651,7 +8664,7 @@ msgstr "이 작업이 실행할 playbook이 포함된 프로젝트입니다."
 msgid "Select Credential Type"
 msgstr "인증 정보 유형 선택"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8718,7 +8731,7 @@ msgstr "인벤토리 편집"
 msgid "Failed to user token."
 msgstr "사용자 토큰에 실패했습니다."
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "SAML으로 로그인"
 
@@ -8986,7 +8999,7 @@ msgstr "인벤토리 소스 동기화 취소"
 msgid "Failed to delete one or more applications."
 msgstr "하나 이상의 애플리케이션을 삭제하지 못했습니다."
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "기타 인증"
 
@@ -9492,7 +9505,7 @@ msgstr "포크"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "이 제한은 이 워크플로우({0}) 내에서 제한을 입력받는 모든 워크플로우 노드에 각 노드에 설정된 제한 대신 적용됩니다."
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP 기본값"
 
@@ -9560,7 +9573,7 @@ msgid "Play"
 msgstr "플레이"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise 팀"
 
@@ -9724,7 +9737,7 @@ msgstr "외부 보안 관리 시스템에서 필드 채우기"
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10017,7 +10030,7 @@ msgstr "툴 전환"
 msgid "Organization"
 msgstr "조직"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "세션이 만료되었습니다. 세션이 만료되기 전의 위치에서 계속하려면 로그인하십시오."
 
@@ -10073,8 +10086,8 @@ msgstr "Azure AD Tenant로 로그인"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD 기본값"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD 기본값"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10135,7 +10148,7 @@ msgstr "검색 취소"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10144,13 +10157,13 @@ msgstr "검색 취소"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10158,6 +10171,7 @@ msgstr "검색 취소"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10328,7 +10342,7 @@ msgstr "이 작업은 다음을 부드럽게 삭제합니다."
 msgid "Listener Addresses"
 msgstr "청취자 주소"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10607,7 +10621,7 @@ msgid "An error occurred"
 msgstr "오류가 발생했습니다."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub 조직"
 
@@ -10943,7 +10957,7 @@ msgstr "조직을 삭제하지 못했습니다."
 #~ msgid "Hosts available"
 #~ msgstr "사용 가능한 호스트"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "로깅"
 
@@ -11243,7 +11257,7 @@ msgstr "하나 이상의 인벤토리 소스를 삭제하지 못했습니다."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "지정된 경우 이 필드는 워크플로우를 볼 때 리소스 이름 대신 노드에 표시됩니다."
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "GitHub로 로그인"
 
@@ -11291,7 +11305,7 @@ msgid "All job types"
 msgstr "모든 작업 유형"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise 조직"
 
@@ -11350,6 +11364,10 @@ msgstr "인벤토리의 호스트를 대상으로 지정하는 데 사용되는 
 msgid "Timeout"
 msgstr "시간 초과"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "Microsoft Entra ID 설정 보기"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "토폴로지 보기가 채워질 때까지 기다리십시오..."
@@ -11378,7 +11396,7 @@ msgstr "{numJobsToCancel, plural, one {선택한 작업 취소} other {선택한
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11387,12 +11405,12 @@ msgstr "{numJobsToCancel, plural, one {선택한 작업 취소} other {선택한
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11401,6 +11419,7 @@ msgstr "{numJobsToCancel, plural, one {선택한 작업 취소} other {선택한
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11852,6 +11871,11 @@ msgstr "Webhook 서비스"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "프로비저닝 콜백 URL 생성을 활성화합니다. 이 URL을 사용하여 호스트는 {brandName}에 연결하고 이 작업 템플릿을 사용하여 구성 업데이트를 요청할 수 있습니다."
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD 기본값 (레거시)"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "취소된 노드, 성공으로 강제"
@@ -12257,6 +12281,11 @@ msgstr "템플릿 복사"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "알림 승인 전환"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"
