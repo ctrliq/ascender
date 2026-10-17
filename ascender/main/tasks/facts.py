@@ -83,7 +83,7 @@ def _read_facts(filepath, schema_qualified):
             if not _is_payload_wrapper(data):
                 return None
             data = _strip_ansible_types(json.loads(data[PAYLOAD_KEY]))
-    except (ValueError, OSError):
+    except (ValueError, TypeError, OSError):  # TypeError: malformed type metadata
         return None
     return data if isinstance(data, dict) else None
 
@@ -102,7 +102,12 @@ def _write_facts(filepath, data):
 
 
 @log_excess_runtime(logger, debug_cutoff=0.01, msg='Inventory {inventory_id} host facts prepared for {written_ct} hosts, took {delta:.3f} s', add_log_data=True)
-def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_data=None):
+def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, host_names=None, log_data=None):
+    """Write the cached facts of hosts for ansible to read.
+
+    host_names are the names of all hosts that will share the cache directory. Passing
+    them lets hosts be any one-pass iterable, so their facts are never all held at once.
+    """
     log_data = log_data or {}
     log_data['inventory_id'] = inventory_id
     log_data['written_ct'] = 0
@@ -116,14 +121,15 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, log_
     if timeout is None:
         timeout = settings.ANSIBLE_FACT_CACHE_TIMEOUT
 
-    hosts = list(hosts)
+    if host_names is None:
+        hosts = list(hosts)
+        host_names = {host.name for host in hosts}
 
     # A file named "s1_<name>" is the older ansible-core cache file of host "s1_<name>"
     # and the newer ansible-core cache file of host "<name>". It is written for host
     # "s1_<name>" so older ansible-core behaves as it always has; host "<name>" gets no
     # cached facts from newer ansible-core, which ignores a file without a payload.
-    all_names = {host.name for host in hosts}
-    shared_files = _shared_file_names(all_names)
+    shared_files = _shared_file_names(set(host_names))
     if shared_files:
         logger.warning(
             f'Inventory {inventory_id}: host names {sorted(shared_files)} collide with the ansible-core 2.19+ cache files of other hosts, '

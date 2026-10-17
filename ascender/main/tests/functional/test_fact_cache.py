@@ -15,6 +15,7 @@ import time
 from datetime import timedelta
 
 import pytest
+from unittest import mock
 
 from django.db import connection, transaction
 from django.test.utils import CaptureQueriesContext
@@ -409,6 +410,38 @@ class TestSchemaQualifiedFactCache:
         host.refresh_from_db()
         assert host.ansible_facts == {'__payload__': 'run-7'}
 
+    def test_malformed_type_metadata_falls_back_to_plain(self, inv, artifacts_dir):
+        """A payload ansible would never write must not stop the other hosts' facts being saved."""
+        web = self._host(inv, 'web1', {'old': True})
+        other = self._host(inv, 'web2', {'old': True})
+        start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
+
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        malformed = {'x': {'value': 'v', 'tags': 1, '__ansible_type': '_AnsibleTaggedStr'}}
+        _write_as_ansible(os.path.join(fact_cache_dir, 's1_web1'), _schema_payload(malformed))
+        _write_as_ansible(os.path.join(fact_cache_dir, 'web1'), {'new': True})
+        _write_as_ansible(os.path.join(fact_cache_dir, 's1_web2'), _schema_payload({'new': 2}))
+        finish_fact_cache(inv.hosts, artifacts_dir=artifacts_dir, inventory_id=inv.id)
+
+        web.refresh_from_db()
+        other.refresh_from_db()
+        assert web.ansible_facts == {'new': True}
+        assert other.ansible_facts == {'new': 2}
+
+    def test_start_streams_hosts_given_their_names(self, inv, artifacts_dir):
+        """With host_names, hosts are read once, so a generator over several inventories works."""
+        old = now() - timedelta(minutes=1)
+        hosts = [
+            Host(name='web1', ansible_facts={'web': True}, ansible_facts_modified=old),
+            Host(name='s1_web1', ansible_facts={'p': True}, ansible_facts_modified=old),
+        ]
+        start_fact_cache((h for h in hosts), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id, host_names={'web1', 's1_web1'})
+
+        fact_cache_dir = os.path.join(artifacts_dir, 'fact_cache')
+        assert sorted(os.listdir(fact_cache_dir)) == ['s1_s1_web1', 's1_web1', 'web1']
+        with open(os.path.join(fact_cache_dir, 's1_web1')) as f:
+            assert json.load(f) == {'p': True}
+
     def test_corrupt_schema_file_falls_back_to_plain(self, inv, artifacts_dir):
         host = self._host(inv, 'web1', {'old': True})
         start_fact_cache(inv.hosts.all(), artifacts_dir=artifacts_dir, timeout=0, inventory_id=inv.id)
@@ -633,7 +666,13 @@ def test_constructed_inventory_inputs_share_one_collision_check(organization, tm
         os.makedirs(os.path.join(private_data_dir, subdir))
     task = RunInventoryUpdate()
     task.instance = inventory_update
-    task.build_args(inventory_update, private_data_dir, {})
+    with mock.patch('ascender.main.tasks.jobs.start_fact_cache', wraps=start_fact_cache) as start:
+        task.build_args(inventory_update, private_data_dir, {})
+
+    # Hosts are streamed rather than all inputs' facts being held at once
+    (hosts_arg,), kwargs = start.call_args
+    assert not isinstance(hosts_arg, (list, tuple))
+    assert kwargs['host_names'] == {'s1_web1', 'web1'}
 
     fact_cache_dir = os.path.join(private_data_dir, 'artifacts', str(inventory_update.id), 'fact_cache')
     assert sorted(os.listdir(fact_cache_dir)) == ['s1_s1_web1', 's1_web1', 'web1']
