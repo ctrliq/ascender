@@ -23,6 +23,14 @@ export interface AssetVariables {
   [key: string]: unknown;
 }
 
+/** The part of the OpenID discovery document the credential form shows. */
+export interface WorkloadIdentityConfiguration {
+  issuer: string;
+  jwks_uri: string;
+  claims_supported?: string[];
+  [key: string]: unknown;
+}
+
 class Root extends Base<ApiRoot> {
   redirectURL: string;
 
@@ -35,6 +43,16 @@ class Root extends Base<ApiRoot> {
   // The root answers with one object rather than a page of them.
   read<T = ApiRoot>() {
     return this.http.get<T>(this.baseUrl);
+  }
+
+  /**
+   * The discovery document an external system reads to trust the workload
+   * identity tokens jobs are issued. Answers 404 while the feature is off.
+   */
+  readWorkloadIdentityConfiguration() {
+    return this.http.get<WorkloadIdentityConfiguration>(
+      `${this.baseUrl}o/.well-known/openid-configuration`
+    );
   }
 
   async login(

@@ -48,6 +48,8 @@ function MiscSystemEdit() {
         'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
         'REMOTE_HOST_HEADERS',
         'ASCENDER_URL_BASE',
+        'WORKLOAD_IDENTITY_ENABLED',
+        'WORKLOAD_IDENTITY_DEFAULT_TTL',
         'DEFAULT_EXECUTION_ENVIRONMENT',
         'PROXY_IP_ALLOWED_LIST',
         'CSRF_TRUSTED_ORIGINS'
@@ -186,6 +188,16 @@ function MiscSystemEdit() {
                   config={system.ASCENDER_URL_BASE}
                   isRequired
                   type="url"
+                />
+                <BooleanField
+                  name="WORKLOAD_IDENTITY_ENABLED"
+                  config={system.WORKLOAD_IDENTITY_ENABLED}
+                />
+                <InputField
+                  name="WORKLOAD_IDENTITY_DEFAULT_TTL"
+                  config={system.WORKLOAD_IDENTITY_DEFAULT_TTL}
+                  type="number"
+                  isRequired
                 />
                 <BooleanField
                   name="ORG_ADMINS_CAN_SEE_ALL_USERS"

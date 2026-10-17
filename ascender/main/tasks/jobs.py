@@ -1,5 +1,6 @@
 # Python
 from collections import OrderedDict
+import contextlib
 import errno
 import functools
 import hashlib
@@ -85,6 +86,7 @@ from ascender.main.utils.common import (
 from ascender.main.utils.handlers import SpecialInventoryHandler
 from ascender.main.tasks.system import update_smart_memberships_for_inventory, update_inventory_computed_fields
 from ascender.main.utils.update_model import update_model
+from ascender.main.utils import workload_identity
 from rest_framework.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
 
@@ -536,8 +538,12 @@ class BaseTask(object):
 
         self.safe_cred_env = {}
         private_data_dir = None
+        # Any credential resolved while the job is prepared can be handed a
+        # workload identity token for it, lasting as long as its timeout
+        workload_identity_scope = contextlib.ExitStack()
 
         try:
+            workload_identity_scope.enter_context(workload_identity.workload_identity_for(self.instance, self.get_instance_timeout(self.instance) or None))
             self.instance.send_notification_templates("running")
             private_data_dir = self.build_private_data_dir(self.instance)
             self.pre_run_hook(self.instance, private_data_dir)
@@ -670,11 +676,14 @@ class BaseTask(object):
                     status = 'failed'
         except ReceptorNodeNotFound as exc:
             self.runner_callback.delay_update(job_explanation=str(exc))
+        except workload_identity.WorkloadIdentityError as exc:
+            self.runner_callback.delay_update(job_explanation=f'Could not issue a workload identity token for this job: {exc}')
         except Exception:
             # this could catch programming or file system errors
             self.runner_callback.delay_update(result_traceback=traceback.format_exc())
             logger.exception('%s Exception occurred while running task', self.instance.log_format)
         finally:
+            workload_identity_scope.close()
             logger.debug('%s finished running, producing %s events.', self.instance.log_format, self.runner_callback.event_ct)
 
         try:

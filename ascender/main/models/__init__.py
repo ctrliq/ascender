@@ -91,6 +91,7 @@ from ascender.main.models.workflow import (  # noqa
 )
 from ascender.api.versioning import reverse
 from ascender.main.models.oauth import OAuth2AccessToken, OAuth2Application, OAuth2RefreshToken, OAuth2IDToken  # noqa
+from ascender.main.models.workload_identity import WorkloadIdentityKey  # noqa
 from oauth2_provider.models import Grant  # noqa -- needed django-oauth-toolkit model migrations
 
 # Add custom methods to User model for permissions checks.

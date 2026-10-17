@@ -29,13 +29,15 @@ awx-manage = "ascender:manage"
 
 # The group a credential plugin registers against is a published name: anything
 # third party declares itself under `awx.credential_plugins` and cannot be
-# rewritten from here. Both groups carry the same ten plugins, and the loader
+# rewritten from here. Both groups carry the same twelve plugins, and the loader
 # reads both, so a plugin written against either is found. They are asserted
 # identical by a test, which is what keeps the two lists from drifting.
 [project.entry-points."ascender.credential_plugins"]
 conjur = "ascender.main.credential_plugins.conjur:conjur_plugin"
 hashivault_kv = "ascender.main.credential_plugins.hashivault:hashivault_kv_plugin"
 hashivault_ssh = "ascender.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+hashivault_kv_oidc = "ascender.main.credential_plugins.hashivault:hashivault_kv_oidc_plugin"
+hashivault_ssh_oidc = "ascender.main.credential_plugins.hashivault:hashivault_ssh_oidc_plugin"
 azure_kv = "ascender.main.credential_plugins.azure_kv:azure_keyvault_plugin"
 aim = "ascender.main.credential_plugins.aim:aim_plugin"
 centrify_vault_kv = "ascender.main.credential_plugins.centrify_vault:centrify_plugin"
@@ -48,6 +50,8 @@ github_app_lookup = "ascender.main.credential_plugins.github_app:github_app_plug
 conjur = "ascender.main.credential_plugins.conjur:conjur_plugin"
 hashivault_kv = "ascender.main.credential_plugins.hashivault:hashivault_kv_plugin"
 hashivault_ssh = "ascender.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+hashivault_kv_oidc = "ascender.main.credential_plugins.hashivault:hashivault_kv_oidc_plugin"
+hashivault_ssh_oidc = "ascender.main.credential_plugins.hashivault:hashivault_ssh_oidc_plugin"
 azure_kv = "ascender.main.credential_plugins.azure_kv:azure_keyvault_plugin"
 aim = "ascender.main.credential_plugins.aim:aim_plugin"
 centrify_vault_kv = "ascender.main.credential_plugins.centrify_vault:centrify_plugin"

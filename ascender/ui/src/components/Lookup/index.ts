@@ -10,3 +10,4 @@ export { default as OrganizationLookup } from './OrganizationLookup';
 export { default as ExecutionEnvironmentLookup } from './ExecutionEnvironmentLookup';
 export { default as PeersLookup } from './PeersLookup';
 export { default as MeshNodeLookup } from './MeshNodeLookup';
+export { default as JobTemplateLookup } from './JobTemplateLookup';

@@ -35,7 +35,7 @@ from ascender.main.models import (
 from ascender.main.models.credential import HIDDEN_PASSWORD, ManagedCredentialType
 
 from ascender.main.tasks import jobs, system, receptor
-from ascender.main.utils import encrypt_field, encrypt_value
+from ascender.main.utils import encrypt_field, encrypt_value, workload_identity
 from ascender.main.utils.safe_yaml import SafeLoader
 from ascender.main.utils.execution_environments import CONTAINER_ROOT
 
@@ -523,6 +523,36 @@ class TestGenericRun:
         assert 'OSError' in update_model_call['result_traceback']
         assert update_model_call['status'] == 'error'
         assert update_model_call['emitted_events'] == 0
+
+    def test_workload_identity_scope(self, patch_Job, execution_environment, mock_me, mock_create_partition, mocker):
+        job = Job(status='running', inventory=Inventory(), project=Project(local_path='/projects/_23_foo'), timeout=900)
+        job.websocket_emit_status = mock.Mock()
+        job.execution_environment = execution_environment
+
+        task = jobs.RunJob()
+        task.instance = job
+        task.update_model = mock.Mock(return_value=job)
+        mocker.patch.object(task.model.objects, 'get', return_value=job)
+        seen = []
+
+        def build_private_data_files(*args, **kwargs):
+            # credentials are resolved from here on, inside the job's scope
+            seen.append(workload_identity._current_workload.get())
+            raise workload_identity.WorkloadIdentityError('Workload identity is not enabled.')
+
+        task.build_project_dir = mock.Mock()
+        task.build_private_data_files = build_private_data_files
+
+        with mock.patch('ascender.main.tasks.jobs.shutil.copytree'):
+            with pytest.raises(Exception):
+                task.run(1)
+
+        assert seen[0].unified_job is job
+        assert seen[0].ttl_seconds == 900
+        assert workload_identity._current_workload.get() is None
+        update_model_call = task.update_model.call_args[1]
+        assert update_model_call['status'] == 'error'
+        assert update_model_call['job_explanation'] == 'Could not issue a workload identity token for this job: Workload identity is not enabled.'
 
     def test_cancel_flag(self, job, update_model_wrapper, execution_environment, mock_me, mock_create_partition, mocker):
         job.status = 'running'

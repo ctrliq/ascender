@@ -1,4 +1,5 @@
 import copy
+import logging
 import os
 import pathlib
 import time
@@ -8,6 +9,8 @@ from .plugin import CredentialPlugin, CertFiles, raise_for_status
 
 import requests
 from django.utils.translation import gettext_lazy as _
+
+logger = logging.getLogger('ascender.main.credential_plugins.hashivault')
 
 base_inputs = {
     'fields': [
@@ -196,6 +199,86 @@ hashi_ssh_inputs['metadata'] = (
 hashi_ssh_inputs['required'].extend(['public_key', 'role'])
 
 
+# The OIDC variants log in as the job, with a token the platform signs for it,
+# so they keep none of the stored secrets the types above take. They are new
+# types rather than another way into the old ones so that those keep working
+# exactly as they did.
+def _field(inputs, field_id):
+    return copy.deepcopy(next(field for field in inputs['fields'] if field['id'] == field_id))
+
+
+def _metadata(inputs, field_id):
+    return copy.deepcopy(next(field for field in inputs['metadata'] if field['id'] == field_id))
+
+
+oidc_fields = [
+    {
+        'id': 'default_auth_path',
+        'label': _('Path to Auth'),
+        'type': 'string',
+        'multiline': False,
+        'default': 'jwt',
+        'help_text': _(
+            "The path the JWT authentication method is mounted at, if one isn't provided in the metadata when linking to an input field. Defaults to 'jwt'"
+        ),
+    },
+    {
+        'id': 'jwt_role',
+        'label': _('JWT Role'),
+        'type': 'string',
+        'multiline': False,
+        'help_text': _(
+            'The name of the role configured in the JWT authentication method of Vault. '
+            'It decides which jobs may log in, by the claims of their token, and with which policies.'
+        ),
+    },
+    {
+        'id': 'workload_identity_token',
+        'label': _('Workload Identity Token'),
+        'type': 'string',
+        'secret': True,
+        'internal': True,
+        'help_text': _('Signed by the platform for each job that uses this credential.'),
+    },
+]
+
+oidc_auth_path_metadata = {
+    'id': 'auth_path',
+    'label': _('Path to Auth'),
+    'type': 'string',
+    'multiline': False,
+    'help_text': _('The path where the JWT authentication method is mounted e.g, jwt'),
+}
+
+hashi_kv_oidc_inputs = {
+    'fields': [_field(hashi_kv_inputs, 'url'), _field(hashi_kv_inputs, 'api_version'), _field(hashi_kv_inputs, 'cacert')]
+    + copy.deepcopy(oidc_fields[:2])
+    + [_field(hashi_kv_inputs, 'namespace'), copy.deepcopy(oidc_fields[2])],
+    'metadata': [
+        _metadata(hashi_kv_inputs, 'secret_backend'),
+        _metadata(hashi_kv_inputs, 'secret_path'),
+        copy.deepcopy(oidc_auth_path_metadata),
+        _metadata(hashi_kv_inputs, 'secret_key'),
+        _metadata(hashi_kv_inputs, 'secret_version'),
+    ],
+    'required': ['url', 'api_version', 'default_auth_path', 'jwt_role', 'secret_path', 'secret_key'],
+}
+
+hashi_ssh_oidc_inputs = {
+    'fields': [_field(hashi_ssh_inputs, 'url'), _field(hashi_ssh_inputs, 'cacert')]
+    + copy.deepcopy(oidc_fields[:2])
+    + [_field(hashi_ssh_inputs, 'namespace'), copy.deepcopy(oidc_fields[2])],
+    'metadata': [
+        _metadata(hashi_ssh_inputs, 'public_key'),
+        _metadata(hashi_ssh_inputs, 'secret_path'),
+        copy.deepcopy(oidc_auth_path_metadata),
+        _metadata(hashi_ssh_inputs, 'role'),
+        _metadata(hashi_ssh_inputs, 'valid_principals'),
+    ],
+    'required': ['url', 'default_auth_path', 'jwt_role', 'secret_path', 'public_key', 'role'],
+}
+
+
 def handle_auth(**kwargs):
     token = None
     if kwargs.get('token'):
@@ -230,6 +313,47 @@ def kubernetes_auth(**kwargs):
 
 def client_cert_auth(**kwargs):
     return {'name': kwargs.get('client_cert_role')}
+
+
+def workload_identity_auth(**kwargs):
+    # A JWT the platform signed for the job, which Vault's jwt auth method
+    # checks against the platform's published keys
+    return {'role': kwargs.get('jwt_role'), 'jwt': kwargs['workload_identity_token']}
+
+
+def revoke_self(token, **kwargs):
+    """
+    Give back a Vault token as soon as the lookup is done with it. Best effort:
+    a batch token cannot be revoked and runs out on its own, and a lookup that
+    already has its secret should not fail over this.
+    """
+    url = urljoin(kwargs['url'], 'v1/auth/token/revoke-self')
+    headers = {'X-Vault-Token': token}
+    if kwargs.get('namespace'):
+        headers['X-Vault-Namespace'] = kwargs['namespace']
+    try:
+        with CertFiles(kwargs.get('cacert', None)) as cert:
+            requests.post(url, headers=headers, verify=cert, timeout=30).raise_for_status()
+    except Exception as exc:
+        logger.debug('Could not revoke the Vault token of a workload identity lookup: %s', exc)
+
+
+def with_workload_identity_login(backend):
+    """
+    Log in to Vault with the job's token, run `backend` with the Vault token
+    that comes back, and revoke it afterwards.
+    """
+
+    def wrapper(**kwargs):
+        if not kwargs.get('workload_identity_token'):
+            raise Exception('No workload identity token was issued for this lookup')
+        token = method_auth(**kwargs, auth_param=workload_identity_auth(**kwargs))
+        try:
+            return backend(**dict(kwargs, token=token))
+        finally:
+            revoke_self(token, **kwargs)
+
+    return wrapper
 
 
 def method_auth(**kwargs):
@@ -381,3 +505,11 @@ def ssh_backend(**kwargs):
 hashivault_kv_plugin = CredentialPlugin('HashiCorp Vault Secret Lookup', inputs=hashi_kv_inputs, backend=kv_backend)
 
 hashivault_ssh_plugin = CredentialPlugin('HashiCorp Vault Signed SSH', inputs=hashi_ssh_inputs, backend=ssh_backend)
+
+hashivault_kv_oidc_plugin = CredentialPlugin(
+    'HashiCorp Vault Secret Lookup (OIDC)', inputs=hashi_kv_oidc_inputs, backend=with_workload_identity_login(kv_backend)
+)
+
+hashivault_ssh_oidc_plugin = CredentialPlugin(
+    'HashiCorp Vault Signed SSH (OIDC)', inputs=hashi_ssh_oidc_inputs, backend=with_workload_identity_login(ssh_backend)
+)

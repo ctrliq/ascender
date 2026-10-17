@@ -13,6 +13,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
+import jwt
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
@@ -27,7 +28,7 @@ from ascender.api.generics import (
 )
 from ascender.main import models
 from ascender.api import serializers
-from ascender.main.utils import set_environ
+from ascender.main.utils import set_environ, workload_identity
 
 
 class CredentialTypeList(ListCreateAPIView):
@@ -128,6 +129,36 @@ class CredentialObjectRolesList(SubListAPIView):
         return models.Role.objects.filter(content_type=content_type, object_id=po.pk)
 
 
+def workload_identity_test_token(request, credential_type, backend_kwargs):
+    """
+    A credential that logs in as the job is tested as a job from the template
+    the user picks, which they have to be able to launch: the token carries
+    that template's claims, so a Vault role bound to it can be tried out.
+
+    Returns the claims that were sent, for the user to compare with what the
+    role expects, or a Response with the error.
+    """
+    backend_kwargs.pop(workload_identity.TOKEN_FIELD, None)
+    if not credential_type.wants_workload_identity_token:
+        return None, None
+    job_template_id = backend_kwargs.pop('job_template_id', None)
+    if job_template_id in (None, ''):
+        return None, Response({'inputs': _('Pick the job template to test this credential as.')}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        job_template = models.JobTemplate.objects.get(pk=int(job_template_id))
+    except (TypeError, ValueError, models.JobTemplate.DoesNotExist):
+        return None, Response({'inputs': _('Job template {} does not exist.').format(job_template_id)}, status=status.HTTP_400_BAD_REQUEST)
+    if not request.user.can_access(models.JobTemplate, 'start', job_template):
+        raise PermissionDenied(_('You do not have permission to launch job template {}.').format(job_template.pk))
+    try:
+        token = workload_identity.sign_token(workload_identity.claims_for_job_template(job_template), backend_kwargs.get('url'))
+    except workload_identity.WorkloadIdentityError as exc:
+        return None, Response({'inputs': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+    backend_kwargs[workload_identity.TOKEN_FIELD] = token
+    # Only decoded to show the user what was sent; Vault checks the signature
+    return jwt.decode(token, options={'verify_signature': False}), None
+
+
 class CredentialCopy(CopyAPIView):
     model = models.Credential
     copy_return_serializer_class = serializers.CredentialSerializer
@@ -154,20 +185,24 @@ class CredentialExternalTest(SubDetailAPIView):
             if value != '$encrypted$':
                 backend_kwargs[field_name] = value
         backend_kwargs.update(request.data.get('metadata', {}))
+        sent_claims, error = workload_identity_test_token(request, obj.credential_type, backend_kwargs)
+        if error:
+            return error
+        details = {'details': {'sent_jwt_payload': sent_claims}} if sent_claims else {}
         try:
             with set_environ(**settings.ASCENDER_TASK_ENV):
                 obj.credential_type.plugin.backend(**backend_kwargs)
-                return Response({}, status=status.HTTP_202_ACCEPTED)
+                return Response(details, status=status.HTTP_202_ACCEPTED)
         except requests.exceptions.HTTPError as exc:
             message = 'HTTP {}'.format(exc.response.status_code)
-            return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             message = exc.__class__.__name__
             args = getattr(exc, 'args', [])
             for a in args:
                 if isinstance(getattr(a, 'reason', None), ConnectTimeoutError):
                     message = str(a.reason)
-            return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CredentialInputSourceDetail(RetrieveUpdateDestroyAPIView):
@@ -209,16 +244,20 @@ class CredentialTypeExternalTest(SubDetailAPIView):
         obj = self.get_object()
         backend_kwargs = request.data.get('inputs', {})
         backend_kwargs.update(request.data.get('metadata', {}))
+        sent_claims, error = workload_identity_test_token(request, obj, backend_kwargs)
+        if error:
+            return error
+        details = {'details': {'sent_jwt_payload': sent_claims}} if sent_claims else {}
         try:
             obj.plugin.backend(**backend_kwargs)
-            return Response({}, status=status.HTTP_202_ACCEPTED)
+            return Response(details, status=status.HTTP_202_ACCEPTED)
         except requests.exceptions.HTTPError as exc:
             message = 'HTTP {}'.format(exc.response.status_code)
-            return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             message = exc.__class__.__name__
             exc_args = getattr(exc, 'args', [])
             for a in exc_args:
                 if isinstance(getattr(a, 'reason', None), ConnectTimeoutError):
                     message = str(a.reason)
-            return Response({'inputs': message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)

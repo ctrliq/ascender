@@ -1,4 +1,4 @@
-import type { Credential, CredentialType } from 'types/api';
+import type { Credential, CredentialType, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -8,6 +8,7 @@ import { Modal } from '@patternfly/react-core/deprecated';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormField from 'components/FormField';
+import { JobTemplateLookup } from 'components/Lookup';
 import { FormFullWidthLayout } from 'components/FormLayout';
 import Popover from 'components/Popover';
 import { required } from 'util/validators';
@@ -15,6 +16,10 @@ import useRequest from 'hooks/useRequest';
 import { CredentialPluginTestAlert } from './CredentialPlugins';
 import type { CredentialTestError } from './CredentialPlugins/CredentialPluginTestAlert';
 import type { CredentialFormValues } from './CredentialForm';
+import {
+  isWorkloadIdentityLookup,
+  withTestJobTemplate,
+} from './workloadIdentity';
 
 export interface ExternalTestModalProps {
   credential?: Credential | null;
@@ -32,13 +37,17 @@ function ExternalTestModal({
   onClose,
 }: ExternalTestModalProps) {
   const { t } = useLingui();
+  const asJob = isWorkloadIdentityLookup(credentialType);
   const {
     result: testPluginSuccess,
     error: testPluginError,
     request: testPluginMetadata,
   } = useRequest(
     useCallback(
-      async (values: Record<string, unknown>) => {
+      async ({
+        job_template: jobTemplate,
+        ...values
+      }: Record<string, unknown>) => {
         const payload = {
           inputs: credentialType.inputs?.fields?.reduce(
             (filteredInputs: Record<string, unknown>, field) => {
@@ -47,7 +56,10 @@ function ExternalTestModal({
             },
             {}
           ),
-          metadata: values,
+          metadata: withTestJobTemplate(
+            values,
+            jobTemplate as { id: number } | null
+          ),
         };
 
         if (credential && credential.credential_type === credentialType.id) {
@@ -81,7 +93,7 @@ function ExternalTestModal({
             }
             return initialValues;
           },
-          {}
+          asJob ? { job_template: null } : {}
         )}
         onSubmit={(values) => handleTest(values)}
       >
@@ -168,6 +180,14 @@ function ExternalTestModal({
 
                   return null;
                 })}
+                {asJob && (
+                  <JobTemplateLookup
+                    required
+                    value={values.job_template as SummaryFieldRef | null}
+                    onChange={(value) => setFieldValue('job_template', value)}
+                    tooltip={t`The test logs in to Vault as a job from this template would, with a token carrying its claims.`}
+                  />
+                )}
               </FormFullWidthLayout>
             </Form>
           </Modal>
