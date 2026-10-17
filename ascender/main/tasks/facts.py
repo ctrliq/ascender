@@ -157,6 +157,9 @@ def start_fact_cache(hosts, artifacts_dir, timeout=None, inventory_id=None, host
             # whole playbook, and one it does know is silently turned into that type.
             logger.warning(f'facts for host {smart_str(host.name)} contain the reserved key {ANSIBLE_TYPE_KEY} and are not cached for ansible-core 2.19+')
         else:
+            # Vaulted values ({"__ansible_vault": ciphertext}) reach ansible-core 2.19+ as that
+            # dict, not as a decryptable value: its cache decoder can only rebuild a vaulted
+            # value from the plaintext, which is deliberately never stored.
             files.append((SCHEMA_KEY_PREFIX + host.name, {PAYLOAD_KEY: json.dumps(host.ansible_facts)}))
         for filename, data in files:
             try:
