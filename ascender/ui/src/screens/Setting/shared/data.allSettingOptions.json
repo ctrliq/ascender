@@ -38,6 +38,15 @@
               "category_slug": "system",
               "default": false
           },
+          "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+              "type": "boolean",
+              "required": true,
+              "label": "Allow AWS Secrets Manager Lookups Without Keys",
+              "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "MANAGE_ORGANIZATION_AUTH": {
               "type": "boolean",
               "required": true,
@@ -4664,6 +4673,14 @@
               "type": "boolean",
               "label": "Hide System Roles from Access Lists",
               "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
+              "category": "System",
+              "category_slug": "system",
+              "defined_in_file": false
+          },
+          "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+              "type": "boolean",
+              "label": "Allow AWS Secrets Manager Lookups Without Keys",
+              "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
               "category": "System",
               "category_slug": "system",
               "defined_in_file": false
