@@ -372,6 +372,19 @@ class TestHashivaultOIDC:
                 hashivault.with_workload_identity_login(mock.Mock(side_effect=RuntimeError('password is not present')))(**self.kwargs)
         revoke.assert_called_once()
 
+    def test_says_why_vault_turned_the_job_down(self):
+        response = mock.Mock(status_code=400)
+        response.json.return_value = {'errors': ['error validating claims: claim "sub" does not match any associated bound claim values']}
+        rejected = hashivault.requests.exceptions.HTTPError('400 Client Error', response=response)
+        with mock.patch.object(hashivault, 'method_auth', side_effect=rejected):
+            with pytest.raises(hashivault.requests.exceptions.HTTPError) as exc:
+                hashivault.with_workload_identity_login(mock.Mock())(**self.kwargs)
+        assert str(exc.value) == (
+            'Vault turned down the workload identity login with role infra: HTTP 400, '
+            'error validating claims: claim "sub" does not match any associated bound claim values'
+        )
+        assert exc.value.response is response
+
     def test_needs_a_token(self):
         with pytest.raises(Exception, match='workload identity token'):
             hashivault.with_workload_identity_login(mock.Mock())(**dict(self.kwargs, workload_identity_token=None))

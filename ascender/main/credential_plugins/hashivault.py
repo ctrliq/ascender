@@ -347,7 +347,17 @@ def with_workload_identity_login(backend):
     def wrapper(**kwargs):
         if not kwargs.get('workload_identity_token'):
             raise Exception('No workload identity token was issued for this lookup')
-        token = method_auth(**kwargs, auth_param=workload_identity_auth(**kwargs))
+        try:
+            token = method_auth(**kwargs, auth_param=workload_identity_auth(**kwargs))
+        except requests.exceptions.HTTPError as exc:
+            # Vault says why it turned the job down (a bound claim, the
+            # audience, an unknown role); keep that rather than a bare 400
+            try:
+                reason = '; '.join(exc.response.json().get('errors', []))
+            except Exception:
+                reason = ''
+            message = 'Vault turned down the workload identity login with role {}: HTTP {}'.format(kwargs.get('jwt_role'), exc.response.status_code)
+            raise requests.exceptions.HTTPError(f'{message}, {reason}' if reason else message, response=exc.response) from exc
         try:
             return backend(**dict(kwargs, token=token))
         finally:

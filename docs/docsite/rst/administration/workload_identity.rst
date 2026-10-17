@@ -99,6 +99,10 @@ With ``claim_mappings`` a policy can use the claims of the job that logged in, s
 
 The accessor of the auth method is in ``vault auth list``.
 
+Vault only maps claims whose value is a string, so map the ``*_name`` claims. The ``*_id`` claims are numbers, as in AAP, and a role that maps one turns every login down with ``error converting claim to string``. They can still be used in ``bound_claims``.
+
+When Vault turns a job down, the job ends in error and its traceback ends with the reason Vault gave, for example ``claim "sub" does not match any associated bound claim values``.
+
 The lookups revoke the Vault token they were given as soon as they have the secret. A batch token cannot be revoked and simply runs out, which is fine.
 
 
