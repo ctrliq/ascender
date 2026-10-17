@@ -21,22 +21,24 @@ function DeleteRoleConfirmationModal({
 }: DeleteRoleConfirmationModalProps) {
   const { t } = useLingui();
   const isTeamRole = typeof role.team_id !== 'undefined';
-  const title = isTeamRole ? t`Remove Team Access` : t`Remove User Access`;
+  const title = isTeamRole
+    ? t`Disassociate Team Role`
+    : t`Disassociate User Role`;
   return (
     <AlertModal
-      variant="danger"
+      variant="warning"
       title={title}
       isOpen
       onClose={onCancel}
       actions={[
         <Button
           ouiaId="delete-role-modal-delete-button"
-          key="delete"
+          key="disassociate"
           variant="danger"
-          aria-label={t`Confirm delete`}
+          aria-label={t`Confirm Disassociate`}
           onClick={onConfirm}
         >
-          {t`Delete`}
+          {t`Disassociate`}
         </Button>,
         <Button
           ouiaId="delete-role-modal-cancel-button"
@@ -50,14 +52,14 @@ function DeleteRoleConfirmationModal({
     >
       {isTeamRole ? (
         <>
-          {t`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`}
+          {t`Are you sure you want to disassociate the ${role.name} role from ${role.team_name}? Doing so affects all members of the team.`}
           <br />
           <br />
-          {t`If you only want to remove access for this particular user, please remove them from the team.`}
+          {t`If you only want to remove access for this particular user, disassociate them from the team instead.`}
         </>
       ) : (
         <>
-          {t`Are you sure you want to remove ${role.name} access from ${username}?`}
+          {t`Are you sure you want to disassociate the ${role.name} role from ${username}?`}
         </>
       )}
     </AlertModal>

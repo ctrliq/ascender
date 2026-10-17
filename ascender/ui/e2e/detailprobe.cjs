@@ -13,7 +13,7 @@ const fs = require('fs');
 
   const id = require('./fixtures.json').nodes[0].jobId;
   const out = {};
-  for (const [name, hash] of [['job detail', `/jobs/system/${id}/details`], ['settings jobs', '/settings/jobs/details']]) {
+  for (const [name, hash] of [['job detail', `/runs/management/${id}/details`], ['settings jobs', '/job_settings/details']]) {
     await page.goto(base + '/#' + hash, { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1200);

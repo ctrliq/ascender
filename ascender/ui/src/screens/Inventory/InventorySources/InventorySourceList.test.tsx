@@ -127,6 +127,23 @@ describe('<InventorySourceList />', () => {
     expect(InventorySourcesAPI.readOptions).toHaveBeenCalled();
   });
 
+  test('finds a source by part of its name, in any case', async () => {
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'FOO'
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
+    await waitFor(() =>
+      expect(InventoriesAPI.readSources).toHaveBeenLastCalledWith(
+        '1',
+        expect.objectContaining({ name__icontains: 'FOO' })
+      )
+    );
+    await settleTooltips();
+  });
+
   test('source data should render properly', async () => {
     expect(
       screen.getByRole('link', { name: 'Source Foo' })
@@ -176,22 +193,37 @@ describe('<InventorySourceList />', () => {
     await settleTooltips();
   });
 
-  test('should render sync all button and make api call to start sync for all', async () => {
-    const syncAllButton = screen.getByRole('button', { name: 'Sync all' });
-    expect(syncAllButton).toBeInTheDocument();
+  test('syncs every source where nothing is ticked', async () => {
+    const syncAllButton = screen.getByRole('button', { name: 'Sync All' });
     await user.click(syncAllButton);
     await settleTooltips();
-    expect(InventoriesAPI.syncAllSources).toHaveBeenCalled();
-    expect(InventoriesAPI.readSources).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledTimes(2)
+    );
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1);
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(2);
   });
 
-  test('displays error after unsuccessful sync all button', async () => {
-    vi.mocked(InventoriesAPI.syncAllSources).mockRejectedValue(new Error());
-    await user.click(screen.getByRole('button', { name: 'Sync all' }));
+  test('syncs only what is ticked, and says Sync once a row is', async () => {
+    const row = screen.getByRole('link', { name: 'Source Foo' }).closest('tr');
+    await user.click(within(row!).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Sync' }));
+    await settleTooltips();
     await waitFor(() =>
-      expect(InventoriesAPI.syncAllSources).toHaveBeenCalled()
+      expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1)
     );
-    expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledTimes(1);
+  });
+
+  test('names the sources the api refused to sync', async () => {
+    vi.mocked(InventorySourcesAPI.createSyncStart).mockRejectedValue(
+      new Error()
+    );
+    await user.click(screen.getByRole('button', { name: 'Sync All' }));
+    expect(
+      await screen.findByText('Not started: Source Foo, Source Bar')
+    ).toBeInTheDocument();
     await settleTooltips();
   });
 });
@@ -278,16 +310,24 @@ describe('<InventorySourceList /> RBAC testing', () => {
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 
-  test('should not render Sync all button', async () => {
-    sources.data.results[0]!.summary_fields.user_capabilities = {
-      edit: true,
-      delete: true,
-      start: false,
-      schedule: true,
-    };
-    vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
-      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
-    );
+  /** The fixture with each source's start capability set as given. */
+  function mockSourcesStartable(...starts: boolean[]) {
+    vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
+      ...sources,
+      data: {
+        ...sources.data,
+        results: sources.data.results.map((source, index) => ({
+          ...source,
+          summary_fields: {
+            ...source.summary_fields,
+            user_capabilities: {
+              ...source.summary_fields.user_capabilities,
+              start: starts[index],
+            },
+          },
+        })),
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -303,12 +343,133 @@ describe('<InventorySourceList /> RBAC testing', () => {
         },
       },
     } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
+  }
+
+  test('should disable Sync All where no source can be started', async () => {
+    mockSourcesStartable(false, false);
+
+    const { user } = renderList('/inventories/inventory/2/sources');
+    await screen.findByRole('link', { name: 'Source Foo' });
+
+    const button = screen.getByRole('button', { name: 'Sync All' });
+    expect(button).toBeDisabled();
+    await user.hover(button);
+    expect(
+      await screen.findByText(
+        'You do not have permission to sync any of these.'
+      )
+    ).toBeInTheDocument();
+  });
+
+  test('should render Sync All where any source can be started', async () => {
+    mockSourcesStartable(false, true);
 
     renderList('/inventories/inventory/2/sources');
     await screen.findByRole('link', { name: 'Source Foo' });
 
     expect(
-      screen.queryByRole('button', { name: 'Sync all' })
-    ).not.toBeInTheDocument();
+      screen.getByRole('button', { name: 'Sync All' })
+    ).toBeInTheDocument();
+  });
+});
+
+/*
+ * The counts that enable Sync All come from the searched list, so what it
+ * syncs is every source that search matches rather than every source in the
+ * inventory.
+ */
+describe('<InventorySourceList /> Sync All under a search', () => {
+  let debug: typeof global.console.debug;
+  const searched =
+    '/inventories/inventory/1/sources?inventory-sources.name__icontains=foo';
+
+  beforeEach(() => {
+    debug = global.console.debug;
+    global.console.debug = () => {};
+    vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
+      data: {
+        actions: {
+          GET: { source: { choices: [['ec2', 'EC2']] } },
+          POST: {},
+        },
+      },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    global.console.debug = debug;
+  });
+
+  test('syncs every source the search matches', async () => {
+    vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
+      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
+    );
+    const { user } = renderList(searched);
+    await screen.findByRole('link', { name: 'Source Foo' });
+
+    const button = screen.getByRole('button', { name: 'Sync All' });
+    await user.hover(button);
+    expect(
+      await screen.findByText(
+        'Sync all Inventory Sources matching the current search'
+      )
+    ).toBeInTheDocument();
+
+    await user.click(button);
+    await settleTooltips();
+    await waitFor(() =>
+      expect(InventoriesAPI.readSources).toHaveBeenLastCalledWith('1', {
+        name__icontains: 'foo',
+        page: 1,
+        page_size: 200,
+        order_by: 'name',
+      })
+    );
+  });
+
+  test('reads every page the search matches, not only the first', async () => {
+    /* The first read is the list itself; the next two are Sync All, whose
+       first page says there is another. */
+    const [first, second] = sources.data.results;
+    vi.mocked(InventoriesAPI.readSources)
+      .mockResolvedValueOnce(
+        sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
+      )
+      .mockResolvedValueOnce({
+        data: { results: [first], count: 2, next: '/page=2' },
+      } as unknown as ResponseOf<typeof InventoriesAPI.readSources>)
+      .mockResolvedValueOnce({
+        data: { results: [second], count: 2, next: null },
+      } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
+    const { user } = renderList(searched);
+    await screen.findByRole('link', { name: 'Source Foo' });
+
+    await user.click(screen.getByRole('button', { name: 'Sync All' }));
+    await waitFor(() =>
+      expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledTimes(2)
+    );
+    expect(InventoriesAPI.readSources).toHaveBeenLastCalledWith('1', {
+      name__icontains: 'foo',
+      page: 2,
+      page_size: 200,
+      order_by: 'name',
+    });
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(1);
+    expect(InventorySourcesAPI.createSyncStart).toHaveBeenCalledWith(2);
+  });
+
+  test('says nothing matches where the search finds no source', async () => {
+    vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
+    const { user } = renderList(searched);
+
+    const button = await screen.findByRole('button', { name: 'Sync All' });
+    expect(button).toBeDisabled();
+    await user.hover(button);
+    expect(
+      await screen.findByText('No inventory sources match the current search.')
+    ).toBeInTheDocument();
   });
 });

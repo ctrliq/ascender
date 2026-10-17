@@ -9,8 +9,9 @@ import useRequest from 'hooks/useRequest';
 import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import ContentError from '../../ContentError';
+import LAUNCH_PROMPT_NAMESPACES from '../namespaces';
 
-const QS_CONFIG = getQSConfig('execution_environment', {
+const QS_CONFIG = getQSConfig(LAUNCH_PROMPT_NAMESPACES.executionEnvironment, {
   page: 1,
   page_size: 5,
 });

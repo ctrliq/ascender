@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
@@ -15,7 +15,10 @@ import PaginatedTable, {
   HeaderRow,
   HeaderCell,
   ToolbarDeleteButton,
+  ToolbarSyncButton,
   getSearchableKeys,
+  getSearchFilters,
+  readEveryPage,
 } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import AddDropDownButton from 'components/AddDropDownButton';
@@ -39,6 +42,8 @@ function InventoryList() {
     result: {
       results,
       itemCount,
+      sourcedCount,
+      syncableCount,
       actions,
       relatedSearchableKeys,
       searchableKeys,
@@ -50,13 +55,40 @@ function InventoryList() {
     ['inventory-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const [response, actionsResponse] = await Promise.all([
+      /* The counts are taken within the search, as Sync All reads within
+         it, so the button never offers what the list in front of the reader
+         has filtered out. */
+      const searchFilters = getSearchFilters(QS_CONFIG, location.search);
+      const [response, actionsResponse, sourced, syncable] = await Promise.all([
         InventoriesAPI.read(params),
         InventoriesAPI.readOptions(),
+        /* How many have a source to read at all, which is what says
+             whether the sync button does anything: an inventory whose hosts
+             were typed in has none, and a new installation has no
+             inventories. */
+        InventoriesAPI.read({
+          ...searchFilters,
+          has_inventory_sources: true,
+          page_size: 1,
+        }),
+        /* And how many of those this reader may sync. The api checks the
+             inventory's update role before syncing its sources, and that
+             role is not among the user_capabilities an inventory carries:
+             edit is its admin role and adhoc its ad hoc role, and a reader
+             given only the update role has neither. So it is asked of the
+             api by role instead. */
+        InventoriesAPI.read({
+          ...searchFilters,
+          has_inventory_sources: true,
+          role_level: 'update_role',
+          page_size: 1,
+        }),
       ]);
       return {
         results: response.data.results,
         itemCount: response.data.count,
+        sourcedCount: sourced.data.count,
+        syncableCount: syncable.data.count,
         actions: actionsResponse.data.actions,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
@@ -67,6 +99,8 @@ function InventoryList() {
     {
       results: [],
       itemCount: 0,
+      sourcedCount: 0,
+      syncableCount: 0,
       actions: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
@@ -92,6 +126,60 @@ function InventoryList() {
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(inventories);
+
+  /*
+   * The update role question again, for the rows ticked, which is what says
+   * whether a ticked one may be synced. It is asked only once a row with a
+   * source is ticked, and once per row, rather than after every read of the
+   * list: asked there it made each page wait on a second round trip for an
+   * answer only a sync of ticked rows ever uses.
+   */
+  const [updatable, setUpdatable] = useState<Record<number, boolean>>({});
+  const askedUpdatable = useRef(new Set<number>());
+
+  useEffect(() => {
+    const ids = selected
+      .filter(
+        ({ id, has_inventory_sources }) =>
+          has_inventory_sources && !askedUpdatable.current.has(id)
+      )
+      .map(({ id }) => id);
+    if (!ids.length) {
+      return;
+    }
+    ids.forEach((id) => askedUpdatable.current.add(id));
+    InventoriesAPI.read({
+      id__in: ids.join(','),
+      role_level: 'update_role',
+      page_size: ids.length,
+    })
+      .then(({ data }) => {
+        const allowed = new Set(data.results.map(({ id }) => id));
+        setUpdatable((current) => ({
+          ...current,
+          ...Object.fromEntries(ids.map((id) => [id, allowed.has(id)])),
+        }));
+      })
+      .catch(() => {
+        // Without an answer the api decides when Sync is clicked, which
+        // refuses with its own reason, rather than the row being called
+        // refused here. It is asked again the next time the ticks change.
+        ids.forEach((id) => askedUpdatable.current.delete(id));
+        setUpdatable((current) => ({
+          ...current,
+          ...Object.fromEntries(ids.map((id) => [id, true])),
+        }));
+      });
+  }, [selected]);
+
+  // A ticked row with a source whose answer has not arrived yet.
+  const isCheckingUpdatable = selected.some(
+    ({ id, has_inventory_sources }) =>
+      has_inventory_sources && updatable[id] === undefined
+  );
+
+  // The search in force, which Sync All and its counts read within.
+  const searchFilters = getSearchFilters(QS_CONFIG, location.search);
 
   const {
     isLoading: isDeleteLoading,
@@ -133,10 +221,10 @@ function InventoryList() {
     selected[0]
   );
 
-  const addInventory = t`Add inventory`;
-  const addSmartInventory = t`Add smart inventory`;
-  const addConstructedInventory = t`Add constructed inventory`;
-  const addFederatedInventory = t`Add federated inventory`;
+  const addInventory = t`Add Inventory`;
+  const addSmartInventory = t`Add Smart Inventory`;
+  const addConstructedInventory = t`Add Constructed Inventory`;
+  const addFederatedInventory = t`Add Federated Inventory`;
   const addButton = (
     <AddDropDownButton
       ouiaId="add-inventory-button"
@@ -269,6 +357,36 @@ function InventoryList() {
                       />
                     }
                   />,
+                  <ToolbarSyncButton
+                    isChecking={isCheckingUpdatable}
+                    key="sync"
+                    itemsToSync={selected}
+                    syncableCount={syncableCount}
+                    sourcedCount={sourcedCount}
+                    hasSource={(inventory) =>
+                      Boolean(inventory.has_inventory_sources)
+                    }
+                    canSync={(inventory) =>
+                      Boolean(inventory.has_inventory_sources) &&
+                      Boolean(updatable[inventory.id])
+                    }
+                    /* Every inventory the search matches that this reader
+                       may sync, every page of it, not only the first. */
+                    readSyncable={() =>
+                      readEveryPage((params) => InventoriesAPI.read(params), {
+                        ...searchFilters,
+                        has_inventory_sources: true,
+                        role_level: 'update_role',
+                      })
+                    }
+                    isSearched={Object.keys(searchFilters).length > 0}
+                    /* One call syncs every source the inventory holds, which
+                       is what its own sources tab does with its Sync all. */
+                    sync={(inventory) =>
+                      InventoriesAPI.syncAllSources(inventory.id)
+                    }
+                    pluralizedItemName={t`Inventories`}
+                  />,
                 ]}
               />
             )}
@@ -288,7 +406,6 @@ function InventoryList() {
                 isSelected={selected.some((row) => row.id === inventory.id)}
               />
             )}
-            emptyStateControls={canAdd && addButton}
           />
         </Card>
         <AlertModal

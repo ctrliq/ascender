@@ -47,7 +47,9 @@ describe('<DisassociateButton />', () => {
       expect(within(dialog).getByText('custom title')).toBeInTheDocument();
       expect(within(dialog).getByText('custom note')).toBeInTheDocument();
       expect(
-        within(dialog).getByText('This action will disassociate the following:')
+        within(dialog).getByText(
+          'This disassociates the following. They are not deleted themselves:'
+        )
       ).toBeInTheDocument();
       expect(within(dialog).getByText('foo')).toBeInTheDocument();
       expect(within(dialog).getByText('bar')).toBeInTheDocument();
@@ -85,7 +87,7 @@ describe('<DisassociateButton />', () => {
       expect(handleDisassociate).toHaveBeenCalledTimes(0);
 
       await user.click(
-        within(dialog).getByRole('button', { name: 'confirm disassociate' })
+        within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
       );
       expect(handleDisassociate).toHaveBeenCalledTimes(1);
       await waitFor(() => {
@@ -141,5 +143,43 @@ describe('<DisassociateButton />', () => {
         screen.getByRole('button', { name: 'Disassociate' })
       ).toBeDisabled();
     });
+  });
+});
+
+describe('<DisassociateButton /> with a reason per item', () => {
+  const rows = [
+    { id: 1, name: 'kept', summary_fields: { user_capabilities: {} } },
+    { id: 2, name: 'free', summary_fields: { user_capabilities: {} } },
+  ];
+  const reason = (item: { name?: string | null }) =>
+    item.name === 'kept' ? 'Cannot leave' : null;
+
+  test('names the reason rather than a missing permission', async () => {
+    const { user } = renderWithContexts(
+      <DisassociateButton
+        onDisassociate={() => {}}
+        itemsToDisassociate={rows}
+        verifyCannotDisassociate={false}
+        cannotDisassociateReason={reason}
+      />
+    );
+    const button = screen.getByRole('button', { name: 'Disassociate' });
+    expect(button).toBeDisabled();
+    await user.hover(button.parentElement!);
+    expect(await screen.findByText('Cannot leave: kept')).toBeInTheDocument();
+    expect(
+      screen.queryByText(/do not have permission/)
+    ).not.toBeInTheDocument();
+  });
+
+  test('replaces the permission check for rows it lets through', () => {
+    renderWithContexts(
+      <DisassociateButton
+        onDisassociate={() => {}}
+        itemsToDisassociate={rows.slice(1)}
+        cannotDisassociateReason={reason}
+      />
+    );
+    expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
   });
 });

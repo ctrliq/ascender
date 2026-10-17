@@ -37,13 +37,20 @@ function ExecutionEnvironment({ setBreadcrumb }: ExecutionEnvironmentProps) {
     isLoading,
     error: contentError,
     request: fetchExecutionEnvironments,
-    result: executionEnvironment,
+    result: { executionEnvironment, formOptions },
   } = useRequest(
     useCallback(async () => {
-      const { data } = await ExecutionEnvironmentsAPI.readDetail(id);
-      return data;
+      // The options are read here rather than in the edit form, so this
+      // screen's one loading state covers everything the page needs. Read
+      // inside the form, they arrived after the card was already on screen and
+      // put a second loading animation inside it.
+      const [{ data }, { data: options }] = await Promise.all([
+        ExecutionEnvironmentsAPI.readDetail(id),
+        ExecutionEnvironmentsAPI.readOptions(),
+      ]);
+      return { executionEnvironment: data, formOptions: options };
     }, [id]),
-    null
+    { executionEnvironment: null, formOptions: null }
   );
 
   useEffect(() => {
@@ -61,7 +68,7 @@ function ExecutionEnvironment({ setBreadcrumb }: ExecutionEnvironmentProps) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to execution environments`}
+          {t`Back to Execution Environments`}
         </>
       ),
       link: '/execution_environments',
@@ -104,12 +111,25 @@ function ExecutionEnvironment({ setBreadcrumb }: ExecutionEnvironmentProps) {
     cardHeader = null;
   }
 
+  /*
+   * One loading animation, in the place the content will be. Drawn inside the
+   * card it made the page arrive in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the executionEnvironment rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  if (isLoading && !executionEnvironment) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
-        {isLoading && <ContentLoading />}
-        {!isLoading && executionEnvironment && (
+        {executionEnvironment && formOptions && (
           <Routes>
             <Route index element={<Navigate to="details" replace />} />
             <Route
@@ -117,6 +137,7 @@ function ExecutionEnvironment({ setBreadcrumb }: ExecutionEnvironmentProps) {
               element={
                 <ExecutionEnvironmentEdit
                   executionEnvironment={executionEnvironment}
+                  formOptions={formOptions}
                 />
               }
             />
@@ -134,6 +155,18 @@ function ExecutionEnvironment({ setBreadcrumb }: ExecutionEnvironmentProps) {
                 <ExecutionEnvironmentTemplateList
                   executionEnvironment={executionEnvironment}
                 />
+              }
+            />
+            {/* A tab this environment has no such thing as, rather than an
+                empty card under the tab strip. */}
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to={`/execution_environments/${id}/details`}>
+                    {t`View Execution Environment Details`}
+                  </Link>
+                </ContentError>
               }
             />
           </Routes>

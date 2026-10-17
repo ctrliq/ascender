@@ -1,7 +1,7 @@
 import type { JobTemplate, SummaryFieldRef } from 'types/api';
 import React from 'react';
 
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import {
@@ -219,12 +219,43 @@ describe('<JobTemplateForm />', () => {
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
     await waitFor(() => expect(LabelsAPI.read).toHaveBeenCalled());
-    expect(JobTemplatesAPI.readInstanceGroups).toHaveBeenCalled();
 
     // LabelSelect (PF typeaheadMulti Select) is rendered; its selected-value
     // chips are not paintable in jsdom, so assert the control is present via
     // its accessible label as a DOM proxy for the original value assertion.
     expect(screen.getByLabelText('Select Labels')).toBeInTheDocument();
+  });
+
+  /*
+   * The form used to read the instance groups itself, which landed after the
+   * page had drawn: the form replaced itself with a second loading animation
+   * inside the card the page had already put on screen. The screen reads them
+   * alongside the template now and hands them here, so one loading state covers
+   * the page and the form arrives complete.
+   */
+  test('should take its instance groups from the screen without reading them', async () => {
+    const handleSubmit = vi.fn();
+    renderWithContexts(
+      <JobTemplateForm
+        template={mockData as unknown as Partial<JobTemplate>}
+        instanceGroups={mockInstanceGroups as unknown as SummaryFieldRef[]}
+        handleSubmit={handleSubmit}
+        handleCancel={vi.fn()}
+      />
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Save' }));
+
+    // Submitted values are where the seeding shows: the lookup's own chips do
+    // not paint in jsdom, so reading them back off the form is what proves the
+    // groups arrived without a request of the form's own.
+    await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
+    const [submitted] = handleSubmit.mock.calls[0] ?? [];
+    expect(submitted).toMatchObject({
+      instanceGroups: mockInstanceGroups,
+      initialInstanceGroups: mockInstanceGroups,
+    });
+    expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
   });
 
   test('should not render source control branch when allow_override is false', async () => {
@@ -372,7 +403,7 @@ describe('<JobTemplateForm />', () => {
     expect(webhookCheckbox).toBeChecked();
 
     const webhookKeyInput = await screen.findByLabelText(
-      'workflow job template webhook key'
+      'template webhook key'
     );
     expect(webhookKeyInput).not.toHaveAttribute('readonly');
     expect(webhookKeyInput).toHaveValue('webhook key');
@@ -421,7 +452,7 @@ describe('<JobTemplateForm />', () => {
     );
 
     const webhookKeyInput = await screen.findByLabelText(
-      'workflow job template webhook key'
+      'template webhook key'
     );
     // no key yet: the field is empty (a new key is generated on save unless
     // the user types their own) and there is nothing to rotate.
@@ -445,6 +476,41 @@ describe('<JobTemplateForm />', () => {
     expect(handleSubmit).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
+  });
+
+  test('a new template shows the playbook error on submit, not before', async () => {
+    const handleSubmit = vi.fn();
+    vi.mocked(ProjectsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
+    vi.mocked(InventoriesAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
+    renderWithContexts(
+      <JobTemplateForm handleSubmit={handleSubmit} handleCancel={vi.fn()} />
+    );
+    await screen.findByRole('button', { name: 'Save' });
+
+    // Untouched, nothing reads as an error, the playbook included.
+    expect(
+      screen.queryByText('This field must not be blank')
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    const playbookGroup = [
+      ...document.querySelectorAll('.pf-v6-c-form__group'),
+    ].find(
+      (group) =>
+        group.querySelector('.pf-v6-c-form__label-text')?.textContent ===
+        'Playbook'
+    ) as HTMLElement;
+    await waitFor(() =>
+      expect(
+        within(playbookGroup).getByText('This field must not be blank')
+      ).toBeInTheDocument()
+    );
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {

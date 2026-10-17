@@ -1,11 +1,12 @@
 import type { Schedule } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Switch, Tooltip } from '@patternfly/react-core';
+import { Switch } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { SchedulesAPI } from 'api';
 import AlertModal from '../../AlertModal';
 import ErrorDetail from '../../ErrorDetail';
+import Tooltip from '../../Tooltip';
 
 export interface ScheduleToggleProps {
   schedule: Schedule;
@@ -59,16 +60,17 @@ function ScheduleToggle({
   return (
     <>
       <Tooltip
-        content={
-          schedule.enabled ? t`Schedule is active` : t`Schedule is inactive`
-        }
+        // The toggle's own state, which moves on after a click while the
+        // schedule it was handed still says what it said on load.
+        content={isEnabled ? t`Schedule is active` : t`Schedule is inactive`}
         position="top"
       >
         <Switch
           className={className}
           id={`schedule-${schedule.id}-toggle`}
-          label={t`On`}
-
+          // PatternFly 6 dropped labelOff, so the label follows the state
+          // itself, as the host toggle's does.
+          label={isEnabled ? t`On` : t`Off`}
           isChecked={Boolean(isEnabled)}
           isDisabled={
             isLoading ||
@@ -76,7 +78,7 @@ function ScheduleToggle({
             isDisabled
           }
           onChange={toggleSchedule}
-          aria-label={t`Toggle schedule`}
+          aria-label={t`Toggle Schedule`}
           ouiaId={`schedule-${schedule.id}-toggle`}
         />
       </Tooltip>

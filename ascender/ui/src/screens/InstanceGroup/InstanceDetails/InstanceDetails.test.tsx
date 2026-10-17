@@ -109,9 +109,13 @@ function setMe(me: Partial<CurrentUser>) {
   vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({ me }));
 }
 
-function renderDetails() {
+function renderDetails(group = instanceGroup, controlPlaneName?: string) {
   return renderWithContexts(
-    <InstanceDetails instanceGroup={instanceGroup} setBreadcrumb={() => {}} />
+    <InstanceDetails
+      instanceGroup={group}
+      controlPlaneName={controlPlaneName}
+      setBreadcrumb={() => {}}
+    />
   );
 }
 
@@ -123,6 +127,9 @@ describe('<InstanceDetails/>', () => {
         typeof InstanceGroupsAPI.readInstances
       >
     );
+    vi.mocked(InstanceGroupsAPI.readInstanceOptions).mockResolvedValue({
+      data: { actions: { GET: {}, POST: {} } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstanceOptions>);
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
       instanceDetail() as unknown as ResponseOf<typeof InstancesAPI.readDetail>
     );
@@ -149,15 +156,17 @@ describe('<InstanceDetails/>', () => {
   test('should render proper data', async () => {
     setMe({ is_superuser: true });
     renderDetails();
-    await screen.findByRole('button', { name: 'Run health check' });
+    await screen.findByRole('button', { name: 'Run Health Check' });
 
-    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2);
+    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2, {
+      id: 1,
+    });
     expect(InstancesAPI.readHealthCheckDetail).toHaveBeenCalledWith(1);
     expect(InstancesAPI.readDetail).toHaveBeenCalledWith(1);
 
     expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
     expect(
-      screen.getByRole('button', { name: 'Run health check' })
+      screen.getByRole('button', { name: 'Run Health Check' })
     ).toBeEnabled();
   });
 
@@ -167,7 +176,7 @@ describe('<InstanceDetails/>', () => {
       data: {},
     } as unknown as ResponseOf<typeof InstancesAPI.update>);
     const { container, user } = renderDetails();
-    await screen.findByRole('button', { name: 'Run health check' });
+    await screen.findByRole('button', { name: 'Run Health Check' });
 
     const forks = () =>
       container.querySelector('[data-cy="number-forks"]')!.textContent;
@@ -181,27 +190,55 @@ describe('<InstanceDetails/>', () => {
     await waitFor(() => expect(forks()).toContain('37 forks'));
   });
 
-  test('buttons should be disabled for non-superuser', async () => {
+  test('offers an auditor neither action', async () => {
     setMe({ is_system_auditor: true });
+    vi.mocked(InstanceGroupsAPI.readInstanceOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstanceOptions>);
     renderDetails();
-    await screen.findByRole('button', { name: 'Run health check' });
+    await screen.findByRole('switch', { name: 'Toggle instance' });
 
-    // Disassociate is only rendered for superusers.
+    // Disassociate is only rendered for an admin of the group, and the
+    // health check only for a superuser, as on the lists.
     expect(
       screen.queryByRole('button', { name: 'Disassociate' })
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Run health check' })
-    ).toBeDisabled();
+      screen.queryByRole('button', { name: 'Run Health Check' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers disassociate to a group admin who is not a superuser', async () => {
+    setMe({ is_superuser: false });
+    renderDetails();
+    await screen.findByRole('button', { name: 'Disassociate' });
+
+    expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
+    expect(
+      screen.queryByRole('button', { name: 'Run Health Check' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers the health check on a managed instance, as the api does', async () => {
+    setMe({ is_superuser: true });
+    vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
+      instanceDetail({ managed: true }) as unknown as ResponseOf<
+        typeof InstancesAPI.readDetail
+      >
+    );
+    renderDetails();
+
+    expect(
+      await screen.findByRole('button', { name: 'Run Health Check' })
+    ).toBeEnabled();
   });
 
   test('should display instance toggle', async () => {
     setMe({ is_system_auditor: true });
     renderDetails();
-    await screen.findByRole('button', { name: 'Run health check' });
 
     expect(
-      screen.getByRole('switch', { name: 'Toggle instance' })
+      await screen.findByRole('switch', { name: 'Toggle instance' })
     ).toBeInTheDocument();
   });
 
@@ -215,7 +252,9 @@ describe('<InstanceDetails/>', () => {
     expect(
       await screen.findByText('Something went wrong...')
     ).toBeInTheDocument();
-    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2);
+    expect(InstanceGroupsAPI.readInstances).toHaveBeenCalledWith(2, {
+      id: 1,
+    });
     expect(InstancesAPI.readHealthCheckDetail).not.toHaveBeenCalled();
     expect(InstancesAPI.readDetail).not.toHaveBeenCalled();
   });
@@ -225,7 +264,7 @@ describe('<InstanceDetails/>', () => {
     vi.mocked(InstancesAPI.healthCheck).mockRejectedValue(new Error());
     const { user } = renderDetails();
     const healthCheck = await screen.findByRole('button', {
-      name: 'Run health check',
+      name: 'Run Health Check',
     });
     expect(healthCheck).toBeEnabled();
 
@@ -234,6 +273,9 @@ describe('<InstanceDetails/>', () => {
       expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1)
     );
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to run a health check.')
+    ).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await settleTooltips();
     expect(screen.queryByText('Error!')).not.toBeInTheDocument();
@@ -253,10 +295,25 @@ describe('<InstanceDetails/>', () => {
       await screen.findByRole('switch', { name: 'Toggle instance' });
 
       expect(
-        screen.queryByRole('button', { name: 'Run health check' })
+        screen.queryByRole('button', { name: 'Run Health Check' })
       ).not.toBeInTheDocument();
     }
   );
+
+  // The api keeps a hybrid node in whichever group its
+  // DEFAULT_CONTROL_PLANE_QUEUE_NAME setting names.
+  test('holds a hybrid node in the control plane group under its own name', async () => {
+    setMe({ is_superuser: true });
+    vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
+      instanceDetail({
+        node_type: 'hybrid',
+      }) as unknown as ResponseOf<typeof InstancesAPI.readDetail>
+    );
+    renderDetails({ ...instanceGroup, name: 'cp' } as InstanceGroup, 'cp');
+    expect(
+      await screen.findByRole('button', { name: 'Disassociate' })
+    ).toBeDisabled();
+  });
 
   test('should call disassociate', async () => {
     setMe({ is_superuser: true });
@@ -268,7 +325,7 @@ describe('<InstanceDetails/>', () => {
 
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     await user.click(
-      await screen.findByRole('button', { name: 'confirm disassociate' })
+      await screen.findByRole('button', { name: 'Confirm Disassociate' })
     );
 
     await waitFor(() =>
@@ -288,10 +345,13 @@ describe('<InstanceDetails/>', () => {
 
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     await user.click(
-      await screen.findByRole('button', { name: 'confirm disassociate' })
+      await screen.findByRole('button', { name: 'Confirm Disassociate' })
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to disassociate the instance.')
+    ).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() =>
       expect(screen.queryByText('Error!')).not.toBeInTheDocument()

@@ -12,7 +12,7 @@ import useRequest from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { InventoriesAPI } from 'api';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import AdvancedInventoryHostListItem from './AdvancedInventoryHostListItem';
 
 const QS_CONFIG = getQSConfig('host', {
@@ -93,12 +93,12 @@ function AdvancedInventoryHostList({
           isDefault: true,
         },
         {
-          name: t`Created by (username)`,
-          key: 'created_by__username',
+          name: t`Created By (Username)`,
+          key: 'created_by__username__icontains',
         },
         {
-          name: t`Modified by (username)`,
-          key: 'modified_by__username',
+          name: t`Modified By (Username)`,
+          key: 'modified_by__username__icontains',
         },
       ]}
       renderToolbar={(props) => (
@@ -107,24 +107,25 @@ function AdvancedInventoryHostList({
           isAllSelected={isAllSelected}
           onSelectAll={selectAll}
           qsConfig={QS_CONFIG}
-          additionalControls={
-            inventory?.summary_fields?.user_capabilities?.adhoc
-              ? [
-                  <AdHocCommands
-                    adHocItems={selected}
-                    hasListItems={count > 0}
-                    onLaunchLoading={setIsAdHocLaunchLoading}
-                    moduleOptions={moduleOptions}
-                  />,
-                ]
-              : []
-          }
+          additionalControls={[
+            <RunSelectionMenu
+              key="run"
+              ouiaId="advanced-inventory-host-list-run-menu"
+              items={selected}
+              inventoryId={inventory?.id}
+              moduleOptions={moduleOptions}
+              onLaunchLoading={setIsAdHocLaunchLoading}
+              canRunCommand={Boolean(
+                inventory?.summary_fields?.user_capabilities?.adhoc
+              )}
+            />,
+          ]}
         />
       )}
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-          <HeaderCell>{t`Recent jobs`}</HeaderCell>
+          <HeaderCell>{t`Activity`}</HeaderCell>
           <HeaderCell>{t`Inventory`}</HeaderCell>
         </HeaderRow>
       }

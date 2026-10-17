@@ -32,7 +32,7 @@ describe('<InventoryHostDetail />', () => {
       renderWithContexts(
         <InventoryHostDetail host={mockHost as unknown as Host} />
       );
-      const editButton = screen.getByRole('link', { name: 'edit' });
+      const editButton = screen.getByRole('link', { name: 'Edit' });
       expect(editButton).toHaveTextContent('Edit');
       expect(editButton).toHaveAttribute(
         'href',
@@ -97,7 +97,7 @@ describe('<InventoryHostDetail />', () => {
         <InventoryHostDetail host={readOnlyHost as unknown as Host} />
       );
       expect(
-        screen.queryByRole('link', { name: 'edit' })
+        screen.queryByRole('link', { name: 'Edit' })
       ).not.toBeInTheDocument();
     });
   });

@@ -17,7 +17,7 @@ function renderItem(approval: WorkflowApproval) {
       <tbody>
         <WorkflowApprovalListItem
           isSelected={false}
-          detailUrl={`/workflow_approvals/${approval.id}`}
+          detailUrl={`/approvals/${approval.id}`}
           onSelect={() => {}}
           rowIndex={0}
           workflowApproval={approval}
@@ -85,5 +85,51 @@ describe('<WorkflowApprovalListItem />', () => {
       },
     });
     expect(screen.getByText('Denied')).toBeInTheDocument();
+  });
+
+  test('offers the actions on a pending approval the user may act on', () => {
+    renderItem({
+      ...workflowApproval,
+      can_approve_or_deny: true,
+      can_cancel_workflow: true,
+    });
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: 'Cancel Workflow Job' })
+    ).toBeEnabled();
+  });
+
+  test('holds the actions back from a user who may not act on it', () => {
+    renderItem({ ...workflowApproval, can_approve_or_deny: false });
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Cancel Workflow Job' })
+    ).toBeDisabled();
+  });
+
+  test('holds Cancel Workflow Job back from an approver who may not cancel it', () => {
+    renderItem({
+      ...workflowApproval,
+      can_approve_or_deny: true,
+      can_cancel_workflow: false,
+    });
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: 'Cancel Workflow Job' })
+    ).toBeDisabled();
+  });
+
+  test('offers Cancel Workflow Job to a workflow admin who may not vote', () => {
+    renderItem({
+      ...workflowApproval,
+      can_approve_or_deny: false,
+      can_cancel_workflow: true,
+    });
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Cancel Workflow Job' })
+    ).toBeEnabled();
   });
 });

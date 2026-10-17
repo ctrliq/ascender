@@ -54,7 +54,7 @@ export default function EmptyOutput({
       ' ',
       React.createElement(
         Link,
-        { to: `/jobs/${typeSegment}/${id}/details` },
+        { to: `/runs/${typeSegment}/${id}/details` },
         t`details.`
       ),
       React.createElement('br'),

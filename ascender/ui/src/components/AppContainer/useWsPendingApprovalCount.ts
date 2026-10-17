@@ -21,7 +21,7 @@ export default function useWsPendingApprovalCount(
     useState(initialCount);
   const [reloadCount, setReloadCount] = useState(false);
   const throttledFetch = useThrottle(reloadCount, 1000);
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
   });
@@ -40,11 +40,12 @@ export default function useWsPendingApprovalCount(
     })();
   }, [throttledFetch, fetchApprovalsCount]);
 
+  // Any approval message in the batch is enough, wherever it sits in it.
   useEffect(() => {
-    if (lastMessage?.type === 'workflow_approval') {
+    if (messages.some((message) => message.type === 'workflow_approval')) {
       setReloadCount(true);
     }
-  }, [lastMessage]);
+  }, [messages]);
 
   return pendingApprovalCount;
 }

@@ -33,7 +33,10 @@ function InventoryGroupHosts({ inventoryGroup }: InventoryGroupHostsProps) {
           )
         }
       />
-      <Route index element={<InventoryGroupHostList />} />
+      <Route
+        index
+        element={<InventoryGroupHostList inventoryGroup={inventoryGroup} />}
+      />
     </Routes>
   );
 }

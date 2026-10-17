@@ -17,9 +17,14 @@ import type { InitialResult, UseRequest } from './useRequest';
  *       { results: [], itemCount: 0 }
  *     );
  *
- * What changes is only what happens on mount. A screen that has been open in
- * the last thirty seconds is served from the cache instead of going back to
- * the API, which is the whole point of moving.
+ * What changes is only what happens on mount. A screen that has been open
+ * before paints at once with the rows the cache kept, and reads the API again
+ * behind them in every case. The cache only speeds up the first paint: it is
+ * never the final answer for a list, because a host deleted from its detail
+ * page, or a row added or edited on another screen, changes the list without
+ * anything here being told. Refetching on every mount is what makes returning
+ * to a list always show current data, without each mutation having to know
+ * which lists it touched.
  *
  * What does not change is refreshing. `request()` still means "read it again
  * now": it drops the cached answer and refetches, so the paths that already
@@ -49,13 +54,25 @@ export default function useCachedRequest<T>(
   const query = useQuery({
     queryKey,
     queryFn: makeRequest,
+    // staleTime still lets two components mounting together share one read,
+    // but a list mounting on its own always goes back to the API. Rows cached
+    // from an earlier visit stay on screen meanwhile, so nothing blanks.
+    refetchOnMount: 'always',
   });
 
-  /** Read it again now, discarding whatever the cache holds for this key. */
+  /**
+   * Read it again now, discarding whatever the cache holds for this list.
+   *
+   * Every key starts with the name of the list it belongs to, and everything
+   * after that is which page, filter or parent it shows. A delete on page two
+   * also changes page three and every search that matched the row, so the
+   * whole list is marked stale by its name rather than only the variant on
+   * screen. Only the one on screen is refetched now; the rest are read again
+   * when they are next shown.
+   */
   const request = useCallback(async () => {
     await queryClient.invalidateQueries({
-      queryKey: keyRef.current,
-      exact: true,
+      queryKey: [keyRef.current[0]],
     });
   }, [queryClient, keyHash]); // eslint-disable-line react-hooks/exhaustive-deps
 

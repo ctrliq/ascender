@@ -14,7 +14,6 @@ import {
   Button,
   Form,
   FormGroup,
-  Tooltip,
   FormHelperText,
   HelperText,
   HelperTextItem,
@@ -31,6 +30,7 @@ import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 import { required } from 'util/validators';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
+import Tooltip from 'components/Tooltip';
 import TypeInputsSubForm from './TypeInputsSubForm';
 import ExternalTestModal from './ExternalTestModal';
 import './CredentialForm.css';
@@ -230,7 +230,7 @@ function CredentialFormFields({
                 }
               }}
               autoComplete="off"
-              placeholder={t`Select a credential Type`}
+              placeholder={t`Select a credential type`}
               aria-label={t`Select Credential Type`}
             />
             {(filterValue || selectedLabel) && !isCredentialTypeDisabled && (
@@ -460,8 +460,14 @@ function CredentialForm({
                     ouiaId="credential-form-cancel-button"
                     id="credential-form-cancel-button"
                     aria-label={t`Cancel`}
-                    variant="secondary"
+                    // A link, as on every other form's action row, which is
+                    // what keeps it the same width as theirs.
+                    variant="link"
                     type="button"
+                    // Takes the click without the focus, as FormActionGroup
+                    // does, so blurring an empty required field on the way
+                    // out does not flash its error.
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={onCancel}
                   >
                     {t`Cancel`}

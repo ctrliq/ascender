@@ -94,13 +94,13 @@ describe('<ContainerGroupDetails/>', () => {
     );
 
     assertDetail('Name', 'Foo');
-    assertDetail('Type', 'Container group');
+    assertDetail('Type', 'Container Group');
     // The credential renders as a link to its detail page.
     expect(screen.getByRole('link', { name: 'CG' })).toHaveAttribute(
       'href',
       '/credentials/71'
     );
-    expect(screen.getByText('Pod spec override')).toBeInTheDocument();
+    expect(screen.getByText('Pod Spec Override')).toBeInTheDocument();
   });
 
   test('links to the mesh node the pods run behind', () => {
@@ -128,7 +128,7 @@ describe('<ContainerGroupDetails/>', () => {
 
   test('expected api call is made for delete', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/instance_groups/container_group/42/details'],
+      initialEntries: ['/container_groups/42/details'],
     });
     vi.mocked(InstanceGroupsAPI.destroy).mockResolvedValue(
       {} as unknown as ResponseOf<typeof InstanceGroupsAPI.destroy>
@@ -146,7 +146,7 @@ describe('<ContainerGroupDetails/>', () => {
     await waitFor(() =>
       expect(InstanceGroupsAPI.destroy).toHaveBeenCalledTimes(1)
     );
-    expect(history.location.pathname).toBe('/instance_groups');
+    expect(history.location.pathname).toBe('/container_groups');
   });
 
   test('should not render delete button when delete capability is false', () => {

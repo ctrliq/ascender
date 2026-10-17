@@ -15,7 +15,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import StatusLabel from 'components/StatusLabel';
 import { JobsAPI } from 'api';
 
-import { getJobModel, isJobRunning } from 'util/jobs';
+import { getJobModel, getRunActionLabels, isJobRunning } from 'util/jobs';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useInterval from 'hooks/useInterval';
 import { parseQueryString, getQSConfig } from 'util/qs';
@@ -116,6 +116,13 @@ export interface JobOutputProps {
   eventRelatedSearchableKeys?: string[];
   eventSearchableKeys?: SearchableKey[];
   onJobRefresh?: () => void;
+  /**
+   * Called once the first page of events is in, or once reading them has
+   * failed. The screen above keeps its own loading state on screen until then,
+   * so the page shows one loading animation rather than one for the job, a
+   * second for this output, and a card in between.
+   */
+  onContentReady?: () => void;
   [key: string]: unknown;
 }
 
@@ -124,8 +131,9 @@ function JobOutput({
   eventRelatedSearchableKeys,
   eventSearchableKeys,
   onJobRefresh,
+  onContentReady,
 }: JobOutputProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const location = useLocation();
   const parentRef = useRef<HTMLDivElement>(null);
   const jobSocketCounter = useRef(0);
@@ -193,7 +201,20 @@ function JobOutput({
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [hostEvent, setHostEvent] = useState<OutputEvent | null>(null);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
+
+  /*
+   * Tell the screen above that the output is on screen, once. An error reports
+   * too: a page that never reported would hold the screen's loading animation
+   * for good.
+   */
+  const hasReportedReady = useRef(false);
+  useEffect(() => {
+    if (hasReportedReady.current || (hasContentLoading && !contentError)) {
+      return;
+    }
+    hasReportedReady.current = true;
+    onContentReady?.();
+  }, [hasContentLoading, contentError, onContentReady]);
   const [highestLoadedCounter, setHighestLoadedCounter] = useState(0);
   const [isFollowModeEnabled, setIsFollowModeEnabled] = useState(
     isJobRunning(job.status)
@@ -255,6 +276,25 @@ function JobOutput({
     // ResizeObserver updates this to the true size on mount.
     initialRect: { width: 1000, height: 600 },
   });
+  /*
+   * When a row above the viewport changes height, react-virtual shifts the
+   * scroll position by the difference so the rows being read stay put. Its own
+   * test counts a row as above the viewport when the row ends at or before the
+   * scroll offset, and a row that renders empty while its event loads is zero
+   * pixels tall: at the top of the output it ends exactly at offset 0. Filling
+   * the first rows in then pushed a finished run down by their height before
+   * anyone had scrolled, opening it at line 4 instead of line 1. Only a row
+   * that starts above the viewport and ends at or before its top moves the
+   * view, and at the top nothing is above it.
+   */
+  rowVirtualizer.shouldAdjustScrollPositionOnItemSizeChange = (
+    item,
+    _delta,
+    instance
+  ) => {
+    const offset = (instance.scrollOffset ?? 0) + instance.scrollAdjustments;
+    return item.start < offset && item.end <= offset;
+  };
 
   // Passed to JobEvent / JobEventSkeleton as `measure` so they can request a
   // remeasure on content/image load — replacing react-virtualized's CellMeasurer
@@ -341,6 +381,7 @@ function JobOutput({
       setIsFollowModeEnabled(false);
     }
     Promise.allSettled(pendingRequests).then(() => {
+      startAgain();
       setRemoteRowCount(0);
       clearLoadedEvents();
       loadJobEvents();
@@ -351,15 +392,64 @@ function JobOutput({
     rebuildEventsTree();
   }, [isFlatMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /*
+   * Every reset of the list makes what is in flight stale. The reads that
+   * stream a running job ask for the events below the counter the socket has
+   * reached, so their count stops there; the read that replaces them once the
+   * job is over asks for all of them. Landing in that order is what the reader
+   * sees as the end of the run arriving and then half of it going away again,
+   * since the count comes back short and the rows above it are gone with the
+   * socket's own. A read carries the generation it began in, and a generation
+   * behind is dropped.
+   */
+  const loadGeneration = useRef(0);
+  const startAgain = () => {
+    loadGeneration.current += 1;
+  };
+  /*
+   * True once the api says it has finished writing the run's events and this
+   * screen has read them whole. What the socket delivers after that is a late
+   * copy of what was just read, and taking it back in starts the streaming
+   * read again: the list would ask for the events below the socket's counter
+   * and come back with a count that stops there, half the run.
+   */
+  const eventsAreFinal = useRef(false);
+  /*
+   * The read below is held rather than called through the closure that was
+   * current when the poll was built: the poll outlives that render, and the
+   * job finishing is what turns the flat list the stream needs back into the
+   * tree a finished run is read as. A stale read asks with the filter the
+   * stream used and answers with a count that does not fit the tree, which
+   * leaves the last events of the run addressed past the end of the list.
+   */
+  const loadJobEventsRef = useRef<
+    (firstWsCounter?: number | null) => Promise<void>
+  >(async () => {});
+  /*
+   * Whether the reader was watching the end when the run finished. The read
+   * that replaces the streamed events rebuilds the list under them, and a
+   * rebuilt list starts at the top: someone who followed a run to its last
+   * line would be left in the middle of it.
+   */
+  const wasFollowingRef = useRef(false);
+  const scrollToEndRef = useRef<() => void>(() => {});
+
   const pollForEventsProcessed = useCallback(async () => {
     const {
       data: { event_processing_finished },
     } = await getJobModel(job.type).readDetail(job.id);
     if (event_processing_finished) {
+      eventsAreFinal.current = true;
+      startAgain();
       setWsEvents([]);
       setRemoteRowCount(0);
       clearLoadedEvents();
-      loadJobEvents();
+      const wasAtEnd = wasFollowingRef.current;
+      await loadJobEventsRef.current();
+      if (wasAtEnd) {
+        // After the rows are back, and again once their heights settle.
+        scrollToEndRef.current();
+      }
       if (onJobRefresh) {
         onJobRefresh();
       }
@@ -384,6 +474,10 @@ function JobOutput({
     let batchTimeout: ReturnType<typeof setTimeout>;
     let batchedEvents: OutputEvent[] = [];
     const addBatchedEvents = () => {
+      if (eventsAreFinal.current) {
+        batchedEvents = [];
+        return;
+      }
       let min = 0;
       let max = 0;
       let newCssMap: Record<string, string> = {};
@@ -429,6 +523,9 @@ function JobOutput({
     // outlived the screen.
     const jobSocket = connectJobSocket(job, (data: JobSocketMessage) => {
       if (data.group_name === `${job.type}_events`) {
+        if (eventsAreFinal.current) {
+          return;
+        }
         batchedEvents.push(data);
         clearTimeout(batchTimeout as ReturnType<typeof setTimeout>);
         if (batchedEvents.length >= 10) {
@@ -463,6 +560,14 @@ function JobOutput({
     }
   }, [wsEvents.length, isFollowModeEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* Kept for the read that lands after the run, which is built from a render
+     older than the one that turned following off. */
+  useEffect(() => {
+    if (isFollowModeEnabled) {
+      wasFollowingRef.current = true;
+    }
+  }, [isFollowModeEnabled]);
+
   // NOTE: do NOT add an effect here that calls rowVirtualizer.measure() on
   // content changes (currentlyLoading/cssMap/remoteRowCount/wsEvents). measure()
   // clears the ENTIRE itemSizeCache back to the 25px estimateSize, and the
@@ -486,20 +591,6 @@ function JobOutput({
   }, [jobStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
-    error: cancelError,
-    isLoading: isCancelling,
-    request: cancelJob,
-  } = useRequest(
-    useCallback(async () => {
-      await getJobModel(job.type).cancel(job.id);
-    }, [job.id, job.type]),
-    undefined
-  );
-
-  const { error: dismissableCancelError, dismissError: dismissCancelError } =
-    useDismissableError(cancelError);
-
-  const {
     request: deleteJob,
     isLoading: isDeleting,
     error: deleteError,
@@ -507,7 +598,7 @@ function JobOutput({
     useCallback(async () => {
       await getJobModel(job.type).destroy(job.id);
 
-      navigate('/jobs');
+      navigate('/runs');
     }, [job.type, job.id, navigate])
   );
 
@@ -593,6 +684,7 @@ function JobOutput({
   };
 
   const loadJobEvents = async (firstWsCounter: number | null = null) => {
+    const generation = loadGeneration.current;
     const [params, loadRange] = getEventRequestParams(job, 50, [1, 50]);
 
     if (isMounted.current) {
@@ -619,7 +711,7 @@ function JobOutput({
         data: { count, results: fetchedEvents = [] },
       } = await eventPromise;
 
-      if (!isMounted.current) {
+      if (!isMounted.current || generation !== loadGeneration.current) {
         return;
       }
       let newCssMap: Record<string, string> = {};
@@ -648,11 +740,29 @@ function JobOutput({
         setOnReadyEvents((prev) => prev.concat(events));
       }
       setHighestLoadedCounter(lastCounter);
+      /*
+       * Every event is a row. X-UI-Max-Events, which every events response
+       * carries, is MAX_UI_JOB_EVENTS: the most events the ui should ask for in
+       * one request, not the most a job can show. Read as a cap on the whole
+       * output it hid every row past the 4000th without a word, filed the
+       * socket's live events after row 4000 where they did not belong, and cut
+       * search results short. The pages this reads are 50 events, well inside
+       * the smallest value the setting takes, so the header has nothing to
+       * limit here.
+       */
       setRemoteRowCount(count + countOffset);
     } catch (err) {
-      setContentError(err);
+      /* A read that a newer one replaced answers for a list that is gone,
+         and its failure is no more the list's than its events are. */
+      if (isMounted.current && generation === loadGeneration.current) {
+        setContentError(err);
+      }
     } finally {
-      if (isMounted.current) {
+      /* The same holds here, and the newer read is still in flight: turning
+         the loading off for it would flash the empty output screen and let
+         the list ask for rows that are about to arrive. The newer read clears
+         the same range of counters when it lands. */
+      if (isMounted.current && generation === loadGeneration.current) {
         setHasContentLoading(false);
         setCurrentlyLoading((prevCurrentlyLoading) =>
           prevCurrentlyLoading.filter((n) => !loadRange?.includes(n))
@@ -660,6 +770,9 @@ function JobOutput({
       }
     }
   };
+
+  loadJobEventsRef.current = loadJobEvents;
+  scrollToEndRef.current = scrollToEnd;
 
   const isRowLoaded = ({ index }: { index: number }) => {
     let counter;
@@ -756,6 +869,7 @@ function JobOutput({
     if (!isMounted.current) {
       return;
     }
+    const generation = loadGeneration.current;
     if (startIndex === 0 && stopIndex === 0) {
       return;
     }
@@ -800,7 +914,7 @@ function JobOutput({
       }
       throw error;
     }
-    if (!isMounted.current) {
+    if (!isMounted.current || generation !== loadGeneration.current) {
       return;
     }
     const events = response.data.results;
@@ -1031,13 +1145,13 @@ function JobOutput({
           <OutputToolbar
             job={job}
             jobStatus={jobStatus}
-            onCancel={() => setShowCancelModal(true)}
             onDelete={deleteJob}
             isDeleteDisabled={isDeleting}
           />
         </div>
         <HostStatusBar
           counts={(job.host_status_counts as Record<string, number>) || {}}
+          jobStatus={jobStatus}
         />
         <JobOutputSearch
           qsConfig={QS_CONFIG}
@@ -1163,58 +1277,16 @@ function JobOutput({
           )}
         </div>
       </CardBody>
-      {showCancelModal && isJobRunning(job.status) && (
-        <AlertModal
-          isOpen={showCancelModal}
-          variant="danger"
-          onClose={() => setShowCancelModal(false)}
-          title={t`Cancel Job`}
-          label={t`Cancel Job`}
-          actions={[
-            <Button
-              id="cancel-job-confirm-button"
-              key="delete"
-              variant="danger"
-              isDisabled={isCancelling}
-              aria-label={t`Cancel job`}
-              onClick={cancelJob}
-            >
-              {t`Cancel job`}
-            </Button>,
-            <Button
-              id="cancel-job-return-button"
-              key="cancel"
-              variant="secondary"
-              aria-label={t`Return`}
-              onClick={() => setShowCancelModal(false)}
-            >
-              {t`Return`}
-            </Button>,
-          ]}
-        >
-          {t`Are you sure you want to submit the request to cancel this job?`}
-        </AlertModal>
-      )}
       {dismissableDeleteError && (
         <AlertModal
           isOpen={dismissableDeleteError}
           variant="danger"
           onClose={dismissDeleteError}
-          title={t`Job Delete Error`}
-          label={t`Job Delete Error`}
+          title={i18n._(getRunActionLabels(job.type).deleteError)}
+          label={i18n._(getRunActionLabels(job.type).deleteError)}
         >
+          {i18n._(getRunActionLabels(job.type).deleteErrorMessage)}
           <ErrorDetail error={dismissableDeleteError} />
-        </AlertModal>
-      )}
-      {dismissableCancelError && (
-        <AlertModal
-          isOpen={dismissableCancelError}
-          variant="danger"
-          onClose={dismissCancelError}
-          title={t`Job Cancel Error`}
-          label={t`Job Cancel Error`}
-        >
-          <ErrorDetail error={dismissableCancelError} />
         </AlertModal>
       )}
     </>

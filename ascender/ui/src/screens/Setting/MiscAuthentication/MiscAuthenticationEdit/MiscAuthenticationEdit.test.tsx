@@ -62,7 +62,7 @@ describe('<MiscAuthenticationEdit />', () => {
 
   async function renderEdit() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/miscellaneous_authentication/edit'],
+      initialEntries: ['/authentication/session/edit'],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -108,29 +108,48 @@ describe('<MiscAuthenticationEdit />', () => {
     await settleTooltips();
   });
 
+  /*
+   * This tab's own settings and no others: the tokens, the mapping and the
+   * password rules arrive in the same category and are saved from the three
+   * tabs beside it.
+   */
   test('save button should call updateAll', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    const { AUTHENTICATION_BACKENDS, ...rest } = authenticationData;
-    expect(SettingsAPI.updateAll).toHaveBeenCalledWith(rest);
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SESSION_COOKIE_AGE: authenticationData.SESSION_COOKIE_AGE,
+      SESSIONS_PER_USER: authenticationData.SESSIONS_PER_USER,
+      DISABLE_LOCAL_AUTH: authenticationData.DISABLE_LOCAL_AUTH,
+      AUTH_BASIC_ENABLED: authenticationData.AUTH_BASIC_ENABLED,
+      LOGIN_REDIRECT_OVERRIDE: authenticationData.LOGIN_REDIRECT_OVERRIDE,
+      ALLOW_METRICS_FOR_ANONYMOUS_USERS: false,
+    });
   });
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('authentication');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SESSION_COOKIE_AGE: 1800,
+      SESSIONS_PER_USER: -1,
+      DISABLE_LOCAL_AUTH: false,
+      AUTH_BASIC_ENABLED: true,
+      LOGIN_REDIRECT_OVERRIDE: '',
+      ALLOW_METRICS_FOR_ANONYMOUS_USERS: false,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -144,7 +163,7 @@ describe('<MiscAuthenticationEdit />', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
-        '/settings/miscellaneous_authentication/details'
+        '/authentication/session/details'
       )
     );
   });
@@ -153,7 +172,7 @@ describe('<MiscAuthenticationEdit />', () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(
-      '/settings/miscellaneous_authentication/details'
+      '/authentication/session/details'
     );
   });
 

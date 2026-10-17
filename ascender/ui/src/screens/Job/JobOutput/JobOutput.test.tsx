@@ -2,6 +2,7 @@ import type { ApiResponse } from 'api/Base';
 import type { AnyJob, Paginated } from 'types/api';
 import React from 'react';
 import {
+  act,
   fireEvent,
   screen,
   waitFor,
@@ -119,10 +120,11 @@ describe('<JobOutput />', () => {
       await screen.findByRole('button', { name: 'Confirm Delete' })
     );
 
-    // The failed delete surfaces a "Job Delete Error" AlertModal.
+    // The failed delete surfaces an alert named for the kind of run.
     const errorModal = await screen.findByRole('dialog', {
       name: /Job Delete Error/,
     });
+    expect(errorModal).toHaveTextContent('Failed to delete job.');
     expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
 
     await user.click(
@@ -412,5 +414,97 @@ describe('<JobOutput />', () => {
         result.overscanStopIndex - result.overscanStartIndex
       ).toBeLessThanOrEqual(MAX_SELECTION_OVERSCAN);
     });
+  });
+
+  /*
+   * X-UI-Max-Events is MAX_UI_JOB_EVENTS, which the api documents as the most
+   * events the ui asks for in one request. Read as the most a job shows, it
+   * stopped every output at row 4000 with nothing to say so.
+   */
+  test('shows every event of a job longer than the per-request maximum', async () => {
+    vi.mocked(JobsAPI.readEvents).mockResolvedValue({
+      data: {
+        count: 9000,
+        next: null,
+        previous: null,
+        results: mockJobEventsData.results.slice(0, 50),
+      },
+      headers: { 'x-ui-max-events': '4000' },
+    } as unknown as ApiResponse<Paginated<JobEvent>>);
+    const { container } = renderWithContexts(
+      <JobOutput job={{ ...mockJob, status: 'successful' }} />
+    );
+    await waitForLoaded();
+
+    // The list is as tall as its rows, 25 pixels each until measured: 9000
+    // rows are over 200000 pixels, where a list stopped at 4000 is about half.
+    const list = container.querySelector(
+      '.ascender-job-output__scroll-container > div'
+    ) as HTMLElement;
+    await waitFor(() =>
+      expect(Number.parseFloat(list.style.height)).toBeGreaterThan(200000)
+    );
+  });
+
+  /*
+   * A new filter starts the read again, and the read it replaced can still
+   * answer after that. Its answer was already dropped, but its failure still
+   * put the error screen up and its end still turned the loading off while
+   * the read that replaced it was in flight.
+   */
+  test('should ignore a read that a newer one replaced', async () => {
+    const reads: {
+      resolve: (value: unknown) => void;
+      reject: (err: unknown) => void;
+    }[] = [];
+    vi.mocked(JobsAPI.readEvents).mockImplementation(
+      () =>
+        new Promise((resolve, reject) => {
+          reads.push({
+            resolve: resolve as (value: unknown) => void,
+            reject,
+          });
+        }) as ReturnType<typeof JobsAPI.readEvents>
+    );
+    const { container, history } = renderWithContexts(
+      <JobOutput job={mockJob} />
+    );
+    // The loading animation is an empty state too, so this is every other.
+    const failure = () =>
+      container.querySelector(
+        '.pf-v6-c-empty-state:not(.ascender-content-loading__empty-state)'
+      );
+    await waitFor(() => expect(reads).toHaveLength(1));
+
+    act(() => {
+      history.push('/?job_output.stdout__icontains=ok');
+    });
+    await waitFor(() => expect(reads).toHaveLength(2));
+
+    await act(async () => {
+      reads[0]?.reject(new Error('stale'));
+    });
+    // Still waiting on the read that counts, and no error for the one that
+    // does not.
+    expect(failure()).toBeNull();
+    expect(
+      container.querySelector(
+        '.ascender-job-output__scroll-container [role="progressbar"]'
+      )
+    ).not.toBeNull();
+
+    await act(async () => {
+      reads[1]?.resolve({
+        data: { count: 3, results: mockJobEventsData.results.slice(0, 3) },
+      });
+    });
+    await waitFor(() =>
+      expect(
+        container.querySelector(
+          '.ascender-job-output__scroll-container [role="progressbar"]'
+        )
+      ).toBeNull()
+    );
+    expect(failure()).toBeNull();
   });
 });

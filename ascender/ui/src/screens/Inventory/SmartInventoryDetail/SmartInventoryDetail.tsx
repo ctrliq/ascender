@@ -7,6 +7,7 @@ import { Button, Label } from '@patternfly/react-core';
 
 import { InventoriesAPI, UnifiedJobsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
+import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -89,6 +90,11 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
 
   const { error, dismissError } = useDismissableError(deleteError);
 
+  // What the delete dialog lists as relying on this inventory, as for the
+  // other kinds of inventory.
+  const deleteDetailsRequests =
+    relatedResourceDeleteRequests.inventory(inventory);
+
   if (hasContentLoading) {
     return <ContentLoading />;
   }
@@ -119,13 +125,13 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
           />
           <Detail
             fullWidth
-            label={t`Smart host filter`}
+            label={t`Smart Host Filter`}
             value={<Label variant="outline">{host_filter}</Label>}
           />
-          <Detail label={t`Total hosts`} value={total_hosts} />
+          <Detail label={t`Total Hosts`} value={total_hosts} />
           <Detail
             fullWidth
-            label={t`Instance groups`}
+            label={t`Instance Groups`}
             value={<InstanceGroupLabels labels={instanceGroups} />}
             isEmpty={instanceGroups.length === 0}
           />
@@ -138,7 +144,7 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
           />
           <UserDateDetail label={t`Created`} date={created} user={created_by} />
           <UserDateDetail
-            label={t`Last modified`}
+            label={t`Last Modified`}
             date={modified}
             user={modified_by}
           />
@@ -148,7 +154,7 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
             <Button
               ouiaId="smart-inventory-detail-edit-button"
               component={Link}
-              aria-label={t`edit`}
+              aria-label={t`Edit`}
               to={`/inventories/smart_inventory/${id}/edit`}
             >
               {t`Edit`}
@@ -157,9 +163,11 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
           {user_capabilities?.delete && (
             <DeleteButton
               name={name}
-              modalTitle={t`Delete smart inventory`}
+              modalTitle={t`Delete Smart Inventory`}
               onConfirm={handleDelete}
               isDisabled={isLoading}
+              deleteDetailsRequests={deleteDetailsRequests}
+              deleteMessage={t`This inventory is currently being used by other resources. Are you sure you want to delete it?`}
             >
               {t`Delete`}
             </DeleteButton>

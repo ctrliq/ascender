@@ -83,13 +83,13 @@ describe('<InventoryHostItem />', () => {
 
     expect(screen.getByRole('cell', { name: 'Bar' })).toBeInTheDocument();
     expect(
-      screen.getByRole('switch', { name: 'Toggle host' })
+      screen.getByRole('switch', { name: 'Toggle Host' })
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Host 1' })).toHaveAttribute(
       'href',
       '/host/1'
     );
-    expect(screen.getByRole('link', { name: 'Edit host' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Edit Host' })).toHaveAttribute(
       'href',
       '/inventories/inventory/1/hosts/1/edit'
     );
@@ -107,7 +107,7 @@ describe('<InventoryHostItem />', () => {
     };
 
     renderItem({ host: copyMockHost });
-    expect(screen.queryByText('Edit host')).not.toBeInTheDocument();
+    expect(screen.queryByText('Edit Host')).not.toBeInTheDocument();
   });
 
   test('should show and hide related groups on overflow button click', async () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PaginatedTable from './PaginatedTable';
@@ -59,6 +59,55 @@ describe('<PaginatedTable />', () => {
     expect(rows[2]).toHaveTextContent('three');
     expect(rows[3]).toHaveTextContent('four');
     expect(rows[4]).toHaveTextContent('five');
+  });
+
+  /*
+   * Every change to the query string clears the selection, including the
+   * search box's, which replaces the address rather than pushing one: a tick
+   * kept across a new filter could sit on a row that filter hides, and a bulk
+   * action would still reach it.
+   */
+  describe('what a change of address does to the selection', () => {
+    function renderTable(history: ReturnType<typeof createMemoryHistory>) {
+      const clearSelected = vi.fn();
+      renderWithContexts(
+        <PaginatedTable
+          items={mockData}
+          itemCount={7}
+          queryParams={{ page: 1, page_size: 5, order_by: 'name' }}
+          qsConfig={qsConfig}
+          clearSelected={clearSelected}
+          renderRow={() => null}
+        />,
+        { context: { router: { history } } }
+      );
+      clearSelected.mockClear();
+      return clearSelected;
+    }
+
+    test('should clear it where the address is replaced', () => {
+      const history = createMemoryHistory({
+        initialEntries: ['/organizations/1/teams'],
+      });
+      const clearSelected = renderTable(history);
+
+      act(() =>
+        history.replace('/organizations/1/teams?item.name__icontains=t')
+      );
+
+      expect(clearSelected).toHaveBeenCalled();
+    });
+
+    test('should clear it where the address is pushed', () => {
+      const history = createMemoryHistory({
+        initialEntries: ['/organizations/1/teams'],
+      });
+      const clearSelected = renderTable(history);
+
+      act(() => history.push('/organizations/1/teams?item.page=2'));
+
+      expect(clearSelected).toHaveBeenCalled();
+    });
   });
 
   test('should navigate page when changes', async () => {

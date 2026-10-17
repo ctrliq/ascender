@@ -47,3 +47,9 @@
 .ascender-frequency-detail-subform__margin-left-10 {
   margin-left: 10px;
 }
+
+/* The unit after Run every is one word, beside an input that takes the rest
+   of the row: it keeps its own width rather than breaking inside the word. */
+.ascender-frequency-detail-subform__run-every-label {
+  white-space: nowrap;
+}

@@ -16,7 +16,7 @@ function RevertAllAlert({ onClose, onRevertAll }: RevertAllAlertProps) {
   return (
     <AlertModal
       isOpen
-      title={t`Revert settings`}
+      title={t`Revert Settings`}
       variant="info"
       onClose={onClose}
       ouiaId="revert-all-modal"
@@ -28,7 +28,7 @@ function RevertAllAlert({ onClose, onRevertAll }: RevertAllAlertProps) {
           aria-label={t`Confirm revert all`}
           onClick={onRevertAll}
         >
-          {t`Revert all`}
+          {t`Revert All`}
         </Button>,
         <Button
           ouiaId="revert-all-cancel-button"

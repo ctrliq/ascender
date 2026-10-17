@@ -35,12 +35,23 @@ vi.mock('./UserAdd/UserAdd', async () => {
     default: () => ReactLib.createElement('div', null, 'UserAdd'),
   };
 });
+// The breadcrumb a test wants the detail subtree to report, if any.
+let mockBreadcrumbArgs: unknown[] | undefined;
 vi.mock('./User', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
-  return {
-    __esModule: true,
-    default: () => ReactLib.createElement('div', null, 'User detail'),
-  };
+  function MockUser({
+    setBreadcrumb,
+  }: {
+    setBreadcrumb: (...args: unknown[]) => void;
+  }) {
+    ReactLib.useEffect(() => {
+      if (mockBreadcrumbArgs) {
+        setBreadcrumb(...mockBreadcrumbArgs);
+      }
+    }, [setBreadcrumb]);
+    return ReactLib.createElement('div', null, 'User detail');
+  }
+  return { __esModule: true, default: MockUser };
 });
 
 function renderAt(path: string) {
@@ -58,6 +69,7 @@ function renderAt(path: string) {
 describe('<Users />', () => {
   beforeEach(() => {
     mockScreenHeaderProps = undefined;
+    mockBreadcrumbArgs = undefined;
   });
 
   test('renders the list and sets the breadcrumb config at /users', async () => {
@@ -80,5 +92,33 @@ describe('<Users />', () => {
     renderAt('/users/1/details');
     expect(await screen.findByText('User detail')).toBeInTheDocument();
     expect(screen.queryByText('UsersList')).not.toBeInTheDocument();
+  });
+
+  /*
+   * The api gives a token no name, so the crumb names it the way the token
+   * list does: by its application, or as a personal access token.
+   */
+  test("names a token's crumb after its application", async () => {
+    mockBreadcrumbArgs = [
+      { id: 1, username: 'alex' },
+      { id: 5, summary_fields: { application: { id: 3, name: 'hg' } } },
+    ];
+    renderAt('/users/1/tokens/5/details');
+    await screen.findByText('User detail');
+    expect(
+      mockScreenHeaderProps?.breadcrumbConfig['/users/1/tokens/5/details']
+    ).toBe('hg');
+  });
+
+  test("names a personal token's crumb as such", async () => {
+    mockBreadcrumbArgs = [
+      { id: 1, username: 'alex' },
+      { id: 5, summary_fields: { application: null } },
+    ];
+    renderAt('/users/1/tokens/5/details');
+    await screen.findByText('User detail');
+    expect(
+      mockScreenHeaderProps?.breadcrumbConfig['/users/1/tokens/5/details']
+    ).toBe('Personal Access Token');
   });
 });

@@ -121,6 +121,7 @@ function JobTemplatesList({
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Job Templates`}
       contentError={error}
       hasContentLoading={isLoading}
       itemCount={count}
@@ -165,7 +166,7 @@ function JobTemplatesList({
           isDefault: true,
         },
         {
-          name: t`Playbook name`,
+          name: t`Playbook Name`,
           key: 'playbook__icontains',
         },
         {

@@ -54,15 +54,72 @@ describe('<InstanceGroupForm/>', () => {
     vi.clearAllMocks();
   });
 
-  function setup() {
+  function setup(
+    overrides: Record<string, unknown> = {},
+    queueNames?: { controlPlane: string; execution: string }
+  ) {
     return renderWithContexts(
       <InstanceGroupForm
+        queueNames={queueNames}
         onCancel={onCancel}
         onSubmit={onSubmit}
-        instanceGroup={instanceGroup as unknown as Partial<InstanceGroup>}
+        instanceGroup={
+          {
+            ...instanceGroup,
+            ...overrides,
+          } as unknown as Partial<InstanceGroup>
+        }
       />
     );
   }
+
+  /*
+   * The api refuses to rename the installer's groups or to move their policy
+   * instance percentage, so the form holds both fields and says why.
+   */
+  test.each([['default'], ['controlplane']])(
+    'holds the name and percentage of %s and says why',
+    (name) => {
+      const { container } = setup({ name });
+      expect(container.querySelector('#instance-group-name')).toBeDisabled();
+      expect(
+        container.querySelector('#instance-group-policy-instance-percentage')
+      ).toBeDisabled();
+      expect(
+        container.querySelector('#instance-group-policy-instance-minimum')
+      ).toBeEnabled();
+      expect(
+        screen.getByText(
+          `The ${name} instance group's name may not be changed.`
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          `The ${name} instance group's policy instance percentage may not be changed from the initial value set by the installer.`
+        )
+      ).toBeInTheDocument();
+    }
+  );
+
+  // The api protects the groups its settings name, which an install may
+  // name otherwise than the defaults.
+  test('holds the groups under the names the install gives them', () => {
+    const names = { controlPlane: 'cp', execution: 'jobs' };
+    const { container, unmount } = setup({ name: 'cp' }, names);
+    expect(container.querySelector('#instance-group-name')).toBeDisabled();
+    unmount();
+
+    const other = setup({ name: 'controlplane' }, names);
+    expect(other.container.querySelector('#instance-group-name')).toBeEnabled();
+  });
+
+  test('leaves the name and percentage of any other group editable', () => {
+    const { container } = setup();
+    expect(container.querySelector('#instance-group-name')).toBeEnabled();
+    expect(
+      container.querySelector('#instance-group-policy-instance-percentage')
+    ).toBeEnabled();
+  });
 
   test('should display form fields properly', () => {
     const { container } = setup();

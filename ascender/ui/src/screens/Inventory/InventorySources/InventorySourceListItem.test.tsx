@@ -1,8 +1,12 @@
 import type { InventorySource } from 'types/api';
 import React from 'react';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import { InventoryUpdatesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import InventorySourceListItem from './InventorySourceListItem';
+
+vi.mock('../../../api/models/InventoryUpdates');
 
 const source = {
   id: 1,
@@ -23,8 +27,12 @@ const source = {
   },
 } as unknown as InventorySource;
 
+// The harness signs in a superuser, whom the api always lets cancel.
+const notSuperuser = { config: { me: { id: 2, is_superuser: false } } };
+
 function renderItem(
-  props?: Partial<React.ComponentProps<typeof InventorySourceListItem>>
+  props?: Partial<React.ComponentProps<typeof InventorySourceListItem>>,
+  options?: Parameters<typeof renderWithContexts>[1]
 ) {
   return renderWithContexts(
     <table>
@@ -39,7 +47,8 @@ function renderItem(
           {...props}
         />
       </tbody>
-    </table>
+    </table>,
+    options
   );
 }
 
@@ -59,7 +68,7 @@ describe('<InventorySourceListItem />', () => {
     expect(screen.getByText('Canceled')).toBeInTheDocument();
     const jobLink = screen
       .getAllByRole('link')
-      .find((link) => link.getAttribute('href') === '/jobs/inventory/664');
+      .find((link) => link.getAttribute('href') === '/runs/inventory/664');
     expect(jobLink).toBeDefined();
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
     const row = screen.getByText('Foo').closest('tr');
@@ -73,7 +82,7 @@ describe('<InventorySourceListItem />', () => {
       screen.getByRole('link', { name: 'Edit Source' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Start sync source' })
+      screen.getByRole('button', { name: 'Sync Source' })
     ).toBeInTheDocument();
   });
 
@@ -106,7 +115,7 @@ describe('<InventorySourceListItem />', () => {
       label: undefined,
     });
     expect(
-      screen.queryByRole('button', { name: 'Start sync source' })
+      screen.queryByRole('button', { name: 'Sync Source' })
     ).not.toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'Edit Source' })
@@ -126,7 +135,7 @@ describe('<InventorySourceListItem />', () => {
       screen.queryByRole('link', { name: 'Edit Source' })
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Start sync source' })
+      screen.getByRole('button', { name: 'Sync Source' })
     ).toBeInTheDocument();
   });
 
@@ -146,7 +155,78 @@ describe('<InventorySourceListItem />', () => {
       },
     });
     expect(
-      screen.getByRole('button', { name: 'Cancel Inventory Source Sync' })
+      screen.getByRole('button', { name: 'Cancel Inventory Sync' })
+    ).toBeInTheDocument();
+  });
+
+  // A new sync has not reached a node yet, and the api still lets it go.
+  test('should render cancel button for a sync not yet started', () => {
+    renderItem({
+      source: {
+        ...source,
+        status: 'pending',
+        summary_fields: {
+          ...source.summary_fields,
+          current_job: { id: 1000, status: 'new' },
+        },
+      },
+    });
+    expect(
+      screen.getByRole('button', { name: 'Cancel Inventory Sync' })
+    ).toBeInTheDocument();
+  });
+
+  /*
+   * Starting a sync is not the right the api checks on cancel. Someone who
+   * may sync but did not start this run, and is no admin of the inventory,
+   * is refused, so neither Cancel nor Sync is offered while it runs.
+   */
+  test('should not offer cancel to a user the api would refuse', async () => {
+    vi.mocked(InventoryUpdatesAPI.readDetail).mockResolvedValue({
+      data: { summary_fields: { user_capabilities: { cancel: false } } },
+    } as unknown as ResponseOf<typeof InventoryUpdatesAPI.readDetail>);
+    renderItem(
+      {
+        source: {
+          ...source,
+          summary_fields: {
+            ...source.summary_fields,
+            user_capabilities: { start: true, edit: false },
+            current_job: { id: 1000, status: 'running' },
+          },
+        },
+      },
+      { context: notSuperuser }
+    );
+    await waitFor(() =>
+      expect(InventoryUpdatesAPI.readDetail).toHaveBeenCalledWith(1000)
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Cancel Inventory Sync' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('should offer cancel to the user who started the sync', async () => {
+    vi.mocked(InventoryUpdatesAPI.readDetail).mockResolvedValue({
+      data: { summary_fields: { user_capabilities: { cancel: true } } },
+    } as unknown as ResponseOf<typeof InventoryUpdatesAPI.readDetail>);
+    renderItem(
+      {
+        source: {
+          ...source,
+          summary_fields: {
+            ...source.summary_fields,
+            user_capabilities: { start: true, edit: false },
+            current_job: { id: 1000, status: 'running' },
+          },
+        },
+      },
+      { context: notSuperuser }
+    );
+    expect(
+      await screen.findByRole('button', {
+        name: 'Cancel Inventory Sync',
+      })
     ).toBeInTheDocument();
   });
 });

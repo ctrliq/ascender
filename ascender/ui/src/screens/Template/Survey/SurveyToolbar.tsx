@@ -10,10 +10,10 @@ import {
   ToolbarContent,
   ToolbarGroup,
   ToolbarItem,
-  Tooltip,
 } from '@patternfly/react-core';
 import { ToolbarAddButton } from 'components/PaginatedTable';
 import './SurveyToolbar.css';
+import Tooltip from 'components/Tooltip';
 
 export interface SurveyToolbarProps {
   canEdit?: boolean;
@@ -42,6 +42,16 @@ function SurveyToolbar({
 }: SurveyToolbarProps) {
   const { t } = useLingui();
   isDeleteDisabled = !canEdit || isDeleteDisabled;
+  /* Why Delete cannot be pressed, where it cannot: the permission first,
+     since ticking a question would not help with that. */
+  /* Questions, in the plural, since one click deletes every question
+     ticked, where Add adds the one Question. */
+  let deleteTooltip = t`Delete Questions`;
+  if (!canEdit) {
+    deleteTooltip = t`You do not have permission to delete survey questions`;
+  } else if (isDeleteDisabled) {
+    deleteTooltip = t`Select a question to delete`;
+  }
   const { pathname } = useLocation();
   const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   return (
@@ -64,17 +74,19 @@ function SurveyToolbar({
           />
         </ToolbarItem>
         <ToolbarGroup>
-          <ToolbarItem>
-            <ToolbarAddButton
-              isDisabled={!canEdit}
-              linkTo={`${surveyUrl}/add`}
-            />
-          </ToolbarItem>
+          {/* Left out rather than disabled for whoever may not edit, as the
+              other lists leave out their Add. */}
+          {canEdit && (
+            <ToolbarItem>
+              <ToolbarAddButton
+                tooltip={t`Add Question`}
+                linkTo={`${surveyUrl}/add`}
+              />
+            </ToolbarItem>
+          )}
           {canEdit && onOpenOrderModal && (
             <ToolbarItem>
-              <Tooltip
-                content={t`Click to rearrange the order of the survey questions`}
-              >
+              <Tooltip content={t`Edit Question Order`}>
                 <Button
                   onClick={() => {
                     onOpenOrderModal();
@@ -88,13 +100,7 @@ function SurveyToolbar({
             </ToolbarItem>
           )}
           <ToolbarItem>
-            <Tooltip
-              content={
-                isDeleteDisabled
-                  ? t`Select a question to delete`
-                  : t`Delete survey question`
-              }
-            >
+            <Tooltip content={deleteTooltip}>
               <div>
                 <Button
                   ouiaId="survey-delete-button"
@@ -113,8 +119,7 @@ function SurveyToolbar({
             <Switch
               aria-label={t`Survey Toggle`}
               id="survey-toggle"
-              label={t`Survey Enabled`}
-
+              label={surveyEnabled ? t`Survey Enabled` : t`Survey Disabled`}
               isChecked={surveyEnabled}
               isDisabled={!canEdit}
               onChange={() => onToggleSurvey(!surveyEnabled)}

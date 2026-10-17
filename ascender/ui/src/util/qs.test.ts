@@ -8,6 +8,7 @@ import {
   _addDefaultsToObject,
   mergeParams,
   updateQueryString,
+  removeNamespaces,
 } from './qs';
 
 describe('qs (qs.js)', () => {
@@ -882,5 +883,34 @@ describe('qs (qs.js)', () => {
         'credential.page=3&template.name__icontains=workflow&template.page=3'
       );
     });
+  });
+});
+
+describe('removeNamespaces', () => {
+  /*
+   * A list inside a modal writes its search into the address like any other,
+   * and the modal closing is the only thing that can forget it.
+   */
+  test('takes out what the namespaces own and leaves the rest', () => {
+    const search =
+      '?run-template.name__icontains=zzz&run-target.page=2&host.page=3&order_by=name';
+
+    expect(removeNamespaces(search, ['run-template', 'run-target'])).toEqual(
+      'host.page=3&order_by=name'
+    );
+  });
+
+  test('leaves an address holding none of them alone', () => {
+    expect(removeNamespaces('?host.page=3', ['run-template'])).toEqual(
+      'host.page=3'
+    );
+  });
+
+  /* A namespace is a prefix and a dot, not a substring: run-target does not
+     own what run-target-other wrote. */
+  test('matches whole namespaces', () => {
+    expect(removeNamespaces('?run-targets.page=2', ['run-target'])).toEqual(
+      'run-targets.page=2'
+    );
   });
 });

@@ -47,9 +47,7 @@ function Dashboard() {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -70,7 +68,7 @@ function Dashboard() {
             failed
             link="/hosts?host.last_job_host_summary__failed=true"
             data={countData?.hosts?.failed}
-            label={t`Failed hosts`}
+            label={t`Failed Hosts`}
           />
           <Count
             link="/inventories"
@@ -81,7 +79,7 @@ function Dashboard() {
             failed
             link="/inventories?inventory.inventory_sources_with_failures__gt=0"
             data={countData?.inventories?.inventory_failed}
-            label={t`Inventory sync failures`}
+            label={t`Inventory Sync Failures`}
           />
           <Count
             link="/projects"
@@ -92,7 +90,7 @@ function Dashboard() {
             failed
             link="/projects?project.status__in=failed,canceled"
             data={countData?.projects?.failed}
-            label={t`Project sync failures`}
+            label={t`Project Sync Failures`}
           />
         </div>
       </PageSection>
@@ -106,22 +104,22 @@ function Dashboard() {
               ouiaId="dashboard-tabs"
             >
               <Tab
-                aria-label={t`Job status graph tab`}
+                aria-label={t`Run Status graph tab`}
                 eventKey={0}
-                title={<TabTitleText>{t`Job status`}</TabTitleText>}
+                title={<TabTitleText>{t`Run Status`}</TabTitleText>}
                 ouiaId="job-status-graph-tab"
               >
                 <DashboardGraph />
               </Tab>
               <Tab
-                aria-label={t`Recent Jobs list tab`}
+                aria-label={t`Recent Runs list tab`}
                 eventKey={1}
-                title={<TabTitleText>{t`Recent Jobs`}</TabTitleText>}
+                title={<TabTitleText>{t`Recent Runs`}</TabTitleText>}
                 ouiaId="recent-jobs-list-tab"
               >
                 <div>
                   {activeTabId === 1 && (
-                    <JobList defaultParams={{ page_size: 5 }} />
+                    <JobList showTypeColumn defaultParams={{ page_size: 5 }} />
                   )}
                 </div>
               </Tab>

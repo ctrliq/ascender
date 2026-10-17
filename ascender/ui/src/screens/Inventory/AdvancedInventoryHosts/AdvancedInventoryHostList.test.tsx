@@ -1,6 +1,6 @@
 import type { Inventory } from 'types/api';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI } from 'api';
@@ -98,5 +98,29 @@ describe('<AdvancedInventoryHostList />', () => {
     expect(
       await screen.findByText('Something went wrong...')
     ).toBeInTheDocument();
+  });
+
+  test('searches the creator by part of the username', async () => {
+    const { user } = renderList();
+    await waitFor(() => expect(InventoriesAPI.readHosts).toHaveBeenCalled());
+
+    // A username search matches part of the name, as the other lists' do.
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
+    await user.click(
+      await screen.findByRole('option', { name: 'Created By (Username)' })
+    );
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'adm'
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
+    await waitFor(() =>
+      expect(InventoriesAPI.readHosts).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ created_by__username__icontains: 'adm' })
+      )
+    );
   });
 });

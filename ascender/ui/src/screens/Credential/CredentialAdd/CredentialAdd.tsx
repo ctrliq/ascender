@@ -160,11 +160,7 @@ function CredentialAdd({ me }: CredentialAddProps) {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <CardBody>
-            <ContentLoading />
-          </CardBody>
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }

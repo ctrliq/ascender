@@ -177,6 +177,7 @@ function ExecutionEnvironmentList() {
                   ...(canAdd
                     ? [
                         <ToolbarAddButton
+                          tooltip={t`Add Execution Environment`}
                           ouiaId="add-execution-environment"
                           key="add"
                           linkTo="/execution_environments/add"
@@ -212,25 +213,17 @@ function ExecutionEnvironmentList() {
                 fetchExecutionEnvironments={fetchExecutionEnvironments}
               />
             )}
-            emptyStateControls={
-              canAdd && (
-                <ToolbarAddButton
-                  key="add"
-                  linkTo="/execution_environments/add"
-                />
-              )
-            }
           />
         </Card>
       </PageSection>
       <AlertModal
-        aria-label={t`Deletion error`}
+        aria-label={t`Deletion Error`}
         isOpen={Boolean(deletionError)}
         onClose={clearDeletionError}
-        title={t`Error`}
+        title={t`Error!`}
         variant="error"
       >
-        {t`Failed to delete one or more execution environments`}
+        {t`Failed to delete one or more execution environments.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
       <Toast {...toastProps} />

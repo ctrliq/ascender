@@ -10,9 +10,10 @@ import useRequest from 'hooks/useRequest';
 import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import ContentError from '../../ContentError';
+import LAUNCH_PROMPT_NAMESPACES from '../namespaces';
 import './InventoryStep.css';
 
-const QS_CONFIG = getQSConfig('inventory', {
+const QS_CONFIG = getQSConfig(LAUNCH_PROMPT_NAMESPACES.inventory, {
   page: 1,
   page_size: 5,
   order_by: 'name',

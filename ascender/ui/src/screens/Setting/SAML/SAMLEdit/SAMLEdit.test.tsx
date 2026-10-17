@@ -56,7 +56,7 @@ describe('<SAMLEdit />', () => {
 
   async function renderEdit() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/saml/edit'],
+      initialEntries: ['/authentication/saml/edit'],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -100,19 +100,37 @@ describe('<SAMLEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('saml');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SAML_AUTO_CREATE_OBJECTS: true,
+      SOCIAL_AUTH_SAML_SP_ENTITY_ID: '',
+      SOCIAL_AUTH_SAML_SP_PUBLIC_CERT: '',
+      SOCIAL_AUTH_SAML_SP_PRIVATE_KEY: '',
+      SOCIAL_AUTH_SAML_ORG_INFO: {},
+      SOCIAL_AUTH_SAML_TECHNICAL_CONTACT: {},
+      SOCIAL_AUTH_SAML_SUPPORT_CONTACT: {},
+      SOCIAL_AUTH_SAML_ENABLED_IDPS: {},
+      SOCIAL_AUTH_SAML_SP_EXTRA: null,
+      SOCIAL_AUTH_SAML_EXTRA_DATA: null,
+      SOCIAL_AUTH_SAML_ORGANIZATION_MAP: null,
+      SOCIAL_AUTH_SAML_TEAM_MAP: null,
+      SOCIAL_AUTH_SAML_ORGANIZATION_ATTR: {},
+      SOCIAL_AUTH_SAML_TEAM_ATTR: {},
+      SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR: {},
+      SOCIAL_AUTH_SAML_SECURITY_CONFIG: { requestedAuthnContext: false },
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -155,14 +173,14 @@ describe('<SAMLEdit />', () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/settings/saml/details')
+      expect(history.location.pathname).toEqual('/authentication/saml/details')
     );
   });
 
   test('should navigate to saml detail when cancel is clicked', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/settings/saml/details');
+    expect(history.location.pathname).toEqual('/authentication/saml/details');
   });
 
   test('should display error message on unsuccessful submission', async () => {

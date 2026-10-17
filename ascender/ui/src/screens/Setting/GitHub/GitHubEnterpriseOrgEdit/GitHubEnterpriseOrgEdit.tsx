@@ -10,7 +10,7 @@ function GitHubEnterpriseOrgEdit() {
   return (
     <SettingsEditForm
       category="github-enterprise-org"
-      detailUrl="/settings/github/enterprise_organization/details"
+      detailUrl="/authentication/github/enterprise_organization/details"
     >
       {(github) => (
         <>

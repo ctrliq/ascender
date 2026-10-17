@@ -31,14 +31,17 @@ describe('<LDAPEdit />', () => {
 
   async function renderEdit(category = 'default') {
     history = createMemoryHistory({
-      initialEntries: [`/settings/ldap/${category}/edit`],
+      initialEntries: [`/authentication/ldap/${category}/edit`],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route path="/settings/ldap/:category/edit" element={<LDAPEdit />} />
           <Route
-            path="/settings/ldap/:category/details"
+            path="/authentication/ldap/:category/edit"
+            element={<LDAPEdit />}
+          />
+          <Route
+            path="/authentication/ldap/:category/details"
             element={<div>LDAP detail view</div>}
           />
         </Routes>
@@ -84,11 +87,11 @@ describe('<LDAPEdit />', () => {
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
@@ -163,7 +166,7 @@ describe('<LDAPEdit />', () => {
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
-        '/settings/ldap/default/details'
+        '/authentication/ldap/default/details'
       )
     );
   });
@@ -171,7 +174,9 @@ describe('<LDAPEdit />', () => {
   test('should navigate to ldap default detail when cancel is clicked', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/settings/ldap/default/details');
+    expect(history.location.pathname).toEqual(
+      '/authentication/ldap/default/details'
+    );
   });
 
   test('should display error message on unsuccessful submission', async () => {

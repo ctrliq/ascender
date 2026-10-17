@@ -71,6 +71,27 @@ describe('<UserTokenDetail/>', () => {
     await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(2));
   });
 
+  test('after a delete, goes where the Back tab goes', async () => {
+    vi.mocked(TokensAPI.destroy).mockResolvedValueOnce(
+      {} as unknown as ResponseOf<typeof TokensAPI.destroy>
+    );
+    const { user, history } = renderWithContexts(
+      <UserTokenDetail
+        token={token as unknown as OAuth2Token}
+        backLink="/applications/3/tokens"
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/applications/3/tokens')
+    );
+  });
+
   test('should display error on failed deletion', async () => {
     vi.mocked(TokensAPI.destroy).mockRejectedValueOnce(
       Object.assign(new Error('An error occurred'), {
@@ -95,10 +116,52 @@ describe('<UserTokenDetail/>', () => {
 
     await waitFor(() => expect(TokensAPI.destroy).toHaveBeenCalledWith(2));
     expect(await screen.findByText('Error!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to delete user token.')
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() =>
       expect(screen.queryByText('Error!')).not.toBeInTheDocument()
     );
+  });
+
+  /*
+   * Tokens carry no user_capabilities, so the button follows the api's rule:
+   * the token's owner, a superuser, or an organization admin for a token
+   * issued through an application.
+   */
+  test('offers Delete to the token owner', () => {
+    renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />,
+      { context: { config: { me: { id: 1, is_superuser: false } } } }
+    );
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+  });
+
+  test('hides Delete from someone the api would refuse', () => {
+    renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />,
+      {
+        context: {
+          config: { me: { id: 7, is_superuser: false }, adminOrgCount: 0 },
+        },
+      }
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Delete' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers Delete on an application token to an organization admin', () => {
+    renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />,
+      {
+        context: {
+          config: { me: { id: 7, is_superuser: false }, adminOrgCount: 1 },
+        },
+      }
+    );
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 });

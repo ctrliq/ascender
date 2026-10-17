@@ -5,6 +5,14 @@
   min-height: 250px;
 }
 
+/* The empty state centres its content with align-items: center, so the content
+   box shrinks to fit and the stack's width: 100% resolves against nothing: the
+   four bars came out about three pixels wide. Giving the content the full width
+   is what makes the percentages below mean anything. */
+.ascender-content-loading__empty-state .pf-v6-c-empty-state__content {
+  width: 100%;
+}
+
 .ascender-content-loading__skeleton-stack {
   display: flex;
   flex-direction: column;

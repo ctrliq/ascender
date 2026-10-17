@@ -24,24 +24,24 @@ function LinkDeleteModal() {
   return (
     <AlertModal
       variant="danger"
-      title={t`Remove Link`}
+      title={t`Delete Link`}
       isOpen={linkToDelete}
       onClose={() => dispatch({ type: 'SET_LINK_TO_DELETE', value: null })}
       actions={[
         <Button
           ouiaId="link-remove-confirm-button"
           id="confirm-link-removal"
-          aria-label={t`Confirm link removal`}
-          key="remove"
+          aria-label={t`Confirm Delete Link`}
+          key="delete"
           onClick={() => dispatch({ type: 'DELETE_LINK' })}
           variant="danger"
         >
-          {t`Remove`}
+          {t`Delete`}
         </Button>,
         <Button
           ouiaId="link-remove-cancel-button"
           id="cancel-link-removal"
-          aria-label={t`Cancel link removal`}
+          aria-label={t`Cancel Delete Link`}
           key="cancel"
           onClick={() => dispatch({ type: 'SET_LINK_TO_DELETE', value: null })}
           variant="link"
@@ -50,12 +50,12 @@ function LinkDeleteModal() {
         </Button>,
       ]}
     >
-      <p>{t`Are you sure you want to remove this link?`}</p>
+      <p>{t`Are you sure you want to delete this link?`}</p>
       {!linkToDelete.isConvergenceLink && (
         <>
           <br />
           <p>
-            {t`Removing this link will orphan the rest of the branch and cause it to be executed immediately on launch.`}
+            {t`Deleting this link will orphan the rest of the branch and cause it to be executed immediately on launch.`}
           </p>
         </>
       )}

@@ -100,6 +100,16 @@ export interface HeaderCellProps {
   className?: string;
   children?: React.ReactNode;
   tooltip?: React.ReactNode;
+  /**
+   * How wide this column should be, in pixels or as a css length.
+   *
+   * The table lays itself out from its contents, and a column is only as wide
+   * as what is in it: a column of one small action ends up the width of its own
+   * heading. Asked for here rather than on the cells below, which is where it
+   * has an effect: a width on the body cells alone leaves the column where it
+   * was.
+   */
+  width?: number | string;
 }
 
 export function HeaderCell({
@@ -111,6 +121,7 @@ export function HeaderCell({
   className,
   children,
   tooltip,
+  width,
 }: HeaderCellProps) {
   const sort: ThProps['sort'] = sortKey
     ? {
@@ -126,12 +137,9 @@ export function HeaderCell({
   return (
     <PFTh
       info={tooltip ? { popover: <div>{tooltip}</div> } : undefined}
+      style={width ? { width } : undefined}
       id={sortKey ? `${idPrefix}-${sortKey}` : undefined}
-      className={[
-        'ascender-header-row__th',
-        children === 'Actions' && 'ascender-header-row__th--align-right',
-        className,
-      ]
+      className={['ascender-header-row__th', className]
         .filter(Boolean)
         .join(' ')}
       sort={sort}

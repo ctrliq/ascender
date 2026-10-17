@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment } from 'types/api';
+import type { ExecutionEnvironment, OptionsResponse } from 'types/api';
 import React from 'react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
@@ -50,6 +50,11 @@ vi.mock('../shared/ExecutionEnvironmentForm', () => ({
   },
 }));
 
+/** What the screen reads and hands down, in place of the form reading it. */
+const formOptions = {
+  actions: { POST: { pull: { choices: [] } } },
+} as unknown as OptionsResponse;
+
 describe('<ExecutionEnvironmentEdit/>', () => {
   let history: TestHistory;
 
@@ -58,6 +63,7 @@ describe('<ExecutionEnvironmentEdit/>', () => {
     return renderWithContexts(
       <ExecutionEnvironmentEdit
         executionEnvironment={executionEnvironmentData}
+        formOptions={formOptions}
       />,
       { context: { router: { history } } }
     );

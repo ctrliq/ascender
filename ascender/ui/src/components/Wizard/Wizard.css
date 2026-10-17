@@ -3,3 +3,12 @@
 .ascender-wizard .pf-v6-c-toolbar__content {
   padding: 0 !important;
 }
+
+/* The limit a run is aimed at is a list of host names, and the header keeps to
+   one line: what does not fit is cut with an ellipsis rather than pushing the
+   first step down the modal. */
+.ascender-wizard .pf-v6-c-wizard__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

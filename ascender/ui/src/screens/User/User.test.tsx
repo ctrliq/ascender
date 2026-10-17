@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { UsersAPI } from 'api';
@@ -67,5 +67,19 @@ describe('<User />', () => {
     renderUser('/users/1/foobar');
 
     expect(await screen.findByText('Not Found')).toBeInTheDocument();
+    // No tab claims an address it has no view for, Back to Users included.
+    const selected = screen
+      .getAllByRole('tab')
+      .filter((tab) => tab.getAttribute('aria-selected') === 'true');
+    expect(selected).toHaveLength(0);
+  });
+
+  test('does not say Not Found while the user is still loading', async () => {
+    vi.mocked(UsersAPI.readDetail).mockReturnValue(
+      new Promise(() => {}) as ReturnType<typeof UsersAPI.readDetail>
+    );
+    renderUser('/users/1/details');
+    await waitFor(() => expect(UsersAPI.readDetail).toHaveBeenCalled());
+    expect(screen.queryByText('Not Found')).not.toBeInTheDocument();
   });
 });

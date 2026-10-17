@@ -50,6 +50,7 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     },
     webhook_service: 'Github',
     webhook_key: 'Foo webhook key',
+    webhook_credential: 1,
     scm_branch: 'main',
     limit: 'servers',
   } as unknown as WorkflowJobTemplate;
@@ -76,7 +77,7 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     renderDetail();
 
     assertDetail('Created', '7/7/2015');
-    assertDetail('Modified', '8/11/2019');
+    assertDetail('Last Modified', '8/11/2019');
     assertDetail(
       'Webhook URL',
       'http://localhost/api/v2/workflow_job_templates/45/github/'
@@ -85,11 +86,14 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     assertDetail('Limit', 'servers');
     assertDetail('Webhook Service', 'Github');
     assertDetail('Webhook Key', 'Foo webhook key');
+    // The form picks one credential, so the detail names it in the singular.
+    assertDetail('Webhook Credential', 'Credential');
     assertDetail('Name', 'WFJT Template');
     assertDetail('Description', 'Yo, it is a wfjt template!');
-    assertDetail('Job Type', 'Workflow Job Template');
+    // A workflow template has no job type, so none is shown for it.
+    expect(screen.queryByText('Job Type')).not.toBeInTheDocument();
 
-    // Organization renders a label inside a link
+    // Organization renders a plain link, as a job template's does
     const organization = getDetailValue('Organization');
     expect(organization).toHaveTextContent('Org');
     // Inventory renders a link to the inventory's name
@@ -113,6 +117,25 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     expect(
       within(activity as unknown as HTMLElement).getAllByRole('link')
     ).toHaveLength(3);
+  });
+
+  test('names each option as its checkbox on the form does', () => {
+    renderDetail({
+      ...template,
+      allow_simultaneous: true,
+      allow_overwrite_flow_vars_on_relaunch: true,
+    });
+    const options = screen.getByText('Options')
+      .nextElementSibling as HTMLElement;
+    expect(
+      within(options)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual([
+      'Enable Webhook',
+      'Concurrent Jobs',
+      'Allow Overwriting Variables on Relaunch',
+    ]);
   });
 
   test('should have proper number of delete detail requests', async () => {

@@ -60,3 +60,17 @@ export function getDetailPendingLabel(workflowApproval: WorkflowApproval) {
 
   return `${formatDateString(workflowApproval.approval_expiration)}`;
 }
+
+/**
+ * Whether the workflow that asked for this approval is gone.
+ *
+ * Deleting a workflow job leaves its pending approvals behind: the node is
+ * removed, the approval keeps its pending status, and the api keeps saying it
+ * can be approved or denied. Voting on one is not refused, it simply moves a
+ * record nobody reads and sends the notifications for it, since there is no
+ * workflow left to carry on. The list already says so in place of the name,
+ * and the buttons follow.
+ */
+export function isWorkflowDeleted(workflowApproval: WorkflowApproval) {
+  return !workflowApproval?.summary_fields?.source_workflow_job?.id;
+}

@@ -10,7 +10,7 @@ function AzureADEdit() {
   return (
     <SettingsEditForm
       category="azuread-oauth2"
-      detailUrl="/settings/azure/default/details"
+      detailUrl="/authentication/azure/default/details"
     >
       {(azure) => (
         <>
