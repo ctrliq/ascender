@@ -302,7 +302,7 @@ msgstr "无论父节点的最后状态如何都执行。"
 msgid "Are you sure you want to remove this node?"
 msgstr "您确定要从删除这个节点吗？"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
 msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
 msgstr "作业可以在环境变量 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE 指向的文件中找到令牌。"
 
@@ -1008,7 +1008,7 @@ msgstr "此调度使用 UI 中不支持的复杂规则。\n"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:114
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1526,7 +1526,7 @@ msgstr "启用权限升级"
 msgid "Filter..."
 msgstr "过滤..."
 
-#: screens/Credential/shared/ExternalTestModal.tsx:188
+#: screens/Credential/shared/ExternalTestModal.tsx:190
 msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 msgstr "测试会像此模板的作业一样登录 Vault，使用的令牌带有该作业的声明。"
 
@@ -1613,8 +1613,8 @@ msgstr "API 服务/集成密钥"
 msgid "Minute"
 msgstr "分钟"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1681,8 +1681,8 @@ msgstr "创建新联邦库存"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:119
-#: components/Lookup/JobTemplateLookup.tsx:129
+#: components/Lookup/JobTemplateLookup.tsx:122
+#: components/Lookup/JobTemplateLookup.tsx:132
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2158,9 +2158,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "在评估条件之前需要父节点的结果。"
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:100
-#: components/Lookup/JobTemplateLookup.tsx:105
-#: components/Lookup/JobTemplateLookup.tsx:135
+#: components/Lookup/JobTemplateLookup.tsx:103
+#: components/Lookup/JobTemplateLookup.tsx:108
+#: components/Lookup/JobTemplateLookup.tsx:138
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2180,7 +2180,7 @@ msgstr "任务模板"
 msgid "Install Bundle"
 msgstr "安装捆绑包"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
 msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 msgstr "系统管理员可以在“设置”的“其他系统”中启用它，同时需要在那里设置服务的基本 URL。"
 
@@ -3712,7 +3712,7 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
-#: screens/Credential/shared/ExternalTestModal.tsx:123
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5337,8 +5337,8 @@ msgid "Delete Job"
 msgstr "删除作业"
 
 #: components/CopyButton/CopyButton.tsx:54
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5631,7 +5631,7 @@ msgstr "写入"
 msgid "Option Details"
 msgstr "选项详情"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
 msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
 msgstr "对于 HashiCorp Vault，请启用 JWT 身份验证方法并将其指向此签发者："
 
@@ -6177,6 +6177,10 @@ msgstr "警告：{selectedValue} 是指向 {0} 的链接，并将保存为该链
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:83
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# 个月} other {# 个月}}"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "无法从服务器读取要信任的签发者。请稍后重试。"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
 #~ msgid "Last recalculation date:"
@@ -8864,7 +8868,7 @@ msgstr "回答变量名称"
 msgid "Select"
 msgstr "选择"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
 msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 msgstr "接受该令牌的系统必须信任此签发者，它同时也是 OIDC 发现 URL："
 
@@ -9381,7 +9385,7 @@ msgstr "最近模板"
 msgid "Applications & Tokens"
 msgstr "应用程序和令牌"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
 msgid "Workload identity is not available"
 msgstr "工作负载身份不可用"
 
@@ -11314,7 +11318,7 @@ msgstr "时间格式无效"
 msgid "Unknown Project"
 msgstr "未知的工程ID"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
 msgid "Each job gets a short lived token signed for it, with no secret stored here"
 msgstr "每个作业都会获得一个为其签名的短期令牌，此处不存储任何机密"
 
@@ -11488,7 +11492,7 @@ msgstr "成功拒绝"
 msgid "Not configured for inventory sync."
 msgstr "没有为清单同步配置。"
 
-#: components/Lookup/JobTemplateLookup.tsx:121
+#: components/Lookup/JobTemplateLookup.tsx:124
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11602,6 +11606,10 @@ msgstr "房东/体验达人被自动处理了多少次"
 #: components/CodeEditor/VariablesField.js:260
 #~ msgid "Expand input"
 #~ msgstr "展开输入"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "无法读取工作负载身份配置"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
@@ -12130,7 +12138,7 @@ msgstr "删除主机失败。"
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:125
+#: components/Lookup/JobTemplateLookup.tsx:128
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

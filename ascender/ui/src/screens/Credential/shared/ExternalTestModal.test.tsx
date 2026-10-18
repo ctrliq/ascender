@@ -1,6 +1,6 @@
 import type { Credential, CredentialType } from 'types/api';
 import React from 'react';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI, JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
@@ -196,11 +196,11 @@ describe('<ExternalTestModal />', () => {
     // disabled while the lookup reads its first page
     await waitFor(() => expect(jobTemplateInput).toBeEnabled());
     await user.type(jobTemplateInput, 'patch');
-    // the lookup resolves what was typed a second after typing stops
-    await act(async () => {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 1300);
-      });
+    // the lookup resolves what was typed a second after typing stops, and
+    // Run stays disabled until it has
+    expect(getRunButton()).toBeDisabled();
+    await waitFor(() => expect(getRunButton()).toBeEnabled(), {
+      timeout: 3000,
     });
     expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
       name: 'patch',

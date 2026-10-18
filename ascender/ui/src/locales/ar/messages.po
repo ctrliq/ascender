@@ -304,7 +304,7 @@ msgstr "التنفيذ بغض النظر عن الحالة النهائية لل
 msgid "Are you sure you want to remove this node?"
 msgstr "هل أنت متأكد من أنك تريد إزالة هذه العقدة؟"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
 msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
 msgstr "تجد المهمة الرمز في الملف الذي يحدده متغير البيئة ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE."
 
@@ -1010,7 +1010,7 @@ msgstr "يستخدم هذا الجدول قواعد معقدة غير مدعوم
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:114
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1528,7 +1528,7 @@ msgstr "تمكين تصعيد الامتيازات"
 msgid "Filter..."
 msgstr "تصفية..."
 
-#: screens/Credential/shared/ExternalTestModal.tsx:188
+#: screens/Credential/shared/ExternalTestModal.tsx:190
 msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 msgstr "يسجّل الاختبار الدخول إلى Vault كما تفعل مهمة من هذا القالب، باستخدام رمز يحمل مطالباتها."
 
@@ -1615,8 +1615,8 @@ msgstr "مفتاح خدمة/تكامل API"
 msgid "Minute"
 msgstr "دقيقة"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1683,8 +1683,8 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:119
-#: components/Lookup/JobTemplateLookup.tsx:129
+#: components/Lookup/JobTemplateLookup.tsx:122
+#: components/Lookup/JobTemplateLookup.tsx:132
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2160,9 +2160,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "نتيجة العقدة الأصل مطلوبة قبل تقييم الشرط."
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:100
-#: components/Lookup/JobTemplateLookup.tsx:105
-#: components/Lookup/JobTemplateLookup.tsx:135
+#: components/Lookup/JobTemplateLookup.tsx:103
+#: components/Lookup/JobTemplateLookup.tsx:108
+#: components/Lookup/JobTemplateLookup.tsx:138
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2182,7 +2182,7 @@ msgstr "قالب المهمة"
 msgid "Install Bundle"
 msgstr "تثبيت الحزمة"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
 msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 msgstr "يمكن لمسؤول النظام تشغيلها من الإعدادات، النظام (متفرقات)، حيث يجب أيضًا تعيين عنوان URL الأساسي للخدمة."
 
@@ -3715,7 +3715,7 @@ msgstr "سيؤدي هذا الإجراء إلى إلغاء ربط جميع ال�
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
-#: screens/Credential/shared/ExternalTestModal.tsx:123
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5340,8 +5340,8 @@ msgid "Delete Job"
 msgstr "حذف المهمة"
 
 #: components/CopyButton/CopyButton.tsx:54
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5634,7 +5634,7 @@ msgstr "كتابة"
 msgid "Option Details"
 msgstr "تفاصيل الخيار"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
 msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
 msgstr "بالنسبة إلى HashiCorp Vault، فعّل طريقة مصادقة JWT ووجّهها إلى جهة الإصدار:"
 
@@ -6180,6 +6180,10 @@ msgstr "تحذير: {selectedValue} هو رابط إلى {0} وسيتم حفظه
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:83
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# شهر} other {# أشهر}}"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "تعذّرت قراءة جهة الإصدار الموثوقة من الخادم. حاول مرة أخرى لاحقًا."
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
 #~ msgid "Last recalculation date:"
@@ -8868,7 +8872,7 @@ msgstr "اسم متغير الإجابة"
 msgid "Select"
 msgstr "تحديد"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
 msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 msgstr "يجب على النظام الذي يقبله أن يثق بجهة الإصدار هذه، وهي أيضًا عنوان URL لاكتشاف OIDC:"
 
@@ -9385,7 +9389,7 @@ msgstr "القوالب الأخيرة"
 msgid "Applications & Tokens"
 msgstr "التطبيقات والرموز المميزة"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
 msgid "Workload identity is not available"
 msgstr "هوية عبء العمل غير متاحة"
 
@@ -11318,7 +11322,7 @@ msgstr "تنسيق وقت غير صالح"
 msgid "Unknown Project"
 msgstr "مشروع غير معروف"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
 msgid "Each job gets a short lived token signed for it, with no secret stored here"
 msgstr "تحصل كل مهمة على رمز قصير الأجل موقّع لها، دون تخزين أي سر هنا"
 
@@ -11492,7 +11496,7 @@ msgstr "تم الرفض بنجاح"
 msgid "Not configured for inventory sync."
 msgstr "غير مُكوّن لمزامنة المخزون."
 
-#: components/Lookup/JobTemplateLookup.tsx:121
+#: components/Lookup/JobTemplateLookup.tsx:124
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11606,6 +11610,10 @@ msgstr "كم مرة تمت أتمتة المضيف"
 #: components/CodeEditor/VariablesField.js:260
 #~ msgid "Expand input"
 #~ msgstr "توسيع الإدخال"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "تعذّرت قراءة إعدادات هوية عبء العمل"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
@@ -12134,7 +12142,7 @@ msgstr "فشل حذف المضيف."
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:125
+#: components/Lookup/JobTemplateLookup.tsx:128
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

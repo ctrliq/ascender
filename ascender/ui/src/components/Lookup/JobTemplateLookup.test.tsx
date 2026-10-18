@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { FormRoot } from 'components/Form';
 import { JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
@@ -49,16 +49,14 @@ describe('<JobTemplateLookup />', () => {
     ) as HTMLInputElement;
     await waitFor(() => expect(input).toBeEnabled());
     await user.type(input, 'patch');
-    await act(async () => {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 1300);
-      });
+    // the lookup resolves what was typed a second after typing stops
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(patch), {
+      timeout: 3000,
     });
     expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
       name: 'patch',
       role_level: 'execute_role',
     });
-    expect(onChange).toHaveBeenCalledWith(patch);
   });
 
   test('clears the value when nothing matches', async () => {
@@ -76,11 +74,26 @@ describe('<JobTemplateLookup />', () => {
     ) as HTMLInputElement;
     await waitFor(() => expect(input).toBeEnabled());
     await user.type(input, 'nope');
-    await act(async () => {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 1300);
-      });
-    });
+    await waitFor(
+      () =>
+        expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+          name: 'nope',
+          role_level: 'execute_role',
+        }),
+      { timeout: 3000 }
+    );
     expect(onChange).toHaveBeenLastCalledWith(null);
+  });
+
+  test('takes its id from the caller', async () => {
+    renderWithContexts(
+      <FormRoot initialValues={{ job_template: null }} onSubmit={() => {}}>
+        <JobTemplateLookup id="test-as" onChange={vi.fn()} />
+      </FormRoot>
+    );
+    await waitFor(() =>
+      expect(document.querySelector('input#test-as')).toBeInTheDocument()
+    );
+    expect(document.querySelector('input#job_template')).toBeNull();
   });
 });

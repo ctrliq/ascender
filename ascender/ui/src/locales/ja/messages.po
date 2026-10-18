@@ -302,7 +302,7 @@ msgstr "親ノードの最終状態に関係なく実行します。"
 msgid "Are you sure you want to remove this node?"
 msgstr "このノードを削除してもよろしいですか?"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
 msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
 msgstr "ジョブは環境変数 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE が指すファイルでトークンを取得できます。"
 
@@ -1008,7 +1008,7 @@ msgstr "このスケジュールは UI でサポートされていない複雑�
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:114
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1526,7 +1526,7 @@ msgstr "権限昇格の有効化"
 msgid "Filter..."
 msgstr "フィルター..."
 
-#: screens/Credential/shared/ExternalTestModal.tsx:188
+#: screens/Credential/shared/ExternalTestModal.tsx:190
 msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 msgstr "テストは、このテンプレートのジョブと同じように、そのクレームを含むトークンで Vault にログインします。"
 
@@ -1613,8 +1613,8 @@ msgstr "API サービス/統合キー"
 msgid "Minute"
 msgstr "分"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1681,8 +1681,8 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:119
-#: components/Lookup/JobTemplateLookup.tsx:129
+#: components/Lookup/JobTemplateLookup.tsx:122
+#: components/Lookup/JobTemplateLookup.tsx:132
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2158,9 +2158,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "条件が評価される前に、親ノードの結果が必要です。"
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:100
-#: components/Lookup/JobTemplateLookup.tsx:105
-#: components/Lookup/JobTemplateLookup.tsx:135
+#: components/Lookup/JobTemplateLookup.tsx:103
+#: components/Lookup/JobTemplateLookup.tsx:108
+#: components/Lookup/JobTemplateLookup.tsx:138
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2180,7 +2180,7 @@ msgstr "ジョブテンプレート"
 msgid "Install Bundle"
 msgstr "バンドルのインストール"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
 msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 msgstr "システム管理者は「設定」の「その他のシステム」で有効にできます。そこでサービスのベース URL も設定する必要があります。"
 
@@ -3712,7 +3712,7 @@ msgstr "このアクションにより、このユーザーのすべてのロー
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
-#: screens/Credential/shared/ExternalTestModal.tsx:123
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5337,8 +5337,8 @@ msgid "Delete Job"
 msgstr "ジョブの削除"
 
 #: components/CopyButton/CopyButton.tsx:54
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5631,7 +5631,7 @@ msgstr "書き込み"
 msgid "Option Details"
 msgstr "オプションの詳細"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
 msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
 msgstr "HashiCorp Vault では、JWT 認証方式を有効にして発行者を指定してください:"
 
@@ -6177,6 +6177,10 @@ msgstr "警告: {selectedValue} は {0} へのリンクであり、そのよう�
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:83
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# か月} other {# か月}}"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "信頼する発行者をサーバーから読み取れませんでした。後でもう一度お試しください。"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
 #~ msgid "Last recalculation date:"
@@ -8864,7 +8868,7 @@ msgstr "回答の変数名"
 msgid "Select"
 msgstr "選択"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
 msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 msgstr "これを受け入れるシステムは、この発行者を信頼する必要があります。これは OIDC ディスカバリー URL でもあります:"
 
@@ -9381,7 +9385,7 @@ msgstr "最近のテンプレート"
 msgid "Applications & Tokens"
 msgstr "アプリケーションおよびトークン"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
 msgid "Workload identity is not available"
 msgstr "ワークロード ID は利用できません"
 
@@ -11314,7 +11318,7 @@ msgstr "無効な時間形式です"
 msgid "Unknown Project"
 msgstr "不明なプロジェクト"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
 msgid "Each job gets a short lived token signed for it, with no secret stored here"
 msgstr "各ジョブにはそのジョブ用に署名された短期間有効なトークンが渡され、ここにシークレットは保存されません"
 
@@ -11488,7 +11492,7 @@ msgstr "正常に拒否されました"
 msgid "Not configured for inventory sync."
 msgstr "インベントリーの同期に設定されていません。"
 
-#: components/Lookup/JobTemplateLookup.tsx:121
+#: components/Lookup/JobTemplateLookup.tsx:124
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11602,6 +11606,10 @@ msgstr "ホストが自動化された回数"
 #: components/CodeEditor/VariablesField.js:260
 #~ msgid "Expand input"
 #~ msgstr "入力の展開"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "ワークロード ID の設定を読み取れませんでした"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
@@ -12130,7 +12138,7 @@ msgstr "ホストを削除できませんでした。"
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:125
+#: components/Lookup/JobTemplateLookup.tsx:128
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

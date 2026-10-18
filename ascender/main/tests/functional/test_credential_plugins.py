@@ -394,9 +394,10 @@ class TestHashivaultOIDC:
         assert post.call_args.args == ('https://vault.example.com:8200/v1/auth/jwt/login',)
 
     def test_needs_a_token(self):
-        with pytest.raises(Exception, match='workload identity token'):
+        with pytest.raises(ValueError, match='workload identity token'):
             hashivault.with_workload_identity_login(mock.Mock())(**dict(self.kwargs, workload_identity_token=None))
 
+    # the debug log line reads its settings from the database
     @pytest.mark.django_db
     def test_revoke_failure_is_swallowed(self):
         with mock.patch('requests.post', side_effect=Exception('batch tokens cannot be revoked')):

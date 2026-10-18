@@ -118,8 +118,9 @@ register(
     default=300,
     label=_('Workload Identity Token Lifetime'),
     help_text=_(
-        'How long a workload identity token lasts for a job with no timeout. A job with a timeout gets a token '
-        'that lasts as long as the timeout. A minute is always added to allow for clock drift.'
+        'How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long '
+        'as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute '
+        'is always added to allow for clock drift.'
     ),
     category=_('System'),
     category_slug='system',

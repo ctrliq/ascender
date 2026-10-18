@@ -302,7 +302,7 @@ msgstr "부모 노드의 최종 상태에 관계없이 실행합니다."
 msgid "Are you sure you want to remove this node?"
 msgstr "이 노드를 삭제하시겠습니까?"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
 msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
 msgstr "작업은 환경 변수 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE이 가리키는 파일에서 토큰을 찾을 수 있습니다."
 
@@ -1008,7 +1008,7 @@ msgstr "이 일정은 UI에서 지원되지 않는 복잡한 규칙을\n"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:114
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1526,7 +1526,7 @@ msgstr "권한 에스컬레이션 활성화"
 msgid "Filter..."
 msgstr "필터..."
 
-#: screens/Credential/shared/ExternalTestModal.tsx:188
+#: screens/Credential/shared/ExternalTestModal.tsx:190
 msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 msgstr "테스트는 이 템플릿의 작업과 마찬가지로 해당 클레임을 담은 토큰으로 Vault에 로그인합니다."
 
@@ -1613,8 +1613,8 @@ msgstr "API 서비스/통합 키"
 msgid "Minute"
 msgstr "분"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1681,8 +1681,8 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:119
-#: components/Lookup/JobTemplateLookup.tsx:129
+#: components/Lookup/JobTemplateLookup.tsx:122
+#: components/Lookup/JobTemplateLookup.tsx:132
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2158,9 +2158,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "조건이 평가되기 전에 부모 노드 결과가 필요합니다."
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:100
-#: components/Lookup/JobTemplateLookup.tsx:105
-#: components/Lookup/JobTemplateLookup.tsx:135
+#: components/Lookup/JobTemplateLookup.tsx:103
+#: components/Lookup/JobTemplateLookup.tsx:108
+#: components/Lookup/JobTemplateLookup.tsx:138
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2180,7 +2180,7 @@ msgstr "작업 템플릿"
 msgid "Install Bundle"
 msgstr "번들 설치"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
 msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 msgstr "시스템 관리자는 설정의 기타 시스템에서 이 기능을 켤 수 있으며, 이곳에 서비스 기본 URL도 설정되어 있어야 합니다."
 
@@ -3712,7 +3712,7 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
-#: screens/Credential/shared/ExternalTestModal.tsx:123
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5337,8 +5337,8 @@ msgid "Delete Job"
 msgstr "작업 삭제"
 
 #: components/CopyButton/CopyButton.tsx:54
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5631,7 +5631,7 @@ msgstr "쓰기"
 msgid "Option Details"
 msgstr "옵션 세부 정보"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
 msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
 msgstr "HashiCorp Vault의 경우 JWT 인증 방식을 활성화하고 발급자를 지정하십시오:"
 
@@ -6177,6 +6177,10 @@ msgstr "경고: {selectedValue}은(는) {0}에 대한 링크이며 해당 링크
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:83
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# 개월} other {# 개월}}"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "신뢰할 발급자를 서버에서 읽을 수 없습니다. 나중에 다시 시도하십시오."
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
 #~ msgid "Last recalculation date:"
@@ -8864,7 +8868,7 @@ msgstr "응답 변수 이름"
 msgid "Select"
 msgstr "선택"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
 msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 msgstr "이를 받아들이는 시스템은 이 발급자를 신뢰해야 하며, 이는 OIDC 검색 URL이기도 합니다:"
 
@@ -9381,7 +9385,7 @@ msgstr "최근 템플릿"
 msgid "Applications & Tokens"
 msgstr "애플리케이션 및 토큰"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
 msgid "Workload identity is not available"
 msgstr "워크로드 ID를 사용할 수 없습니다"
 
@@ -11314,7 +11318,7 @@ msgstr "유효하지 않은 시간 형식입니다"
 msgid "Unknown Project"
 msgstr "알 수 없는 프로젝트"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
 msgid "Each job gets a short lived token signed for it, with no secret stored here"
 msgstr "각 작업은 해당 작업용으로 서명된 수명이 짧은 토큰을 받으며, 여기에는 어떤 시크릿도 저장되지 않습니다"
 
@@ -11488,7 +11492,7 @@ msgstr "성공적으로 거부됨"
 msgid "Not configured for inventory sync."
 msgstr "인벤토리 동기화에 대해 구성되지 않았습니다."
 
-#: components/Lookup/JobTemplateLookup.tsx:121
+#: components/Lookup/JobTemplateLookup.tsx:124
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11602,6 +11606,10 @@ msgstr "호스트가 자동화한 횟수"
 #: components/CodeEditor/VariablesField.js:260
 #~ msgid "Expand input"
 #~ msgstr "입력 확장"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "워크로드 ID 구성을 읽을 수 없습니다"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
@@ -12130,7 +12138,7 @@ msgstr "호스트를 삭제하지 못했습니다."
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:125
+#: components/Lookup/JobTemplateLookup.tsx:128
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

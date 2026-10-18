@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Alert, ClipboardCopy } from '@patternfly/react-core';
 import { RootAPI } from 'api';
+import { useFormContext } from 'components/Form';
 import useRequest from 'hooks/useRequest';
 import { FormFullWidthLayout } from 'components/FormLayout';
 import { isWorkloadIdentityLookup } from '../workloadIdentity';
@@ -18,6 +19,9 @@ export interface WorkloadIdentityInfoProps {
  */
 function WorkloadIdentityInfo({ credentialType }: WorkloadIdentityInfoProps) {
   const { t } = useLingui();
+  // The command names the mount this credential logs in through
+  const { values } = useFormContext<{ inputs?: Record<string, unknown> }>();
+  const authPath = (values?.inputs?.default_auth_path as string) || 'jwt';
   const {
     result: issuer,
     error,
@@ -35,18 +39,25 @@ function WorkloadIdentityInfo({ credentialType }: WorkloadIdentityInfoProps) {
   }, [fetchIssuer]);
 
   if (error) {
-    const detail = (error as { response?: { data?: { detail?: string } } })
-      ?.response?.data?.detail;
+    // The documents answer 404 while the feature is off or has no issuer;
+    // anything else is a failure to read them, not advice to turn it on
+    const notAvailable =
+      (error as { response?: { status?: number } })?.response?.status === 404;
     return (
       <FormFullWidthLayout>
         <Alert
           isInline
           variant="warning"
-          title={t`Workload identity is not available`}
+          title={
+            notAvailable
+              ? t`Workload identity is not available`
+              : t`Could not read the workload identity configuration`
+          }
           ouiaId="workload-identity-unavailable"
         >
-          {detail ? `${detail} ` : ''}
-          {t`A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too.`}
+          {notAvailable
+            ? t`A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too.`
+            : t`The issuer to trust could not be read from the server. Try again later.`}
         </Alert>
       </FormFullWidthLayout>
     );
@@ -83,7 +94,7 @@ function WorkloadIdentityInfo({ credentialType }: WorkloadIdentityInfoProps) {
               clickTip={t`Copied`}
               id="workload-identity-vault-config"
             >
-              {`vault write auth/jwt/config oidc_discovery_url="${issuer}" bound_issuer="${issuer}"`}
+              {`vault write auth/${authPath}/config oidc_discovery_url="${issuer}" bound_issuer="${issuer}"`}
             </ClipboardCopy>
           </>
         ) : (

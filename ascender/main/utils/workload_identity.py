@@ -197,9 +197,14 @@ def rotate_signing_key(keep=1):
 
 
 def build_jwks():
+    """
+    The public half of every published key. A public, unauthenticated
+    document, so it never makes a key: the first one is made when the first
+    token is signed (or by rotate_workload_identity_key), and a relying party
+    fetches the keys again when it meets a key id it does not know.
+    """
     from ascender.main.models import WorkloadIdentityKey
 
-    _signing_key()
     keys = []
     for key in WorkloadIdentityKey.objects.order_by('-created', '-pk'):
         public_key = serialization.load_pem_private_key(key.get_private_key().encode(), password=None).public_key()
@@ -221,7 +226,11 @@ def _related(obj, name):
 
 
 def claims_for_unified_job(unified_job):
-    """The claims of a job that is about to run. A claim with no value is left out."""
+    """
+    The claims of a job that is about to run. The job's id, name and launch
+    type are always there; a claim for something this job does not have (a
+    project, an inventory, a launching user...) is left out.
+    """
     scope = AutomationJobScope
     claims = {
         # what kind of job: a project sync or an ad hoc command can carry the
@@ -276,7 +285,7 @@ def claims_for_unified_job(unified_job):
     if launched_by.get('id') is not None:
         claims[scope.CLAIM_LAUNCHED_BY_ID] = launched_by['id']
     # a user, a schedule, a workflow job...: the id alone is ambiguous
-    if launched_by.get('type'):
+    if launched_by.get('type') is not None:
         claims[scope.CLAIM_LAUNCHED_BY_TYPE] = launched_by['type']
 
     return claims
@@ -324,7 +333,7 @@ def claims_for_job_template(job_template, user=None):
 def sign_token(claims, audience, ttl_seconds=None):
     """
     Sign `claims` for `audience`. The registered claims (iss, sub, aud, iat,
-    exp, jti) are always set here and win over anything of the same name.
+    nbf, exp, jti) are always set here and win over anything of the same name.
     """
     if not settings.WORKLOAD_IDENTITY_ENABLED:
         raise WorkloadIdentityError('Workload identity is not enabled. An administrator can turn it on in the system settings.')

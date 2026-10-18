@@ -304,7 +304,7 @@ msgstr "मूल नोड की अंतिम स्थिति की प
 msgid "Are you sure you want to remove this node?"
 msgstr "क्या आप वाकई इस नोड को हटाना चाहते हैं?"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
 msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
 msgstr "जॉब को टोकन ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE पर्यावरण चर द्वारा बताई गई फ़ाइल में मिलता है।"
 
@@ -1010,7 +1010,7 @@ msgstr "यह शेड्यूल जटिल नियमों का उ�
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:114
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:300
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:90
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:25
@@ -1528,7 +1528,7 @@ msgstr "विशेषाधिकार वृद्धि सक्षम क
 msgid "Filter..."
 msgstr "फ़िल्टर..."
 
-#: screens/Credential/shared/ExternalTestModal.tsx:188
+#: screens/Credential/shared/ExternalTestModal.tsx:190
 msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 msgstr "परीक्षण Vault में वैसे ही लॉग इन करता है जैसे इस टेम्पलेट का कोई जॉब करता, एक ऐसे टोकन के साथ जिसमें उसके क्लेम होते हैं।"
 
@@ -1615,8 +1615,8 @@ msgstr "API सेवा/इंटीग्रेशन कुंजी"
 msgid "Minute"
 msgstr "मिनट"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:71
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:83
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1683,8 +1683,8 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:119
-#: components/Lookup/JobTemplateLookup.tsx:129
+#: components/Lookup/JobTemplateLookup.tsx:122
+#: components/Lookup/JobTemplateLookup.tsx:132
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2160,9 +2160,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "स्थिति का मूल्यांकन करने से पहले मूल नोड परिणाम आवश्यक है।"
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:100
-#: components/Lookup/JobTemplateLookup.tsx:105
-#: components/Lookup/JobTemplateLookup.tsx:135
+#: components/Lookup/JobTemplateLookup.tsx:103
+#: components/Lookup/JobTemplateLookup.tsx:108
+#: components/Lookup/JobTemplateLookup.tsx:138
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2182,7 +2182,7 @@ msgstr "जॉब टेम्पलेट"
 msgid "Install Bundle"
 msgstr "बंडल इंस्टॉल करें"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:49
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
 msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 msgstr "सिस्टम व्यवस्थापक इसे सेटिंग्स, विविध सिस्टम में चालू कर सकता है, जहाँ सेवा का बेस URL भी सेट होना चाहिए।"
 
@@ -3715,7 +3715,7 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:467
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:107
-#: screens/Credential/shared/ExternalTestModal.tsx:123
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:177
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:183
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5340,8 +5340,8 @@ msgid "Delete Job"
 msgstr "जॉब हटाएं"
 
 #: components/CopyButton/CopyButton.tsx:54
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:70
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -5634,7 +5634,7 @@ msgstr "लिखें"
 msgid "Option Details"
 msgstr "विकल्प विवरण"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
 msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
 msgstr "HashiCorp Vault के लिए, JWT प्रमाणीकरण विधि सक्षम करें और उसे जारीकर्ता की ओर इंगित करें:"
 
@@ -6180,6 +6180,10 @@ msgstr "चेतावनी: {selectedValue} {0} का एक लिंक �
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:83
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# माह} other {# माह}}"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "भरोसा करने योग्य जारीकर्ता सर्वर से पढ़ा नहीं जा सका। बाद में फिर से प्रयास करें।"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
 #~ msgid "Last recalculation date:"
@@ -8868,7 +8872,7 @@ msgstr "उत्तर वेरिएबल नाम"
 msgid "Select"
 msgstr "चुनें"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:67
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
 msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 msgstr "जो सिस्टम इसे स्वीकार करता है उसे इस जारीकर्ता पर भरोसा करना होगा, जो उसका OIDC डिस्कवरी URL भी है:"
 
@@ -9385,7 +9389,7 @@ msgstr "हाल के टेम्पलेट"
 msgid "Applications & Tokens"
 msgstr "एप्लिकेशन और टोकन"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:45
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
 msgid "Workload identity is not available"
 msgstr "वर्कलोड पहचान उपलब्ध नहीं है"
 
@@ -11318,7 +11322,7 @@ msgstr "अमान्य समय प्रारूप"
 msgid "Unknown Project"
 msgstr "अज्ञात प्रोजेक्ट"
 
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:64
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
 msgid "Each job gets a short lived token signed for it, with no secret stored here"
 msgstr "हर जॉब को उसके लिए हस्ताक्षरित एक अल्पकालिक टोकन मिलता है, यहाँ कोई रहस्य संग्रहीत नहीं होता"
 
@@ -11492,7 +11496,7 @@ msgstr "सफलतापूर्वक अस्वीकृत"
 msgid "Not configured for inventory sync."
 msgstr "इन्वेंटरी सिंक के लिए कॉन्फ़िगर नहीं किया गया।"
 
-#: components/Lookup/JobTemplateLookup.tsx:121
+#: components/Lookup/JobTemplateLookup.tsx:124
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11606,6 +11610,10 @@ msgstr "होस्ट कितनी बार स्वचालित ह�
 #: components/CodeEditor/VariablesField.js:260
 #~ msgid "Expand input"
 #~ msgstr "इनपुट विस्तृत करें"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "वर्कलोड पहचान कॉन्फ़िगरेशन पढ़ा नहीं जा सका"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:292
 #: screens/Template/shared/JobTemplateForm.tsx:571
@@ -12134,7 +12142,7 @@ msgstr "होस्ट हटाने में विफल।"
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:125
+#: components/Lookup/JobTemplateLookup.tsx:128
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

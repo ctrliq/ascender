@@ -110,6 +110,8 @@ function ExternalTestModal({
                 key="confirm"
                 variant="primary"
                 onClick={() => handleSubmit()}
+                // the api turns a test without a template down anyway
+                isDisabled={asJob && !values.job_template}
               >
                 {t`Run`}
               </Button>,

@@ -99,6 +99,14 @@ describe('<MiscSystemEdit />', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
+  test('shows the workload identity settings', async () => {
+    await mountEdit();
+    expect(screen.getByText('Enable Workload Identity')).toBeInTheDocument();
+    expect(
+      screen.getByText('Workload Identity Token Lifetime')
+    ).toBeInTheDocument();
+  });
+
   test('save button should call updateAll', async () => {
     const { user } = await mountEdit();
     await selectExecutionEnvironment(user);
