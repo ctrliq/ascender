@@ -385,6 +385,14 @@ class TestHashivaultOIDC:
         )
         assert exc.value.response is response
 
+    def test_auth_path_defaults_to_jwt(self):
+        # a credential made through the api has no default_auth_path stored
+        kwargs = {k: v for k, v in self.kwargs.items() if k != 'default_auth_path'}
+        with mock.patch.object(hashivault, 'revoke_self'), mock.patch('requests.Session.post') as post:
+            post.return_value.json.return_value = {'auth': {'client_token': 'vault-token'}}
+            hashivault.with_workload_identity_login(mock.Mock())(**kwargs)
+        assert post.call_args.args == ('https://vault.example.com:8200/v1/auth/jwt/login',)
+
     def test_needs_a_token(self):
         with pytest.raises(Exception, match='workload identity token'):
             hashivault.with_workload_identity_login(mock.Mock())(**dict(self.kwargs, workload_identity_token=None))

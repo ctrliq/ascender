@@ -138,10 +138,12 @@ def workload_identity_test_token(request, credential_type, backend_kwargs):
     Returns the claims that were sent, for the user to compare with what the
     role expects, or a Response with the error.
     """
+    # Neither is the plugin's to see: the token is only ever signed here, and
+    # the template may be left over from a credential picked earlier
     backend_kwargs.pop(workload_identity.TOKEN_FIELD, None)
+    job_template_id = backend_kwargs.pop('job_template_id', None)
     if not credential_type.wants_workload_identity_token:
         return None, None
-    job_template_id = backend_kwargs.pop('job_template_id', None)
     if job_template_id in (None, ''):
         return None, Response({'inputs': _('Pick the job template to test this credential as.')}, status=status.HTTP_400_BAD_REQUEST)
     try:

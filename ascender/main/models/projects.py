@@ -35,6 +35,7 @@ from ascender.main.models.mixins import ResourceMixin, TaskManagerProjectUpdateM
 from ascender.main.utils import update_scm_url, polymorphic
 from ascender.main.utils.ansible import skip_directory, could_be_inventory, could_be_playbook
 from ascender.main.utils.execution_environments import get_control_plane_execution_environment
+from ascender.main.utils.workload_identity import WorkloadIdentityError
 from ascender.main.fields import ImplicitRoleField
 from ascender.main.models.rbac import (
     ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
@@ -160,7 +161,11 @@ class ProjectOptions(models.Model):
                 scm_url = update_scm_url(self.scm_type, self.scm_url, check_special_cases=False)
                 scm_url_parts = urlparse.urlsplit(scm_url)
                 # Prefer the username/password in the URL, if provided.
-                scm_username = scm_url_parts.username or cred.get_input('username', default='')
+                try:
+                    scm_username = scm_url_parts.username or cred.get_input('username', default='')
+                except WorkloadIdentityError:
+                    # Looked up as the job, so only known once one runs
+                    scm_username = ''
                 if scm_url_parts.password or cred.has_input('password'):
                     scm_password = '********'
                 else:

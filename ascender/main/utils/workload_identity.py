@@ -28,11 +28,11 @@ from datetime import datetime, timezone
 import jwt
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from jwt.algorithms import RSAAlgorithm
 
 from ascender.main import constants
-from ascender.main.utils.common import getattr_dne
 from ascender.main.utils.pglock import advisory_lock
 from ascender.settings.typed import settings
 
@@ -56,6 +56,11 @@ ALGORITHM = 'RS256'
 # Added to every lifetime so a token is not rejected for a clock that is a
 # little ahead of ours (RFC 7519, section 4.1.4 leaves room for it).
 CLOCK_SKEW_SECONDS = 60
+
+# The longest a token lasts, whatever the job's timeout: a day, as in AAP. A
+# token handed to the playbook should not outlive what it is for by a week
+# because the job happens to allow that long.
+MAX_TTL_SECONDS = 86400
 
 # The id of the field a credential plugin declares to be handed a token. It is
 # marked internal: the API hides it and nobody can store a value in it.
@@ -201,6 +206,17 @@ def build_jwks():
     return {'keys': keys}
 
 
+def _related(obj, name):
+    """
+    The object `name` points at, or None when this kind of job has no such
+    relation or the object it pointed at is gone.
+    """
+    try:
+        return getattr(obj, name, None)
+    except ObjectDoesNotExist:
+        return None
+
+
 def claims_for_unified_job(unified_job):
     """The claims of a job that is about to run. A claim with no value is left out."""
     scope = AutomationJobScope
@@ -210,32 +226,35 @@ def claims_for_unified_job(unified_job):
         scope.CLAIM_LAUNCH_TYPE: unified_job.launch_type,
     }
 
-    if organization := getattr_dne(unified_job, 'organization'):
+    # An ad hoc command has no organization of its own: it runs against an
+    # inventory, whose organization is the one that decides who may run it
+    organization = _related(unified_job, 'organization') or _related(_related(unified_job, 'inventory'), 'organization')
+    if organization:
         claims[scope.CLAIM_ORGANIZATION_NAME] = organization.name
         claims[scope.CLAIM_ORGANIZATION_ID] = organization.id
 
-    if ujt := getattr_dne(unified_job, 'unified_job_template'):
+    if ujt := _related(unified_job, 'unified_job_template'):
         claims[scope.CLAIM_UNIFIED_JOB_TEMPLATE_NAME] = ujt.name
         claims[scope.CLAIM_UNIFIED_JOB_TEMPLATE_ID] = ujt.id
 
-    if instance_group := getattr_dne(unified_job, 'instance_group'):
+    if instance_group := _related(unified_job, 'instance_group'):
         claims[scope.CLAIM_INSTANCE_GROUP_NAME] = instance_group.name
         claims[scope.CLAIM_INSTANCE_GROUP_ID] = instance_group.id
 
     # Not every kind of job has these
-    if inventory := getattr_dne(unified_job, 'inventory', None):
+    if inventory := _related(unified_job, 'inventory'):
         claims[scope.CLAIM_INVENTORY_NAME] = inventory.name
         claims[scope.CLAIM_INVENTORY_ID] = inventory.id
 
-    if execution_environment := getattr_dne(unified_job, 'execution_environment', None):
+    if execution_environment := _related(unified_job, 'execution_environment'):
         claims[scope.CLAIM_EXECUTION_ENVIRONMENT_NAME] = execution_environment.name
         claims[scope.CLAIM_EXECUTION_ENVIRONMENT_ID] = execution_environment.id
 
-    if project := getattr_dne(unified_job, 'project', None):
+    if project := _related(unified_job, 'project'):
         claims[scope.CLAIM_PROJECT_NAME] = project.name
         claims[scope.CLAIM_PROJECT_ID] = project.id
 
-    if job_template := getattr_dne(unified_job, 'job_template', None):
+    if job_template := _related(unified_job, 'job_template'):
         claims[scope.CLAIM_JOB_TEMPLATE_NAME] = job_template.name
         claims[scope.CLAIM_JOB_TEMPLATE_ID] = job_template.id
 
@@ -276,7 +295,7 @@ def claims_for_job_template(job_template):
         ('inventory', scope.CLAIM_INVENTORY_NAME, scope.CLAIM_INVENTORY_ID),
         ('execution_environment', scope.CLAIM_EXECUTION_ENVIRONMENT_NAME, scope.CLAIM_EXECUTION_ENVIRONMENT_ID),
     ):
-        if obj := getattr_dne(job_template, related):
+        if obj := _related(job_template, related):
             claims[name_claim] = obj.name
             claims[id_claim] = obj.id
     return claims
@@ -292,7 +311,7 @@ def sign_token(claims, audience, ttl_seconds=None):
     if not audience:
         raise WorkloadIdentityError('A workload identity token needs an audience.')
 
-    lifetime = (ttl_seconds or settings.WORKLOAD_IDENTITY_DEFAULT_TTL) + CLOCK_SKEW_SECONDS
+    lifetime = min(ttl_seconds or settings.WORKLOAD_IDENTITY_DEFAULT_TTL, MAX_TTL_SECONDS) + CLOCK_SKEW_SECONDS
     issued_at = int(datetime.now(tz=timezone.utc).timestamp())
     registered = {
         'iss': issuer(),
