@@ -539,7 +539,8 @@ class BaseTask(object):
         self.safe_cred_env = {}
         private_data_dir = None
         # Any credential resolved while the job is prepared can be handed a
-        # workload identity token for it, lasting as long as its timeout
+        # workload identity token for it. Entered inside the try, so that a
+        # failure there is reported like any other; closed in the finally
         workload_identity_scope = contextlib.ExitStack()
 
         try:

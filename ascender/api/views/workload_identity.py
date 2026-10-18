@@ -8,27 +8,27 @@ authentication, and both are plain JSON, which is what an OIDC client asks for.
 """
 
 from django.http import JsonResponse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_safe
 
 from ascender.main.utils import workload_identity
 from ascender.settings.typed import settings
 
 
-def _unavailable():
+def _issuer():
+    """The issuer, or the 404 to answer with while there is none."""
     if not settings.WORKLOAD_IDENTITY_ENABLED:
-        return JsonResponse({'detail': 'Workload identity is not enabled.'}, status=404)
+        return None, JsonResponse({'detail': 'Workload identity is not enabled.'}, status=404)
     try:
-        workload_identity.issuer()
+        return workload_identity.issuer(), None
     except workload_identity.WorkloadIdentityError as exc:
-        return JsonResponse({'detail': str(exc)}, status=404)
-    return None
+        return None, JsonResponse({'detail': str(exc)}, status=404)
 
 
-@require_GET
+@require_safe
 def openid_configuration(request):
-    if response := _unavailable():
-        return response
-    issuer = workload_identity.issuer()
+    issuer, unavailable = _issuer()
+    if unavailable:
+        return unavailable
     return JsonResponse(
         {
             'issuer': issuer,
@@ -42,10 +42,11 @@ def openid_configuration(request):
     )
 
 
-@require_GET
+@require_safe
 def jwks(request):
-    if response := _unavailable():
-        return response
+    _, unavailable = _issuer()
+    if unavailable:
+        return unavailable
     response = JsonResponse(workload_identity.build_jwks())
     # public, and read by every relying party: let them and any proxy keep it
     # a few minutes, short enough for a rotated key to show up quickly

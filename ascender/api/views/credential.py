@@ -7,13 +7,13 @@ Lifted out of ascender/api/views/__init__.py, which had grown to 2,048 lines and
 120 classes with no order to them. Nothing here changed on the way across.
 """
 
+import jwt
 import requests
 from urllib3.exceptions import ConnectTimeoutError
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-import jwt
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
@@ -135,8 +135,12 @@ def workload_identity_test_token(request, credential_type, backend_kwargs):
     the user picks, which they have to be able to launch: the token carries
     that template's claims, so a Vault role bound to it can be tried out.
 
-    Returns the claims that were sent, for the user to compare with what the
-    role expects, or a Response with the error.
+    Returns a (claims, error) pair. For a type that logs in as the job, claims
+    are the ones the token was signed with, for the user to compare with what
+    the role expects, and backend_kwargs gets the token; error is a Response
+    to return instead when the token could not be signed. For any other type
+    both are None. Raises PermissionDenied when the user cannot launch the
+    template, or it does not exist, so as not to tell the two apart.
     """
     # Neither is the plugin's to see: the token is only ever signed here, and
     # the template may be left over from a credential picked earlier
@@ -147,11 +151,12 @@ def workload_identity_test_token(request, credential_type, backend_kwargs):
     if job_template_id in (None, ''):
         return None, Response({'inputs': _('Pick the job template to test this credential as.')}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        job_template = models.JobTemplate.objects.get(pk=int(job_template_id))
-    except (TypeError, ValueError, models.JobTemplate.DoesNotExist):
-        return None, Response({'inputs': _('Job template {} does not exist.').format(job_template_id)}, status=status.HTTP_400_BAD_REQUEST)
-    if not request.user.can_access(models.JobTemplate, 'start', job_template):
-        raise PermissionDenied(_('You do not have permission to launch job template {}.').format(job_template.pk))
+        job_template_id = int(job_template_id)
+    except (TypeError, ValueError):
+        return None, Response({'inputs': _('The job template must be given by its id.')}, status=status.HTTP_400_BAD_REQUEST)
+    job_template = models.JobTemplate.objects.filter(pk=job_template_id).first()
+    if job_template is None or not request.user.can_access(models.JobTemplate, 'start', job_template):
+        raise PermissionDenied(_('You cannot launch job template {}.').format(job_template_id))
     try:
         token = workload_identity.sign_token(workload_identity.claims_for_job_template(job_template, request.user), backend_kwargs.get('url'))
     except workload_identity.WorkloadIdentityError as exc:
@@ -159,6 +164,19 @@ def workload_identity_test_token(request, credential_type, backend_kwargs):
     backend_kwargs[workload_identity.TOKEN_FIELD] = token
     # Only decoded to show the user what was sent; Vault checks the signature
     return jwt.decode(token, options={'verify_signature': False}), None
+
+
+def workload_identity_test_error(sent_claims, exc):
+    """
+    Only the status of a failed lookup is shown, never the body: the server is
+    one the user names, and answering with what it sent would let a test read
+    from anywhere the platform can reach. A lookup that logs in as the job is
+    the exception, since the reason Vault turned the token down is what the
+    test is for, and that plugin's error carries only Vault's list of errors.
+    """
+    if sent_claims:
+        return str(exc)
+    return 'HTTP {}'.format(exc.response.status_code)
 
 
 class CredentialCopy(CopyAPIView):
@@ -196,7 +214,7 @@ class CredentialExternalTest(SubDetailAPIView):
                 obj.credential_type.plugin.backend(**backend_kwargs)
                 return Response(details, status=status.HTTP_202_ACCEPTED)
         except requests.exceptions.HTTPError as exc:
-            message = 'HTTP {}'.format(exc.response.status_code)
+            message = workload_identity_test_error(sent_claims, exc)
             return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             message = exc.__class__.__name__
@@ -254,7 +272,7 @@ class CredentialTypeExternalTest(SubDetailAPIView):
             obj.plugin.backend(**backend_kwargs)
             return Response(details, status=status.HTTP_202_ACCEPTED)
         except requests.exceptions.HTTPError as exc:
-            message = 'HTTP {}'.format(exc.response.status_code)
+            message = workload_identity_test_error(sent_claims, exc)
             return Response({'inputs': message, **details}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             message = exc.__class__.__name__

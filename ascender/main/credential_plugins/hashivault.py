@@ -219,7 +219,7 @@ oidc_fields = [
         'multiline': False,
         'default': 'jwt',
         'help_text': _(
-            "The path the JWT authentication method is mounted at, if one isn't provided in the metadata when linking to an input field. Defaults to 'jwt'"
+            "The path the JWT authentication method is mounted at, if one isn't provided in the metadata when linking to an input field. Defaults to 'jwt'."
         ),
     },
     {
@@ -247,7 +247,7 @@ oidc_auth_path_metadata = {
     'label': _('Path to Auth'),
     'type': 'string',
     'multiline': False,
-    'help_text': _('The path where the JWT authentication method is mounted e.g, jwt'),
+    'help_text': _('The path where the JWT authentication method is mounted, e.g. jwt'),
 }
 
 hashi_kv_oidc_inputs = {
@@ -346,7 +346,7 @@ def with_workload_identity_login(backend):
 
     def wrapper(**kwargs):
         if not kwargs.get('workload_identity_token'):
-            raise Exception('No workload identity token was issued for this lookup')
+            raise ValueError('No workload identity token was issued for this lookup')
         # The form fills in the default, but a credential made through the
         # api or a collection only has what was sent
         if not kwargs.get('default_auth_path'):
@@ -357,8 +357,9 @@ def with_workload_identity_login(backend):
             # Vault says why it turned the job down (a bound claim, the
             # audience, an unknown role); keep that rather than a bare 400
             try:
-                reason = '; '.join(exc.response.json().get('errors', []))
-            except Exception:
+                reason = '; '.join(str(error) for error in exc.response.json().get('errors', []))
+            except (ValueError, AttributeError, TypeError):
+                # not the JSON Vault answers with
                 reason = ''
             message = 'Vault turned down the workload identity login with role {}: HTTP {}'.format(kwargs.get('jwt_role'), exc.response.status_code)
             raise requests.exceptions.HTTPError(f'{message}, {reason}' if reason else message, response=exc.response) from exc

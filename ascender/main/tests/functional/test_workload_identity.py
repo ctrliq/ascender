@@ -5,6 +5,7 @@ from unittest.mock import PropertyMock
 
 import jwt
 import pytest
+from django.core.exceptions import ValidationError
 from django.test.utils import override_settings
 
 from ascender.api.versioning import reverse
@@ -327,6 +328,7 @@ class TestInternalField:
             admin,
         )
         assert response.status_code == 400
+        assert 'workload_identity_token' in str(response.data)
 
 
 @pytest.mark.django_db
@@ -334,6 +336,18 @@ class TestDiscovery:
     def test_off_by_default(self, get):
         assert get('/api/o/.well-known/openid-configuration').status_code == 404
         assert get('/api/o/.well-known/jwks.json').status_code == 404
+
+    def test_needs_a_base_url(self, get):
+        with override_settings(WORKLOAD_IDENTITY_ENABLED=True, ASCENDER_URL_BASE='https://ascenderhost'):
+            response = get('/api/o/.well-known/openid-configuration')
+        assert response.status_code == 404
+        assert 'Base URL' in json.loads(response.content)['detail']
+
+    @enabled
+    def test_reading_the_keys_makes_none(self, get):
+        response = get('/api/o/.well-known/jwks.json')
+        assert json.loads(response.content) == {'keys': []}
+        assert not WorkloadIdentityKey.objects.exists()
 
     @enabled
     def test_openid_configuration(self, get):
@@ -347,6 +361,7 @@ class TestDiscovery:
 
     @enabled
     def test_jwks(self, get):
+        workload_identity.sign_token({}, VAULT)
         response = get('/api/o/.well-known/jwks.json')
         assert response.status_code == 200
         assert response['Cache-Control'] == 'public, max-age=300'
@@ -392,6 +407,16 @@ class TestCredentialTest:
         response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, alice)
         assert response.status_code == 403
 
+    def test_other_plugins_only_show_the_status_of_a_failure(self, post, admin, external_credential):
+        import requests
+
+        response_403 = mock.Mock(status_code=403, text='secret internal page')
+        with mock.patch('ascender.main.models.credential.CredentialType.plugin', new_callable=PropertyMock) as plugin:
+            plugin.return_value.backend.side_effect = requests.exceptions.HTTPError('secret internal page', response=response_403)
+            response = post(self.url(external_credential), {'metadata': {'key': 'k'}}, admin)
+        assert response.status_code == 400
+        assert response.data['inputs'] == 'HTTP 403'
+
     def test_other_plugins_never_see_the_template_or_a_token(self, post, admin, external_credential, jt_linked):
         with mock.patch('ascender.main.models.credential.CredentialType.plugin', new_callable=PropertyMock) as plugin:
             plugin.return_value.backend.return_value = 'secret'
@@ -413,11 +438,15 @@ class TestCredentialTest:
         assert 'not enabled' in response.data['inputs']
 
     @enabled
-    def test_unknown_template(self, post, admin, oidc_credential):
-        for bad in (999999, 'abc'):
-            response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': bad}}, admin)
-            assert response.status_code == 400
-            assert 'does not exist' in response.data['inputs']
+    def test_unknown_template(self, post, admin, alice, oidc_credential, jt_linked):
+        response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': 'abc'}}, admin)
+        assert response.status_code == 400
+        assert 'by its id' in response.data['inputs']
+        # a template that does not exist and one the user cannot launch look the same
+        oidc_credential.use_role.members.add(alice)
+        missing = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': 999999}}, alice)
+        forbidden = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, alice)
+        assert missing.status_code == forbidden.status_code == 403
 
     @enabled
     def test_vault_turning_the_test_down_still_shows_the_claims(self, post, admin, oidc_plugin, oidc_credential, jt_linked):
@@ -425,10 +454,13 @@ class TestCredentialTest:
 
         response_400 = mock.Mock(status_code=400)
         with mock.patch.object(type(oidc_plugin[0]), 'plugin', new_callable=PropertyMock) as plugin:
-            plugin.return_value.backend.side_effect = requests.exceptions.HTTPError('nope', response=response_400)
+            plugin.return_value.backend.side_effect = requests.exceptions.HTTPError(
+                'Vault turned down the workload identity login with role infra: HTTP 400, claim "sub" does not match', response=response_400
+            )
             response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, admin)
         assert response.status_code == 400
-        assert response.data['inputs'] == 'HTTP 400'
+        # the reason Vault gave, which is what the test is for
+        assert response.data['inputs'] == 'Vault turned down the workload identity login with role infra: HTTP 400, claim "sub" does not match'
         assert response.data['details']['sent_jwt_payload']['ascender_job_template_id'] == jt_linked.pk
 
     @enabled
@@ -522,6 +554,9 @@ class TestKeyCommandsAndTypes:
         call_command('rotate_workload_identity_key', '--keep', '0', stdout=out)
         assert f"Dropped {jwt.get_unverified_header(before)['kid']}" in out.getvalue()
         assert WorkloadIdentityKey.objects.count() == 1
+        # a negative count keeps none rather than counting from the end
+        call_command('rotate_workload_identity_key', '--keep', '-3', stdout=StringIO())
+        assert WorkloadIdentityKey.objects.count() == 1
 
     def test_a_custom_type_cannot_declare_an_internal_field(self, post, admin):
         response = post(
@@ -534,6 +569,7 @@ class TestKeyCommandsAndTypes:
             admin,
         )
         assert response.status_code == 400
+        assert 'internal' in str(response.data)
 
     def test_the_new_types_are_registered(self):
         from ascender.main.models.credential import ManagedCredentialType
@@ -548,20 +584,13 @@ class TestInputSourceValidation:
     def url(self, credential):
         return reverse('api:credential_input_source_sublist', kwargs={'pk': credential.pk})
 
-    def test_cannot_target_an_internal_field(self, post, admin, oidc_credential):
-        # an OIDC lookup whose own token field is looked up from another one
-        other = Credential.objects.create(credential_type=oidc_credential.credential_type, name='other', inputs={'url': VAULT, 'jwt_role': 'r'})
-        response = post(
-            reverse('api:credential_input_source_list'),
-            {
-                'target_credential': oidc_credential.pk,
-                'source_credential': other.pk,
-                'input_field_name': 'workload_identity_token',
-                'metadata': {'secret_key': 'x'},
-            },
-            admin,
-        )
-        assert response.status_code == 400
+    def test_cannot_target_an_internal_field(self):
+        # Through the api only an external type has one, and it cannot be a
+        # target; the model refuses it all the same
+        target_type = CredentialType(kind='cloud', name='T', managed=True, inputs=OIDC_TYPE_INPUTS)
+        source = CredentialInputSource(target_credential=Credential(credential_type=target_type), input_field_name='workload_identity_token')
+        with pytest.raises(ValidationError, match='Input field must be defined'):
+            source.clean_input_field_name()
 
     def test_vault_id_cannot_be_looked_up_as_the_job(self, post, admin, oidc_credential):
         vault_type = CredentialType.defaults['vault']()

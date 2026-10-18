@@ -544,7 +544,7 @@ class TestGenericRun:
         task.build_private_data_files = build_private_data_files
 
         with mock.patch('ascender.main.tasks.jobs.shutil.copytree'):
-            with pytest.raises(Exception):
+            with pytest.raises(Exception, match='encountered an error'):
                 task.run(1)
 
         assert seen[0].unified_job is job

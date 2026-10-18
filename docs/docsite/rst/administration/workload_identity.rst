@@ -61,7 +61,7 @@ Enable the auth method and point it at Ascender:
         oidc_discovery_url="https://ascender.example.com/api/o" \
         bound_issuer="https://ascender.example.com/api/o"
 
-Vault has to be able to reach the discovery URL. If Ascender uses a certificate from a private CA, add ``oidc_discovery_ca_pem=@ca.pem``. If Vault cannot reach Ascender at all, give it the keys instead of the URL, with ``jwt_validation_pubkeys`` and the keys from ``jwks.json`` in PEM form; keep in mind they then have to be updated by hand when the key is rotated.
+Vault has to be able to reach the discovery URL. If Ascender uses a certificate from a private CA, add ``oidc_discovery_ca_pem=@ca.pem``. If Vault cannot reach Ascender at all, give it the keys instead of the URL, with ``jwt_validation_pubkeys`` and the keys from ``jwks.json`` in PEM form; keep in mind they then have to be updated by hand when the key is rotated. ``jwks.json`` is empty until the first token is signed, and ``ascender-manage rotate_workload_identity_key`` makes the first key ahead of that.
 
 Then a role. This one lets in the jobs of the ``infra`` organization, with the ``infra-linux`` policy, for five minutes:
 

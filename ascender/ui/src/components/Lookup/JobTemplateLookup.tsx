@@ -30,6 +30,8 @@ export interface JobTemplateLookupProps {
   /** Rendered in a popover beside the label, so markup is fine. */
   tooltip?: React.ReactNode;
   fieldName?: string;
+  /** The id of the input, for a page with more than one of these. */
+  id?: string;
   [key: string]: unknown;
 }
 
@@ -39,6 +41,7 @@ function JobTemplateLookup({
   required = false,
   tooltip = '',
   fieldName = 'job_template',
+  id = 'job_template',
 }: JobTemplateLookupProps) {
   const location = useLocation();
   const { t } = useLingui();
@@ -60,7 +63,7 @@ function JobTemplateLookup({
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
-        searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+        searchableKeys: getSearchableKeys(actionsResponse?.data?.actions?.GET),
       };
     }, [location.search]),
     {
@@ -95,13 +98,13 @@ function JobTemplateLookup({
 
   return (
     <FormGroup
-      fieldId="job_template"
+      fieldId={id}
       isRequired={required}
       label={t`Job Template`}
       labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
     >
       <Lookup
-        id="job_template"
+        id={id}
         header={t`Job Template`}
         name="job_template"
         value={value}

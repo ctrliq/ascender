@@ -1,7 +1,7 @@
 import type { Credential } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI, JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
@@ -258,6 +258,8 @@ describe('<CredentialPluginPrompt />', () => {
   });
 
   describe('Workload identity lookup', () => {
+    // The first step still lists the credentials of the mocked page (the
+    // CyberArk one is preselected); only its type is the Vault OIDC one.
     beforeEach(() => {
       vi.mocked(CredentialTypesAPI.readDetail).mockResolvedValue({
         data: {
@@ -306,11 +308,15 @@ describe('<CredentialPluginPrompt />', () => {
       ) as HTMLInputElement;
       await waitFor(() => expect(jobTemplateInput).toBeEnabled());
       await user.type(jobTemplateInput, 'patch');
-      await act(async () => {
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1300);
-        });
-      });
+      // the lookup resolves what was typed a second after typing stops
+      await waitFor(
+        () =>
+          expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+            name: 'patch',
+            role_level: 'execute_role',
+          }),
+        { timeout: 3000 }
+      );
 
       await user.click(screen.getByRole('button', { name: 'Test' }));
       await waitFor(() =>
@@ -368,11 +374,14 @@ describe('<CredentialPluginPrompt />', () => {
       ) as HTMLInputElement;
       await waitFor(() => expect(jobTemplateInput).toBeEnabled());
       await user.type(jobTemplateInput, 'nope');
-      await act(async () => {
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1300);
-        });
-      });
+      await waitFor(
+        () =>
+          expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+            name: 'nope',
+            role_level: 'execute_role',
+          }),
+        { timeout: 3000 }
+      );
       await user.click(screen.getByRole('button', { name: 'OK' }));
       await waitFor(() => expect(onSubmit).toHaveBeenCalled());
     });
