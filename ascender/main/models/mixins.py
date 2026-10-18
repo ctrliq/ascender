@@ -17,7 +17,7 @@ from ascender.dab.lib.utils.models import prevent_search
 
 # Ascender
 from ascender.main.models.rbac import Role, RoleAncestorEntry
-from ascender.main.utils import parse_yaml_or_json, polymorphic
+from ascender.main.utils import parse_yaml_or_json, polymorphic, workload_identity
 from ascender.main.utils.execution_environments import get_default_execution_environment
 from ascender.main.utils.encryption import decrypt_value, get_encryption_key, is_encrypted
 from ascender.main.utils.polymorphic import build_polymorphic_ctypes_map
@@ -690,7 +690,12 @@ class WebhookMixin(models.Model):
                     'target_url': self.get_ui_url(),
                 }
             k, v = service_header[self.webhook_service]
-            headers = {k: v.format(self.webhook_credential.get_input('token')), 'Content-Type': 'application/json'}
+            # Status changes are posted from outside the run too (pending,
+            # the final state), so a token looked up as the job is signed
+            # for this job here rather than relying on a run being under way
+            with workload_identity.workload_identity_for(self):
+                token = self.webhook_credential.get_input('token')
+            headers = {k: v.format(token), 'Content-Type': 'application/json'}
             response = requests.post(status_api, data=json.dumps(data), headers=headers, timeout=30)
         except Exception:
             logger.exception("Posting webhook status caused an error.")

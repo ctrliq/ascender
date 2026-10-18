@@ -347,6 +347,10 @@ def with_workload_identity_login(backend):
     def wrapper(**kwargs):
         if not kwargs.get('workload_identity_token'):
             raise Exception('No workload identity token was issued for this lookup')
+        # The form fills in the default, but a credential made through the
+        # api or a collection only has what was sent
+        if not kwargs.get('default_auth_path'):
+            kwargs = dict(kwargs, default_auth_path='jwt')
         try:
             token = method_auth(**kwargs, auth_param=workload_identity_auth(**kwargs))
         except requests.exceptions.HTTPError as exc:

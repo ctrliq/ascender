@@ -8,7 +8,7 @@ import pytest
 from django.test.utils import override_settings
 
 from ascender.api.versioning import reverse
-from ascender.main.models import Credential, CredentialInputSource, CredentialType, WorkloadIdentityKey
+from ascender.main.models import Credential, CredentialInputSource, CredentialType, Project, WorkloadIdentityKey
 from ascender.main.models.credential import build_safe_env
 from ascender.main.utils import workload_identity
 
@@ -114,6 +114,11 @@ class TestSigning:
         assert payload['exp'] - payload['iat'] == 3600 + workload_identity.CLOCK_SKEW_SECONDS
 
     @enabled
+    def test_lifetime_is_capped_at_a_day(self):
+        payload = verify(workload_identity.sign_token({}, VAULT, ttl_seconds=7 * 86400))
+        assert payload['exp'] - payload['iat'] == 86400 + workload_identity.CLOCK_SKEW_SECONDS
+
+    @enabled
     def test_one_key_is_made_and_reused(self):
         first = jwt.get_unverified_header(workload_identity.sign_token({}, VAULT))['kid']
         second = jwt.get_unverified_header(workload_identity.sign_token({}, VAULT))['kid']
@@ -167,6 +172,62 @@ class TestClaims:
         claims = workload_identity.claims_for_unified_job(job)
         assert workload_identity.AutomationJobScope.CLAIM_INVENTORY_NAME not in claims
         assert None not in claims.values()
+
+    def check_shape(self, claims):
+        # every claim is one the scope declares, none is empty, and the token's subject can be built
+        assert set(claims) <= set(workload_identity.AutomationJobScope.list_claims())
+        assert None not in claims.values()
+        assert workload_identity.AutomationJobScope.subject(claims).startswith('workload_type:ascender_automation_job:organization:')
+
+    def test_project_update(self, project):
+        update = project.create_project_update()
+        claims = workload_identity.claims_for_unified_job(update)
+        self.check_shape(claims)
+        assert claims['ascender_project_id'] == project.id
+        assert claims['ascender_unified_job_template_id'] == project.id
+        assert 'ascender_job_template_id' not in claims
+
+    def test_inventory_update(self, inventory_source):
+        update = inventory_source.create_inventory_update()
+        claims = workload_identity.claims_for_unified_job(update)
+        self.check_shape(claims)
+        assert claims['ascender_inventory_id'] == inventory_source.inventory.id
+        assert claims['ascender_unified_job_template_id'] == inventory_source.id
+
+    def test_ad_hoc_command(self, inventory, admin):
+        from ascender.main.models import AdHocCommand
+
+        command = AdHocCommand.objects.create(inventory=inventory, module_name='ping', created_by=admin)
+        claims = workload_identity.claims_for_unified_job(command)
+        self.check_shape(claims)
+        assert claims['ascender_inventory_id'] == inventory.id
+        assert claims['ascender_launched_by_name'] == admin.username
+        assert 'ascender_playbook_name' not in claims
+        # its organization is the inventory's, so a Vault role can be bound to it
+        assert command.organization is None
+        assert claims['ascender_organization_id'] == inventory.organization.id
+        assert (
+            workload_identity.AutomationJobScope.subject(claims)
+            == f'workload_type:ascender_automation_job:organization:{inventory.organization.name}:job_template:'
+        )
+
+    def test_workflow_job(self, workflow_job_factory):
+        workflow_job = workflow_job_factory()
+        claims = workload_identity.claims_for_unified_job(workflow_job)
+        self.check_shape(claims)
+        assert claims['ascender_unified_job_template_id'] == workflow_job.workflow_job_template.id
+
+    def test_job_launched_from_a_workflow(self, workflow_job_factory, jt_linked, admin):
+        from ascender.main.models import WorkflowJobNode
+
+        workflow_job = workflow_job_factory()
+        job = jt_linked.create_unified_job(_eager_fields={'launch_type': 'workflow'})
+        WorkflowJobNode.objects.create(workflow_job=workflow_job, unified_job_template=jt_linked, job=job)
+        claims = workload_identity.claims_for_unified_job(job)
+        self.check_shape(claims)
+        assert claims['ascender_launch_type'] == 'workflow'
+        # who started the workflow, not the workflow itself
+        assert claims['ascender_launched_by_name'] == admin.username
 
     def test_job_template(self, jt_linked):
         claims = workload_identity.claims_for_job_template(jt_linked)
@@ -315,6 +376,45 @@ class TestCredentialTest:
         response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, alice)
         assert response.status_code == 403
 
+    def test_other_plugins_never_see_the_template_or_a_token(self, post, admin, external_credential, jt_linked):
+        with mock.patch('ascender.main.models.credential.CredentialType.plugin', new_callable=PropertyMock) as plugin:
+            plugin.return_value.backend.return_value = 'secret'
+            response = post(
+                self.url(external_credential),
+                {'inputs': {'workload_identity_token': 'forged'}, 'metadata': {'key': 'k', 'job_template_id': jt_linked.pk}},
+                admin,
+            )
+        assert response.status_code == 202
+        sent = plugin.return_value.backend.call_args.kwargs
+        assert 'job_template_id' not in sent and 'workload_identity_token' not in sent
+        assert 'details' not in response.data
+
+    @enabled
+    def test_feature_off(self, post, admin, oidc_credential, jt_linked):
+        with override_settings(WORKLOAD_IDENTITY_ENABLED=False):
+            response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, admin)
+        assert response.status_code == 400
+        assert 'not enabled' in response.data['inputs']
+
+    @enabled
+    def test_unknown_template(self, post, admin, oidc_credential):
+        for bad in (999999, 'abc'):
+            response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': bad}}, admin)
+            assert response.status_code == 400
+            assert 'does not exist' in response.data['inputs']
+
+    @enabled
+    def test_vault_turning_the_test_down_still_shows_the_claims(self, post, admin, oidc_plugin, oidc_credential, jt_linked):
+        import requests
+
+        response_400 = mock.Mock(status_code=400)
+        with mock.patch.object(type(oidc_plugin[0]), 'plugin', new_callable=PropertyMock) as plugin:
+            plugin.return_value.backend.side_effect = requests.exceptions.HTTPError('nope', response=response_400)
+            response = post(self.url(oidc_credential), {'metadata': {'secret_key': 'password', 'job_template_id': jt_linked.pk}}, admin)
+        assert response.status_code == 400
+        assert response.data['inputs'] == 'HTTP 400'
+        assert response.data['details']['sent_jwt_payload']['ascender_job_template_id'] == jt_linked.pk
+
     @enabled
     def test_type_test(self, post, admin, oidc_plugin, jt_linked):
         credential_type, calls = oidc_plugin
@@ -325,3 +425,91 @@ class TestCredentialTest:
         )
         assert response.status_code == 202
         assert verify(calls[0]['workload_identity_token'])['ascender_job_template_name'] == jt_linked.name
+
+
+@pytest.mark.django_db
+class TestOutsideAJob:
+    """Places that read a credential with no job running, which cannot get a token."""
+
+    @enabled
+    def test_saving_a_project_whose_scm_username_comes_from_vault(self, patch, admin, organization, oidc_credential, input_sources):
+        scm_type = CredentialType.defaults['scm']()
+        scm_type.save()
+        scm = Credential.objects.create(credential_type=scm_type, name='git', inputs={'password': 'x'})
+        CredentialInputSource.objects.create(
+            target_credential=scm, source_credential=oidc_credential, input_field_name='username', metadata={'secret_key': 'user'}
+        )
+        project = Project.objects.create(name='p', organization=organization, scm_type='git', scm_url='https://example.com/repo.git', credential=scm)
+        response = patch(reverse('api:project_detail', kwargs={'pk': project.pk}), {'description': 'changed'}, admin)
+        assert response.status_code == 200
+
+    @enabled
+    def test_webhook_status_token_from_vault(self, job_factory, oidc_plugin, oidc_credential, input_sources):
+        _, calls = oidc_plugin
+        github_type = CredentialType.defaults['github_token']()
+        github_type.save()
+        github = Credential.objects.create(credential_type=github_type, name='gh', inputs={})
+        CredentialInputSource.objects.create(
+            target_credential=github, source_credential=oidc_credential, input_field_name='token', metadata={'secret_key': 'token'}
+        )
+        job = job_factory()
+        job.webhook_service = 'github'
+        job.webhook_credential = github
+        job.extra_vars = '{"awx_webhook_status_api": "https://api.github.com/repos/o/r/statuses/abc"}'
+        job.save()
+        with mock.patch('ascender.main.models.mixins.requests.post') as post:
+            post.return_value.status_code = 201
+            job.update_webhook_status('pending')
+        assert post.call_args.kwargs['headers']['Authorization'] == 'token the-secret'
+        assert verify(calls[0]['workload_identity_token'])['ascender_job_id'] == job.id
+
+    @enabled
+    def test_launch_defaults_with_a_vault_id_from_vault(self, get, admin, job_template, oidc_credential, input_sources):
+        vault_type = CredentialType.defaults['vault']()
+        vault_type.save()
+        vault = Credential.objects.create(credential_type=vault_type, name='av', inputs={'vault_password': 'x'})
+        CredentialInputSource.objects.create(
+            target_credential=vault, source_credential=oidc_credential, input_field_name='vault_id', metadata={'secret_key': 'id'}
+        )
+        job_template.credentials.add(vault)
+        response = get(reverse('api:job_template_launch', kwargs={'pk': job_template.pk}), admin)
+        assert response.status_code == 200
+        (cred,) = response.data['defaults']['credentials']
+        assert cred['vault_id'] is None
+
+
+@pytest.mark.django_db
+class TestKeyCommandsAndTypes:
+    @enabled
+    def test_rotate_command(self):
+        from io import StringIO
+        from django.core.management import call_command
+
+        before = workload_identity.sign_token({}, VAULT)
+        out = StringIO()
+        call_command('rotate_workload_identity_key', stdout=out)
+        assert out.getvalue().startswith('Signing with ')
+        verify(before)
+        out = StringIO()
+        call_command('rotate_workload_identity_key', '--keep', '0', stdout=out)
+        assert f"Dropped {jwt.get_unverified_header(before)['kid']}" in out.getvalue()
+        assert WorkloadIdentityKey.objects.count() == 1
+
+    def test_a_custom_type_cannot_declare_an_internal_field(self, post, admin):
+        response = post(
+            reverse('api:credential_type_list'),
+            {
+                'kind': 'cloud',
+                'name': 'Sneaky',
+                'inputs': {'fields': [{'id': 'workload_identity_token', 'label': 'T', 'type': 'string', 'internal': True}]},
+            },
+            admin,
+        )
+        assert response.status_code == 400
+
+    def test_the_new_types_are_registered(self):
+        from ascender.main.models.credential import ManagedCredentialType
+
+        token_type = ManagedCredentialType.registry['oidc_workload_identity']
+        assert token_type.kind == 'cloud'
+        assert token_type.inputs['required'] == ['audience']
