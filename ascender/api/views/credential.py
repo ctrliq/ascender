@@ -153,7 +153,7 @@ def workload_identity_test_token(request, credential_type, backend_kwargs):
     if not request.user.can_access(models.JobTemplate, 'start', job_template):
         raise PermissionDenied(_('You do not have permission to launch job template {}.').format(job_template.pk))
     try:
-        token = workload_identity.sign_token(workload_identity.claims_for_job_template(job_template), backend_kwargs.get('url'))
+        token = workload_identity.sign_token(workload_identity.claims_for_job_template(job_template, request.user), backend_kwargs.get('url'))
     except workload_identity.WorkloadIdentityError as exc:
         return None, Response({'inputs': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
     backend_kwargs[workload_identity.TOKEN_FIELD] = token

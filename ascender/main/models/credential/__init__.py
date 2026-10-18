@@ -199,6 +199,10 @@ class Credential(PasswordFieldsModel, CommonModelNameNotUnique, ResourceMixin):
             ssh_key_data = self.get_input('ssh_key_data')
         except AttributeError:
             return False
+        except workload_identity.WorkloadIdentityError:
+            # Looked up as the job: it can only be read once one runs, so
+            # whether it is encrypted is not known while editing or launching
+            return False
 
         try:
             pem_objects = validate_ssh_private_key(ssh_key_data)
@@ -1401,9 +1405,15 @@ class CredentialInputSource(PrimordialModel):
         return self.source_credential
 
     def clean_input_field_name(self):
-        defined_fields = self.target_credential.credential_type.defined_fields
+        target_type = self.target_credential.credential_type
+        # an internal field is filled in by the platform, never looked up
+        defined_fields = [field['id'] for field in target_type.inputs.get('fields', []) if not field.get('internal')]
         if self.input_field_name not in defined_fields:
             raise ValidationError(_('Input field must be defined on target credential (options are {}).'.format(', '.join(sorted(defined_fields)))))
+        if self.input_field_name == 'vault_id' and self.source_credential_id and self.source_credential.credential_type.wants_workload_identity_token:
+            # The vault id tells a template's vault credentials apart when they
+            # are attached and launched, with no job running to sign a token for
+            raise ValidationError(_('A vault id cannot be looked up as the job: it is needed before any job runs.'))
         return self.input_field_name
 
     def get_input_value(self):

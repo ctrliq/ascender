@@ -500,12 +500,7 @@ Gives the job a short lived token, signed by Ascender for that job, for the play
 
 The only attribute is **Audience** (required): who the token is for, as that system expects it in the ``aud`` claim, for example ``sts.amazonaws.com`` or ``api://AzureADTokenExchange``.
 
-The job finds the token in two environment variables:
-
-- ``ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE``: the path of a file holding the token
-- ``ASCENDER_WORKLOAD_IDENTITY_TOKEN``: the token itself
-
-Neither is stored with the job. The token lasts as long as the timeout of the job, or the **Workload Identity Token Lifetime** setting when the job has no timeout.
+The job finds the token in a file, whose path is in the ``ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE`` environment variable. The token itself is deliberately not in the environment, which a play against ``localhost`` stores with its facts. The file is removed with the rest of the job's private data when it finishes. The token lasts as long as the timeout of the job, at most a day, or the **Workload Identity Token Lifetime** setting when the job has no timeout.
 
 For example, to assume an AWS role with it:
 
