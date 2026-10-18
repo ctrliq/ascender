@@ -302,6 +302,10 @@ msgstr "부모 노드의 최종 상태에 관계없이 실행합니다."
 msgid "Are you sure you want to remove this node?"
 msgstr "이 노드를 삭제하시겠습니까?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "작업은 환경 변수 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE이 가리키는 파일에서 토큰을 찾을 수 있습니다."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:88
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:96
 msgid "Edit this link"
@@ -2527,10 +2531,6 @@ msgstr "범위"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0} (삭제됨)"
-
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
-msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
-msgstr "작업은 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE이 가리키는 파일과 ASCENDER_WORKLOAD_IDENTITY_TOKEN에서 토큰을 찾을 수 있습니다."
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -7076,7 +7076,7 @@ msgstr "레지스트리 인증 정보"
 msgid "Host Details"
 msgstr "호스트 세부 정보"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
 msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 msgstr "테스트에서만 사용되며, 이 템플릿의 작업과 마찬가지로 Vault에 로그인합니다. 작업은 작업 자신으로 로그인합니다."
 

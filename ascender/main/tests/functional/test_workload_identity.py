@@ -165,6 +165,8 @@ class TestClaims:
         assert claims[scope.CLAIM_PLAYBOOK_NAME] == 'helloworld.yml'
         assert claims[scope.CLAIM_JOB_TYPE] == 'run'
         assert claims[scope.CLAIM_LAUNCHED_BY_NAME] == admin.username
+        assert claims[scope.CLAIM_LAUNCHED_BY_TYPE] == 'user'
+        assert claims[scope.CLAIM_UNIFIED_JOB_TYPE] == 'job'
         assert set(claims) <= set(scope.list_claims())
 
     def test_missing_relations_are_left_out(self, job_template, admin):
@@ -184,6 +186,7 @@ class TestClaims:
         claims = workload_identity.claims_for_unified_job(update)
         self.check_shape(claims)
         assert claims['ascender_project_id'] == project.id
+        assert claims['ascender_unified_job_type'] == 'project_update'
         assert claims['ascender_unified_job_template_id'] == project.id
         assert 'ascender_job_template_id' not in claims
 
@@ -192,6 +195,7 @@ class TestClaims:
         claims = workload_identity.claims_for_unified_job(update)
         self.check_shape(claims)
         assert claims['ascender_inventory_id'] == inventory_source.inventory.id
+        assert claims['ascender_unified_job_type'] == 'inventory_update'
         assert claims['ascender_unified_job_template_id'] == inventory_source.id
 
     def test_ad_hoc_command(self, inventory, admin):
@@ -203,6 +207,7 @@ class TestClaims:
         assert claims['ascender_inventory_id'] == inventory.id
         assert claims['ascender_launched_by_name'] == admin.username
         assert 'ascender_playbook_name' not in claims
+        assert claims['ascender_unified_job_type'] == 'ad_hoc_command'
         # its organization is the inventory's, so a Vault role can be bound to it
         assert command.organization is None
         assert claims['ascender_organization_id'] == inventory.organization.id
@@ -216,6 +221,7 @@ class TestClaims:
         claims = workload_identity.claims_for_unified_job(workflow_job)
         self.check_shape(claims)
         assert claims['ascender_unified_job_template_id'] == workflow_job.workflow_job_template.id
+        assert claims['ascender_unified_job_type'] == 'workflow_job'
 
     def test_job_launched_from_a_workflow(self, workflow_job_factory, jt_linked, admin):
         from ascender.main.models import WorkflowJobNode
@@ -250,8 +256,11 @@ class TestCurrentWorkload:
             first = workload_identity.token_for_current_workload(VAULT)
             assert workload_identity.token_for_current_workload(VAULT) == first
             other = workload_identity.token_for_current_workload('sts.amazonaws.com')
+            for_playbook = workload_identity.token_for_current_workload(VAULT, for_playbook=True)
         assert verify(other, audience='sts.amazonaws.com')['jti'] != verify(first)['jti']
-        assert verify(first)['exp'] - verify(first)['iat'] == 600 + workload_identity.CLOCK_SKEW_SECONDS
+        # a lookup uses its token at once; the playbook's lasts as long as the job may run
+        assert verify(first)['exp'] - verify(first)['iat'] == 300 + workload_identity.CLOCK_SKEW_SECONDS
+        assert verify(for_playbook)['exp'] - verify(for_playbook)['iat'] == 600 + workload_identity.CLOCK_SKEW_SECONDS
 
     @enabled
     def test_input_source_is_handed_a_token_for_the_job(self, job_factory, oidc_plugin, oidc_credential, credentialtype_ssh, input_sources):
@@ -286,17 +295,18 @@ class TestInjectedToken:
         credential_type.save()
         credential = Credential.objects.create(credential_type=credential_type, name='aws', inputs={'audience': 'sts.amazonaws.com'})
         env, safe_env = {}, {}
-        with workload_identity.workload_identity_for(job_factory()):
+        with workload_identity.workload_identity_for(job_factory(), ttl_seconds=1800):
             credential.credential_type.inject_credential(credential, env, safe_env, [], str(tmp_path))
-        token = env['ASCENDER_WORKLOAD_IDENTITY_TOKEN']
-        assert verify(token, audience='sts.amazonaws.com')['aud'] == 'sts.amazonaws.com'
         assert env['ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE'].startswith('/runner/env/')
         written = tmp_path / 'env' / os.path.basename(env['ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE'])
-        assert written.read_text() == token
+        token = written.read_text()
+        payload = verify(token, audience='sts.amazonaws.com')
+        assert payload['exp'] - payload['iat'] == 1800 + workload_identity.CLOCK_SKEW_SECONDS
         assert oct(written.stat().st_mode)[-3:] == '600'
-        # never stored with the job
-        assert token not in build_safe_env(env).values()
+        # only the path: the environment ends up in ansible_env facts, which are stored
+        assert token not in env.values()
         assert token not in safe_env.values()
+        assert token not in build_safe_env(env).values()
 
 
 @pytest.mark.django_db
@@ -339,6 +349,7 @@ class TestDiscovery:
     def test_jwks(self, get):
         response = get('/api/o/.well-known/jwks.json')
         assert response.status_code == 200
+        assert response['Cache-Control'] == 'public, max-age=300'
         (key,) = json.loads(response.content)['keys']
         assert key['kty'] == 'RSA' and key['alg'] == 'RS256' and key['use'] == 'sig'
         assert 'd' not in key
@@ -367,6 +378,11 @@ class TestCredentialTest:
         sent = response.data['details']['sent_jwt_payload']
         assert sent['ascender_job_template_id'] == jt_linked.pk
         assert sent['aud'] == VAULT
+        # as a manual launch by whoever runs the test
+        assert sent['ascender_launch_type'] == 'manual'
+        assert sent['ascender_launched_by_name'] == admin.username
+        assert sent['ascender_launched_by_type'] == 'user'
+        assert sent['ascender_unified_job_type'] == 'job'
         assert verify(calls[0]['workload_identity_token'])['ascender_job_template_id'] == jt_linked.pk
         assert 'job_template_id' not in calls[0]
 
@@ -477,6 +493,18 @@ class TestOutsideAJob:
         (cred,) = response.data['defaults']['credentials']
         assert cred['vault_id'] is None
 
+    @enabled
+    def test_editing_a_machine_credential_whose_key_comes_from_vault(self, patch, get, admin, oidc_credential, credentialtype_ssh, job_template, input_sources):
+        machine = Credential.objects.create(credential_type=credentialtype_ssh, name='m', inputs={'username': 'root', 'ssh_key_unlock': 'ASK'})
+        CredentialInputSource.objects.create(
+            target_credential=machine, source_credential=oidc_credential, input_field_name='ssh_key_data', metadata={'secret_key': 'key'}
+        )
+        response = patch(reverse('api:credential_detail', kwargs={'pk': machine.pk}), {'name': 'renamed'}, admin)
+        assert response.status_code == 200
+        # nor does launching ask for, or fail over, an unlock it cannot know about
+        job_template.credentials.add(machine)
+        assert get(reverse('api:job_template_launch', kwargs={'pk': job_template.pk}), admin).status_code == 200
+
 
 @pytest.mark.django_db
 class TestKeyCommandsAndTypes:
@@ -513,3 +541,47 @@ class TestKeyCommandsAndTypes:
         token_type = ManagedCredentialType.registry['oidc_workload_identity']
         assert token_type.kind == 'cloud'
         assert token_type.inputs['required'] == ['audience']
+
+
+@pytest.mark.django_db
+class TestInputSourceValidation:
+    def url(self, credential):
+        return reverse('api:credential_input_source_sublist', kwargs={'pk': credential.pk})
+
+    def test_cannot_target_an_internal_field(self, post, admin, oidc_credential):
+        # an OIDC lookup whose own token field is looked up from another one
+        other = Credential.objects.create(credential_type=oidc_credential.credential_type, name='other', inputs={'url': VAULT, 'jwt_role': 'r'})
+        response = post(
+            reverse('api:credential_input_source_list'),
+            {
+                'target_credential': oidc_credential.pk,
+                'source_credential': other.pk,
+                'input_field_name': 'workload_identity_token',
+                'metadata': {'secret_key': 'x'},
+            },
+            admin,
+        )
+        assert response.status_code == 400
+
+    def test_vault_id_cannot_be_looked_up_as_the_job(self, post, admin, oidc_credential):
+        vault_type = CredentialType.defaults['vault']()
+        vault_type.save()
+        vault = Credential.objects.create(credential_type=vault_type, name='av', inputs={'vault_password': 'x'})
+        response = post(
+            reverse('api:credential_input_source_list'),
+            {'target_credential': vault.pk, 'source_credential': oidc_credential.pk, 'input_field_name': 'vault_id', 'metadata': {'secret_key': 'id'}},
+            admin,
+        )
+        assert response.status_code == 400
+        assert 'vault id' in str(response.data)
+
+    def test_vault_password_can(self, post, admin, oidc_credential):
+        vault_type = CredentialType.defaults['vault']()
+        vault_type.save()
+        vault = Credential.objects.create(credential_type=vault_type, name='av', inputs={'vault_id': 'prod'})
+        response = post(
+            reverse('api:credential_input_source_list'),
+            {'target_credential': vault.pk, 'source_credential': oidc_credential.pk, 'input_field_name': 'vault_password', 'metadata': {'secret_key': 'pw'}},
+            admin,
+        )
+        assert response.status_code == 201

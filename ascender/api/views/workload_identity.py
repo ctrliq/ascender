@@ -46,4 +46,8 @@ def openid_configuration(request):
 def jwks(request):
     if response := _unavailable():
         return response
-    return JsonResponse(workload_identity.build_jwks())
+    response = JsonResponse(workload_identity.build_jwks())
+    # public, and read by every relying party: let them and any proxy keep it
+    # a few minutes, short enough for a rotated key to show up quickly
+    response['Cache-Control'] = 'public, max-age=300'
+    return response

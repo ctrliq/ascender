@@ -87,7 +87,7 @@ function WorkloadIdentityInfo({ credentialType }: WorkloadIdentityInfoProps) {
             </ClipboardCopy>
           </>
         ) : (
-          <p>{t`The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN.`}</p>
+          <p>{t`The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable.`}</p>
         )}
       </Alert>
     </FormFullWidthLayout>

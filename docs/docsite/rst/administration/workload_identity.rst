@@ -42,7 +42,7 @@ While the feature is off, or the base URL is not set, both answer ``404``, and a
 
 The form of a workload identity credential shows the issuer as the server sees it, ready to copy.
 
-**Workload Identity Token Lifetime** (``WORKLOAD_IDENTITY_DEFAULT_TTL``, 300 seconds by default) is how long a token lasts for a job that has no timeout. A job with a timeout gets a token that lasts as long as its timeout. A minute is added in both cases to allow for clock drift. The lookups use the token only while the job is being prepared, so a short lifetime is enough for them.
+**Workload Identity Token Lifetime** (``WORKLOAD_IDENTITY_DEFAULT_TTL``, 300 seconds by default) is how long the token of a Vault lookup lasts: the lookup uses it straight away, while the job is being prepared. The token handed to a playbook by **OIDC Workload Identity Token** lasts as long as the timeout of the job instead, since the playbook may need it near the end, and falls back to this setting when the job has no timeout. No token lasts more than a day, and a minute is always added to allow for clock drift.
 
 
 .. _ag_workload_identity_vault:
@@ -117,16 +117,18 @@ Every token carries the registered claims ``iss``, ``sub``, ``aud``, ``iat``, ``
 
    * - Claim
      - Value
+   * - ``ascender_unified_job_type``
+     - What kind of job: ``job``, ``project_update``, ``inventory_update``, ``ad_hoc_command`` or ``workflow_job``.
    * - ``ascender_job_id``, ``ascender_job_name``
      - The job.
    * - ``ascender_job_type``
      - ``run`` or ``check``.
    * - ``ascender_launch_type``
      - How it was launched: ``manual``, ``relaunch``, ``scheduled``, ``workflow``, ``webhook``, ``callback``, ``dependency``...
-   * - ``ascender_launched_by_name``, ``ascender_launched_by_id``
-     - Who or what launched it: a user, a schedule, a workflow.
+   * - ``ascender_launched_by_name``, ``ascender_launched_by_id``, ``ascender_launched_by_type``
+     - Who or what launched it, and what kind of thing that is: ``user``, ``schedule``, ``workflow_job``... The id alone is ambiguous, so bind the type along with it.
    * - ``ascender_organization_name``, ``ascender_organization_id``
-     - Its organization.
+     - Its organization. An ad hoc command has none of its own and gets its inventory's.
    * - ``ascender_job_template_name``, ``ascender_job_template_id``
      - Its job template.
    * - ``ascender_unified_job_template_name``, ``ascender_unified_job_template_id``
@@ -148,11 +150,13 @@ The subject is built from the organization and the job template, always with the
 
     workload_type:ascender_automation_job:organization:<organization name>:job_template:<job template name>
 
+Project syncs, inventory syncs and ad hoc commands get tokens too, when one of their credentials is looked up as the job, and their subject ends in an empty ``job_template:``. A role bound to ``job_template:`` alone lets all of them in, so bind ``ascender_unified_job_type`` as well when the role is meant for one kind only. Otherwise a project admin could point the SCM credential of a project at that lookup, with an SCM URL on a server they control, and receive the secret as the git password.
+
 
 Testing a credential
 --------------------
 
-The **Test** button of a Vault OIDC credential, and the one in the metadata step of the key icon, ask for a job template. The test logs in to Vault with a token carrying the claims of that template, as far as they are known before it runs, so a role bound to the template can be tried out without launching it. Only templates the user can launch can be picked. The result shows the claims that were sent, which makes it easy to see why a role turned the token down.
+The **Test** button of a Vault OIDC credential, and the one in the metadata step of the key icon, ask for a job template. The test logs in to Vault with a token carrying the claims a manual launch of that template by you would have, so a role bound to the template can be tried out without launching it. Only templates the user can launch can be picked. The result shows the claims that were sent, which makes it easy to see why a role turned the token down. A real job carries a few more claims the test cannot know (its id, its instance group, how it was launched), so a role bound to those can pass the test and still turn a job down, or the other way round.
 
 
 Signing keys
@@ -174,7 +178,18 @@ Security notes
 
 * A token says which job it is; what the job may do is decided by the external system. Bind the Vault roles as tightly as the job needs, by organization, template or project.
 * The lookups use the Vault address as the audience, and the token never reaches the playbook. With **OIDC Workload Identity Token**, on the other hand, the playbook holds the token and can send it anywhere. A role bound to such a template trusts the content of its project, so only bind it to templates whose project you trust.
-* Tokens are signed in the process that runs the job, for that job only. There is no API that issues a token for arbitrary claims. The credential test signs for a template the user can launch, with the audience the user gives, and sends the token only to that address.
+* Tokens are signed by Ascender itself, for a job: the one running, or the one whose status is posted back to a webhook. There is no API that issues a token for arbitrary claims. The credential test signs for a template the user can launch, with the audience the user gives, and sends the token only to that address.
+* Anyone who can launch a template can get a token with its claims and an audience of their choosing, through the credential test or an **OIDC Workload Identity Token** credential of their own. Always bind the audience in the relying party (``bound_audiences`` in Vault); a token meant for one system is then useless against another.
+* The audience is compared as an exact string: ``https://vault.example.com:8200`` and ``https://vault.example.com:8200/`` are different audiences.
+* The token handed to a playbook is in a file, and only its path is in the environment: the environment of a play against ``localhost`` ends up in ``ansible_env``, which is stored with the facts of the job.
+
+
+Limitations
+-----------
+
+* A token can only be signed for a job. Credentials read when no job is running cannot be looked up as the job: the credential of a container group, which the pod reaper also uses on its own schedule, and the vault id of a vault credential, which tells a template's vault credentials apart before any job runs. Ascender refuses a vault id looked up that way; a container group credential that is cannot be used by the reaper, which logs the failure and leaves orphaned pods behind.
+* **OIDC Workload Identity Token** is a cloud credential, and a job takes one credential of each cloud type, so a job gets a token for one audience.
+* When an SSH key is looked up as the job, whether it is encrypted is only known once a job runs, so **Prompt on launch** for its passphrase cannot ask for it.
 
 
 Coming from Ansible Automation Platform

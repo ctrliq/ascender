@@ -302,6 +302,10 @@ msgstr "Execute regardless of the parent node's final state."
 msgid "Are you sure you want to remove this node?"
 msgstr "Are you sure you want to remove this node?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:88
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:96
 msgid "Edit this link"
@@ -2527,10 +2531,6 @@ msgstr "Scope"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0} (deleted)"
-
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
-msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
-msgstr "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -7078,7 +7078,7 @@ msgstr "Registry credential"
 msgid "Host Details"
 msgstr "Host Details"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
 msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 msgstr "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 

@@ -302,6 +302,10 @@ msgstr "Uitvoeren ongeacht de eindtoestand van het bovenliggende knooppunt."
 msgid "Are you sure you want to remove this node?"
 msgstr "Weet u zeker dat u dit knooppunt wilt verwijderen?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "De taak vindt het token in het bestand dat de omgevingsvariabele ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE aangeeft."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:88
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:96
 msgid "Edit this link"
@@ -2527,10 +2531,6 @@ msgstr "Bereik"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0} (verwijderd)"
-
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
-msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
-msgstr "De taak vindt het token in het bestand dat ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE aangeeft, en in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -7076,7 +7076,7 @@ msgstr "Toegangsgegevens registreren"
 msgid "Host Details"
 msgstr "Hostdetails"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
 msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 msgstr "Alleen gebruikt door de test, die zich bij Vault aanmeldt zoals een taak van deze sjabloon dat zou doen. Taken melden zich als zichzelf aan."
 

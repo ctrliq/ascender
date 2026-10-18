@@ -149,10 +149,12 @@ def oidc_workload_identity(cred, env, private_data_dir):
     # A token signed for this job, for the playbook to trade with an external
     # system that trusts the platform: an AWS role through
     # AssumeRoleWithWebIdentity, an Azure federated credential, Vault's jwt login
-    token = workload_identity.token_for_current_workload(cred.get_input('audience', default=''))
+    token = workload_identity.token_for_current_workload(cred.get_input('audience', default=''), for_playbook=True)
     handle, path = tempfile.mkstemp(dir=os.path.join(private_data_dir, 'env'))
     with os.fdopen(handle, 'w') as f:
         os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
         f.write(token)
-    env['ASCENDER_WORKLOAD_IDENTITY_TOKEN'] = token
+    # Only the path goes in the environment: the environment ends up in the
+    # facts of a play against localhost (ansible_env), which are stored with
+    # the job's events and in the fact cache for anyone who can read them
     env['ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE'] = to_container_path(path, private_data_dir)

@@ -302,6 +302,10 @@ msgstr "无论父节点的最后状态如何都执行。"
 msgid "Are you sure you want to remove this node?"
 msgstr "您确定要从删除这个节点吗？"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "作业可以在环境变量 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE 指向的文件中找到令牌。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:88
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:96
 msgid "Edit this link"
@@ -2527,10 +2531,6 @@ msgstr "范围"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0}（已删除）"
-
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
-msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
-msgstr "作业可以在 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE 指向的文件以及 ASCENDER_WORKLOAD_IDENTITY_TOKEN 中找到令牌。"
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -7076,7 +7076,7 @@ msgstr "注册表凭证"
 msgid "Host Details"
 msgstr "类型详情"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
 msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 msgstr "仅供测试使用，测试会像此模板的作业一样登录 Vault。作业以自身身份登录。"
 

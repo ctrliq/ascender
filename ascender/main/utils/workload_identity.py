@@ -12,10 +12,10 @@ claim can rely on it. The names follow Ansible Automation Platform's, with the
 `aap_controller_` prefix replaced by `ascender_`, so a Vault role written for
 one is easy to carry over to the other.
 
-Tokens are signed here, in the process that runs the job, and only for the job
-it is running: there is no API that hands out a token for an arbitrary set of
-claims. The one exception is the credential test, which signs for a job
-template the user can launch.
+Tokens are signed here, by the platform itself, and only for a job: the one
+being run, or the one whose status is being posted back to a webhook. There is
+no API that hands out a token for an arbitrary set of claims. The one exception
+is the credential test, which signs for a job template the user can launch.
 """
 
 import contextlib
@@ -32,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from jwt.algorithms import RSAAlgorithm
 
+from ascender.dab.lib.utils.models import get_type_for_model
 from ascender.main import constants
 from ascender.main.utils.pglock import advisory_lock
 from ascender.settings.typed import settings
@@ -76,6 +77,7 @@ class AutomationJobScope:
 
     name = 'ascender_automation_job'
 
+    CLAIM_UNIFIED_JOB_TYPE = 'ascender_unified_job_type'
     CLAIM_JOB_ID = 'ascender_job_id'
     CLAIM_JOB_NAME = 'ascender_job_name'
     CLAIM_JOB_TYPE = 'ascender_job_type'
@@ -83,6 +85,7 @@ class AutomationJobScope:
     CLAIM_PLAYBOOK_NAME = 'ascender_playbook_name'
     CLAIM_LAUNCHED_BY_NAME = 'ascender_launched_by_name'
     CLAIM_LAUNCHED_BY_ID = 'ascender_launched_by_id'
+    CLAIM_LAUNCHED_BY_TYPE = 'ascender_launched_by_type'
     CLAIM_ORGANIZATION_NAME = 'ascender_organization_name'
     CLAIM_ORGANIZATION_ID = 'ascender_organization_id'
     CLAIM_INVENTORY_NAME = 'ascender_inventory_name'
@@ -172,7 +175,7 @@ def _signing_key():
 
     key = WorkloadIdentityKey.objects.order_by('-created', '-pk').first()
     if key is None:
-        with transaction.atomic(), advisory_lock('workload_identity_signing_key'):
+        with advisory_lock('workload_identity_signing_key'), transaction.atomic():
             key = WorkloadIdentityKey.objects.order_by('-created', '-pk').first() or _create_key()
     return key
 
@@ -185,7 +188,7 @@ def rotate_signing_key(keep=1):
     """
     from ascender.main.models import WorkloadIdentityKey
 
-    with transaction.atomic(), advisory_lock('workload_identity_signing_key'):
+    with advisory_lock('workload_identity_signing_key'), transaction.atomic():
         old = list(WorkloadIdentityKey.objects.order_by('-created', '-pk'))
         new = _create_key()
         dropped = [key.kid for key in old[keep:]]
@@ -221,6 +224,9 @@ def claims_for_unified_job(unified_job):
     """The claims of a job that is about to run. A claim with no value is left out."""
     scope = AutomationJobScope
     claims = {
+        # what kind of job: a project sync or an ad hoc command can carry the
+        # same organization and no template, so a role can tell them apart
+        scope.CLAIM_UNIFIED_JOB_TYPE: get_type_for_model(type(unified_job)),
         scope.CLAIM_JOB_ID: unified_job.id,
         scope.CLAIM_JOB_NAME: unified_job.name,
         scope.CLAIM_LAUNCH_TYPE: unified_job.launch_type,
@@ -269,18 +275,24 @@ def claims_for_unified_job(unified_job):
         claims[scope.CLAIM_LAUNCHED_BY_NAME] = launched_by['name']
     if launched_by.get('id') is not None:
         claims[scope.CLAIM_LAUNCHED_BY_ID] = launched_by['id']
+    # a user, a schedule, a workflow job...: the id alone is ambiguous
+    if launched_by.get('type'):
+        claims[scope.CLAIM_LAUNCHED_BY_TYPE] = launched_by['type']
 
     return claims
 
 
-def claims_for_job_template(job_template):
+def claims_for_job_template(job_template, user=None):
     """
-    The claims a job from this template would carry, as far as they are known
-    before it runs. Used by the credential test, so that a Vault role bound to a
+    The claims a job from this template would carry when `user` launches it,
+    as far as they are known before it runs: there is no job id or instance
+    group yet. Used by the credential test, so that a Vault role bound to a
     template can be tried out without launching it.
     """
     scope = AutomationJobScope
     claims = {
+        scope.CLAIM_UNIFIED_JOB_TYPE: 'job',
+        scope.CLAIM_LAUNCH_TYPE: 'manual',
         scope.CLAIM_JOB_TEMPLATE_NAME: job_template.name,
         scope.CLAIM_JOB_TEMPLATE_ID: job_template.id,
         scope.CLAIM_UNIFIED_JOB_TEMPLATE_NAME: job_template.name,
@@ -293,11 +305,19 @@ def claims_for_job_template(job_template):
         ('organization', scope.CLAIM_ORGANIZATION_NAME, scope.CLAIM_ORGANIZATION_ID),
         ('project', scope.CLAIM_PROJECT_NAME, scope.CLAIM_PROJECT_ID),
         ('inventory', scope.CLAIM_INVENTORY_NAME, scope.CLAIM_INVENTORY_ID),
-        ('execution_environment', scope.CLAIM_EXECUTION_ENVIRONMENT_NAME, scope.CLAIM_EXECUTION_ENVIRONMENT_ID),
     ):
         if obj := _related(job_template, related):
             claims[name_claim] = obj.name
             claims[id_claim] = obj.id
+    # the one a job would run in, which may come from the project, the
+    # organization or the global default rather than the template itself
+    if execution_environment := job_template.resolve_execution_environment():
+        claims[scope.CLAIM_EXECUTION_ENVIRONMENT_NAME] = execution_environment.name
+        claims[scope.CLAIM_EXECUTION_ENVIRONMENT_ID] = execution_environment.id
+    if user is not None:
+        claims[scope.CLAIM_LAUNCHED_BY_NAME] = user.username
+        claims[scope.CLAIM_LAUNCHED_BY_ID] = user.id
+        claims[scope.CLAIM_LAUNCHED_BY_TYPE] = 'user'
     return claims
 
 
@@ -361,17 +381,22 @@ def workload_identity_for(unified_job, ttl_seconds=None):
         _current_workload.reset(reset_token)
 
 
-def token_for_current_workload(audience):
+def token_for_current_workload(audience, for_playbook=False):
     """
     A token for the job this context runs. One is signed per audience and
     reused for the rest of the run, so a credential with several fields looked
     up from the same Vault logs in with the same token.
+
+    A lookup uses its token there and then, so it gets the short default
+    lifetime. A token handed to the playbook (`for_playbook`) lasts as long as
+    the job's timeout, since the playbook may only use it near the end.
     """
     state = _current_workload.get()
     if state is None:
         raise WorkloadIdentityError('A workload identity token can only be issued for a running job.')
-    if audience not in state.tokens:
+    key = (audience, for_playbook)
+    if key not in state.tokens:
         if state.claims is None:
             state.claims = claims_for_unified_job(state.unified_job)
-        state.tokens[audience] = sign_token(state.claims, audience, state.ttl_seconds)
-    return state.tokens[audience]
+        state.tokens[key] = sign_token(state.claims, audience, state.ttl_seconds if for_playbook else None)
+    return state.tokens[key]

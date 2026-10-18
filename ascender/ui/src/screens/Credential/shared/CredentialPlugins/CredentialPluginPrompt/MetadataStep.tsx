@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { useField, useFormContext } from 'components/Form';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { CredentialTypesAPI } from 'api';
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -123,11 +123,21 @@ function MetadataStep() {
               return null;
             })}
             {asJob && (
-              <JobTemplateLookup
-                value={form.values.job_template}
-                onChange={(value) => form.setFieldValue('job_template', value)}
-                tooltip={t`Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves.`}
-              />
+              // A form of its own: the lookup checks what was typed against
+              // the templates, and a name that matches none must not stop the
+              // lookup from being saved, since only the test uses it
+              <FormRoot
+                initialValues={{ job_template: form.values.job_template }}
+                onSubmit={() => {}}
+              >
+                <JobTemplateLookup
+                  value={form.values.job_template}
+                  onChange={(value) =>
+                    form.setFieldValue('job_template', value)
+                  }
+                  tooltip={t`Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves.`}
+                />
+              </FormRoot>
             )}
           </FormFullWidthLayout>
         </Form>

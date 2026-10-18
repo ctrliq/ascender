@@ -304,6 +304,10 @@ msgstr "मूल नोड की अंतिम स्थिति की प
 msgid "Are you sure you want to remove this node?"
 msgstr "क्या आप वाकई इस नोड को हटाना चाहते हैं?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "जॉब को टोकन ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE पर्यावरण चर द्वारा बताई गई फ़ाइल में मिलता है।"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:88
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:96
 msgid "Edit this link"
@@ -2529,10 +2533,6 @@ msgstr "स्कोप"
 #: screens/ActivityStream/ActivityStreamListItem.tsx:30
 msgid "{0} (deleted)"
 msgstr "{0} (हटाया गया)"
-
-#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:90
-msgid "The job finds the token in the file named by ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE, and in ASCENDER_WORKLOAD_IDENTITY_TOKEN."
-msgstr "जॉब को टोकन ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE द्वारा बताई गई फ़ाइल में और ASCENDER_WORKLOAD_IDENTITY_TOKEN में मिलता है।"
 
 #: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
@@ -7079,7 +7079,7 @@ msgstr "रजिस्ट्री क्रेडेंशियल"
 msgid "Host Details"
 msgstr "होस्ट विवरण"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:129
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
 msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 msgstr "केवल परीक्षण द्वारा उपयोग किया जाता है, जो Vault में वैसे ही लॉग इन करता है जैसे इस टेम्पलेट का कोई जॉब करता। जॉब अपनी ही पहचान से लॉग इन करते हैं।"
 
