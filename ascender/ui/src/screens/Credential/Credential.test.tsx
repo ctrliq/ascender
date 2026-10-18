@@ -113,6 +113,18 @@ describe('<Credential />', () => {
     expect(screen.queryByText('Job Templates')).not.toBeInTheDocument();
   });
 
+  test.each(['hashivault_kv_oidc', 'hashivault_ssh_oidc'])(
+    'hides the Job Templates tab for a %s lookup',
+    async (kind) => {
+      vi.mocked(CredentialsAPI.readDetail).mockResolvedValue({
+        data: { ...mockCyberArkCredential, kind },
+      } as unknown as ResponseOf<typeof CredentialsAPI.readDetail>);
+      renderAt('/credentials/2/details');
+      expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
+      expect(screen.queryByText('Job Templates')).not.toBeInTheDocument();
+    }
+  );
+
   test('shows a not-found error on an unknown sub-route', async () => {
     renderAt('/credentials/2/foobar');
     expect(

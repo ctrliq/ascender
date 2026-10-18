@@ -28,6 +28,8 @@ const unacceptableCredentialTypes = [
   'conjur',
   'hashivault_kv',
   'hashivault_ssh',
+  'hashivault_kv_oidc',
+  'hashivault_ssh_oidc',
   'azure_kv',
   'thycotic_dsv',
   'thycotic_tss',
