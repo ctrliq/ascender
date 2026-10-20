@@ -68,6 +68,25 @@ register(
 )
 
 register(
+    'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Allow AWS Secrets Manager Lookups Without Keys'),
+    help_text=_(
+        'When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates '
+        'as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra '
+        'Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. '
+        'Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives '
+        'all of them that identity\'s Secrets Manager permissions, both to read secret values and to probe which '
+        'secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, '
+        'so scope that identity to only the secrets meant to be shared this way. When disabled, '
+        'a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
     'ASCENDER_URL_BASE',
     field_class=fields.URLField,
     schemes=('http', 'https'),
