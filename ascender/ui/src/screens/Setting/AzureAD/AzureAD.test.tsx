@@ -52,6 +52,30 @@ describe('<AzureAD />', () => {
     ).toBeInTheDocument();
   });
 
+  test('should send /settings/azure to the Entra ID details', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/settings/azure'],
+    });
+    renderWithContexts(
+      <SettingsProvider value={settingOptions}>
+        <Routes>
+          <Route path="/settings/azure/*" element={<AzureAD />} />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual('/settings/azure/entra/details')
+    );
+  });
+
+  test('should render entra id edit', async () => {
+    renderAzure(['/settings/azure/entra/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
+  });
+
   test('should render azure edit', async () => {
     renderAzure(['/settings/azure/default/edit']);
     expect(
