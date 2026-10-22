@@ -171,8 +171,10 @@ supported services:
  - A flag to indicate how system tracking records will be sent
  - Selecting which loggers to send
  - Enabling sending logs
- - Connection type (HTTPS, TCP, or UDP)
- - Timeout value if connection type is based on TCP protocol (HTTPS and TCP)
+ - Connection type (HTTPS, TCP, UDP, or RELP)
+ - Timeout value if connection type is based on TCP protocol (HTTPS, TCP and RELP)
+ - TLS for TCP and RELP (`LOG_AGGREGATOR_TLS`), with optional CA certificates
+   and an optional client certificate and key; HTTPS takes TLS from the URL
 
 Some settings for the log handler will not be exposed to the user via
 this mechanism. For example, threading (enabled).

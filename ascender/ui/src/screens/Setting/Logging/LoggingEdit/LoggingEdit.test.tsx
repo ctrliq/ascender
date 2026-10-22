@@ -29,6 +29,10 @@ const mockSettings = {
   LOG_AGGREGATOR_PROTOCOL: 'https',
   LOG_AGGREGATOR_TCP_TIMEOUT: 123,
   LOG_AGGREGATOR_VERIFY_CERT: true,
+  LOG_AGGREGATOR_TLS: false,
+  LOG_AGGREGATOR_TLS_CA_CERTIFICATE: '',
+  LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE: '',
+  LOG_AGGREGATOR_TLS_CLIENT_KEY: '',
   LOG_AGGREGATOR_LEVEL: 'ERROR',
   LOG_AGGREGATOR_ACTION_QUEUE_SIZE: 131072,
   LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: 1,
@@ -156,7 +160,7 @@ describe('<LoggingEdit />', () => {
   test('HTTPS certificate toggle should be shown when protocol is https', async () => {
     const { container } = await renderEdit();
     expect(
-      screen.getByText('Enable/disable HTTPS certificate verification')
+      screen.getByText('Enable/disable certificate verification')
     ).toBeInTheDocument();
     expect(
       (
@@ -195,7 +199,7 @@ describe('<LoggingEdit />', () => {
       tcpGroup!.querySelectorAll('.pf-v6-c-form__label-required')
     ).toHaveLength(1);
     expect(
-      screen.queryByText('Enable/disable HTTPS certificate verification')
+      screen.queryByText('Enable/disable certificate verification')
     ).not.toBeInTheDocument();
   });
 
@@ -210,12 +214,77 @@ describe('<LoggingEdit />', () => {
       ).not.toBeInTheDocument()
     );
     expect(
-      screen.queryByText('Enable/disable HTTPS certificate verification')
+      screen.queryByText('Enable/disable certificate verification')
     ).not.toBeInTheDocument();
     expect(
       screen.getByText('Logging Aggregator Level Threshold')
     ).toBeInTheDocument();
   });
+
+  test.each(['tcp', 'relp'])(
+    'TLS toggle, then certificate verification and TLS certificate fields, when protocol is %s',
+    async (protocol) => {
+      const { container } = await renderEdit();
+      fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
+        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: protocol },
+      });
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Encrypt TCP and RELP log aggregator connections with TLS'
+          )
+        ).toBeInTheDocument()
+      );
+      // TLS is off: nothing to verify and no certificates to supply
+      expect(
+        screen.queryByText('Enable/disable certificate verification')
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('TLS client certificate for the log aggregator')
+      ).not.toBeInTheDocument();
+
+      fireEvent.click(container.querySelector('#LOG_AGGREGATOR_TLS')!);
+      await waitFor(() =>
+        expect(
+          screen.getByText('Enable/disable certificate verification')
+        ).toBeInTheDocument()
+      );
+      expect(
+        screen.getByText(
+          "CA certificates for the log aggregator's TLS certificate"
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('TLS client certificate for the log aggregator')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('TLS client private key for the log aggregator')
+      ).toBeInTheDocument();
+    }
+  );
+
+  test.each(['https', 'udp'])(
+    'TLS toggle should be hidden when protocol is %s',
+    async (protocol) => {
+      const { container } = await renderEdit();
+      fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL')!, {
+        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: protocol },
+      });
+      await waitFor(() =>
+        expect(
+          screen.getByText('Logging Aggregator Level Threshold')
+        ).toBeInTheDocument()
+      );
+      expect(
+        screen.queryByText(
+          'Encrypt TCP and RELP log aggregator connections with TLS'
+        )
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('TLS client private key for the log aggregator')
+      ).not.toBeInTheDocument();
+    }
+  );
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
