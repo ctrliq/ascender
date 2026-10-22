@@ -2548,7 +2548,7 @@ msgstr "호스트"
 msgid "Add resource type"
 msgstr "리소스 유형 추가"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:142
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:143
 msgid "Enable external logging"
 msgstr "외부 로깅 활성화"
 
@@ -2586,7 +2586,7 @@ msgstr "작업 분할"
 #~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
 #~ msgstr "업그레이드 또는 갱신할 준비가 되었으면 <0>에 문의</0>하십시오."
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:175
 msgid "Enable log system tracking facts individually"
 msgstr "로그 시스템 추적 사실을 개별적으로 활성화"
 
@@ -4174,8 +4174,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:100
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:174
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:178
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:108
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:116
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
@@ -5606,6 +5606,10 @@ msgstr "쓰기"
 msgid "Option Details"
 msgstr "옵션 세부 정보"
 
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+msgid "Enable certificate verification"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
 #~ msgid "No subscriptions found"
@@ -6799,7 +6803,7 @@ msgstr "애플리케이션을 찾을 수 없습니다."
 msgid "Any"
 msgstr "모든"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:136
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:137
 msgid "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 msgstr "로깅 집계기 호스트 및 로깅 집계기 유형을 제공하지 않으면 로그 집계기를 활성화할 수 없습니다."
 
@@ -7989,9 +7993,9 @@ msgstr "플레이북 실행"
 msgid "Back to Instance Groups"
 msgstr "인스턴스 그룹으로 돌아가기"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
-msgid "Enable HTTPS certificate verification"
-msgstr "HTTPS 인증서 확인 활성화"
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+#~ msgid "Enable HTTPS certificate verification"
+#~ msgstr "HTTPS 인증서 확인 활성화"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8037,7 +8041,7 @@ msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사�
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:74
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
@@ -10126,7 +10130,7 @@ msgstr "검색 취소"
 #: screens/Project/Projects.tsx:29
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:81
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
@@ -11802,6 +11806,10 @@ msgstr "설문 조사 삭제"
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:26
 msgid "Policy instance minimum"
 msgstr "정책 인스턴스 최소"
+
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:201
+msgid "Encrypt TCP and RELP log aggregator connections with TLS"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:397
 msgid "Failed to delete workflow approval."

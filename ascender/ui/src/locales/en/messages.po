@@ -2548,7 +2548,7 @@ msgstr "Host"
 msgid "Add resource type"
 msgstr "Add resource type"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:142
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:143
 msgid "Enable external logging"
 msgstr "Enable external logging"
 
@@ -2586,7 +2586,7 @@ msgstr "Job Slice"
 #~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
 #~ msgstr "If you are ready to upgrade or renew, please <0>contact us.</0>"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:175
 msgid "Enable log system tracking facts individually"
 msgstr "Enable log system tracking facts individually"
 
@@ -4175,8 +4175,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:100
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:174
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:178
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:108
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:116
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
@@ -5607,6 +5607,10 @@ msgstr "Write"
 msgid "Option Details"
 msgstr "Option Details"
 
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+msgid "Enable certificate verification"
+msgstr "Enable certificate verification"
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
 #~ msgid "No subscriptions found"
@@ -6801,7 +6805,7 @@ msgstr "Application not found."
 msgid "Any"
 msgstr "Any"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:136
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:137
 msgid "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 msgstr "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 
@@ -7993,9 +7997,9 @@ msgstr "Playbook Run"
 msgid "Back to Instance Groups"
 msgstr "Back to Instance Groups"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
-msgid "Enable HTTPS certificate verification"
-msgstr "Enable HTTPS certificate verification"
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+#~ msgid "Enable HTTPS certificate verification"
+#~ msgstr "Enable HTTPS certificate verification"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8041,7 +8045,7 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:74
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
@@ -10131,7 +10135,7 @@ msgstr "Cancel lookup"
 #: screens/Project/Projects.tsx:29
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:81
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
@@ -11807,6 +11811,10 @@ msgstr "Delete Survey"
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:26
 msgid "Policy instance minimum"
 msgstr "Policy instance minimum"
+
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:201
+msgid "Encrypt TCP and RELP log aggregator connections with TLS"
+msgstr "Encrypt TCP and RELP log aggregator connections with TLS"
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:397
 msgid "Failed to delete workflow approval."
