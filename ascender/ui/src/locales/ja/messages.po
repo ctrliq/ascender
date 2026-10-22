@@ -2548,7 +2548,7 @@ msgstr "ホスト"
 msgid "Add resource type"
 msgstr "リソースタイプの追加"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:142
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:143
 msgid "Enable external logging"
 msgstr "外部ログの有効化"
 
@@ -2586,7 +2586,7 @@ msgstr "ジョブスライス"
 #~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
 #~ msgstr "アップグレードまたは更新の準備ができましたら、<0>お問い合わせください</0>。"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:175
 msgid "Enable log system tracking facts individually"
 msgstr "システムトラッキングファクトを個別に有効化"
 
@@ -4174,8 +4174,8 @@ msgstr "認証情報の削除"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:100
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:174
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:178
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:108
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:116
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
@@ -5606,6 +5606,10 @@ msgstr "書き込み"
 msgid "Option Details"
 msgstr "オプションの詳細"
 
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+msgid "Enable certificate verification"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
 #~ msgid "No subscriptions found"
@@ -6799,7 +6803,7 @@ msgstr "アプリケーションが見つかりません。"
 msgid "Any"
 msgstr "任意"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:136
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:137
 msgid "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 msgstr "ログアグリゲータホストとログアグリゲータタイプを指定しないと、ログアグリゲータを有効にできません。"
 
@@ -7989,9 +7993,9 @@ msgstr "Playbook 実行"
 msgid "Back to Instance Groups"
 msgstr "インスタンスグループに戻る"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
-msgid "Enable HTTPS certificate verification"
-msgstr "HTTPS 証明書の検証を有効化"
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+#~ msgid "Enable HTTPS certificate verification"
+#~ msgstr "HTTPS 証明書の検証を有効化"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8037,7 +8041,7 @@ msgstr "{0, plural, one {このインスタンスは現在、他のリソース�
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:74
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
@@ -10126,7 +10130,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Project/Projects.tsx:29
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:81
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
@@ -11802,6 +11806,10 @@ msgstr "Survey の削除"
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:26
 msgid "Policy instance minimum"
 msgstr "ポリシーインスタンスの最小値"
+
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:201
+msgid "Encrypt TCP and RELP log aggregator connections with TLS"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:397
 msgid "Failed to delete workflow approval."

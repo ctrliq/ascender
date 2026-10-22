@@ -11586,7 +11586,7 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  TCP and RELP are encrypted when LOG_AGGREGATOR_TLS is enabled.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
@@ -11626,11 +11626,35 @@ export interface components {
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
       /**
-       * Enable/disable HTTPS certificate verification
-       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
+       * Enable/disable certificate verification
+       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https", or when it is "tcp" or "relp" and LOG_AGGREGATOR_TLS is enabled. If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection: it must be signed by a trusted CA and name LOG_AGGREGATOR_HOST. If disabled, TCP checks nothing, and RELP checks that the certificate is signed by a trusted CA but not the name, because librelp has no option to skip the CA check.
        * @default true
        */
       LOG_AGGREGATOR_VERIFY_CERT: boolean;
+      /**
+       * Encrypt TCP and RELP log aggregator connections with TLS
+       * @description Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls="on". LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.
+       * @default false
+       */
+      LOG_AGGREGATOR_TLS: boolean;
+      /**
+       * CA certificates for the log aggregator's TLS certificate
+       * @description PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CA_CERTIFICATE: string;
+      /**
+       * TLS client certificate for the log aggregator
+       * @description PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Optional for TCP. Required for RELP: librelp checks that the aggregator's certificate names LOG_AGGREGATOR_HOST only when it presents a client certificate. Intermediate certificates may follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE: string;
+      /**
+       * TLS client private key for the log aggregator
+       * @description PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_KEY: string;
       /**
        * Logging Aggregator Level Threshold
        * @description Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting)
@@ -14731,7 +14755,7 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  TCP and RELP are encrypted when LOG_AGGREGATOR_TLS is enabled.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
@@ -14771,11 +14795,35 @@ export interface components {
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
       /**
-       * Enable/disable HTTPS certificate verification
-       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
+       * Enable/disable certificate verification
+       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https", or when it is "tcp" or "relp" and LOG_AGGREGATOR_TLS is enabled. If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection: it must be signed by a trusted CA and name LOG_AGGREGATOR_HOST. If disabled, TCP checks nothing, and RELP checks that the certificate is signed by a trusted CA but not the name, because librelp has no option to skip the CA check.
        * @default true
        */
       LOG_AGGREGATOR_VERIFY_CERT: boolean;
+      /**
+       * Encrypt TCP and RELP log aggregator connections with TLS
+       * @description Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls="on". LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.
+       * @default false
+       */
+      LOG_AGGREGATOR_TLS: boolean;
+      /**
+       * CA certificates for the log aggregator's TLS certificate
+       * @description PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CA_CERTIFICATE: string;
+      /**
+       * TLS client certificate for the log aggregator
+       * @description PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Optional for TCP. Required for RELP: librelp checks that the aggregator's certificate names LOG_AGGREGATOR_HOST only when it presents a client certificate. Intermediate certificates may follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE: string;
+      /**
+       * TLS client private key for the log aggregator
+       * @description PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_KEY: string;
       /**
        * Logging Aggregator Level Threshold
        * @description Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting)
@@ -16860,7 +16908,7 @@ export interface components {
       LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
-       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.
+       * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  TCP and RELP are encrypted when LOG_AGGREGATOR_TLS is enabled.
        *
        *     * `https` - HTTPS/HTTP
        *     * `tcp` - TCP
@@ -16900,11 +16948,35 @@ export interface components {
        */
       LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES: number;
       /**
-       * Enable/disable HTTPS certificate verification
-       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.
+       * Enable/disable certificate verification
+       * @description Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is "https", or when it is "tcp" or "relp" and LOG_AGGREGATOR_TLS is enabled. If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection: it must be signed by a trusted CA and name LOG_AGGREGATOR_HOST. If disabled, TCP checks nothing, and RELP checks that the certificate is signed by a trusted CA but not the name, because librelp has no option to skip the CA check.
        * @default true
        */
       LOG_AGGREGATOR_VERIFY_CERT: boolean;
+      /**
+       * Encrypt TCP and RELP log aggregator connections with TLS
+       * @description Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls="on". LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.
+       * @default false
+       */
+      LOG_AGGREGATOR_TLS: boolean;
+      /**
+       * CA certificates for the log aggregator's TLS certificate
+       * @description PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CA_CERTIFICATE: string;
+      /**
+       * TLS client certificate for the log aggregator
+       * @description PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Optional for TCP. Required for RELP: librelp checks that the aggregator's certificate names LOG_AGGREGATOR_HOST only when it presents a client certificate. Intermediate certificates may follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE: string;
+      /**
+       * TLS client private key for the log aggregator
+       * @description PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.
+       * @default
+       */
+      LOG_AGGREGATOR_TLS_CLIENT_KEY: string;
       /**
        * Logging Aggregator Level Threshold
        * @description Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting)

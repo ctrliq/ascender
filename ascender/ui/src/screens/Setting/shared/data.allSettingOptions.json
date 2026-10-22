@@ -580,11 +580,50 @@
           "LOG_AGGREGATOR_VERIFY_CERT": {
               "type": "boolean",
               "required": false,
-              "label": "Enable/disable HTTPS certificate verification",
+              "label": "Enable/disable certificate verification",
               "help_text": "Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is \"https\". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.",
               "category": "Logging",
               "category_slug": "logging",
               "default": true
+          },
+          "LOG_AGGREGATOR_TLS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Encrypt TCP and RELP log aggregator connections with TLS",
+              "help_text": "Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls=\"on\". LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "default": false
+          },
+          "LOG_AGGREGATOR_TLS_CA_CERTIFICATE": {
+              "type": "string",
+              "required": false,
+              "allow_blank": true,
+              "label": "CA certificates for the log aggregator's TLS certificate",
+              "help_text": "PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "default": ""
+          },
+          "LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE": {
+              "type": "string",
+              "required": false,
+              "allow_blank": true,
+              "label": "TLS client certificate for the log aggregator",
+              "help_text": "PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled, for aggregators that require client certificates. Intermediate certificates may follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "default": ""
+          },
+          "LOG_AGGREGATOR_TLS_CLIENT_KEY": {
+              "type": "string",
+              "required": false,
+              "allow_blank": true,
+              "label": "TLS client private key for the log aggregator",
+              "help_text": "PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "default": ""
           },
           "LOG_AGGREGATOR_LEVEL": {
               "type": "choice",
@@ -5130,8 +5169,40 @@
           },
           "LOG_AGGREGATOR_VERIFY_CERT": {
               "type": "boolean",
-              "label": "Enable/disable HTTPS certificate verification",
+              "label": "Enable/disable certificate verification",
               "help_text": "Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is \"https\". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "defined_in_file": false
+          },
+          "LOG_AGGREGATOR_TLS": {
+              "type": "boolean",
+              "label": "Encrypt TCP and RELP log aggregator connections with TLS",
+              "help_text": "Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls=\"on\". LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "defined_in_file": false
+          },
+          "LOG_AGGREGATOR_TLS_CA_CERTIFICATE": {
+              "type": "string",
+              "label": "CA certificates for the log aggregator's TLS certificate",
+              "help_text": "PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "defined_in_file": false
+          },
+          "LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE": {
+              "type": "string",
+              "label": "TLS client certificate for the log aggregator",
+              "help_text": "PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS is enabled, for aggregators that require client certificates. Intermediate certificates may follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.",
+              "category": "Logging",
+              "category_slug": "logging",
+              "defined_in_file": false
+          },
+          "LOG_AGGREGATOR_TLS_CLIENT_KEY": {
+              "type": "string",
+              "label": "TLS client private key for the log aggregator",
+              "help_text": "PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.",
               "category": "Logging",
               "category_slug": "logging",
               "defined_in_file": false

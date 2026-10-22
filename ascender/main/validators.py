@@ -177,6 +177,80 @@ def validate_certificate(data):
     return validate_pem(data, max_keys=0, min_certs=1)
 
 
+def load_x509_certificates(data):
+    """Every certificate in PEM text, parsed as X.509 (cryptography's own parser, not just the PEM framing).
+
+    Text without BEGIN/END lines is read as one base64 certificate, the same leniency validate_certificate has,
+    so a value that passes validate_certificate is also one this can turn into PEM a TLS library will load.
+    Raises ValueError if any certificate does not parse.
+    """
+    from cryptography import x509
+
+    data = data.strip()
+    if 'BEGIN ' not in data:
+        data = '-----BEGIN CERTIFICATE-----\n{}'.format(data)
+    if 'END ' not in data:
+        data = '{}\n-----END CERTIFICATE-----'.format(data)
+    return x509.load_pem_x509_certificates(data.encode())
+
+
+def logging_tls_errors(get, check_validity=True):
+    """What is wrong with the external logging TLS settings, as messages that never quote a certificate or key.
+
+    get(name) returns a setting's effective value. Both the settings API (on save) and the rsyslog config generator
+    (before it emits a TLS action) call this, so a value that reached the database another way still can't produce
+    a config rsyslog would run unsafely. check_validity adds the certificates' validity dates, which only the save
+    checks: a certificate that expires later makes rsyslog's own handshake fail.
+    """
+    enabled, tls, protocol = get('LOG_AGGREGATOR_ENABLED'), get('LOG_AGGREGATOR_TLS'), get('LOG_AGGREGATOR_PROTOCOL')
+    in_use = bool(enabled and tls and protocol in ('tcp', 'relp'))
+    certificate, key = get('LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE') or '', get('LOG_AGGREGATOR_TLS_CLIENT_KEY') or ''
+    if bool(certificate) != bool(key):
+        return ['LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE and LOG_AGGREGATOR_TLS_CLIENT_KEY must be set together.']
+    if tls and protocol == 'relp' and not certificate:
+        return [
+            'RELP over TLS needs LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE and LOG_AGGREGATOR_TLS_CLIENT_KEY: without a client'
+            " certificate, librelp does not check that the aggregator's certificate names LOG_AGGREGATOR_HOST."
+        ]
+    errors = []
+    host = get('LOG_AGGREGATOR_HOST') or ''
+    if in_use and re.search(r'[\s,]', host):
+        # rsyslog splits StreamDriverPermittedPeers on commas, so such a host would permit other names
+        errors.append('LOG_AGGREGATOR_HOST must not contain commas or whitespace when LOG_AGGREGATOR_TLS is enabled.')
+    if certificate:
+        from cryptography.exceptions import UnsupportedAlgorithm
+        from cryptography.hazmat.primitives import serialization
+
+        try:
+            public_key = load_x509_certificates(certificate)[0].public_key()
+            private_key = serialization.load_pem_private_key(key.encode(), password=None)
+        except (TypeError, ValueError, UnsupportedAlgorithm):
+            return errors + ['LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE or LOG_AGGREGATOR_TLS_CLIENT_KEY cannot be loaded.']
+        der = serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+        if public_key.public_bytes(*der) != private_key.public_key().public_bytes(*der):
+            errors.append('LOG_AGGREGATOR_TLS_CLIENT_KEY does not match LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE.')
+    if check_validity and in_use:
+        import datetime
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+        names = ['LOG_AGGREGATOR_TLS_CA_CERTIFICATE', 'LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE']
+        if protocol == 'tcp' and not get('LOG_AGGREGATOR_VERIFY_CERT'):
+            names.remove('LOG_AGGREGATOR_TLS_CA_CERTIFICATE')  # omfwd's anon mode never reads the CA
+        for name in names:
+            try:
+                certificates = load_x509_certificates(get(name)) if get(name) else []
+            except ValueError:
+                errors.append(f'{name} cannot be loaded.')
+                continue
+            for c in certificates:
+                if not c.not_valid_before_utc <= now <= c.not_valid_after_utc:
+                    errors.append(
+                        f'{name}: the certificate {c.subject.rfc4514_string()} is not valid now: it is valid from'
+                        f' {c.not_valid_before_utc} to {c.not_valid_after_utc}.'
+                    )
+    return errors
+
+
 def validate_ssh_private_key(data):
     """
     Validate that data contains at least one private key and optionally

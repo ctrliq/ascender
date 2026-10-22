@@ -3,6 +3,7 @@ import logging
 
 # Django
 from django.core.checks import Error
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.translation import gettext_lazy as _
 
 # Django REST Framework
@@ -11,6 +12,7 @@ from rest_framework import serializers
 # Ascender
 from ascender.conf import fields, register, register_validate
 from ascender.main.models import ExecutionEnvironment
+from ascender.main.validators import load_x509_certificates, logging_tls_errors, validate_certificate, validate_private_key
 
 logger = logging.getLogger('ascender.main.conf')
 
@@ -617,7 +619,7 @@ register(
     help_text=_(
         'Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  '
         'RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection '
-        'resets.  It does not currently support TLS.'
+        'resets.  TCP and RELP are encrypted when LOG_AGGREGATOR_TLS is enabled.'
     ),
     category=_('Logging'),
     category_slug='logging',
@@ -702,13 +704,103 @@ register(
     'LOG_AGGREGATOR_VERIFY_CERT',
     field_class=fields.BooleanField,
     default=True,
-    label=_('Enable/disable HTTPS certificate verification'),
+    label=_('Enable/disable certificate verification'),
     help_text=_(
         'Flag to control enable/disable of certificate verification'
-        ' when LOG_AGGREGATOR_PROTOCOL is "https". If enabled, the'
+        ' when LOG_AGGREGATOR_PROTOCOL is "https", or when it is "tcp" or "relp" and'
+        ' LOG_AGGREGATOR_TLS is enabled. If enabled, the'
         ' log handler will verify certificate sent by external log aggregator'
-        ' before establishing connection.'
+        ' before establishing connection: it must be signed by a trusted CA and name'
+        ' LOG_AGGREGATOR_HOST. If disabled, TCP checks nothing, and RELP checks that the'
+        ' certificate is signed by a trusted CA but not the name, because librelp has no'
+        ' option to skip the CA check.'
     ),
+    category=_('Logging'),
+    category_slug='logging',
+)
+
+
+def validate_tls_certificates(data):
+    """One or more PEM X.509 certificates. Errors never repeat the submitted text.
+
+    Validity dates are checked with the other settings (logging_tls_errors), and only while TLS is in use, so an
+    expired certificate can't block unrelated saves such as turning external logging off.
+    """
+    try:
+        validate_certificate(data)
+        load_x509_certificates(data)
+    except (DjangoValidationError, serializers.ValidationError, ValueError, TypeError):
+        raise serializers.ValidationError(_('Must be one or more PEM-encoded X.509 certificates.'))
+    return data
+
+
+def validate_unencrypted_private_key(data):
+    """One private key that rsyslog can load as it is: rsyslog has no setting for a passphrase.
+
+    validate_private_key's own errors quote the start of the value, so they are replaced: this one is a secret.
+    """
+    try:
+        pems = validate_private_key(data)
+    except (DjangoValidationError, serializers.ValidationError):
+        raise serializers.ValidationError(_('Must be one PEM-encoded private key.'))
+    if any(pem.get('key_enc') for pem in pems):
+        raise serializers.ValidationError(_('The private key must not be encrypted with a passphrase.'))
+    return data
+
+
+register(
+    'LOG_AGGREGATOR_TLS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Encrypt TCP and RELP log aggregator connections with TLS'),
+    help_text=_(
+        'Use TLS for the TCP and RELP log aggregator protocols. The aggregator must accept TLS on'
+        ' LOG_AGGREGATOR_PORT, for example rsyslog imtcp with a TLS stream driver, or imrelp with tls="on".'
+        ' LOG_AGGREGATOR_VERIFY_CERT controls certificate verification. HTTPS uses the scheme in'
+        ' LOG_AGGREGATOR_HOST instead, and UDP ignores this setting.'
+    ),
+    category=_('Logging'),
+    category_slug='logging',
+)
+register(
+    'LOG_AGGREGATOR_TLS_CA_CERTIFICATE',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    validators=[validate_tls_certificates],
+    label=_('CA certificates for the log aggregator\'s TLS certificate'),
+    help_text=_(
+        'PEM-encoded CA certificates used to verify the log aggregator over TCP or RELP when'
+        ' LOG_AGGREGATOR_TLS is enabled. Leave blank to use the system trust store.'
+    ),
+    category=_('Logging'),
+    category_slug='logging',
+)
+register(
+    'LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    validators=[validate_tls_certificates],
+    label=_('TLS client certificate for the log aggregator'),
+    help_text=_(
+        'PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS'
+        ' is enabled. Optional for TCP. Required for RELP: librelp checks that the aggregator\'s certificate'
+        ' names LOG_AGGREGATOR_HOST only when it presents a client certificate. Intermediate certificates may'
+        ' follow it. Set together with LOG_AGGREGATOR_TLS_CLIENT_KEY.'
+    ),
+    category=_('Logging'),
+    category_slug='logging',
+)
+register(
+    'LOG_AGGREGATOR_TLS_CLIENT_KEY',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    encrypted=True,
+    validators=[validate_unencrypted_private_key],
+    label=_('TLS client private key for the log aggregator'),
+    help_text=_('PEM-encoded private key for LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE, without a passphrase. Stored encrypted and never returned by the API.'),
     category=_('Logging'),
     category_slug='logging',
 )
@@ -971,12 +1063,62 @@ def logging_validate(serializer, attrs):
             and not attrs.get('LOG_AGGREGATOR_TYPE', True)
         ):
             errors.append('Cannot enable log aggregator without providing type.')
+    errors.extend(logging_tls_setting_errors(serializer, attrs))
+    if errors:
+        raise serializers.ValidationError(_('\n'.join(errors)))
+    return attrs
+
+
+# Saving one of these can put a certificate into use, so only such a save checks the certificates' dates.
+TLS_DATE_CHECK_KEYS = {
+    'LOG_AGGREGATOR_ENABLED',
+    'LOG_AGGREGATOR_PROTOCOL',
+    'LOG_AGGREGATOR_TLS',
+    'LOG_AGGREGATOR_VERIFY_CERT',
+    'LOG_AGGREGATOR_TLS_CA_CERTIFICATE',
+    'LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE',
+    'LOG_AGGREGATOR_TLS_CLIENT_KEY',
+}
+
+
+def logging_tls_setting_errors(serializer, attrs):
+    """logging_tls_errors on the values this save would leave in place, if it changes any LOG_AGGREGATOR_* value.
+
+    A save that changes no logging setting (an LDAP screen saved through /settings/all/, or a PUT that re-sends the
+    stored values) is never refused for the stored state, and the certificates' dates are checked only when the save
+    changes one of TLS_DATE_CHECK_KEYS. A key left unchanged arrives as $encrypted$ and the field skips it, so the
+    stored key stands in. The serializer instance holds stored rows, still encrypted, so those are read back through
+    settings, which decrypts them, and settings also supplies what the instance doesn't hold (the /changed/ view
+    holds only changed settings).
+    """
+    from django.conf import settings
+
+    def stored(key):
+        if hasattr(serializer.instance, key):
+            value = getattr(serializer.instance, key)
+            if not (isinstance(value, str) and value.startswith('$encrypted$')):
+                return value
+        return getattr(settings, key, None)
+
+    def current(key):
+        return attrs[key] if key in attrs else stored(key)
+
+    changed = {key for key in attrs if key.startswith('LOG_AGGREGATOR_') and attrs[key] != stored(key)}
+    if not changed:
+        return []
+    return logging_tls_errors(current, check_validity=bool(changed & TLS_DATE_CHECK_KEYS))
+
+
+def changed_settings_validate(serializer, attrs):
+    """The /changed/ view skips the logging category's validator; the TLS checks still apply to a logging change."""
+    errors = logging_tls_setting_errors(serializer, attrs)
     if errors:
         raise serializers.ValidationError(_('\n'.join(errors)))
     return attrs
 
 
 register_validate('logging', logging_validate)
+register_validate('changed', changed_settings_validate)
 
 
 def csrf_trusted_origins_validate(serializer, attrs):

@@ -2550,7 +2550,7 @@ msgstr "होस्ट"
 msgid "Add resource type"
 msgstr "संसाधन प्रकार जोड़ें"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:142
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:143
 msgid "Enable external logging"
 msgstr "बाहरी लॉगिंग सक्षम करें"
 
@@ -2588,7 +2588,7 @@ msgstr "जॉब स्लाइस"
 #~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
 #~ msgstr "यदि आप अपग्रेड या नवीनीकरण के लिए तैयार हैं, तो कृपया <0>हमसे संपर्क करें।</0>"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:175
 msgid "Enable log system tracking facts individually"
 msgstr "लॉग सिस्टम को फ़ैक्ट्स को व्यक्तिगत रूप से ट्रैक करने में सक्षम करें"
 
@@ -4177,8 +4177,8 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:100
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:174
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:178
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:108
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:116
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
@@ -5609,6 +5609,10 @@ msgstr "लिखें"
 msgid "Option Details"
 msgstr "विकल्प विवरण"
 
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+msgid "Enable certificate verification"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
 #~ msgid "No subscriptions found"
@@ -6802,7 +6806,7 @@ msgstr "एप्लिकेशन नहीं मिला।"
 msgid "Any"
 msgstr "कोई भी"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:136
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:137
 msgid "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 msgstr "लॉगिंग एग्रीगेटर होस्ट और लॉगिंग एग्रीगेटर प्रकार प्रदान किए बिना लॉग एग्रीगेटर सक्षम नहीं किया जा सकता।"
 
@@ -7992,9 +7996,9 @@ msgstr "प्लेबुक रन"
 msgid "Back to Instance Groups"
 msgstr "इंस्टेंस समूहों पर वापस"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
-msgid "Enable HTTPS certificate verification"
-msgstr "HTTPS प्रमाणपत्र सत्यापन सक्षम करें"
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+#~ msgid "Enable HTTPS certificate verification"
+#~ msgstr "HTTPS प्रमाणपत्र सत्यापन सक्षम करें"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8040,7 +8044,7 @@ msgstr "{0, plural, one {यह इंस्टेंस वर्तमान �
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:74
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
@@ -10130,7 +10134,7 @@ msgstr "लुकअप रद्द करें"
 #: screens/Project/Projects.tsx:29
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:81
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
@@ -11806,6 +11810,10 @@ msgstr "सर्वेक्षण हटाएं"
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:26
 msgid "Policy instance minimum"
 msgstr "नीति इंस्टेंस न्यूनतम"
+
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:201
+msgid "Encrypt TCP and RELP log aggregator connections with TLS"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:397
 msgid "Failed to delete workflow approval."

@@ -24,6 +24,7 @@ import {
   RevertAllAlert,
   RevertFormActionGroup,
 } from '../../shared';
+import { FileUploadField } from '../../shared/SharedFields';
 
 function LoggingEdit() {
   const navigate = useNavigate();
@@ -192,13 +193,45 @@ function LoggingEdit() {
                     isRequired
                   />
                 )}
-                {formik.values.LOG_AGGREGATOR_PROTOCOL === 'https' && (
+                {['tcp', 'relp'].includes(
+                  String(formik.values.LOG_AGGREGATOR_PROTOCOL)
+                ) && (
+                  <BooleanField
+                    name="LOG_AGGREGATOR_TLS"
+                    ariaLabel={t`Encrypt TCP and RELP log aggregator connections with TLS`}
+                    config={logging.LOG_AGGREGATOR_TLS}
+                  />
+                )}
+                {(formik.values.LOG_AGGREGATOR_PROTOCOL === 'https' ||
+                  (['tcp', 'relp'].includes(
+                    String(formik.values.LOG_AGGREGATOR_PROTOCOL)
+                  ) &&
+                    Boolean(formik.values.LOG_AGGREGATOR_TLS))) && (
                   <BooleanField
                     name="LOG_AGGREGATOR_VERIFY_CERT"
-                    ariaLabel={t`Enable HTTPS certificate verification`}
+                    ariaLabel={t`Enable certificate verification`}
                     config={logging.LOG_AGGREGATOR_VERIFY_CERT}
                   />
                 )}
+                {['tcp', 'relp'].includes(
+                  String(formik.values.LOG_AGGREGATOR_PROTOCOL)
+                ) &&
+                  Boolean(formik.values.LOG_AGGREGATOR_TLS) && (
+                    <>
+                      <FileUploadField
+                        name="LOG_AGGREGATOR_TLS_CA_CERTIFICATE"
+                        config={logging.LOG_AGGREGATOR_TLS_CA_CERTIFICATE}
+                      />
+                      <FileUploadField
+                        name="LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE"
+                        config={logging.LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE}
+                      />
+                      <FileUploadField
+                        name="LOG_AGGREGATOR_TLS_CLIENT_KEY"
+                        config={logging.LOG_AGGREGATOR_TLS_CLIENT_KEY}
+                      />
+                    </>
+                  )}
                 <ObjectField
                   name="LOG_AGGREGATOR_LOGGERS"
                   config={logging.LOG_AGGREGATOR_LOGGERS}
