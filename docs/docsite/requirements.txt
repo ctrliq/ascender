@@ -4,16 +4,16 @@ ansible-pygments==0.1.2
     # via sphinx-ansible-theme
 babel==2.18.0
     # via sphinx
-certifi==2026.7.22
+certifi==2026.10.19
     # via requests
-charset-normalizer==3.5.1
+charset-normalizer==3.5.2
     # via requests
 docutils==0.22.4
     # via
     #   -r requirements.in
     #   sphinx
     #   sphinx-rtd-theme
-idna==3.19
+idna==3.20
     # via requests
 imagesize==2.0.1
     # via sphinx
@@ -21,7 +21,7 @@ jinja2==3.1.6
     # via
     #   -r requirements.in
     #   sphinx
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via jinja2
 packaging==26.3
     # via sphinx
@@ -37,7 +37,7 @@ roman-numerals==4.1.0
     # via sphinx
 snowballstemmer==3.1.1
     # via sphinx
-sphinx==9.1.0
+sphinx==9.2.0
     # via
     #   -r requirements.in
     #   sphinx-ansible-theme
@@ -58,7 +58,7 @@ sphinxcontrib-htmlhelp==2.1.0
     # via sphinx
 sphinxcontrib-jquery==4.1
     # via sphinx-rtd-theme
-sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-jsmath==2.0.0
     # via sphinx
 sphinxcontrib-qthelp==2.0.0
     # via sphinx
