@@ -11296,6 +11296,18 @@ export interface components {
        */
       ASCENDER_URL_BASE: string;
       /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
+      /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
        *       "REMOTE_ADDR",
@@ -14426,6 +14438,18 @@ export interface components {
        */
       ASCENDER_URL_BASE: string;
       /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
+      /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
        *       "REMOTE_ADDR",
@@ -16569,6 +16593,18 @@ export interface components {
        * @default https://ascenderhost
        */
       ASCENDER_URL_BASE: string;
+      /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [

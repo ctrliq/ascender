@@ -973,6 +973,15 @@ DISABLE_LOCAL_AUTH = False
 # Note: This setting may be overridden by database settings.
 ASCENDER_URL_BASE = constants.ASCENDER_URL_BASE_PLACEHOLDER
 
+# Workload identity: the platform signs a short lived JWT for each job that
+# uses a credential which asks for one, and publishes the key to verify it at
+# /api/o/.well-known/. Off until an administrator turns it on.
+# Note: These settings may be overridden by database settings.
+WORKLOAD_IDENTITY_ENABLED = False
+# Lifetime, in seconds, of the token a lookup logs in with. The token handed
+# to a playbook lasts as long as the job timeout, or this long without one.
+WORKLOAD_IDENTITY_DEFAULT_TTL = 300
+
 
 # Settings related to external logger configuration
 LOG_AGGREGATOR_ENABLED = False

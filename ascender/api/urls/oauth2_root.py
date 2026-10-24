@@ -4,13 +4,14 @@ from datetime import timedelta
 
 from django.utils.timezone import now
 from ascender.settings.typed import settings
-from django.urls import path
+from django.urls import path, re_path
 
 from oauthlib import oauth2
 from oauth2_provider import views
 
 from ascender.main.models import OAuth2RefreshToken
 from ascender.api.views.root import ApiOAuthAuthorizationRootView
+from ascender.api.views import workload_identity
 
 
 class TokenView(views.TokenView):
@@ -39,6 +40,10 @@ urls = [
     path("authorize/", views.AuthorizationView.as_view(), name="authorize"),
     path("token/", TokenView.as_view(), name="token"),
     path("revoke_token/", views.RevokeTokenView.as_view(), name="revoke-token"),
+    # Workload identity: an OIDC client builds these from the issuer without
+    # a trailing slash, so they answer with or without one
+    re_path(r"^\.well-known/openid-configuration/?$", workload_identity.openid_configuration, name="workload_identity_openid_configuration"),
+    re_path(r"^\.well-known/jwks\.json/?$", workload_identity.jwks, name="workload_identity_jwks"),
 ]
 
 

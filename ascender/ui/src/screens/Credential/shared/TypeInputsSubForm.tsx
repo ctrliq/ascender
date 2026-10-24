@@ -9,7 +9,12 @@ import {
   SubFormLayout,
 } from 'components/FormLayout';
 import { CheckboxField } from 'components/FormField';
-import { CredentialField, GceFileUploadField } from './CredentialFormFields';
+import {
+  CredentialField,
+  GceFileUploadField,
+  WorkloadIdentityInfo,
+} from './CredentialFormFields';
+import { isWorkloadIdentityType } from './workloadIdentity';
 
 export interface TypeInputsSubFormProps {
   credentialType: CredentialType;
@@ -30,6 +35,9 @@ function TypeInputsSubForm({ credentialType }: TypeInputsSubFormProps) {
         {t`Type Details`}
       </Title>
       <FormColumnLayout>
+        {isWorkloadIdentityType(credentialType) && (
+          <WorkloadIdentityInfo credentialType={credentialType} />
+        )}
         {credentialType.namespace === 'gce' && <GceFileUploadField />}
         {stringFields?.map((fieldOptions) =>
           fieldOptions.multiline ? (

@@ -30,6 +30,7 @@ from ascender.main.models import (
 )
 from ascender.main.models.base import VERBOSITY_CHOICES, NEW_JOB_TYPE_CHOICES
 from ascender.main.utils import getattrd, truncate_stdout
+from ascender.main.utils.workload_identity import WorkloadIdentityError
 from ascender.main.validators import vars_validate_or_raise
 from ascender.api.fields import VerbatimField
 from ascender.api.serializers.base import (
@@ -732,7 +733,11 @@ class JobLaunchSerializer(BaseSerializer):
                 for cred in obj.credentials.all():
                     cred_dict = dict(id=cred.id, name=cred.name, credential_type=cred.credential_type.pk, passwords_needed=cred.passwords_needed)
                     if cred.credential_type.managed and 'vault_id' in cred.credential_type.defined_fields:
-                        cred_dict['vault_id'] = cred.get_input('vault_id', default=None)
+                        try:
+                            cred_dict['vault_id'] = cred.get_input('vault_id', default=None)
+                        except WorkloadIdentityError:
+                            # Looked up as the job, so only known once one runs
+                            cred_dict['vault_id'] = None
                     defaults_dict.setdefault(field_name, []).append(cred_dict)
             elif field_name == 'execution_environment':
                 if obj.execution_environment_id:

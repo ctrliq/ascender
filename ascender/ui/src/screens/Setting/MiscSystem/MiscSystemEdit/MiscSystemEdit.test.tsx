@@ -32,6 +32,8 @@ const systemData = {
   ORG_ADMINS_CAN_SEE_ALL_USERS: true,
   REMOTE_HOST_HEADERS: ['REMOTE_ADDR', 'REMOTE_HOST'],
   ASCENDER_URL_BASE: 'https://localhost:3000',
+  WORKLOAD_IDENTITY_ENABLED: false,
+  WORKLOAD_IDENTITY_DEFAULT_TTL: 300,
   PROXY_IP_ALLOWED_LIST: [],
   CSRF_TRUSTED_ORIGINS: [],
 };
@@ -94,6 +96,14 @@ describe('<MiscSystemEdit />', () => {
   test('initially renders without crashing', async () => {
     await mountEdit();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+  });
+
+  test('shows the workload identity settings', async () => {
+    await mountEdit();
+    expect(screen.getByText('Enable Workload Identity')).toBeInTheDocument();
+    expect(
+      screen.getByText('Workload Identity Token Lifetime')
+    ).toBeInTheDocument();
   });
 
   test('save button should call updateAll', async () => {
