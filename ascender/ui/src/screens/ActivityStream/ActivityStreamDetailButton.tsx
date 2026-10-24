@@ -37,7 +37,7 @@ function ActivityStreamDetailButton({
       <Button
         icon={<SearchPlusIcon />}
         ouiaId={`${streamItem.id}-view-details-button`}
-        aria-label={t`View event details`}
+        aria-label={t`View Event Details`}
         variant="plain"
         component="button"
         onClick={() => setIsOpen(true)}
@@ -45,8 +45,8 @@ function ActivityStreamDetailButton({
       <Modal
         variant="large"
         isOpen={isOpen}
-        title={t`Event detail`}
-        aria-label={t`Event detail modal`}
+        title={t`Event Details`}
+        aria-label={t`Event Details Modal`}
         onClose={() => setIsOpen(false)}
       >
         <DetailList gutter="sm">
@@ -54,13 +54,13 @@ function ActivityStreamDetailButton({
             label={t`Time`}
             value={formatDateString(streamItem.timestamp)}
           />
-          <Detail label={t`Initiated by`} value={user} />
+          <Detail label={t`Initiated By`} value={user} />
           <Detail
-            label={t`Setting category`}
+            label={t`Setting Category`}
             value={setting && (setting[0]?.category as React.ReactNode)}
           />
-          <Detail label={t`Setting name`} value={setting && setting[0]?.name} />
-          <Detail fullWidth label={t`Action`} value={description} />
+          <Detail label={t`Setting Name`} value={setting && setting[0]?.name} />
+          <Detail fullWidth label={t`Event`} value={description} />
           {streamItem?.changes && (
             <VariablesDetail
               label={t`Changes`}

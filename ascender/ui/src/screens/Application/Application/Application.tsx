@@ -63,7 +63,15 @@ function Application({ setBreadcrumb }: ApplicationProps) {
         clientTypeOptions: clientType,
       };
     }, [setBreadcrumb, id]),
-    { application: null, authorizationOptions: [], clientTypeOptions: [] }
+    // Loading from the first render: the read starts in an effect, after the
+    // routes below have drawn once, and until then an idle hook with no
+    // application sent every address to Not Found for a moment.
+    {
+      application: null,
+      authorizationOptions: [],
+      clientTypeOptions: [],
+      isLoading: true,
+    }
   );
 
   useEffect(() => {
@@ -75,7 +83,7 @@ function Application({ setBreadcrumb }: ApplicationProps) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to applications`}
+          {t`Back to Applications`}
         </>
       ),
       link: '/applications',
@@ -99,7 +107,7 @@ function Application({ setBreadcrumb }: ApplicationProps) {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Application not found.`}{' '}
-                <Link to="/applications">{t`View all applications.`}</Link>
+                <Link to="/applications">{t`View all Applications.`}</Link>
               </span>
             )}
           </ContentError>
@@ -136,11 +144,32 @@ function Application({ setBreadcrumb }: ApplicationProps) {
                   />
                 }
               />
-              {/* /* so token detail URLs (tokens/:tokenId/details) still
-                  resolve to the list, matching the old non-exact v5 route */}
-              <Route path="tokens/*" element={<ApplicationTokens />} />
+              {/* An application has no token pages of its own: a row links to
+                  the token under its owner, /users/:id/tokens/:tokenId. The
+                  /* keeps any deeper address, an old bookmark of a token here
+                  for one, on the list rather than on a blank card. */}
+              <Route
+                path="tokens/*"
+                element={<ApplicationTokens application={application} />}
+              />
             </>
           )}
+          {/* Any other address below the application, a mistyped one for
+              instance, says so rather than leaving the card empty. */}
+          <Route
+            path="*"
+            element={
+              !isLoading ? (
+                <ContentError isNotFound>
+                  {id && (
+                    <Link to={`/applications/${id}/details`}>
+                      {t`View Application Details`}
+                    </Link>
+                  )}
+                </ContentError>
+              ) : null
+            }
+          />
         </Routes>
       </Card>
     </PageSection>

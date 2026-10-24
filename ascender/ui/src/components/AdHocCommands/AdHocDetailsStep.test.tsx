@@ -104,6 +104,8 @@ describe('<AdHocDetailsStep />', () => {
 
     // diff_mode Switch renders a checkbox input with aria-label "toggle changes"
     const diffSwitch = screen.getByRole('switch', { name: 'toggle changes' });
+    // PF6 has no off label, so the label itself has to follow the state.
+    expect(diffSwitch.closest('label')).toHaveTextContent('Off');
     await user.click(diffSwitch);
 
     const becomeCheckbox = screen.getByRole('checkbox', {
@@ -117,6 +119,7 @@ describe('<AdHocDetailsStep />', () => {
     expect(forksInput).toHaveValue(10);
     expect(limitInput).toHaveValue('Inventory 1, inventory 2, new inventory');
     expect(diffSwitch).toBeChecked();
+    expect(diffSwitch.closest('label')).toHaveTextContent('On');
     expect(becomeCheckbox).toBeChecked();
   });
 });

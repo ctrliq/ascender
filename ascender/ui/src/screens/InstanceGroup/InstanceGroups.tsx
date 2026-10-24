@@ -8,16 +8,13 @@ import PersistentFilters from 'components/PersistentFilters';
 import InstanceGroupAdd from './InstanceGroupAdd';
 import InstanceGroupList from './InstanceGroupList';
 import InstanceGroup from './InstanceGroup';
-import ContainerGroupAdd from './ContainerGroupAdd';
-import ContainerGroup from './ContainerGroup';
 
 function InstanceGroups() {
   const { t } = useLingui();
   const { pathname } = useLocation();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/instance_groups': t`Instance Groups`,
-    '/instance_groups/add': t`Create new instance group`,
-    '/instance_groups/container_group/add': t`Create new container group`,
+    '/instance_groups/add': t`Create New Instance Group`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -30,21 +27,15 @@ function InstanceGroups() {
       }
       setBreadcrumbConfig({
         '/instance_groups': t`Instance Groups`,
-        '/instance_groups/add': t`Create new instance group`,
-        '/instance_groups/container_group/add': t`Create new container group`,
+        '/instance_groups/add': t`Create New Instance Group`,
 
-        [`/instance_groups/${instanceGroups.id}/details`]: t`Details`,
-        [`/instance_groups/${instanceGroups.id}/instances`]: t`Instances`,
+        [`/instance_groups/${instanceGroups.id}/details`]: `${instanceGroups.name}`,
+        [`/instance_groups/${instanceGroups.id}/instances`]: `${instanceGroups.name}`,
         [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}`]: `${instance?.hostname}`,
-        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]: t`Instance details`,
-        [`/instance_groups/${instanceGroups.id}/jobs`]: t`Jobs`,
-        [`/instance_groups/${instanceGroups.id}/edit`]: t`Edit details`,
+        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]: `${instance?.hostname}`,
+        [`/instance_groups/${instanceGroups.id}/runs`]: `${instanceGroups.name}`,
+        [`/instance_groups/${instanceGroups.id}/edit`]: t`Edit ${instanceGroups.name}`,
         [`/instance_groups/${instanceGroups.id}`]: `${instanceGroups.name}`,
-
-        [`/instance_groups/container_group/${instanceGroups.id}/details`]: t`Details`,
-        [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: t`Jobs`,
-        [`/instance_groups/container_group/${instanceGroups.id}/edit`]: t`Edit details`,
-        [`/instance_groups/container_group/${instanceGroups.id}`]: `${instanceGroups.name}`,
       });
     },
     [t]
@@ -61,12 +52,6 @@ function InstanceGroups() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route path="container_group/add" element={<ContainerGroupAdd />} />
-        {/* /* so the nested <ContainerGroup> route tree can match the rest */}
-        <Route
-          path="container_group/:id/*"
-          element={<ContainerGroup setBreadcrumb={buildBreadcrumbConfig} />}
-        />
         <Route path="add" element={<InstanceGroupAdd />} />
         {/* /* so the nested <InstanceGroup> route tree can match the rest */}
         <Route

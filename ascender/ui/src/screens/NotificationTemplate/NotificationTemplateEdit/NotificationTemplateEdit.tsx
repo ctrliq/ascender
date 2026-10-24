@@ -18,7 +18,7 @@ function NotificationTemplateEdit({
   template,
   defaultMessages,
 }: NotificationTemplateEditProps) {
-  const detailsUrl = `/notification_templates/${template.id}/details`;
+  const detailsUrl = `/notifications/${template.id}/details`;
   const navigate = useNavigate();
   const [formError, setFormError] = useState<unknown>(null);
 

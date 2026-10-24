@@ -31,7 +31,7 @@ describe('PageHeaderToolbar', () => {
     ).toBeInTheDocument();
     expect(
       container.querySelector(
-        'a[href="/workflow_approvals?workflow_approvals.status=pending"]'
+        'a[href="/approvals?workflow_approvals.status=pending"]'
       )
     ).toBeInTheDocument();
     expect(
@@ -39,7 +39,8 @@ describe('PageHeaderToolbar', () => {
         '[data-ouia-component-id="toolbar-user-dropdown-toggle"]'
       )
     ).toBeInTheDocument();
-    await waitFor(() => expect(WorkflowApprovalsAPI.read).toHaveBeenCalled());
+    // the count is the container's to read, so the toolbar asks for nothing
+    expect(WorkflowApprovalsAPI.read).not.toHaveBeenCalled();
   });
 
   test('dropdowns have expected items and callbacks', async () => {
@@ -56,7 +57,7 @@ describe('PageHeaderToolbar', () => {
     // help dropdown items are not rendered until the toggle is clicked
     expect(screen.queryByText('About')).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Info' }));
-    expect(screen.getByText('Help')).toBeInTheDocument();
+    expect(screen.getByText('Documentation')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
 
     // clicking About fires the callback
@@ -82,13 +83,9 @@ describe('PageHeaderToolbar', () => {
   });
 
   test('pending workflow approvals count set correctly', async () => {
-    vi.mocked(WorkflowApprovalsAPI.read).mockResolvedValueOnce({
-      data: {
-        count: 20,
-      },
-    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.read>);
     const { container } = renderWithContexts(
       <PageHeaderToolbar
+        approvalCount={20}
         onAboutClick={onAboutClick}
         onLogoutClick={onLogoutClick}
       />
@@ -103,9 +100,6 @@ describe('PageHeaderToolbar', () => {
   });
 
   test('the approval badge is one named link, not a button inside one', async () => {
-    vi.mocked(WorkflowApprovalsAPI.read).mockResolvedValueOnce({
-      data: { count: 0 },
-    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.read>);
     const { container } = renderWithContexts(
       <PageHeaderToolbar
         onAboutClick={onAboutClick}

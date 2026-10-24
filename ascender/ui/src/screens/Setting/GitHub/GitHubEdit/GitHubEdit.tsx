@@ -8,7 +8,10 @@ import { SettingsEditForm } from '../../shared';
 
 function GitHubEdit() {
   return (
-    <SettingsEditForm category="github" detailUrl="/settings/github/details">
+    <SettingsEditForm
+      category="github"
+      detailUrl="/authentication/github/default/details"
+    >
       {(github) => (
         <>
           <InputField

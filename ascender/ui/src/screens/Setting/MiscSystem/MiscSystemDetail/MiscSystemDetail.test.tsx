@@ -1,6 +1,8 @@
 import type { OptionsField } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
@@ -59,51 +61,83 @@ describe('<MiscSystemDetail />', () => {
     options: typeof settingOptions = settingOptions,
     context: TestContexts | undefined = undefined
   ) {
-    renderWithContexts(
+    // Each group of settings is an address, so the screen is mounted on one
+    // and a tab click is a navigation like any other.
+    const history = createMemoryHistory({
+      initialEntries: ['/system/activity_stream'],
+    });
+    const result = renderWithContexts(
       <SettingsProvider value={options}>
-        <MiscSystemDetail />
+        <Routes>
+          <Route path="/system/:group" element={<MiscSystemDetail />} />
+        </Routes>
       </SettingsProvider>,
-      context ? { context } : undefined
+      {
+        ...(context ?? {}),
+        context: { ...(context ?? {}), router: { history } },
+      } as Parameters<typeof renderWithContexts>[1]
     );
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
+    return result;
   }
 
   test('initially renders without crashing', async () => {
     await mountDetail();
-    expect(screen.getByText('Details')).toBeInTheDocument();
+    expect(screen.getByText('Enable Activity Stream')).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
+  test('should render one tab per group of settings', async () => {
     await mountDetail();
-    const expectedTabs = ['Back to Settings', 'Details'];
-    screen.getAllByRole('tab').forEach((tab, index) => {
-      expect(tab).toHaveTextContent(expectedTabs[index]!);
+    [
+      'Activity Stream',
+      'Execution Environment',
+      'Miscellaneous',
+      'Security',
+      'Users',
+    ].forEach((name) => {
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument();
     });
   });
 
-  test('should render expected details', async () => {
-    await mountDetail();
+  test("should render each tab's settings, and only those", async () => {
+    const { user } = await mountDetail();
+
+    assertDetail('Enable Activity Stream', 'On');
+    assertDetail('Enable Activity Stream for Inventory Sync', 'Off');
+    expect(
+      screen.queryByText('Base URL of the service')
+    ).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole('tab', { name: 'Execution Environment' })
+    );
+    assertDetail('Global default execution environment', 'Foo');
+
+    await user.click(screen.getByRole('tab', { name: 'Miscellaneous' }));
+    assertDetail('Base URL of the service', 'https://towerhost');
     assertDetail(
       'Unique identifier for an installation',
       'db39b9ec-0c6e-4554-987d-42aw9c732ed8'
     );
-    assertDetail('All Users Visible to Organization Admins', 'On');
-    assertDetail('Base URL of the service', 'https://towerhost');
-    assertDetail('Organization Admins Can Manage Users and Teams', 'On');
-    assertDetail('Enable Activity Stream', 'On');
-    assertDetail('Enable Activity Stream for Inventory Sync', 'Off');
+
+    await user.click(screen.getByRole('tab', { name: 'Security' }));
     assertVariableDetail('Remote Host Headers');
     assertVariableDetail('Proxy IP Allowed List');
-    assertDetail('Global default execution environment', 'Foo');
+
+    await user.click(screen.getByRole('tab', { name: 'Users' }));
+    assertDetail('All Users Visible to Organization Admins', 'On');
+    // Editable on this tab, so shown on it too.
+    assertDetail('Hide System Roles from Access Lists', 'Off');
+    assertDetail('Organization Admins Can Manage Users and Teams', 'On');
   });
 
   test('should render execution environment as not configured', async () => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { ...freshSystemData(), DEFAULT_EXECUTION_ENVIRONMENT: null },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
-    await mountDetail({
+    const { user } = await mountDetail({
       ...settingOptions,
       // Null on purpose: the detail reads this as not configured.
       DEFAULT_EXECUTION_ENVIRONMENT: null as unknown as Record<
@@ -111,6 +145,9 @@ describe('<MiscSystemDetail />', () => {
         OptionsField
       >,
     });
+    await user.click(
+      screen.getByRole('tab', { name: 'Execution Environment' })
+    );
     assertDetail('Global default execution environment', 'Not configured');
   });
 

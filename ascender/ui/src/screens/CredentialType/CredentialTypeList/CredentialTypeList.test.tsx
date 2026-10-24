@@ -103,6 +103,8 @@ describe('<CredentialTypeList>', () => {
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     fireEvent.click(await screen.findByLabelText('confirm delete'));
 
-    expect(await screen.findByLabelText('Deletion error')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Deletion Error')).toBeInTheDocument();
+    // Titled as every other list's deletion error is.
+    expect(screen.getByText('Error!')).toBeInTheDocument();
   });
 });

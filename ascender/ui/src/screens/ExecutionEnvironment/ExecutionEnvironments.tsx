@@ -12,7 +12,7 @@ function ExecutionEnvironments() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/execution_environments': t`Execution Environments`,
-    '/execution_environments/add': t`Create new execution environment`,
+    '/execution_environments/add': t`Create New Execution Environment`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -22,10 +22,10 @@ function ExecutionEnvironments() {
       }
       setBreadcrumbConfig({
         '/execution_environments': t`Execution Environments`,
-        '/execution_environments/add': t`Create new execution environment`,
+        '/execution_environments/add': t`Create New Execution Environment`,
         [`/execution_environments/${executionEnvironments.id}`]: `${executionEnvironments.name}`,
-        [`/execution_environments/${executionEnvironments.id}/edit`]: t`Edit details`,
-        [`/execution_environments/${executionEnvironments.id}/details`]: t`Details`,
+        [`/execution_environments/${executionEnvironments.id}/edit`]: t`Edit ${executionEnvironments.name}`,
+        [`/execution_environments/${executionEnvironments.id}/details`]: `${executionEnvironments.name}`,
       });
     },
     [t]

@@ -13,13 +13,13 @@ import useModal from 'hooks/useModal';
 import useRequest from 'hooks/useRequest';
 import { SettingsAPI } from 'api';
 import RevertAllAlert from './RevertAllAlert';
-import { formatJson } from './settingUtils';
+import { factoryDefaults, formatJson } from './settingUtils';
 import RevertFormActionGroup from './RevertFormActionGroup';
 
 export type SettingsConfigMap = Record<string, SettingConfig>;
 
 export interface SettingsEditFormProps {
-  /** The settings category to read, save and revert, such as `radius`. */
+  /** The settings category to read and save, such as `radius`. */
   category: string;
   /** Where to go after a save, a revert or a cancel. */
   detailUrl: string;
@@ -111,8 +111,14 @@ function SettingsEditForm({
 
   const { error: revertError, request: revertAll } = useRequest(
     useCallback(async () => {
-      await SettingsAPI.revertCategory(category);
-    }, [category]),
+      // The settings this form holds and nothing else. A DELETE on the
+      // category would also reset what the screen does not show: Session,
+      // Password and Mapping all live in authentication, and each Jobs tab is
+      // one slice of jobs.
+      await SettingsAPI.updateAll(
+        factoryDefaults(Object.keys(config ?? {}), options)
+      );
+    }, [config, options]),
     null
   );
 

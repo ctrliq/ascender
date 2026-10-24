@@ -20,6 +20,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import { InstancesAPI, ReceptorAPI } from 'api';
 import useExpanded from 'hooks/useExpanded';
+import { useConfig } from 'contexts/Config';
 import useSelected from 'hooks/useSelected';
 import type { QSParams } from 'util/qs';
 import InstancePeerListItem from './InstancePeerListItem';
@@ -53,16 +54,14 @@ export interface InstancePeerListProps {
 
 function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
   const { t } = useLingui();
+  const { me } = useConfig();
   const location = useLocation();
   const { id } = useParams() as { id: string };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToast, Toast, toastProps } = useToast();
-  // The options are the collection's, not one instance's, so the id it used
-  // to pass here was ignored and has been since the initial import.
-  const readInstancesOptions = useCallback(
-    () => InstancesAPI.readOptions(),
-    []
-  );
+  // The add modal lists receptor addresses, so its advanced search keys are
+  // theirs rather than an instance's.
+  const readAddressOptions = useCallback(() => ReceptorAPI.readOptions(), []);
   const {
     isLoading,
     error: contentError,
@@ -75,23 +74,33 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
       const [
         { data: detail },
         {
-          data: { results },
+          data: { results, count: peerCount },
         },
         actions,
-        instances,
       ] = await Promise.all([
         InstancesAPI.readDetail(id),
         InstancesAPI.readPeers(id, params),
-        InstancesAPI.readOptions(),
-        InstancesAPI.read(),
+        // The rows are receptor addresses, so theirs are the fields the
+        // advanced search can filter on, not an instance's.
+        ReceptorAPI.readOptions(),
       ]);
+
+      // The instances these addresses belong to, asked for by id: reading
+      // the first page of every instance left a peer beyond it nameless.
+      const instanceIds = [...new Set(results.map((obj) => obj.instance))];
+      const hosts = instanceIds.length
+        ? (
+            await InstancesAPI.read({
+              id__in: instanceIds.join(','),
+              page_size: instanceIds.length,
+            })
+          ).data.results
+        : [];
 
       const address_list: PeerAddress[] = [];
 
       results.forEach((receptor) => {
-        const host = instances.data.results.find(
-          (obj) => obj.id === receptor.instance
-        );
+        const host = hosts.find((obj) => obj.id === receptor.instance);
         address_list.push({
           ...receptor,
           hostname: host?.hostname,
@@ -106,13 +115,14 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
       return {
         instance: detail,
         peers: address_list,
-        count: address_list.length,
+        // The api's count, since the rows are one page of it.
+        count: peerCount,
         relatedSearchableKeys: (actions.data.related_search_fields || []).map(
           (val) => val.slice(0, -8)
         ),
-        searchableKeys: getSearchableKeys(actions.data.actions.GET),
+        searchableKeys: getSearchableKeys(actions.data.actions?.GET),
       };
-    }, [id, location]),
+    }, [id, location.search]),
     {
       instance: {},
       peers: [] as PeerAddress[],
@@ -196,7 +206,7 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
         fetchPeers();
         addToast({
           id: instance.id,
-          title: t`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`,
+          title: t`Peers associated with ${instance.hostname}. Run the install bundle for ${instance.hostname} again for the change to take effect.`,
           variant: AlertVariant.success,
           hasTimeout: true,
         });
@@ -219,7 +229,7 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
 
       fetchPeers();
       addToast({
-        title: t`Peer removed. Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`,
+        title: t`Peers disassociated from ${instance.hostname}. Run the install bundle for ${instance.hostname} again for the change to take effect.`,
         variant: AlertVariant.success,
         hasTimeout: true,
       });
@@ -232,6 +242,9 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
 
   const isHopNode = instance.node_type === 'hop';
   const isExecutionNode = instance.node_type === 'execution';
+  // Peering is a change to the instance itself, so it follows the details
+  // page's Edit: a superuser, on an instance the install does not manage.
+  const canEditPeers = Boolean(me?.is_superuser) && !instance.managed;
 
   return (
     <CardBody>
@@ -248,30 +261,32 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
         clearSelected={clearSelected}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
+        /*
+         * The rows are receptor addresses, which the api filters and orders
+         * by their own fields: the name and node type are the instance's,
+         * reached through it, and a bare hostname is refused with a 400.
+         */
         toolbarSearchColumns={[
           {
             name: t`Name`,
-            key: 'hostname__icontains',
+            key: 'instance__hostname__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
             name: t`Name`,
-            key: 'hostname',
+            key: 'instance__hostname',
           },
         ]}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isExpandable>
-            <HeaderCell
-              tooltip={t`Cannot run health check on hop nodes.`}
-              sortKey="hostname"
-            >
+            <HeaderCell sortKey="instance__hostname">
               {t`Instance Name`}
             </HeaderCell>
             <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
             <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
-            <HeaderCell sortKey="node_type">{t`Node Type`}</HeaderCell>
+            <HeaderCell sortKey="instance__node_type">{t`Node Type`}</HeaderCell>
             <HeaderCell sortKey="canonical">{t`Canonical`}</HeaderCell>
           </HeaderRow>
         }
@@ -283,25 +298,28 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
             isAllExpanded={isAllExpanded}
             onExpandAll={expandAll}
             qsConfig={QS_CONFIG}
-            additionalControls={[
-              (isExecutionNode || isHopNode) && (
-                <ToolbarAddButton
-                  ouiaId="add-instance-peers-button"
-                  key="associate"
-                  defaultLabel={t`Associate`}
-                  onClick={() => setIsModalOpen(true)}
-                />
-              ),
-              (isExecutionNode || isHopNode) && (
-                <DisassociateButton
-                  verifyCannotDisassociate={false}
-                  key="disassociate"
-                  onDisassociate={handlePeersDiassociate}
-                  itemsToDisassociate={selected}
-                  modalTitle={t`Remove peers?`}
-                />
-              ),
-            ]}
+            // Left out rather than passed as false: the toolbar wraps each
+            // control in an item keyed by it, and two falses share no key.
+            additionalControls={
+              (isExecutionNode || isHopNode) && canEditPeers
+                ? [
+                    <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Peer`}
+                      ouiaId="add-instance-peers-button"
+                      key="associate"
+                      onClick={() => setIsModalOpen(true)}
+                    />,
+                    <DisassociateButton
+                      verifyCannotDisassociate={false}
+                      key="disassociate"
+                      onDisassociate={handlePeersDiassociate}
+                      itemsToDisassociate={selected}
+                      modalTitle={t`Disassociate these peers?`}
+                    />,
+                  ]
+                : []
+            }
           />
         )}
         renderRow={(peer: PeerAddress, index: number) => (
@@ -323,8 +341,8 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
           isModalOpen={isModalOpen}
           onAssociate={handlePeerAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Peer Addresses`}
-          optionsRequest={readInstancesOptions}
+          title={t`Associate Peers`}
+          optionsRequest={readAddressOptions}
           displayKey="address"
           columns={[
             { key: 'hostname', name: t`Name` },
@@ -343,8 +361,9 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
           title={t`Error!`}
           variant="error"
         >
-          {Boolean(associateError) && t`Failed to associate peer.`}
-          {Boolean(disassociateError) && t`Failed to remove peers.`}
+          {Boolean(associateError) && t`Failed to associate one or more peers.`}
+          {Boolean(disassociateError) &&
+            t`Failed to disassociate one or more peers.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}

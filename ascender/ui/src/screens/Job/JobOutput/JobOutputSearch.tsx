@@ -8,7 +8,6 @@ import {
   ToolbarContent,
   ToolbarItem,
   ToolbarToggleGroup,
-  Tooltip,
   Button,
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
@@ -22,6 +21,7 @@ import {
 import { isJobRunning } from 'util/jobs';
 import { useLingui } from '@lingui/react/macro';
 import './JobOutputSearch.css';
+import Tooltip from 'components/Tooltip';
 
 export interface JobOutputSearchProps {
   qsConfig: QSConfig;

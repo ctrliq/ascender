@@ -1,6 +1,6 @@
 import type { UserEvent } from '@testing-library/user-event';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import {
   renderWithContexts,
   assertDetail,
@@ -90,6 +90,37 @@ const codeEditorCount = () =>
 // PF Tabs render each tab title as a button[role="tab"] with the given label.
 async function clickTab(user: UserEvent, label: string) {
   await user.click(screen.getByRole('tab', { name: label }));
+}
+
+/**
+ * The heights CodeMirror has been asked to hold its scroller to, in pixels.
+ *
+ * The editor takes its cap from the theme it is configured with, which
+ * CodeMirror writes into a stylesheet of its own rather than onto the element.
+ * jsdom lays nothing out, so that rule is where a test can read the cap: the
+ * numbers are rows times the line height, and nothing else in the modal sets
+ * one.
+ */
+function editorMaxHeights(): number[] {
+  return [...document.querySelectorAll('style')]
+    .flatMap(
+      (style) => (style.textContent || '').match(/max-height: (\d+)px/g) || []
+    )
+    .map((rule) => Number(rule.replace(/\D/g, '')));
+}
+
+/**
+ * Sets the window height a render will read, as jsdom's own is fixed.
+ *
+ * Args:
+ *     height: The height to report, in pixels.
+ */
+function setWindowHeight(height: number) {
+  Object.defineProperty(window, 'innerHeight', {
+    value: height,
+    configurable: true,
+    writable: true,
+  });
 }
 
 describe('HostEventModal', () => {
@@ -295,5 +326,61 @@ describe('HostEventModal', () => {
     );
     await clickTab(user, 'Output tab');
     expect(codeEditorCount()).toBeGreaterThanOrEqual(1);
+  });
+
+  /*
+   * The editors were twenty rows whatever the window was, which left a short
+   * result sitting in a box mostly empty and, on a short window, pushed the box
+   * past the modal so the modal's own body scrolled: you scrolled through empty
+   * rows to reach the end of a six line document. The cap follows the window
+   * now, so the scrollbar is the editor's and it scrolls the document.
+   *
+   * The numbers below are rows times the twenty four pixel line height, with
+   * the window less the modal's own chrome deciding how many rows fit.
+   */
+  test('should size the editor to the window it is opened in', async () => {
+    const original = window.innerHeight;
+    setWindowHeight(1000);
+    const { user } = renderWithContexts(
+      <HostEventModal hostEvent={hostEvent} onClose={() => {}} isOpen />
+    );
+    await clickTab(user, 'JSON tab');
+
+    // (1000 - 185) / 24 rounds down to 33 rows
+    expect(editorMaxHeights()).toContain(33 * 24);
+    setWindowHeight(original);
+  });
+
+  test('should keep a floor under the rows on a short window', async () => {
+    const original = window.innerHeight;
+    setWindowHeight(200);
+    const { user } = renderWithContexts(
+      <HostEventModal hostEvent={hostEvent} onClose={() => {}} isOpen />
+    );
+    await clickTab(user, 'YAML tab');
+
+    // the window has room for none, and six is the fewest that still reads as
+    // an editor rather than a line of text
+    expect(editorMaxHeights()).toContain(6 * 24);
+    setWindowHeight(original);
+  });
+
+  test('should follow the window as it is resized', async () => {
+    const original = window.innerHeight;
+    setWindowHeight(900);
+    const { user } = renderWithContexts(
+      <HostEventModal hostEvent={hostEvent} onClose={() => {}} isOpen />
+    );
+    await clickTab(user, 'JSON tab');
+    // (1204 - 185) / 24 rounds down to 42 rows
+    expect(editorMaxHeights()).not.toContain(42 * 24);
+
+    setWindowHeight(1204);
+    await act(async () => {
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    expect(editorMaxHeights()).toContain(42 * 24);
+    setWindowHeight(original);
   });
 });

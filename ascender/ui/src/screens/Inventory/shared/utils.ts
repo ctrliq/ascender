@@ -1,4 +1,4 @@
-import type { AnyInventory } from 'types/api';
+import type { AnyInventory, Group } from 'types/api';
 import { isJsonString, jsonToYaml, parseVariableField } from 'util/yaml';
 import type { SmartInventoryFormValues } from './SmartInventoryForm';
 
@@ -40,6 +40,52 @@ export function isReadOnlyInventoryType(inventoryType?: string | null) {
     inventoryType === 'constructed_inventory' ||
     inventoryType === 'federated_inventory'
   );
+}
+
+/**
+ * The inventory type, as the routes and isReadOnlyInventoryType name it, of
+ * an inventory kind as the api reports it.
+ *
+ * Args:
+ *   kind: The inventory's kind: '' for a plain inventory, or smart,
+ *     constructed or federated.
+ *
+ * Returns:
+ *   inventory, smart_inventory, constructed_inventory or federated_inventory.
+ */
+export function getInventoryType(kind?: string | null) {
+  return kind ? `${kind}_inventory` : 'inventory';
+}
+
+/**
+ * Where a group's inventory lives in the ui, and whether its groups are
+ * read-only there.
+ *
+ * The path follows the kind of inventory the group is in, so a group of a
+ * constructed or federated inventory opens under that inventory rather than
+ * under a plain one, where it would not be found.
+ *
+ * Args:
+ *   group: The group, whose summary names the inventory it is in.
+ *   inventoryId: The inventory on screen, for a group whose summary does
+ *     not name one.
+ *
+ * Returns:
+ *   The inventory's path, and whether the group may not be edited there.
+ */
+export function getGroupInventory(
+  group: Pick<Group, 'summary_fields'>,
+  inventoryId?: number | string
+) {
+  const kind = (group.summary_fields.inventory?.kind ??
+    '') as AnyInventory['kind'];
+  return {
+    path: getInventoryPath({
+      id: Number(group.summary_fields.inventory?.id ?? inventoryId),
+      kind,
+    }),
+    isReadOnly: isReadOnlyInventoryType(getInventoryType(kind)),
+  };
 }
 
 // The vmware source supports two inventory plugins: the deprecated

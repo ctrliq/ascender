@@ -15,10 +15,10 @@ describe('WorkflowActionTooltipItem', () => {
   // lint rules that say so could not see it through the styled component it
   // used to be, which is how it stayed that way.
   test('is a button, named by what it does', () => {
-    render(<WorkflowActionTooltipItem label="Delete this node" id="node" />);
+    render(<WorkflowActionTooltipItem label="Delete Node" id="node" />);
 
     expect(
-      screen.getByRole('button', { name: 'Delete this node' })
+      screen.getByRole('button', { name: 'Delete Node' })
     ).toBeInTheDocument();
   });
 
@@ -26,17 +26,11 @@ describe('WorkflowActionTooltipItem', () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     render(
-      <WorkflowActionTooltipItem
-        label="Add a new node"
-        id="node"
-        onClick={onClick}
-      />
+      <WorkflowActionTooltipItem label="Add Node" id="node" onClick={onClick} />
     );
 
     await user.tab();
-    expect(
-      screen.getByRole('button', { name: 'Add a new node' })
-    ).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Add Node' })).toHaveFocus();
 
     await user.keyboard('{Enter}');
     expect(onClick).toHaveBeenCalledTimes(1);
@@ -49,7 +43,7 @@ describe('WorkflowActionTooltipItem', () => {
     render(
       <>
         <WorkflowActionTooltipItem
-          label="Edit this node"
+          label="Edit Node"
           id="node"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

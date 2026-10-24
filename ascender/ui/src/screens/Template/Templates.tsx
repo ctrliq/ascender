@@ -2,7 +2,7 @@ import type { BreadcrumbResource, Schedule } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 
 import { Routes, Route } from 'react-router';
-import { PageSection } from '@patternfly/react-core';
+import { Card, PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -45,19 +45,19 @@ function Templates() {
       setScreenHeader({
         ...initScreenHeader.current,
         [templatePath]: `${template.name}`,
-        [`${templatePath}/details`]: t`Details`,
-        [`${templatePath}/edit`]: t`Edit Details`,
-        [`${templatePath}/access`]: t`Access`,
-        [`${templatePath}/notifications`]: t`Notifications`,
-        [`${templatePath}/jobs`]: t`Jobs`,
-        [surveyPath]: t`Survey`,
+        [`${templatePath}/details`]: `${template.name}`,
+        [`${templatePath}/edit`]: t`Edit ${template.name}`,
+        [`${templatePath}/access`]: `${template.name}`,
+        [`${templatePath}/notifications`]: `${template.name}`,
+        [`${templatePath}/runs`]: `${template.name}`,
+        [surveyPath]: `${template.name}`,
         [`${surveyPath}/add`]: t`Add Question`,
         [`${surveyPath}/edit`]: t`Edit Question`,
-        [schedulesPath]: t`Schedules`,
+        [schedulesPath]: `${template.name}`,
         [`${schedulesPath}/add`]: t`Create New Schedule`,
         [`${schedulesPath}/${schedule?.id}`]: `${schedule?.name}`,
-        [`${schedulesPath}/${schedule?.id}/details`]: t`Schedule Details`,
-        [`${schedulesPath}/${schedule?.id}/edit`]: t`Edit Schedule`,
+        [`${schedulesPath}/${schedule?.id}/details`]: `${schedule?.name}`,
+        [`${schedulesPath}/${schedule?.id}/edit`]: t`Edit ${schedule?.name}`,
       });
     },
     [template, schedule, t]
@@ -87,9 +87,13 @@ function Templates() {
           index
           element={
             <PageSection hasBodyWrapper={false}>
-              <PersistentFilters pageKey="templates">
-                <TemplateList />
-              </PersistentFilters>
+              {/* The card is the page's rather than the list's, so the
+                  dashboard's tab can hold the same list without a second one. */}
+              <Card>
+                <PersistentFilters pageKey="templates">
+                  <TemplateList hasTypeTabs />
+                </PersistentFilters>
+              </Card>
             </PageSection>
           }
         />

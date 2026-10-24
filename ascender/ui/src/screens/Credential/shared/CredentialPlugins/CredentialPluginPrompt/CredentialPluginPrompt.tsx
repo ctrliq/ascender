@@ -5,13 +5,13 @@ import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
-  Tooltip,
   WizardFooterWrapper,
   useWizardContext,
 } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { CredentialsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
+import Tooltip from 'components/Tooltip';
 import CredentialsStep from './CredentialsStep';
 import MetadataStep from './MetadataStep';
 import { CredentialPluginTestAlert } from '..';
@@ -70,7 +70,6 @@ function CredentialPluginFooter({
         <>
           <Tooltip
             content={t`Click this button to verify connection to the secret management system using the selected credential and specified inputs.`}
-            position="right"
           >
             <Button
               ouiaId="credential-plugin-prompt-test"

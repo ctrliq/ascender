@@ -2,9 +2,14 @@ import { QueryClient } from '@tanstack/react-query';
 
 /**
  * How long a read stays fresh before the next component asking for it goes
- * back to the API. Thirty seconds is short enough that a screen reopened after
- * a change shows it, and long enough that two components mounting together, or
- * a tab switched away and back, share one request rather than making two.
+ * back to the API. This is what lets two components mounting together share
+ * one request rather than making two.
+ *
+ * It is not what keeps a list current. Nothing tells the cache when a row is
+ * added, edited or deleted on another screen, so thirty seconds is plenty of
+ * time to show a host that was just deleted. The lists read through
+ * useCachedRequest therefore refetch every time they mount whatever this says,
+ * and use the cache only to paint the previous rows while that read is out.
  */
 const STALE_TIME = 30_000;
 

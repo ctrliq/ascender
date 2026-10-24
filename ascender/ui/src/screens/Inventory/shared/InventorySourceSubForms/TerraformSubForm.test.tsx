@@ -51,9 +51,9 @@ describe('<TerraformSubForm />', () => {
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
     expect(getByText('Credential')).toBeInTheDocument();
     expect(getByText('Verbosity')).toBeInTheDocument();
-    expect(getByText('Update options')).toBeInTheDocument();
-    expect(getByText('Cache timeout (seconds)')).toBeInTheDocument();
-    expect(getByText('Source variables')).toBeInTheDocument();
+    expect(getByText('Update Options')).toBeInTheDocument();
+    expect(getByText('Cache Timeout (Seconds)')).toBeInTheDocument();
+    expect(getByText('Source Variables')).toBeInTheDocument();
   });
 
   test('should make expected api calls', async () => {

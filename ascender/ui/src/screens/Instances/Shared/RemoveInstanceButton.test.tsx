@@ -68,7 +68,6 @@ describe('<RemoveInstanceButtton />', () => {
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s
           itemsToRemove={instances.slice(0, 1)}
           onRemove={onRemove}
         />
@@ -79,8 +78,12 @@ describe('<RemoveInstanceButtton />', () => {
     await user.click(button);
     await waitFor(() => screen.getByRole('dialog'));
     const modal = screen.getByRole('dialog');
+    // One instance is named in the singular.
+    expect(
+      within(modal).getByRole('heading', { name: /Delete Instance$/ })
+    ).toBeInTheDocument();
     const removeButton = within(modal).getByRole('button', {
-      name: 'Confirm remove',
+      name: 'Confirm Delete',
     });
 
     await user.click(removeButton);
@@ -88,12 +91,35 @@ describe('<RemoveInstanceButtton />', () => {
     await waitFor(() => expect(onRemove).toHaveBeenCalled());
   });
 
+  test('names several instances in the plural', async () => {
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
+    const user = userEvent.setup();
+    render(
+      <I18nProvider i18n={i18n}>
+        <RemoveInstanceButton
+          itemsToRemove={[
+            instances[0]!,
+            { ...instances[0]!, id: 3, hostname: 'second' },
+          ]}
+          onRemove={vi.fn()}
+        />
+      </I18nProvider>
+    );
+
+    await user.click(screen.getByRole('button'));
+    const modal = await screen.findByRole('dialog');
+    expect(
+      within(modal).getByRole('heading', { name: /Delete Instances$/ })
+    ).toBeInTheDocument();
+  });
+
   test('Should be disabled', async () => {
     const user = userEvent.setup();
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s
           itemsToRemove={instances.slice(1, 2)}
           onRemove={vi.fn()}
         />
@@ -103,7 +129,30 @@ describe('<RemoveInstanceButtton />', () => {
     const button = screen.getByRole('button');
     await user.hover(button);
     await waitFor(() =>
-      screen.getByText('You do not have permission to remove instances:')
+      screen.getByText(/^Only execution and hop nodes can be deleted:/)
+    );
+  });
+
+  test('says a managed instance cannot be deleted', async () => {
+    const user = userEvent.setup();
+    render(
+      <I18nProvider i18n={i18n}>
+        <RemoveInstanceButton
+          itemsToRemove={
+            [
+              { ...instances[0], hostname: 'managed-node', managed: true },
+            ] as Instance[]
+          }
+          onRemove={vi.fn()}
+        />
+      </I18nProvider>
+    );
+
+    const button = screen.getByRole('button', { name: 'Delete' });
+    expect(button).toBeDisabled();
+    await user.hover(button.parentElement!);
+    await waitFor(() =>
+      screen.getByText('Managed instances cannot be deleted: managed-node')
     );
   });
 
@@ -125,7 +174,6 @@ describe('<RemoveInstanceButtton />', () => {
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s
           itemsToRemove={instances.slice(0, 1)}
           onRemove={onRemove}
         />

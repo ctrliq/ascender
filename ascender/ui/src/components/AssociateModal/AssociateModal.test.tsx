@@ -79,7 +79,7 @@ describe('<AssociateModal />', () => {
     const [firstCheckbox] = screen.getAllByRole('checkbox');
     await user.click(firstCheckbox as unknown as Element);
 
-    const saveButton = screen.getByRole('button', { name: 'Save' });
+    const saveButton = screen.getByRole('button', { name: 'Associate' });
     await waitFor(() => expect(saveButton).toBeEnabled());
     await user.click(saveButton);
 

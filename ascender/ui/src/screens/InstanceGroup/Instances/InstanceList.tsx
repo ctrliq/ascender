@@ -28,6 +28,7 @@ import HealthCheckButton from 'components/HealthCheckButton/HealthCheckButton';
 import HealthCheckAlert from 'components/HealthCheckAlert';
 import type { QSParams } from 'util/qs';
 import InstanceListItem from './InstanceListItem';
+import { DEFAULT_QUEUE_NAMES } from '../shared/queueNames';
 
 const QS_CONFIG = getQSConfig('instance', {
   page: 1,
@@ -37,16 +38,23 @@ const QS_CONFIG = getQSConfig('instance', {
 
 export interface InstanceListProps {
   instanceGroup: InstanceGroup;
+  /**
+   * The group a hybrid node may not leave, by the name the api's
+   * DEFAULT_CONTROL_PLANE_QUEUE_NAME setting gives it.
+   */
+  controlPlaneName?: string;
   [key: string]: unknown;
 }
 
-function InstanceList({ instanceGroup }: InstanceListProps) {
+function InstanceList({
+  instanceGroup,
+  controlPlaneName = DEFAULT_QUEUE_NAMES.controlPlane,
+}: InstanceListProps) {
   const { t } = useLingui();
   const config = useConfig();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
   const [pendingHealthCheck, setPendingHealthCheck] = useState(false);
-  const [canRunHealthCheck, setCanRunHealthCheck] = useState(true);
   const location = useLocation();
   const { id: instanceGroupId } = useParams() as { id: string };
   const isMounted = useRef(false);
@@ -120,17 +128,11 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
     }, [selected])
   );
 
-  useEffect(() => {
-    if (selected) {
-      selected.forEach((i) => {
-        if (i.node_type === 'execution') {
-          setCanRunHealthCheck(true);
-        } else {
-          setCanRunHealthCheck(false);
-        }
-      });
-    }
-  }, [selected]);
+  // The request goes out for the execution nodes among the selection and
+  // skips the rest, so one execution node is enough to make it worth sending.
+  const canRunHealthCheck = selected.some(
+    ({ node_type }) => node_type === 'execution'
+  );
 
   const handleHealthCheck = async () => {
     await fetchHealthCheck();
@@ -189,8 +191,24 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
     associateError || disassociateError || healthCheckError
   );
 
+  // The api offers POST here to an admin of the group, and the same admin
+  // role is what it asks of both associating and disassociating an instance.
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
+
+  const isControlPlane = instanceGroup.name === controlPlaneName;
+
+  // What holds a row back is the kind of node, which the api refuses to move,
+  // rather than the viewer's rights, which canAdd has already settled.
+  const cannotDisassociateReason = (item: { node_type?: string | null }) => {
+    if (item.node_type === 'control') {
+      return t`Control nodes cannot be disassociated`;
+    }
+    if (isControlPlane && item.node_type === 'hybrid') {
+      return t`Hybrid nodes cannot be disassociated from ${controlPlaneName}`;
+    }
+    return null;
+  };
 
   const fetchInstancesToAssociate = useCallback(
     (params: QSParams) =>
@@ -269,57 +287,54 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Instance`}
                       key="associate"
                       onClick={() => setIsModalOpen(true)}
-                      defaultLabel={t`Associate`}
+                    />,
+                    <DisassociateButton
+                      verifyCannotDisassociate={false}
+                      cannotDisassociateReason={cannotDisassociateReason}
+                      key="disassociate"
+                      onDisassociate={handleDisassociate}
+                      itemsToDisassociate={selected}
+                      modalTitle={t`Disassociate these instances from the instance group?`}
+                      modalNote={
+                        selected.some(
+                          (instance) => instance.managed_by_policy === true
+                        ) ? (
+                          <Trans>
+                            <b>
+                              Note: Instances may be re-associated with this
+                              instance group if they are managed by{' '}
+                              <a
+                                href={policyRulesDocsLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                policy rules.
+                              </a>
+                            </b>
+                          </Trans>
+                        ) : null
+                      }
                     />,
                   ]
                 : []),
-              <DisassociateButton
-                verifyCannotDisassociate={
-                  selected.some((s) => s.node_type === 'control') ||
-                  instanceGroup.name === 'controlplane'
-                }
-                key="disassociate"
-                onDisassociate={handleDisassociate}
-                itemsToDisassociate={selected}
-                modalTitle={t`Disassociate instance from instance group?`}
-                isProtectedInstanceGroup={instanceGroup.name === 'controlplane'}
-                modalNote={
-                  selected.some(
-                    (instance) => instance.managed_by_policy === true
-                  ) ? (
-                    <Trans>
-                      <b>
-                        Note: Instances may be re-associated with this instance
-                        group if they are managed by{' '}
-                        <a
-                          href={policyRulesDocsLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          policy rules.
-                        </a>
-                      </b>
-                    </Trans>
-                  ) : null
-                }
-              />,
-              <HealthCheckButton
-                isDisabled={!canAdd || !canRunHealthCheck}
-                onClick={handleHealthCheck}
-                selectedItems={selected}
-                healthCheckPending={pendingHealthCheck}
-              />,
+              // Starting a health check is a superuser action in the api,
+              // whatever role the viewer holds on this group.
+              ...(config?.me?.is_superuser
+                ? [
+                    <HealthCheckButton
+                      key="healthCheck"
+                      isDisabled={!canRunHealthCheck}
+                      onClick={handleHealthCheck}
+                      selectedItems={selected}
+                      healthCheckPending={pendingHealthCheck}
+                    />,
+                  ]
+                : []),
             ]}
-            emptyStateControls={
-              canAdd ? (
-                <ToolbarAddButton
-                  key="add"
-                  onClick={() => setIsModalOpen(true)}
-                />
-              ) : null
-            }
           />
         )}
         headerRow={
@@ -358,7 +373,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Instances`}
+          title={t`Associate Instances`}
           optionsRequest={readInstancesOptions}
           displayKey="hostname"
           columns={[
@@ -392,7 +407,8 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
           title={t`Error!`}
           variant="error"
         >
-          {Boolean(associateError) && t`Failed to associate.`}
+          {Boolean(associateError) &&
+            t`Failed to associate one or more instances.`}
           {Boolean(disassociateError) &&
             t`Failed to disassociate one or more instances.`}
           {Boolean(healthCheckError) &&

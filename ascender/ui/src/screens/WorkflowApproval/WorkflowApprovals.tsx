@@ -11,7 +11,7 @@ import WorkflowApproval from './WorkflowApproval';
 function WorkflowApprovals() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/workflow_approvals': t`Workflow Approvals`,
+    '/approvals': t`Approvals`,
   });
 
   const updateBreadcrumbConfig = useCallback(
@@ -21,9 +21,9 @@ function WorkflowApprovals() {
       }
       const { id } = workflowApproval;
       setBreadcrumbConfig({
-        '/workflow_approvals': t`Workflow Approvals`,
-        [`/workflow_approvals/${id}`]: workflowApproval.name,
-        [`/workflow_approvals/${id}/details`]: t`Details`,
+        '/approvals': t`Approvals`,
+        [`/approvals/${id}`]: workflowApproval.name,
+        [`/approvals/${id}/details`]: workflowApproval.name,
       });
     },
     [t]

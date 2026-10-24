@@ -1,0 +1,12 @@
+/* RevertFormActionGroup: the settings forms end on these buttons. */
+
+.pf-v6-c-form__group.pf-m-action.ascender-settings-actions {
+  /* The themes zero --pf-v6-c-form__group--m-action--MarginBlockStart, which
+     left the buttons sitting one grid gap under the last field and reading as
+     another row of it. They are the end of the form, so they get their own.
+
+     Stated as the distance wanted rather than as an amount to add: the grid gap
+     is 24px in light and classic but 12px in dark and default, so a fixed
+     addition lands the buttons in a different place in each. */
+  margin-block-start: calc(2rem - var(--pf-v6-c-form--GridGap));
+}

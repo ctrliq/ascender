@@ -1,13 +1,10 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { Role, Team } from 'types/api';
+import type { Team } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Button, EmptyState, EmptyStateBody } from '@patternfly/react-core';
-import { CubesIcon } from '@patternfly/react-icons';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
 import useCachedRequest from 'hooks/useCachedRequest';
-import { useDeleteItems } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
   HeaderCell,
@@ -19,6 +16,12 @@ import { getQSConfig, parseQueryString } from 'util/qs';
 import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import UserAndTeamAccessAdd from 'components/UserAndTeamAccessAdd/UserAndTeamAccessAdd';
+import roleResourceUrl from 'util/roles';
+import {
+  RoleRemovalButton,
+  RoleRemovalModals,
+  useRoleRemoval,
+} from '../../Roles/shared/useRoleRemoval';
 import TeamRoleListItem from './TeamRoleListItem';
 
 const QS_CONFIG = getQSConfig('roles', {
@@ -35,9 +38,6 @@ export interface TeamRolesListProps {
 function TeamRolesList({ me, team }: TeamRolesListProps) {
   const { t } = useLingui();
   const { search } = useLocation();
-  const [roleToDisassociate, setRoleToDisassociate] = useState<Role | null>(
-    null
-  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [associateError, setAssociateError] = useState<unknown>(null);
 
@@ -53,7 +53,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
       searchableKeys,
     },
   } = useCachedRequest(
-    ['team-roles-list', search],
+    ['team-roles-list', team.id, me.id, team.organization, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [
@@ -90,65 +90,37 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
     }
   );
 
-  const {
-    isLoading: isDisassociateLoading,
-    deleteItems: disassociateRole,
-    deletionError: disassociationError,
-    clearDeletionError: clearDisassociationError,
-  } = useDeleteItems(
-    useCallback(async () => {
-      setRoleToDisassociate(null);
-      if (roleToDisassociate) {
-        await RolesAPI.disassociateTeamRole(roleToDisassociate.id, team.id);
-      }
-    }, [roleToDisassociate, team.id]),
-    { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
-  );
+  const removal = useRoleRemoval({
+    roles,
+    qsConfig: QS_CONFIG,
+    fetchRoles,
+    disassociate: useCallback(
+      (roleId: number) => RolesAPI.disassociateTeamRole(roleId, team.id),
+      [team.id]
+    ),
+  });
 
   const canAdd = team?.summary_fields?.user_capabilities?.edit || isAdminOfOrg;
-  const detailUrl = (role: Role) => {
-    const { resource_id, resource_type } = role.summary_fields;
 
-    if (!role || !resource_type) {
-      return null;
-    }
-
-    if (resource_type?.includes('template')) {
-      return `/templates/${resource_type}/${resource_id}/details`;
-    }
-    if (resource_type?.includes('inventory')) {
-      return `/inventories/${resource_type}/${resource_id}/details`;
-    }
-    return `/${resource_type}s/${resource_id}/details`;
-  };
-
-  const isSysAdmin = roles.some(
-    (role: Role) => role.name === 'System Administrator'
-  );
-  if (isSysAdmin) {
-    return (
-      <EmptyState
-        headingLevel="h5"
-        icon={CubesIcon}
-        titleText={<>{t`System Administrator`}</>}
-        variant="full"
-      >
-        <EmptyStateBody>
-          {t`System administrators have unrestricted access to all resources.`}
-        </EmptyStateBody>
-      </EmptyState>
-    );
-  }
-
+  /*
+   * No System Administrator check here, unlike the user's list: the api
+   * refuses to grant a team a role on nothing, so a team never holds one.
+   */
   return (
     <>
       <PaginatedTable
         contentError={contentError}
-        hasContentLoading={isLoading || isDisassociateLoading}
+        hasContentLoading={isLoading || removal.isRemoving}
         items={roles}
         itemCount={roleCount}
         pluralizedItemName={t`Team Roles`}
+        emptyContentMessage={
+          canAdd
+            ? t`Associate a role to list it here`
+            : t`Roles this team holds appear here`
+        }
         qsConfig={QS_CONFIG}
+        clearSelected={removal.clearSelected}
         toolbarSearchColumns={[
           {
             name: t`Role`,
@@ -167,33 +139,46 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
         renderToolbar={(props) => (
           <DataListToolbar
             {...props}
+            isAllSelected={removal.isAllSelected}
+            onSelectAll={removal.selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Role`}
                       ouiaId="role-add-button"
                       key="add"
                       onClick={() => setShowAddModal(true)}
                     />,
                   ]
                 : []),
+              <RoleRemovalButton
+                key="disassociate"
+                removal={removal}
+                modalTitle={t`Disassociate these roles from the team?`}
+                modalNote={t`The team's members lose these roles. The resources themselves are not changed.`}
+              />,
             ]}
           />
         )}
         headerRow={
-          <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
+          <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell>{t`Resource Name`}</HeaderCell>
             <HeaderCell>{t`Type`}</HeaderCell>
-            <HeaderCell sortKey="id">{t`Role`}</HeaderCell>
+            <HeaderCell>{t`Role`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(role) => (
+        renderRow={(role, index) => (
           <TeamRoleListItem
             key={role.id}
             role={role}
-            detailUrl={detailUrl(role)}
-            onDisassociate={setRoleToDisassociate}
+            detailUrl={roleResourceUrl(role)}
+            onDisassociate={removal.setRoleToDisassociate}
+            isSelected={removal.selected.some((row) => row.id === role.id)}
+            onSelectRow={() => removal.handleSelect(role)}
+            rowIndex={index}
           />
         )}
       />
@@ -205,46 +190,15 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
             setShowAddModal(false);
             fetchRoles();
           }}
-          title={t`Add team permissions`}
+          title={t`Associate Team Roles`}
           onClose={() => setShowAddModal(false)}
           onError={(err) => setAssociateError(err)}
         />
       )}
-      {roleToDisassociate && (
-        <AlertModal
-          aria-label={t`Disassociate role`}
-          isOpen={roleToDisassociate}
-          variant="error"
-          title={t`Disassociate role!`}
-          onClose={() => setRoleToDisassociate(null)}
-          actions={[
-            <Button
-              ouiaId="disassociate-confirm-button"
-              key="disassociate"
-              variant="danger"
-              aria-label={t`confirm disassociate`}
-              onClick={disassociateRole}
-            >
-              {t`Disassociate`}
-            </Button>,
-            <Button
-              ouiaId="disassociate-cancel-button"
-              key="cancel"
-              variant="link"
-              aria-label={t`Cancel`}
-              onClick={() => setRoleToDisassociate(null)}
-            >
-              {t`Cancel`}
-            </Button>,
-          ]}
-        >
-          <div>
-            {t`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`}
-            <br />
-            <strong>{roleToDisassociate.name}</strong>
-          </div>
-        </AlertModal>
-      )}
+      <RoleRemovalModals
+        removal={removal}
+        confirmMessage={t`This disassociates the following role from the team:`}
+      />
       {associateError && (
         <AlertModal
           aria-label={t`Associate role error`}
@@ -253,19 +207,8 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
           title={t`Error!`}
           onClose={() => setAssociateError(null)}
         >
-          {t`Failed to associate role`}
+          {t`Failed to associate one or more roles. Some roles may have been associated; the list now shows which.`}
           <ErrorDetail error={associateError} />
-        </AlertModal>
-      )}
-      {disassociationError && (
-        <AlertModal
-          isOpen={disassociationError}
-          variant="error"
-          title={t`Error!`}
-          onClose={clearDisassociationError}
-        >
-          {t`Failed to delete role.`}
-          <ErrorDetail error={disassociationError} />
         </AlertModal>
       )}
     </>

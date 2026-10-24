@@ -86,20 +86,27 @@ describe('ScheduleListItem', () => {
 
     test('Related resource correctly shown', () => {
       renderItem();
-      const cell = cellByLabel('Related resource');
+      const cell = cellByLabel('Related Resource');
       expect(cell).toHaveTextContent('Mock JT');
     });
 
     test('Resource type correctly shown', () => {
       renderItem();
-      const cell = cellByLabel('Resource type');
-      expect(cell).toHaveTextContent('Playbook Run');
+      const cell = cellByLabel('Resource Type');
+      expect(cell).toHaveTextContent('Job Template');
     });
 
     test('Next run correctly shown', () => {
       renderItem();
       const cell = cellByLabel('Next Run');
       expect(cell).toHaveTextContent('2/20/2020, 12:00:00 AM');
+    });
+
+    test('Next run cell holds the date without repeating its heading', () => {
+      renderItem();
+      expect(cellByLabel('Next Run')?.textContent).toBe(
+        '2/20/2020, 12:00:00 AM'
+      );
     });
 
     test('Edit button shown with correct link', () => {
@@ -114,7 +121,7 @@ describe('ScheduleListItem', () => {
     test('Toggle button enabled', () => {
       renderItem();
       expect(
-        screen.getByRole('switch', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle Schedule' })
       ).toBeEnabled();
     });
 
@@ -149,12 +156,12 @@ describe('ScheduleListItem', () => {
 
     test('Related resource correctly shown', () => {
       renderItem({ schedule: readOnlySchedule });
-      expect(cellByLabel('Related resource')).toHaveTextContent('Mock JT');
+      expect(cellByLabel('Related Resource')).toHaveTextContent('Mock JT');
     });
 
     test('Resource type correctly shown', () => {
       renderItem({ schedule: readOnlySchedule });
-      expect(cellByLabel('Resource type')).toHaveTextContent('Playbook Run');
+      expect(cellByLabel('Resource Type')).toHaveTextContent('Job Template');
     });
 
     test('Next run correctly shown', () => {
@@ -174,7 +181,7 @@ describe('ScheduleListItem', () => {
     test('Toggle button disabled', () => {
       renderItem({ schedule: readOnlySchedule });
       expect(
-        screen.getByRole('switch', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle Schedule' })
       ).toBeDisabled();
     });
   });
@@ -196,8 +203,29 @@ describe('ScheduleListItem', () => {
       const nameCell = cellByLabel('Name');
       expect(nameCell!.querySelector('svg')).toBeInTheDocument();
       expect(
-        screen.getByRole('switch', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle Schedule' })
       ).toBeDisabled();
     });
+  });
+
+  test('links a cleanup job schedule to that cleanup job', () => {
+    renderItem({
+      schedule: {
+        ...mockSchedule,
+        summary_fields: {
+          ...mockSchedule.summary_fields,
+          unified_job_template: {
+            id: 4,
+            name: 'Cleanup Job Details',
+            description: '',
+            unified_job_type: 'system_job',
+          },
+        },
+      },
+    });
+    expect(
+      screen.getByRole('link', { name: 'Cleanup Job Details' })
+    ).toHaveAttribute('href', '/cleanup_jobs/4/details');
+    expect(cellByLabel('Resource Type')).toHaveTextContent('Cleanup Job');
   });
 });

@@ -20,9 +20,11 @@ describe('<Templates />', () => {
       </Routes>,
       { context: { router: { history } } }
     );
-    // The ScreenHeader breadcrumb renders regardless of the matched route.
+    // An address the screen does not name is still inside the screen, so the
+    // header says so rather than standing an empty title over an empty trail.
+    expect(screen.getByRole('heading', { name: 'Templates' })).toBeVisible();
     expect(
-      screen.getByRole('navigation', { name: 'Breadcrumb' })
-    ).toBeInTheDocument();
+      screen.queryByRole('navigation', { name: 'Breadcrumb' })
+    ).not.toBeInTheDocument();
   });
 });

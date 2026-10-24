@@ -44,8 +44,7 @@ function ActivityStreamListItem({ streamItem }: ActivityStreamListItemProps) {
       ouiaId={streamItem.id}
       aria-labelledby={labelId}
     >
-      <Td />
-      <Td dataLabel={t`Time`}>
+      <Td dataLabel={t`Time`} modifier="nowrap">
         {streamItem.timestamp ? formatDateString(streamItem.timestamp) : ''}
       </Td>
       <Td dataLabel={t`Initiated By`}>{user}</Td>
@@ -53,7 +52,7 @@ function ActivityStreamListItem({ streamItem }: ActivityStreamListItemProps) {
         {description}
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
-        <ActionItem visible tooltip={t`View event details`}>
+        <ActionItem visible tooltip={t`View Event Details`}>
           <ActivityStreamDetailButton
             streamItem={streamItem}
             user={user}

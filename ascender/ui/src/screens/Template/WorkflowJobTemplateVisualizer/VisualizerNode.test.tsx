@@ -114,7 +114,7 @@ describe('VisualizerNode', () => {
     test('Add tooltip action hover/click updates help text and dispatches properly', () => {
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.mouseEnter(tooltipItem('node-add')!);
-      expect(updateHelpText).toHaveBeenCalledWith('Add a new node');
+      expect(updateHelpText).toHaveBeenCalledWith('Add Node');
       fireEvent.mouseLeave(tooltipItem('node-add')!);
       expect(updateHelpText).toHaveBeenCalledWith(null);
       // RTL's mouseLeave bubbles to the node <g> (React derives onMouseLeave
@@ -131,7 +131,7 @@ describe('VisualizerNode', () => {
     test('Edit tooltip action hover/click updates help text and dispatches properly', async () => {
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.mouseEnter(tooltipItem('node-edit')!);
-      expect(updateHelpText).toHaveBeenCalledWith('Edit this node');
+      expect(updateHelpText).toHaveBeenCalledWith('Edit Node');
       fireEvent.mouseLeave(tooltipItem('node-edit')!);
       expect(updateHelpText).toHaveBeenCalledWith(null);
       // RTL's mouseLeave bubbles to the node <g> (React derives onMouseLeave
@@ -159,7 +159,7 @@ describe('VisualizerNode', () => {
     test('Details tooltip action hover/click updates help text and dispatches properly', async () => {
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.mouseEnter(tooltipItem('node-details')!);
-      expect(updateHelpText).toHaveBeenCalledWith('View node details');
+      expect(updateHelpText).toHaveBeenCalledWith('View Node Details');
       fireEvent.mouseLeave(tooltipItem('node-details')!);
       expect(updateHelpText).toHaveBeenCalledWith(null);
       fireEvent.mouseEnter(nodeG()!);
@@ -185,7 +185,7 @@ describe('VisualizerNode', () => {
     test('Link tooltip action hover/click updates help text and dispatches properly', () => {
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.mouseEnter(tooltipItem('node-link')!);
-      expect(updateHelpText).toHaveBeenCalledWith('Link to an available node');
+      expect(updateHelpText).toHaveBeenCalledWith('Link to Node');
       fireEvent.mouseLeave(tooltipItem('node-link')!);
       expect(updateHelpText).toHaveBeenCalledWith(null);
       fireEvent.mouseEnter(nodeG()!);
@@ -200,7 +200,7 @@ describe('VisualizerNode', () => {
     test('Delete tooltip action hover/click updates help text and dispatches properly', () => {
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.mouseEnter(tooltipItem('node-delete')!);
-      expect(updateHelpText).toHaveBeenCalledWith('Delete this node');
+      expect(updateHelpText).toHaveBeenCalledWith('Delete Node');
       fireEvent.mouseLeave(tooltipItem('node-delete')!);
       expect(updateHelpText).toHaveBeenCalledWith(null);
       fireEvent.mouseEnter(nodeG()!);

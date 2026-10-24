@@ -3,26 +3,31 @@
 //
 import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
+import ResourceTabs from 'components/ResourceTabs';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { DetailList } from 'components/DetailList';
-import RoutedTabs from 'components/RoutedTabs';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
 import { pluck, sortNestedDetails } from '../../shared/settingUtils';
+import { groupFromPath } from '../../shared/settingGroups';
+import { GROUPS } from '../groups';
 
 function MiscSystemDetail() {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const { me } = useConfig();
   const { GET: options = {} } = useSettings();
+  const { pathname } = useLocation();
+  // The address says which group is open, so a link into one lands on it and
+  // the back button walks the tabs as it walks every other tab bar.
+  const activeGroup = groupFromPath(GROUPS, pathname).id;
 
   const {
     isLoading,
@@ -74,43 +79,43 @@ function MiscSystemDetail() {
     request();
   }, [request]);
 
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`Details`,
-      link: `/settings/miscellaneous_system/details`,
-      id: 0,
-    },
-  ];
-
   return (
     <>
-      <RoutedTabs tabsArray={tabsArray} />
+      <ResourceTabs
+        aria-label={t`System tabs`}
+        ouiaId="system-tabs"
+        tabs={GROUPS.map(({ id, label }) => ({
+          label: i18n._(label),
+          path: `/system/${id}`,
+        }))}
+      />
       <CardBody>
         {isLoading && <ContentLoading />}
         {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && system && (
           <DetailList>
-            {system.map(([key, detail]) => (
-              <SettingDetail
-                key={key}
-                id={key}
-                helpText={detail?.help_text}
-                label={detail?.label}
-                type={detail?.type}
-                unit={detail?.unit}
-                value={detail?.value}
-              />
-            ))}
+            {/* In the tab's own order rather than the sorted one the request
+                returns, so each group reads as the edit form asks for it. */}
+            {(GROUPS.find(({ id }) => id === activeGroup)?.keys ?? [])
+              .map(
+                (key) =>
+                  [key, system.find(([id]) => id === key)?.[1]] as [
+                    string,
+                    SettingConfig | undefined,
+                  ]
+              )
+              .filter(([, detail]) => Boolean(detail))
+              .map(([key, detail]) => (
+                <SettingDetail
+                  key={key}
+                  id={key}
+                  helpText={detail?.help_text}
+                  label={detail?.label}
+                  type={detail?.type}
+                  unit={detail?.unit}
+                  value={detail?.value}
+                />
+              ))}
           </DetailList>
         )}
         {me?.is_superuser && (
@@ -119,7 +124,7 @@ function MiscSystemDetail() {
               ouiaId="system-detail-edit-button"
               aria-label={t`Edit`}
               component={Link}
-              to="/settings/miscellaneous_system/edit"
+              to={`/system/edit/${activeGroup}`}
             >
               {t`Edit`}
             </Button>

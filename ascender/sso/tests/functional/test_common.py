@@ -356,7 +356,7 @@ class TestCommonFunctions:
         if enable_enterprise:
             from ascender.sso.models import UserEnterpriseAuth
 
-            enterprise_auth = UserEnterpriseAuth(user=user, provider='tacacs+')
+            enterprise_auth = UserEnterpriseAuth(user=user, provider='saml')
             enterprise_auth.save()
 
         assert get_external_account(user) == expected_results
@@ -369,8 +369,6 @@ class TestCommonFunctions:
             # Set the hard coded settings
             ('AUTH_LDAP_SERVER_URI', True),
             ('SOCIAL_AUTH_SAML_ENABLED_IDPS', True),
-            ('RADIUS_SERVER', True),
-            ('TACACSPLUS_HOST', True),
             # Set some SOCIAL_SOCIAL_AUTH_OIDC_KEYAUTH_*_KEY settings
             ('SOCIAL_AUTH_AZUREAD_OAUTH2_KEY', True),
             ('SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY', True),

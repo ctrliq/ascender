@@ -17,7 +17,9 @@ import type { RoutedTab } from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
 import JobList from 'components/JobList';
+import TemplateLaunchControl from 'components/JobList/TemplateLaunchControl';
 import NotificationList from 'components/NotificationList';
 import { Schedules } from 'components/Schedule';
 import { ResourceAccessList } from 'components/ResourceAccessList';
@@ -46,6 +48,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
       surveyConfig,
       launchConfig,
       resourceDefaultCredentials,
+      instanceGroups,
     },
     isLoading,
     error: contentError,
@@ -60,6 +63,9 @@ function Template({ setBreadcrumb }: TemplateProps) {
         actions,
         notifAdminRes,
         { data: launchConfiguration },
+        {
+          data: { results: relatedInstanceGroups },
+        },
       ] = await Promise.all([
         JobTemplatesAPI.readDetail(templateId),
         JobTemplatesAPI.readCredentials(templateId, {
@@ -71,6 +77,11 @@ function Template({ setBreadcrumb }: TemplateProps) {
           role_level: 'notification_admin_role',
         }),
         JobTemplatesAPI.readLaunch(templateId),
+        // Read here rather than in the edit form, so this screen's one loading
+        // state covers everything the page needs. Read inside the form, it
+        // arrived after the card was already on screen and put a second loading
+        // animation inside it.
+        JobTemplatesAPI.readInstanceGroups(templateId),
       ]);
       let surveyConfiguration = {};
 
@@ -98,6 +109,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
         surveyConfig: surveyConfiguration,
         launchConfig: launchConfiguration,
         resourceDefaultCredentials: defaultCredentials,
+        instanceGroups: relatedInstanceGroups,
       };
     }, [templateId]),
     {
@@ -106,6 +118,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
       resourceDefaultCredentials: [],
       surveyConfig: {},
       launchConfig: {},
+      instanceGroups: [],
     }
   );
 
@@ -149,6 +162,14 @@ function Template({ setBreadcrumb }: TemplateProps) {
     { name: t`Access`, link: `${baseUrl}/access` },
   ];
 
+  /* Runs last, after the tabs that belong to this kind of object and the
+     Notifications and Schedules every template has, as on a project's and
+     an inventory's screens. */
+  tabsArray.push({
+    name: canAddAndEditSurvey ? t`Survey` : t`View Survey`,
+    link: `${baseUrl}/survey`,
+  });
+
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
@@ -163,20 +184,27 @@ function Template({ setBreadcrumb }: TemplateProps) {
     });
   }
 
-  tabsArray.push(
-    {
-      name: t`Jobs`,
-      link: `${baseUrl}/jobs`,
-    },
-    {
-      name: canAddAndEditSurvey ? t`Survey` : t`View Survey`,
-      link: `${baseUrl}/survey`,
-    }
-  );
+  tabsArray.push({
+    name: t`Runs`,
+    link: `${baseUrl}/runs`,
+  });
 
   // Ids come from position rather than from the literals, since which tabs
   // exist depends on the template and on who is looking at it.
   const tabs: RoutedTab[] = tabsArray.map((tab, id) => ({ ...tab, id }));
+
+  /*
+   * Without this the card renders empty until the template lands, so the load
+   * runs skeleton, blank card, skeleton again. The workflow screen beside this
+   * one has always had the branch.
+   */
+  if (isLoading && !template) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
 
   if (contentError) {
     return (
@@ -221,6 +249,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
               element={
                 <JobTemplateEdit
                   template={template}
+                  instanceGroups={instanceGroups}
                   reloadTemplate={loadTemplateAndRoles}
                 />
               }
@@ -262,10 +291,15 @@ function Template({ setBreadcrumb }: TemplateProps) {
                 }
               />
             )}
+            {/* The tab's address before the rail called these runs. */}
+            <Route path="jobs" element={<Navigate to="../runs" replace />} />
             <Route
-              path="jobs"
+              path="runs"
               element={
-                <JobList defaultParams={{ job__job_template: template.id }} />
+                <JobList
+                  defaultParams={{ job__job_template: template.id }}
+                  runControl={<TemplateLaunchControl template={template} />}
+                />
               }
             />
             <Route

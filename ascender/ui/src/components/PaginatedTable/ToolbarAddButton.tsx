@@ -1,13 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
-import {
-  Button,
-  DropdownItem,
-  MenuToggle,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Button, DropdownItem, MenuToggle } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
+import Tooltip from '../Tooltip';
 
 export interface ToolbarAddButtonProps {
   /** Where the button leads. Either this or onClick, never neither. */
@@ -16,6 +12,11 @@ export interface ToolbarAddButtonProps {
   isDisabled?: boolean;
   isExpanded?: boolean;
   defaultLabel?: string;
+  /**
+   * What the tooltip says, where the button's own word is not enough: a
+   * toolbar of one-word buttons says Add, and the tooltip says what of.
+   */
+  tooltip?: React.ReactNode;
   /** Renders a menu toggle rather than a button, for an add with a menu. */
   showToggleIndicator?: boolean;
   ouiaId?: string;
@@ -29,6 +30,7 @@ function ToolbarAddButton({
   isDisabled,
   isExpanded,
   defaultLabel,
+  tooltip,
   showToggleIndicator,
   ouiaId,
   ref,
@@ -57,7 +59,7 @@ function ToolbarAddButton({
   }
   if (showToggleIndicator) {
     return (
-      <Tooltip content={defaultLabel || t`Add`} position="top">
+      <Tooltip content={tooltip ?? defaultLabel ?? t`Add`} position="top">
         <MenuToggle
           ref={ref}
           ouiaId={ouiaId}
@@ -73,7 +75,7 @@ function ToolbarAddButton({
   }
   if (linkTo) {
     return (
-      <Tooltip content={defaultLabel || t`Add`} position="top">
+      <Tooltip content={tooltip ?? defaultLabel ?? t`Add`} position="top">
         <Button
           ouiaId={ouiaId}
           component={Link}
@@ -86,7 +88,7 @@ function ToolbarAddButton({
     );
   }
   return (
-    <Tooltip content={defaultLabel || t`Add`} position="top">
+    <Tooltip content={tooltip ?? defaultLabel ?? t`Add`} position="top">
       <Button ouiaId={ouiaId} onClick={onClick} isDisabled={isDisabled}>
         {defaultLabel || t`Add`}
       </Button>

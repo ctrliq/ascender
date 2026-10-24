@@ -42,7 +42,7 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
 
   async function setup() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/github/enterprise_team/edit'],
+      initialEntries: ['/authentication/github/enterprise_team/edit'],
     });
     const utils = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -79,19 +79,28 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user, container } = await setup();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     expect(
       screen.queryByLabelText('Confirm revert all')
     ).not.toBeInTheDocument();
     await user.click(
-      container.querySelector('button[aria-label="Revert all to default"]')!
+      container.querySelector('button[aria-label="Revert All to Default"]')!
     );
     expect(screen.getByLabelText('Confirm revert all')).toBeInTheDocument();
     await user.click(screen.getByLabelText('Confirm revert all'));
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith(
-      'github-enterprise-team'
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_URL: '',
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_API_URL: '',
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_KEY: '',
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_SECRET: '',
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_ID: '',
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_ORGANIZATION_MAP: null,
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_TEAM_MAP: null,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -127,7 +136,7 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
     await user.click(container.querySelector('button[aria-label="Save"]')!);
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
-        '/settings/github/enterprise_team/details'
+        '/authentication/github/enterprise_team/details'
       )
     );
   });
@@ -136,7 +145,7 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
     const { user, container } = await setup();
     await user.click(container.querySelector('button[aria-label="Cancel"]')!);
     expect(history.location.pathname).toEqual(
-      '/settings/github/enterprise_team/details'
+      '/authentication/github/enterprise_team/details'
     );
   });
 

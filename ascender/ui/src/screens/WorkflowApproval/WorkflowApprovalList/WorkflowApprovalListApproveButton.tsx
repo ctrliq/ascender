@@ -2,12 +2,17 @@ import type { WorkflowApproval } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import { Button, DropdownItem } from '@patternfly/react-core';
 
 import { KebabifiedContext } from 'contexts/Kebabified';
+import Tooltip from 'components/Tooltip';
+import { isWorkflowDeleted } from '../shared/WorkflowApprovalUtils';
 
 function cannotApprove(item: WorkflowApproval) {
-  return !item.can_approve_or_deny;
+  // The api still says an orphaned approval can be voted on, since it stays
+  // pending when its workflow is deleted. There is nothing left to resume, so
+  // the toolbar treats it the way the row does.
+  return !item.can_approve_or_deny || isWorkflowDeleted(item);
 }
 
 export interface WorkflowApprovalListApproveButtonProps {

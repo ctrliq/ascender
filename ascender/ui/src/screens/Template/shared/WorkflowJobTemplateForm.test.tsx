@@ -177,7 +177,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     expect(screen.getByText('Organization')).toBeInTheDocument();
     expect(screen.getByText('Inventory')).toBeInTheDocument();
     expect(screen.getByText('Limit')).toBeInTheDocument();
-    expect(screen.getByText('Source control branch')).toBeInTheDocument();
+    expect(screen.getByText('Source Control Branch')).toBeInTheDocument();
     expect(screen.getByText('Labels')).toBeInTheDocument();
     expect(screen.getByText('Skip Tags')).toBeInTheDocument();
     expect(screen.getByText('Job Tags')).toBeInTheDocument();
@@ -228,7 +228,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     expect(webhookCheckbox).toBeChecked();
 
     const webhookKeyInput = await screen.findByLabelText(
-      'workflow job template webhook key'
+      'template webhook key'
     );
     expect(webhookKeyInput).not.toHaveAttribute('readonly');
     expect(webhookKeyInput).toHaveValue('sdfghjklmnbvcdsew435678iokjhgfd');

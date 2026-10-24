@@ -187,6 +187,34 @@ describe('<ScheduleAdd />', () => {
     });
   });
 
+  /*
+   * A blank limit stored as an empty string would override on every run, and
+   * on a workflow it replaces each node's own limit, so where the resource has
+   * none it is stored as no limit at all.
+   */
+  test.each([
+    ['with no limit of its own', {}, null],
+    ['with a limit of its own', { limit: 'web' }, ''],
+  ])(
+    'stores a blank limit for a resource %s',
+    async (_label, ownLimit, expected) => {
+      renderAdd({ resource: { ...resource, ...ownLimit } });
+      await waitFor(() => expect(formProps).toBeDefined());
+      await submit({
+        name: 'Limited schedule',
+        frequency: [],
+        startDate: '2020-03-25',
+        startTime: '10:00 AM',
+        timezone: 'America/New_York',
+        limit: '',
+      } as SubmittedValues);
+      expect(JobTemplatesAPI.createSchedule).toHaveBeenCalledWith(
+        700,
+        expect.objectContaining({ limit: expected })
+      );
+    }
+  );
+
   test('Successfully creates a schedule with 10 minute repeat frequency and 10 occurrences', async () => {
     renderAdd();
     await waitFor(() => expect(formProps).toBeDefined());

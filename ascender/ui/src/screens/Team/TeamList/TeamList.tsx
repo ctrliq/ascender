@@ -150,7 +150,13 @@ function TeamList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo="/teams/add" />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add Team`}
+                          key="add"
+                          linkTo="/teams/add"
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -171,9 +177,6 @@ function TeamList() {
                 rowIndex={index}
               />
             )}
-            emptyStateControls={
-              canAdd ? <ToolbarAddButton key="add" linkTo="/teams/add" /> : null
-            }
           />
         </Card>
       </PageSection>

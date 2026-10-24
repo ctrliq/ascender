@@ -151,4 +151,40 @@ describe('useWsJobs hook', () => {
     mockServer.close();
     mockServer = null;
   });
+
+  /*
+   * Two jobs changing status in the same tick arrive before React renders
+   * either. Both rows have to take their new status, not just the second.
+   */
+  test('should update two jobs whose messages arrive together', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    mockServer = new WS('ws://localhost/websocket/');
+
+    const jobs = [
+      { id: 1, status: 'running' },
+      { id: 2, status: 'running' },
+    ];
+    await act(async () => {
+      renderWithContexts(<Test jobs={jobs} />);
+    });
+    await mockServer.connected;
+
+    act(() => {
+      mockServer!.send(
+        JSON.stringify({ unified_job_id: 1, type: 'job', status: 'failed' })
+      );
+      mockServer!.send(
+        JSON.stringify({ unified_job_id: 2, type: 'job', status: 'successful' })
+      );
+    });
+
+    await waitFor(() => {
+      const byId = Object.fromEntries(
+        getJobs().map((j: { id: number; status: string }) => [j.id, j.status])
+      );
+      expect(byId).toEqual({ 1: 'failed', 2: 'successful' });
+    });
+    mockServer.close();
+    mockServer = null;
+  });
 });

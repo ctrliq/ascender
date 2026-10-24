@@ -1,7 +1,7 @@
 import type { InventorySource } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import {
   InventorySourcesAPI,
   InventoriesAPI,
@@ -81,7 +81,7 @@ describe('InventorySourceDetail', () => {
 
     expect(
       await screen.findByRole('button', {
-        name: 'Cancel Inventory Source Sync',
+        name: 'Cancel Inventory Sync',
       })
     ).toBeInTheDocument();
   });
@@ -97,8 +97,8 @@ describe('InventorySourceDetail', () => {
     assertDetail('Source', 'Sourced from a Project');
     assertDetail('Organization', 'Mock Org');
     assertDetail('Project', 'Mock Project');
-    assertDetail('Inventory file', 'foo');
-    assertDetail('Cache timeout', '2 seconds');
+    assertDetail('Inventory File', 'foo');
+    assertDetail('Cache Timeout', '2 seconds');
     assertDetail('Verbosity', '2 (More Verbose)');
 
     assertDetail(
@@ -109,16 +109,27 @@ describe('InventorySourceDetail', () => {
     // CredentialChip splits "Cloud:" and the name across nodes; assert on the
     // Credential detail's combined text content instead.
     assertDetail('Credential', 'Cloud: mock cred');
-    expect(screen.getByText('Source variables')).toBeInTheDocument();
+    expect(screen.getByText('Source Variables')).toBeInTheDocument();
 
-    const options = screen.getByText('Enabled Options').nextElementSibling;
-    expect(options).toHaveTextContent(
-      'Overwrite local groups and hosts from remote inventory source'
+    // Each option is named as its checkbox on the form is.
+    const options = screen.getByText('Update Options')
+      .nextElementSibling as HTMLElement;
+    expect(
+      within(options)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual(['Overwrite', 'Overwrite Variables', 'Update on Launch']);
+  });
+
+  test('names the branch as the source form does', async () => {
+    renderWithContexts(
+      <InventorySourceDetail
+        inventorySource={{ ...mockInvSource, scm_branch: 'main' }}
+      />
     );
-    expect(options).toHaveTextContent(
-      'Overwrite local variables from remote inventory source'
-    );
-    expect(options).toHaveTextContent('Update on launch');
+
+    await screen.findByText('mock inv source');
+    assertDetail('Source Control Branch/Tag/Commit', 'main');
   });
 
   test('should display expected action buttons for users with permissions', async () => {
@@ -126,14 +137,14 @@ describe('InventorySourceDetail', () => {
       <InventorySourceDetail inventorySource={mockInvSource} />
     );
 
-    const editLink = await screen.findByRole('link', { name: 'edit' });
+    const editLink = await screen.findByRole('link', { name: 'Edit' });
     expect(editLink).toHaveAttribute(
       'href',
       '/inventories/inventory/2/sources/123/edit'
     );
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Start sync source' })
+      screen.getByRole('button', { name: 'Sync Source' })
     ).toBeInTheDocument();
   });
 
@@ -152,13 +163,13 @@ describe('InventorySourceDetail', () => {
 
     await screen.findByText('mock inv source');
     expect(
-      screen.queryByRole('link', { name: 'edit' })
+      screen.queryByRole('link', { name: 'Edit' })
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Delete' })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: 'Start sync source' })
+      screen.queryByRole('button', { name: 'Sync Source' })
     ).not.toBeInTheDocument();
   });
 

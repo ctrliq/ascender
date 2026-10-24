@@ -8,7 +8,6 @@ import {
   ButtonVariant,
   FormGroup,
   InputGroup,
-  Tooltip,
   InputGroupItem,
   FormHelperText,
   HelperText,
@@ -19,6 +18,7 @@ import styles from '@patternfly/react-styles/css/components/Form/form';
 import { css } from '@patternfly/react-styles';
 import FieldWithPrompt from 'components/FieldWithPrompt';
 import Popover from 'components/Popover';
+import Tooltip from 'components/Tooltip';
 import { CredentialPluginPrompt } from './CredentialPluginPrompt';
 import CredentialPluginSelected from './CredentialPluginSelected';
 
