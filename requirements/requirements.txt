@@ -1,6 +1,6 @@
 aiohappyeyeballs==2.7.1
     # via aiohttp
-aiohttp==3.14.3
+aiohttp==3.14.5
     # via
     #   -r /ascender_devel/requirements/requirements.in
     #   kubernetes
@@ -128,7 +128,7 @@ django-split-settings==1.3.2
     # via -r /ascender_devel/requirements/requirements.in
 django-valkey==0.4.1
     # via -r /ascender_devel/requirements/requirements.in
-djangorestframework==3.18.1
+djangorestframework==3.18.3
     # via
     #   -r /ascender_devel/requirements/requirements.in
     #   drf-spectacular
@@ -144,7 +144,7 @@ frozenlist==1.8.0
     #   aiosignal
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.62
+gitpython==3.2.1
     # via -r /ascender_devel/requirements/requirements.in
 h11==0.16.0
     # via uvicorn
@@ -404,7 +404,7 @@ wheel==0.48.0
     # via -r /ascender_devel/requirements/requirements.in
 xmlsec==1.3.17
     # via python3-saml
-yarl==1.24.5
+yarl==1.25.1
     # via aiohttp
 zope-interface==8.6
     # via twisted

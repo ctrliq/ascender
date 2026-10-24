@@ -1,4 +1,4 @@
-aiohttp>=3.14.3  # CVE-2026-69244 CVE-2026-59881 CVE-2026-69243
+aiohttp>=3.14.4  # GHSA-2g87-pp6c-29x5 CVE-2026-111064 CVE-2026-111063
 asciichartpy
 azure-identity>=1.25.2
 # only azure.keyvault.secrets is used (credential_plugins/azure_kv.py); the
@@ -25,9 +25,9 @@ django-solo
 drf-spectacular>=0.27.0
 django-split-settings
 django-valkey
-djangorestframework>=3.18.0 # first release declaring Django 6.1 support; floor was 3.17.2 for CVE-2026-73228 CVE-2026-73229
+djangorestframework>=3.18.2 # CVE-2026-114138 CVE-2026-114136 CVE-2026-114137
 filelock
-GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
+GitPython>=3.2.1  # CVE-2026-114145
 inflection  # used by vendored ascender/dab (formerly a django-ansible-base dep)
 jinja2>=3.1.6  # CVE-2025-27516
 jsonschema
