@@ -384,6 +384,7 @@ class AscenderSettings(Protocol):
     LOG_ROOT: str
     MANAGERS: list[Any]
     MANAGE_ORGANIZATION_AUTH: bool
+    RESTRICT_USER_IDENTITY_TO_SUPERUSERS: bool
     MAX_EVENT_RES_DATA: int
     MAX_FORKS: int
     MAX_PAGE_SIZE: int

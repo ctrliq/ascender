@@ -394,3 +394,5 @@ Uncomment the line below (i.e. set ``SOCIAL_AUTH_USER_FIELDS`` to an empty list)
 
     SOCIAL_AUTH_USER_FIELDS = []
 
+By default, an external login is linked to the one existing account with the same email address, local accounts included, so use a provider that issues verified emails.  Enable **Only Superusers Can Set User Emails and Change Usernames** (``RESTRICT_USER_IDENTITY_TO_SUPERUSERS``) in the System settings to stop anyone but a superuser from setting the email of a new user or changing the email or username of any user.
+

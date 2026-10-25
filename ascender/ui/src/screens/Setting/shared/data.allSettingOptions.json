@@ -47,6 +47,15 @@
               "category_slug": "system",
               "default": true
           },
+          "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Only Superusers Can Set User Emails and Change Usernames",
+              "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "ASCENDER_URL_BASE": {
               "type": "string",
               "required": true,
@@ -4681,6 +4690,15 @@
               "category": "System",
               "category_slug": "system",
               "defined_in_file": false
+          },
+          "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Only Superusers Can Set User Emails and Change Usernames",
+              "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
           },
           "ASCENDER_URL_BASE": {
               "type": "string",
