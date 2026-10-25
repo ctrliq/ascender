@@ -177,6 +177,15 @@ def test_radius_settings(get, put, patch, delete, admin, settings):
 
 
 @pytest.mark.django_db
+def test_prevent_username_collisions_round_trip(get, patch, admin, settings):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'authentication'})
+    patch(url, user=admin, data={'SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS': True}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS'] is True
+    assert settings.SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS is True
+
+
+@pytest.mark.django_db
 def test_restrict_user_identity_round_trip(get, patch, admin, settings):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'system'})
     assert get(url, user=admin, expect=200).data['RESTRICT_USER_IDENTITY_TO_SUPERUSERS'] is False
