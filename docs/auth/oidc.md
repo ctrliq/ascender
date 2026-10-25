@@ -62,13 +62,31 @@ The same works with `SOCIAL_AUTH_OIDC_USERNAME_KEY` set to `email`.
 
 This only shapes accounts as they are created. An existing account is found by
 the provider's `sub` claim, not by name, so turning it on later does not rename
-anyone and does not split anyone's account in two. Two users whose addresses
-differ only in the domain would come out with the same name; the second one to
-log in gets a random suffix added to it, as social auth does for any name that
-is already taken. Rules match on claims, not on the username, so they are not
-affected.
+anyone and does not split anyone's account in two. Rules match on claims, not on
+the username, so they are not affected.
+
+When `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS` is enabled, a first login whose
+desired username is already taken fails instead of receiving a random suffix.
+The user sees a message with the request ID of the failed sign-in. The same ID
+is on the security log entry for the refusal, with the blocking account and the
+incoming identity, and in the failed request's `X-API-Request-Id` header. An
+email match still wins over the username collision, because that login links to
+the existing account rather than creating a new one; several accounts with that
+email are refused. The check runs as steps of the default social auth pipeline, so a
+deployment with its own `SOCIAL_AUTH_PIPELINE` needs to add
+`check_external_login_collision` and `check_final_username_collision` from
+`ascender/settings/defaults.py`.
+
+Username comparisons are exact and case-sensitive, as in social auth itself.
 
 ## Linking and editing accounts
+
+On a first login, social auth links the identity to the one existing account
+with the same email, local accounts included. Only use this with a provider that
+issues verified emails, and keep the email of shared, recycled or placeholder
+mailboxes off local accounts, since whoever holds that address can sign in as
+the account. A password or token that account already had keeps working after
+the link.
 
 `RESTRICT_USER_IDENTITY_TO_SUPERUSERS` (**Settings > System**) is off by
 default. When on, only superusers can set the email of a new user or change the

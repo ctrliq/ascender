@@ -997,6 +997,15 @@
               "category_slug": "authentication",
               "default": false
           },
+          "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Prevent username collisions on first login",
+              "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.",
+              "category": "Authentication",
+              "category_slug": "authentication",
+              "default": false
+          },
           "AUTH_LDAP_SERVER_URI": {
               "type": "string",
               "required": false,
@@ -5485,6 +5494,14 @@
               "type": "boolean",
               "label": "Use Email address for usernames",
               "help_text": "Enabling this setting will tell social auth to use the full Email as username instead of the full name",
+              "category": "Authentication",
+              "category_slug": "authentication",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+              "type": "boolean",
+              "label": "Prevent username collisions on first login",
+              "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.",
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false

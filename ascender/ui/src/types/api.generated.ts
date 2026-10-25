@@ -11880,6 +11880,12 @@ export interface components {
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
       /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
+      /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.
        */
@@ -15038,6 +15044,12 @@ export interface components {
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
       /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
+      /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.
        */
@@ -17165,6 +17177,12 @@ export interface components {
        * @default false
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
+      /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
       /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.

@@ -158,6 +158,19 @@ register(
     category_slug='authentication',
 )
 
+register(
+    'SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Prevent username collisions on first login'),
+    help_text=_(
+        'When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. '
+        'LDAP, RADIUS and TACACS+ already refuse an existing username.'
+    ),
+    category=_('Authentication'),
+    category_slug='authentication',
+)
+
 ###############################################################################
 # LDAP AUTHENTICATION SETTINGS
 ###############################################################################

@@ -585,6 +585,7 @@ To configure OIDC in Ascender:
   rule is also set, the list can only grant; revocation follows the rule. An
   empty trigger rule (``{}``) counts as no rule. Usernames are trimmed and
   de-duplicated. If you use username lists, enable **Only Superusers Can Set User Emails and Change Usernames** in the System settings, so that nobody else can rename an account to a listed name.
+- **Prevent username collisions on first login**: When enabled, an external login fails visibly if its desired username is already taken and no account has the same email, instead of creating a suffixed username.
 - **Log Out of the OIDC Provider**: Use the toggle to also end the user's session at the provider when they log out of Ascender.
 - **OIDC Post Logout Redirect URL**: Where the provider sends the browser after that logout. Defaults to the Base URL of Ascender.
 
