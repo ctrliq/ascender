@@ -68,6 +68,19 @@ log in gets a random suffix added to it, as social auth does for any name that
 is already taken. Rules match on claims, not on the username, so they are not
 affected.
 
+## Linking and editing accounts
+
+`RESTRICT_USER_IDENTITY_TO_SUPERUSERS` (**Settings > System**) is off by
+default. When on, only superusers can set the email of a new user or change the
+email or username of any user, themselves included. Everyone else can still
+create users, but without an email, and keeps their other permissions.
+Unchanged values are accepted, so edit forms keep working, and the fields LDAP
+manages stay locked for LDAP users as before. It keeps others from creating
+an account that a provider user will later link to, and from renaming or
+re-addressing an account to match an organization or team map entry or a
+username list. Turn it on if you use username lists: otherwise anyone who can
+edit their own username can take a listed name.
+
 ## Who can log in
 
 By default anyone the provider authenticates gets an account the first time
@@ -193,7 +206,8 @@ Usernames are the Ascender usernames, which
 `SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN` may have shortened to the part before
 the `@` when the account was created, and an existing account keeps the name it
 had. List a user by the name Ascender shows, not by the claim the provider
-sent. The lists match against the stored username.
+sent. The lists match against the stored username, so see
+[Linking and editing accounts](#linking-and-editing-accounts) for who can change it.
 
 A username can also be claimed before the intended account exists, so treat
 these lists as a convenience rather than a proof of identity. For a grant that

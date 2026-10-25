@@ -177,6 +177,15 @@ def test_radius_settings(get, put, patch, delete, admin, settings):
 
 
 @pytest.mark.django_db
+def test_restrict_user_identity_round_trip(get, patch, admin, settings):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'system'})
+    assert get(url, user=admin, expect=200).data['RESTRICT_USER_IDENTITY_TO_SUPERUSERS'] is False
+    patch(url, user=admin, data={'RESTRICT_USER_IDENTITY_TO_SUPERUSERS': True}, expect=200)
+    assert get(url, user=admin, expect=200).data['RESTRICT_USER_IDENTITY_TO_SUPERUSERS'] is True
+    assert settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS is True
+
+
+@pytest.mark.django_db
 def test_login_redirect_override_scheme(get, patch, admin, settings):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'authentication'})
     patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': '/sso/login/saml/?idp=corp'}, expect=200)

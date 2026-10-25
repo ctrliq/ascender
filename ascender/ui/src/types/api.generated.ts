@@ -11286,6 +11286,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -14519,6 +14525,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -16770,6 +16782,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
       /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
