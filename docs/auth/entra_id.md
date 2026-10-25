@@ -88,6 +88,11 @@ address, a local superuser included. The only accounts an Entra ID login takes
 over are those of the legacy Azure AD logins, and only when they belong to the
 same person (see [Moving from the Azure AD logins](#moving-from-the-azure-ad-logins)).
 
+For the same reason, `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS` skips the email
+part of its check for Entra ID and only refuses a first login whose desired
+username is already taken. Several existing accounts sharing the incoming email
+address do not block a login that would otherwise create a new account.
+
 ## Groups and app roles
 
 Entra only puts groups in the token once you ask for them, under *Token
