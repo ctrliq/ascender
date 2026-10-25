@@ -11286,6 +11286,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -13091,7 +13097,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Prefer a rule on a group, role or the oid claim where that matters.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -13255,7 +13261,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. A listed username can be claimed by whoever signs up with it first, so prefer a rule on a group or the sub claim where that matters.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;
@@ -14518,6 +14524,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
       /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
@@ -16386,7 +16398,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Prefer a rule on a group, role or the oid claim where that matters.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -16565,7 +16577,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. A listed username can be claimed by whoever signs up with it first, so prefer a rule on a group or the sub claim where that matters.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;
@@ -16770,6 +16782,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
       /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
@@ -18576,7 +18594,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Prefer a rule on a group, role or the oid claim where that matters.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -18740,7 +18758,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. A listed username can be claimed by whoever signs up with it first, so prefer a rule on a group or the sub claim where that matters.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;

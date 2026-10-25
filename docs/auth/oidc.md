@@ -68,6 +68,24 @@ log in gets a random suffix added to it, as social auth does for any name that
 is already taken. Rules match on claims, not on the username, so they are not
 affected.
 
+## Linking and editing accounts
+
+`RESTRICT_USER_IDENTITY_TO_SUPERUSERS` (**Settings > System**) is off by
+default. When on, only superusers can set the email of a new user or change the
+email or username of any user, themselves included. Everyone else can still
+create users, but without an email, and keeps their other permissions.
+Unchanged values are accepted, so edit forms keep working, and the fields LDAP
+manages stay locked for LDAP users as before. It keeps others from creating
+an account that a provider user will later link to, and from renaming or
+re-addressing an account to match an organization or team map entry or a
+username list.
+
+Organization administrators are the important case: they can rename themselves
+and their members and create users, so without this setting they could take a
+name from a username list and gain that account's flags at their next login.
+The OIDC and Entra ID user flags therefore ignore their username lists, with a
+warning, while this setting is off. Trigger rules are not affected.
+
 ## Who can log in
 
 By default anyone the provider authenticates gets an account the first time
@@ -193,12 +211,18 @@ Usernames are the Ascender usernames, which
 `SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN` may have shortened to the part before
 the `@` when the account was created, and an existing account keeps the name it
 had. List a user by the name Ascender shows, not by the claim the provider
-sent. The lists match against the stored username.
+sent. The lists match against the stored username, so see
+[Linking and editing accounts](#linking-and-editing-accounts) for who can change it.
 
-A username can also be claimed before the intended account exists, so treat
-these lists as a convenience rather than a proof of identity. For a grant that
-has to follow an immutable identifier, use a trigger rule on the provider's
-`sub` claim or on a group instead.
+The lists are only honored while
+`RESTRICT_USER_IDENTITY_TO_SUPERUSERS` is on. When it is off, Ascender ignores
+them with a warning, because an organization administrator can rename their own
+or another account, or create a local user, and would otherwise be able to take
+a listed name and the flags that come with it. This applies to Entra ID as
+well. Trigger rules still work, and a username can still be claimed before the
+intended account exists, so treat these lists as a convenience rather than a
+proof of identity. For a grant that has to follow an immutable identifier, use a
+trigger rule on the provider's `sub` claim or on a group instead.
 
 Keep a local superuser that does not log in through OIDC. The social auth
 pipeline links an OIDC identity to an existing account with the same email, and

@@ -341,6 +341,11 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
     revokes the users it does not name; with a rule, revocation follows the rule
     and remove_<flag>s.  An empty rule counts as no rule.  A flag with neither
     is left alone.
+
+    Username lists are only honored while RESTRICT_USER_IDENTITY_TO_SUPERUSERS
+    is on.  With it off, a list is ignored with a warning, because an
+    organization administrator can rename accounts or create users and could
+    otherwise claim a listed name.  Trigger rules are unaffected.
     """
     if not user or not is_oidc(backend):
         return
@@ -348,12 +353,26 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
     if not user_flags or not isinstance(user_flags, dict):
         return
 
+    # The lists name accounts, not provider identities.  Without the identity
+    # restriction, an organization admin can rename their account or create a
+    # local user with a listed name, so a list would be an escalation path.
+    ignore_lists = False
+    if not getattr(settings, 'RESTRICT_USER_IDENTITY_TO_SUPERUSERS', False):
+        listed_flags = [attribute for _, attribute in USER_FLAGS if user_flags.get(attribute)]
+        if listed_flags:
+            logger.warning(
+                "Ignoring the username lists %s in %s because RESTRICT_USER_IDENTITY_TO_SUPERUSERS is off; an organization administrator could otherwise rename or create an account to take a listed name",
+                ', '.join(listed_flags),
+                _setting_name(backend, 'USER_FLAGS'),
+            )
+            ignore_lists = True
+
     identity = OIDCIdentity(backend, response)
     save = False
     for flag, attribute in USER_FLAGS:
         triggers_key = 'triggers_{}'.format(flag)
         triggers = user_flags.get(triggers_key)
-        usernames = user_flags.get(attribute)
+        usernames = None if ignore_lists else user_flags.get(attribute)
         # Only an absent, null or empty rule means "no rule".  A malformed falsy
         # one ([] or '' from a settings file) must not make the list
         # authoritative, or it would revoke everyone the list does not name.

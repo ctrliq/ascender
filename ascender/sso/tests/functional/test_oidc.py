@@ -154,6 +154,12 @@ class TestStripUsernameDomain:
 
 @pytest.mark.django_db
 class TestUserFlags:
+    @pytest.fixture(autouse=True)
+    def allow_username_lists(self, settings):
+        # Username lists require the identity restriction; the list tests here
+        # are about how a permitted list is evaluated.
+        settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS = True
+
     def test_a_matching_user_becomes_superuser(self, settings, user):
         settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE}
         update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
@@ -230,6 +236,31 @@ class TestUserFlags:
     def test_a_username_in_the_list_becomes_superuser(self, settings, user):
         settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['alice']}
         update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_username_lists_are_ignored_without_the_identity_restriction(self, caplog, settings, user):
+        settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS = False
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['alice']}
+        with caplog.at_level(logging.WARNING, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+        assert 'RESTRICT_USER_IDENTITY_TO_SUPERUSERS is off' in caplog.text
+
+    def test_ignored_username_lists_do_not_revoke_without_the_identity_restriction(self, settings, user):
+        settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS = False
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_trigger_rules_still_apply_without_the_identity_restriction(self, settings, user):
+        settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS = False
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
         user.refresh_from_db()
         assert user.is_superuser is True
 

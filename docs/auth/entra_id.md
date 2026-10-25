@@ -169,7 +169,10 @@ These work exactly as for generic OIDC, see [oidc.md](oidc.md):
 
 `SOCIAL_AUTH_ENTRA_ID_USER_FLAGS` accepts the same trigger rules and
 `is_superuser` / `is_system_auditor` username lists as generic OIDC. The lists
-name Ascender accounts by exact, case-sensitive username.
+name Ascender accounts by exact, case-sensitive username, and are only honored
+while `RESTRICT_USER_IDENTITY_TO_SUPERUSERS` is on; with it off, they are
+ignored with a warning because an organization administrator could otherwise
+rename or create an account to take a listed name.
 
 For example, with app roles:
 
