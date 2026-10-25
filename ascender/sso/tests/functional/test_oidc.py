@@ -1,4 +1,5 @@
 import json
+import logging
 from unittest import mock
 from urllib.parse import parse_qs, urlsplit
 
@@ -20,6 +21,20 @@ def oidc_backend(**claims):
     """The generic OIDC backend as the pipeline sees it, with a validated ID token."""
     backend = OpenIdConnectAuth(load_strategy())
     backend.id_token = dict({'sub': '1234'}, **claims)
+    return backend
+
+
+def oidc_backend_with_user_flags(user_flags, **claims):
+    """An OIDC backend whose raw user flags bypass the validated settings layer."""
+    backend = oidc_backend(**claims)
+    original_setting = backend.setting
+
+    def setting(name, default=None):
+        if name == 'USER_FLAGS':
+            return user_flags
+        return original_setting(name, default)
+
+    backend.setting = setting
     return backend
 
 
@@ -161,6 +176,17 @@ class TestUserFlags:
         user.refresh_from_db()
         assert user.is_superuser is True
 
+    @pytest.mark.parametrize('value', ['false', 'no', 'off', '0'])
+    def test_a_false_string_remove_setting_keeps_it_with_a_rule_only(self, value, settings, user):
+        # A settings file is not validated. bool("false") used to read as true
+        # and revoke every user the rule skipped.
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'remove_superusers': value}
+        update_user_flags(oidc_backend(groups=[]), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
     def test_system_auditor(self, settings, user):
         settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_system_auditor': {'groups': {'has_or': ['auditors']}}}
         update_user_flags(oidc_backend(groups=['auditors']), {}, user=user, response={})
@@ -200,6 +226,345 @@ class TestUserFlags:
         update_user_flags(backend, {}, user=user, response={})
         user.refresh_from_db()
         assert user.is_superuser is False
+
+    def test_a_username_in_the_list_becomes_superuser(self, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['alice']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_username_not_in_the_list_loses_it(self, settings, user):
+        # No trigger at all: the list alone manages the flag, so a user it does
+        # not name loses it.
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_remove_false_keeps_a_username_not_in_the_list(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['bob'], 'remove_superusers': False}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_username_list_entries_are_trimmed(self, settings, user):
+        # A settings file bypasses the field, so the runtime comparison has to
+        # trim the entries itself.
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': [' alice ']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    @pytest.mark.parametrize('usernames', [[''], ['   '], ['', '   ']])
+    def test_a_list_with_only_blank_usernames_is_ignored(self, usernames, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': usernames}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_mixed_blank_entry_does_not_stop_a_revoke(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['bob', '   ']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_duplicate_usernames_are_processed_once(self, settings, user):
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['alice', 'alice', ' alice ']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_username_list_revokes_a_system_auditor(self, settings, user):
+        user.is_system_auditor = True
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_system_auditor': ['bob']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert User.objects.get(pk=user.pk).is_system_auditor is False
+
+    @pytest.mark.parametrize('value', ['false', 'no', 'off', '0', 0, None, ''])
+    def test_a_false_remove_system_auditors_setting_keeps_the_flag(self, value, settings, user):
+        user.is_system_auditor = True
+        update_user_flags(oidc_backend_with_user_flags({'is_system_auditor': ['bob'], 'remove_system_auditors': value}), {}, user=user, response={})
+        assert User.objects.get(pk=user.pk).is_system_auditor is True
+
+    @pytest.mark.parametrize('value', ['true', 'yes', 'on', '1', 1, True])
+    def test_a_true_remove_system_auditors_setting_revokes_the_flag(self, value, settings, user):
+        user.is_system_auditor = True
+        update_user_flags(oidc_backend_with_user_flags({'is_system_auditor': ['bob'], 'remove_system_auditors': value}), {}, user=user, response={})
+        assert User.objects.get(pk=user.pk).is_system_auditor is False
+
+    def test_a_null_username_list_is_left_alone(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': None}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_null_system_auditor_username_list_is_left_alone(self, settings, user):
+        user.is_system_auditor = True
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_system_auditor': None}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert User.objects.get(pk=user.pk).is_system_auditor is True
+
+    def test_a_null_username_list_does_not_stop_a_trigger(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': None}
+        update_user_flags(oidc_backend(groups=[]), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_an_explicit_deny_revokes_even_with_remove_false(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'never': {}}, 'is_superuser': ['alice'], 'remove_superusers': False}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_a_flag_change_is_logged_for_audit(self, caplog, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['alice']}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert 'action=grant flag=superuser user="alice" old=False new=True source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=username_list' in caplog.text
+
+    def test_a_flag_revocation_is_logged_for_audit(self, caplog, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_superuser': ['bob']}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert 'action=revoke flag=superuser user="alice" old=True new=False source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=username_list' in caplog.text
+
+    def test_a_username_list_grants_a_system_auditor(self, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'is_system_auditor': ['alice']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert User.objects.get(pk=user.pk).is_system_auditor is True
+
+    def test_a_trigger_rule_wins_over_the_username_list(self, settings, user):
+        # alice is not in the list, but the rule matches, so the flag is granted.
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_the_username_list_decides_when_the_rule_skips(self, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': ['alice']}
+        update_user_flags(oidc_backend(groups=[]), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_denying_rule_wins_over_the_username_list(self, settings, user):
+        # alice is in the list, but the rule explicitly denies her.
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'never': {}}, 'is_superuser': ['alice']}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    @pytest.mark.parametrize('flags', [{'is_superuser': []}, {'is_superuser': [], 'remove_superusers': False}, {'is_superuser': [], 'remove_superusers': True}])
+    def test_an_empty_username_list_leaves_the_flag_alone(self, caplog, settings, user, flags):
+        # An empty list names nobody, and a list that ended up empty by mistake
+        # must not revoke the flag from every user.
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = flags
+        with caplog.at_level(logging.WARNING, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+        assert 'is empty' in caplog.text
+
+    def test_a_never_rule_clears_the_flag_from_everyone(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'never': {}}, 'remove_superusers': False}
+        update_user_flags(oidc_backend(), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_a_bare_string_is_ignored(self, settings, user):
+        # A settings file is not validated, but a bare string is not a list of
+        # usernames, so it must not grant or revoke anything.
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': 'bob'}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_non_list_setting_is_ignored(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': True}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_mapping_setting_is_ignored(self, settings, user):
+        # ListField iterates a mapping into its keys; that must not become a
+        # username list that grants or revokes.
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': {'bob': True}}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_list_with_only_non_strings_is_ignored(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': [123]}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_non_string_entry_does_not_stop_a_revoke(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['bob', 123]}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_a_non_string_entry_does_not_stop_a_grant(self, settings, user):
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['alice', 123]}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    @pytest.mark.parametrize('value', ['false', 'no', 'off', '0', 0, None, ''])
+    def test_a_false_remove_setting_keeps_the_flag(self, value, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['bob'], 'remove_superusers': value}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    @pytest.mark.parametrize('value', ['true', 'yes', 'on', '1', 1, True])
+    def test_a_true_remove_setting_revokes_the_flag(self, value, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['bob'], 'remove_superusers': value}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_an_unrecognized_remove_setting_is_off(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'is_superuser': ['bob'], 'remove_superusers': 'sometimes'}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_empty_rule_is_no_rule_for_a_username_list(self, settings, user):
+        # An empty rule is no rule at all, so the list alone decides and the
+        # user it does not name loses the flag.
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'triggers_superuser': {}, 'is_superuser': ['bob']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    def test_an_empty_rule_with_a_username_list_and_remove_false_keeps_it(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(
+            oidc_backend_with_user_flags({'triggers_superuser': {}, 'is_superuser': ['bob'], 'remove_superusers': False}),
+            {},
+            user=user,
+            response={},
+        )
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_empty_rule_still_grants_a_listed_user(self, settings, user):
+        update_user_flags(oidc_backend_with_user_flags({'triggers_superuser': {}, 'is_superuser': ['alice']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_empty_rule_without_a_username_list_changes_nothing(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'triggers_superuser': {}}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_unusable_rule_does_not_revoke_a_user_not_in_the_list(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'groups': {'has_or': []}}, 'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_unusable_rule_still_grants_a_listed_user(self, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'groups': {'has_or': []}}, 'is_superuser': ['alice']}
+        update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_an_empty_list_with_an_unusable_rule_does_not_revoke(self, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'groups': {'has_or': []}}, 'is_superuser': []}
+        update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_skipping_rule_still_revokes_a_user_not_in_the_list(self, settings, user):
+        # The list does not revoke here; the rule's own skip semantics do.
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': ['bob']}
+        update_user_flags(oidc_backend(groups=[]), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is False
+
+    @pytest.mark.parametrize('triggers', [[], '', 0])
+    def test_a_malformed_falsy_rule_does_not_make_the_list_authoritative(self, triggers, settings, user):
+        # A settings file is not validated.  A malformed falsy rule is not the
+        # same as no rule: it must not turn the username list into an
+        # authoritative list that revokes everyone it does not name.
+        user.is_superuser = True
+        user.save()
+        update_user_flags(oidc_backend_with_user_flags({'triggers_superuser': triggers, 'is_superuser': ['bob']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    @pytest.mark.parametrize('triggers', [[], '', 0])
+    def test_a_malformed_falsy_rule_still_grants_a_listed_user(self, triggers, settings, user):
+        update_user_flags(oidc_backend_with_user_flags({'triggers_superuser': triggers, 'is_superuser': ['alice']}), {}, user=user, response={})
+        user.refresh_from_db()
+        assert user.is_superuser is True
+
+    def test_a_trigger_grant_is_logged(self, caplog, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        assert 'action=grant flag=superuser user="alice" old=False new=True source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=trigger_rule' in caplog.text
+
+    def test_a_trigger_deny_is_logged(self, caplog, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'never': {}}}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(), {}, user=user, response={})
+        assert 'action=revoke flag=superuser user="alice" old=True new=False source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=trigger_rule' in caplog.text
+
+    def test_a_trigger_skip_revoke_is_logged(self, caplog, settings, user):
+        user.is_superuser = True
+        user.save()
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': GROUP_RULE, 'is_superuser': ['bob']}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(groups=[]), {}, user=user, response={})
+        assert 'action=revoke flag=superuser user="alice" old=True new=False source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=trigger_rule_skip_remove' in caplog.text
+
+    def test_an_unusable_rule_grant_is_logged(self, caplog, settings, user):
+        settings.SOCIAL_AUTH_OIDC_USER_FLAGS = {'triggers_superuser': {'groups': {'has_or': []}}, 'is_superuser': ['alice']}
+        with caplog.at_level(logging.INFO, logger='ascender.sso.oidc'):
+            update_user_flags(oidc_backend(groups=['ascender-admins']), {}, user=user, response={})
+        assert (
+            'action=grant flag=superuser user="alice" old=False new=True source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=username_list_after_unusable_rule'
+        ) in caplog.text
 
 
 @pytest.mark.django_db

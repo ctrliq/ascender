@@ -167,6 +167,10 @@ These work exactly as for generic OIDC, see [oidc.md](oidc.md):
   username and email expressions
 * `SOCIAL_AUTH_ENTRA_ID_USER_FLAGS`, for superusers and system auditors
 
+`SOCIAL_AUTH_ENTRA_ID_USER_FLAGS` accepts the same trigger rules and
+`is_superuser` / `is_system_auditor` username lists as generic OIDC. The lists
+name Ascender accounts by exact, case-sensitive username.
+
 For example, with app roles:
 
 ```json

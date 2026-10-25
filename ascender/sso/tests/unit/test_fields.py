@@ -444,19 +444,80 @@ class TestOIDCUserFlagsField:
         data = {
             'triggers_superuser': {'groups': {'has_or': ['ascender-superusers']}},
             'triggers_system_auditor': {'attributes': {'department': {'equals': 'Audit'}}},
+            'is_superuser': ['ascender-superusers', 'admin'],
+            'is_system_auditor': ['auditor'],
             'remove_superusers': False,
             'remove_system_auditors': True,
         }
         assert OIDCUserFlagsField().to_internal_value(data) == data
 
+    def test_a_bare_string_is_not_split_into_characters(self):
+        # The settings layer represents values before validation.  A string
+        # must stay a string so validation rejects it, not become ["a", "l"].
+        data = {'is_superuser': 'alice'}
+        assert OIDCUserFlagsField().to_representation(data) == data
+
+    def test_a_mapping_is_not_turned_into_its_keys(self):
+        # ListField iterates any iterable, so a mapping would otherwise become
+        # a list of its keys and pass as a username list.
+        data = {'is_superuser': {'alice': True}}
+        assert OIDCUserFlagsField().to_representation(data) == data
+        with pytest.raises(ValidationError):
+            OIDCUserFlagsField().to_internal_value(data)
+
+    def test_non_string_usernames_are_not_coerced(self):
+        data = {'is_superuser': [123]}
+        assert OIDCUserFlagsField().to_representation(data) == data
+        with pytest.raises(ValidationError):
+            OIDCUserFlagsField().to_internal_value(data)
+
+    def test_other_iterables_of_strings_are_accepted(self):
+        data = {'is_superuser': (name for name in ['alice'])}
+        assert OIDCUserFlagsField().to_internal_value(data) == {'is_superuser': ['alice']}
+
+    def test_usernames_are_trimmed_and_deduplicated(self):
+        data = {'is_superuser': [' alice ', 'alice', 'bob', ' alice ']}
+        assert OIDCUserFlagsField().to_internal_value(data) == {'is_superuser': ['alice', 'bob']}
+
     @pytest.mark.parametrize(
         "data",
         [
-            {'is_superuser': ['ascender-superusers']},
+            # An all-blank list must not quietly become an empty list.
+            {'is_superuser': ['']},
+            {'is_system_auditor': ['   ']},
+            {'is_superuser': ['alice', '  ']},
+        ],
+    )
+    def test_blank_usernames_are_refused(self, data):
+        with pytest.raises(ValidationError):
+            OIDCUserFlagsField().to_internal_value(data)
+
+    @pytest.mark.parametrize(
+        "data",
+        [
             {'triggers_superuser': {'groups': {'has_or': []}}},
             {'triggers_superuser': {'always': {}, 'never': {}}},
         ],
     )
     def test_invalid(self, data):
+        with pytest.raises(ValidationError):
+            OIDCUserFlagsField().to_internal_value(data)
+
+    @pytest.mark.parametrize(
+        "data",
+        [
+            # The flag values are username lists, not the booleans the org and
+            # team maps accept, and not a bare string.
+            {'is_superuser': True},
+            {'is_superuser': 'admin'},
+            {'is_system_auditor': False},
+            {'is_superuser': {'alice': True}},
+            {'is_superuser': [123]},
+            {'is_system_auditor': ['alice', None]},
+            {'is_superuser': b'alice'},
+            {'is_superuser': range(3)},
+        ],
+    )
+    def test_invalid_username_list(self, data):
         with pytest.raises(ValidationError):
             OIDCUserFlagsField().to_internal_value(data)
