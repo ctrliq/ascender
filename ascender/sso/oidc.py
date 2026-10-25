@@ -13,11 +13,14 @@ from urllib.parse import urlencode, urlsplit
 
 from django.conf import settings
 
+from rest_framework.fields import BooleanField
+
 from social_core.backends.open_id_connect import OpenIdConnectAuth
 from social_core.exceptions import AuthForbidden
 from social_django.utils import load_strategy
 
 from ascender.main.constants import ASCENDER_URL_BASE_PLACEHOLDER
+from ascender.main.utils.common import sanitize_log_value
 from ascender.sso.triggers import UNUSABLE_RULE, evaluate_trigger_rule, resolve_membership
 
 logger = logging.getLogger('ascender.sso.oidc')
@@ -144,8 +147,8 @@ class OIDCIdentity:
     def evaluate(self, triggers, map_id):
         return evaluate_trigger_rule(triggers, self.groups, self.attributes, map_id)
 
-    def resolve(self, triggers, map_id, fallback, remove):
-        return resolve_membership(triggers, self.groups, self.attributes, map_id, fallback, remove)
+    def resolve(self, triggers, map_id, fallback, remove, trace=None):
+        return resolve_membership(triggers, self.groups, self.attributes, map_id, fallback, remove, trace=trace)
 
 
 def check_login_allowed(backend, details, response=None, *args, **kwargs):
@@ -204,13 +207,109 @@ USER_FLAGS = (
 )
 
 
+def _match_username(user, usernames, remove, flag):
+    """
+    Decide one user flag from a username list: True if listed, False if not
+    listed and remove is set, None if the list decides nothing.
+
+    Entries are stripped and de-duplicated; non-strings and blank entries are
+    ignored.  A missing, mistyped, empty or entirely unusable list is ignored
+    too, so a mistake cannot revoke the flag from everyone.  To do that on
+    purpose, use the trigger rule {"never": {}}.
+    """
+    if usernames is None:
+        return None
+    # A settings file is not validated, so the type can still be wrong here.
+    if not isinstance(usernames, (list, tuple, set, frozenset)):
+        logger.warning(
+            "The OIDC user flags username list for %s of %s will be ignored because it is not a list of usernames",
+            flag,
+            sanitize_log_value(user.username),
+        )
+        return None
+    # Keep the valid names so one bad entry does not disable the whole list.
+    names = set()
+    invalid = False
+    for name in usernames:
+        if not isinstance(name, str):
+            invalid = True
+            continue
+        name = name.strip()
+        if not name:
+            invalid = True
+            continue
+        names.add(name)
+    if not usernames:
+        logger.warning(
+            "The OIDC user flags username list for %s of %s will be ignored because it is empty; use a trigger rule such as {\"never\": {}} to revoke the flag from everyone",
+            flag,
+            sanitize_log_value(user.username),
+        )
+        return None
+    if invalid:
+        if not names:
+            logger.warning(
+                "The OIDC user flags username list for %s of %s will be ignored because it contains no usable usernames",
+                flag,
+                sanitize_log_value(user.username),
+            )
+            return None
+        logger.warning(
+            "The OIDC user flags username list for %s of %s contains blank or non-string values that will be ignored",
+            flag,
+            sanitize_log_value(user.username),
+        )
+    if user.username in names:
+        return True
+    if not remove:
+        return None
+    return False
+
+
+def _remove_flag_setting(user_flags, flag, user):
+    """
+    Read one remove_<flag>s setting, which may come from an unvalidated file.
+
+    bool() would read the string "false" as True.  Unknown values turn removal
+    off, the safe direction for a destructive action.
+    """
+    key = 'remove_{}s'.format(flag)
+    if key not in user_flags:
+        return True
+    value = user_flags[key]
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        if value in BooleanField.TRUE_VALUES:
+            return True
+        if value in BooleanField.FALSE_VALUES:
+            return False
+    elif isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in BooleanField.TRUE_VALUES:
+            return True
+        if normalized in BooleanField.FALSE_VALUES or normalized in BooleanField.NULL_VALUES:
+            return False
+    elif value is None:
+        return False
+    logger.warning(
+        "The OIDC user flags setting %s of %s is not a boolean, so the flag will not be removed",
+        key,
+        sanitize_log_value(user.username),
+    )
+    return False
+
+
 def update_user_flags(backend, details, user=None, response=None, *args, **kwargs):
     """
     Grant or revoke superuser and system auditor from SOCIAL_AUTH_OIDC_USER_FLAGS.
 
-    A flag without a rule is left alone, so turning this on for auditors does
-    not touch who is a superuser.  With a rule, a user who matches gets the flag,
-    and one who does not loses it unless remove_<flag>s is false.
+    A flag is managed by a trigger rule, a username list, or both.  With both,
+    the rule goes first and the list can still grant a user the rule says
+    nothing about, as in the org and team maps.  Only a list without a rule
+    revokes the users it does not name; with a rule, revocation follows the rule
+    and remove_<flag>s.  An empty rule counts as no rule.  A flag with neither
+    is left alone.
     """
     if not user or not is_oidc(backend):
         return
@@ -221,14 +320,51 @@ def update_user_flags(backend, details, user=None, response=None, *args, **kwarg
     identity = OIDCIdentity(backend, response)
     save = False
     for flag, attribute in USER_FLAGS:
-        triggers = user_flags.get('triggers_{}'.format(flag))
-        if not triggers:
+        triggers_key = 'triggers_{}'.format(flag)
+        triggers = user_flags.get(triggers_key)
+        usernames = user_flags.get(attribute)
+        # Only an absent, null or empty rule means "no rule".  A malformed falsy
+        # one ([] or '' from a settings file) must not make the list
+        # authoritative, or it would revoke everyone the list does not name.
+        has_triggers = triggers is not None and triggers != {}
+        if not has_triggers and usernames is None:
             continue
-        remove = bool(user_flags.get('remove_{}s'.format(flag), True))
-        state = identity.resolve(triggers, 'OIDC user flag {}'.format(flag), lambda: None, remove)
-        if state is None or state == bool(getattr(user, attribute)):
+        remove = _remove_flag_setting(user_flags, flag, user)
+        # Only a list without a rule revokes.  With a rule, the list is just a
+        # fallback, and a skipped user is revoked by resolve_membership as before.
+        list_remove = remove and not has_triggers
+        trace = {}
+        state = identity.resolve(
+            triggers,
+            'OIDC user flag {}'.format(flag),
+            lambda: _match_username(user, usernames, list_remove, flag),
+            remove,
+            trace=trace,
+        )
+        previous = bool(getattr(user, attribute))
+        if state is None or state == previous:
             continue
-        logger.info("%s %s %s from the OIDC user flags", 'Granting' if state else 'Revoking', flag, user.username)
+        source = trace.get('source')
+        if source == 'trigger_rule':
+            reason = 'trigger_rule'
+        elif source == 'trigger_rule_skip_remove':
+            reason = 'trigger_rule_skip_remove'
+        elif source == 'fallback':
+            if trace.get('unusable_rule'):
+                reason = 'username_list_after_unusable_rule' if usernames is not None else 'none'
+            else:
+                reason = 'username_list' if usernames is not None else 'none'
+        else:
+            reason = source or 'unknown'
+        logger.info(
+            "OIDC user flag changed action=%s flag=%s user=%s old=%s new=%s source=SOCIAL_AUTH_OIDC_USER_FLAGS reason=%s",
+            'grant' if state else 'revoke',
+            flag,
+            sanitize_log_value(user.username),
+            previous,
+            state,
+            reason,
+        )
         setattr(user, attribute, state)
         # is_system_auditor is a role, which its setter writes on its own.
         save = save or attribute == 'is_superuser'

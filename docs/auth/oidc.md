@@ -138,20 +138,67 @@ shared one no longer applies to OIDC.
 
 ## Superusers and system auditors
 
-`SOCIAL_AUTH_OIDC_USER_FLAGS` hands out the two system wide flags:
+`SOCIAL_AUTH_OIDC_USER_FLAGS` hands out the two system wide flags. Each flag
+can be driven by a trigger rule, by a list of usernames, or by both:
 
 ```json
 {
   "triggers_superuser": {"groups": {"has_or": ["ascender-superusers"]}},
+  "is_superuser": ["fernando.roca"],
   "triggers_system_auditor": {"groups": {"has_or": ["ascender-auditors"]}},
+  "is_system_auditor": ["auditor"],
   "remove_superusers": true,
   "remove_system_auditors": true
 }
 ```
 
-A flag without a rule is left alone. With a rule, a user who matches gets the
-flag and a user who does not loses it at their next login, unless the matching
-`remove_` key is false.
+When both are given for a flag, the trigger rule is evaluated first and the
+usernames can grant a user the rule says nothing about, the same precedence the
+organization and team maps use. Only a list without a rule revokes the users it
+does not name; with a rule, an explicit deny revokes regardless of the `remove_`
+key, which only keeps a rule that skips a user from revoking. `is_superuser` and
+`is_system_auditor` are lists of usernames, the Ascender usernames, and are
+matched exactly and case-sensitively; they do not take the booleans,
+emails or regular expressions the organization and team maps do. Every entry
+must be a non-blank string; surrounding whitespace is trimmed and duplicate
+names are ignored. A bare string is not a list, so write the value as a JSON
+array even for one username. Use the trigger rules for matching on the
+provider's claims. The API rejects a value that is not an array of non-blank
+strings, but a value written directly into a settings file is not validated: at
+login, non-list values and blank or non-string entries are ignored with a
+warning, and the list is evaluated from the names that remain.
+
+A flag with neither a rule nor a username list is left alone. A list with no
+rule is authoritative: a user it does not name loses the flag at their next
+login unless the matching `remove_` key is false. An empty list is ignored with
+a warning, like `null`, so a list that ends up empty by mistake cannot strip the
+flag from every user. To deliberately revoke a flag from everyone, use a trigger
+rule that denies everyone:
+
+```json
+{"triggers_superuser": {"never": {}}}
+```
+
+This revokes the flag at each user's next login whatever the `remove_` key says,
+and it overrides any username list for that flag. With a trigger rule, the list never
+revokes: a user the rule skips is still handled by the rule's own `remove_` key,
+and when the rule cannot be evaluated, listed users are still granted while
+everyone else is left alone. An empty rule (`{}`) is treated as no rule, so a
+username list alongside it decides by itself. A list that contains only blank
+or non-string entries is ignored with a warning rather than treated as an empty
+list. Each flag is handled independently, so this decides `is_superuser` and
+`is_system_auditor` separately.
+
+Usernames are the Ascender usernames, which
+`SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN` may have shortened to the part before
+the `@` when the account was created, and an existing account keeps the name it
+had. List a user by the name Ascender shows, not by the claim the provider
+sent. The lists match against the stored username.
+
+A username can also be claimed before the intended account exists, so treat
+these lists as a convenience rather than a proof of identity. For a grant that
+has to follow an immutable identifier, use a trigger rule on the provider's
+`sub` claim or on a group instead.
 
 Keep a local superuser that does not log in through OIDC. The social auth
 pipeline links an OIDC identity to an existing account with the same email, and
