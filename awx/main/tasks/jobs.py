@@ -1180,10 +1180,16 @@ class RunJob(SourceControlMixin, BaseTask):
             return
         if self.should_use_fact_cache() and self.runner_callback.artifacts_processed:
             job.log_lifecycle("finish_job_fact_cache")
+            if job.inventory.kind == 'constructed':
+                hosts_qs = job.get_source_hosts_for_constructed_inventory()
+            else:
+                hosts_qs = job.inventory.hosts
             finish_fact_cache(
+                hosts_qs,
                 artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(job.id)),
                 job_id=job.id,
                 inventory_id=job.inventory_id,
+                job_created=job.created,
             )
 
     def final_run_hook(self, job, status, private_data_dir):
@@ -1631,17 +1637,25 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
         # these must come in order, and in order _before_ the constructed inventory itself
         if inventory_update.inventory.kind == 'constructed':
             inventory_update.log_lifecycle("start_job_fact_cache")
-            for input_inventory in inventory_update.inventory.input_inventories.all():
+            input_inventories = list(inventory_update.inventory.input_inventories.all())
+            for input_inventory in input_inventories:
                 args.append('-i')
                 script_params = dict(hostvars=True, towervars=True)
                 source_inv_path = self.write_inventory_file(input_inventory, private_data_dir, f'hosts_{input_inventory.id}', script_params)
                 args.append(to_container_path(source_inv_path, private_data_dir))
-                # Include any facts from input inventories so they can be used in filters
-                start_fact_cache(
-                    input_inventory.hosts.only(*HOST_FACTS_FIELDS),
-                    artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(inventory_update.id)),
-                    inventory_id=input_inventory.id,
-                )
+            # Include any facts from input inventories so they can be used in filters.
+            # They share one cache directory, and host names from different inputs can
+            # collide in the ansible-core 2.19+ cache format, so the names of all of them
+            # are checked together while the hosts and their facts are streamed.
+            host_names = set()
+            for input_inventory in input_inventories:
+                host_names.update(input_inventory.hosts.values_list('name', flat=True))
+            start_fact_cache(
+                (host for input_inventory in input_inventories for host in input_inventory.hosts.only(*HOST_FACTS_FIELDS).iterator()),
+                artifacts_dir=os.path.join(private_data_dir, 'artifacts', str(inventory_update.id)),
+                inventory_id=inventory_update.inventory_id,
+                host_names=host_names,
+            )
 
         # Add arguments for the source inventory file/script/thing
         rel_path = self.pseudo_build_inventory(inventory_update, private_data_dir)
