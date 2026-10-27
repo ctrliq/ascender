@@ -2,7 +2,6 @@ import logging
 
 from django.db import migrations
 from django.db.models import F, Q
-from django.utils.timezone import now
 
 logger = logging.getLogger('awx.main.migrations')
 
@@ -45,9 +44,14 @@ def revoke_owner_rewritten_tokens(apps, schema_editor):
     access_ids = list(OAuth2AccessToken.objects.filter(Q(application__in=owned) | rewritten).values_list('pk', flat=True))
     if not access_ids and not owned.exists():
         return
-    # Revoked the way RefreshToken.revoke() does it: marked, not deleted. Done
-    # before the access tokens go, since deleting them clears access_token.
-    refresh_count = OAuth2RefreshToken.objects.filter(Q(application__in=owned) | Q(access_token__in=access_ids), revoked__isnull=True).update(revoked=now())
+    # Deleted rather than marked revoked. The unique key is (token, revoked) and
+    # NULLs are distinct, so two live rows may share a token, and stamping one
+    # revoked time on both would abort the upgrade. A deleted refresh token gets
+    # the same invalid_grant. Done before the access tokens go, since deleting
+    # them clears access_token.
+    refresh_tokens = OAuth2RefreshToken.objects.filter(Q(application__in=owned) | Q(access_token__in=access_ids), revoked__isnull=True)
+    refresh_count = refresh_tokens.count()
+    refresh_tokens.delete()
     OAuth2AccessToken.objects.filter(pk__in=access_ids).delete()
     logger.warning(
         'Revoked %d access and %d refresh tokens that an OAuth2 application owner may have taken over (applications with an owner: %s); their users must obtain new tokens.',

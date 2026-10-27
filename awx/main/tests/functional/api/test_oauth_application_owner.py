@@ -187,7 +187,7 @@ def test_upgrade_revokes_tokens_already_given_to_the_owner(get, post, organizati
 
     assert _as(get, 'swapped').status_code == 401
     assert not AccessToken.objects.filter(application=owned).exists()
-    assert RefreshToken.objects.get(token='alice-refresh').revoked is not None
+    assert not RefreshToken.objects.filter(token='alice-refresh').exists()
     resp = _grant(post, owned, 'grant_type=refresh_token&refresh_token=alice-refresh')
     assert resp.status_code == 400 and 'access_token' not in json.loads(resp.content)
     assert _whoami(get, unowned_token) == 'alice'
@@ -214,6 +214,23 @@ def test_upgrade_revokes_rewritten_tokens_of_a_formerly_owned_application(get, p
     _run_upgrade(registry, settings)
 
     assert _as(get, 'swapped').status_code == 401
-    assert RefreshToken.objects.get(token='alice-refresh').revoked is not None
+    assert not RefreshToken.objects.filter(token='alice-refresh').exists()
     assert _whoami(get, kept) == 'alice'
     assert AccessToken.objects.get(token=kept).refresh_token.revoked is None
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('registry', ['historical', 'live'])
+def test_upgrade_survives_live_refresh_tokens_sharing_a_token(organization, admin, alice, registry, settings):
+    # The unique key is (token, revoked) and NULLs are distinct, so two live rows
+    # may share a token. One revoked timestamp for both would raise IntegrityError.
+    owned = Application.objects.create(name='owned', organization=organization, user=admin, client_type='confidential', authorization_grant_type='password')
+    for name in ('first', 'second'):
+        access = AccessToken.objects.create(user=admin, application=owned, token=name, expires=now() + timedelta(days=1), scope='write')
+        RefreshToken.objects.create(user=alice, application=owned, token='same-value', access_token=access)
+    assert RefreshToken.objects.filter(revoked__isnull=True).values('token').distinct().count() == 1
+
+    _run_upgrade(registry, settings)
+
+    assert not RefreshToken.objects.filter(application=owned).exists()
+    assert not AccessToken.objects.filter(application=owned).exists()

@@ -26,8 +26,8 @@ def org_app(organization):
     return Application.objects.create(name='org app', organization=organization, client_type='confidential', authorization_grant_type='password')
 
 
-def _client_auth(app):
-    return 'Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([app.client_id, app.client_secret]))))
+def _client_auth(app, secret=None):
+    return 'Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([app.client_id, secret or app.client_secret]))))
 
 
 def _deactivate(user):
@@ -44,6 +44,40 @@ def _me(get, **headers):
     # OAuth2AccessToken.is_valid() records last_used in an on_commit hook.
     with immediate_on_commit():
         return get(ME, **headers)
+
+
+def _token_request(post, app, data, secret=None):
+    return post(TOKEN_URL, data=urllib.parse.urlencode(data), content_type='application/x-www-form-urlencoded', HTTP_AUTHORIZATION=_client_auth(app, secret))
+
+
+def _issue_code(organization, user, mocker, browser):
+    # Returns the application and the token-request fields for a code issued to `user`.
+    mocker.patch('awx.main.middleware.is_migrating', return_value=False)
+    app = Application.objects.create(
+        name='code app',
+        organization=organization,
+        client_type='confidential',
+        authorization_grant_type='authorization-code',
+        redirect_uris=REDIRECT_URI,
+        skip_authorization=True,
+    )
+    browser.force_login(user, backend='awx.main.backends.AWXModelBackend')
+    verifier = 'v' * 64
+    challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip('=')
+    query = urllib.parse.urlencode(
+        {
+            'response_type': 'code',
+            'client_id': app.client_id,
+            'redirect_uri': REDIRECT_URI,
+            'scope': 'write',
+            'code_challenge': challenge,
+            'code_challenge_method': 'S256',
+        }
+    )
+    resp = browser.get(OAUTH_ROOT + 'authorize/?' + query)
+    assert resp.status_code == 302 and resp['Location'].startswith(REDIRECT_URI), (resp.status_code, resp.get('Location'))
+    code = urllib.parse.parse_qs(urllib.parse.urlparse(resp['Location']).query)['code'][0]
+    return app, {'grant_type': 'authorization_code', 'code': code, 'redirect_uri': REDIRECT_URI, 'code_verifier': verifier}
 
 
 def _password_grant(post, app, username):
@@ -146,44 +180,32 @@ def test_session_refused_for_inactive_user(alice, mocker, browser):
 
 
 @pytest.mark.django_db
-def test_authorization_code_refused_after_owner_deactivated(get, post, organization, alice, mocker, browser):
+def test_authorization_code_refused_after_owner_deactivated(post, organization, alice, mocker, browser):
     # A code issued just before deactivation must not be exchangeable for its remaining lifetime.
-    mocker.patch('awx.main.middleware.is_migrating', return_value=False)
-    app = Application.objects.create(
-        name='code app',
-        organization=organization,
-        client_type='confidential',
-        authorization_grant_type='authorization-code',
-        redirect_uris=REDIRECT_URI,
-        skip_authorization=True,
-    )
-    browser.force_login(alice, backend='awx.main.backends.AWXModelBackend')
-    verifier = 'v' * 64
-    challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip('=')
-    query = urllib.parse.urlencode(
-        {
-            'response_type': 'code',
-            'client_id': app.client_id,
-            'redirect_uri': REDIRECT_URI,
-            'scope': 'write',
-            'code_challenge': challenge,
-            'code_challenge_method': 'S256',
-        }
-    )
-    resp = browser.get(OAUTH_ROOT + 'authorize/?' + query)
-    assert resp.status_code == 302 and resp['Location'].startswith(REDIRECT_URI), (resp.status_code, resp.get('Location'))
-    code = urllib.parse.parse_qs(urllib.parse.urlparse(resp['Location']).query)['code'][0]
-
+    app, data = _issue_code(organization, alice, mocker, browser)
     _deactivate(alice)
-    resp = post(
-        TOKEN_URL,
-        data=urllib.parse.urlencode({'grant_type': 'authorization_code', 'code': code, 'redirect_uri': REDIRECT_URI, 'code_verifier': verifier}),
-        content_type='application/x-www-form-urlencoded',
-        HTTP_AUTHORIZATION=_client_auth(app),
-    )
+    resp = _token_request(post, app, data)
     assert resp.status_code == 400, (resp.status_code, resp.content)
     _assert_invalid_grant(resp)
     assert not AccessToken.objects.filter(application=app).exists()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('is_active', [True, False])
+@pytest.mark.parametrize('grant', ['refresh_token', 'authorization_code'])
+def test_wrong_client_secret_does_not_reveal_whether_user_is_active(post, org_app, organization, alice, mocker, browser, is_active, grant):
+    # Client authentication comes first, so without the client secret an inactive user's
+    # refresh token or code gets the same invalid_client as an active user's.
+    if grant == 'refresh_token':
+        app = org_app
+        data = {'grant_type': 'refresh_token', 'refresh_token': json.loads(_password_grant(post, app, 'alice').content)['refresh_token']}
+    else:
+        app, data = _issue_code(organization, alice, mocker, browser)
+    alice.is_active = is_active
+    alice.save()
+    resp = _token_request(post, app, data, secret='wrong-secret')
+    assert resp.status_code == 401, (resp.status_code, resp.content)
+    assert json.loads(resp.content)['error'] == 'invalid_client'
 
 
 @pytest.mark.django_db

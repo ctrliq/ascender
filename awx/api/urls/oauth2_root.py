@@ -8,13 +8,32 @@ from django.urls import path
 
 from oauthlib import oauth2
 from oauth2_provider import views
-from oauth2_provider.models import get_grant_model
+from oauth2_provider.oauth2_validators import OAuth2Validator
 
 from awx.main.models import RefreshToken
 from awx.api.views.root import ApiOAuthAuthorizationRootView
 
 
+class ActiveUserOAuth2Validator(OAuth2Validator):
+    """Refuse refresh and authorization-code grants for inactive users.
+
+    DOT checks is_active for the password grant only, so a refresh token or
+    code issued before deactivation would still mint tokens. oauthlib calls
+    these after it has authenticated the client, and DOT's own lookup finds the
+    token, so the refusal is the invalid_grant a revoked token gets and says
+    nothing about the account to a caller without the client's credentials.
+    """
+
+    def validate_code(self, client_id, code, client, request, *args, **kwargs):
+        return super().validate_code(client_id, code, client, request, *args, **kwargs) and request.user.is_active
+
+    def validate_refresh_token(self, refresh_token, client, request, *args, **kwargs):
+        return super().validate_refresh_token(refresh_token, client, request, *args, **kwargs) and request.user.is_active
+
+
 class TokenView(views.TokenView):
+    validator_class = ActiveUserOAuth2Validator
+
     def create_token_response(self, request):
         # Django OAuth2 Toolkit has a bug whereby refresh tokens are *never*
         # properly expired (ugh):
@@ -23,26 +42,12 @@ class TokenView(views.TokenView):
         #
         # This code detects and auto-expires them on refresh grant
         # requests.
-        grant_user = None
         if request.POST.get('grant_type') == 'refresh_token' and 'refresh_token' in request.POST:
             refresh_token = RefreshToken.objects.filter(token=request.POST['refresh_token']).first()
             if refresh_token:
                 expire_seconds = settings.OAUTH2_PROVIDER.get('REFRESH_TOKEN_EXPIRE_SECONDS', 0)
                 if refresh_token.created + timedelta(seconds=expire_seconds) < now():
                     return request.build_absolute_uri(), {}, 'The refresh token has expired.', '403'
-                grant_user = refresh_token.user
-        elif request.POST.get('grant_type') == 'authorization_code' and 'code' in request.POST:
-            grant = get_grant_model().objects.filter(code=request.POST['code']).first()
-            if grant:
-                grant_user = grant.user
-        # DOT checks is_active for the password grant only; a refresh token or
-        # authorization code issued before deactivation would still mint tokens.
-        # Answer as DOT does for a revoked token, so the client sees a standard
-        # error and the account's state is not disclosed.
-        if grant_user is not None and not grant_user.is_active:
-            error = oauth2.InvalidGrantError()
-            headers = {'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache'}
-            return request.build_absolute_uri(), headers, error.json, error.status_code
         try:
             return super(TokenView, self).create_token_response(request)
         except oauth2.AccessDeniedError as e:
