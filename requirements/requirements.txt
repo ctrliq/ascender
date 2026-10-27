@@ -10,7 +10,7 @@ aiohttp-retry==2.8.3
     # via twilio
 aiosignal==1.4.0
     # via aiohttp
-# ansible-runner @ git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
+# ansible-runner @ git+https://github.com/ansible/ansible-runner.git@fb826c258ea6e74ac2502c70e4ff3014ee443e40  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
@@ -50,7 +50,7 @@ botocore==1.43.80
     #   s3transfer
 cachetools==7.1.7
     # via -r /awx_devel/requirements/requirements.in
-# certifi @ git+https://github.com/ansible/system-certifi.git@devel  # git requirements installed separately
+# certifi @ git+https://github.com/ansible/system-certifi.git@5aa52ab91f9d579bfe52b5acf30ca799f1a563d9  # git requirements installed separately
     # via
     #   -r /awx_devel/requirements/requirements_git.txt
     #   kubernetes
