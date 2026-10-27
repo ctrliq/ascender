@@ -7,6 +7,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.test import RequestFactory
+from oauth2_provider.oauth2_validators import OAuth2Validator
 from rest_framework.exceptions import AuthenticationFailed
 
 from ascender.api.authentication import LoggedOAuth2Authentication
@@ -16,7 +17,6 @@ from ascender.dab.lib.channels import middleware
 from ascender.main.models import OAuth2AccessToken
 
 PARENT_TOKEN_RESPONSE = 'oauth2_provider.views.TokenView.create_token_response'
-INVALID_GRANT_HEADERS = {'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache'}
 
 
 def _user(username='alice', is_active=True):
@@ -45,64 +45,52 @@ class TestLoggedOAuth2Authentication:
             assert LoggedOAuth2Authentication().authenticate(mock.Mock()) is None
 
 
-class TestTokenViewInactiveUser:
-    def _respond(self, data, refresh_token=None, grant=None):
-        request = RequestFactory().post('/api/o/token/', data)
-        with (
-            mock.patch.object(oauth2_root.OAuth2RefreshToken.objects, 'filter') as rt_filter,
-            mock.patch.object(oauth2_root, 'get_grant_model', create=True) as grant_model,
-            mock.patch(PARENT_TOKEN_RESPONSE, return_value='issued') as parent,
-        ):
-            rt_filter.return_value.first.return_value = refresh_token
-            grant_model.return_value.objects.filter.return_value.first.return_value = grant
-            return oauth2_root.TokenView().create_token_response(request), parent
+class TestActiveUserOAuth2Validator:
+    # oauthlib calls these after authenticating the client; False becomes invalid_grant.
+    @pytest.fixture(params=['validate_refresh_token', 'validate_code'])
+    def method(self, request):
+        return request.param
 
-    def _refresh_token(self, user):
-        from django.utils.timezone import now
+    def _validate(self, method, user, dot_result=True):
+        def dot_validate(self, *args, **kwargs):
+            args[-1].user = user
+            return dot_result
 
-        return mock.Mock(user=user, created=now())
+        request = mock.Mock(user=None)
+        args = ('refresh', mock.Mock(), request) if method == 'validate_refresh_token' else ('client-id', 'code', mock.Mock(), request)
+        with mock.patch.object(OAuth2Validator, method, dot_validate):
+            return getattr(oauth2_root.ActiveUserOAuth2Validator(), method)(*args)
 
-    @pytest.mark.parametrize('is_active', [True, False])
-    def test_refresh_grant(self, is_active):
-        ret, parent = self._respond({'grant_type': 'refresh_token', 'refresh_token': 'r'}, refresh_token=self._refresh_token(_user(is_active=is_active)))
-        if is_active:
-            assert ret == 'issued'
-        else:
-            assert ret[1:] == (INVALID_GRANT_HEADERS, '{"error": "invalid_grant"}', 400)
-            parent.assert_not_called()
+    def test_active_user_passes(self, method):
+        assert self._validate(method, _user()) is True
 
-    @pytest.mark.parametrize('is_active', [True, False])
-    def test_authorization_code_grant(self, is_active):
-        # A code issued just before deactivation stays redeemable for AUTHORIZATION_CODE_EXPIRE_SECONDS.
-        ret, parent = self._respond({'grant_type': 'authorization_code', 'code': 'c'}, grant=mock.Mock(user=_user(is_active=is_active)))
-        if is_active:
-            assert ret == 'issued'
-        else:
-            assert ret[1:] == (INVALID_GRANT_HEADERS, '{"error": "invalid_grant"}', 400)
-            parent.assert_not_called()
+    def test_inactive_user_is_refused(self, method):
+        # DOT's validate_refresh_token and validate_code set request.user without checking is_active.
+        assert self._validate(method, _user(is_active=False)) is False
 
+    def test_dot_refusal_is_kept(self, method):
+        assert self._validate(method, _user(), dot_result=False) is False
+
+    def test_token_view_uses_it(self):
+        # get_oauthlib_core() caches per class, so check the server it actually builds.
+        assert isinstance(oauth2_root.TokenView.get_server().request_validator, oauth2_root.ActiveUserOAuth2Validator)
+
+
+class TestTokenViewRefreshExpiry:
     def test_expired_refresh_token_still_reported_as_expired(self):
         from datetime import timedelta
         from django.utils.timezone import now
 
-        expired = mock.Mock(user=_user(is_active=False), created=now() - timedelta(days=3650))
-        ret, parent = self._respond({'grant_type': 'refresh_token', 'refresh_token': 'r'}, refresh_token=expired)
+        request = RequestFactory().post('/api/o/token/', {'grant_type': 'refresh_token', 'refresh_token': 'r'})
+        expired = mock.Mock(created=now() - timedelta(days=3650))
+        with (
+            mock.patch.object(oauth2_root.OAuth2RefreshToken.objects, 'filter') as rt_filter,
+            mock.patch(PARENT_TOKEN_RESPONSE) as parent,
+        ):
+            rt_filter.return_value.first.return_value = expired
+            ret = oauth2_root.TokenView().create_token_response(request)
         assert ret[2:] == ('The refresh token has expired.', '403')
         parent.assert_not_called()
-
-    @pytest.mark.parametrize(
-        'data',
-        [
-            {'grant_type': 'refresh_token', 'refresh_token': 'unknown'},
-            {'grant_type': 'authorization_code', 'code': 'unknown'},
-            {'grant_type': 'password', 'username': 'alice', 'password': 'x'},
-        ],
-    )
-    def test_unknown_or_other_grants_are_left_to_dot(self, data):
-        # DOT rejects unknown tokens and codes itself, and checks is_active for the password grant.
-        ret, parent = self._respond(data)
-        assert ret == 'issued'
-        parent.assert_called_once()
 
 
 class TestDrfAuthMiddlewareInactiveSessionUser:
