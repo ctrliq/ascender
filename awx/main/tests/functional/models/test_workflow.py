@@ -1,4 +1,6 @@
 # Python
+import multiprocessing
+
 import pytest
 from unittest import mock
 import json
@@ -972,6 +974,12 @@ class TestApprovalContextMessage:
     def test_non_identifier_artifact_keys(self, approval):
         # set_stats keys are arbitrary strings, they must not break rendering
         assert self._render(approval, '{{ ok }}', {'not-an-identifier!': 1, 'ok': 'yes'}) == 'yes'
+
+    def test_renders_inside_daemonic_process(self, approval, monkeypatch):
+        # dispatcher pool workers are daemonic multiprocessing children, and
+        # multiprocessing.Process.start() raises inside one
+        monkeypatch.setattr(multiprocessing.current_process(), 'daemon', True)
+        assert self._render(approval, 'context: {{ env }}', {'env': 'prod'}) == 'context: prod'
 
     def test_template_error_does_not_raise(self, approval):
         assert self._render(approval, '{% if %}', {'x': 1}) == ''
