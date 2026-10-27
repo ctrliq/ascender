@@ -99,9 +99,6 @@ class OAuth2TokenSerializer(BaseOAuth2TokenSerializer):
         validated_data['token'] = generate_token()
         validated_data['expires'] = now() + timedelta(seconds=settings.OAUTH2_PROVIDER['ACCESS_TOKEN_EXPIRE_SECONDS'])
         obj = super(OAuth2TokenSerializer, self).create(validated_data)
-        if obj.application and obj.application.user:
-            obj.user = obj.application.user
-        obj.save()
         if obj.application:
             OAuth2RefreshToken.objects.create(user=current_user, token=generate_token(), application=obj.application, access_token=obj)
         return obj
