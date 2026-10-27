@@ -540,7 +540,7 @@ function Visualizer({ template }) {
               })
             );
           }
-        } else if (node.isEdited) {
+        } else if (node.isEdited && node.originalNodeObject) {
           if (
             node.fullUnifiedJobTemplate.type === 'workflow_approval_template'
           ) {
