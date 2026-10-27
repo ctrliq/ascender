@@ -166,6 +166,11 @@ def _historical_apps(settings):
     return MigrationLoader(None).project_state(('main', '0229_project_reuse_requirements')).apps
 
 
+def _run_upgrade(registry, settings):
+    migration = importlib.import_module('ascender.main.migrations.0230_revoke_owner_rewritten_oauth2_tokens')
+    migration.revoke_owner_rewritten_tokens(_historical_apps(settings) if registry == 'historical' else apps, None)
+
+
 @pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize('registry', ['historical', 'live'])
 def test_upgrade_revokes_tokens_already_given_to_the_owner(get, post, organization, admin, alice, registry, settings):
@@ -181,8 +186,7 @@ def test_upgrade_revokes_tokens_already_given_to_the_owner(get, post, organizati
     unowned_token = json.loads(resp.content)['access_token']
     personal = AccessToken.objects.create(user=admin, token='personal', expires=now() + timedelta(days=1), scope='write')
 
-    migration = importlib.import_module('ascender.main.migrations.0230_revoke_tokens_of_owned_oauth2_applications')
-    migration.revoke_tokens_of_owned_applications(_historical_apps(settings) if registry == 'historical' else apps, None)
+    _run_upgrade(registry, settings)
 
     assert _as(get, 'swapped').status_code == 401
     assert not AccessToken.objects.filter(application=owned).exists()
@@ -192,3 +196,27 @@ def test_upgrade_revokes_tokens_already_given_to_the_owner(get, post, organizati
     assert _whoami(get, unowned_token) == 'alice'
     assert _whoami(get, personal.token) == 'admin'
     assert RefreshToken.objects.get(application=unowned).revoked is None
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('registry', ['historical', 'live'])
+def test_upgrade_revokes_rewritten_tokens_of_a_formerly_owned_application(get, post, organization, admin, alice, registry, settings):
+    # The owner was cleared after the receiver had rewritten alice's token, as the
+    # update(user=None) workaround does, so only the refresh token still names alice.
+    formerly_owned = Application.objects.create(
+        name='formerly owned', organization=organization, user=admin, client_type='confidential', authorization_grant_type='password'
+    )
+    swapped = AccessToken.objects.create(user=admin, application=formerly_owned, token='swapped', expires=now() + timedelta(days=1), scope='write')
+    RefreshToken.objects.create(user=alice, application=formerly_owned, token='alice-refresh', access_token=swapped)
+    Application.objects.filter(pk=formerly_owned.pk).update(user=None)
+    assert _whoami(get, 'swapped') == 'admin'
+    # alice's token issued after the owner was cleared is hers on both sides and stays.
+    resp = _grant(post, formerly_owned, 'grant_type=password&username=alice&password=alice&scope=write')
+    kept = json.loads(resp.content)['access_token']
+
+    _run_upgrade(registry, settings)
+
+    assert _as(get, 'swapped').status_code == 401
+    assert RefreshToken.objects.get(token='alice-refresh').revoked is not None
+    assert _whoami(get, kept) == 'alice'
+    assert AccessToken.objects.get(token=kept).refresh_token.revoked is None
