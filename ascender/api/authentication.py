@@ -7,9 +7,10 @@ import logging
 # Django
 from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _
 
 # Django REST Framework
-from rest_framework import authentication
+from rest_framework import authentication, exceptions
 
 # Django-OAuth-Toolkit
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -43,6 +44,9 @@ class LoggedOAuth2Authentication(OAuth2Authentication):
         ret = super(LoggedOAuth2Authentication, self).authenticate(request)
         if ret:
             user, token = ret
+            # DOT's bearer validation never checks is_active; refuse like DRF's Basic and Session auth do.
+            if user is not None and not user.is_active:
+                raise exceptions.AuthenticationFailed(_('User inactive or deleted.'))
             username = user.username if user else '<none>'
             logger.info(
                 smart_str("User {} performed a {} to {} through the API using OAuth 2 token {}.".format(username, request.method, request.path, token.pk))
