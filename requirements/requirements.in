@@ -1,4 +1,4 @@
-aiohttp>=3.14.3  # CVE-2026-69244 CVE-2026-59881 CVE-2026-69243
+aiohttp>=3.14.4
 asciichartpy
 azure-identity>=1.25.2
 # only azure.keyvault.secrets is used (credential_plugins/azure_kv.py); the
@@ -26,9 +26,9 @@ django-solo
 drf-spectacular>=0.27.0
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
 django-valkey
-djangorestframework>=3.17.2 # CVE-2026-73228 CVE-2026-73229
-filelock
-GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
+djangorestframework>=3.18.2
+filelock>=4.2.1
+GitPython>=3.2.1
 importlib-metadata==9.0.0
 inflection  # used by vendored awx/dab (formerly a django-ansible-base dep)
 jaraco.functools>= 4
@@ -42,7 +42,7 @@ prometheus-client
 psycopg
 psutil
 pygithub
-pyjwt[crypto]  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
+pyjwt[crypto]>=2.15.0  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
 pyopenssl>=26.4.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
 pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host filtering: Expected 'or' term, found 'or'  (at char 15), (line:1, col:16)
 python-dsv-sdk>=1.0.4
@@ -58,12 +58,12 @@ slack-sdk
 tacacs-plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
 twilio
 twisted[tls]>=26.4.0   # CVE-2026-42304
-urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
+urllib3>=2.8.0
 uWSGI>=2.0.22 # CVE-2023-27522
 valkey[libvalkey]
 wheel>=0.46.2  # CVE-2026-24049
 pip==26.2.1  # CVE-2026-13346
-setuptools==84.0.0  # CVE-2026-59890
+setuptools==84.1.0  # CVE-2026-59890
 setuptools-scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
