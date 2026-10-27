@@ -4,17 +4,21 @@ import { Formik } from 'formik';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import MultipleChoiceField from './MultipleChoiceField';
 
-// The CheckIcon styled-component encodes the `selected` prop purely as a CSS
-// color rule (selected -> secondary active color, unselected -> disabled
-// color). To proxy the `selected` prop we read the resolved color on the
-// rendered <svg>.
-const SELECTED_COLOR = 'var(--pf-v6-c-button--m-secondary--active--Color)';
+// The default toggle shows its state two ways that must agree: a modifier
+// class on the button, which the stylesheet colours, and aria-pressed.
+const SELECTED_CLASS =
+  'ascender-multiple-choice-field__default-toggle--selected';
 
 const isSelected = (ouiaId) => {
-  const icon = document.querySelector(
-    `[data-ouia-component-id="${ouiaId}"] svg`
-  );
-  return window.getComputedStyle(icon).color === SELECTED_COLOR;
+  const button = document.querySelector(`[data-ouia-component-id="${ouiaId}"]`);
+  const byClass = button.classList.contains(SELECTED_CLASS);
+  const byAria = button.getAttribute('aria-pressed') === 'true';
+  if (byClass !== byAria) {
+    throw new Error(
+      `${ouiaId}: class=${byClass} aria-pressed=${byAria} disagree`
+    );
+  }
+  return byClass;
 };
 
 const toggleButton = (ouiaId) =>
@@ -38,6 +42,7 @@ describe('<MultipleChoiceField/>', () => {
     );
 
     expect(isSelected('alex-button')).toBe(true);
+    expect(isSelected('athena-button')).toBe(false);
 
     fireEvent.click(toggleButton('alex-button'));
     await waitFor(() => expect(isSelected('alex-button')).toBe(false));

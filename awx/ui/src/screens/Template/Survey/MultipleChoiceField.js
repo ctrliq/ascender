@@ -10,7 +10,7 @@ import {
   Button,
   InputGroup as PFInputGroup,
 } from '@patternfly/react-core';
-import PFCheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
+import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
 import styled from 'styled-components';
 import Popover from 'components/Popover';
 
@@ -22,11 +22,40 @@ const HelperTextWrapper = styled.div`
   font-size: var(--pf-v6-c-form__label--FontSize);
 `;
 
-const CheckIcon = styled(PFCheckIcon)`
-  color: var(--pf-v6-c-button--m-plain--disabled--Color);
-  ${(props) =>
-    props.selected &&
-    `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
+/*
+ * The default-choice toggle is a control button whose background shows the
+ * state: the brand colour when the choice is the default, a disabled-looking
+ * grey when it is not (including the disabled toggle on a still-empty row).
+ *
+ * The themes paint every control button in the brand colour with
+ * high-specificity nested rules (html[data-theme] ...
+ * .pf-v6-c-button.pf-m-control, with :not(:disabled), :hover and :disabled
+ * variants), so the grey state has to use !important to win. PatternFly draws
+ * the border with a ::after pseudo-element from --pf-v6-c-button--BorderColor,
+ * so that variable has to change as well as border-color (the light, dark and
+ * awx themes also set a real border on the element). The selected
+ * state lets the theme through and only supplies a fallback for themes that do
+ * not style control buttons.
+ */
+const DefaultToggle = styled(Button)`
+  &.ascender-multiple-choice-field__default-toggle--selected {
+    background-color: var(--pf-t--global--color--brand--default);
+    color: var(--pf-t--global--text--color--on-brand--default);
+  }
+
+  &:not(.ascender-multiple-choice-field__default-toggle--selected) {
+    --pf-v6-c-button--BorderColor: var(
+      --pf-t--global--border--color--disabled
+    ) !important;
+    --pf-v6-c-button--hover--BorderColor: var(
+      --pf-t--global--border--color--disabled
+    ) !important;
+    background: var(
+      --pf-t--global--background--color--disabled--default
+    ) !important;
+    border-color: var(--pf-t--global--border--color--disabled) !important;
+    color: var(--pf-t--global--icon--color--disabled) !important;
+  }
 `;
 
 function MultipleChoiceField({ label, tooltip }) {
@@ -106,9 +135,17 @@ function MultipleChoiceField({ label, tooltip }) {
               formattedChoicesHelpers.setValue(newValues);
             }}
           />
-          <Button
+          <DefaultToggle
             variant="control"
+            className={[
+              'ascender-multiple-choice-field__default-toggle',
+              isDefault &&
+                'ascender-multiple-choice-field__default-toggle--selected',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             aria-label={t`Click to toggle default value`}
+            aria-pressed={isDefault}
             ouiaId={choice ? `${choice}-button` : 'new-choice-button'}
             isDisabled={!choice.trim()}
             onClick={() => {
@@ -141,8 +178,8 @@ function MultipleChoiceField({ label, tooltip }) {
                 : formattedChoicesHelpers.setValue(newValues);
             }}
           >
-            <CheckIcon selected={isDefault} />
-          </Button>
+            <CheckIcon />
+          </DefaultToggle>
         </InputGroup>
       ))}
       <FormHelperText>
