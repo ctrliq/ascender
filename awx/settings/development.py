@@ -115,3 +115,9 @@ from .statement_timeout import set_statement_timeout
 set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT)  # NOQA
 
 del set_statement_timeout
+
+from .connection_reuse import set_conn_max_age
+
+set_conn_max_age(DATABASES, DATABASE_CONN_MAX_AGE)  # NOQA
+
+del set_conn_max_age
