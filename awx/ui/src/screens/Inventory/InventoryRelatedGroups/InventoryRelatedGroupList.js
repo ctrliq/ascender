@@ -22,6 +22,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
 import InventoryGroupRelatedGroupListItem from './InventoryRelatedGroupListItem';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 const QS_CONFIG = getQSConfig('group', {
   page: 1,
@@ -72,7 +73,7 @@ function InventoryRelatedGroupList() {
         canAdd:
           actions.data.actions &&
           Object.prototype.hasOwnProperty.call(actions.data.actions, 'POST') &&
-          inventoryType !== 'constructed_inventory',
+          !isReadOnlyInventoryType(inventoryType),
       };
     }, [groupId, location.search, inventoryType, inventoryId]),
     {
@@ -166,7 +167,7 @@ function InventoryRelatedGroupList() {
       ]}
     />
   );
-  const isNotConstructedInventory = inventoryType !== 'constructed_inventory';
+  const isNotReadOnlyInventory = !isReadOnlyInventoryType(inventoryType);
   return (
     <>
       <PaginatedTable
@@ -220,7 +221,7 @@ function InventoryRelatedGroupList() {
                     />,
                   ]
                 : []),
-              ...(isNotConstructedInventory
+              ...(isNotReadOnlyInventory
                 ? [
                     <DisassociateButton
                       key="disassociate"
@@ -236,7 +237,7 @@ function InventoryRelatedGroupList() {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
+            {isNotReadOnlyInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
           </HeaderRow>
         }
         renderRow={(group, index) => (
@@ -244,8 +245,8 @@ function InventoryRelatedGroupList() {
             key={group.id}
             rowIndex={index}
             group={group}
-            detailUrl={`/inventories/inventory/${inventoryId}/groups/${group.id}/details`}
-            editUrl={`/inventories/inventory/${inventoryId}/groups/${group.id}/edit`}
+            detailUrl={`/inventories/${inventoryType}/${inventoryId}/groups/${group.id}/details`}
+            editUrl={`/inventories/${inventoryType}/${inventoryId}/groups/${group.id}/edit`}
             isSelected={selected.some((row) => row.id === group.id)}
             onSelect={() => handleSelect(group)}
           />

@@ -7,6 +7,7 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link, useParams } from 'react-router';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
   const { t } = useLingui();
@@ -30,7 +31,7 @@ function InventoryGroupItem({ group, isSelected, onSelect, rowIndex }) {
           <b>{group.name}</b>
         </Link>
       </Td>
-      {inventoryType !== 'constructed_inventory' && (
+      {!isReadOnlyInventoryType(inventoryType) && (
         <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
           <ActionItem
             visible={group.summary_fields.user_capabilities.edit}

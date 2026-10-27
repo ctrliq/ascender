@@ -8,6 +8,7 @@ import { Button } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 function InventoryRelatedGroupListItem({
   detailUrl,
@@ -39,7 +40,7 @@ function InventoryRelatedGroupListItem({
           <b>{group.name}</b>
         </Link>
       </Td>
-      {inventoryType !== 'constructed_inventory' && (
+      {!isReadOnlyInventoryType(inventoryType) && (
         <ActionsTd dataLabel={t`Actions`}>
           <ActionItem
             tooltip={t`Edit Group`}
