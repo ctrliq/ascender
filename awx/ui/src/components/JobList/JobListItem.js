@@ -6,7 +6,6 @@ import { Label, Button } from '@patternfly/react-core';
 
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
 import { isJobRunning } from 'util/jobs';
 import getScheduleUrl from 'util/getScheduleUrl';
@@ -29,7 +28,6 @@ import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import JobCancelButton from '../JobCancelButton';
 
-const Dash = styled.span``;
 function JobListItem({
   isExpanded,
   onExpand,
@@ -94,12 +92,13 @@ function JobListItem({
           }}
           dataLabel={t`Select`}
         />
+        <Td dataLabel={t`ID`} modifier="fitContent">
+          {job.id}
+        </Td>
         <TdBreakWord id={labelId} dataLabel={t`Name`}>
           <span>
             <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
-              <b>
-                {job.id} <Dash>&mdash;</Dash> {job.name}
-              </b>
+              <b>{job.name || job.id}</b>
             </Link>
           </span>
         </TdBreakWord>
@@ -188,7 +187,7 @@ function JobListItem({
         ouiaId={`expanded-job-row-${job.id}`}
       >
         <Td colSpan={2} />
-        <Td colSpan={showTypeColumn ? 6 : 5}>
+        <Td colSpan={showTypeColumn ? 7 : 6}>
           <ExpandableRowContent>
             <DetailList>
               {job.type === 'inventory_update' && (

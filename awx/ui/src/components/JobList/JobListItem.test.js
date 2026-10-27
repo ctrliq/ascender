@@ -84,6 +84,16 @@ describe('<JobListItem />', () => {
     ).toBeInTheDocument();
   });
 
+  test('should show the ID in its own cell, not in the name link', () => {
+    expect(container.querySelector('td[data-label="ID"]')).toHaveTextContent(
+      /^123$/
+    );
+    // an exact name: the link no longer carries the ID prefix
+    expect(
+      within(container).getByRole('link', { name: 'Demo Job Template' })
+    ).toBeInTheDocument();
+  });
+
   test('should display expected details', () => {
     // Detail rows live in the (always-rendered) expandable row content.
     assertDetail(within(container), 'Job Slice', '1/3');
@@ -138,6 +148,10 @@ describe('<JobListItem />', () => {
     expect(
       container.querySelector('td[data-label="Type"]')
     ).not.toBeInTheDocument();
+    // the expanded row spans every column after expand + select
+    expect(
+      container.querySelector('tr[id="expanded-job-row-123"] > td:nth-child(2)')
+    ).toHaveAttribute('colspan', '6');
   });
 
   test('should show type column when showTypeColumn is true', () => {
@@ -150,6 +164,9 @@ describe('<JobListItem />', () => {
       />
     );
     expect(c.querySelector('td[data-label="Type"]')).toBeInTheDocument();
+    expect(
+      c.querySelector('tr[id="expanded-job-row-123"] > td:nth-child(2)')
+    ).toHaveAttribute('colspan', '7');
   });
 
   test('should not show schedule detail in expanded view', () => {
