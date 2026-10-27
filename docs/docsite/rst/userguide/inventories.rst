@@ -510,7 +510,9 @@ Key behaviors:
 - Each child job uses its source inventory's Instance Groups, not those of the federated inventory itself (the federated inventory carries no Instance Group assignment).
 - Source inventories that contribute **no matching hosts or groups** for the effective ``limit`` are skipped — no empty child job is dispatched for them.
 - Simple glob patterns (e.g. ``web*``) are resolved against the database before dispatch using an indexed prefix query. Exact name patterns use a direct index lookup.
-- Complex limit patterns containing ``:``, ``&``, or ``!`` operators are passed through to all source inventories and resolved by Ansible at run time, since Ascender cannot pre-evaluate them. This means child jobs may be dispatched for inventories that end up matching no hosts after Ansible applies the full pattern.
+- A comma-separated limit (e.g. ``web01,db01``) is a list of patterns, as in Ansible: a source inventory is included if any pattern in the list matches it.
+- A subscripted pattern (e.g. ``webservers[0]`` or ``webservers[0:2]``) is matched by its base name; Ansible picks the hosts by position at run time.
+- Complex limit patterns containing ``:``, ``&``, or ``!`` operators, ``~`` regular expressions, and ``@`` limit files are passed through to all source inventories and resolved by Ansible at run time, since Ascender cannot pre-evaluate them. This means child jobs may be dispatched for inventories that end up matching no hosts after Ansible applies the full pattern.
 - The resulting Workflow Job appears in the Jobs list and shows individual per-source child jobs, exactly as sliced jobs do.
 
 .. image:: ../common/images/inventory_federated_edit.png
@@ -541,7 +543,7 @@ Limitations
 - **No ad hoc commands**: Ad hoc commands bypass the job template launch path and run directly against the inventory. Because a federated inventory holds no hosts, ad hoc commands will produce no results. Use a job template instead.
 - **No inventory sync**: The federated inventory has no inventory source and does not support syncing. Host and group data come entirely from the input inventories.
 - **Plain inputs only**: Input inventories must be plain (standard) inventories. Smart, constructed, and federated inventories are not supported as inputs.
-- **Complex limit patterns**: Patterns using ``:``, ``&``, or ``!`` are not pre-evaluated by Ascender and are forwarded to all source inventories.
+- **Complex limit patterns**: Patterns using ``:``, ``&``, or ``!``, ``~`` regular expressions, and ``@`` limit files are not pre-evaluated by Ascender and are forwarded to all source inventories.
 
 
 User interface

@@ -1,5 +1,8 @@
 import pytest
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
+
 from awx.main.models import JobTemplate, Job, JobHostSummary, WorkflowJob, Inventory, Project, Organization
 from awx.main.models.jobs import _federated_inventory_has_matching_hosts
 
@@ -213,6 +216,23 @@ class TestFederatedInventoryLaunch:
         assert job.workflow_nodes.count() == 1
         assert job.workflow_nodes.first().ancestor_artifacts['source_inventory_id'] == src_web.id
 
+    def test_limit_comma_list_includes_each_listed_inventory(self, organization):
+        """A comma-separated limit is a list of patterns; every inventory matching one of them gets a node."""
+        fed = Inventory.objects.create(name='fed-inv', kind='federated', organization=organization)
+        src_web = Inventory.objects.create(name='src-web', kind='', organization=organization)
+        src_web.hosts.create(name='web01')
+        src_db = Inventory.objects.create(name='src-db', kind='', organization=organization)
+        src_db.hosts.create(name='db01')
+        src_app = Inventory.objects.create(name='src-app', kind='', organization=organization)
+        src_app.hosts.create(name='app01')
+        for src in (src_web, src_db, src_app):
+            fed.input_inventories.add(src)
+
+        jt = JobTemplate.objects.create(name='fed-jt', inventory=fed, organization=organization)
+        job = jt.create_unified_job(limit='web01,db01')
+        node_inv_ids = {n.ancestor_artifacts['source_inventory_id'] for n in job.workflow_nodes.all()}
+        assert node_inv_ids == {src_web.id, src_db.id}
+
     def test_limit_all_includes_all_non_empty(self, federated_inv_factory, organization):
         """No limit (or 'all') includes every non-empty source inventory."""
         fed, sources = federated_inv_factory(3)
@@ -359,3 +379,85 @@ class TestFederatedInventoryHasMatchingHosts:
         assert _federated_inventory_has_matching_hosts(inv, 'web:db') is True
         assert _federated_inventory_has_matching_hosts(inv, 'web&db') is True
         assert _federated_inventory_has_matching_hosts(inv, '!web') is True
+
+    def test_comma_separated_list(self, organization):
+        """A comma-separated limit matches if any of its patterns does, as in Ansible."""
+        inv = self._make_inv(organization, host_names=['web01'], group_names=['webservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'web01,db01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01, web01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'dbservers,webservers') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,web*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,app01') is False
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,,') is False
+
+    def test_comma_list_complex_item_failsafe(self, organization):
+        """A list containing a pattern that can't be pre-evaluated includes the inventory."""
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,!web') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,&web') is True
+
+    def test_regex_pattern_failsafe(self, organization):
+        """'~' patterns are regular expressions, evaluated by Ansible at run time."""
+        inv = self._make_inv(organization, host_names=['web01'])
+        assert _federated_inventory_has_matching_hosts(inv, '~web\\d+') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,~(web|app)01') is True
+
+    def test_subscript_matches_base_pattern(self, organization):
+        """'name[N]', 'name[N:M]' and 'name[N-M]' select hosts of 'name' by position, as in
+        Ansible; the brackets are not an fnmatch character class."""
+        webs = self._make_inv(organization, host_names=['web01', 'web02'], group_names=['webservers'])
+        dbs = Inventory.objects.create(name='test-src-db', kind='', organization=organization)
+        dbs.groups.create(name='databases').hosts.add(dbs.hosts.create(name='db01'))
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[-1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0:1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[1:]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'webservers[0-1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'web*[0]') is True
+        assert _federated_inventory_has_matching_hosts(dbs, 'databases[0],app01') is True
+        # The base pattern still has to match for the inventory to be included
+        assert _federated_inventory_has_matching_hosts(dbs, 'webservers[0]') is False
+        assert _federated_inventory_has_matching_hosts(webs, 'databases[0],app01') is False
+        # Brackets that aren't a trailing numeric subscript stay a character class; a numeric
+        # one is a subscript even where a class was meant ('web0' is not in the inventory)
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[a1]') is True
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[ab]') is False
+        assert _federated_inventory_has_matching_hosts(webs, 'web0[12]') is False
+
+    def test_limit_file_failsafe(self, organization):
+        """'@file' items are read by Ansible at run time, so the inventory is included."""
+        inv = self._make_inv(organization, host_names=['h1'])
+        assert _federated_inventory_has_matching_hosts(inv, '@hosts.txt') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'db01,@hosts.txt') is True
+
+    def test_comma_list_mixed_kinds(self, organization):
+        """Each kind of pattern in a list is checked; one match anywhere includes the inventory."""
+        inv = self._make_inv(organization, host_names=['web01', 'db01'], group_names=['appservers'])
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,q?q,web*01') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,app*') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,app?ervers') is True
+        assert _federated_inventory_has_matching_hosts(inv, 'missing,xyz*,q?q,[xy]z') is False
+
+    @pytest.mark.parametrize(
+        'make_item',
+        [
+            pytest.param(lambda i: f'missing{i}', id='exact'),
+            pytest.param(lambda i: f'missing{i}*', id='trailing-star'),
+            pytest.param(lambda i: f'missing{i}?', id='glob'),
+            pytest.param(lambda i: f'missing{i}[0]', id='subscript'),
+            pytest.param(lambda i: f'missing{i}*,other{i},o?{i}', id='mixed'),
+        ],
+    )
+    def test_query_count_does_not_grow_with_list_length(self, organization, make_item):
+        """The pre-filter runs in the launch request and limit is unbounded, so an
+        inventory that matches nothing must cost the same for 1 item as for 500."""
+        inv = self._make_inv(organization, host_names=[f'web{i:02d}' for i in range(20)], group_names=['webservers'])
+
+        def queries(n):
+            limit = ','.join(make_item(i) for i in range(n))
+            with CaptureQueriesContext(connection) as ctx:
+                assert _federated_inventory_has_matching_hosts(inv, limit) is False
+            return len(ctx.captured_queries)
+
+        assert queries(500) == queries(1)
