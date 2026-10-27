@@ -29,7 +29,7 @@ import {
 } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
-import { getCookie } from 'api/Base';
+import { submitSocialLoginForm } from 'util/socialLogin';
 import { useSession } from 'contexts/Session';
 import { applyTheme, getSavedThemeId, clearSessionTheme } from 'themeRegistry';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -177,16 +177,7 @@ function AWXLogin({ alt, isAuthenticated }) {
   // view, so navigate there with a CSRF-carrying form rather than a link.
   const startSocialLogin = (loginUrl) => {
     setSessionRedirect();
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = loginUrl;
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'csrfmiddlewaretoken';
-    input.value = getCookie('csrftoken') ?? '';
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
+    submitSocialLoginForm(loginUrl);
   };
 
   const socialAuthProviders = {
