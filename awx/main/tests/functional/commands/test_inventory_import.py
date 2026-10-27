@@ -526,3 +526,42 @@ class TestRelinkOrphanedJobHostSummaries:
 
         summary = JobHostSummary.objects.get(job=job_b, host_name='server1')
         assert summary.host_id is None, "Summary from inv_b should not be re-linked to inv_a's host"
+
+    def test_relink_only_updates_hosts_with_orphans(self, inventory):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+        from awx.main.models import JobHostSummary, Job, Project, JobTemplate
+
+        project = Project.objects.create(name='test-proj')
+        jt = JobTemplate.objects.create(name='test-jt', inventory=inventory, project=project)
+        hosts = [Host.objects.create(name=f'server{i}', inventory=inventory) for i in range(5)]
+        job = Job.objects.create(inventory=inventory, job_template=jt, status='successful')
+        JobHostSummary.objects.create(job=job, host=None, host_name='server3', ok=1)
+
+        cmd = inventory_import.Command()
+        cmd.inventory = inventory
+        cmd._batch_size = 2
+        with CaptureQueriesContext(connection) as ctx:
+            cmd._relink_orphaned_job_host_summaries()
+
+        updates = [q['sql'] for q in ctx.captured_queries if q['sql'].startswith('UPDATE "main_jobhostsummary"')]
+        assert len(updates) == 1
+        # One lookup per batch of names: 5 hosts in batches of 2
+        selects = [q['sql'] for q in ctx.captured_queries if q['sql'].startswith('SELECT DISTINCT "main_jobhostsummary"."host_name"')]
+        assert len(selects) == 3
+        assert JobHostSummary.objects.get(job=job, host_name='server3').host_id == hosts[3].pk
+
+    def test_relink_issues_no_updates_without_orphans(self, inventory):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+
+        for i in range(5):
+            Host.objects.create(name=f'server{i}', inventory=inventory)
+
+        cmd = inventory_import.Command()
+        cmd.inventory = inventory
+        cmd._batch_size = 2
+        with CaptureQueriesContext(connection) as ctx:
+            cmd._relink_orphaned_job_host_summaries()
+
+        assert not [q for q in ctx.captured_queries if q['sql'].startswith('UPDATE')]
