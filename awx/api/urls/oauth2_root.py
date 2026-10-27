@@ -8,6 +8,7 @@ from django.urls import path
 
 from oauthlib import oauth2
 from oauth2_provider import views
+from oauth2_provider.models import get_grant_model
 
 from awx.main.models import RefreshToken
 from awx.api.views.root import ApiOAuthAuthorizationRootView
@@ -22,12 +23,26 @@ class TokenView(views.TokenView):
         #
         # This code detects and auto-expires them on refresh grant
         # requests.
+        grant_user = None
         if request.POST.get('grant_type') == 'refresh_token' and 'refresh_token' in request.POST:
             refresh_token = RefreshToken.objects.filter(token=request.POST['refresh_token']).first()
             if refresh_token:
                 expire_seconds = settings.OAUTH2_PROVIDER.get('REFRESH_TOKEN_EXPIRE_SECONDS', 0)
                 if refresh_token.created + timedelta(seconds=expire_seconds) < now():
                     return request.build_absolute_uri(), {}, 'The refresh token has expired.', '403'
+                grant_user = refresh_token.user
+        elif request.POST.get('grant_type') == 'authorization_code' and 'code' in request.POST:
+            grant = get_grant_model().objects.filter(code=request.POST['code']).first()
+            if grant:
+                grant_user = grant.user
+        # DOT checks is_active for the password grant only; a refresh token or
+        # authorization code issued before deactivation would still mint tokens.
+        # Answer as DOT does for a revoked token, so the client sees a standard
+        # error and the account's state is not disclosed.
+        if grant_user is not None and not grant_user.is_active:
+            error = oauth2.InvalidGrantError()
+            headers = {'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache'}
+            return request.build_absolute_uri(), headers, error.json, error.status_code
         try:
             return super(TokenView, self).create_token_response(request)
         except oauth2.AccessDeniedError as e:
