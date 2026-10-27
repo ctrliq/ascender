@@ -37,8 +37,12 @@ class TokenView(views.TokenView):
                 grant_user = grant.user
         # DOT checks is_active for the password grant only; a refresh token or
         # authorization code issued before deactivation would still mint tokens.
+        # Answer as DOT does for a revoked token, so the client sees a standard
+        # error and the account's state is not disclosed.
         if grant_user is not None and not grant_user.is_active:
-            return request.build_absolute_uri(), {}, 'User inactive or deleted.', '403'
+            error = oauth2.InvalidGrantError()
+            headers = {'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache'}
+            return request.build_absolute_uri(), headers, error.json, error.status_code
         try:
             return super(TokenView, self).create_token_response(request)
         except oauth2.AccessDeniedError as e:

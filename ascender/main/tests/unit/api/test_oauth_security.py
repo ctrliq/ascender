@@ -16,6 +16,7 @@ from ascender.dab.lib.channels import middleware
 from ascender.main.models import OAuth2AccessToken
 
 PARENT_TOKEN_RESPONSE = 'oauth2_provider.views.TokenView.create_token_response'
+INVALID_GRANT_HEADERS = {'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache'}
 
 
 def _user(username='alice', is_active=True):
@@ -67,7 +68,7 @@ class TestTokenViewInactiveUser:
         if is_active:
             assert ret == 'issued'
         else:
-            assert ret[2:] == ('User inactive or deleted.', '403')
+            assert ret[1:] == (INVALID_GRANT_HEADERS, '{"error": "invalid_grant"}', 400)
             parent.assert_not_called()
 
     @pytest.mark.parametrize('is_active', [True, False])
@@ -77,7 +78,7 @@ class TestTokenViewInactiveUser:
         if is_active:
             assert ret == 'issued'
         else:
-            assert ret[2:] == ('User inactive or deleted.', '403')
+            assert ret[1:] == (INVALID_GRANT_HEADERS, '{"error": "invalid_grant"}', 400)
             parent.assert_not_called()
 
     def test_expired_refresh_token_still_reported_as_expired(self):

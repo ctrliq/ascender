@@ -79,6 +79,12 @@ def test_application_token_refused_after_owner_deactivated(get, post, org_app, a
     assert resp.status_code == 401, (resp.status_code, resp.data['results'][0]['username'] if resp.status_code == 200 else resp.data)
 
 
+def _assert_invalid_grant(resp):
+    # The same response DOT gives a revoked token, so clients can parse it and learn nothing about the account.
+    assert resp['Content-Type'] == 'application/json' and resp['Cache-Control'] == 'no-store'
+    assert json.loads(resp.content) == {'error': 'invalid_grant'}
+
+
 @pytest.mark.django_db
 def test_refresh_grant_refused_after_owner_deactivated(get, post, org_app, alice):
     resp = _password_grant(post, org_app, 'alice')
@@ -93,11 +99,12 @@ def test_refresh_grant_refused_after_owner_deactivated(get, post, org_app, alice
     )
     minted = json.loads(resp.content).get('access_token') if resp.status_code == 200 else None
     minted_me = _me(get, HTTP_AUTHORIZATION='Bearer ' + minted) if minted else None
-    assert resp.status_code in (400, 401, 403) and minted is None, (
+    assert resp.status_code == 400 and minted is None, (
         resp.status_code,
         'new access token -> /me/',
         minted_me and (minted_me.status_code, minted_me.data['results'][0]['username']),
     )
+    _assert_invalid_grant(resp)
 
 
 @pytest.mark.django_db
@@ -137,7 +144,8 @@ def test_authorization_code_refused_after_owner_deactivated(post, organization, 
         content_type='application/x-www-form-urlencoded',
         HTTP_AUTHORIZATION=_client_auth(app),
     )
-    assert resp.status_code == 403, (resp.status_code, resp.content)
+    assert resp.status_code == 400, (resp.status_code, resp.content)
+    _assert_invalid_grant(resp)
     assert not AccessToken.objects.filter(application=app).exists()
 
 

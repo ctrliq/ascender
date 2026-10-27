@@ -1,15 +1,20 @@
 import base64
 import hashlib
+import importlib
 import json
 import urllib.parse
 
+from datetime import timedelta
+
 import pytest
 
+from django.apps import apps
 from django.test import Client
+from django.utils.timezone import now
 from django.utils.encoding import smart_bytes, smart_str
 
 from ascender.api.versioning import drf_reverse, reverse
-from ascender.main.models.oauth import OAuth2AccessToken as AccessToken, OAuth2Application as Application
+from ascender.main.models.oauth import OAuth2AccessToken as AccessToken, OAuth2Application as Application, OAuth2RefreshToken as RefreshToken
 from ascender.main.tests.functional import immediate_on_commit
 
 ME = drf_reverse('api:user_me_list', kwargs={'version': 'v2'})
@@ -148,3 +153,42 @@ def test_client_credentials_grant_refused(post, app):
     resp = _grant(post, app, 'grant_type=client_credentials&scope=write')
     assert resp.status_code == 400 and json.loads(resp.content)['error'] == 'unauthorized_client', resp.content
     assert not AccessToken.objects.filter(application=app).exists()
+
+
+def _historical_apps(settings):
+    # The models as `migrate` hands them to the migration, not the live ones. The test
+    # database is built with --nomigrations, which hides the migration graph from the loader,
+    # and importing the squashed migrations probes django_migrations, which aborts the
+    # transaction a non-transactional test runs in.
+    from django.db.migrations.loader import MigrationLoader
+
+    settings.MIGRATION_MODULES = {}
+    return MigrationLoader(None).project_state(('main', '0229_project_reuse_requirements')).apps
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('registry', ['historical', 'live'])
+def test_upgrade_revokes_tokens_already_given_to_the_owner(get, post, organization, admin, alice, registry, settings):
+    # The state the removed receiver left behind: alice obtained the token, it was rewritten to the owner,
+    # and its refresh token still names alice.
+    owned = Application.objects.create(name='owned', organization=organization, user=admin, client_type='confidential', authorization_grant_type='password')
+    swapped = AccessToken.objects.create(user=admin, application=owned, token='swapped', expires=now() + timedelta(days=1), scope='write')
+    RefreshToken.objects.create(user=alice, application=owned, token='alice-refresh', access_token=swapped)
+    assert _whoami(get, 'swapped') == 'admin'
+    # Untouched: a token from an application without an owner, and a personal token.
+    unowned = Application.objects.create(name='unowned', organization=organization, client_type='confidential', authorization_grant_type='password')
+    resp = _grant(post, unowned, 'grant_type=password&username=alice&password=alice&scope=write')
+    unowned_token = json.loads(resp.content)['access_token']
+    personal = AccessToken.objects.create(user=admin, token='personal', expires=now() + timedelta(days=1), scope='write')
+
+    migration = importlib.import_module('ascender.main.migrations.0230_revoke_tokens_of_owned_oauth2_applications')
+    migration.revoke_tokens_of_owned_applications(_historical_apps(settings) if registry == 'historical' else apps, None)
+
+    assert _as(get, 'swapped').status_code == 401
+    assert not AccessToken.objects.filter(application=owned).exists()
+    assert RefreshToken.objects.get(token='alice-refresh').revoked is not None
+    resp = _grant(post, owned, 'grant_type=refresh_token&refresh_token=alice-refresh')
+    assert resp.status_code == 400 and 'access_token' not in json.loads(resp.content)
+    assert _whoami(get, unowned_token) == 'alice'
+    assert _whoami(get, personal.token) == 'admin'
+    assert RefreshToken.objects.get(application=unowned).revoked is None
