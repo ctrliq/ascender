@@ -24,8 +24,6 @@ asgiref==3.11.0
     #   django
     #   django-cors-headers
     #   social-auth-app-django
-asn1==3.3.0
-    # via -r /awx_devel/requirements/requirements.in
 attrs==23.2.0
     # via
     #   aiohttp
@@ -141,8 +139,6 @@ drf-spectacular==0.30.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
     # via kubernetes
-enum-compat==0.0.3
-    # via asn1
 filelock==3.32.4
     # via -r /awx_devel/requirements/requirements.in
 frozenlist==1.4.1

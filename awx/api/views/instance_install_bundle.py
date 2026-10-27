@@ -9,12 +9,12 @@ import tarfile
 import time
 import re
 
-import asn1
 from awx.api import serializers
 from awx.api.generics import GenericAPIView, Response
 from awx.api.permissions import IsSystemAdminOrAuditor
 from awx.main import models
 from cryptography import x509
+from cryptography.hazmat.asn1 import encode_der
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509 import DNSName, IPAddress, ObjectIdentifier, OtherName
@@ -145,12 +145,11 @@ def generate_receptor_tls(instance_obj):
     # generate private key for the receptor
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
-    # encode receptor hostname to asn1
+    # receptor expects the OtherName value to be a DER-encoded UTF8String of the hostname.
+    # cryptography.hazmat.asn1 (added in 47.0) encodes a str as a UTF8String, but the module
+    # is not yet covered by cryptography's backwards-compatibility policy.
     hostname = instance_obj.hostname
-    encoder = asn1.Encoder()
-    encoder.start()
-    encoder.write(hostname.encode(), nr=asn1.Numbers.UTF8String)
-    hostname_asn1 = encoder.output()
+    hostname_asn1 = encode_der(hostname)
 
     san_params = [
         DNSName(hostname),
