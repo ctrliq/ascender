@@ -9,7 +9,7 @@ import traceback
 from datetime import datetime, timezone
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.timezone import now
 from django.utils.encoding import force_str
 

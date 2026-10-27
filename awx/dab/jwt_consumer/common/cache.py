@@ -1,7 +1,7 @@
 import logging
 from typing import Optional, Tuple
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.cache import caches
 
 from awx.dab.lib.utils.settings import get_setting

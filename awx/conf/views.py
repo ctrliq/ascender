@@ -11,7 +11,7 @@ from socket import SHUT_RDWR
 
 # Django
 from django.db import connection
-from django.conf import settings
+from awx.settings.typed import settings
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 

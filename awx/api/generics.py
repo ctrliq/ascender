@@ -7,7 +7,7 @@ import logging
 import time
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldDoesNotExist

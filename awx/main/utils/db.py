@@ -3,7 +3,7 @@
 
 
 from awx.settings.application_name import set_application_name
-from django.conf import settings
+from awx.settings.typed import settings
 
 
 def set_connection_name(function):

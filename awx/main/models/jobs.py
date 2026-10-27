@@ -8,7 +8,7 @@ import time
 from urllib.parse import urljoin
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Cast

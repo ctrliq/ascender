@@ -2,7 +2,7 @@
 # All Rights Reserved.
 import logging
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.models import (
     Instance,

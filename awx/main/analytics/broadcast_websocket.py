@@ -14,7 +14,7 @@ from prometheus_client import (
     parser,
 )
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 BROADCAST_WEBSOCKET_VALKEY_KEY_NAME = 'broadcast_websocket_stats'
 

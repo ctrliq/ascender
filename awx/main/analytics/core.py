@@ -9,7 +9,7 @@ import shutil
 import tarfile
 import tempfile
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.timezone import now, timedelta
 from rest_framework.exceptions import PermissionDenied

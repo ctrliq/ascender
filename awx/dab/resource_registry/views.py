@@ -1,7 +1,7 @@
 import logging
 from collections import OrderedDict
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.http import HttpResponseNotFound

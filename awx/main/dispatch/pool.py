@@ -13,7 +13,7 @@ from multiprocessing import Process
 from multiprocessing import Queue as MPQueue
 from queue import Full as QueueFull, Empty as QueueEmpty
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import connection as django_connection, connections
 from django.core.cache import cache as django_cache
 from django.utils.timezone import now as tz_now

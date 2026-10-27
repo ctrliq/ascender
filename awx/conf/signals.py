@@ -11,6 +11,7 @@ from django.dispatch import receiver
 # AWX
 from awx.conf import settings_registry
 from awx.conf.models import Setting
+from awx.conf.settings import bump_setting_cache_version
 
 logger = logging.getLogger('awx.conf.signals')
 
@@ -30,6 +31,10 @@ def handle_setting_change(key, for_delete=False):
 
     # if we have changed a setting, we want to avoid mucking with the in-memory cache entirely
     settings._awx_conf_memoizedcache.clear()
+
+    # and tell every other process to do the same, which is what the web
+    # processes check once a request
+    bump_setting_cache_version()
 
     # Send setting_changed signal with new value for each setting.
     for setting_key in setting_keys:

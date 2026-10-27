@@ -7,7 +7,7 @@ from awx.main.models.base import accepts_json
 
 # Django
 from django.db import models
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 

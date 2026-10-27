@@ -4,7 +4,7 @@ from collections import deque
 
 # Django
 from django.db import models
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.contenttypes.models import ContentType
 
 NAMED_URL_RES_DILIMITER = "++"

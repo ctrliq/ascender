@@ -3,7 +3,7 @@ import collections
 import urllib.parse as urlparse
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 

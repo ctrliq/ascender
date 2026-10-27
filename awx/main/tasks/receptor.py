@@ -10,7 +10,7 @@ import time
 import yaml
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import connections
 
 # Runner

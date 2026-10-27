@@ -1,5 +1,5 @@
 from awx.main.tasks.system import clear_setting_cache
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 
 

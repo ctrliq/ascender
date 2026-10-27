@@ -13,7 +13,7 @@ import traceback
 from collections import OrderedDict
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
 from django.utils.encoding import smart_str

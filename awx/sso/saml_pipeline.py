@@ -6,7 +6,7 @@ import re
 import logging
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.models import Team
 from awx.sso.common import create_org_and_teams, reconcile_users_org_team_mappings, get_orgs_by_ids

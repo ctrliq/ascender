@@ -11,7 +11,7 @@ from datetime import datetime
 from dateutil.tz import tzutc
 from django.utils.timezone import now
 from django.core.serializers.json import DjangoJSONEncoder
-from django.conf import settings
+from awx.settings.typed import settings
 
 
 class TimeFormatter(logging.Formatter):

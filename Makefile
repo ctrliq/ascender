@@ -308,6 +308,7 @@ test:
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	awx-manage check_settings
 
 ## Run the tests that need a real PostgreSQL, which the SQLite suite skips.
 PG_TEST_DIRS ?= awx/main/tests/functional/commands/test_cleanup_jobs_postgres.py
@@ -325,6 +326,7 @@ test-serial:
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	awx-manage check_settings
 
 ## Run tests with limited parallel workers (safer than auto).
 test-safe:
@@ -333,6 +335,7 @@ test-safe:
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	awx-manage check_settings
 
 test_migrations:
 	if [ "$(VENV_BASE)" ]; then \

@@ -4,7 +4,7 @@
 from collections import OrderedDict
 
 # Django REST Framework
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.paginator import Paginator as DjangoPaginator
 from django.utils.functional import cached_property
 from rest_framework import pagination

@@ -3,7 +3,7 @@
 import logging
 import yaml
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand
 
 from awx.main.dispatch import get_task_queuename

@@ -6,7 +6,7 @@ import json
 import logging
 import requests
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.notifications.base import AWXBaseEmailBackend
 from awx.main.utils import get_awx_http_client_headers

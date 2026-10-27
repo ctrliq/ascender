@@ -10,7 +10,7 @@ import sys
 
 # Django
 from django.db import connection
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db.models.signals import (
     pre_save,
     post_save,

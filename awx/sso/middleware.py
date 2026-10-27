@@ -5,7 +5,7 @@
 import urllib.parse
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.functional import LazyObject
 from django.shortcuts import redirect
 

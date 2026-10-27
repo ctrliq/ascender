@@ -1,6 +1,6 @@
 import functools
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 # from django.core.cache.backends.redis import RedisCache

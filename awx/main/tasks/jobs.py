@@ -16,7 +16,7 @@ import time
 import urllib.parse as urlparse
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 
 logger = logging.getLogger('awx.main.tasks.jobs')
 

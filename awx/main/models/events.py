@@ -6,7 +6,7 @@ import logging
 from collections import defaultdict
 import time
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, DatabaseError
 from django.db.models.functions import Cast

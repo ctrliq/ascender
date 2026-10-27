@@ -15,7 +15,7 @@ from logging import Filter
 
 from django.apps import apps
 from django.db import models
-from django.conf import settings
+from awx.settings.typed import settings
 
 from django_guid import get_guid
 from django_guid.log_filters import CorrelationId

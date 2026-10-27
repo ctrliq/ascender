@@ -2,7 +2,7 @@ import logging
 import warnings
 from typing import Any
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.translation import gettext_lazy as _
 
 from awx.dab.lib.utils.imports import import_object

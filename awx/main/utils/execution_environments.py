@@ -2,7 +2,7 @@ import os
 import logging
 from pathlib import Path
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.models.execution_environments import ExecutionEnvironment
 

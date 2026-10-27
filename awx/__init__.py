@@ -63,7 +63,7 @@ else:
 def oauth2_getattribute(self, attr):
     # Custom method to override
     # oauth2_provider.settings.OAuth2ProviderSettings.__getattribute__
-    from django.conf import settings
+    from awx.settings.typed import settings
     from oauth2_provider.settings import DEFAULTS
 
     val = None

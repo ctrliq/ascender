@@ -1,4 +1,4 @@
-from django.conf import settings
+from awx.settings.typed import settings
 from prometheus_client import CollectorRegistry, Gauge, Info, generate_latest
 
 from awx.conf.license import get_license

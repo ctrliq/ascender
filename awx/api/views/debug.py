@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 from rest_framework.response import Response
 from awx.api.generics import APIView

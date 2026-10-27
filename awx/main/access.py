@@ -8,7 +8,7 @@ import logging
 from functools import reduce
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db.models import Q, Prefetch
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType

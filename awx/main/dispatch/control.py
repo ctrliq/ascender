@@ -2,7 +2,7 @@ import logging
 import uuid
 import json
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import connection
 import valkey
 

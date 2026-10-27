@@ -7,7 +7,7 @@ import logging
 import operator
 from collections import OrderedDict
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie

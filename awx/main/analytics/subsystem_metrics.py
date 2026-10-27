@@ -7,7 +7,7 @@ import logging
 import prometheus_client
 from prometheus_client.core import GaugeMetricFamily, HistogramMetricFamily
 from prometheus_client.registry import CollectorRegistry
-from django.conf import settings
+from awx.settings.typed import settings
 from django.http import HttpRequest
 from rest_framework.request import Request
 

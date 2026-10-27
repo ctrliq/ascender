@@ -7,7 +7,7 @@ import logging
 import valkey
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 
 __all__ = ['CallbackQueueDispatcher']
 

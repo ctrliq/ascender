@@ -44,7 +44,7 @@ def get_encryption_key(field_name, pk=None, secret_key=None):
                can be omitted in situations where you're encrypting a setting
                that is not database-persistent (like a read-only setting)
     """
-    from django.conf import settings
+    from awx.settings.typed import settings
 
     h = hashlib.sha512()
     h.update(smart_bytes(secret_key or settings.SECRET_KEY))
