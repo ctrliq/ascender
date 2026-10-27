@@ -62,7 +62,7 @@ describe('<LoggingDetail />', () => {
     assertDetail('TCP Connection Timeout', '5 seconds');
     assertDetail('Logging Aggregator Level Threshold', 'INFO');
     assertDetail('Log Format For API 4XX Errors', 'Test Log Line');
-    assertDetail('Enable/disable HTTPS certificate verification', 'On');
+    assertDetail('Enable/disable certificate verification', 'On');
     // CodeEditor (list type) renders empty under jsdom; assert the label.
     expect(
       screen.getByText('Loggers Sending Data to Log Aggregator Form')

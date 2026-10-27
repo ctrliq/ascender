@@ -2548,7 +2548,7 @@ msgstr "主机"
 msgid "Add resource type"
 msgstr "添加资源类型"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:142
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:143
 msgid "Enable external logging"
 msgstr "启用外部日志记录"
 
@@ -2586,7 +2586,7 @@ msgstr "作业分片"
 #~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
 #~ msgstr "如果您准备进行升级或续订，请<0>联系我们。</0>"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:175
 msgid "Enable log system tracking facts individually"
 msgstr "单独启用日志系统跟踪事实"
 
@@ -4174,8 +4174,8 @@ msgstr "删除凭证"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:100
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:174
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:178
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:108
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:116
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
@@ -5606,6 +5606,10 @@ msgstr "写入"
 msgid "Option Details"
 msgstr "选项详情"
 
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+msgid "Enable certificate verification"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:118
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.tsx:142
 #~ msgid "No subscriptions found"
@@ -6799,7 +6803,7 @@ msgstr "未找到应用程序。"
 msgid "Any"
 msgstr "任何"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:136
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:137
 msgid "Cannot enable log aggregator without providing logging aggregator host and logging aggregator type."
 msgstr "如果不提供日志聚合器主机和日志聚合器类型，则无法启用日志聚合器。"
 
@@ -7989,9 +7993,9 @@ msgstr "Playbook 运行"
 msgid "Back to Instance Groups"
 msgstr "返回到实例组"
 
-#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
-msgid "Enable HTTPS certificate verification"
-msgstr "启用 HTTPS 证书验证"
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:212
+#~ msgid "Enable HTTPS certificate verification"
+#~ msgstr "启用 HTTPS 证书验证"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8037,7 +8041,7 @@ msgstr "{0, plural, one {此实例当前正被其他资源使用。确定要删�
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:74
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
@@ -10126,7 +10130,7 @@ msgstr "取消查找"
 #: screens/Project/Projects.tsx:29
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:51
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
-#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
+#: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:81
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
 #: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
@@ -11802,6 +11806,10 @@ msgstr "删除问卷调查"
 #: screens/InstanceGroup/shared/InstanceGroupForm.tsx:26
 msgid "Policy instance minimum"
 msgstr "策略实例最小值"
+
+#: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:201
+msgid "Encrypt TCP and RELP log aggregator connections with TLS"
+msgstr ""
 
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:397
 msgid "Failed to delete workflow approval."

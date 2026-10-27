@@ -30,7 +30,7 @@ from ascender.main.tasks.system import clear_setting_cache
 from ascender.conf.models import Setting
 from ascender.conf.serializers import SettingCategorySerializer, SettingSingletonSerializer
 from ascender.conf import settings_registry
-from ascender.main.utils.external_logging import reconfigure_rsyslog
+from ascender.main.utils.external_logging import reconfigure_rsyslog, stopped_reason, tls_handshake_error, tls_in_use
 from ascender.main.constants import ANALYTICS_LOGGER_PREFIX, LEGACY_SERVICE_LOGGER_PREFIX, SERVICE_LOGGER_PREFIX
 
 SettingCategory = collections.namedtuple('SettingCategory', ('url', 'slug', 'name'))
@@ -188,6 +188,11 @@ class SettingLoggingTest(GenericAPIView):
         hostname = getattr(settings, 'LOG_AGGREGATOR_HOST', None)
         protocol = getattr(settings, 'LOG_AGGREGATOR_PROTOCOL', None)
 
+        # the configurer stopped external logging rather than write a TLS action rsyslog can't run safely
+        reason = stopped_reason()
+        if reason:
+            return Response({'error': f'External logging is stopped: {reason}'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             subprocess.check_output(['rsyslogd', '-N1', '-f', '/var/lib/ascender/rsyslog/rsyslog.conf'], stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as exc:
@@ -201,6 +206,14 @@ class SettingLoggingTest(GenericAPIView):
                 return Response({'error': 'Port required for ' + protocol}, status=status.HTTP_400_BAD_REQUEST)
         else:
             # if http/https by this point, domain is reachable
+            return Response(status=status.HTTP_202_ACCEPTED)
+
+        if tls_in_use(settings):
+            # A real handshake with the configured CA, client certificate and name check: a TLS listener accepts the
+            # TCP connection below whether or not the session rsyslog opens would succeed.
+            error = tls_handshake_error(settings)
+            if error:
+                return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
             return Response(status=status.HTTP_202_ACCEPTED)
 
         if protocol == 'udp':
