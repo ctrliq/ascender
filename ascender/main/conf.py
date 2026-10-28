@@ -54,6 +54,19 @@ register(
 )
 
 register(
+    'RESTRICT_USER_IDENTITY_TO_SUPERUSERS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Only Superusers Can Set User Emails and Change Usernames'),
+    help_text=_(
+        'When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. '
+        'This keeps others from creating or editing accounts to match an identity provider user or an organization or team map entry.'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
     'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
     field_class=fields.BooleanField,
     default=False,

@@ -64,7 +64,7 @@ def evaluate_trigger_rule(triggers, groups, attributes, map_id):
     return None
 
 
-def resolve_membership(triggers, groups, attributes, map_id, fallback, remove):
+def resolve_membership(triggers, groups, attributes, map_id, fallback, remove, trace=None):
     """
     Decide one role of one org/team map entry that may carry a trigger rule.
 
@@ -74,17 +74,28 @@ def resolve_membership(triggers, groups, attributes, map_id, fallback, remove):
     which is what every existing configuration relies on.  With one, the rule is
     evaluated first and the older options only decide for a user the rule says
     nothing about.
+
+    trace, if given, is a dict that records which branch decided, for logging.
     """
     if not triggers:
-        return fallback()
+        state = fallback()
+        if trace is not None:
+            trace['source'] = 'fallback'
+        return state
 
     state = evaluate_trigger_rule(triggers, groups, attributes, map_id)
     if state is UNUSABLE_RULE:
         # A rule nobody can evaluate decides nothing.  Anything else here, the
         # revoke below included, would turn one typo into every user losing
         # the role.
-        return fallback()
+        state = fallback()
+        if trace is not None:
+            trace['source'] = 'fallback'
+            trace['unusable_rule'] = True
+        return state
     if state is not None:
+        if trace is not None:
+            trace['source'] = 'trigger_rule'
         return state
 
     # The rule did not apply to this user.  Fall back to the older options, and
@@ -92,5 +103,9 @@ def resolve_membership(triggers, groups, attributes, map_id, fallback, remove):
     # the user does not meet costs them the membership.
     state = fallback()
     if state is None and remove:
+        if trace is not None:
+            trace['source'] = 'trigger_rule_skip_remove'
         return False
+    if trace is not None:
+        trace['source'] = 'fallback'
     return state

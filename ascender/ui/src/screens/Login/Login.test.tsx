@@ -388,6 +388,37 @@ describe('<Login />', () => {
     ).toHaveLength(0);
   });
 
+  test('shows the error returned for an SSO provider', async () => {
+    const error =
+      'Sign-in could not be completed because your username is already in use by another Ascender account. Contact your system administrator and reference request ID 50419ddf9aaf.';
+    vi.mocked(AuthAPI.read).mockResolvedValue({
+      data: {
+        oidc: {
+          login_url: '/sso/login/oidc/',
+          complete_url: 'https://localhost:8043/sso/complete/oidc/',
+          error,
+        },
+      },
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
+
+    const { container } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+
+    expect(screen.getByText(error)).toBeInTheDocument();
+    const loginForm = container.querySelector(
+      '[data-cy="login-form"]'
+    ) as HTMLElement;
+    const errorAlert = screen.getByText(error).closest('.pf-v6-c-alert');
+    expect(loginForm).toBeInTheDocument();
+    expect(errorAlert).not.toBeNull();
+    // Like the session expired warning, the alert sits above the form.
+    expect(loginForm.compareDocumentPosition(errorAlert as Node)).toBe(
+      Node.DOCUMENT_POSITION_PRECEDING
+    );
+  });
+
   test('Google auth button shown', async () => {
     vi.mocked(AuthAPI.read).mockResolvedValue({
       data: {

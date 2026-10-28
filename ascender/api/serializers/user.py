@@ -230,8 +230,23 @@ class UserSerializer(BaseSerializer):
                     raise serializers.ValidationError(_('Unable to change %s on user managed by LDAP.') % field_name)
         return value
 
+    def _validate_superuser_only_identity(self, value, field_name):
+        """With RESTRICT_USER_IDENTITY_TO_SUPERUSERS, only superusers may set an email or rename a user."""
+        if not settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS:
+            return value
+        request = self.context.get('request')
+        if request is None or request.user.is_superuser:
+            return value
+        if self.instance is None:
+            # A new user needs a username, but the email is for a superuser to set.
+            if field_name == 'email' and value:
+                raise serializers.ValidationError(_('Only a superuser can set the email of a user.'))
+        elif value != getattr(self.instance, field_name):
+            raise serializers.ValidationError(_('Only a superuser can change the %s of a user.') % field_name)
+        return value
+
     def validate_username(self, value):
-        return self._validate_ldap_managed_field(value, 'username')
+        return self._validate_superuser_only_identity(self._validate_ldap_managed_field(value, 'username'), 'username')
 
     def validate_first_name(self, value):
         return self._validate_ldap_managed_field(value, 'first_name')
@@ -240,7 +255,7 @@ class UserSerializer(BaseSerializer):
         return self._validate_ldap_managed_field(value, 'last_name')
 
     def validate_email(self, value):
-        return self._validate_ldap_managed_field(value, 'email')
+        return self._validate_superuser_only_identity(self._validate_ldap_managed_field(value, 'email'), 'email')
 
     def validate_is_superuser(self, value):
         return self._validate_ldap_managed_field(value, 'is_superuser')

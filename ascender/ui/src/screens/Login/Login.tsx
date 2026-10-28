@@ -284,6 +284,10 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
     })
     .filter((entry) => entry !== null);
 
+  const socialAuthError = Object.values(socialAuthOptions || {})
+    .map((provider) => provider.error)
+    .find((error) => error);
+
   if (isCustomLoginInfoLoading) {
     return null;
   }
@@ -305,6 +309,15 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
             isInline
             title={t`Your session has expired. Please log in to continue where you left off.`}
             ouiaId="session-expired-warning-alert"
+          />
+        ) : null}
+        {socialAuthError ? (
+          <Alert
+            className="ascender-login__sso-error"
+            variant="danger"
+            isInline
+            title={socialAuthError}
+            ouiaId="social-auth-error-alert"
           />
         ) : null}
         {Header}

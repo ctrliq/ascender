@@ -4,6 +4,7 @@ import inspect
 import json
 import os
 import re
+from collections.abc import Mapping
 
 import six
 
@@ -706,9 +707,44 @@ class OIDCTeamMapField(fields.DictField):
     child = OIDCSingleTeamMapField()
 
 
+class OIDCUsernameListField(fields.StringListField):
+    """A list of exact usernames, without coerced values or bare strings."""
+
+    default_error_messages = {'invalid_username': _('Each username must be a string.')}
+
+    def to_representation(self, value):
+        if value is None:
+            return super(OIDCUsernameListField, self).to_representation(value)
+        if isinstance(value, (set, frozenset)):
+            # A set is not JSON-serializable.
+            value = list(value)
+        if not isinstance(value, (list, tuple)):
+            # Leave it for validation to reject, rather than have ListField
+            # iterate a string into characters or a mapping into keys.
+            return value
+        if not all(isinstance(item, str) for item in value):
+            # Do not let ListField stringify numbers into names.
+            return value
+        return super(OIDCUsernameListField, self).to_representation(value)
+
+    def to_internal_value(self, data):
+        # CharField would turn ints and floats into usernames, so check the
+        # items first, materializing one-shot iterables so they can be re-read.
+        if not isinstance(data, (str, Mapping)) and hasattr(data, '__iter__'):
+            if not isinstance(data, (list, tuple, set, frozenset)):
+                data = list(data)
+            if not all(isinstance(item, str) for item in data):
+                self.fail('invalid_username')
+        # CharField trims whitespace, so de-duplicating here also merges names
+        # that differ only by it.  The first occurrence is kept.
+        return list(dict.fromkeys(super(OIDCUsernameListField, self).to_internal_value(data)))
+
+
 class OIDCUserFlagsField(HybridDictField):
     triggers_superuser = TriggerRuleField(allow_null=True, required=False)
     triggers_system_auditor = TriggerRuleField(allow_null=True, required=False)
+    is_superuser = OIDCUsernameListField(required=False, allow_null=True)
+    is_system_auditor = OIDCUsernameListField(required=False, allow_null=True)
     remove_superusers = fields.BooleanField(required=False)
     remove_system_auditors = fields.BooleanField(required=False)
 

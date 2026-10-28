@@ -158,6 +158,19 @@ register(
     category_slug='authentication',
 )
 
+register(
+    'SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Prevent username collisions on first login'),
+    help_text=_(
+        'When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. '
+        'LDAP, RADIUS and TACACS+ already refuse an existing username.'
+    ),
+    category=_('Authentication'),
+    category_slug='authentication',
+)
+
 ###############################################################################
 # LDAP AUTHENTICATION SETTINGS
 ###############################################################################
@@ -1509,17 +1522,20 @@ register(
     default=None,
     label=_('OIDC User Flags'),
     help_text=_(
-        'Trigger rules that make an OIDC user a superuser (triggers_superuser) or '
-        'a system auditor (triggers_system_auditor). A user who stops matching '
-        'loses the flag at their next login unless remove_superusers or '
-        'remove_system_auditors is false. A flag without a rule is left alone.'
+        'Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. '
+        'With both, the rule goes first and the list can grant users the rule skips. '
+        'A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. '
+        'A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. '
+        'A listed username can be claimed by whoever signs up with it first, so prefer a rule on a group or the sub claim where that matters.'
     ),
     category=_('Generic OIDC'),
     category_slug='oidc',
     placeholder=collections.OrderedDict(
         [
             ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-superusers'])]))])),
+            ('is_superuser', ['admin']),
             ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-auditors'])]))])),
+            ('is_system_auditor', ['auditor']),
             ('remove_superusers', True),
             ('remove_system_auditors', True),
         ]

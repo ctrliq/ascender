@@ -384,6 +384,7 @@ class AscenderSettings(Protocol):
     LOG_ROOT: str
     MANAGERS: list[Any]
     MANAGE_ORGANIZATION_AUTH: bool
+    RESTRICT_USER_IDENTITY_TO_SUPERUSERS: bool
     MAX_EVENT_RES_DATA: int
     MAX_FORKS: int
     MAX_PAGE_SIZE: int
@@ -589,6 +590,7 @@ class AscenderSettings(Protocol):
     SOCIAL_AUTH_TEAM_MAP: Any
     SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: bool
     SOCIAL_AUTH_USER_FIELDS: Any
+    SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: bool
     SOCIAL_AUTH_USER_MODEL: str
     SPECTACULAR_SETTINGS: dict[str, Any]
     SQL_DEBUG: bool

@@ -36,6 +36,7 @@ describe('<MiscAuthenticationDetail />', () => {
         SOCIAL_AUTH_TEAM_MAP: {},
         SOCIAL_AUTH_USER_FIELDS: [],
         SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: false,
+        SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: false,
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });

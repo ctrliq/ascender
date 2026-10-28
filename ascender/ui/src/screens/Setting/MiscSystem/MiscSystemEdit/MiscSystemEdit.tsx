@@ -44,6 +44,7 @@ function MiscSystemEdit() {
         'ACTIVITY_STREAM_ENABLED',
         'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC',
         'MANAGE_ORGANIZATION_AUTH',
+        'RESTRICT_USER_IDENTITY_TO_SUPERUSERS',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
         'REMOTE_HOST_HEADERS',
@@ -198,6 +199,10 @@ function MiscSystemEdit() {
                 <BooleanField
                   name="MANAGE_ORGANIZATION_AUTH"
                   config={system.MANAGE_ORGANIZATION_AUTH}
+                />
+                <BooleanField
+                  name="RESTRICT_USER_IDENTITY_TO_SUPERUSERS"
+                  config={system.RESTRICT_USER_IDENTITY_TO_SUPERUSERS}
                 />
                 <ObjectField
                   name="REMOTE_HOST_HEADERS"

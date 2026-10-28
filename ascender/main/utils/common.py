@@ -90,7 +90,16 @@ __all__ = [
     'cleanup_new_process',
     'log_excess_runtime',
     'unified_job_class_to_event_table_name',
+    'sanitize_log_value',
 ]
+
+
+def sanitize_log_value(value, max_length=200):
+    """Render an untrusted value for a log line, escaping control characters."""
+    text = '' if value is None else json.dumps(str(value), ensure_ascii=True)
+    if len(text) > max_length:
+        text = text[:max_length] + '...'
+    return text
 
 
 def get_object_or_400(klass, *args, **kwargs):

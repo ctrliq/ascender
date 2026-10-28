@@ -9,6 +9,8 @@ export interface AuthProvider {
   type?: string;
   /** Set for an enterprise login, which names the organization it signs in. */
   label?: string;
+  /** A failure from the last login attempt through this provider. */
+  error?: string;
 }
 
 /** Every login the server offers besides the username and password form. */

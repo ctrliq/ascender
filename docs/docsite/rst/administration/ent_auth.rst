@@ -577,7 +577,15 @@ To configure OIDC in Ascender:
 - **OIDC Additional Scopes**: Scopes to request on top of ``openid``, ``profile`` and ``email``, for example ``groups``.
 - **OIDC Login Rule**: Optional. A trigger rule a user must match to log in through OIDC at all.
 - **OIDC Organization Map** and **OIDC Team Map**: Optional. Which organizations and teams OIDC users belong to, based on their groups and claims. When they are not set, the shared social auth maps apply.
-- **OIDC User Flags**: Optional. Trigger rules that make an OIDC user a superuser or a system auditor.
+- **OIDC User Flags**: Optional. Trigger rules and lists of exact Ascender usernames that make an OIDC user a superuser or a system auditor.
+  A username list without a trigger rule is authoritative: users it does not
+  name lose the flag at their next login unless the matching ``remove_`` key is
+  ``false``. An empty list is ignored with a warning; to revoke a flag from every
+  OIDC user use the trigger rule ``{"never": {}}``. When a trigger
+  rule is also set, the list can only grant; revocation follows the rule. An
+  empty trigger rule (``{}``) counts as no rule. Usernames are trimmed and
+  de-duplicated. If you use username lists, enable **Only Superusers Can Set User Emails and Change Usernames** in the System settings, so that nobody else can rename an account to a listed name.
+- **Prevent username collisions on first login**: When enabled, an external login fails visibly if its desired username is already taken and no account has the same email, instead of creating a suffixed username.
 - **Log Out of the OIDC Provider**: Use the toggle to also end the user's session at the provider when they log out of Ascender.
 - **OIDC Post Logout Redirect URL**: Where the provider sends the browser after that logout. Defaults to the Base URL of Ascender.
 
