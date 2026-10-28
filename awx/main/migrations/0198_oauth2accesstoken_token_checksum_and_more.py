@@ -20,6 +20,13 @@ class Migration(migrations.Migration):
         ('main', '0197_add_federated_inventory_kind'),
     ]
 
+    # oauth2_provider 0012 runs a data migration over the swappable access token model, which needs the
+    # token_checksum column this migration adds. Without this edge a plain migrate can run 0012 first and fail on
+    # any database that already has access tokens.
+    run_before = [
+        ('oauth2_provider', '0012_add_token_checksum'),
+    ]
+
     operations = [
         # Stage 1: add the checksum column as nullable (no unique constraint yet,
         # existing rows would all collide on a static default).
