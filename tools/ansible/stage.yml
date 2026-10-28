@@ -7,6 +7,7 @@
       body: "{{ (lookup('file', changelog_path) | replace('\\n', '\n')) if changelog_path else '' }}"
       name: "{{ version }}"
       tag_name: "{{ version }}"
+      target_commitish: "{{ target_commitish }}"
       draft: true
   tasks:
     - name: Publish draft Release
