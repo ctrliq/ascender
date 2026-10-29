@@ -8,12 +8,32 @@ from django.urls import path
 
 from oauthlib import oauth2
 from oauth2_provider import views
+from oauth2_provider.oauth2_validators import OAuth2Validator
 
 from ascender.main.models import OAuth2RefreshToken
 from ascender.api.views.root import ApiOAuthAuthorizationRootView
 
 
+class ActiveUserOAuth2Validator(OAuth2Validator):
+    """Refuse refresh and authorization-code grants for inactive users.
+
+    DOT checks is_active for the password grant only, so a refresh token or
+    code issued before deactivation would still mint tokens. oauthlib calls
+    these after it has authenticated the client, and DOT's own lookup finds the
+    token, so the refusal is the invalid_grant a revoked token gets and says
+    nothing about the account to a caller without the client's credentials.
+    """
+
+    def validate_code(self, client_id, code, client, request, *args, **kwargs):
+        return super().validate_code(client_id, code, client, request, *args, **kwargs) and request.user.is_active
+
+    def validate_refresh_token(self, refresh_token, client, request, *args, **kwargs):
+        return super().validate_refresh_token(refresh_token, client, request, *args, **kwargs) and request.user.is_active
+
+
 class TokenView(views.TokenView):
+    validator_class = ActiveUserOAuth2Validator
+
     def create_token_response(self, request):
         # Django OAuth2 Toolkit has a bug whereby refresh tokens are *never*
         # properly expired (ugh):

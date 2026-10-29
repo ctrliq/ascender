@@ -642,13 +642,3 @@ def save_user_session_membership(sender, **kwargs):
             membership.delete()
         if len(expired):
             consumers.emit_channel_notification('control-limit_reached_{}'.format(user_id), dict(group_name='control', reason='limit_reached'))
-
-
-@receiver(post_save, sender=OAuth2AccessToken)
-def create_access_token_user_if_missing(sender, **kwargs):
-    obj = kwargs['instance']
-    if obj.application and obj.application.user:
-        obj.user = obj.application.user
-        post_save.disconnect(create_access_token_user_if_missing, sender=OAuth2AccessToken)
-        obj.save()
-        post_save.connect(create_access_token_user_if_missing, sender=OAuth2AccessToken)

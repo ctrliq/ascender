@@ -123,6 +123,11 @@ Do not rename the labels.
   other type lookup (`or__type`, `not__type`, `type__icontains`, ...) still keeps its
   value as a model name, as upstream does. Covered by
   `ascender/main/tests/functional/test_dab_rest_filters.py`.
+- `lib/channels/middleware.py::DrfAuthMiddleware` — a session user must be active, not
+  just authenticated. Django's `ModelBackend.get_user` refuses inactive users, but the
+  LDAP and social backends return them, so a deactivated user's surviving
+  session could still open a websocket and subscribe to job event streams. Covered by
+  `ascender/main/tests/functional/api/test_oauth_inactive_user.py`.
 
 Remaining `awx.dab.rbac.*` / `awx.dab.oauth2_provider.*` / `awx.dab.activitystream.*`
 imports are lazy and guarded by INSTALLED_APPS checks; those apps are never installed here.

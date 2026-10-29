@@ -797,7 +797,9 @@ class Command(BaseCommand):
         for offset in range(0, len(host_names), self._batch_size):
             batch_names = host_names[offset : offset + self._batch_size]
             orphaned = JobHostSummary.objects.filter(job__inventory=self.inventory, host_name__in=batch_names, **null_filter)
-            for host_name in batch_names:
+            # Only issue an UPDATE for names that actually have orphans
+            names_with_orphans = set(orphaned.order_by().values_list('host_name', flat=True).distinct())
+            for host_name in names_with_orphans:
                 host_pk = host_map.get(host_name)
                 if host_pk:
                     updated = orphaned.filter(host_name=host_name).update(**{fk_field: host_pk})
