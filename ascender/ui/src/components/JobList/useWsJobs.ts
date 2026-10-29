@@ -29,7 +29,7 @@ export default function useWsJobs(
   const [jobs, setJobs] = useState<UnifiedJob[]>(initialJobs);
   const [jobsToFetch, setJobsToFetch] = useState<number[]>([]);
   const throttledJobsToFetch = useThrottle(jobsToFetch, 5000);
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     schedules: ['changed'],
     control: ['limit_reached_1'],
@@ -39,10 +39,10 @@ export default function useWsJobs(
     setJobs(initialJobs);
   }, [initialJobs]);
 
+  // Checked against the queue as it stands, so two messages for one new job
+  // in the same batch still queue it once.
   const enqueueJobId = (id: number) => {
-    if (!jobsToFetch.includes(id)) {
-      setJobsToFetch((ids) => ids.concat(id));
-    }
+    setJobsToFetch((ids) => (ids.includes(id) ? ids : ids.concat(id)));
   };
   useEffect(() => {
     (async () => {
@@ -61,20 +61,33 @@ export default function useWsJobs(
     })();
   }, [throttledJobsToFetch, fetchJobsById]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Every message in the batch is applied, in order. A row's update is built
+  // on the rows the message before it left, so two jobs changing status in
+  // the same tick both show it; the render's rows only decide whether a job
+  // is on the page or has to be read.
   useEffect(() => {
-    if (!lastMessage || !lastMessage.unified_job_id) {
+    if (!messages.length) {
       return;
     }
     const params = parseQueryString(qsConfig, location.search);
-    const jobId = lastMessage.unified_job_id as number;
-    const index = jobs.findIndex((j) => j.id === jobId);
+    messages.forEach((message) => {
+      if (!message.unified_job_id) {
+        return;
+      }
+      const jobId = message.unified_job_id;
 
-    if (index > -1) {
-      setJobs(sortJobs(updateJob(jobs, index, lastMessage), params));
-    } else {
-      enqueueJobId(jobId);
-    }
-  }, [lastMessage]); // eslint-disable-line react-hooks/exhaustive-deps
+      if (jobs.some((j) => j.id === jobId)) {
+        setJobs((current) => {
+          const index = current.findIndex((j) => j.id === jobId);
+          return index > -1
+            ? sortJobs(updateJob(current, index, message), params)
+            : current;
+        });
+      } else {
+        enqueueJobId(jobId);
+      }
+    });
+  }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return jobs;
 }

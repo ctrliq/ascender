@@ -51,11 +51,11 @@ describe('NodeDeleteModal', () => {
 
     test('Mounts successfully', () => {
       // Modal renders into a body portal; query via screen/document.
-      expect(screen.getByText('Remove Node Bar')).toBeInTheDocument();
+      expect(screen.getByText('Delete Node Bar')).toBeInTheDocument();
     });
 
     test('Confirm button dispatches as expected', () => {
-      expect(screen.getByText('Remove Node Bar')).toBeInTheDocument();
+      expect(screen.getByText('Delete Node Bar')).toBeInTheDocument();
       fireEvent.click(document.querySelector('button#confirm-node-removal')!);
       expect(dispatch).toHaveBeenCalledWith({
         type: 'DELETE_NODE',
@@ -97,7 +97,7 @@ describe('NodeDeleteModal', () => {
         </WorkflowDispatchContext.Provider>
       );
       expect(
-        screen.getByText('Are you sure you want to remove this node?')
+        screen.getByText('Are you sure you want to delete this node?')
       ).toBeInTheDocument();
     });
   });

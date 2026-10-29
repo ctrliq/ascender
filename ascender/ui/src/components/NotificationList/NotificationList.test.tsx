@@ -19,18 +19,21 @@ describe('<NotificationList />', () => {
         name: 'Notification one',
         url: '/api/v2/notification_templates/1/',
         notification_type: 'email',
+        summary_fields: { user_capabilities: { delete: false } },
       },
       {
         id: 2,
         name: 'Notification two',
         url: '/api/v2/notification_templates/2/',
         notification_type: 'email',
+        summary_fields: { user_capabilities: { delete: true } },
       },
       {
         id: 3,
         name: 'Notification three',
         url: '/api/v2/notification_templates/3/',
         notification_type: 'email',
+        summary_fields: { user_capabilities: { delete: true } },
       },
     ],
   };
@@ -213,6 +216,37 @@ describe('<NotificationList />', () => {
     const errorDialog = await screen.findByRole('dialog', { name: /Error!/ });
     expect(within(errorDialog).getByText('Details')).toBeInTheDocument();
   });
+
+  test('deletes the selected notification templates themselves', async () => {
+    vi.mocked(NotificationTemplatesAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof NotificationTemplatesAPI.destroy>
+    );
+    const row = container.querySelector('#notification-row-2') as HTMLElement;
+
+    await user.click(within(row).getByRole('checkbox', { name: /Select row/ }));
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(
+      await screen.findByText(/for every resource that uses them/)
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'confirm delete' }));
+
+    await waitFor(() =>
+      expect(NotificationTemplatesAPI.destroy).toHaveBeenCalledWith(2)
+    );
+    expect(NotificationTemplatesAPI.destroy).toHaveBeenCalledTimes(1);
+    expect(
+      JobTemplatesAPI.disassociateNotificationTemplate
+    ).not.toHaveBeenCalled();
+  });
+
+  test('refuses to delete a template the viewer may not delete', async () => {
+    const row = container.querySelector('#notification-row-1') as HTMLElement;
+
+    await user.click(within(row).getByRole('checkbox', { name: /Select row/ }));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+  });
 });
 
 describe('<NotificationList showChangedToggle />', () => {
@@ -309,5 +343,64 @@ describe('<NotificationList showChangedToggle />', () => {
     await waitFor(() =>
       expect(toggle('notification-1-changed-toggle')).not.toBeChecked()
     );
+  });
+});
+
+describe('<NotificationList /> with no notification templates', () => {
+  const renderEmpty = (actions: Record<string, unknown>) => {
+    vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({
+      data: { actions },
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
+    vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
+    const none = { data: { results: [] } };
+    vi.mocked(
+      JobTemplatesAPI.readNotificationTemplatesSuccess
+    ).mockResolvedValue(
+      none as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readNotificationTemplatesSuccess
+      >
+    );
+    vi.mocked(JobTemplatesAPI.readNotificationTemplatesError).mockResolvedValue(
+      none as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readNotificationTemplatesError
+      >
+    );
+    vi.mocked(
+      JobTemplatesAPI.readNotificationTemplatesStarted
+    ).mockResolvedValue(
+      none as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readNotificationTemplatesStarted
+      >
+    );
+    return renderWithContexts(
+      <NotificationList
+        id={1}
+        canToggleNotifications
+        apiModel={JobTemplatesAPI}
+      />
+    );
+  };
+
+  test('adds one from the toolbar, for somebody who may make one', async () => {
+    renderEmpty({ GET: {}, POST: {} });
+
+    expect(await screen.findByRole('link', { name: 'Add' })).toHaveAttribute(
+      'href',
+      '/notifications/add'
+    );
+    expect(
+      screen.getByText('Add a notification template to enable it here')
+    ).toBeInTheDocument();
+  });
+
+  test('offers no way to make one to somebody who may not', async () => {
+    renderEmpty({ GET: {} });
+
+    expect(
+      await screen.findByText('Notification templates you can use appear here')
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
   });
 });

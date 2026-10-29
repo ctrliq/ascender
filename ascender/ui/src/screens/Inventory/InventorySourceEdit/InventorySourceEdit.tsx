@@ -21,17 +21,24 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
   const { id, organization } = inventory;
   const detailsUrl = `/inventories/inventory/${id}/sources/${source.id}/details`;
 
+  /*
+   * Both reads in one, so this screen shows one loading state rather than its
+   * own and then the form's inside it.
+   */
   const {
     isLoading: isInstanceGroupsLoading,
     error: instanceGroupsError,
     request: fetchInstanceGroups,
-    result: associatedInstanceGroups,
+    result: { associatedInstanceGroups, sourceOptions },
   } = useRequest(
     useCallback(async () => {
-      const { data } = await InventorySourcesAPI.readInstanceGroups(source.id);
-      return data.results;
+      const [{ data }, { data: options }] = await Promise.all([
+        InventorySourcesAPI.readInstanceGroups(source.id),
+        InventorySourcesAPI.readOptions(),
+      ]);
+      return { associatedInstanceGroups: data.results, sourceOptions: options };
     }, [source.id]),
-    null
+    { associatedInstanceGroups: null, sourceOptions: null }
   );
 
   useEffect(() => {
@@ -89,6 +96,14 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
     }
 
     await request({
+      /*
+       * The save is a PUT, so a writable field left out of the body is reset
+       * to its default. The form has no limit or timeout field, and without
+       * these two an edit wiped both. They come from the source as loaded and
+       * sit first so the form's own values win should it ever gain them.
+       */
+      limit: source.limit,
+      timeout: source.timeout,
       credential: credential?.id || null,
       inventory: id,
       source_script: source_script?.id || null,
@@ -114,14 +129,8 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
     );
   }
 
-  if (isInstanceGroupsLoading || !associatedInstanceGroups) {
-    return (
-      <Card>
-        <CardBody>
-          <ContentLoading />
-        </CardBody>
-      </Card>
-    );
+  if (isInstanceGroupsLoading || !associatedInstanceGroups || !sourceOptions) {
+    return <ContentLoading />;
   }
 
   return (
@@ -129,6 +138,7 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
       <CardBody>
         <InventorySourceForm
           source={source}
+          sourceOptions={sourceOptions}
           instanceGroups={associatedInstanceGroups}
           onCancel={handleCancel}
           onSubmit={handleSubmit}

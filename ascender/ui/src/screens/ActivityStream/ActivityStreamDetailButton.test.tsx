@@ -24,7 +24,7 @@ describe('<ActivityStreamDetailButton />', () => {
       />
     );
     expect(
-      screen.getByRole('button', { name: 'View event details' })
+      screen.getByRole('button', { name: 'View Event Details' })
     ).toBeInTheDocument();
   });
 
@@ -69,20 +69,20 @@ describe('<ActivityStreamDetailButton />', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
     await user.click(
-      screen.getByRole('button', { name: 'View event details' })
+      screen.getByRole('button', { name: 'View Event Details' })
     );
 
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
     expect(
-      within(dialog).getByRole('heading', { name: 'Event detail' })
+      within(dialog).getByRole('heading', { name: 'Event Details' })
     ).toBeInTheDocument();
 
     assertDetail('Time', '5/25/2021, 6:17:59 PM');
-    assertDetail('Initiated by', 'Bob');
-    assertDetail('Setting category', 'system');
-    assertDetail('Setting name', 'ACTIVITY_STREAM_ENABLED');
-    assertDetail('Action', 'foo');
+    assertDetail('Initiated By', 'Bob');
+    assertDetail('Setting Category', 'system');
+    assertDetail('Setting Name', 'ACTIVITY_STREAM_ENABLED');
+    assertDetail('Event', 'foo');
 
     // the changes payload is rendered into a read-only code editor. The Ace
     // editor keeps its text in an internal model that does not surface as DOM

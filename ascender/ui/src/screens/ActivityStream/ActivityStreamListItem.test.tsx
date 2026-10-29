@@ -22,5 +22,8 @@ describe('<ActivityStreamListItem />', () => {
       </table>
     );
     expect(screen.getByRole('row')).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-label="Initiated By"]')
+    ).toHaveTextContent('system');
   });
 });

@@ -1,6 +1,6 @@
 import type { InventorySource } from 'types/api';
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import {
   renderWithContexts,
   assertDetail,
@@ -44,16 +44,14 @@ describe('PromptInventorySourceDetail', () => {
     expect(screen.getByText('Source Variables')).toBeInTheDocument();
     expect(screen.getByTestId('code-editor')).toHaveTextContent('foo: bar');
 
-    // Enabled Options renders one <li> per enabled flag
+    // Update Options renders one <li> per enabled flag, named as on the form
     expect(
-      screen.getByText(
-        'Overwrite local groups and hosts from remote inventory source'
+      within(
+        screen.getByText('Update Options').nextElementSibling as HTMLElement
       )
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Overwrite local variables from remote inventory source')
-    ).toBeInTheDocument();
-    expect(screen.getByText('Update on launch')).toBeInTheDocument();
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual(['Overwrite', 'Overwrite Variables', 'Update on Launch']);
   });
 
   test('should render "Deleted" details', () => {

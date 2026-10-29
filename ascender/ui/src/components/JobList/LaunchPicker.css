@@ -1,0 +1,5 @@
+/* The refusal sits above the list it came from, with the gap a row would
+   have had between them. */
+.ascender-launch-picker__error {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}

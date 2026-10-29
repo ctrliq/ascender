@@ -152,7 +152,13 @@ function OrganizationsList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [<ToolbarAddButton key="add" linkTo={addUrl} />]
+                    ? [
+                        <ToolbarAddButton
+                          tooltip={t`Add Organization`}
+                          key="add"
+                          linkTo={addUrl}
+                        />,
+                      ]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -181,9 +187,6 @@ function OrganizationsList() {
                 onSelect={() => handleSelect(o)}
               />
             )}
-            emptyStateControls={
-              canAdd ? <ToolbarAddButton key="add" linkTo={addUrl} /> : null
-            }
           />
         </Card>
       </PageSection>

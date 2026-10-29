@@ -1,3 +1,4 @@
+export { default as SettingsPage } from './SettingsPage';
 export { default as SettingDetail } from './SettingDetail';
 export { default as RevertAllAlert } from './RevertAllAlert';
 export { default as RevertFormActionGroup } from './RevertFormActionGroup';
@@ -12,3 +13,6 @@ export {
   ObjectField,
   TextAreaField,
 } from './SharedFields';
+export { default as GroupRedirect } from './GroupRedirect';
+export { groupBreadcrumbs, groupFromPath, pickGroup } from './settingGroups';
+export type { SettingGroup } from './settingGroups';

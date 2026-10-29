@@ -128,6 +128,7 @@ function LabelSelect({
         <MenuToggle
           ref={toggleRef}
           variant="typeahead"
+          isFullWidth
           onClick={() => setIsExpanded(!isExpanded)}
           isExpanded={isExpanded}
           isDisabled={isLoading}

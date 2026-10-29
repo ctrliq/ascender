@@ -2,7 +2,7 @@
  * Which url segment a job's detail page lives under, keyed by the job's type.
  *
  * The API and the router disagree on these names, so every link to a job goes
- * through this map: a `project_update` is shown at /jobs/project/<id>.
+ * through this map: a `project_update` is shown at /runs/project/<id>.
  */
 export const JOB_TYPE_URL_SEGMENTS: Record<string, string> = {
   job: 'playbook',

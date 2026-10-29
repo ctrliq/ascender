@@ -48,12 +48,12 @@ function CredentialTypeListItem({
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={credentialType.summary_fields.user_capabilities?.edit}
-          tooltip={t`Edit credential type`}
+          tooltip={t`Edit Credential Type`}
         >
           <Button
             icon={<PencilAltIcon />}
             ouiaId={`${credentialType.id}-edit-button`}
-            aria-label={t`Edit credential type`}
+            aria-label={t`Edit Credential Type`}
             variant="plain"
             component={Link}
             to={`/credential_types/${credentialType.id}/edit`}

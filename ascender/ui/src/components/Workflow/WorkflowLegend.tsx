@@ -26,12 +26,12 @@ function WorkflowLegend() {
       </div>
       <ul className="ascender-workflow-legend__legend">
         <li>
-          <div className="ascender-workflow-legend__node-type-letter">JT</div>
+          <div className="ascender-workflow-legend__node-type-letter">J</div>
           <span>{t`Job Template`}</span>
         </li>
         <li>
           <div className="ascender-workflow-legend__node-type-letter">W</div>
-          <span>{t`Workflow`}</span>
+          <span>{t`Workflow Template`}</span>
         </li>
         <li>
           <div className="ascender-workflow-legend__node-type-letter">I</div>
@@ -42,8 +42,8 @@ function WorkflowLegend() {
           <span>{t`Project Sync`}</span>
         </li>
         <li>
-          <div className="ascender-workflow-legend__node-type-letter">M</div>
-          <span>{t`Management Job`}</span>
+          <div className="ascender-workflow-legend__node-type-letter">C</div>
+          <span>{t`Cleanup Job`}</span>
         </li>
         <li>
           <div className="ascender-workflow-legend__node-type-letter">

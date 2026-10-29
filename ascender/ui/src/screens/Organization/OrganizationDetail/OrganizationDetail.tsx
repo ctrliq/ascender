@@ -159,7 +159,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
               onConfirm={deleteOrganization}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={t`This organization is currently being by other resources. Are you sure you want to delete it?`}
+              deleteMessage={t`This organization is currently being used by other resources. Are you sure you want to delete it?`}
             >
               {t`Delete`}
             </DeleteButton>

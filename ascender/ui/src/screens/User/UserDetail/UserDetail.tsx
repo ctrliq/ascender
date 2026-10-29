@@ -103,8 +103,8 @@ function UserDetail({ user }: UserDetailProps) {
         )}
         {userAuthType && (
           <Detail
-            label={t`Type`}
-            value={<Label aria-label={t`login type`}>{userAuthType}</Label>}
+            label={t`Login Type`}
+            value={<Label aria-label={t`Login Type`}>{userAuthType}</Label>}
           />
         )}
         {last_login && (
@@ -120,7 +120,7 @@ function UserDetail({ user }: UserDetailProps) {
           summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="user-detail-edit-button"
-              aria-label={t`edit`}
+              aria-label={t`Edit`}
               component={Link}
               to={`/users/${id}/edit`}
             >

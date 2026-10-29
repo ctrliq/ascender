@@ -15,17 +15,30 @@
   padding: 0px 20px;
 }
 
-.ascender-schedule-detail__frequency-details-container {
-  background-color: var(--pf-v6-global--BackgroundColor--200);
-  margin-top: var(--pf-v6-global--spacer--lg);
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-  margin-right: calc(var(--pf-v6-c-card--child--PaddingRight) * -1);
-  margin-left: calc(var(--pf-v6-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-v6-c-card--child--PaddingRight);
+/* The same voice the detail labels above it use: the block it names carries
+   its own background, so the heading sits outside it rather than inside. */
+.ascender-schedule-detail__frequency-title {
+  margin: var(--pf-v6-global--spacer--lg) 0 var(--pf-v6-global--spacer--sm);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.36px;
+  text-transform: uppercase;
 }
 
-.ascender-schedule-detail__frequency-details-container > p {
-  margin-bottom: var(--pf-v6-global--spacer--md);
+/* The heading has already left the room above it. */
+.ascender-schedule-detail__frequency-title
+  + .ascender-schedule-detail__frequency-details-container {
+  margin-top: 0;
+}
+
+.ascender-schedule-detail__frequency-details-container {
+  background-color: var(--ascender-inset-bg);
+  margin-top: var(--pf-v6-global--spacer--lg);
+  margin-bottom: var(--pf-v6-global--spacer--lg);
+  /* The detail rows inside already hold 14px above and below themselves, so
+     the block only owes the same on the sides. */
+  padding-inline: 14px;
 }
 
 .ascender-schedule-detail__frequency-details-container
@@ -35,15 +48,13 @@
   border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
 }
 
-.ascender-schedule-detail__frequency-details-container
-  + .ascender-schedule-detail__frequency-details-container {
-  margin-top: calc(var(--pf-v6-global--spacer--lg) * -1);
-}
-
-.ascender-schedule-detail__padding-bottom-40 {
-  padding-bottom: 40px;
-}
-
-.ascender-schedule-detail__border-top-0 {
-  border-top: 0;
+/*
+ * The toggle is the first thing in the card, and the themes hold every card
+ * body to four pixels of padding at the top, which left it sitting on the tab
+ * bar above it. Twenty more make the twenty-four the card would otherwise
+ * carry, and the twelve below sit the toggle a shade closer to the first label
+ * than the details keep between their own rows.
+ */
+.ascender-schedule-detail__toggle-row {
+  padding-block: 20px 12px;
 }

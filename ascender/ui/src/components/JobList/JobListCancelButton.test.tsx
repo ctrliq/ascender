@@ -1,6 +1,8 @@
 import type { UnifiedJob } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import { Menu, MenuContent, MenuList } from '@patternfly/react-core';
+import { KebabifiedProvider } from 'contexts/Kebabified';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import JobListCancelButton from './JobListCancelButton';
 
@@ -19,10 +21,10 @@ describe('<JobListCancelButton />', () => {
     expect(getCancelButton()).toBeDisabled();
 
     // Tooltip content is rendered on hover; asserts the
-    // "Select a job to cancel" tooltip text.
+    // "Select a row to cancel" tooltip text.
     await user.hover(getCancelButton()!.closest('div')!);
     expect(
-      await screen.findByText('Select a job to cancel')
+      await screen.findByText('Select a row to cancel')
     ).toBeInTheDocument();
   });
 
@@ -72,6 +74,31 @@ describe('<JobListCancelButton />', () => {
     expect(getCancelButton()).toBeDisabled();
   });
 
+  test('reads the cancel capability, not the start one', async () => {
+    const { user } = renderWithContexts(
+      <JobListCancelButton
+        jobsToCancel={
+          [
+            {
+              id: 1,
+              name: 'cleanup',
+              type: 'system_job',
+              summary_fields: {
+                user_capabilities: { start: true, cancel: false },
+              },
+              status: 'running',
+            },
+          ] as unknown as UnifiedJob[]
+        }
+      />
+    );
+    expect(getCancelButton()).toBeDisabled();
+    await user.hover(getCancelButton()!.parentElement!);
+    expect(
+      await screen.findByText('You do not have permission to cancel:')
+    ).toBeInTheDocument();
+  });
+
   test('should be enabled when user does have permission to cancel selected job', () => {
     renderWithContexts(
       <JobListCancelButton
@@ -84,6 +111,7 @@ describe('<JobListCancelButton />', () => {
                 user_capabilities: {
                   delete: true,
                   start: true,
+                  cancel: true,
                 },
               },
               status: 'running',
@@ -108,6 +136,7 @@ describe('<JobListCancelButton />', () => {
                 user_capabilities: {
                   delete: true,
                   start: true,
+                  cancel: true,
                 },
               },
               status: 'running',
@@ -133,12 +162,29 @@ describe('<JobListCancelButton />', () => {
     // open modal again, click the confirm (danger) button -> onCancel called
     await user.click(getCancelButton()!);
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    // the confirm button shares the "Cancel job" text but lives in the modal
-    const dialog = screen.getByRole('dialog');
-    const confirmButton = dialog.querySelector(
-      '#cancel-job-confirm-button'
-    ) as HTMLElement;
-    await user.click(confirmButton);
+    // The confirm button says what it does, as the single run's dialog does,
+    // rather than repeating the toolbar's Cancel.
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
+    );
     expect(onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  test('the kebab item is named by its own text', () => {
+    renderWithContexts(
+      <KebabifiedProvider
+        value={{ isKebabified: true, onKebabModalChange: () => {} }}
+      >
+        <Menu>
+          <MenuContent>
+            <MenuList>
+              <JobListCancelButton jobsToCancel={[]} />
+            </MenuList>
+          </MenuContent>
+        </Menu>
+      </KebabifiedProvider>
+    );
+    const item = screen.getByRole('menuitem', { name: 'Cancel' });
+    expect(item).not.toHaveAttribute('aria-labelledby');
   });
 });

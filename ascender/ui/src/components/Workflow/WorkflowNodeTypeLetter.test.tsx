@@ -16,7 +16,7 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(container.querySelector('foreignObject')).toHaveTextContent('JT');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('J');
   });
   test('renders JT when unified_job_type=job', () => {
     const { container } = render(
@@ -30,7 +30,7 @@ describe('WorkflowNodeTypeLetter', () => {
         />
       </svg>
     );
-    expect(container.querySelector('foreignObject')).toHaveTextContent('JT');
+    expect(container.querySelector('foreignObject')).toHaveTextContent('J');
   });
   test('renders P when type=project', () => {
     const { container } = render(
@@ -87,6 +87,19 @@ describe('WorkflowNodeTypeLetter', () => {
       </svg>
     );
     expect(container.querySelector('foreignObject')).toHaveTextContent('I');
+  });
+  test.each([
+    { type: 'system_job_template' },
+    { unified_job_type: 'system_job' },
+  ])('renders C for a cleanup job, %o', (fullUnifiedJobTemplate) => {
+    const { container } = render(
+      <svg>
+        <WorkflowNodeTypeLetter
+          node={{ fullUnifiedJobTemplate } as unknown as WorkflowNode}
+        />
+      </svg>
+    );
+    expect(container.querySelector('foreignObject')).toHaveTextContent('C');
   });
   test('renders W when type=workflow_job_template', () => {
     const { container } = render(

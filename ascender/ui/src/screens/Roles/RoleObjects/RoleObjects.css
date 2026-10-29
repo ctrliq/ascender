@@ -1,0 +1,16 @@
+/*
+ * A third of the table for the name, so Organization starts in the same place
+ * whichever kind is open: sized from the longest name, it moved between 882
+ * and 1015 across the kinds.
+ *
+ * Two things about how PatternFly builds a table cell: it caps one at 1px and
+ * lets the width push it out, which is how it truncates, so the cap has to go
+ * before a width is the width; and a percentage inside calc() is dropped on a
+ * cell, so the share is said as a plain percentage. Said from the card, since
+ * the paginated table keeps its own table element to itself.
+ */
+.ascender-role-detail .pf-v6-c-table th:first-child,
+.ascender-role-detail .pf-v6-c-table td:first-child {
+  --pf-v6-c-table--cell--MaxWidth: none;
+  width: 32.9%;
+}

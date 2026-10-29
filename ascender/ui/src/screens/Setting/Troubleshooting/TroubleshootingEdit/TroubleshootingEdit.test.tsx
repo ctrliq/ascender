@@ -33,7 +33,7 @@ describe('<TroubleshootingEdit />', () => {
 
   async function renderEdit() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/troubleshooting/edit'],
+      initialEntries: ['/troubleshooting/edit/misc'],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -54,19 +54,24 @@ describe('<TroubleshootingEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await renderEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('debug');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      ASCENDER_CLEANUP_PATHS: true,
+      ASCENDER_REQUEST_PROFILE: false,
+      RECEPTOR_RELEASE_WORK: true,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -97,9 +102,7 @@ describe('<TroubleshootingEdit />', () => {
   test('should navigate to troubleshooting settings detail when cancel is clicked', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual(
-      '/settings/troubleshooting/details'
-    );
+    expect(history.location.pathname).toEqual('/troubleshooting/misc');
   });
 
   test('should display ContentError on throw', async () => {

@@ -50,7 +50,7 @@ function WorkflowLinkHelp({ link }: WorkflowLinkHelpProps) {
       {link.linkType === 'condition' && link.linkCondition && (
         <>
           <dt>
-            <b>{t`Evaluate on`}</b>
+            <b>{t`Evaluate On`}</b>
           </dt>
           <dd id="workflow-link-help-trigger">{triggerLabel}</dd>
           <dt>

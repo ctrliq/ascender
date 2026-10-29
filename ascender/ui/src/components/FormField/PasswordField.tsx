@@ -6,8 +6,6 @@ import {
   FormHelperText,
   HelperText,
   HelperTextItem,
-  InputGroup,
-  InputGroupItem,
 } from '@patternfly/react-core';
 import Popover from '../Popover';
 import PasswordInput from './PasswordInput';
@@ -41,19 +39,15 @@ function PasswordField({
       label={label}
       labelHelp={helperText ? <Popover content={helperText} /> : undefined}
     >
-      <InputGroup>
-        <InputGroupItem isFill>
-          <PasswordInput
-            id={id}
-            name={name}
-            label={label}
-            validate={validate}
-            isRequired={isRequired}
-            helperText={helperText}
-            {...rest}
-          />
-        </InputGroupItem>
-      </InputGroup>
+      <PasswordInput
+        id={id}
+        name={name}
+        label={label}
+        validate={validate}
+        isRequired={isRequired}
+        helperText={helperText}
+        {...rest}
+      />
       {!isValid && (
         <FormHelperText>
           <HelperText>

@@ -154,6 +154,12 @@ describe('UsersList with full permissions', () => {
     ).toHaveLength(3);
   });
 
+  test('searches by username until another field is chosen', () => {
+    expect(
+      screen.getByRole('button', { name: 'Simple key select' })
+    ).toHaveTextContent('Username');
+  });
+
   test('should show add button', () => {
     expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
   });

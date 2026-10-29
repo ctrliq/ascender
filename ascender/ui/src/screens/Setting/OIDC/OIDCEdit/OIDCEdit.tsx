@@ -9,7 +9,7 @@ import { SettingsEditForm } from '../../shared';
 
 function OIDCEdit() {
   return (
-    <SettingsEditForm category="oidc" detailUrl="/settings/oidc/details">
+    <SettingsEditForm category="oidc" detailUrl="/authentication/oidc/details">
       {(OIDC) => (
         <>
           <InputField

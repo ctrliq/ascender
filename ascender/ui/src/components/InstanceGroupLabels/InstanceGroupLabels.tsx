@@ -16,9 +16,7 @@ function InstanceGroupLabels({
   isLinkable = false,
 }: InstanceGroupLabelsProps) {
   const buildLinkURL = (isContainerGroup: unknown) =>
-    isContainerGroup
-      ? '/instance_groups/container_group/'
-      : '/instance_groups/';
+    isContainerGroup ? '/container_groups/' : '/instance_groups/';
   return (
     <LabelGroup numLabels={5}>
       {labels.map(({ id, name, is_container_group }) =>

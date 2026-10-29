@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { useField } from 'components/Form';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import './RevertButton.css';
+import Tooltip from 'components/Tooltip';
 
 export interface RevertButtonProps {
   id: string;
@@ -43,10 +44,15 @@ function RevertButton({
   const revertTooltipContent = isRevertable
     ? t`Revert to factory default.`
     : t`Restore initial value.`;
-  const tooltipContent =
-    isDisabled || isMatch
-      ? t`Setting matches factory default.`
-      : revertTooltipContent;
+  // A disabled button says why it is disabled. Matching the default is one
+  // reason; a field the form has locked or switched off is another, and there
+  // the setting may well differ from its default.
+  let tooltipContent = revertTooltipContent;
+  if (isMatch) {
+    tooltipContent = t`Setting matches factory default.`;
+  } else if (isDisabled) {
+    tooltipContent = t`Revert is unavailable while the field is disabled.`;
+  }
 
   return (
     <Tooltip entryDelay={700} content={tooltipContent}>

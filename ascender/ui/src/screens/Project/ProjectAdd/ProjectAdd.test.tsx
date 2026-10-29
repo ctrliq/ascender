@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { ProjectsAPI } from 'api';
+import { CredentialTypesAPI, ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -79,8 +79,30 @@ vi.mock('../shared/ProjectForm', async () => {
 });
 
 describe('<ProjectAdd />', () => {
+  /*
+   * The page reads what the form draws with before it renders it, so that the
+   * whole page has one loading state rather than one inside the card.
+   */
+  beforeEach(() => {
+    vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: { scm_type: { choices: [['git', 'Git']] } } } },
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
+    vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
+      data: { results: [{ id: 4 }] },
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('should show a content error when what the form draws with cannot be read', async () => {
+    vi.mocked(CredentialTypesAPI.read).mockRejectedValue(new Error());
+    renderWithContexts(<ProjectAdd />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('handleSubmit should post to the api', async () => {
@@ -89,7 +111,9 @@ describe('<ProjectAdd />', () => {
     } as unknown as ResponseOf<typeof ProjectsAPI.create>);
     const { user } = renderWithContexts(<ProjectAdd />);
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() => expect(ProjectsAPI.create).toHaveBeenCalledTimes(1));
     expect(ProjectsAPI.create).toHaveBeenCalledWith({
@@ -109,7 +133,9 @@ describe('<ProjectAdd />', () => {
       context: { router: { history } },
     });
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toEqual('/projects/5/details')
@@ -129,7 +155,9 @@ describe('<ProjectAdd />', () => {
     vi.mocked(ProjectsAPI.create).mockRejectedValue(error);
     const { user } = renderWithContexts(<ProjectAdd />);
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     expect(await screen.findByText('submit-error')).toBeInTheDocument();
     expect(ProjectsAPI.create).toHaveBeenCalledTimes(1);
@@ -141,7 +169,7 @@ describe('<ProjectAdd />', () => {
       context: { router: { history } },
     });
 
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await user.click(await screen.findByRole('button', { name: 'Cancel' }));
 
     expect(history.location.pathname).toEqual('/projects');
   });

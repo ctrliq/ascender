@@ -71,10 +71,10 @@ function WorkflowStartNode({
         <WorkflowActionTooltip
           actions={[
             <WorkflowActionTooltipItem
-              label={t`Add a new node`}
+              label={t`Add Node`}
               id="node-add"
               key="add"
-              onMouseEnter={() => onUpdateHelpText(t`Add a new node`)}
+              onMouseEnter={() => onUpdateHelpText(t`Add Node`)}
               onMouseLeave={() => onUpdateHelpText(null)}
               onClick={() => {
                 onUpdateHelpText(null);

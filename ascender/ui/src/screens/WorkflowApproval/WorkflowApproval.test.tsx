@@ -22,13 +22,13 @@ vi.mock('./WorkflowApprovalDetail', async () => {
 });
 
 // WorkflowApproval uses paths relative to its parent route, so mount it under
-// the same /workflow_approvals/:id/* route that WorkflowApprovals.js gives it.
+// the same /approvals/:id/* route that WorkflowApprovals.js gives it.
 function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>
       <Route
-        path="/workflow_approvals/:id/*"
+        path="/approvals/:id/*"
         element={<WorkflowApproval setBreadcrumb={() => {}} />}
       />
     </Routes>,
@@ -48,7 +48,7 @@ describe('<WorkflowApproval />', () => {
   });
 
   test('fetches the workflow approval detail', async () => {
-    renderAt('/workflow_approvals/1/details');
+    renderAt('/approvals/1/details');
     expect(
       await screen.findByText('WorkflowApprovalDetail')
     ).toBeInTheDocument();
@@ -57,17 +57,17 @@ describe('<WorkflowApproval />', () => {
   });
 
   test('redirects the index path to details', async () => {
-    const { history } = renderAt('/workflow_approvals/1');
+    const { history } = renderAt('/approvals/1');
     expect(
       await screen.findByText('WorkflowApprovalDetail')
     ).toBeInTheDocument();
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/workflow_approvals/1/details')
+      expect(history.location.pathname).toBe('/approvals/1/details')
     );
   });
 
   test('shows a not-found error on an unknown sub-route', async () => {
-    renderAt('/workflow_approvals/1/foobar');
+    renderAt('/approvals/1/foobar');
     expect(
       await screen.findByText('View Workflow Approval Details')
     ).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('<WorkflowApproval />', () => {
       response: { status: 404 },
     });
     vi.mocked(WorkflowApprovalsAPI.readDetail).mockRejectedValue(err);
-    renderAt('/workflow_approvals/1/details');
+    renderAt('/approvals/1/details');
     expect(
       await screen.findByText('Workflow Approval not found.')
     ).toBeInTheDocument();

@@ -7,6 +7,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
+import { getGroupInventory } from '../shared/utils';
 
 export interface InventoryHostGroupItemProps {
   group: Group;
@@ -27,8 +28,10 @@ function InventoryHostGroupItem({
 }: InventoryHostGroupItemProps) {
   const { t } = useLingui();
   const labelId = `check-action-${group.id}`;
-  const detailUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/details`;
-  const editUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/edit`;
+  const { path: inventoryPath, isReadOnly: isReadOnlyInventory } =
+    getGroupInventory(group, inventoryId);
+  const detailUrl = `${inventoryPath}/groups/${group.id}/details`;
+  const editUrl = `${inventoryPath}/groups/${group.id}/edit`;
 
   return (
     <Tr
@@ -48,20 +51,25 @@ function InventoryHostGroupItem({
           <b>{group.name}</b>
         </Link>
       </Td>
-      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
-        <ActionItem
-          visible={group.summary_fields.user_capabilities?.edit}
-          tooltip={t`Edit group`}
-        >
-          <Button
-            icon={<PencilAltIcon />}
-            ouiaId={`${group.id}-edit-button`}
-            variant="plain"
-            component={Link}
-            to={editUrl}
-          />
-        </ActionItem>
-      </ActionsTd>
+      {/* A constructed or federated inventory builds its groups from its
+          sources, and the api refuses to edit them, so the row offers no
+          Edit, as the same list under the host does. */}
+      {!isReadOnlyInventory && (
+        <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
+          <ActionItem
+            visible={group.summary_fields.user_capabilities?.edit}
+            tooltip={t`Edit Group`}
+          >
+            <Button
+              icon={<PencilAltIcon />}
+              ouiaId={`${group.id}-edit-button`}
+              variant="plain"
+              component={Link}
+              to={editUrl}
+            />
+          </ActionItem>
+        </ActionsTd>
+      )}
     </Tr>
   );
 }

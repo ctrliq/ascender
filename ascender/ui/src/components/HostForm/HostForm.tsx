@@ -8,7 +8,6 @@ import {
   FormHelperText,
   HelperText,
   HelperTextItem,
-  Tooltip,
 } from '@patternfly/react-core';
 import { required } from 'util/validators';
 import FormField, { FormSubmitError } from '../FormField';
@@ -17,6 +16,7 @@ import { VariablesField } from '../CodeEditor';
 import { InventoryLookup } from '../Lookup';
 import { FormColumnLayout, FormFullWidthLayout } from '../FormLayout';
 import Popover from '../Popover';
+import Tooltip from '../Tooltip';
 
 export interface InventoryLookupFieldProps {
   isDisabled: boolean;

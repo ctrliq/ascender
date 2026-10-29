@@ -3,6 +3,8 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
 import SmartInventoryForm from '../shared/SmartInventoryForm';
@@ -11,6 +13,27 @@ import parseHostFilter from '../shared/utils';
 
 function SmartInventoryAdd() {
   const navigate = useNavigate();
+
+  /*
+   * What the form draws with, read here rather than inside it: read there, the
+   * card was already on screen and a second loading animation ran inside it.
+   */
+  const {
+    request: fetchFormOptions,
+    result: formOptions,
+    isLoading,
+    error: contentError,
+  } = useRequest(
+    useCallback(async () => {
+      const { data } = await InventoriesAPI.readOptions();
+      return data;
+    }, []),
+    null
+  );
+
+  useEffect(() => {
+    fetchFormOptions();
+  }, [fetchFormOptions]);
 
   const {
     error: submitError,
@@ -73,11 +96,28 @@ function SmartInventoryAdd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inventoryId]);
 
+  if (contentError) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentError error={contentError} />
+      </PageSection>
+    );
+  }
+
+  if (isLoading || !formOptions) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <SmartInventoryForm
+            options={formOptions}
             onCancel={handleCancel}
             onSubmit={handleSubmit}
             submitError={submitError}

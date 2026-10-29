@@ -220,8 +220,8 @@ describe('NodeTypeStep', () => {
     expect(minutesInput).toBeInTheDocument();
     expect(secondsInput).toBeInTheDocument();
 
-    const onTimeoutSelect = screen.getByLabelText('On timeout');
-    const requiredApprovalsInput = screen.getByLabelText('Required approvals');
+    const onTimeoutSelect = screen.getByLabelText('On Timeout');
+    const requiredApprovalsInput = screen.getByLabelText('Required Approvals');
     expect(onTimeoutSelect).toBeInTheDocument();
     expect(onTimeoutSelect).toHaveValue('deny');
     expect(requiredApprovalsInput).toBeInTheDocument();
