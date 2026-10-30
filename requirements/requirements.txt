@@ -232,7 +232,7 @@ packaging==26.3
     #   wheel
 pexpect==4.7.0
     # via ansible-runner
-pip==26.2.1
+pip==26.2.2
     # via -r /ascender_devel/requirements/requirements.in
 pkgconfig==1.6.0
     # via -r /ascender_devel/requirements/requirements.in
