@@ -215,6 +215,11 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
       icon: AzureIcon,
       label: t`Sign in with Azure AD Tenant`,
     },
+    'entra-id': {
+      dataCy: 'social-auth-entra-id',
+      icon: AzureIcon,
+      label: t`Sign in with Microsoft Entra ID`,
+    },
     github: {
       dataCy: 'social-auth-github',
       icon: GithubIcon,

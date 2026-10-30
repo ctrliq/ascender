@@ -54,7 +54,7 @@ msgstr "वर्कफ़्लो अनुमोदन नहीं मिल
 msgid "Browse…"
 msgstr "ब्राउज़ करें…"
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -237,7 +237,7 @@ msgstr "हेल्थ चेक चल रहा है"
 msgid "Failed to copy inventory."
 msgstr "इन्वेंटरी कॉपी करने में विफल।"
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -676,7 +676,7 @@ msgstr "विस्तृत करें"
 msgid "Promote Child Groups and Hosts"
 msgstr "चाइल्ड समूहों और होस्ट्स को प्रोत्साहित करें"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -776,7 +776,7 @@ msgstr "कृपया 1 और 31 के बीच एक दिन संख�
 msgid "No"
 msgstr "नहीं"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "विविध सिस्टम"
 
@@ -876,7 +876,7 @@ msgstr "टोकन पर वापस"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "वेबहुक: इस टेम्पलेट के लिए वेबहुक सक्षम करें।"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1214,7 +1214,7 @@ msgstr "विफलता स्पष्टीकरण:"
 msgid "February"
 msgstr "फ़रवरी"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "सभी सेटिंग्स देखें"
 
@@ -1491,7 +1491,7 @@ msgstr "प्रबंधन जॉब लॉन्च करें"
 msgid "Add existing group"
 msgstr "मौजूदा समूह जोड़ें"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2035,7 +2035,7 @@ msgstr "कुंजी"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2209,7 +2209,7 @@ msgstr "फ़ील्ड दिए गए नियमित एक्सप�
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {यह क्रेडेंशियल प्रकार वर्तमान में कुछ क्रेडेंशियल्स द्वारा उपयोग किया जा रहा है और इसे हटाया नहीं जा सकता।} other {क्रेडेंशियल्स द्वारा उपयोग किए जा रहे क्रेडेंशियल प्रकार हटाए नहीं जा सकते। क्या आप फिर भी हटाना चाहते हैं?}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2519,7 +2519,7 @@ msgstr "{0} (हटाया गया)"
 msgid "The inventory that this host belongs to."
 msgstr "वह इन्वेंटरी जिससे यह होस्ट संबंधित है।"
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "लॉग इन करें"
 
@@ -3024,7 +3024,7 @@ msgstr "{0, plural, one {कृपया एक मान्य फ़ोन न
 msgid "Facts"
 msgstr "फ़ैक्ट्स"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "या"
 
@@ -3059,8 +3059,8 @@ msgid "Workflow job details"
 msgstr "वर्कफ़्लो जॉब विवरण"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "Azure AD सेटिंग्स"
+#~ msgid "Azure AD settings"
+#~ msgstr "Azure AD सेटिंग्स"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3262,11 +3262,11 @@ msgstr "यह इन्वेंटरी स्रोत वर्तमान
 msgid "Deny"
 msgstr "अस्वीकार करें"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "जेनेरिक OIDC"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3535,7 +3535,7 @@ msgid "Select Hosts"
 msgstr "होस्ट्स चुनें"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3645,7 +3645,7 @@ msgstr "अगस्त"
 msgid "View smart inventory host details"
 msgstr "स्मार्ट इन्वेंटरी होस्ट विवरण देखें"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "Google से साइन इन करें"
 
@@ -3747,8 +3747,8 @@ msgstr "सभी सिंक करें"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4167,8 +4167,8 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4541,7 +4541,7 @@ msgstr "प्रोजेक्ट रिवीज़न रीफ़्रे�
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "वैकल्पिक रूप से वेबहुक सेवा को स्थिति अपडेट वापस भेजने के लिए उपयोग किए जाने वाले क्रेडेंशियल का चयन करें।"
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4795,7 +4795,7 @@ msgstr "होस्ट टॉगल करने में विफल।"
 msgid "denied"
 msgstr "अस्वीकृत"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise Organizations से साइन इन करें"
 
@@ -5112,6 +5112,10 @@ msgstr "टाइमआउट पर"
 msgid "Create New Team"
 msgstr "नई टीम बनाएं"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "Microsoft Entra ID से साइन इन करें"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "दस्तावेज़ीकरण में और"
@@ -5130,7 +5134,7 @@ msgstr "टेक्स्ट क्षेत्र"
 msgid "View User Interface settings"
 msgstr "उपयोगकर्ता इंटरफ़ेस सेटिंग्स देखें"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub Teams से साइन इन करें"
 
@@ -6046,6 +6050,10 @@ msgstr "बीता हुआ"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3 (डिबग)"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "Microsoft Entra ID (Azure AD) सेटिंग्स"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7112,7 +7120,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "नोट: यह फ़ील्ड मानता है कि रिमोट का नाम “origin” है।"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub डिफ़ॉल्ट"
 
@@ -7177,6 +7185,11 @@ msgstr "वर्कफ़्लो जॉब टेम्पलेट"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "लॉन्च पर लेबल के लिए संकेत दें।"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant (लीगेसी)"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7493,7 +7506,7 @@ msgstr "लॉग आउट"
 msgid "sec"
 msgstr "सेकंड"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "{label} से साइन इन करें"
 
@@ -7720,11 +7733,11 @@ msgid "Edit Team"
 msgstr "टीम संपादित करें"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "उपयोगकर्ता इंटरफ़ेस"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise से साइन इन करें"
 
@@ -7772,7 +7785,7 @@ msgstr "कभी समाप्त नहीं होता"
 msgid "View job {0}"
 msgstr "जॉब {0} देखें"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} से साइन इन करें"
 
@@ -7885,7 +7898,7 @@ msgstr "startswith का केस-असंवेदनशील संस्�
 msgid "Unsaved changes modal"
 msgstr "सहेजे न गए परिवर्तन मोडल"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise Teams से साइन इन करें"
 
@@ -7919,7 +7932,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub सेटिंग्स"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub Organizations से साइन इन करें"
 
@@ -8013,8 +8026,8 @@ msgstr "होस्ट ठीक है"
 #~ msgstr "शेष दिन"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "Azure AD सेटिंग्स देखें"
+#~ msgid "View Azure AD settings"
+#~ msgstr "Azure AD सेटिंग्स देखें"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8035,7 +8048,7 @@ msgstr "सभी फ़िल्टर साफ़ करें"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {यह इंस्टेंस वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?} other {इन इंस्टेंस को डीप्रोविजन करने से उन पर निर्भर अन्य संसाधन प्रभावित हो सकते हैं। क्या आप वाकई इन्हें हटाना चाहते हैं?}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8546,7 +8559,7 @@ msgstr "नोट: इन्हें जिस क्रम में चुन
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "लॉन्च के समय पासवर्ड की आवश्यकता वाले क्रेडेंशियल की अनुमति नहीं है। आगे बढ़ने के लिए कृपया निम्नलिखित क्रेडेंशियल को हटाएँ या समान प्रकार के क्रेडेंशियल से बदलें: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "OIDC से साइन इन करें"
 
@@ -8580,7 +8593,7 @@ msgid "Remote Archive"
 msgstr "रिमोट संग्रह"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "समस्या निवारण"
 
@@ -8635,7 +8648,7 @@ msgid "Destination Channels or Users"
 msgstr "गंतव्य चैनल या उपयोगकर्ता"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8655,7 +8668,7 @@ msgstr "वह प्रोजेक्ट जिसमें वह प्ल�
 msgid "Select Credential Type"
 msgstr "क्रेडेंशियल प्रकार चुनें"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8722,7 +8735,7 @@ msgstr "इन्वेंटरी संपादित करें"
 msgid "Failed to user token."
 msgstr "उपयोगकर्ता टोकन में विफल।"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "SAML से साइन इन करें"
 
@@ -8990,7 +9003,7 @@ msgstr "इन्वेंटरी स्रोत सिंक रद्द �
 msgid "Failed to delete one or more applications."
 msgstr "एक या अधिक एप्लिकेशन हटाने में विफल।"
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "विविध प्रमाणीकरण"
 
@@ -9496,7 +9509,7 @@ msgstr "फ़ोर्क्स"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "यह सीमा इस वर्कफ़्लो ({0}) के उन सभी वर्कफ़्लो नोड्स पर लागू होती है जो सीमा के लिए संकेत देते हैं, प्रत्येक नोड पर निर्धारित सीमा के स्थान पर।"
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP डिफ़ॉल्ट"
 
@@ -9564,7 +9577,7 @@ msgid "Play"
 msgstr "प्ले"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -9728,7 +9741,7 @@ msgstr "बाहरी सीक्रेट प्रबंधन सिस्
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10021,7 +10034,7 @@ msgstr "टूल टॉगल करें"
 msgid "Organization"
 msgstr "संगठन"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "आपका सत्र समाप्त हो गया है। जहां आपने छोड़ा था वहां से जारी रखने के लिए कृपया लॉग इन करें।"
 
@@ -10077,8 +10090,8 @@ msgstr "Azure AD Tenant से साइन इन करें"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD डिफ़ॉल्ट"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD डिफ़ॉल्ट"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10139,7 +10152,7 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10148,13 +10161,13 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10162,6 +10175,7 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10332,7 +10346,7 @@ msgstr "यह क्रिया निम्न को सॉफ़्ट ड�
 msgid "Listener Addresses"
 msgstr "लिसनर पते"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10611,7 +10625,7 @@ msgid "An error occurred"
 msgstr "एक त्रुटि हुई"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -10947,7 +10961,7 @@ msgstr "संगठन हटाने में विफल।"
 #~ msgid "Hosts available"
 #~ msgstr "उपलब्ध होस्ट्स"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "लॉगिंग"
 
@@ -11247,7 +11261,7 @@ msgstr "एक या अधिक इन्वेंटरी स्रोत �
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "यदि निर्दिष्ट किया गया है, तो वर्कफ़्लो देखते समय यह फ़ील्ड संसाधन नाम के बजाय नोड पर दिखाया जाएगा"
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "GitHub से साइन इन करें"
 
@@ -11295,7 +11309,7 @@ msgid "All job types"
 msgstr "सभी जॉब प्रकार"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
@@ -11354,6 +11368,10 @@ msgstr "इन्वेंटरी में होस्ट्स को ल�
 msgid "Timeout"
 msgstr "टाइमआउट"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "Microsoft Entra ID सेटिंग्स देखें"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "कृपया तब तक प्रतीक्षा करें जब तक टोपोलॉजी दृश्य भर न जाए..."
@@ -11382,7 +11400,7 @@ msgstr "{numJobsToCancel, plural, one {चयनित कार्य रद्
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11391,12 +11409,12 @@ msgstr "{numJobsToCancel, plural, one {चयनित कार्य रद्
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11405,6 +11423,7 @@ msgstr "{numJobsToCancel, plural, one {चयनित कार्य रद्
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11856,6 +11875,11 @@ msgstr "वेबहुक सेवा"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "प्रोविज़निंग कॉलबैक URL के निर्माण को सक्षम करता है। URL का उपयोग करके, एक होस्ट {brandName} से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है।"
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD डिफ़ॉल्ट (लीगेसी)"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "रद्द नोड, सफल के रूप में बाध्य"
@@ -12261,6 +12285,11 @@ msgstr "टेम्पलेट कॉपी करें"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "सूचना अनुमोदन टॉगल करें"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"

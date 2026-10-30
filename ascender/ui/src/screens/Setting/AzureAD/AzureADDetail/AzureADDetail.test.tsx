@@ -66,8 +66,9 @@ describe('<AzureADDetail />', () => {
     await renderDetail();
     const expectedTabs = [
       /Back to Settings/,
-      /Azure AD Default/,
-      /Azure AD Tenant/,
+      /Microsoft Entra ID/,
+      /Azure AD Default \(legacy\)/,
+      /Azure AD Tenant \(legacy\)/,
     ];
     expectedTabs.forEach((text) => {
       expect(screen.getAllByRole('tab', { name: text }).length).toBeGreaterThan(

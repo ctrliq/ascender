@@ -41,7 +41,12 @@ from ascender.sso.fields import (
     TriggerRuleField,
 )
 from ascender.main.validators import validate_private_key, validate_certificate
-from ascender.sso.validators import validate_ldap_bind_dn, validate_tacacsplus_disallow_nonascii  # noqa
+from ascender.sso.validators import (  # noqa
+    validate_entra_host,
+    validate_entra_tenant_id,
+    validate_ldap_bind_dn,
+    validate_tacacsplus_disallow_nonascii,
+)
 
 
 class SocialAuthCallbackURL(object):
@@ -1169,6 +1174,299 @@ register(
 )
 
 ###############################################################################
+# MICROSOFT ENTRA ID SETTINGS
+###############################################################################
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_CALLBACK_URL',
+    field_class=fields.CharField,
+    read_only=True,
+    default=SocialAuthCallbackURL('entra-id'),
+    label=_('Entra ID Callback URL'),
+    help_text=_('Add this URL as a Web redirect URI of the app registration in Entra ID.'),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    depends_on=['ASCENDER_URL_BASE'],
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_KEY',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Entra ID Client ID'),
+    help_text=_('The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.'),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_SECRET',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Entra ID Client Secret'),
+    help_text=_('A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.'),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    encrypted=True,
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_TENANT_ID',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Entra ID Tenant'),
+    help_text=_(
+        'The Directory (tenant) ID, or one of the tenant\'s domains such as '
+        'contoso.onmicrosoft.com. Only users of this tenant can log in, so '
+        'common, organizations and consumers are not accepted.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    validators=[validate_entra_tenant_id],
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='login.microsoftonline.com',
+    label=_('Entra ID Authority Host'),
+    help_text=_(
+        'The sign in host of the cloud the tenant lives in: login.microsoftonline.com '
+        'for the public cloud, login.microsoftonline.us for Azure Government, '
+        'login.partner.microsoftonline.cn for Azure operated by 21Vianet, or '
+        '<subdomain>.ciamlogin.com for an External ID tenant.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    validators=[validate_entra_host],
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY',
+    field_class=fields.CharField,
+    allow_blank=False,
+    default='preferred_username',
+    label=_('Entra ID Username Claim'),
+    help_text=_(
+        'The claim a new user\'s username is taken from. preferred_username is '
+        'usually the user principal name. Users are recognized on later logins '
+        'by their object ID, so renaming them in Entra ID does not lose their account.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Strip the Domain from Entra ID Usernames'),
+    help_text=_(
+        'Keep only the part before the @ of the username claim when a user is '
+        'created, so fernando.roca@contoso.com becomes fernando.roca. Existing '
+        'users keep their names. Two users whose addresses differ only in the '
+        'domain would get the same name, and the second gets a random suffix.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='groups',
+    label=_('Entra ID Groups Claim'),
+    help_text=_(
+        'The claim the groups triggers of the maps and rules below match against. '
+        'Entra ID only sends groups once a groups claim is added in the Token '
+        'configuration of the app registration, and by default as object IDs '
+        'rather than names. Use roles to match on app roles instead. A user in '
+        'too many groups for the token gets none, and the rules below treat '
+        'that as unknown rather than as no groups. Reading the groups from '
+        'Microsoft Graph, below, avoids both.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Read Entra ID Groups from Microsoft Graph'),
+    help_text=_(
+        'Read the user\'s groups from Microsoft Graph at login instead of from '
+        'the token. Graph has no limit on how many groups and includes nested '
+        'ones. The groups claim then holds their object IDs, never their names, '
+        'which any user who can create a group can copy. The app registration '
+        'needs the delegated Microsoft Graph permission GroupMember.Read.All, '
+        'with admin consent. If Graph cannot be reached at login, rules on groups '
+        'treat the user\'s groups as unknown.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Microsoft Graph Host'),
+    help_text=_(
+        'The Microsoft Graph host groups are read from. Leave it blank to use the '
+        'one of the authority host\'s cloud: graph.microsoft.com, graph.microsoft.us '
+        'or microsoftgraph.chinacloudapi.cn. Set it for others, such as '
+        'dod-graph.microsoft.us for Azure Government DoD.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    validators=[validate_entra_host],
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS',
+    field_class=TriggerRuleField,
+    allow_null=True,
+    default=None,
+    label=_('Entra ID Login Rule'),
+    help_text=_(
+        'A trigger rule a user has to match to log in through Entra ID at all. '
+        'Users it turns away are refused before an account is created for them. '
+        'Leave it empty to let in every user of the tenant the app registration '
+        'lets in.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    placeholder=collections.OrderedDict(
+        [('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000001', '11111111-0000-0000-0000-000000000002'])]))]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP',
+    field_class=OIDCOrganizationMapField,
+    allow_null=True,
+    default=None,
+    label=_('Entra ID Organization Map'),
+    help_text=_(
+        'Mapping to organization admins/users from Entra ID logins. On top of the '
+        'username and email expressions of the other social auth maps, a role may '
+        'be driven by a trigger rule, given as triggers_admins or triggers_users, '
+        'which matches on the user\'s groups and claims. Configuration details are '
+        'available in the documentation.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    placeholder=collections.OrderedDict(
+        [
+            (
+                'Default',
+                collections.OrderedDict(
+                    [
+                        (
+                            'triggers_admins',
+                            collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000002'])]))]),
+                        ),
+                        (
+                            'triggers_users',
+                            collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000001'])]))]),
+                        ),
+                        ('remove_admins', True),
+                        ('remove_users', True),
+                    ]
+                ),
+            ),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_TEAM_MAP',
+    field_class=OIDCTeamMapField,
+    allow_null=True,
+    default=None,
+    label=_('Entra ID Team Map'),
+    help_text=_(
+        'Mapping of team members (users) from Entra ID logins. Membership may be '
+        'driven by a trigger rule, given as triggers, which matches on the user\'s '
+        'groups and claims. Configuration details are available in the documentation.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    placeholder=collections.OrderedDict(
+        [
+            (
+                'Operators',
+                collections.OrderedDict(
+                    [
+                        ('organization', 'Default'),
+                        ('triggers', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000003'])]))])),
+                        ('remove', True),
+                    ]
+                ),
+            ),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_USER_FLAGS',
+    field_class=OIDCUserFlagsField,
+    allow_null=True,
+    default=None,
+    label=_('Entra ID User Flags'),
+    help_text=_(
+        'Trigger rules that make an Entra ID user a superuser (triggers_superuser) '
+        'or a system auditor (triggers_system_auditor). A user who stops matching '
+        'loses the flag at their next login unless remove_superusers or '
+        'remove_system_auditors is false. A flag without a rule is left alone.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+    placeholder=collections.OrderedDict(
+        [
+            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000005'])]))])),
+            ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000004'])]))])),
+            ('remove_superusers', True),
+            ('remove_system_auditors', True),
+        ]
+    ),
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Log Out of Entra ID'),
+    help_text=_(
+        'When a user who logged in through Entra ID logs out of Ascender, also end '
+        'their Microsoft session. Entra ID only sends the browser back to the post '
+        'logout redirect URL below if it is one of the redirect URIs of the app registration.'
+    ),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+register(
+    'SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL',
+    field_class=fields.URLField,
+    schemes=('http', 'https'),
+    allow_plain_hostname=True,
+    allow_blank=True,
+    default='',
+    label=_('Entra ID Post Logout Redirect URL'),
+    help_text=_('Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.'),
+    category=_('Microsoft Entra ID'),
+    category_slug='entra-id',
+)
+
+###############################################################################
 # MICROSOFT AZURE ACTIVE DIRECTORY SETTINGS
 ###############################################################################
 
@@ -1179,7 +1477,7 @@ register(
     default=SocialAuthCallbackURL('azuread-oauth2'),
     label=_('Azure AD OAuth2 Callback URL'),
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail. '),
-    category=_('Azure AD OAuth2'),
+    category=_('Azure AD OAuth2 (legacy)'),
     category_slug='azuread-oauth2',
     depends_on=['ASCENDER_URL_BASE'],
 )
@@ -1190,8 +1488,11 @@ register(
     allow_blank=True,
     default='',
     label=_('Azure AD OAuth2 Key'),
-    help_text=_('The OAuth2 key (Client ID) from your Azure AD application.'),
-    category=_('Azure AD OAuth2'),
+    help_text=_(
+        'The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now '
+        'Microsoft Entra ID, and its own settings are the ones to use for a new setup.'
+    ),
+    category=_('Azure AD OAuth2 (legacy)'),
     category_slug='azuread-oauth2',
 )
 
@@ -1204,7 +1505,7 @@ register(
     help_text=_(
         'The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.'
     ),
-    category=_('Azure AD OAuth2'),
+    category=_('Azure AD OAuth2 (legacy)'),
     category_slug='azuread-oauth2',
     encrypted=True,
 )
@@ -1216,7 +1517,7 @@ register(
     default=None,
     label=_('Azure AD OAuth2 Organization Map'),
     help_text=SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT,
-    category=_('Azure AD OAuth2'),
+    category=_('Azure AD OAuth2 (legacy)'),
     category_slug='azuread-oauth2',
     placeholder=SOCIAL_AUTH_ORGANIZATION_MAP_PLACEHOLDER,
 )
@@ -1228,7 +1529,7 @@ register(
     default=None,
     label=_('Azure AD OAuth2 Team Map'),
     help_text=SOCIAL_AUTH_TEAM_MAP_HELP_TEXT,
-    category=_('Azure AD OAuth2'),
+    category=_('Azure AD OAuth2 (legacy)'),
     category_slug='azuread-oauth2',
     placeholder=SOCIAL_AUTH_TEAM_MAP_PLACEHOLDER,
 )
@@ -1244,7 +1545,7 @@ register(
     default=SocialAuthCallbackURL('azuread-tenant-oauth2'),
     label=_('Azure AD Tenant OAuth2 Callback URL'),
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
-    category=_('Azure AD Tenant OAuth2'),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
     depends_on=['ASCENDER_URL_BASE'],
 )
@@ -1255,8 +1556,11 @@ register(
     allow_blank=True,
     default='',
     label=_('Azure AD Tenant OAuth2 Key'),
-    help_text=_('The OAuth2 key (Client ID) from your Azure AD application.'),
-    category=_('Azure AD Tenant OAuth2'),
+    help_text=_(
+        'The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now '
+        'Microsoft Entra ID, and its own settings are the ones to use for a new setup.'
+    ),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
 )
 
@@ -1269,7 +1573,7 @@ register(
     help_text=_(
         'The OAuth2 secret (Client Secret) from your Azure AD application. Leave blank when using Azure Workload Identity or another client assertion source.'
     ),
-    category=_('Azure AD Tenant OAuth2'),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
     encrypted=True,
 )
@@ -1281,7 +1585,7 @@ register(
     default='',
     label=_('Azure AD Tenant ID'),
     help_text=_('The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.'),
-    category=_('Azure AD Tenant OAuth2'),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
 )
 
@@ -1292,7 +1596,7 @@ register(
     default=None,
     label=_('Azure AD Tenant OAuth2 Organization Map'),
     help_text=SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT,
-    category=_('Azure AD Tenant OAuth2'),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
     placeholder=SOCIAL_AUTH_ORGANIZATION_MAP_PLACEHOLDER,
 )
@@ -1304,7 +1608,7 @@ register(
     default=None,
     label=_('Azure AD Tenant OAuth2 Team Map'),
     help_text=SOCIAL_AUTH_TEAM_MAP_HELP_TEXT,
-    category=_('Azure AD Tenant OAuth2'),
+    category=_('Azure AD Tenant OAuth2 (legacy)'),
     category_slug='azuread-oauth2-tenant',
     placeholder=SOCIAL_AUTH_TEAM_MAP_PLACEHOLDER,
 )
@@ -1518,7 +1822,7 @@ register(
     category_slug='oidc',
     placeholder=collections.OrderedDict(
         [
-            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-superusers'])]))])),
+            ('triggers_superuser', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['11111111-0000-0000-0000-000000000005'])]))])),
             ('triggers_system_auditor', collections.OrderedDict([('groups', collections.OrderedDict([('has_or', ['ascender-auditors'])]))])),
             ('remove_superusers', True),
             ('remove_system_auditors', True),
