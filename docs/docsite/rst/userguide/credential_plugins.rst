@@ -163,8 +163,14 @@ This plugin allows AWS to be used as a credential input source to pull secrets f
 
 When **AWS Secrets Manager lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
 
-- **AWS Access Key** (required): provide the access key used for communicating with AWS' key management system
-- **AWS Secret Key** (required): provide the secret as obtained by the AWS IAM console
+- **AWS Access Key**: provide the access key used for communicating with AWS' key management system
+- **AWS Secret Key**: provide the secret as obtained by the AWS IAM console
+
+Leave both keys empty to authenticate as the Ascender controller's own AWS identity instead: ``AWS_*`` environment variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Ascender refuses such a lookup unless a system administrator enables **Allow AWS Secrets Manager Lookups Without Keys** (``AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS``) in the Miscellaneous System settings; it is off by default.
+
+.. warning::
+
+   Every user can create a lookup without keys and use it in their own credentials, so enabling this setting gives all of them the Secrets Manager permissions of the controller's identity, both to read secret values into their jobs and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way.
 
 
 Below shows an example of a configured AWS Secret Manager credential.
