@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { URL } = require('url');
+const { insecureTLS } = require('./tls');
 
 const BASE = process.env.ASCENDER_URL || 'https://localhost:8043';
 const USERNAME = process.env.ASCENDER_USERNAME || 'admin';
@@ -23,10 +24,10 @@ const PASSWORD = process.env.ASCENDER_PASSWORD || 'password';
 const TOKEN = process.env.ASCENDER_TOKEN;
 const WORKFLOW_NAME = 'e2e-workflow';
 const NODE_COUNT = 3;
+const INSECURE_TLS = insecureTLS(BASE);
 
-// self-signed certificate in the development environment, and Node's global
-// fetch gives no clean way to relax that per request, so this goes through the
-// https module directly
+// Node's global fetch gives no clean way to relax certificate verification per
+// request, so this goes through the https module directly
 function api(method, endpoint, body) {
   const url = new URL(endpoint, BASE);
   const payload = body ? JSON.stringify(body) : null;
@@ -40,7 +41,7 @@ function api(method, endpoint, body) {
         hostname: url.hostname,
         port: url.port,
         path: `${url.pathname}${url.search}`,
-        rejectUnauthorized: false,
+        rejectUnauthorized: !INSECURE_TLS,
         headers: {
           Authorization: authorization,
           'Content-Type': 'application/json',
