@@ -38,13 +38,16 @@ export const GROUPS: SettingGroup[] = [
     keys: ['ASCENDER_URL_BASE', 'INSTALL_UUID'],
   },
   {
-    // What a proxy in front of the platform is allowed to say about a request.
+    // What a proxy in front of the platform is allowed to say about a request,
+    // and whether the AWS Secrets Manager lookup may fall back on the
+    // credentials of the host it runs on.
     id: 'security',
     label: msg`Security`,
     keys: [
       'REMOTE_HOST_HEADERS',
       'PROXY_IP_ALLOWED_LIST',
       'CSRF_TRUSTED_ORIGINS',
+      'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS',
     ],
   },
   {

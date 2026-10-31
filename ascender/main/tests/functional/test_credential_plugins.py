@@ -1,5 +1,8 @@
 import pytest
 from unittest import mock
+
+from django.test.utils import override_settings
+
 from ascender.main.credential_plugins import hashivault
 
 
@@ -50,6 +53,176 @@ def test_azure_authority_hosts_match_the_sdk():
     assert azure_kv.AUTHORITY_HOSTS['AzureChinaCloud'] == AzureAuthorityHosts.AZURE_CHINA
     assert azure_kv.AUTHORITY_HOSTS['AzureCloud'] == AzureAuthorityHosts.AZURE_PUBLIC_CLOUD
     assert azure_kv.AUTHORITY_HOSTS['AzureUSGovernment'] == AzureAuthorityHosts.AZURE_GOVERNMENT
+
+
+AWS_SM_METADATA = {'region_name': 'us-west-2', 'secret_name': 'some/secret'}
+AWS_ACCESS_KEY, AWS_SECRET_KEY = 'AKIAIOSFODNN7EXAMPLE', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+
+
+def test_aws_secretsmanager_keys_are_optional():
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    inputs = aws_secretsmanager.secrets_manager_inputs
+    assert inputs['required'] == ['region_name', 'secret_name']
+    assert [field['default'] for field in inputs['fields']] == ['', '']
+
+
+AWS_SM_KEYLESS = {'absent': {}, 'empty': {'aws_access_key': '', 'aws_secret_key': ''}}
+
+
+def aws_secretsmanager_lookup(allow_default_credentials, **keys):
+    """Run the backend with boto3's Session mocked, and return that mock."""
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    # boto3 is imported inside the backend, so patch it where it is imported from
+    with override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials), mock.patch('boto3.session.Session') as session:
+        session.return_value.client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
+        assert aws_secretsmanager.aws_secretsmanager_backend(**AWS_SM_METADATA, **keys) == 'sentinel'
+    return session
+
+
+@pytest.mark.django_db  # the setting is read for real: no database row, so its registered default
+@pytest.mark.parametrize('keys', AWS_SM_KEYLESS.values(), ids=AWS_SM_KEYLESS.keys())
+def test_aws_secretsmanager_keyless_lookup_is_refused_by_default(keys):
+    """Without the setting, a lookup without keys never reaches boto3, so it cannot run as the controller's identity."""
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    with mock.patch('boto3.session.Session') as session:
+        with pytest.raises(aws_secretsmanager.DefaultCredentialsNotAllowed, match='AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS is off'):
+            aws_secretsmanager.aws_secretsmanager_backend(**AWS_SM_METADATA, **keys)
+    session.assert_not_called()
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+@pytest.mark.parametrize('keys', AWS_SM_KEYLESS.values(), ids=AWS_SM_KEYLESS.keys())
+def test_aws_secretsmanager_keyless_lookup_uses_the_default_chain_when_allowed(keys):
+    """With the setting on, absent or empty keys reach boto3 as None, so its default credential chain (IRSA, instance role) applies."""
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    session = aws_secretsmanager_lookup(True, **keys)
+    client_kwargs = session.return_value.client.call_args.kwargs
+    assert client_kwargs['aws_access_key_id'] is None
+    assert client_kwargs['aws_secret_access_key'] is None
+    # the chain ends at the instance metadata service: botocore is held to one 1 s attempt per request
+    botocore_session = session.call_args.kwargs['botocore_session']
+    assert botocore_session.get_config_variable('metadata_service_timeout') == aws_secretsmanager.METADATA_SERVICE_TIMEOUT == 1
+    assert botocore_session.get_config_variable('metadata_service_num_attempts') == aws_secretsmanager.METADATA_SERVICE_NUM_ATTEMPTS == 1
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+def test_aws_secretsmanager_metadata_limits_override_the_environment(monkeypatch):
+    """AWS_METADATA_SERVICE_* on the controller cannot lengthen how long a lookup with no identity to find holds a worker."""
+    monkeypatch.setenv('AWS_METADATA_SERVICE_TIMEOUT', '5')
+    monkeypatch.setenv('AWS_METADATA_SERVICE_NUM_ATTEMPTS', '4')
+    botocore_session = aws_secretsmanager_lookup(True).call_args.kwargs['botocore_session']
+    assert botocore_session.get_config_variable('metadata_service_timeout') == 1
+    assert botocore_session.get_config_variable('metadata_service_num_attempts') == 1
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+@pytest.mark.parametrize('allow_default_credentials', [False, True], ids=['off', 'on'])
+def test_aws_secretsmanager_supplied_keys_ignore_the_setting(allow_default_credentials):
+    session = aws_secretsmanager_lookup(allow_default_credentials, aws_access_key=AWS_ACCESS_KEY, aws_secret_key=AWS_SECRET_KEY)
+    client_kwargs = session.return_value.client.call_args.kwargs
+    assert client_kwargs['aws_access_key_id'] == AWS_ACCESS_KEY
+    assert client_kwargs['aws_secret_access_key'] == AWS_SECRET_KEY
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+@pytest.mark.parametrize('allow_default_credentials', [False, True], ids=['off', 'on'])
+@pytest.mark.parametrize(
+    'keys, missing',
+    [({'aws_access_key': AWS_ACCESS_KEY}, 'aws_secret_access_key'), ({'aws_access_key': '', 'aws_secret_key': AWS_SECRET_KEY}, 'aws_access_key_id')],
+    ids=['access-key-only', 'secret-key-only'],
+)
+def test_aws_secretsmanager_one_key_never_reaches_the_chain(keys, missing, allow_default_credentials):
+    """One key alone is a misconfiguration, not a request for the controller's identity: real botocore refuses it
+    before it would consult the default chain, whatever the setting says."""
+    import botocore.session
+    from botocore.exceptions import PartialCredentialsError
+
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    with (
+        override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials),
+        mock.patch.object(botocore.session.Session, 'get_credentials') as get_credentials,
+    ):
+        with pytest.raises(PartialCredentialsError, match=missing):
+            aws_secretsmanager.aws_secretsmanager_backend(**AWS_SM_METADATA, **keys)
+    get_credentials.assert_not_called()
+
+
+AWS_SM_CALLER_ARN = 'arn:aws:sts::123456789012:assumed-role/ascender-controller/i-0123456789abcdef0'
+
+
+def aws_secretsmanager_failure(allow_default_credentials, failure, at='get_secret_value', **keys):
+    """Run the backend with boto3's Session mocked to fail like AWS does, either when the client is created (where
+    container credential providers fetch credentials) or in get_secret_value, and return the exception raised."""
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    with override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials), mock.patch('boto3.session.Session') as session:
+        if at == 'client':
+            session.return_value.client.side_effect = failure
+        else:
+            session.return_value.client.return_value.get_secret_value.side_effect = failure
+        with pytest.raises(Exception) as excinfo:
+            aws_secretsmanager.aws_secretsmanager_backend(**AWS_SM_METADATA, **keys)
+    return excinfo.value
+
+
+def aws_denied(operation='GetSecretValue'):
+    from botocore.exceptions import ClientError
+
+    return ClientError(
+        {'Error': {'Code': 'AccessDeniedException', 'Message': f'User: {AWS_SM_CALLER_ARN} is not authorized to perform: {operation}'}}, operation
+    )
+
+
+def aws_credential_endpoint_failure():
+    from botocore.exceptions import CredentialRetrievalError
+
+    return CredentialRetrievalError(provider='container-role', error_msg=f'Received non 200 response (403) from container metadata: {AWS_SM_CALLER_ARN}')
+
+
+def assert_no_caller_identity(exc):
+    import traceback
+
+    from ascender.main.credential_plugins import aws_secretsmanager
+
+    assert isinstance(exc, aws_secretsmanager.DefaultCredentialsLookupError)
+    formatted = ''.join(traceback.format_exception(exc))
+    assert AWS_SM_CALLER_ARN not in formatted
+    assert '123456789012' not in formatted
+    assert AWS_SM_METADATA['secret_name'] not in str(exc)
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+@pytest.mark.parametrize('keys', AWS_SM_KEYLESS.values(), ids=AWS_SM_KEYLESS.keys())
+@pytest.mark.parametrize(
+    'failure, at, detail',
+    [
+        (aws_denied, 'get_secret_value', 'AccessDeniedException from GetSecretValue'),
+        (lambda: aws_denied('AssumeRoleWithWebIdentity'), 'get_secret_value', 'AccessDeniedException from AssumeRoleWithWebIdentity'),
+        (aws_credential_endpoint_failure, 'client', 'CredentialRetrievalError'),
+    ],
+    ids=['secretsmanager-denied', 'sts-denied', 'credential-endpoint'],
+)
+def test_aws_secretsmanager_keyless_error_hides_the_controller_identity(keys, failure, at, detail):
+    """A job stores and logs the full traceback of a failed lookup, and any user who can read the job sees it, so a
+    lookup made with the controller's identity must carry neither AWS's nor botocore's error text, which can name that
+    identity, wherever it fails; the error code and operation still say where to look."""
+    exc = aws_secretsmanager_failure(True, failure(), at=at, **keys)
+    assert_no_caller_identity(exc)
+    assert detail in str(exc)
+
+
+@pytest.mark.django_db  # override_settings reads the setting back on exit
+@pytest.mark.parametrize('failure, at', [(aws_denied, 'get_secret_value'), (aws_credential_endpoint_failure, 'client')], ids=['denied', 'credential-endpoint'])
+def test_aws_secretsmanager_supplied_keys_keep_the_aws_error(failure, at):
+    """With the user's own keys, the error is about the user's identity, so it passes through unchanged for debugging."""
+    original = failure()
+    exc = aws_secretsmanager_failure(False, original, at=at, aws_access_key=AWS_ACCESS_KEY, aws_secret_key=AWS_SECRET_KEY)
+    assert exc is original
 
 
 def test_hashivault_approle_auth():

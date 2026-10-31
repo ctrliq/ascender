@@ -188,6 +188,7 @@ class AuthenticationBackendsField(fields.StringListField):
                 'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
                 ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY', 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET', 'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID'],
             ),
+            ('ascender.sso.entra.EntraIDOAuth2', ['SOCIAL_AUTH_ENTRA_ID_KEY', 'SOCIAL_AUTH_ENTRA_ID_SECRET', 'SOCIAL_AUTH_ENTRA_ID_TENANT_ID']),
             (
                 'ascender.sso.backends.SAMLAuth',
                 [
@@ -214,6 +215,7 @@ class AuthenticationBackendsField(fields.StringListField):
     WORKLOAD_IDENTITY_OPTIONAL_SETTINGS = {
         'social_core.backends.azuread.AzureADOAuth2': ['SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'],
         'social_core.backends.azuread_tenant.AzureADTenantOAuth2': ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET'],
+        'ascender.sso.entra.EntraIDOAuth2': ['SOCIAL_AUTH_ENTRA_ID_SECRET'],
     }
 
     # Per-backend Django settings mirroring social-core CLIENT_ASSERTION /
@@ -226,6 +228,10 @@ class AuthenticationBackendsField(fields.StringListField):
         'social_core.backends.azuread_tenant.AzureADTenantOAuth2': (
             'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CLIENT_ASSERTION',
             'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_FEDERATED_TOKEN_FILE',
+        ),
+        'ascender.sso.entra.EntraIDOAuth2': (
+            'SOCIAL_AUTH_ENTRA_ID_CLIENT_ASSERTION',
+            'SOCIAL_AUTH_ENTRA_ID_FEDERATED_TOKEN_FILE',
         ),
     }
 

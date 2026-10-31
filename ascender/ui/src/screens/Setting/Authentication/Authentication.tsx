@@ -20,7 +20,7 @@ function Authentication() {
 
   const providers = [
     {
-      title: t`Azure AD`,
+      title: t`Microsoft Entra ID (Azure AD)`,
       path: '/authentication/azure',
       description: t`Microsoft Entra ID, for one tenant or for any`,
     },

@@ -52,6 +52,42 @@ describe('<AzureAD />', () => {
     ).toBeInTheDocument();
   });
 
+  test('should send /authentication/azure to the Entra ID details', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/authentication/azure'],
+    });
+    renderWithContexts(
+      <SettingsProvider value={settingOptions}>
+        <Routes>
+          <Route path="/authentication/azure/*" element={<AzureAD />} />
+        </Routes>
+      </SettingsProvider>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/authentication/azure/entra/details'
+      )
+    );
+  });
+
+  test('should offer Entra ID ahead of the two legacy setups', async () => {
+    renderAzure(['/authentication/azure/entra/details']);
+    const tabs = await screen.findAllByRole('tab');
+    expect(tabs.map((tab) => tab.textContent)).toEqual([
+      'Microsoft Entra ID',
+      'Default (Legacy)',
+      'Tenant (Legacy)',
+    ]);
+  });
+
+  test('should render entra id edit', async () => {
+    renderAzure(['/authentication/azure/entra/edit']);
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
+  });
+
   test('should render azure edit', async () => {
     renderAzure(['/authentication/azure/default/edit']);
     expect(

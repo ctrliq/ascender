@@ -9,6 +9,7 @@ import { SettingsPage } from '../shared';
 import AzureADDetail from './AzureADDetail';
 import AzureADEdit from './AzureADEdit';
 import AzureADTenantEdit from './AzureADTenantEdit';
+import EntraIDEdit from './EntraIDEdit';
 
 // /settings/azure/:category (no sub-view) redirects to that category's details
 export interface CategoryRedirectProps {
@@ -38,6 +39,9 @@ function AzureAD() {
   const breadcrumbConfig = {
     '/authentication': t`Authentication`,
     '/authentication/azure': null,
+    '/authentication/azure/entra': null,
+    '/authentication/azure/entra/details': t`Microsoft Entra ID`,
+    '/authentication/azure/entra/edit': t`Edit Microsoft Entra ID`,
     '/authentication/azure/default': null,
     '/authentication/azure/default/details': t`Azure AD`,
     '/authentication/azure/default/edit': t`Edit Azure AD`,
@@ -57,20 +61,25 @@ function AzureAD() {
             aria-label={t`Azure AD tabs`}
             ouiaId="azure-tabs"
             tabs={[
-              { label: t`Default`, path: `${baseURL}/default` },
-              { label: t`Tenant`, path: `${baseURL}/tenant` },
+              { label: t`Microsoft Entra ID`, path: `${baseURL}/entra` },
+              { label: t`Default (Legacy)`, path: `${baseURL}/default` },
+              { label: t`Tenant (Legacy)`, path: `${baseURL}/tenant` },
             ]}
           />
           <Routes>
             <Route
               index
-              element={<Navigate to={`${baseURL}/default/details`} replace />}
+              element={<Navigate to={`${baseURL}/entra/details`} replace />}
             />
             <Route
               path=":category"
               element={<CategoryRedirect baseURL={baseURL} />}
             />
             <Route path=":category/details" element={<AzureADDetail />} />
+            <Route
+              path="entra/edit"
+              element={onlyForSuperuser(<EntraIDEdit />)}
+            />
             <Route
               path="default/edit"
               element={onlyForSuperuser(<AzureADEdit />)}
@@ -83,8 +92,8 @@ function AzureAD() {
               path="*"
               element={
                 <ContentError isNotFound>
-                  <Link to={`${baseURL}/default/details`}>
-                    {t`View Azure AD Settings`}
+                  <Link to={`${baseURL}/entra/details`}>
+                    {t`View Microsoft Entra ID Settings`}
                   </Link>
                 </ContentError>
               }

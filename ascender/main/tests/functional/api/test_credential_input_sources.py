@@ -1,6 +1,10 @@
+from unittest import mock
+
 import pytest
 
-from ascender.main.models import CredentialInputSource
+from django.test.utils import override_settings
+
+from ascender.main.models import Credential, CredentialInputSource, CredentialType
 from ascender.api.versioning import reverse
 
 
@@ -142,6 +146,41 @@ def test_input_source_rbac_associate(get, post, delete, alice, vault_credential,
     vault_credential.admin_role.members.add(alice)
     response = delete(delete_url, alice)
     assert response.status_code == 204
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('allow_default_credentials', [False, True], ids=['off', 'on'])
+def test_keyless_aws_secretsmanager_input_source(post, alice, credentialtype_ssh, allow_default_credentials):
+    """The path a job takes. A user with no other rights links a keyless AWS Secrets Manager lookup they created to a
+    credential of their own; resolving it may use the controller's AWS identity only when the setting allows it."""
+    from ascender.main.credential_plugins.aws_secretsmanager import DefaultCredentialsNotAllowed
+
+    asm = CredentialType.defaults['aws_secretsmanager_credential']()
+    asm.save()
+    credential_list = reverse('api:credential_list')
+    lookup = post(credential_list, {'credential_type': asm.pk, 'name': 'lookup', 'user': alice.pk, 'inputs': {}}, alice, expect=201)
+    target = post(
+        credential_list, {'credential_type': credentialtype_ssh.pk, 'name': 'machine', 'user': alice.pk, 'inputs': {'username': 'alice'}}, alice, expect=201
+    )
+    params = {
+        'target_credential': target.data['id'],
+        'source_credential': lookup.data['id'],
+        'input_field_name': 'password',
+        'metadata': {'region_name': 'us-west-2', 'secret_name': 'some/secret'},
+    }
+    post(reverse('api:credential_input_source_list'), params, alice, expect=201)
+
+    # Credential.get_input resolves a linked field through _get_dynamic_input; the suite's autouse
+    # mock_external_credential_input_sources fixture hides input sources from get_input, so call it directly
+    machine = Credential.objects.get(pk=target.data['id'])
+    with override_settings(AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS=allow_default_credentials), mock.patch('boto3.session.Session') as session:
+        session.return_value.client.return_value.get_secret_value.return_value = {'SecretString': 'sentinel'}
+        if allow_default_credentials:
+            assert machine._get_dynamic_input('password') == 'sentinel'
+        else:
+            with pytest.raises(DefaultCredentialsNotAllowed):
+                machine._get_dynamic_input('password')
+    assert session.called is allow_default_credentials
 
 
 @pytest.mark.django_db

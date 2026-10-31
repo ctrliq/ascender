@@ -219,7 +219,7 @@ function ShowChangesToggle() {
         id="prompt-show-changes"
         label={field.value ? t`On` : t`Off`}
         isChecked={field.value}
-        onChange={helpers.setValue}
+        onChange={(_event, checked) => helpers.setValue(checked)}
         ouiaId="prompt-show-changes"
       />
     </FormGroup>

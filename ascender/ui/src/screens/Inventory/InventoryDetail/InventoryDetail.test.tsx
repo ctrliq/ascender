@@ -109,7 +109,7 @@ describe('<InventoryDetail />', () => {
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
   });
 
-  test('should list allow jobs while syncing among the enabled options', async () => {
+  test('should list allow jobs while syncing among the options', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
     } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
@@ -121,7 +121,7 @@ describe('<InventoryDetail />', () => {
     );
 
     await screen.findByText('Inv no hosts');
-    expect(screen.getByText('Enabled Options')).toBeInTheDocument();
+    expect(screen.getByText('Options')).toBeInTheDocument();
     expect(screen.getByText('Allow Jobs While Syncing')).toBeInTheDocument();
   });
 

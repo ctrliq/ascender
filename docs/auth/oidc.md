@@ -191,6 +191,10 @@ accepts HTML with a redirect to the provider, and any other request with
 
 ## Entra ID
 
+Entra ID has a login of its own now, described in [entra_id.md](entra_id.md),
+which takes care of the tenant, the cloud and app roles for you. Going through
+generic OIDC still works:
+
 1. Register an application with a web redirect URI pointing at the callback URL,
    and create a client secret.
 2. Under *Token configuration*, add a groups claim. Entra ID sends group object

@@ -56,6 +56,7 @@ function MiscSystemEdit() {
         'MANAGE_ORGANIZATION_AUTH',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
+        'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS',
         'REMOTE_HOST_HEADERS',
         'ASCENDER_URL_BASE',
         'DEFAULT_EXECUTION_ENVIRONMENT',
@@ -256,6 +257,12 @@ function MiscSystemEdit() {
                         <ObjectField
                           name="CSRF_TRUSTED_ORIGINS"
                           config={system.CSRF_TRUSTED_ORIGINS}
+                        />
+                        <BooleanField
+                          name="AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS"
+                          config={
+                            system.AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS
+                          }
                         />
                       </>
                     )}

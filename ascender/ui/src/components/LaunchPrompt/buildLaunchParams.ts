@@ -47,6 +47,7 @@ export default async function buildLaunchParams(
   setValue('extra_vars', mergeExtraVars(extraVars, surveyValues));
   setValue('scm_branch', values.scm_branch);
   setValue('verbosity', values.verbosity);
+  setValue('diff_mode', values.diff_mode);
   setValue('timeout', values.timeout);
   setValue('forks', values.forks);
   setValue('job_slice_count', values.job_slice_count);

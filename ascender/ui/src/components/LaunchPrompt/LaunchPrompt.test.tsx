@@ -385,6 +385,56 @@ describe('LaunchPrompt', () => {
     expect(ids).toEqual(['other-prompts-step', 'preview-step']);
   });
 
+  test('should launch with show changes when it is turned on', async () => {
+    const onLaunch = vi.fn();
+    const { user } = renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_diff_mode_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={onLaunch}
+        onCancel={noop}
+      />
+    );
+
+    await user.click(await screen.findByRole('switch', { name: 'Off' }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(await screen.findByRole('button', { name: 'Launch' }));
+
+    await waitFor(() =>
+      expect(onLaunch).toHaveBeenCalledWith(
+        expect.objectContaining({ diff_mode: true })
+      )
+    );
+  });
+
+  test('should launch without show changes when it is left off', async () => {
+    const onLaunch = vi.fn();
+    const { user } = renderWithContexts(
+      <LaunchPrompt
+        launchConfig={{
+          ...config,
+          ask_diff_mode_on_launch: true,
+        }}
+        resource={resource}
+        onLaunch={onLaunch}
+        onCancel={noop}
+      />
+    );
+
+    await screen.findByRole('switch', { name: 'Off' });
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(await screen.findByRole('button', { name: 'Launch' }));
+
+    await waitFor(() =>
+      expect(onLaunch).toHaveBeenCalledWith(
+        expect.objectContaining({ diff_mode: false })
+      )
+    );
+  });
+
   test('should add survey step', async () => {
     renderWithContexts(
       <LaunchPrompt

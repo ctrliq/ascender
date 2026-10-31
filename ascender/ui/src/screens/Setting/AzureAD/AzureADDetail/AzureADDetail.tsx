@@ -28,18 +28,20 @@ function AzureADDetail() {
     result: azureDetails,
   } = useRequest(
     useCallback(async () => {
-      const [{ data: azureDefault }, { data: azureTenant }] = await Promise.all(
-        [
+      const [{ data: entra }, { data: azureDefault }, { data: azureTenant }] =
+        await Promise.all([
+          SettingsAPI.readCategory('entra-id'),
           SettingsAPI.readCategory('azuread-oauth2'),
           SettingsAPI.readCategory('azuread-oauth2-tenant'),
-        ]
-      );
+        ]);
       return {
+        entra,
         default: azureDefault,
         tenant: azureTenant,
       };
     }, []),
     {
+      entra: null,
       default: null,
       tenant: null,
     }
@@ -50,7 +52,7 @@ function AzureADDetail() {
   }, [request]);
 
   if (!Object.keys(azureDetails).includes(category)) {
-    return <Navigate to={`${baseURL}/default/details`} replace />;
+    return <Navigate to={`${baseURL}/entra/details`} replace />;
   }
 
   return (
