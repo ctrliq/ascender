@@ -54,7 +54,7 @@ sqlparse>=0.6.0   # CVE-2026-59893 CVE-2026-54284 CVE-2026-71491 CVE-2026-59894;
 requests>=2.33.0 # CVE-2026-25645
 slack-sdk
 tacacs-plus
-twisted[tls]>=26.4.0   # CVE-2026-42304
+twisted[tls]>=26.10.0  # CVE-2026-106454 CVE-2026-115774 CVE-2026-115775 CVE-2026-115776 CVE-2026-115877 CVE-2026-115778
 urllib3>=2.8.0 # CVE-2026-97689 CVE-2026-97687
 uvicorn[standard]  # the ASGI server that serves the API and the websockets
 valkey[libvalkey]
