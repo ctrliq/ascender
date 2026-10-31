@@ -1506,6 +1506,11 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         assert task.__vars__['requirements_cache_enabled'] is False
         assert task.__vars__['requirements_cache_salt']['galaxy_servers'] == ['https://galaxy.ansible.com/']
 
+        assert task.__vars__['collections_from_ee'] is False
+        with mock.patch.object(settings, 'ASCENDER_COLLECTIONS_FROM_EE', True):
+            task.build_extra_vars_file(project_update, private_data_dir)
+        assert task.__vars__['collections_from_ee'] is True
+
         # GALAXY_TASK_ENV reaches the install commands, so it is part of the key, as a fingerprint only
         fingerprint = task.__vars__['requirements_cache_salt']['galaxy_task_env']
         task_env = {'ANSIBLE_GALAXY_SERVER_SERVER0_URL': 'https://hub.example.com/', 'ANSIBLE_GALAXY_SERVER_SERVER0_TOKEN': 'sekrit'}

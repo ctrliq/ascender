@@ -145,3 +145,33 @@ def test_project_ansible_cfg_is_part_of_the_key(tmp_path):
 def test_ansible_cfg_alone_is_not_a_requirements_file(tmp_path):
     write(tmp_path, 'ansible.cfg', '[defaults]\n')
     assert key(tmp_path) == ('', False, 'no requirements files')
+
+
+def test_ee_collections_are_part_of_the_key(tmp_path):
+    project, ee = tmp_path / 'project', tmp_path / 'ee'
+    write(project, 'collections/requirements.yml', 'collections: [community.general]\n')
+
+    def ee_key():
+        return requirements_cache_key.compute_key(str(project), FILES, None, ['ansible.cfg'], str(ee))
+
+    without_ee = key(project)[0]
+    empty_ee = ee_key()
+    assert empty_ee[0] != without_ee
+    assert empty_ee[1] is True
+
+    write(ee, 'ansible_collections/community/general/MANIFEST.json', '{"collection_info": {"version": "13.4.0"}}')
+    with_general = ee_key()[0]
+    assert with_general != empty_ee[0]
+    assert ee_key()[0] == with_general
+
+    write(ee, 'ansible_collections/community/general/MANIFEST.json', '{"collection_info": {"version": "13.5.0"}}')
+    upgraded = ee_key()[0]
+    assert upgraded != with_general
+
+    write(ee, 'ansible_collections/my_namespace/my_collection/galaxy.yml', 'version: 1.0.0\n')
+    assert ee_key()[0] != upgraded
+
+    # files inside a collection other than its metadata do not change what Galaxy resolves
+    before = ee_key()[0]
+    write(ee, 'ansible_collections/community/general/README.md', 'docs\n')
+    assert ee_key()[0] == before

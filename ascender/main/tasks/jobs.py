@@ -1413,6 +1413,7 @@ class RunProjectUpdate(BaseTask):
                 'scm_track_submodules': project_update.scm_track_submodules,
                 'roles_enabled': galaxy_creds_are_defined and settings.ASCENDER_ROLES_ENABLED,
                 'collections_enabled': galaxy_creds_are_defined and settings.ASCENDER_COLLECTIONS_ENABLED,
+                'collections_from_ee': settings.ASCENDER_COLLECTIONS_FROM_EE,
                 'galaxy_task_env': settings.GALAXY_TASK_ENV,
                 'requirements_cache_enabled': project_update.project.reuse_requirements,
                 # an update someone asked for installs afresh, picking up new releases of unpinned requirements
