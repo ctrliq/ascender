@@ -135,7 +135,7 @@ drf-spectacular==0.30.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
     # via kubernetes
-filelock==4.2.4
+filelock==4.2.5
     # via -r /awx_devel/requirements/requirements.in
 frozenlist==1.4.1
     # via
