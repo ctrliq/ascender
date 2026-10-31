@@ -33,10 +33,11 @@ a running instance.
 
 | Variable | Default | Meaning |
 | -------- | ------- | ------- |
-| `ASCENDER_URL` | `https://localhost:8043` | Where the instance is |
+| `ASCENDER_URL` | `https://localhost:8043` | Where the instance is. It must be https unless the host is loopback |
 | `ASCENDER_USERNAME` | `admin` | Account the specs log in as |
 | `ASCENDER_PASSWORD` | `password` | Its password, which is what the CI environment sets |
 | `ASCENDER_TOKEN` | unset | Used by the seed instead of a password, if you prefer |
+| `ASCENDER_INSECURE_TLS` | unset | Set to `1` to skip certificate verification (seed and browser) for a non-loopback `ASCENDER_URL`. Loopback hosts always skip it, for the development environment's self-signed certificate |
 
 ## The fixtures
 
