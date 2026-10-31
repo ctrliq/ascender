@@ -11,6 +11,7 @@
 // the default one rather than only the common case.
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 const https = require('https');
 const { URL } = require('url');
 const { insecureTLS } = require('./tls');
@@ -27,7 +28,7 @@ const NODE_COUNT = 3;
 const INSECURE_TLS = insecureTLS(BASE);
 
 // Node's global fetch gives no clean way to relax certificate verification per
-// request, so this goes through the https module directly
+// request, so this goes through the http and https modules directly
 function api(method, endpoint, body) {
   const url = new URL(endpoint, BASE);
   const payload = body ? JSON.stringify(body) : null;
@@ -35,7 +36,8 @@ function api(method, endpoint, body) {
     ? `Bearer ${TOKEN}`
     : `Basic ${Buffer.from(`${USERNAME}:${PASSWORD}`).toString('base64')}`;
   return new Promise((resolve, reject) => {
-    const req = https.request(
+    const transport = url.protocol === 'http:' ? http : https;
+    const req = transport.request(
       {
         method,
         hostname: url.hostname,
