@@ -11429,6 +11429,12 @@ export interface components {
        */
       ASCENDER_COLLECTIONS_ENABLED: boolean;
       /**
+       * Use Collections from the Execution Environment
+       * @description Project updates skip collections in a requirements.yml file that the control plane execution environment already ships, instead of downloading them into the project. Every execution environment that runs jobs or inventory updates from the project must then ship those collections too, and unpinned requirements stay at the version the control plane execution environment ships.
+       * @default false
+       */
+      ASCENDER_COLLECTIONS_FROM_EE: boolean;
+      /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.
        * @default false
@@ -14677,6 +14683,12 @@ export interface components {
        */
       ASCENDER_COLLECTIONS_ENABLED: boolean;
       /**
+       * Use Collections from the Execution Environment
+       * @description Project updates skip collections in a requirements.yml file that the control plane execution environment already ships, instead of downloading them into the project. Every execution environment that runs jobs or inventory updates from the project must then ship those collections too, and unpinned requirements stay at the version the control plane execution environment ships.
+       * @default false
+       */
+      ASCENDER_COLLECTIONS_FROM_EE: boolean;
+      /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.
        * @default false
@@ -16913,6 +16925,12 @@ export interface components {
        * @default true
        */
       ASCENDER_COLLECTIONS_ENABLED: boolean;
+      /**
+       * Use Collections from the Execution Environment
+       * @description Project updates skip collections in a requirements.yml file that the control plane execution environment already ships, instead of downloading them into the project. Every execution environment that runs jobs or inventory updates from the project must then ship those collections too, and unpinned requirements stay at the version the control plane execution environment ships.
+       * @default false
+       */
+      ASCENDER_COLLECTIONS_FROM_EE: boolean;
       /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.

@@ -792,6 +792,11 @@ ASCENDER_ROLES_ENABLED = True
 # Note: This setting may be overridden by database settings.
 ASCENDER_COLLECTIONS_ENABLED = True
 
+# Let collections the control plane execution environment ships satisfy
+# a project's collection requirements instead of installing them
+# Note: This setting may be overridden by database settings.
+ASCENDER_COLLECTIONS_FROM_EE = False
+
 # Follow symlinks when scanning for playbooks
 ASCENDER_SHOW_PLAYBOOK_LINKS = False
 

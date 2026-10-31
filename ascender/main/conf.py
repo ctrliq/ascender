@@ -333,6 +333,21 @@ register(
 )
 
 register(
+    'ASCENDER_COLLECTIONS_FROM_EE',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Use Collections from the Execution Environment'),
+    help_text=_(
+        'Project updates skip collections in a requirements.yml file that the control plane execution environment '
+        'already ships, instead of downloading them into the project. Every execution environment that runs jobs or '
+        'inventory updates from the project must then ship those collections too, and unpinned requirements stay at '
+        'the version the control plane execution environment ships.'
+    ),
+    category=_('Jobs'),
+    category_slug='jobs',
+)
+
+register(
     'ENABLE_ANSIBLE_29',
     field_class=fields.BooleanField,
     default=False,

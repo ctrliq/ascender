@@ -31,6 +31,12 @@ options:
     description:
       - Any other install input to fold into the key, such as the Galaxy server list.
     required: false
+  ee_collections_path:
+    description:
+      - Collections path of the execution environment that Galaxy also reads. The collections
+        installed there are part of the key, so the key changes when the environment ships
+        other collections or versions.
+    required: false
 author:
     - Ascender Team
 """
@@ -50,6 +56,7 @@ reason:
   type: str
 """
 
+import glob
 import hashlib
 import json
 import os
@@ -129,7 +136,17 @@ def _file_digest(path):
         return hashlib.sha256(f.read()).hexdigest()
 
 
-def compute_key(project_path, files, salt=None, config_files=()):
+def installed_collections(collections_path):
+    """Return [relpath, digest] of the metadata file of every collection installed under collections_path"""
+    found = []
+    # MANIFEST.json of a built collection, galaxy.yml of one installed from source
+    for name in ('MANIFEST.json', 'galaxy.yml'):
+        for path in glob.glob(os.path.join(glob.escape(collections_path), 'ansible_collections', '*', '*', name)):
+            found.append([os.path.relpath(path, collections_path), _file_digest(path)])
+    return sorted(found)
+
+
+def compute_key(project_path, files, salt=None, config_files=(), ee_collections_path=None):
     """Return (requirements_hash, cacheable, reason) for the project's requirements files"""
     import yaml
 
@@ -153,7 +170,10 @@ def compute_key(project_path, files, salt=None, config_files=()):
     if not found:
         return '', False, 'no requirements files'
     config = [[relpath, _file_digest(os.path.join(project_path, relpath))] for relpath in config_files if os.path.isfile(os.path.join(project_path, relpath))]
-    key = json.dumps({'files': found, 'config': config, 'salt': salt}, sort_keys=True)
+    key = {'files': found, 'config': config, 'salt': salt}
+    if ee_collections_path:
+        key['ee_collections'] = installed_collections(ee_collections_path)
+    key = json.dumps(key, sort_keys=True)
     return hashlib.sha256(key.encode('utf-8')).hexdigest(), reason is None, reason
 
 
@@ -166,11 +186,12 @@ def main():
             files=dict(type='list', elements='str', required=True),
             config_files=dict(type='list', elements='str', required=False, default=[]),
             salt=dict(type='raw', required=False, default=None),
+            ee_collections_path=dict(type='path', required=False, default=None),
         ),
         supports_check_mode=True,
     )
     requirements_hash, cacheable, reason = compute_key(
-        module.params['project_path'], module.params['files'], module.params['salt'], module.params['config_files']
+        module.params['project_path'], module.params['files'], module.params['salt'], module.params['config_files'], module.params['ee_collections_path']
     )
     result = dict(changed=False, requirements_hash=requirements_hash, cacheable=cacheable)
     if reason:

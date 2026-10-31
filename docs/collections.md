@@ -111,6 +111,35 @@ is published there after a successful update.
   except one that a kept revision still relies on. A revision whose requirements cache is
   gone is treated as uncached, so the next job sync installs again.
 
+### Collections from the Execution Environment
+
+Project updates always run in the control plane execution environment, whatever
+execution environment a job uses. By default `ansible-galaxy` looks only at the
+project's cache folder, so every collection in the requirements is installed there,
+even one the execution environment already ships. That keeps the cache complete for
+jobs in any execution environment.
+
+The **Use Collections from the Execution Environment** setting
+(`ASCENDER_COLLECTIONS_FROM_EE`, off by default) adds the control plane execution
+environment's `/usr/share/ansible/collections` to the path `ansible-galaxy` reads.
+A requirement that a collection there satisfies is skipped, and only the rest are
+installed into the cache. When the execution environment ships everything, the
+install step reports "Nothing to do".
+
+Turn it on only when this holds:
+
+- Every execution environment that runs jobs or SCM inventory updates from these
+  projects ships the collections the control plane execution environment ships. A
+  job in an execution environment without one fails, because the cache no longer
+  holds it.
+- An unpinned requirement stays at the version the control plane execution
+  environment ships, even on a refresh. A requirement pinned to another version is
+  still installed from Galaxy.
+
+The collections installed in that folder (their `MANIFEST.json` or `galaxy.yml`)
+are part of the requirements cache key while the setting is on, so a new control
+plane execution environment with other collections or versions installs afresh.
+
 ### Galaxy Server Selection
 
 For details on how Galaxy servers are configured in Ansible in general see:

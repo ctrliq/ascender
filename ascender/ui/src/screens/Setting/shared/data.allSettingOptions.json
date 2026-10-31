@@ -273,6 +273,15 @@
               "category_slug": "jobs",
               "default": true
           },
+          "ASCENDER_COLLECTIONS_FROM_EE": {
+              "type": "boolean",
+              "required": false,
+              "label": "Use Collections from the Execution Environment",
+              "help_text": "Project updates skip collections in a requirements.yml file that the control plane execution environment already ships, instead of downloading them into the project. Every execution environment that runs jobs or inventory updates from the project must then ship those collections too, and unpinned requirements stay at the version the control plane execution environment ships.",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "default": false
+          },
           "ENABLE_ANSIBLE_29": {
               "type": "boolean",
               "required": false,
@@ -5089,6 +5098,14 @@
               "type": "boolean",
               "label": "Enable Collection(s) Download",
               "help_text": "Allows collections to be dynamically downloaded from a requirements.yml file for SCM projects.",
+              "category": "Jobs",
+              "category_slug": "jobs",
+              "defined_in_file": false
+          },
+          "ASCENDER_COLLECTIONS_FROM_EE": {
+              "type": "boolean",
+              "label": "Use Collections from the Execution Environment",
+              "help_text": "Project updates skip collections in a requirements.yml file that the control plane execution environment already ships, instead of downloading them into the project. Every execution environment that runs jobs or inventory updates from the project must then ship those collections too, and unpinned requirements stay at the version the control plane execution environment ships.",
               "category": "Jobs",
               "category_slug": "jobs",
               "defined_in_file": false
