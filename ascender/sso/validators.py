@@ -19,7 +19,18 @@ __all__ = [
     'validate_ldap_filter_with_user',
     'validate_tacacsplus_disallow_nonascii',
     'validate_trigger_rule',
+    'validate_entra_tenant_id',
+    'validate_entra_host',
 ]
+
+# A DNS name of at least two labels, which is what both a sign in host and a
+# tenant's verified domain are.
+_HOSTNAME_RE = re.compile(r'^(?=.{1,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$', re.I)
+_GUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.I)
+
+# Kept here rather than imported from ascender.sso.entra, which pulls in
+# social auth for every module that only wants the validators.
+_ENTRA_MULTI_TENANT_IDS = ('common', 'organizations', 'consumers')
 
 
 def validate_ldap_dn(value, with_user=False):
@@ -162,3 +173,24 @@ def _validate_attribute_conditions(attributes):
                     errors[key] = _('Invalid regular expression: {}.').format(e)
 
     return errors
+
+
+def validate_entra_tenant_id(value):
+    """
+    A single Entra ID tenant, by its ID or one of its domains.
+
+    The names Entra takes for any tenant are refused, since with them a token
+    from any directory would be accepted.
+    """
+    if not value:
+        return
+    if value.lower() in _ENTRA_MULTI_TENANT_IDS:
+        raise ValidationError(_('{} lets in users from any directory. Give your own tenant ID or domain.').format(value))
+    if not (_GUID_RE.match(value) or _HOSTNAME_RE.match(value)):
+        raise ValidationError(_('Expected a tenant ID such as 00000000-0000-0000-0000-000000000000 or a domain such as contoso.onmicrosoft.com.'))
+
+
+def validate_entra_host(value):
+    """A host name, without a scheme or a path, for Entra's sign in or for Graph."""
+    if value and not _HOSTNAME_RE.match(value):
+        raise ValidationError(_('Expected a host name only, without https:// or a path.'))

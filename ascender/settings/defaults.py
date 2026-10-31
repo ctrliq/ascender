@@ -550,6 +550,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.open_id_connect.OpenIdConnectAuth',
     'social_core.backends.azuread.AzureADOAuth2',
     'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
+    'ascender.sso.entra.EntraIDOAuth2',
     'ascender.sso.backends.SAMLAuth',
     'ascender.main.backends.AWXModelBackend',
 )
@@ -665,7 +666,7 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
+    'ascender.sso.entra.associate_existing_account',
     'social_core.pipeline.user.create_user',
     'ascender.sso.social_base_pipeline.check_user_found_or_created',
     'social_core.pipeline.social_auth.associate_user',
@@ -730,6 +731,10 @@ SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = ''
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = ''
+
+SOCIAL_AUTH_ENTRA_ID_KEY = ''
+SOCIAL_AUTH_ENTRA_ID_SECRET = ''
+SOCIAL_AUTH_ENTRA_ID_TENANT_ID = ''
 
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = ''
 SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = ''
@@ -968,6 +973,7 @@ CALLBACK_QUEUE_SOCKET_TIMEOUT = 30
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
 ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
+AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS = False
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.

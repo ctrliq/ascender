@@ -12,7 +12,7 @@
 If you discover a security vulnerability in this project, please report it
 responsibly. **Do not open a public GitHub issue for security vulnerabilities.**
 
-Instead, please send an email to **security@ctrliq.com** with:
+Instead, please send an email to **security@ciq.com** with:
 
 - A description of the vulnerability
 - Steps to reproduce the issue

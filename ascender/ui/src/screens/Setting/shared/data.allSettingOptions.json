@@ -38,6 +38,15 @@
               "category_slug": "system",
               "default": false
           },
+          "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+              "type": "boolean",
+              "required": true,
+              "label": "Allow AWS Secrets Manager Lookups Without Keys",
+              "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "MANAGE_ORGANIZATION_AUTH": {
               "type": "boolean",
               "required": true,
@@ -3775,8 +3784,8 @@
               "type": "string",
               "required": false,
               "label": "Azure AD OAuth2 Key",
-              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
-              "category": "Azure AD OAuth2",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "default": ""
           },
@@ -3785,7 +3794,7 @@
               "required": false,
               "label": "Azure AD OAuth2 Secret",
               "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "default": ""
           },
@@ -3794,7 +3803,7 @@
               "required": false,
               "label": "Azure AD OAuth2 Organization Map",
               "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "placeholder": {
                   "Default": {
@@ -3836,7 +3845,7 @@
               "required": false,
               "label": "Azure AD OAuth2 Team Map",
               "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "placeholder": {
                   "My Team": {
@@ -3868,8 +3877,8 @@
               "type": "string",
               "required": false,
               "label": "Azure AD Tenant OAuth2 Key",
-              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
-              "category": "Azure AD Tenant OAuth2",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "default": ""
           },
@@ -3878,7 +3887,7 @@
               "required": false,
               "label": "Azure AD Tenant OAuth2 Secret",
               "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "default": ""
           },
@@ -3887,7 +3896,7 @@
               "required": false,
               "label": "Azure AD Tenant ID",
               "help_text": "The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "default": ""
           },
@@ -3896,7 +3905,7 @@
               "required": false,
               "label": "Azure AD Tenant OAuth2 Organization Map",
               "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "placeholder": {
                   "Test Org": {
@@ -3929,7 +3938,7 @@
               "required": false,
               "label": "Azure AD Tenant OAuth2 Team Map",
               "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "placeholder": {
                   "My Team": {
@@ -3956,6 +3965,230 @@
                       "read_only": false
                   }
               }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_KEY": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Client ID",
+              "help_text": "The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": ""
+          },
+          "SOCIAL_AUTH_ENTRA_ID_SECRET": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Client Secret",
+              "help_text": "A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": ""
+          },
+          "SOCIAL_AUTH_ENTRA_ID_TENANT_ID": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Tenant",
+              "help_text": "The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": ""
+          },
+          "SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Authority Host",
+              "help_text": "The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": "login.microsoftonline.com"
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Username Claim",
+              "help_text": "The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": "preferred_username"
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN": {
+              "type": "boolean",
+              "required": false,
+              "label": "Strip the Domain from Entra ID Usernames",
+              "help_text": "Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Groups Claim",
+              "help_text": "The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": "groups"
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH": {
+              "type": "boolean",
+              "required": false,
+              "label": "Read Entra ID Groups from Microsoft Graph",
+              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST": {
+              "type": "string",
+              "required": false,
+              "label": "Microsoft Graph Host",
+              "help_text": "The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": ""
+          },
+          "SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS": {
+              "type": "nested object",
+              "required": false,
+              "label": "Entra ID Login Rule",
+              "help_text": "A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "placeholder": {
+                  "groups": {
+                      "has_or": [
+                          "11111111-0000-0000-0000-000000000001",
+                          "11111111-0000-0000-0000-000000000002"
+                      ]
+                  }
+              },
+              "default": null,
+              "child": {
+                  "type": "field",
+                  "required": true,
+                  "read_only": false
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP": {
+              "type": "nested object",
+              "required": false,
+              "label": "Entra ID Organization Map",
+              "help_text": "Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "placeholder": {
+                  "Default": {
+                      "triggers_admins": {
+                          "groups": {
+                              "has_or": [
+                                  "11111111-0000-0000-0000-000000000002"
+                              ]
+                          }
+                      },
+                      "triggers_users": {
+                          "groups": {
+                              "has_or": [
+                                  "11111111-0000-0000-0000-000000000001"
+                              ]
+                          }
+                      },
+                      "remove_admins": true,
+                      "remove_users": true
+                  }
+              },
+              "default": null,
+              "child": {
+                  "type": "nested object",
+                  "required": true,
+                  "read_only": false,
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_TEAM_MAP": {
+              "type": "nested object",
+              "required": false,
+              "label": "Entra ID Team Map",
+              "help_text": "Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "placeholder": {
+                  "Operators": {
+                      "organization": "Default",
+                      "triggers": {
+                          "groups": {
+                              "has_or": [
+                                  "11111111-0000-0000-0000-000000000003"
+                              ]
+                          }
+                      },
+                      "remove": true
+                  }
+              },
+              "default": null,
+              "child": {
+                  "type": "nested object",
+                  "required": true,
+                  "read_only": false,
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USER_FLAGS": {
+              "type": "nested object",
+              "required": false,
+              "label": "Entra ID User Flags",
+              "help_text": "Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "placeholder": {
+                  "triggers_superuser": {
+                      "groups": {
+                          "has_or": [
+                              "11111111-0000-0000-0000-000000000005"
+                          ]
+                      }
+                  },
+                  "triggers_system_auditor": {
+                      "groups": {
+                          "has_or": [
+                              "11111111-0000-0000-0000-000000000004"
+                          ]
+                      }
+                  },
+                  "remove_superusers": true,
+                  "remove_system_auditors": true
+              },
+              "default": null,
+              "child": {
+                  "type": "field",
+                  "required": true,
+                  "read_only": false
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP": {
+              "type": "boolean",
+              "required": false,
+              "label": "Log Out of Entra ID",
+              "help_text": "When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL": {
+              "type": "string",
+              "required": false,
+              "label": "Entra ID Post Logout Redirect URL",
+              "help_text": "Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "default": ""
           },
           "SOCIAL_AUTH_OIDC_KEY": {
               "type": "string",
@@ -4664,6 +4897,14 @@
               "type": "boolean",
               "label": "Hide System Roles from Access Lists",
               "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
+              "category": "System",
+              "category_slug": "system",
+              "defined_in_file": false
+          },
+          "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+              "type": "boolean",
+              "label": "Allow AWS Secrets Manager Lookups Without Keys",
+              "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
               "category": "System",
               "category_slug": "system",
               "defined_in_file": false
@@ -7353,15 +7594,15 @@
               "type": "string",
               "label": "Azure AD OAuth2 Callback URL",
               "help_text": "Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail. ",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "defined_in_file": false
           },
           "SOCIAL_AUTH_AZUREAD_OAUTH2_KEY": {
               "type": "string",
               "label": "Azure AD OAuth2 Key",
-              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
-              "category": "Azure AD OAuth2",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "defined_in_file": false
           },
@@ -7369,7 +7610,7 @@
               "type": "string",
               "label": "Azure AD OAuth2 Secret",
               "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "defined_in_file": false
           },
@@ -7377,7 +7618,7 @@
               "type": "nested object",
               "label": "Azure AD OAuth2 Organization Map",
               "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "defined_in_file": false,
               "child": {
@@ -7393,7 +7634,7 @@
               "type": "nested object",
               "label": "Azure AD OAuth2 Team Map",
               "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
-              "category": "Azure AD OAuth2",
+              "category": "Azure AD OAuth2 (legacy)",
               "category_slug": "azuread-oauth2",
               "defined_in_file": false,
               "child": {
@@ -7409,15 +7650,15 @@
               "type": "string",
               "label": "Azure AD Tenant OAuth2 Callback URL",
               "help_text": "Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false
           },
           "SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY": {
               "type": "string",
               "label": "Azure AD Tenant OAuth2 Key",
-              "help_text": "The OAuth2 key (Client ID) from your Azure AD application.",
-              "category": "Azure AD Tenant OAuth2",
+              "help_text": "The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false
           },
@@ -7425,7 +7666,7 @@
               "type": "string",
               "label": "Azure AD Tenant OAuth2 Secret",
               "help_text": "The OAuth2 secret (Client Secret) from your Azure AD application.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false
           },
@@ -7433,7 +7674,7 @@
               "type": "string",
               "label": "Azure AD Tenant ID",
               "help_text": "The directory/tenant ID of your Azure AD application. This limits authentication to a single tenant.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false
           },
@@ -7441,7 +7682,7 @@
               "type": "nested object",
               "label": "Azure AD Tenant OAuth2 Organization Map",
               "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false,
               "child": {
@@ -7457,7 +7698,7 @@
               "type": "nested object",
               "label": "Azure AD Tenant OAuth2 Team Map",
               "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
-              "category": "Azure AD Tenant OAuth2",
+              "category": "Azure AD Tenant OAuth2 (legacy)",
               "category_slug": "azuread-oauth2-tenant",
               "defined_in_file": false,
               "child": {
@@ -7468,6 +7709,156 @@
                       "read_only": false
                   }
               }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_CALLBACK_URL": {
+              "type": "string",
+              "label": "Entra ID Callback URL",
+              "help_text": "Add this URL as a Web redirect URI of the app registration in Entra ID.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_KEY": {
+              "type": "string",
+              "label": "Entra ID Client ID",
+              "help_text": "The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_SECRET": {
+              "type": "string",
+              "label": "Entra ID Client Secret",
+              "help_text": "A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_TENANT_ID": {
+              "type": "string",
+              "label": "Entra ID Tenant",
+              "help_text": "The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST": {
+              "type": "string",
+              "label": "Entra ID Authority Host",
+              "help_text": "The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY": {
+              "type": "string",
+              "label": "Entra ID Username Claim",
+              "help_text": "The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN": {
+              "type": "boolean",
+              "label": "Strip the Domain from Entra ID Usernames",
+              "help_text": "Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM": {
+              "type": "string",
+              "label": "Entra ID Groups Claim",
+              "help_text": "The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH": {
+              "type": "boolean",
+              "label": "Read Entra ID Groups from Microsoft Graph",
+              "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST": {
+              "type": "string",
+              "label": "Microsoft Graph Host",
+              "help_text": "The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS": {
+              "type": "nested object",
+              "label": "Entra ID Login Rule",
+              "help_text": "A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false,
+              "child": {
+                  "type": "field"
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP": {
+              "type": "nested object",
+              "label": "Entra ID Organization Map",
+              "help_text": "Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false,
+              "child": {
+                  "type": "nested object",
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_TEAM_MAP": {
+              "type": "nested object",
+              "label": "Entra ID Team Map",
+              "help_text": "Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false,
+              "child": {
+                  "type": "nested object",
+                  "child": {
+                      "type": "field",
+                      "required": true,
+                      "read_only": false
+                  }
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_USER_FLAGS": {
+              "type": "nested object",
+              "label": "Entra ID User Flags",
+              "help_text": "Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false,
+              "child": {
+                  "type": "field"
+              }
+          },
+          "SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP": {
+              "type": "boolean",
+              "label": "Log Out of Entra ID",
+              "help_text": "When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL": {
+              "type": "string",
+              "label": "Entra ID Post Logout Redirect URL",
+              "help_text": "Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.",
+              "category": "Microsoft Entra ID",
+              "category_slug": "entra-id",
+              "defined_in_file": false
           },
           "SOCIAL_AUTH_OIDC_KEY": {
               "type": "string",

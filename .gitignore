@@ -31,7 +31,7 @@ ascender/ui/build_test
 ascender/ui/client/languages
 ascender/ui/templates/ui/index.html
 ascender/ui/templates/ui/installing.html
-ascender/ui/node_modules/
+ascender/ui/node_modules
 #ascender/ui/src/locales/*/messages.js
 ascender/ui/coverage/
 ascender/ui/build

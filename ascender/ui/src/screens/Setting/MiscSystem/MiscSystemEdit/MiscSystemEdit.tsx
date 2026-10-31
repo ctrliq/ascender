@@ -46,6 +46,7 @@ function MiscSystemEdit() {
         'MANAGE_ORGANIZATION_AUTH',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
+        'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS',
         'REMOTE_HOST_HEADERS',
         'ASCENDER_URL_BASE',
         'DEFAULT_EXECUTION_ENVIRONMENT',
@@ -198,6 +199,10 @@ function MiscSystemEdit() {
                 <BooleanField
                   name="MANAGE_ORGANIZATION_AUTH"
                   config={system.MANAGE_ORGANIZATION_AUTH}
+                />
+                <BooleanField
+                  name="AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS"
+                  config={system.AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS}
                 />
                 <ObjectField
                   name="REMOTE_HOST_HEADERS"

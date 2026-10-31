@@ -11289,6 +11289,12 @@ export interface components {
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -13002,8 +13008,105 @@ export interface components {
         };
       } | null;
       /**
+       * Entra ID Client ID
+       * @description The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_KEY: string;
+      /**
+       * Entra ID Client Secret
+       * @description A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_SECRET: string;
+      /**
+       * Entra ID Tenant
+       * @description The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_TENANT_ID: string;
+      /**
+       * Entra ID Authority Host
+       * @description The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.
+       * @default login.microsoftonline.com
+       */
+      SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST: string;
+      /**
+       * Entra ID Username Claim
+       * @description The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from Entra ID Usernames
+       * @description Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * Entra ID Groups Claim
+       * @description The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.
+       * @default groups
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
+      /**
+       * Read Entra ID Groups from Microsoft Graph
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
+      /**
+       * Microsoft Graph Host
+       * @description The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST: string;
+      /**
+       * Entra ID Login Rule
+       * @description A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Entra ID Organization Map
+       * @description Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID Team Map
+       * @description Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID User Flags
+       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of Entra ID
+       * @description When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP: boolean;
+      /**
+       * Entra ID Post Logout Redirect URL
+       * @description Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL?: string;
+      /**
        * Azure AD OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
@@ -13037,7 +13140,7 @@ export interface components {
       } | null;
       /**
        * Azure AD Tenant OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
@@ -14418,6 +14521,12 @@ export interface components {
        * @default false
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -16189,13 +16298,115 @@ export interface components {
         };
       } | null;
       /**
+       * Entra ID Callback URL
+       * @description Add this URL as a Web redirect URI of the app registration in Entra ID.
+       */
+      readonly SOCIAL_AUTH_ENTRA_ID_CALLBACK_URL: string;
+      /**
+       * Entra ID Client ID
+       * @description The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_KEY: string;
+      /**
+       * Entra ID Client Secret
+       * @description A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_SECRET: string;
+      /**
+       * Entra ID Tenant
+       * @description The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_TENANT_ID: string;
+      /**
+       * Entra ID Authority Host
+       * @description The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.
+       * @default login.microsoftonline.com
+       */
+      SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST: string;
+      /**
+       * Entra ID Username Claim
+       * @description The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from Entra ID Usernames
+       * @description Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * Entra ID Groups Claim
+       * @description The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.
+       * @default groups
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
+      /**
+       * Read Entra ID Groups from Microsoft Graph
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
+      /**
+       * Microsoft Graph Host
+       * @description The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST: string;
+      /**
+       * Entra ID Login Rule
+       * @description A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Entra ID Organization Map
+       * @description Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID Team Map
+       * @description Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID User Flags
+       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of Entra ID
+       * @description When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP: boolean;
+      /**
+       * Entra ID Post Logout Redirect URL
+       * @description Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL?: string;
+      /**
        * Azure AD OAuth2 Callback URL
        * @description Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.
        */
       readonly SOCIAL_AUTH_AZUREAD_OAUTH2_CALLBACK_URL: string;
       /**
        * Azure AD OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
@@ -16234,7 +16445,7 @@ export interface components {
       readonly SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CALLBACK_URL: string;
       /**
        * Azure AD Tenant OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;
@@ -16562,6 +16773,12 @@ export interface components {
        * @default false
        */
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
+       * Allow AWS Secrets Manager Lookups Without Keys
+       * @description When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.
+       * @default false
+       */
+      AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: boolean;
       /**
        * Base URL of the service
        * Format: uri
@@ -18276,8 +18493,105 @@ export interface components {
         };
       } | null;
       /**
+       * Entra ID Client ID
+       * @description The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_KEY: string;
+      /**
+       * Entra ID Client Secret
+       * @description A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_SECRET: string;
+      /**
+       * Entra ID Tenant
+       * @description The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_TENANT_ID: string;
+      /**
+       * Entra ID Authority Host
+       * @description The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.
+       * @default login.microsoftonline.com
+       */
+      SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST: string;
+      /**
+       * Entra ID Username Claim
+       * @description The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.
+       * @default preferred_username
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY: string;
+      /**
+       * Strip the Domain from Entra ID Usernames
+       * @description Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN: boolean;
+      /**
+       * Entra ID Groups Claim
+       * @description The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.
+       * @default groups
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM: string;
+      /**
+       * Read Entra ID Groups from Microsoft Graph
+       * @description Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH: boolean;
+      /**
+       * Microsoft Graph Host
+       * @description The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.
+       * @default
+       */
+      SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST: string;
+      /**
+       * Entra ID Login Rule
+       * @description A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Entra ID Organization Map
+       * @description Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID Team Map
+       * @description Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.
+       */
+      SOCIAL_AUTH_ENTRA_ID_TEAM_MAP?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      } | null;
+      /**
+       * Entra ID User Flags
+       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       */
+      SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Log Out of Entra ID
+       * @description When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.
+       * @default false
+       */
+      SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP: boolean;
+      /**
+       * Entra ID Post Logout Redirect URL
+       * @description Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.
+       */
+      SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL?: string;
+      /**
        * Azure AD OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: string;
@@ -18311,7 +18625,7 @@ export interface components {
       } | null;
       /**
        * Azure AD Tenant OAuth2 Key
-       * @description The OAuth2 key (Client ID) from your Azure AD application.
+       * @description The OAuth2 key (Client ID) from your Azure AD application. Azure AD is now Microsoft Entra ID, and its own settings are the ones to use for a new setup.
        * @default
        */
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: string;

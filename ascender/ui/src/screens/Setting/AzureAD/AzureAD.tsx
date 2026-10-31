@@ -6,6 +6,7 @@ import ContentError from 'components/ContentError';
 import AzureADDetail from './AzureADDetail';
 import AzureADEdit from './AzureADEdit';
 import AzureADTenantEdit from './AzureADTenantEdit';
+import EntraIDEdit from './EntraIDEdit';
 
 // /settings/azure/:category (no sub-view) redirects to that category's details
 export interface CategoryRedirectProps {
@@ -28,21 +29,22 @@ function AzureAD() {
         <Routes>
           <Route
             index
-            element={<Navigate to={`${baseURL}/default/details`} replace />}
+            element={<Navigate to={`${baseURL}/entra/details`} replace />}
           />
           <Route
             path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
           <Route path=":category/details" element={<AzureADDetail />} />
+          <Route path="entra/edit" element={<EntraIDEdit />} />
           <Route path="default/edit" element={<AzureADEdit />} />
           <Route path="tenant/edit" element={<AzureADTenantEdit />} />
           <Route
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/default/details`}>
-                  {t`View Azure AD settings`}
+                <Link to={`${baseURL}/entra/details`}>
+                  {t`View Microsoft Entra ID settings`}
                 </Link>
               </ContentError>
             }

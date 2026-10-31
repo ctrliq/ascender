@@ -29,7 +29,7 @@ function SettingList() {
       id: 'authentication',
       routes: [
         {
-          title: t`Azure AD settings`,
+          title: t`Microsoft Entra ID (Azure AD) settings`,
           path: '/settings/azure',
         },
         {

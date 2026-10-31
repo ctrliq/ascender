@@ -27,6 +27,7 @@ export type { LaunchConfig, SurveyConfig, SurveyQuestion };
 export interface LaunchPromptValues {
   credential_passwords?: Record<string, string>;
   credentials?: LaunchCredential[];
+  diff_mode?: boolean;
   execution_environment?: SummaryFieldRef | null;
   extra_vars?: string;
   forks?: number;

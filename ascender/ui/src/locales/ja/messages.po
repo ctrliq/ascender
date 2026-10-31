@@ -52,7 +52,7 @@ msgstr "ワークフローの承認が見つかりません。"
 msgid "Browse…"
 msgstr "参照…"
 
-#: screens/Setting/Settings.tsx:117
+#: screens/Setting/Settings.tsx:120
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -235,7 +235,7 @@ msgstr "実行中の可用性チェック"
 msgid "Failed to copy inventory."
 msgstr "インベントリーをコピーできませんでした。"
 
-#: screens/Setting/Settings.tsx:114
+#: screens/Setting/Settings.tsx:117
 msgid "SAML"
 msgstr "SAML"
 
@@ -674,7 +674,7 @@ msgstr "展開"
 msgid "Promote Child Groups and Hosts"
 msgstr "子グループおよびホストのプロモート"
 
-#: screens/Setting/Settings.tsx:74
+#: screens/Setting/Settings.tsx:77
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -774,7 +774,7 @@ msgstr "1 から 31 までの日付を選択してください。"
 msgid "No"
 msgstr "不可"
 
-#: screens/Setting/Settings.tsx:108
+#: screens/Setting/Settings.tsx:111
 msgid "Miscellaneous System"
 msgstr "その他のシステム"
 
@@ -874,7 +874,7 @@ msgstr "トークンに戻る"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhook: このテンプレートの webhook を有効にします。"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:92
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -1212,7 +1212,7 @@ msgstr "失敗の説明:"
 msgid "February"
 msgstr "2 月"
 
-#: screens/Setting/Settings.tsx:181
+#: screens/Setting/Settings.tsx:184
 msgid "View all settings"
 msgstr "すべての設定の表示"
 
@@ -1489,7 +1489,7 @@ msgstr "管理ジョブの起動"
 msgid "Add existing group"
 msgstr "既存グループの追加"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:91
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -2033,7 +2033,7 @@ msgstr "キー"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:345
+#: screens/Login/Login.tsx:350
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2207,7 +2207,7 @@ msgstr "特定の正規表現に一致するフィールド。"
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:343
+#: screens/Login/Login.tsx:348
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2517,7 +2517,7 @@ msgstr "{0} (削除済み)"
 msgid "The inventory that this host belongs to."
 msgstr "このホストが属するインベントリー。"
 
-#: screens/Login/Login.tsx:328
+#: screens/Login/Login.tsx:333
 msgid "Log In"
 msgstr "ログイン"
 
@@ -3022,7 +3022,7 @@ msgstr "{0, plural, one {有効な電話番号を入力してください。} ot
 msgid "Facts"
 msgstr "ファクト"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:357
 msgid "or"
 msgstr "または"
 
@@ -3057,8 +3057,8 @@ msgid "Workflow job details"
 msgstr "ワークフロージョブの詳細"
 
 #: screens/Setting/SettingList.tsx:32
-msgid "Azure AD settings"
-msgstr "Azure AD の設定"
+#~ msgid "Azure AD settings"
+#~ msgstr "Azure AD の設定"
 
 #: components/JobList/JobListItem.tsx:377
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
@@ -3260,11 +3260,11 @@ msgstr "このインベントリーソースは、現在それに依存してい
 msgid "Deny"
 msgstr "拒否"
 
-#: screens/Setting/Settings.tsx:77
+#: screens/Setting/Settings.tsx:80
 msgid "Generic OIDC"
 msgstr "汎用 OIDC"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3532,7 +3532,7 @@ msgid "Select Hosts"
 msgstr "ホストの選択"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:62
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Team"
 msgstr "GitHub チーム"
 
@@ -3642,7 +3642,7 @@ msgstr "8 月"
 msgid "View smart inventory host details"
 msgstr "スマートインベントリーホストの詳細の表示"
 
-#: screens/Login/Login.tsx:251
+#: screens/Login/Login.tsx:256
 msgid "Sign in with Google"
 msgstr "Google でサインイン"
 
@@ -3744,8 +3744,8 @@ msgstr "すべてを同期"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
 #: screens/Setting/Settings.tsx:52
-msgid "Azure AD Tenant"
-msgstr "Azure AD Tenant"
+#~ msgid "Azure AD Tenant"
+#~ msgstr "Azure AD Tenant"
 
 #: screens/Instances/Instances.tsx:17
 #: screens/Instances/Instances.tsx:27
@@ -4164,8 +4164,8 @@ msgstr "認証情報の削除"
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:355
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:120
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:124
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:150
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:154
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:85
@@ -4538,7 +4538,7 @@ msgstr "プロジェクトリビジョンの更新"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "(任意) ステータス更新を webhook サービスに送り返すために使用する認証情報を選択します。"
 
-#: screens/Setting/Settings.tsx:111
+#: screens/Setting/Settings.tsx:114
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4792,7 +4792,7 @@ msgstr "ホストの切り替えに失敗しました。"
 msgid "denied"
 msgstr "拒否"
 
-#: screens/Login/Login.tsx:241
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "GitHub Enterprise 組織でサインイン"
 
@@ -5109,6 +5109,10 @@ msgstr "タイムアウト時"
 msgid "Create New Team"
 msgstr "新規チームの作成"
 
+#: screens/Login/Login.tsx:221
+msgid "Sign in with Microsoft Entra ID"
+msgstr "Microsoft Entra ID でサインイン"
+
 #: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "ドキュメンテーションと"
@@ -5127,7 +5131,7 @@ msgstr "テキストエリア"
 msgid "View User Interface settings"
 msgstr "ユーザーインターフェース設定の表示"
 
-#: screens/Login/Login.tsx:231
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Teams"
 msgstr "GitHub チームでサインイン"
 
@@ -6043,6 +6047,10 @@ msgstr "経過時間"
 #: components/VerbositySelectField/VerbositySelectField.tsx:15
 msgid "3 (Debug)"
 msgstr "3 (デバッグ)"
+
+#: screens/Setting/SettingList.tsx:32
+msgid "Microsoft Entra ID (Azure AD) settings"
+msgstr "Microsoft Entra ID (Azure AD) の設定"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:134
 msgid "Track submodules"
@@ -7109,7 +7117,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "注記: このフィールドは、リモート名が「origin」であることを前提としています。"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:56
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Default"
 msgstr "GitHub のデフォルト"
 
@@ -7174,6 +7182,11 @@ msgstr "ワークフロージョブテンプレート"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:18
 #~ msgid "Prompt for labels on launch."
 #~ msgstr "起動時にラベルを要求します。"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:78
+#: screens/Setting/Settings.tsx:55
+msgid "Azure AD Tenant (legacy)"
+msgstr "Azure AD Tenant（レガシー）"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
@@ -7490,7 +7503,7 @@ msgstr "ログアウト"
 msgid "sec"
 msgstr "秒"
 
-#: screens/Login/Login.tsx:282
+#: screens/Login/Login.tsx:287
 msgid "Sign in with {label}"
 msgstr "{label} でサインイン"
 
@@ -7717,11 +7730,11 @@ msgid "Edit Team"
 msgstr "チームの編集"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:120
+#: screens/Setting/Settings.tsx:123
 msgid "User Interface"
 msgstr "ユーザーインターフェース"
 
-#: screens/Login/Login.tsx:236
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise"
 msgstr "GitHub Enterprise でサインイン"
 
@@ -7769,7 +7782,7 @@ msgstr "無期限"
 msgid "View job {0}"
 msgstr "ジョブ {0} の表示"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} でサインイン"
 
@@ -7882,7 +7895,7 @@ msgstr "startswith で大文字小文字の区別なし。"
 msgid "Unsaved changes modal"
 msgstr "保存されていない変更モーダル"
 
-#: screens/Login/Login.tsx:246
+#: screens/Login/Login.tsx:251
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise チームでサインイン"
 
@@ -7916,7 +7929,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 設定"
 
-#: screens/Login/Login.tsx:226
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 組織でサインイン"
 
@@ -8010,8 +8023,8 @@ msgstr "ホスト OK"
 #~ msgstr "残りの日数"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
-msgid "View Azure AD settings"
-msgstr "Azure AD 設定の表示"
+#~ msgid "View Azure AD settings"
+#~ msgstr "Azure AD 設定の表示"
 
 #: screens/Instances/InstanceList/InstanceList.tsx:181
 #: screens/Instances/Shared/InstanceForm.tsx:33
@@ -8032,7 +8045,7 @@ msgstr "すべてのフィルターの解除"
 msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {このインスタンスは現在、他のリソースで使用されています。削除してもよろしいですか?} other {これらのインスタンスのプロビジョニングを解除すると、それらに依存する他のリソースに影響する可能性があります。それでも削除してもよろしいですか?}}"
 
-#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:59
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:61
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:76
 #: screens/Setting/GoogleOAuth2/GoogleOAuth2Detail/GoogleOAuth2Detail.tsx:44
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:58
@@ -8542,7 +8555,7 @@ msgstr "注: 選択された順序によって、実行の優先順位が設定�
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "起動時にパスワードが必要な認証情報は許可されていません。続行するには、次の認証情報を削除するか、同じタイプの認証情報に置き換えてください: {0}"
 
-#: screens/Login/Login.tsx:256
+#: screens/Login/Login.tsx:261
 msgid "Sign in with OIDC"
 msgstr "OIDC でサインイン"
 
@@ -8576,7 +8589,7 @@ msgid "Remote Archive"
 msgstr "リモートアーカイブ"
 
 #: screens/Setting/SettingList.tsx:107
-#: screens/Setting/Settings.tsx:123
+#: screens/Setting/Settings.tsx:126
 msgid "Troubleshooting"
 msgstr "トラブルシューティング"
 
@@ -8631,7 +8644,7 @@ msgid "Destination Channels or Users"
 msgstr "送信先チャネルまたはユーザー"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:65
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8651,7 +8664,7 @@ msgstr "このジョブが実行する playbook が含まれるプロジェク�
 msgid "Select Credential Type"
 msgstr "認証情報タイプの選択"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8718,7 +8731,7 @@ msgstr "インベントリーの編集"
 msgid "Failed to user token."
 msgstr "ユーザートークンに失敗しました。"
 
-#: screens/Login/Login.tsx:268
+#: screens/Login/Login.tsx:273
 msgid "Sign in with SAML"
 msgstr "SAML でサインイン"
 
@@ -8986,7 +8999,7 @@ msgstr "インベントリーソース同期の取り消し"
 msgid "Failed to delete one or more applications."
 msgstr "1 つ以上のアプリケーションを削除できませんでした。"
 
-#: screens/Setting/Settings.tsx:105
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous Authentication"
 msgstr "その他の認証"
 
@@ -9492,7 +9505,7 @@ msgstr "フォーク"
 msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
 msgstr "この制限は、このワークフロー ({0}) 内で制限の入力を求めるすべてのワークフローノードに、各ノードに設定された制限の代わりに適用されます。"
 
-#: screens/Setting/Settings.tsx:84
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP Default"
 msgstr "LDAP のデフォルト"
 
@@ -9560,7 +9573,7 @@ msgid "Play"
 msgstr "プレイ"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:71
+#: screens/Setting/Settings.tsx:74
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise チーム"
 
@@ -9724,7 +9737,7 @@ msgstr "外部のシークレット管理システムからフィールドにデ
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:80
+#: screens/Setting/Settings.tsx:83
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -10017,7 +10030,7 @@ msgstr "ツールの切り替え"
 msgid "Organization"
 msgstr "組織"
 
-#: screens/Login/Login.tsx:306
+#: screens/Login/Login.tsx:311
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "セッションの期限が切れました。中断したところから続行するには、ログインしてください。"
 
@@ -10073,8 +10086,8 @@ msgstr "Azure AD Tenant でサインイン"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
 #: screens/Setting/Settings.tsx:49
-msgid "Azure AD Default"
-msgstr "Azure AD (デフォルト)"
+#~ msgid "Azure AD Default"
+#~ msgstr "Azure AD (デフォルト)"
 
 #: components/Search/LookupTypeInput.tsx:80
 msgid "Case-insensitive version of endswith."
@@ -10135,7 +10148,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Settings.tsx:46
 #: screens/Setting/Settings.tsx:50
 #: screens/Setting/Settings.tsx:53
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 #: screens/Setting/Settings.tsx:60
 #: screens/Setting/Settings.tsx:63
 #: screens/Setting/Settings.tsx:66
@@ -10144,13 +10157,13 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Settings.tsx:75
 #: screens/Setting/Settings.tsx:78
 #: screens/Setting/Settings.tsx:81
-#: screens/Setting/Settings.tsx:90
-#: screens/Setting/Settings.tsx:91
-#: screens/Setting/Settings.tsx:92
+#: screens/Setting/Settings.tsx:84
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:96
+#: screens/Setting/Settings.tsx:97
+#: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:106
 #: screens/Setting/Settings.tsx:109
 #: screens/Setting/Settings.tsx:112
@@ -10158,6 +10171,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Settings.tsx:121
 #: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:127
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
@@ -10328,7 +10342,7 @@ msgstr "このアクションでは、次の項目がソフト削除されます
 msgid "Listener Addresses"
 msgstr "リスナーアドレス"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:90
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10607,7 +10621,7 @@ msgid "An error occurred"
 msgstr "エラーが発生しました"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:59
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Organization"
 msgstr "GitHub 組織"
 
@@ -10943,7 +10957,7 @@ msgstr "組織を削除できませんでした。"
 #~ msgid "Hosts available"
 #~ msgstr "利用可能なホスト"
 
-#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:105
 msgid "Logging"
 msgstr "ロギング"
 
@@ -11243,7 +11257,7 @@ msgstr "1 つ以上のインベントリーリソースを削除できません�
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "指定した場合に、ワークフローを表示すると、リソース名の代わりにこのフィールドがノードに表示されます"
 
-#: screens/Login/Login.tsx:221
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub"
 msgstr "GitHub でサインイン"
 
@@ -11291,7 +11305,7 @@ msgid "All job types"
 msgstr "すべてのジョブタイプ"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:68
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise 組織"
 
@@ -11350,6 +11364,10 @@ msgstr "インベントリー内のホストをターゲットにするために
 msgid "Timeout"
 msgstr "タイムアウト"
 
+#: screens/Setting/AzureAD/AzureAD.tsx:47
+msgid "View Microsoft Entra ID settings"
+msgstr "Microsoft Entra ID 設定の表示"
+
 #: screens/TopologyView/ContentLoading.tsx:45
 msgid "Please wait until the topology view is populated..."
 msgstr "トポロジービューが反映されるまでお待ちください..."
@@ -11378,7 +11396,7 @@ msgstr "{numJobsToCancel, plural, one {選択したジョブをキャンセル} 
 #: screens/Setting/Settings.tsx:47
 #: screens/Setting/Settings.tsx:51
 #: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:57
 #: screens/Setting/Settings.tsx:61
 #: screens/Setting/Settings.tsx:64
 #: screens/Setting/Settings.tsx:67
@@ -11387,12 +11405,12 @@ msgstr "{numJobsToCancel, plural, one {選択したジョブをキャンセル} 
 #: screens/Setting/Settings.tsx:76
 #: screens/Setting/Settings.tsx:79
 #: screens/Setting/Settings.tsx:82
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:97
-#: screens/Setting/Settings.tsx:98
+#: screens/Setting/Settings.tsx:85
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
+#: screens/Setting/Settings.tsx:102
+#: screens/Setting/Settings.tsx:103
 #: screens/Setting/Settings.tsx:104
 #: screens/Setting/Settings.tsx:107
 #: screens/Setting/Settings.tsx:110
@@ -11401,6 +11419,7 @@ msgstr "{numJobsToCancel, plural, one {選択したジョブをキャンセル} 
 #: screens/Setting/Settings.tsx:119
 #: screens/Setting/Settings.tsx:122
 #: screens/Setting/Settings.tsx:125
+#: screens/Setting/Settings.tsx:128
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11852,6 +11871,11 @@ msgstr "Webhook サービス"
 msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
 msgstr "プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは {brandName} に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
 
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:73
+#: screens/Setting/Settings.tsx:52
+msgid "Azure AD Default (legacy)"
+msgstr "Azure AD (デフォルト)（レガシー）"
+
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:75
 msgid "Canceled node, forced as successful"
 msgstr "キャンセルされたノード、成功として強制"
@@ -12257,6 +12281,11 @@ msgstr "テンプレートのコピー"
 #: components/NotificationList/NotificationListItem.tsx:82
 msgid "Toggle notification approvals"
 msgstr "通知承認の切り替え"
+
+#: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:68
+#: screens/Setting/Settings.tsx:49
+msgid "Microsoft Entra ID"
+msgstr "Microsoft Entra ID"
 
 #: screens/Template/Survey/SurveyToolbar.tsx:95
 msgid "Delete survey question"
