@@ -427,7 +427,10 @@ def test_months_with_31_days(post, admin_user):
 def test_really_old_dtstart(post, admin_user, freq, delta, total_seconds):
     url = reverse('api:schedule_rrule')
     # every <interval>, at the :30 second mark
-    rrule = f'DTSTART;TZID=America/New_York:20051231T000030 RRULE:FREQ={freq};INTERVAL={delta}'
+    # UTC, because a DST change in a local zone legitimately puts uneven gaps
+    # between runs (see test_dst_rollback_duplicates), which would fail the
+    # spacing check below whenever the next ten runs cross one.
+    rrule = f'DTSTART;TZID=UTC:20051231T000030 RRULE:FREQ={freq};INTERVAL={delta}'
     start = now()
     next_ten = post(url, {'rrule': rrule}, admin_user, expect=200).data['utc']
 
@@ -437,7 +440,7 @@ def test_really_old_dtstart(post, admin_user, freq, delta, total_seconds):
     assert next_ten[0] >= start
 
     # ...but *no more than* <interval> into the future
-    assert now() + datetime.timedelta(**{'minutes' if freq == 'MINUTELY' else 'hours': delta})
+    assert next_ten[0] <= start + datetime.timedelta(**{'minutes' if freq == 'MINUTELY' else 'hours': delta})
 
     # every date in the list is <interval> greater than the last
     for i, x in enumerate(next_ten):
