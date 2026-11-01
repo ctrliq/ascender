@@ -119,10 +119,20 @@ class AutomationJobScope:
         A part whose claim is missing is still written, empty, so the subject
         always has the same shape and a glob in a Vault role matches it the
         same way every time.
+
+        The names are encoded so that only the platform can write the
+        separator. Whoever can rename an organization chooses that name, and
+        `infra:job_template:rogue` would otherwise match a role bound to
+        `organization:infra:job_template:*`. Percent encoding rather than a
+        backslash, which would have to be doubled in a role's JSON.
         """
         parts = [f'workload_type:{cls.name}']
-        parts.extend(f'{label}:{claims.get(claim, "")}' for claim, label in cls.SUBJECT_PARTS)
+        parts.extend(f'{label}:{cls._encode_subject_value(claims.get(claim, ""))}' for claim, label in cls.SUBJECT_PARTS)
         return ':'.join(parts)
+
+    @staticmethod
+    def _encode_subject_value(value):
+        return str(value).replace('%', '%25').replace(':', '%3A')
 
 
 def issuer():
@@ -392,20 +402,23 @@ def workload_identity_for(unified_job, ttl_seconds=None):
 
 def token_for_current_workload(audience, for_playbook=False):
     """
-    A token for the job this context runs. One is signed per audience and
-    reused for the rest of the run, so a credential with several fields looked
-    up from the same Vault logs in with the same token.
+    A token for the job this context runs.
 
     A lookup uses its token there and then, so it gets the short default
-    lifetime. A token handed to the playbook (`for_playbook`) lasts as long as
-    the job's timeout, since the playbook may only use it near the end.
+    lifetime and a new one every time: preparing a job can outlast that
+    lifetime, and each field of a credential logs in to Vault separately.
+
+    A token handed to the playbook (`for_playbook`) lasts as long as the job's
+    timeout, since the playbook may only use it near the end. There is one per
+    audience for the run, so what the job is given does not change under it.
     """
     state = _current_workload.get()
     if state is None:
         raise WorkloadIdentityError('A workload identity token can only be issued for a running job.')
-    key = (audience, for_playbook)
-    if key not in state.tokens:
-        if state.claims is None:
-            state.claims = claims_for_unified_job(state.unified_job)
-        state.tokens[key] = sign_token(state.claims, audience, state.ttl_seconds if for_playbook else None)
-    return state.tokens[key]
+    if state.claims is None:
+        state.claims = claims_for_unified_job(state.unified_job)
+    if not for_playbook:
+        return sign_token(state.claims, audience)
+    if audience not in state.tokens:
+        state.tokens[audience] = sign_token(state.claims, audience, state.ttl_seconds)
+    return state.tokens[audience]

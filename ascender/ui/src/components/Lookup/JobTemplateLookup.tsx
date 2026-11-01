@@ -75,7 +75,7 @@ function JobTemplateLookup({
   );
 
   const checkJobTemplateName = useCallback(
-    async (name: string) => {
+    async (name: string, isStale: () => boolean) => {
       if (!name) {
         onChange(null);
         return;
@@ -84,9 +84,17 @@ function JobTemplateLookup({
         const {
           data: { results, count: matches },
         } = await JobTemplatesAPI.read({ name, role_level: 'execute_role' });
-        onChange(matches ? (results[0] ?? null) : null);
+        if (isStale()) {
+          return;
+        }
+        // A name is only unique within an organization, and the test runs
+        // with the claims of the template picked, so an ambiguous name has to
+        // be chosen from the list
+        onChange(matches === 1 ? (results[0] ?? null) : null);
       } catch {
-        onChange(null);
+        if (!isStale()) {
+          onChange(null);
+        }
       }
     },
     [onChange]
@@ -111,6 +119,7 @@ function JobTemplateLookup({
         onChange={onChange}
         onUpdate={fetchJobTemplates}
         onDebounce={checkJobTemplateName}
+        clearOnType
         fieldName={fieldName}
         required={required}
         isLoading={isLoading}

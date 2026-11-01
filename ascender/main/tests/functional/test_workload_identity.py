@@ -1,3 +1,4 @@
+import fnmatch
 import json
 import os
 from unittest import mock
@@ -72,6 +73,33 @@ class TestSubject:
 
     def test_missing_parts_stay_in_place(self):
         assert workload_identity.AutomationJobScope.subject({}) == 'workload_type:ascender_automation_job:organization::job_template:'
+
+    def test_an_organization_cannot_name_itself_into_another(self):
+        claims = {'ascender_organization_name': 'infra:job_template:rogue', 'ascender_job_template_name': 'patch'}
+        subject = workload_identity.AutomationJobScope.subject(claims)
+        assert subject == 'workload_type:ascender_automation_job:organization:infra%3Ajob_template%3Arogue:job_template:patch'
+        assert not fnmatch.fnmatchcase(subject, 'workload_type:ascender_automation_job:organization:infra:job_template:*')
+
+    @pytest.mark.parametrize(
+        'first, second',
+        [
+            (('a:job_template:b', 'c'), ('a', 'b:job_template:c')),
+            (('a%3Ab', 'c'), ('a:b', 'c')),
+            (('a%253Ab', 'c'), ('a%3Ab', 'c')),
+        ],
+    )
+    def test_different_names_never_share_a_subject(self, first, second):
+        subject = workload_identity.AutomationJobScope.subject
+        assert subject(dict(zip(('ascender_organization_name', 'ascender_job_template_name'), first))) != subject(
+            dict(zip(('ascender_organization_name', 'ascender_job_template_name'), second))
+        )
+
+    @pytest.mark.django_db
+    @enabled
+    def test_the_name_claims_stay_as_they_are(self):
+        payload = verify(workload_identity.sign_token({'ascender_organization_name': 'db:ops'}, VAULT))
+        assert payload['ascender_organization_name'] == 'db:ops'
+        assert ':organization:db%3Aops:' in payload['sub']
 
 
 @pytest.mark.django_db
@@ -252,13 +280,25 @@ class TestCurrentWorkload:
                 workload_identity.token_for_current_workload(VAULT)
 
     @enabled
-    def test_one_token_per_audience(self, job_factory):
+    def test_each_lookup_gets_a_token_of_its_own(self, job_factory):
         with workload_identity.workload_identity_for(job_factory(), ttl_seconds=600):
             first = workload_identity.token_for_current_workload(VAULT)
-            assert workload_identity.token_for_current_workload(VAULT) == first
-            other = workload_identity.token_for_current_workload('sts.amazonaws.com')
-            for_playbook = workload_identity.token_for_current_workload(VAULT, for_playbook=True)
+            # a later field must not be handed one that has run out in the meantime
+            assert verify(workload_identity.token_for_current_workload(VAULT))['jti'] != verify(first)['jti']
+
+    @enabled
+    def test_the_playbook_keeps_one_token_per_audience(self, job_factory):
+        with workload_identity.workload_identity_for(job_factory(), ttl_seconds=600):
+            first = workload_identity.token_for_current_workload(VAULT, for_playbook=True)
+            assert workload_identity.token_for_current_workload(VAULT, for_playbook=True) == first
+            other = workload_identity.token_for_current_workload('sts.amazonaws.com', for_playbook=True)
         assert verify(other, audience='sts.amazonaws.com')['jti'] != verify(first)['jti']
+
+    @enabled
+    def test_a_lookup_token_is_short_and_a_playbook_token_is_not(self, job_factory):
+        with workload_identity.workload_identity_for(job_factory(), ttl_seconds=600):
+            first = workload_identity.token_for_current_workload(VAULT)
+            for_playbook = workload_identity.token_for_current_workload(VAULT, for_playbook=True)
         # a lookup uses its token at once; the playbook's lasts as long as the job may run
         assert verify(first)['exp'] - verify(first)['iat'] == 300 + workload_identity.CLOCK_SKEW_SECONDS
         assert verify(for_playbook)['exp'] - verify(for_playbook)['iat'] == 600 + workload_identity.CLOCK_SKEW_SECONDS
@@ -603,6 +643,56 @@ class TestInputSourceValidation:
         )
         assert response.status_code == 400
         assert 'vault id' in str(response.data)
+
+    @pytest.fixture
+    def vault_credential(self):
+        vault_type = CredentialType.defaults['vault']()
+        vault_type.save()
+        return Credential.objects.create(credential_type=vault_type, name='av', inputs={'vault_password': 'x'})
+
+    @pytest.fixture
+    def plain_lookup(self, oidc_plugin):
+        lookup_type = CredentialType.objects.create(
+            kind='external',
+            managed=True,
+            name='Plain lookup',
+            inputs={
+                'fields': [{'id': 'token', 'label': 'Token', 'type': 'string', 'secret': True}],
+                'metadata': [{'id': 'secret_key', 'label': 'Key', 'type': 'string'}],
+            },
+        )
+        return Credential.objects.create(credential_type=lookup_type, name='plain', inputs={})
+
+    def link(self, target, source, field):
+        return {'target_credential': target.pk, 'source_credential': source.pk, 'input_field_name': field, 'metadata': {'secret_key': 'k'}}
+
+    def test_vault_id_cannot_come_from_a_lookup_that_itself_logs_in_as_the_job(self, post, admin, oidc_credential, plain_lookup, vault_credential):
+        url = reverse('api:credential_input_source_list')
+        assert post(url, self.link(plain_lookup, oidc_credential, 'token'), admin).status_code == 201
+        response = post(url, self.link(vault_credential, plain_lookup, 'vault_id'), admin)
+        assert response.status_code == 400
+        assert 'vault id' in str(response.data)
+
+    def test_a_lookup_behind_a_vault_id_cannot_start_logging_in_as_the_job(self, post, admin, oidc_credential, plain_lookup, vault_credential):
+        url = reverse('api:credential_input_source_list')
+        assert post(url, self.link(vault_credential, plain_lookup, 'vault_id'), admin).status_code == 201
+        response = post(url, self.link(plain_lookup, oidc_credential, 'token'), admin)
+        assert response.status_code == 400
+        assert 'vault id' in str(response.data)
+
+    def test_moving_a_vault_id_to_a_lookup_that_logs_in_as_the_job(self, post, patch, admin, oidc_credential, plain_lookup, vault_credential):
+        url = reverse('api:credential_input_source_list')
+        assert post(url, self.link(plain_lookup, oidc_credential, 'token'), admin).status_code == 201
+        other_lookup = Credential.objects.create(credential_type=plain_lookup.credential_type, name='plain2', inputs={})
+        created = post(url, self.link(vault_credential, other_lookup, 'vault_id'), admin)
+        assert created.status_code == 201
+        response = patch(reverse('api:credential_input_source_detail', kwargs={'pk': created.data['id']}), {'source_credential': plain_lookup.pk}, admin)
+        assert response.status_code == 400
+        assert 'vault id' in str(response.data)
+
+    def test_vault_id_from_a_plain_lookup_is_still_fine(self, post, admin, plain_lookup, vault_credential):
+        response = post(reverse('api:credential_input_source_list'), self.link(vault_credential, plain_lookup, 'vault_id'), admin)
+        assert response.status_code == 201
 
     def test_vault_password_can(self, post, admin, oidc_credential):
         vault_type = CredentialType.defaults['vault']()

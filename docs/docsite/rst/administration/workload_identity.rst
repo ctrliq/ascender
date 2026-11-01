@@ -150,6 +150,8 @@ The subject is built from the organization and the job template, always with the
 
     workload_type:ascender_automation_job:organization:<organization name>:job_template:<job template name>
 
+The separator can't appear inside a name: in the subject, every ``%`` in a name is written as ``%25`` and every ``:`` as ``%3A``, so a template called ``db:patch`` shows up as ``db%3Apatch``. Without that, the admin of an organization could rename it to ``infra:job_template:x`` and match a role bound to the ``infra`` organization. The ``*_name`` claims keep the name as it is.
+
 Project syncs, inventory syncs and ad hoc commands get tokens too, when one of their credentials is looked up as the job, and their subject ends in an empty ``job_template:``. A role bound to ``job_template:`` alone lets all of them in, so bind ``ascender_unified_job_type`` as well when the role is meant for one kind only. Otherwise a project admin could point the SCM credential of a project at that lookup, with an SCM URL on a server they control, and receive the secret as the git password.
 
 

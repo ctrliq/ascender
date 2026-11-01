@@ -1410,11 +1410,47 @@ class CredentialInputSource(PrimordialModel):
         defined_fields = [field['id'] for field in target_type.inputs.get('fields', []) if not field.get('internal')]
         if self.input_field_name not in defined_fields:
             raise ValidationError(_('Input field must be defined on target credential (options are {}).'.format(', '.join(sorted(defined_fields)))))
-        if self.input_field_name == 'vault_id' and self.source_credential_id and self.source_credential.credential_type.wants_workload_identity_token:
+        if self.source_credential_id and self._source_looks_up_as_the_job() and (self.input_field_name == 'vault_id' or self._target_feeds_a_vault_id()):
             # The vault id tells a template's vault credentials apart when they
             # are attached and launched, with no job running to sign a token for
             raise ValidationError(_('A vault id cannot be looked up as the job: it is needed before any job runs.'))
         return self.input_field_name
+
+    def _source_looks_up_as_the_job(self):
+        """
+        Whether reading from the source needs a job, because it logs in as one
+        or because a credential further up does: a lookup resolves every input
+        source of the credential it reads from.
+        """
+        seen = set()
+        pending = [self.source_credential]
+        while pending:
+            credential = pending.pop()
+            if credential.pk in seen:
+                continue
+            seen.add(credential.pk)
+            if credential.credential_type.wants_workload_identity_token:
+                return True
+            links = CredentialInputSource.objects.filter(target_credential=credential).select_related('source_credential__credential_type')
+            pending.extend(link.source_credential for link in links)
+        return False
+
+    def _target_feeds_a_vault_id(self):
+        """Whether a vault id is already looked up from the target, directly or further down."""
+        seen = set()
+        pending = [self.target_credential_id]
+        while pending:
+            credential_id = pending.pop()
+            if credential_id in seen:
+                continue
+            seen.add(credential_id)
+            for field_name, target_id in CredentialInputSource.objects.filter(source_credential_id=credential_id).values_list(
+                'input_field_name', 'target_credential_id'
+            ):
+                if field_name == 'vault_id':
+                    return True
+                pending.append(target_id)
+        return False
 
     def get_input_value(self):
         backend = self.source_credential.credential_type.plugin.backend
