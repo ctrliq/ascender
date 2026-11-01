@@ -29,7 +29,7 @@ attrs==23.2.0
     #   referencing
     #   service-identity
     #   twisted
-autobahn==24.4.2
+autobahn==26.10.2
     # via daphne
 automat==24.8.1
     # via twisted
@@ -50,6 +50,8 @@ botocore==1.43.80
     #   s3transfer
 cachetools==7.1.7
     # via -r /awx_devel/requirements/requirements.in
+cbor2==6.1.5
+    # via autobahn
 # certifi @ git+https://github.com/ansible/system-certifi.git@5aa52ab91f9d579bfe52b5acf30ca799f1a563d9  # git requirements installed separately
     # via
     #   -r /awx_devel/requirements/requirements_git.txt
@@ -57,6 +59,7 @@ cachetools==7.1.7
     #   requests
 cffi==2.0.0
     # via
+    #   autobahn
     #   cryptography
     #   pynacl
 channels==4.3.2
@@ -205,7 +208,9 @@ msal==1.38.0
 msal-extensions==1.3.1
     # via azure-identity
 msgpack==1.2.4
-    # via channels-valkey
+    # via
+    #   autobahn
+    #   channels-valkey
 multidict==6.0.5
     # via
     #   aiohttp
@@ -360,7 +365,7 @@ twisted[tls]==26.10.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   daphne
-txaio==23.1.1
+txaio==26.6.1
     # via autobahn
 typing-extensions==4.16.0
     # via
@@ -376,6 +381,8 @@ typing-extensions==4.16.0
     #   pyopenssl
     #   setuptools-scm
     #   twisted
+ujson==6.0.0
+    # via autobahn
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==2.8.0
@@ -412,7 +419,6 @@ setuptools==84.1.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   asciichartpy
-    #   autobahn
     #   incremental
     #   setuptools-rust
     #   setuptools-scm
