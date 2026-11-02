@@ -82,7 +82,7 @@ Then a role. This one lets in the jobs of the ``infra`` organization, with the `
     }
     EOF
 
-``bound_audiences`` has to be exactly the **Server URL** of the Ascender credential, port included: the lookups use it as the audience of the token. Any claim can be bound, not only ``sub``; for example ``"ascender_job_template_name": "patch-linux"`` lets in the jobs of that one template.
+``bound_audiences`` has to be exactly the **Server URL** of the Ascender credential, port included: the lookups use it as the audience of the token. Any claim can be bound, not only ``sub``. Bind templates by id, for example ``"ascender_job_template_id": 42`` lets in the jobs of that one template. Names are only unique within an organization, so a role that binds ``ascender_job_template_name`` (or a project or inventory name) on its own also lets in a template of the same name from any other organization; always bind ``ascender_organization_id`` along with a name.
 
 With ``claim_mappings`` a policy can use the claims of the job that logged in, so one policy covers every organization and template:
 
@@ -99,7 +99,7 @@ With ``claim_mappings`` a policy can use the claims of the job that logged in, s
 
 The accessor of the auth method is in ``vault auth list``.
 
-Vault only maps claims whose value is a string, so map the ``*_name`` claims. The ``*_id`` claims are numbers, as in AAP, and a role that maps one turns every login down with ``error converting claim to string``. They can still be used in ``bound_claims``.
+Vault only maps claims whose value is a string, so map the ``*_name`` claims. The ``*_id`` claims are numbers, as in AAP, and a role that maps one turns every login down with ``error converting claim to string``. They can still be used in ``bound_claims``, but the value has to be a JSON number, as in ``"ascender_job_template_id": 42``. Written as a string (``"42"``), or with the ``key=value`` form of ``vault write``, which always sends strings, it never matches, and every login is turned down with ``claim "ascender_job_template_id" does not match any associated bound claim values``. Write the role as JSON, as in the example above.
 
 When Vault turns a job down, the job ends in error and its traceback ends with the reason Vault gave, for example ``claim "sub" does not match any associated bound claim values``.
 
