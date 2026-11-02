@@ -55,3 +55,13 @@
 .ascender-code-editor__wrapper--read-only.ascender-code-editor__wrapper--read-only.pf-v6-c-form-control::after {
   border: none;
 }
+
+/* the editor scrolls, not the host, and the grid row takes a dragged height */
+.ascender-code-editor__wrapper--resizable.ascender-code-editor__wrapper--resizable {
+  overflow: hidden;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.ascender-code-editor__wrapper--resized {
+  min-height: 56px;
+}

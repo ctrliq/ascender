@@ -97,6 +97,7 @@ function VariablesDetail({
           mode={mode}
           value={currentValue}
           readOnly
+          resizable
           rows={rows}
           minRows={minRows}
         />

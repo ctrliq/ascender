@@ -1,4 +1,11 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  useState,
+  useLayoutEffect,
+} from 'react';
 
 import { EditorState, Compartment } from '@codemirror/state';
 import type { Extension } from '@codemirror/state';
@@ -42,6 +49,27 @@ const PADDING = 8;
 // replaced allowed, and it holds the render cost flat however long the value
 // is. The rest scrolls.
 const MAX_ROWS = 50;
+// a double click within this of the bottom-right corner resets the height
+const HANDLE_SIZE = 16;
+
+// storage can throw (private windows, blocked site data); then it is not kept
+const heightKey = (id: string) => `codeEditorHeight:${id}`;
+const savedHeight = (id?: string) => {
+  try {
+    return id ? localStorage.getItem(heightKey(id)) : null;
+  } catch {
+    return null;
+  }
+};
+const saveHeight = (id: string | undefined, height: string | null) => {
+  try {
+    if (!id) return;
+    if (height) localStorage.setItem(heightKey(id), height);
+    else localStorage.removeItem(heightKey(id));
+  } catch {
+    // not kept
+  }
+};
 
 /**
  * The languages the editor knows, named as the UI names them rather than as
@@ -111,6 +139,8 @@ export interface CodeEditorProps {
   rows?: number | 'auto';
   minRows?: number;
   maxRows?: number;
+  /** A drag handle on the height; on by default unless read only. */
+  resizable?: boolean;
   className?: string;
 }
 
@@ -126,6 +156,7 @@ function CodeEditor({
   rows = 6,
   minRows = 1,
   maxRows = MAX_ROWS,
+  resizable = !readOnly,
   className = '',
 }: CodeEditorProps) {
   const { t } = useLingui();
@@ -164,8 +195,16 @@ function CodeEditor({
   // 'auto' sizes the box from the content, one line per row, never below
   // minRows and never above maxRows, so a short value still reads as an editor
   // and a long one shows all of itself. A number of rows is a fixed height.
+  // A dragged height overrides all of that.
+  const [resized, setResized] = useState(false);
   const isAuto = rows === 'auto';
   const heightTheme = useMemo(() => {
+    if (resized) {
+      return EditorView.theme({
+        '&': { height: '100%', minHeight: 0 },
+        '.cm-scroller': { height: '100%', overflow: 'auto' },
+      });
+    }
     if (!isAuto) {
       return EditorView.theme({
         '.cm-scroller': {
@@ -181,7 +220,51 @@ function CodeEditor({
         overflow: 'auto',
       },
     });
-  }, [isAuto, rows, minRows, maxRows]);
+  }, [resized, isAuto, rows, minRows, maxRows]);
+
+  // Only a drag, or one remembered for this id, sets an inline height on the
+  // host.
+  // before paint, so a remembered height does not flash the default first
+  useLayoutEffect(() => {
+    const parent = host.current;
+    if (!parent) {
+      return undefined;
+    }
+    const saved = resizable ? savedHeight(id) : null;
+    parent.style.height = saved ?? '';
+    setResized(!!saved);
+    if (!resizable || typeof ResizeObserver === 'undefined') {
+      return undefined;
+    }
+    const observer = new ResizeObserver(() => {
+      if (parent.style.height) {
+        setResized(true);
+        saveHeight(id, parent.style.height);
+      }
+    });
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [resizable, id]);
+
+  const resetHeight = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const parent = host.current;
+      if (!parent || !resized) {
+        return;
+      }
+      const box = parent.getBoundingClientRect();
+      if (
+        box.right - event.clientX > HANDLE_SIZE ||
+        box.bottom - event.clientY > HANDLE_SIZE
+      ) {
+        return;
+      }
+      parent.style.height = '';
+      saveHeight(id, null);
+      setResized(false);
+    },
+    [resized, id]
+  );
 
   useEffect(() => {
     const parent = host.current;
@@ -353,12 +436,16 @@ function CodeEditor({
             'ascender-code-editor__wrapper',
             hasErrors && 'ascender-code-editor__wrapper--has-errors',
             readOnly && 'ascender-code-editor__wrapper--read-only',
+            resizable && 'ascender-code-editor__wrapper--resizable',
+            resized && 'ascender-code-editor__wrapper--resized',
             'pf-v6-c-form-control',
+            resizable && 'pf-m-resize-vertical',
             className,
           ]
             .filter(Boolean)
             .join(' ')}
           onKeyDown={escape}
+          onDoubleClick={resetHeight}
         />
       </div>
       {!readOnly && (
