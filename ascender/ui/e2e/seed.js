@@ -14,9 +14,8 @@ const path = require('path');
 const http = require('http');
 const https = require('https');
 const { URL } = require('url');
-const { insecureTLS } = require('./tls');
+const { BASE_URL: BASE, insecureTLS } = require('./tls');
 
-const BASE = process.env.ASCENDER_URL || 'https://localhost:8043';
 const USERNAME = process.env.ASCENDER_USERNAME || 'admin';
 const PASSWORD = process.env.ASCENDER_PASSWORD || 'password';
 // Basic auth by default, which is what the development environment is set up

@@ -1,10 +1,9 @@
 // Modifications Copyright (c) 2026 Ctrl IQ, Inc.
 const { defineConfig, devices } = require('@playwright/test');
-const { insecureTLS } = require('./tls');
+const { BASE_URL: baseURL, insecureTLS } = require('./tls');
 
 // The development environment serves the built UI over a self-signed
 // certificate; tls.js decides when that is allowed to be ignored.
-const baseURL = process.env.ASCENDER_URL || 'https://localhost:8043';
 
 module.exports = defineConfig({
   testDir: './tests',

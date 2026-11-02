@@ -9,16 +9,25 @@
 // the password into an unencrypted page, so a non-loopback url has to be https
 // and anything else stops the suite before a credential is sent. That only
 // covers the configured url; guardTransport in tests/helpers.js holds the
-// browser to the same rule for wherever the instance sends it afterwards.
+// browser to browserMayReach for wherever the instance sends it afterwards.
 const { URL } = require('url');
+
+const BASE_URL = process.env.ASCENDER_URL || 'https://localhost:8043';
 
 const LOOPBACK_HOSTS = ['localhost', '127.0.0.1', '[::1]'];
 
 const isLoopback = (url) => LOOPBACK_HOSTS.includes(new URL(url).hostname);
 
-// plain http is only allowed to a loopback host; https, and the browser's own
-// schemes such as data: and blob:, always pass
-const allowedTransport = (url) => new URL(url).protocol !== 'http:' || isLoopback(url);
+// The browser ignores certificate errors for the whole context, not only for
+// the instance, so with a loopback instance it stays on the machine: a
+// redirect elsewhere would otherwise hand the password to any server with any
+// certificate. Against a remote instance, plain http is what it refuses.
+// Schemes the browser serves itself, such as data: and blob:, always pass.
+function browserMayReach(url) {
+  const { protocol } = new URL(url);
+  if (!['http:', 'https:'].includes(protocol) || isLoopback(url)) return true;
+  return !isLoopback(BASE_URL) && protocol === 'https:';
+}
 
 function insecureTLS(base) {
   const url = new URL(base);
@@ -31,4 +40,4 @@ function insecureTLS(base) {
   return loopback || process.env.ASCENDER_INSECURE_TLS === '1';
 }
 
-module.exports = { allowedTransport, insecureTLS };
+module.exports = { BASE_URL, browserMayReach, insecureTLS };
