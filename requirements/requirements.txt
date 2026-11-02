@@ -248,7 +248,7 @@ psycopg==3.3.5
     # via -r /ascender_devel/requirements/requirements.in
 ptyprocess==0.7.0
     # via pexpect
-pyasn1==0.6.4
+pyasn1==0.6.5
     # via
     #   pyasn1-modules
     #   python-ldap
