@@ -141,6 +141,8 @@ export interface CodeEditorProps {
   maxRows?: number;
   /** A drag handle on the height; on by default unless read only. */
   resizable?: boolean;
+  /** Where a dragged height is remembered; defaults to the id. */
+  heightKey?: string;
   className?: string;
 }
 
@@ -157,6 +159,7 @@ function CodeEditor({
   minRows = 1,
   maxRows = MAX_ROWS,
   resizable = !readOnly,
+  heightKey = id,
   className = '',
 }: CodeEditorProps) {
   const { t } = useLingui();
@@ -222,7 +225,7 @@ function CodeEditor({
     });
   }, [resized, isAuto, rows, minRows, maxRows]);
 
-  // Only a drag, or one remembered for this id, sets an inline height on the
+  // Only a drag, or one remembered for this key, sets an inline height on the
   // host.
   // before paint, so a remembered height does not flash the default first
   useLayoutEffect(() => {
@@ -230,7 +233,7 @@ function CodeEditor({
     if (!parent) {
       return undefined;
     }
-    const saved = resizable ? savedHeight(id) : null;
+    const saved = resizable ? savedHeight(heightKey) : null;
     parent.style.height = saved ?? '';
     setResized(!!saved);
     if (!resizable || typeof ResizeObserver === 'undefined') {
@@ -239,12 +242,12 @@ function CodeEditor({
     const observer = new ResizeObserver(() => {
       if (parent.style.height) {
         setResized(true);
-        saveHeight(id, parent.style.height);
+        saveHeight(heightKey, parent.style.height);
       }
     });
     observer.observe(parent);
     return () => observer.disconnect();
-  }, [resizable, id]);
+  }, [resizable, heightKey]);
 
   const resetHeight = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
@@ -260,10 +263,10 @@ function CodeEditor({
         return;
       }
       parent.style.height = '';
-      saveHeight(id, null);
+      saveHeight(heightKey, null);
       setResized(false);
     },
-    [resized, id]
+    [resized, heightKey]
   );
 
   useEffect(() => {

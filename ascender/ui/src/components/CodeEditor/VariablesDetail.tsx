@@ -98,6 +98,7 @@ function VariablesDetail({
           value={currentValue}
           readOnly
           resizable
+          heightKey={`detail-${name}`}
           rows={rows}
           minRows={minRows}
         />

@@ -63,7 +63,7 @@ function InventoryGroupForm({
                 />
                 <FormFullWidthLayout>
                   <VariablesField
-                    id="host-variables"
+                    id="group-variables"
                     name="variables"
                     label={t`Variables`}
                   />
