@@ -1,9 +1,9 @@
 // Modifications Copyright (c) 2026 Ctrl IQ, Inc.
 const { defineConfig, devices } = require('@playwright/test');
+const { BASE_URL: baseURL, insecureTLS } = require('./tls');
 
 // The development environment serves the built UI over a self-signed
-// certificate, which is why ignoreHTTPSErrors is on rather than optional.
-const baseURL = process.env.ASCENDER_URL || 'https://localhost:8043';
+// certificate; tls.js decides when that is allowed to be ignored.
 
 module.exports = defineConfig({
   testDir: './tests',
@@ -21,7 +21,7 @@ module.exports = defineConfig({
     : [['list']],
   use: {
     baseURL,
-    ignoreHTTPSErrors: true,
+    ignoreHTTPSErrors: insecureTLS(baseURL),
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
