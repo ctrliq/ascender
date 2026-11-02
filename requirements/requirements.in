@@ -60,7 +60,7 @@ uvicorn[standard]  # the ASGI server that serves the API and the websockets
 valkey[libvalkey]
 wheel>=0.46.2  # CVE-2026-24049
 pip==26.2.2  # GHSA-6q48-6c7w-9gw2
-setuptools==84.0.0  # CVE-2026-59890
+setuptools==84.1.0  # GHSA-xmj3-9gf7-h52w
 setuptools-scm[toml]  # see UPGRADE BLOCKERs, xmlsec build dep
 setuptools-rust>=0.11.4  # cryptography build dep
 pkgconfig>=1.5.1  # xmlsec build dep - needed for offline build
