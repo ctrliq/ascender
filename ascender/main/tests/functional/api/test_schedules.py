@@ -433,6 +433,8 @@ def test_really_old_dtstart(post, admin_user, freq, delta, total_seconds):
     rrule = f'DTSTART;TZID=UTC:20051231T000030 RRULE:FREQ={freq};INTERVAL={delta}'
     start = now()
     next_ten = post(url, {'rrule': rrule}, admin_user, expect=200).data['utc']
+    # the preview reads the clock itself, somewhere between start and end
+    end = now()
 
     assert len(next_ten) == 10
 
@@ -440,7 +442,7 @@ def test_really_old_dtstart(post, admin_user, freq, delta, total_seconds):
     assert next_ten[0] >= start
 
     # ...but *no more than* <interval> into the future
-    assert next_ten[0] <= start + datetime.timedelta(**{'minutes' if freq == 'MINUTELY' else 'hours': delta})
+    assert next_ten[0] <= end + datetime.timedelta(**{'minutes' if freq == 'MINUTELY' else 'hours': delta})
 
     # every date in the list is <interval> greater than the last
     for i, x in enumerate(next_ten):
