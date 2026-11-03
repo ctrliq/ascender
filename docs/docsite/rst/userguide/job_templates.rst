@@ -364,13 +364,11 @@ Optional Survey Questions
 
 The **Required** setting on a survey question determines whether the answer is optional or not for the user interacting with it.
 
-Behind the scenes, optional survey variables can be passed to the playbook in ``extra_vars``, even when they aren't filled in.
+If an optional survey question is left unanswered, its variable is not passed to the playbook at all, regardless of the minimum length. The playbook must handle the variable being undefined, for example with ``{{ my_var | default('') }}``.
 
-- If a non-text variable (input type) is marked as optional, and is not filled in, no survey ``extra_var`` is passed to the playbook.
+.. note::
 
-- If a text input or text area input is marked as optional, is not filled in, and has a minimum ``length > 0``, no survey ``extra_var`` is passed to the playbook.
-
-- If a text input or text area input is marked as optional, is not filled in, and has a minimum ``length === 0``, that survey ``extra_var`` is passed to the playbook, with the value set to an empty string ( "" ).
+  In Ascender 25.3.4 and earlier, optional *Text* and *Textarea* questions with a minimum length of 0 were passed to the playbook as an empty string ( "" ) when left unanswered. If a playbook relies on this and cannot be updated, add a matching entry with an empty string value to the Template Variables, for example ``my_var: ""``. A survey answer still overrides it.
 
 
 Launch a Job Template
