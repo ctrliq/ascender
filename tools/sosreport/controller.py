@@ -53,6 +53,7 @@ SOSREPORT_FORBIDDEN_PATHS = [
     "/var/log/ascender/profile",
     "/etc/receptor/tls/ca/*.key",
     "/etc/receptor/tls/*.key",
+    "/var/lib/ascender/rsyslog/tls",  # the external logging client key (LOG_AGGREGATOR_TLS_CLIENT_KEY)
 ]
 
 

@@ -13,6 +13,9 @@ def supervisor_service_command(command, service='*', communicate=True):
     """
     example use pattern of supervisorctl:
     # supervisorctl restart ascender-processes:receiver ascender-processes:factcacher
+
+    Returns True if supervisorctl succeeded, False if it exited non-zero or wrote to stderr (also logged), and None when
+    communicate is False, because the outcome is not waited for.
     """
     args = ['supervisorctl']
 
@@ -32,10 +35,11 @@ def supervisor_service_command(command, service='*', communicate=True):
                     command, service, restart_code, restart_stdout.strip(), restart_err.strip()
                 )
             )
-        else:
-            logger.debug('supervisorctl {} {} succeeded'.format(command, service))
-    else:
-        logger.info('Submitted supervisorctl {} command, not waiting for result'.format(command))
+            return False
+        logger.debug('supervisorctl {} {} succeeded'.format(command, service))
+        return True
+    logger.info('Submitted supervisorctl {} command, not waiting for result'.format(command))
+    return None
 
 
 def stop_local_services(communicate=True):
