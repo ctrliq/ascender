@@ -300,13 +300,10 @@ Optional Survey Questions
 
 The **Required** setting on a survey question determines whether the answer is optional or not for the user interacting with it.
 
-Behind the scenes, optional survey variables can be passed to the playbook in ``extra_vars``, even when they aren't filled in.
+.. note::
 
-- If a non-text variable (input type) is marked as optional, and is not filled in, no survey ``extra_var`` is passed to the playbook.
+  In Ascender 25.3.4 and earlier, optional survey variables of type *Text* and *Textarea* were passed to the playbook even when they were not filled in. To run playbooks relying on this behavior, a corresponding entry can be added to the Template Variables to explicitly pass an empty string.
 
-- If a text input or text area input is marked as optional, is not filled in, and has a minimum ``length > 0``, no survey ``extra_var`` is passed to the playbook.
-
-- If a text input or text area input is marked as optional, is not filled in, and has a minimum ``length === 0``, that survey ``extra_var`` is passed to the playbook, with the value set to an empty string ( "" ).
 
 
 .. _ug_wf_editor:
