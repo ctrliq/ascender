@@ -9491,6 +9491,7 @@ export interface components {
       readonly summary_fields: string;
       readonly created: string;
       readonly modified: string;
+      /** @default  */
       name: string | null;
       /** @default  */
       description: string | null;
@@ -9532,6 +9533,7 @@ export interface components {
       organization: number;
     };
     OAuth2ApplicationRequest: {
+      /** @default  */
       name: string | null;
       /** @default  */
       description: string | null;
@@ -11132,7 +11134,8 @@ export interface components {
       messages: unknown;
     };
     PatchedOAuth2ApplicationRequest: {
-      name?: string | null;
+      /** @default  */
+      name: string | null;
       /** @default  */
       description: string | null;
       /**
