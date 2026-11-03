@@ -100,7 +100,8 @@ describe('<EntraIDEdit />', () => {
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // Each setting at its default rather than a DELETE on the category, which
     // would reset what the page does not show as well.
-    const reverted = vi.mocked(SettingsAPI.updateAll).mock.calls[0][0];
+    const reverted = vi.mocked(SettingsAPI.updateAll).mock
+      .calls[0]?.[0] as Record<string, unknown>;
     expect(Object.keys(reverted)).toEqual(
       expect.arrayContaining([
         'SOCIAL_AUTH_ENTRA_ID_KEY',
