@@ -577,6 +577,7 @@ def stopped_reason(path=RSYSLOG_CONF):
 @task(queue='rsyslog_configurer')
 def reconfigure_rsyslog():
     tls_error = None
+    stale_tls_files = []
     if tls_in_use(settings):
         try:
             stale_tls_files = write_tls_files(settings)
@@ -595,5 +596,8 @@ def reconfigure_rsyslog():
             os.chmod(path, 0o640)
             f.write(tmpl + '\n')
         shutil.move(path, '/var/lib/ascender/rsyslog/rsyslog.conf')
-    supervisor_service_command(command='restart', service='rsyslogd')
-    remove_stale_tls_files(stale_tls_files)
+    if supervisor_service_command(command='restart', service='rsyslogd') is True:
+        remove_stale_tls_files(stale_tls_files)
+    elif stale_tls_files:
+        # the old rsyslogd may still be running the config that names these files; the next run removes them
+        logger.error('rsyslogd was not confirmed to have restarted, so these TLS files are kept for now: %s', ', '.join(stale_tls_files))

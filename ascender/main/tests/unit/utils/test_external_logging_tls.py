@@ -267,7 +267,7 @@ def test_write_tls_files_closes_the_descriptor_when_chmod_fails(tmp_path, monkey
     assert os.listdir(directory) == []  # the temporary file is gone too
 
 
-def _reconfigure(monkeypatch, tmp_path, mock_settings, tls_directory=None):
+def _reconfigure(monkeypatch, tmp_path, mock_settings, tls_directory=None, restart_result=True):
     """Run reconfigure_rsyslog on mock_settings, writing rsyslog.conf (and TLS files) under tmp_path."""
     restarts = []
     tls_directory = tls_directory or tmp_path / 'tls'
@@ -278,7 +278,7 @@ def _reconfigure(monkeypatch, tmp_path, mock_settings, tls_directory=None):
     if external_logging.write_tls_files is real_write:
         monkeypatch.setattr(external_logging, 'write_tls_files', lambda settings: real_write(settings, directory=str(tls_directory)))
     _redirect_config(monkeypatch, tmp_path)
-    monkeypatch.setattr(external_logging, 'supervisor_service_command', lambda **kwargs: restarts.append(kwargs))
+    monkeypatch.setattr(external_logging, 'supervisor_service_command', lambda **kwargs: restarts.append(kwargs) or restart_result)
     external_logging.reconfigure_rsyslog()
     return (tmp_path / 'rsyslog.conf').read_text(), restarts
 
@@ -291,7 +291,7 @@ def test_reconfigure_removes_stale_files_after_the_restart(tmp_path, monkeypatch
     monkeypatch.setattr(external_logging, 'construct_rsyslog_conf_template', lambda *args, **kwargs: 'action(type="omfile" file="/dev/null")')
     monkeypatch.setattr(external_logging, 'settings', _settings('tcp', certificate=CERTIFICATE, key=KEY))
     _redirect_config(monkeypatch, tmp_path)
-    monkeypatch.setattr(external_logging, 'supervisor_service_command', lambda **kwargs: seen.setdefault('at_restart', stale.exists()))
+    monkeypatch.setattr(external_logging, 'supervisor_service_command', lambda **kwargs: seen.setdefault('at_restart', stale.exists()) or True)
     external_logging.reconfigure_rsyslog()
     assert seen == {'at_restart': True}
     assert not stale.exists()
@@ -363,6 +363,25 @@ def test_reconfigure_survives_a_tls_directory_that_became_read_only(tmp_path, mo
     assert external_logging.STOPPED_MARKER in conf and 'omfwd' not in conf
     assert restarts == [dict(command='restart', service='rsyslogd')]
     assert any(message.startswith('Could not remove ') and 'client.key' in message for message in errors)
+
+
+@pytest.mark.parametrize('restart_result', [False, None], ids=['failed', 'not-waited-for'])
+@pytest.mark.parametrize('now', ['tls-off', 'other-tls-files'])
+def test_reconfigure_keeps_stale_files_until_a_restart_is_confirmed(tmp_path, monkeypatch, now, restart_result):
+    # supervisorctl failures are logged and swallowed, so the old rsyslogd may still run the config that names these
+    directory = tmp_path / 'tls'
+    write_tls_files(_settings('tcp', ca=CA, certificate=CERTIFICATE, key=KEY), directory=str(directory))
+    mock_settings = _settings('tcp', tls=False) if now == 'tls-off' else _settings('tcp', ca=CA)
+    errors = []
+    monkeypatch.setattr(external_logging.logger, 'error', lambda message, *args: errors.append(message % args))
+    _, restarts = _reconfigure(monkeypatch, tmp_path, mock_settings, restart_result=restart_result)
+    assert restarts == [dict(command='restart', service='rsyslogd')]
+    assert 'client.key' in os.listdir(directory)
+    assert errors and 'not confirmed to have restarted' in errors[0]
+    # the next successful run removes them
+    monkeypatch.setattr(external_logging, 'supervisor_service_command', lambda **kwargs: True)
+    external_logging.reconfigure_rsyslog()
+    assert 'client.key' not in os.listdir(directory)
 
 
 def test_a_failed_removal_does_not_stop_the_others_and_a_vanished_file_is_fine(tmp_path, monkeypatch):
