@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { expect } = require('@playwright/test');
+const { browserMayReach } = require('../tls');
 
 const USERNAME = process.env.ASCENDER_USERNAME || 'admin';
 const PASSWORD = process.env.ASCENDER_PASSWORD || 'password';
@@ -17,7 +18,31 @@ function fixtures() {
 // The UI is a hash router, so every route the specs visit is behind a #.
 const route = (hash) => `/#${hash}`;
 
+// Holds the page to tls.js's browserMayReach for as long as it is open, so an
+// instance that redirects the login page, or answers the login POST with a
+// 307, somewhere the password should not go is refused before the password
+// follows it. page.route never sees redirect hops, which is why this goes to
+// Chromium's Fetch domain instead: that pauses every hop.
+async function guardTransport(page) {
+  const cdp = await page.context().newCDPSession(page);
+  cdp.on('Fetch.requestPaused', ({ requestId, request }) => {
+    let reply;
+    if (browserMayReach(request.url)) {
+      reply = cdp.send('Fetch.continueRequest', { requestId });
+    } else {
+      console.error(`refused request to ${request.url}`);
+      reply = cdp.send('Fetch.failRequest', { requestId, errorReason: 'BlockedByClient' });
+    }
+    // the page can close while a request is paused
+    reply.catch(() => {});
+  });
+  await cdp.send('Fetch.enable', {
+    patterns: [{ urlPattern: 'http://*' }, { urlPattern: 'https://*' }],
+  });
+}
+
 async function login(page) {
+  await guardTransport(page);
   await page.goto(route('/login'), { waitUntil: 'domcontentloaded' });
   await page.fill('#pf-login-username-id', USERNAME);
   await page.fill('#pf-login-password-id', PASSWORD);

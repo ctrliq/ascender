@@ -162,6 +162,25 @@ describe('OtherPromptsStep', () => {
     expect(toggle).toBeChecked();
   });
 
+  test('should turn show changes on and off again', async () => {
+    const { user } = renderWithContexts(
+      <FormRoot onSubmit={() => {}} initialValues={{ diff_mode: false }}>
+        <OtherPromptsStep
+          launchConfig={{
+            ask_diff_mode_on_launch: true,
+            ...jobTemplateData,
+          }}
+        />
+      </FormRoot>
+    );
+
+    await user.click(screen.getByRole('switch', { name: 'Off' }));
+    expect(screen.getByRole('switch', { name: 'On' })).toBeChecked();
+
+    await user.click(screen.getByRole('switch', { name: 'On' }));
+    expect(screen.getByRole('switch', { name: 'Off' })).not.toBeChecked();
+  });
+
   test('should render variables field', async () => {
     // VariablesField does an async Formik update on mount; findBy settles it
     // inside act so the console-error trap stays quiet.

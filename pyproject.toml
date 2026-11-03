@@ -4,7 +4,7 @@
 # README.md asks for under UPGRADE BLOCKERs. A floor is also too low now that
 # the metadata below is PEP 621: setuptools grew full support for [project] in
 # 61, so a build resolving anything older would ignore or reject it.
-requires = ["setuptools==84.0.0", "setuptools_scm[toml]==10.2.3"]
+requires = ["setuptools==84.1.0", "setuptools_scm[toml]==10.2.3"]
 build-backend = "setuptools.build_meta"
 
 [project]

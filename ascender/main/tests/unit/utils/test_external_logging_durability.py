@@ -15,6 +15,8 @@ replaced rsyslog would have to keep every one of them, or five settings that
 users can see stop meaning anything.
 """
 
+import os
+
 import pytest
 from django.conf import settings
 
@@ -155,6 +157,7 @@ def test_a_spool_path_that_is_a_file_falls_back(tmp_path):
     assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
 
 
+@pytest.mark.skipif(os.geteuid() == 0, reason='root enters any directory regardless of its mode')
 def test_a_spool_directory_that_cannot_be_entered_falls_back(tmp_path):
     """Writable but not searchable: the write bit alone does not let anything
     create a file inside, so rsyslog could not spool there either.
