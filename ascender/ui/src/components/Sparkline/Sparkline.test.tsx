@@ -29,8 +29,8 @@ describe('Sparkline', () => {
     // Tooltip + StatusIcon (the StatusIcon div carries aria-label={status}).
     const link1 = screen.getByRole('link', { name: 'View job 1' });
     const link2 = screen.getByRole('link', { name: 'View job 2' });
-    expect(link1).toHaveAttribute('href', '/jobs/undefined/1');
-    expect(link2).toHaveAttribute('href', '/jobs/undefined/2');
+    expect(link1).toHaveAttribute('href', '/runs/undefined/1');
+    expect(link2).toHaveAttribute('href', '/runs/undefined/2');
     expect(
       link1.querySelector('[data-job-status="successful"]')
     ).toBeInTheDocument();

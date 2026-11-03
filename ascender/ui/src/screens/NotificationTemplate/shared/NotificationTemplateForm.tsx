@@ -20,6 +20,7 @@ import TypeInputsSubForm from './TypeInputsSubForm';
 import CustomMessagesSubForm from './CustomMessagesSubForm';
 import hasCustomMessages from './hasCustomMessages';
 import typeFieldNames, { initialConfigValues } from './typeFieldNames';
+import { getNotificationTypeOptions } from '../constants';
 
 /** The text one notification carries: a one line message and a longer body. */
 export interface NotificationText {
@@ -82,7 +83,7 @@ function NotificationTemplateFormFields({
   defaultMessages,
   template,
 }: NotificationTemplateFormFieldsProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const { setFieldValue, setFieldTouched } =
     useFormContext<NotificationTemplateFormValues>();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
@@ -136,19 +137,15 @@ function NotificationTemplateFormFields({
             {
               value: '',
               key: 'none',
-              label: t`Choose a Notification Type`,
+              label: t`Choose a notification type`,
               isDisabled: true,
             },
-            { value: 'email', key: 'email', label: t`E-mail` },
-            { value: 'grafana', key: 'grafana', label: 'Grafana' },
-            { value: 'irc', key: 'irc', label: 'IRC' },
-            { value: 'matrix', key: 'matrix', label: 'Matrix' },
-            { value: 'mattermost', key: 'mattermost', label: 'Mattermost' },
-            { value: 'pagerduty', key: 'pagerduty', label: 'Pagerduty' },
-            { value: 'rocketchat', key: 'rocketchat', label: 'Rocket.Chat' },
-            { value: 'slack', key: 'slack', label: 'Slack' },
-            { value: 'twilio', key: 'twilio', label: 'Twilio' },
-            { value: 'webhook', key: 'webhook', label: 'Webhook' },
+            // The one list every screen names the types by, translated.
+            ...getNotificationTypeOptions(i18n).map(([value, label]) => ({
+              value,
+              key: value,
+              label,
+            })),
           ]}
         />
         {typeMeta.touched && typeMeta.error && (

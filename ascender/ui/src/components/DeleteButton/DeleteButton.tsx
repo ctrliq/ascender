@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
+import { Button, Badge, Alert } from '@patternfly/react-core';
 import type { ButtonProps } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
 import type {
@@ -12,6 +12,7 @@ import type {
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import './DeleteButton.css';
+import Tooltip from '../Tooltip';
 
 export interface DeleteButtonProps {
   /** Called with nothing: the caller already holds what it is deleting. */

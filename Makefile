@@ -25,8 +25,6 @@ LDAP ?= false
 VAULT ?= false
 # If set to true docker-compose will also start a hashicorp vault instance with TLS enabled
 VAULT_TLS ?= false
-# If set to true docker-compose will also start a tacacs+ instance
-TACACS ?= false
 
 EDITABLE_DEPENDENCIES ?= false
 
@@ -519,7 +517,6 @@ docker-compose-sources: .git/hooks/pre-commit
 	    -e enable_ldap=$(LDAP) \
 	    -e enable_vault=$(VAULT) \
 	    -e vault_tls=$(VAULT_TLS) \
-	    -e enable_tacacs=$(TACACS) \
 		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
 	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
 

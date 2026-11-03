@@ -1,7 +1,7 @@
 import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn } from 'types/api';
 import type { ToolbarLabel } from '@patternfly/react-core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
@@ -27,10 +27,24 @@ import getChipsByKey from './getChipsByKey';
 import type { SearchChipGroup } from './getChipsByKey';
 import './Search.css';
 
+/**
+ * How long the box waits after the last keystroke before it filters, in
+ * milliseconds. Typing a name is then one request rather than one per letter.
+ */
+const LIVE_SEARCH_DELAY = 300;
+
 export interface SearchProps {
   columns: SearchColumn[];
   onSearch?: (key: string, value: QSParamValue) => void;
   onReplaceSearch?: (key: string, value: QSParamValue) => void;
+  /**
+   * Filters the list as the box is typed in, a short pause after the last
+   * keystroke. Where it is set the box holds the filter itself rather than
+   * one waiting to be added, so what is typed replaces what was typed before
+   * and clearing it clears the filter. Lists pass it; the job output's own
+   * search does not, and keeps the button it always had.
+   */
+  onLiveSearch?: (key: string, value: QSParamValue) => void;
   onRemove?: (key: string, value: QSParamValue) => void;
   qsConfig: QSConfig;
   searchableKeys?: SearchableKey[];
@@ -50,6 +64,7 @@ function Search({
   columns,
   onSearch,
   onReplaceSearch,
+  onLiveSearch,
   onRemove,
   qsConfig,
   searchableKeys = [],
@@ -91,6 +106,31 @@ function Search({
     delete params.host_filter;
   }
 
+  /*
+   * What the address says this key is filtered by, as one string: with a live
+   * search there is one value per key, and this is the box's own content once
+   * the pause has run out.
+   */
+  const applied = ((value) =>
+    Array.isArray(value) ? (value[value.length - 1] ?? '') : (value ?? ''))(
+    params[searchKey as string]
+  ).toString();
+  /** The last value this box asked for, to tell its own change from any other. */
+  const asked = useRef<string | null>(null);
+
+  const column = columns.find(({ key }) => key === searchKey);
+  /*
+   * Only the plain text box follows the typing. A date wants its operator, a
+   * list of options and a yes or no want the choice made, and the advanced
+   * search builds a key of its own before it has anything to search for.
+   */
+  const isLive =
+    Boolean(onLiveSearch) &&
+    searchKey !== 'advanced' &&
+    !column?.options &&
+    !column?.isBoolean &&
+    !(qsConfig.dateFields || []).includes(searchKey as string);
+
   const searchChips = getChipsByKey(params, columns, qsConfig);
   // Deep copied so the effect below can empty each group's chips without
   // touching the ones getChipsByKey just built.
@@ -107,6 +147,46 @@ function Search({
     });
     setChipsByKey({ ...chipsByKey, ...searchChips });
   }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /*
+   * The address changed to something this box did not ask for: a chip removed,
+   * the filters cleared, the back button, or a move to another key. The box
+   * follows it rather than putting back what it was holding, which is what
+   * would otherwise happen the moment the pause below ran out again.
+   */
+  useEffect(() => {
+    if (!isLive || asked.current === applied) {
+      return;
+    }
+    asked.current = applied;
+    setSearchValue(applied);
+  }, [isLive, applied]);
+
+  /*
+   * The pause: long enough that a typed word is one request rather than one
+   * per letter, short enough that the list reads as following the typing.
+   */
+  /*
+   * The callback is read through a ref rather than listed as a dependency.
+   * Lists hand over a new function on every render, and a busy list renders
+   * on every socket message, so as a dependency it restarted the pause each
+   * time and the typing never got to filter. The ref still calls the newest
+   * one, which is the one that knows the current address.
+   */
+  const onLiveSearchRef = useRef(onLiveSearch);
+  useEffect(() => {
+    onLiveSearchRef.current = onLiveSearch;
+  });
+  useEffect(() => {
+    if (!isLive || searchValue === applied) {
+      return undefined;
+    }
+    const timer = setTimeout(() => {
+      asked.current = searchValue;
+      onLiveSearchRef.current?.(searchKey as string, searchValue || null);
+    }, LIVE_SEARCH_DELAY);
+    return () => clearTimeout(timer);
+  }, [isLive, searchValue, applied, searchKey]);
 
   const handleDropdownSelect = (_event: unknown, selectedName: unknown) => {
     // The dropdown only offers names taken from columns, so this always hits.
@@ -125,10 +205,18 @@ function Search({
     // keeps page from fully reloading
     e.preventDefault();
 
-    if (searchValue) {
-      onSearch?.(searchKey as string, searchValue);
-      setSearchValue('');
+    if (!searchValue) {
+      return;
     }
+    if (isLive) {
+      // The pause is only a pause: the button and the return key say now, and
+      // the box keeps what it is filtering by.
+      asked.current = searchValue;
+      onLiveSearch?.(searchKey as string, searchValue);
+      return;
+    }
+    onSearch?.(searchKey as string, searchValue);
+    setSearchValue('');
   };
 
   const handleTextKeyDown = (e: React.KeyboardEvent) => {

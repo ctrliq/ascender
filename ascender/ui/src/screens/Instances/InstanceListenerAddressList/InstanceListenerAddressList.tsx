@@ -9,15 +9,15 @@ import PaginatedTable, {
   // ToolbarAddButton,
 } from 'components/PaginatedTable';
 import useToast from 'hooks/useToast';
-import { getQSConfig } from 'util/qs';
-import { useParams } from 'react-router';
+import { getQSConfig, parseQueryString } from 'util/qs';
+import { useLocation, useParams } from 'react-router';
 import useRequest from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import { InstancesAPI, ReceptorAPI } from 'api';
 import useSelected from 'hooks/useSelected';
 import InstanceListenerAddressListItem from './InstanceListenerAddressListItem';
 
-const QS_CONFIG = getQSConfig('peer', {
+const QS_CONFIG = getQSConfig('address', {
   page: 1,
   page_size: 20,
   order_by: 'pk',
@@ -33,6 +33,7 @@ function InstanceListenerAddressList({
 }: InstanceListenerAddressListProps) {
   const { t } = useLingui();
   const { id } = useParams() as { id: string };
+  const location = useLocation();
   const { Toast, toastProps } = useToast();
   const {
     isLoading,
@@ -47,32 +48,37 @@ function InstanceListenerAddressList({
     },
   } = useRequest(
     useCallback(async () => {
+      /*
+       * The instance's own addresses endpoint, with the list's search, sort
+       * and page sent along, rather than the first page of every address in
+       * the cluster filtered here: that missed any address past the first 25
+       * and ignored the toolbar altogether.
+       */
+      const params = parseQueryString(QS_CONFIG, location.search);
       const [
         { data: detail },
         {
-          data: { results },
+          data: { results, count: addressCount },
         },
         actions,
       ] = await Promise.all([
         InstancesAPI.readDetail(id),
-        ReceptorAPI.read(),
-        InstancesAPI.readOptions(),
+        InstancesAPI.readReceptorAddresses(id, params),
+        // The addresses' own fields, which are what the advanced search can
+        // filter them on, not an instance's.
+        ReceptorAPI.readOptions(),
       ]);
-
-      const listenerAddress_list = results.filter(
-        (receptor) => id.toString() === receptor.instance.toString()
-      );
 
       return {
         instance: detail,
-        listenerAddresses: listenerAddress_list,
-        count: listenerAddress_list.length,
+        listenerAddresses: results,
+        count: addressCount,
         relatedSearchableKeys: (actions.data.related_search_fields || []).map(
           (val) => val.slice(0, -8)
         ),
-        searchableKeys: getSearchableKeys(actions.data.actions.GET),
+        searchableKeys: getSearchableKeys(actions.data.actions?.GET),
       };
-    }, [id]),
+    }, [id, location.search]),
     {
       instance: {},
       listenerAddresses: [],
@@ -108,17 +114,18 @@ function InstanceListenerAddressList({
         clearSelected={clearSelected}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
+        // An address has no name of its own: it is the host it answers on.
         toolbarSearchColumns={[
           {
-            name: t`Name`,
-            key: 'hostname__icontains',
+            name: t`Address`,
+            key: 'address__icontains',
             isDefault: true,
           },
         ]}
         toolbarSortColumns={[
           {
-            name: t`Name`,
-            key: 'hostname',
+            name: t`Address`,
+            key: 'address',
           },
         ]}
         headerRow={

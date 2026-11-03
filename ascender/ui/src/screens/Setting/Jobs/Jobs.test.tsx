@@ -17,7 +17,7 @@ function mountAt(path: string) {
   return renderWithContexts(
     <SettingsProvider value={settingOptions}>
       <Routes>
-        <Route path="/settings/jobs/*" element={<Jobs />} />
+        <Route path="/job_settings/*" element={<Jobs />} />
       </Routes>
     </SettingsProvider>,
     { context: { router: { history } } }
@@ -36,8 +36,10 @@ describe('<Jobs />', () => {
   });
 
   test('should render jobs details', async () => {
-    mountAt('/settings/jobs/details');
-    expect(await screen.findByText('Details')).toBeInTheDocument();
+    // The first group, which is where the page and the address it used to
+    // answer to both land. The tabs read by name, so the first is Content.
+    mountAt('/job_settings/details');
+    expect(await screen.findByText('Enable Role Download')).toBeInTheDocument();
     await waitFor(() =>
       expect(SettingsAPI.readCategory).toHaveBeenCalledWith('jobs')
     );
@@ -50,7 +52,7 @@ describe('<Jobs />', () => {
     const originalError = console.error;
     console.error = vi.fn();
     try {
-      mountAt('/settings/jobs/edit');
+      mountAt('/job_settings/edit');
       expect(
         await screen.findByRole('button', { name: 'Save' })
       ).toBeInTheDocument();
@@ -60,7 +62,7 @@ describe('<Jobs />', () => {
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    mountAt('/settings/jobs/foo');
-    expect(await screen.findByText('View Jobs settings')).toBeInTheDocument();
+    mountAt('/job_settings/foo');
+    expect(await screen.findByText('View Jobs Settings')).toBeInTheDocument();
   });
 });

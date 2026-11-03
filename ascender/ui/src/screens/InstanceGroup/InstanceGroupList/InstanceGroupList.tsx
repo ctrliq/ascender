@@ -1,11 +1,11 @@
 import type { InstanceGroup } from 'types/api';
 import type { DeletableItem } from 'components/PaginatedTable';
 import React, { useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 import { Plural, useLingui } from '@lingui/react/macro';
 
-import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
+import { Card, PageSection } from '@patternfly/react-core';
 
 import { InstanceGroupsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -15,25 +15,46 @@ import useSelected from 'hooks/useSelected';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
+  ToolbarAddButton,
   ToolbarDeleteButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import DatalistToolbar from 'components/DataListToolbar';
-import AddDropDownButton from 'components/AddDropDownButton';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import ResourceTabs from 'components/ResourceTabs';
+import { useUserProfile } from 'contexts/Config';
+import { getInstanceTabs } from '../../Instances/tabs';
 import InstanceGroupListItem from './InstanceGroupListItem';
 
-const QS_CONFIG = getQSConfig('instance-group', {
-  page: 1,
-  page_size: 20,
-});
+const QS_CONFIGS = {
+  instance: getQSConfig('instance-group', { page: 1, page_size: 20 }),
+  container: getQSConfig('container-group', { page: 1, page_size: 20 }),
+};
 
-function InstanceGroupList() {
-  const { t } = useLingui();
+export interface InstanceGroupListProps {
+  /** Container groups rather than instance groups: the other tab's list. */
+  isContainerGroup?: boolean;
+}
+
+/**
+ * The groups a job can be sent to, of one kind or the other.
+ *
+ * The two kinds are one endpoint told apart by a flag, and they were one table
+ * with a type column saying which row was which. They are a tab each now, so
+ * the table says only what differs between rows of the same kind, and the add
+ * button adds the kind the tab names.
+ */
+function InstanceGroupList({
+  isContainerGroup = false,
+}: InstanceGroupListProps) {
+  const { t, i18n } = useLingui();
+  const userProfile = useUserProfile();
   const location = useLocation();
-  const navigate = useNavigate();
+  const QS_CONFIG = isContainerGroup
+    ? QS_CONFIGS.container
+    : QS_CONFIGS.instance;
 
   const {
     error: contentError,
@@ -47,9 +68,15 @@ function InstanceGroupList() {
       searchableKeys,
     },
   } = useCachedRequest(
-    ['instance-group-list', location.search],
+    // The kind is part of the key: the two tabs read the same endpoint with
+    // opposite filters, and one cached under the other's name showed the
+    // wrong groups on a tab switch.
+    ['instance-group-list', String(isContainerGroup), location.search],
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, location.search);
+      const params = {
+        ...parseQueryString(QS_CONFIG, location.search),
+        is_container_group: isContainerGroup,
+      };
 
       const [response, responseActions] = await Promise.all([
         InstanceGroupsAPI.read(params),
@@ -65,7 +92,7 @@ function InstanceGroupList() {
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(responseActions.data.actions?.GET),
       };
-    }, [location]),
+    }, [location, QS_CONFIG, isContainerGroup]),
     {
       instanceGroups: [],
       instanceGroupsCount: 0,
@@ -106,38 +133,26 @@ function InstanceGroupList() {
   const cannotDelete = (item: DeletableItem) =>
     !item.summary_fields?.user_capabilities?.delete;
 
-  const pluralizedItemName = t`Instance Groups`;
-  const addContainerGroup = t`Add container group`;
-  const addInstanceGroup = t`Add instance group`;
+  const pluralizedItemName = isContainerGroup
+    ? t`Container Groups`
+    : t`Instance Groups`;
 
   const addButton = (
-    <AddDropDownButton
+    <ToolbarAddButton
       ouiaId="add-instance-group-button"
       key="add"
-      dropdownItems={[
-        <DropdownItem
-          ouiaId="add-container-group-item"
-          onClick={() => navigate('/instance_groups/container_group/add')}
-          key={addContainerGroup}
-          aria-label={addContainerGroup}
-        >
-          {addContainerGroup}
-        </DropdownItem>,
-        <DropdownItem
-          ouiaId="add-instance-group-item"
-          onClick={() => navigate('/instance_groups/add')}
-          key={addInstanceGroup}
-          aria-label={addInstanceGroup}
-        >
-          {addInstanceGroup}
-        </DropdownItem>,
-      ]}
+      linkTo={
+        isContainerGroup ? '/container_groups/add' : '/instance_groups/add'
+      }
+      tooltip={
+        isContainerGroup ? t`Add Container Group` : t`Add Instance Group`
+      }
     />
   );
 
   const getDetailUrl = (item: InstanceGroup) =>
     item.is_container_group
-      ? `/instance_groups/container_group/${item.id}/details`
+      ? `/container_groups/${item.id}/details`
       : `/instance_groups/${item.id}/details`;
   const deleteDetailsRequests = relatedResourceDeleteRequests.instanceGroup(
     selected[0]
@@ -146,6 +161,16 @@ function InstanceGroupList() {
     <>
       <PageSection hasBodyWrapper={false}>
         <Card>
+          {/* The same strip the instances and the topology carry: one screen,
+              four lists of the machinery a job runs on. */}
+          <ResourceTabs
+            aria-label={t`Instance tabs`}
+            ouiaId="instance-tabs"
+            tabs={getInstanceTabs(userProfile).map(({ label, path }) => ({
+              label: i18n._(label),
+              path,
+            }))}
+          />
           <PaginatedTable
             contentError={contentError}
             hasContentLoading={isLoading || deleteLoading}
@@ -179,11 +204,19 @@ function InstanceGroupList() {
                     pluralizedItemName={pluralizedItemName}
                     deleteDetailsRequests={deleteDetailsRequests}
                     deleteMessage={
-                      <Plural
-                        value={selected.length}
-                        one="This instance group is currently being used by other resources. Are you sure you want to delete it?"
-                        other="Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
-                      />
+                      isContainerGroup ? (
+                        <Plural
+                          value={selected.length}
+                          one="This container group is currently being used by other resources. Are you sure you want to delete it?"
+                          other="Deleting these container groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
+                        />
+                      ) : (
+                        <Plural
+                          value={selected.length}
+                          one="This instance group is currently being used by other resources. Are you sure you want to delete it?"
+                          other="Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
+                        />
+                      )
                     }
                   />,
                 ]}
@@ -192,7 +225,6 @@ function InstanceGroupList() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell>{t`Type`}</HeaderCell>
                 <HeaderCell>{t`Running Jobs`}</HeaderCell>
                 <HeaderCell>{t`Total Jobs`}</HeaderCell>
                 <HeaderCell>{t`Instances`}</HeaderCell>
@@ -211,7 +243,6 @@ function InstanceGroupList() {
                 rowIndex={index}
               />
             )}
-            emptyStateControls={canAdd && addButton}
           />
         </Card>
       </PageSection>
@@ -219,10 +250,12 @@ function InstanceGroupList() {
         aria-label={t`Deletion error`}
         isOpen={Boolean(deletionError)}
         onClose={clearDeletionError}
-        title={t`Error`}
+        title={t`Error!`}
         variant="error"
       >
-        {t`Failed to delete one or more instance groups.`}
+        {isContainerGroup
+          ? t`Failed to delete one or more container groups.`
+          : t`Failed to delete one or more instance groups.`}
         <ErrorDetail error={deletionError} />
       </AlertModal>
     </>

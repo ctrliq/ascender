@@ -11,12 +11,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { CardBody, CardActionsRow } from 'components/Card';
 import DeleteButton from 'components/DeleteButton';
-import {
-  Detail,
-  DetailList,
-  UserDateDetail,
-  DetailBadge,
-} from 'components/DetailList';
+import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { jsonToYaml, isJsonString } from 'util/yaml';
 import { InstanceGroupsAPI } from 'api';
@@ -39,7 +34,9 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
   } = useRequest(
     useCallback(async () => {
       await InstanceGroupsAPI.destroy(id);
-      navigate(`/instance_groups`);
+      // The list the deleted group was in, which is not the instance groups
+      // one: that list filters container groups out.
+      navigate(`/container_groups`);
     }, [id, navigate])
   );
 
@@ -56,22 +53,22 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
         />
         <Detail
           label={t`Type`}
-          value={t`Container group`}
+          value={t`Container Group`}
           dataCy="container-group-type"
         />
-        <DetailBadge
-          label={t`Max concurrent jobs`}
+        <Detail
+          label={t`Max Concurrent Jobs`}
           dataCy="instance-group-max-concurrent-jobs"
           helpText={t`Maximum number of jobs to run concurrently on this group.
           Zero means no limit will be enforced.`}
-          content={instanceGroup.max_concurrent_jobs}
+          value={instanceGroup.max_concurrent_jobs}
         />
-        <DetailBadge
-          label={t`Max forks`}
+        <Detail
+          label={t`Max Forks`}
           dataCy="instance-group-max-forks"
           helpText={t`Maximum number of forks to allow across all jobs running concurrently on this group.
           Zero means no limit will be enforced.`}
-          content={instanceGroup.max_forks}
+          value={instanceGroup.max_forks}
         />
         {instanceGroup.summary_fields.mesh_node && (
           <Detail
@@ -117,7 +114,7 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
         />
         {instanceGroup.pod_spec_override && (
           <VariablesDetail
-            label={t`Pod spec override`}
+            label={t`Pod Spec Override`}
             value={
               isJsonString(instanceGroup.pod_spec_override)
                 ? jsonToYaml(instanceGroup.pod_spec_override)
@@ -135,9 +132,9 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
           instanceGroup.summary_fields.user_capabilities.edit && (
             <Button
               ouiaId="container-group-detail-edit-button"
-              aria-label={t`edit`}
+              aria-label={t`Edit`}
               component={Link}
-              to={`/instance_groups/container_group/${id}/edit`}
+              to={`/container_groups/${id}/edit`}
             >
               {t`Edit`}
             </Button>
@@ -147,11 +144,11 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
             <DeleteButton
               ouiaId="container-group-detail-delete-button"
               name={name}
-              modalTitle={t`Delete instance group`}
+              modalTitle={t`Delete Container Group`}
               onConfirm={deleteInstanceGroup}
               isDisabled={isLoading}
               deleteDetailsRequests={deleteDetailsRequests}
-              deleteMessage={t`This container group is currently being by other resources. Are you sure you want to delete it?`}
+              deleteMessage={t`This container group is currently being used by other resources. Are you sure you want to delete it?`}
             >
               {t`Delete`}
             </DeleteButton>
@@ -161,7 +158,7 @@ function ContainerGroupDetails({ instanceGroup }: ContainerGroupDetailsProps) {
         <AlertModal
           isOpen={error}
           onClose={dismissError}
-          title={t`Error`}
+          title={t`Error!`}
           variant="error"
         >
           <ErrorDetail error={error} />

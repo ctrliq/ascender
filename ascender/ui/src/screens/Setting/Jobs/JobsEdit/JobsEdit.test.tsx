@@ -33,7 +33,7 @@ describe('<JobsEdit />', () => {
 
   async function mountEdit(options = settingOptions) {
     history = createMemoryHistory({
-      initialEntries: ['/settings/jobs/edit'],
+      initialEntries: ['/job_settings/edit'],
     });
     // The mock OPTIONS data omits config for a few BooleanFields (e.g.
     // ENABLE_ANSIBLE_29), so the production form logs a PropTypes warning on
@@ -63,19 +63,28 @@ describe('<JobsEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user } = await mountEdit();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
-    expect(screen.queryByText('Revert settings')).not.toBeInTheDocument();
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
+    expect(screen.queryByText('Revert Settings')).not.toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
-    expect(await screen.findByText('Revert settings')).toBeInTheDocument();
+    expect(await screen.findByText('Revert Settings')).toBeInTheDocument();
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
-    );
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('jobs');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      ASCENDER_ROLES_ENABLED: true,
+      ASCENDER_COLLECTIONS_ENABLED: true,
+      GALAXY_IGNORE_CERTS: false,
+      GALAXY_TASK_ENV: {
+        ANSIBLE_FORCE_COLOR: 'false',
+        GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no',
+      },
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -83,12 +92,15 @@ describe('<JobsEdit />', () => {
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    const {
-      EVENT_STDOUT_MAX_BYTES_DISPLAY,
-      STDOUT_MAX_BYTES_DISPLAY,
-      ...jobRequest
-    } = mockJobSettings;
-    expect(SettingsAPI.updateAll).toHaveBeenCalledWith(jobRequest);
+    // The tab's own settings, which are the ones the form was showing: the
+    // rest of the category is left as it was.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      ASCENDER_ROLES_ENABLED: mockJobSettings.ASCENDER_ROLES_ENABLED,
+      ASCENDER_COLLECTIONS_ENABLED:
+        mockJobSettings.ASCENDER_COLLECTIONS_ENABLED,
+      GALAXY_IGNORE_CERTS: mockJobSettings.GALAXY_IGNORE_CERTS,
+      GALAXY_TASK_ENV: mockJobSettings.GALAXY_TASK_ENV,
+    });
   });
 
   test('should display error message on unsuccessful submission', async () => {
@@ -110,7 +122,8 @@ describe('<JobsEdit />', () => {
   test('should navigate to job settings detail when cancel is clicked', async () => {
     const { user } = await mountEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/settings/jobs/details');
+    // Back to the tab it was editing, not to the top of the screen.
+    expect(history.location.pathname).toEqual('/job_settings/content');
   });
 
   test('should display ContentError on throw', async () => {

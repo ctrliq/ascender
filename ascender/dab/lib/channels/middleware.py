@@ -27,8 +27,8 @@ def _get_authenticated_user(scope: dict):
 class DrfAuthMiddleware(AuthMiddleware):
     async def __call__(self, scope, receive, send):
         session_user = await get_session_user(scope)
-        # Only ModelBackend.get_user refuses inactive users; the LDAP, TACACS+ and
-        # social backends hand them back, so a deactivated user's session survives.
+        # Only ModelBackend.get_user refuses inactive users; the LDAP and social
+        # backends hand them back, so a deactivated user's session survives.
         if session_user and session_user.is_authenticated and session_user.is_active:
             user = session_user
         else:

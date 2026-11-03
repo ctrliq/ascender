@@ -44,19 +44,20 @@ function DateTimePicker({
     }
   };
 
+  /* Built from the field it binds rather than from the label, which is
+     translated and may hold spaces or slashes, so the id stays the same in
+     every language and the label points at the date input it names. */
+  const fieldId = `schedule-${dateFieldName.replace(/[^A-Za-z0-9_-]/g, '-')}`;
+
   return (
-    <FormGroup
-      fieldId={`schedule-${label}`}
-      data-cy={`schedule-${label}`}
-      isRequired
-      label={label}
-    >
+    <FormGroup fieldId={fieldId} data-cy={fieldId} isRequired label={label}>
       <span className="ascender-date-time-picker__group">
         <DatePicker
           aria-label={
-            dateFieldName.startsWith('start') ? t`Start date` : t`End date`
+            dateFieldName.startsWith('start') ? t`Start Date` : t`End Date`
           }
           {...dateField}
+          inputProps={{ id: fieldId }}
           value={dateField.value.split('T')[0]}
           onChange={onDateChange}
         />
@@ -64,7 +65,7 @@ function DateTimePicker({
           placeholder="hh:mm AM/PM"
           stepMinutes={15}
           aria-label={
-            timeFieldName.startsWith('start') ? t`Start time` : t`End time`
+            timeFieldName.startsWith('start') ? t`Start Time` : t`End Time`
           }
           time={timeField.value}
           {...timeField}

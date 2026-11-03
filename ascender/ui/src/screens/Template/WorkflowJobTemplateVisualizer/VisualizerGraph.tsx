@@ -34,10 +34,29 @@ export interface VisualizerGraphProps {
   [key: string]: unknown;
 }
 
+/**
+ * What names a link, since a link carries no id of its own.
+ *
+ * The graph raises the hovered link so its menu is not painted over, and hands
+ * the same link back down as the one that is hovered: both ask this, so a link
+ * cannot be raised and closed, or open and behind.
+ */
+const linkId = (link: WorkflowLink) => `${link.source.id}-${link.target.id}`;
+
 function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
   const [helpText, setHelpText] = useState<React.ReactNode>(null);
   const [linkHelp, setLinkHelp] = useState<WorkflowLink | null>();
   const [nodeHelp, setNodeHelp] = useState<WorkflowNode | null>();
+  /**
+   * The node to draw last. Svg paints in document order and has no z-index, so
+   * the action menu a node opens on hover is covered by every node rendered
+   * after it. Ordering the list is the declarative way to lift it: React moves
+   * the one group, and a later render cannot put it back the way it undid the
+   * appendChild this replaced.
+   */
+  const [raisedNode, setRaisedNode] = useState<WorkflowNode | null>(null);
+  /** The same, for links: the one the pointer is on is drawn last. */
+  const [raisedLink, setRaisedLink] = useState<WorkflowLink | null>(null);
   const [zoomPercentage, setZoomPercentage] = useState(100);
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
@@ -217,6 +236,45 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /*
+   * The link the pointer is on, taken from the current links rather than from
+   * what was raised: a re-read hands back new link objects, and this has to be
+   * the one being rendered.
+   */
+  const hoveredLink = raisedLink
+    ? links.find((link: WorkflowLink) => linkId(link) === linkId(raisedLink))
+    : null;
+
+  /**
+   * Draws one link, or nothing when the layout has not placed both its nodes.
+   *
+   * Args:
+   *     link: The link to draw.
+   *     isMenuLayer: Whether this is the pass that draws the open menu, which
+   *         the graph makes after the nodes, rather than the line.
+   *
+   * Returns:
+   *     The link element, or null while either end is unplaced.
+   */
+  function renderLink(link: WorkflowLink, isMenuLayer = false) {
+    if (!nodePositions[link.source.id] || !nodePositions[link.target.id]) {
+      return null;
+    }
+    const id = `link-${link.source.id}-${link.target.id}`;
+    return (
+      <VisualizerLink
+        key={isMenuLayer ? `${id}-menu` : id}
+        link={link}
+        isHovered={isMenuLayer}
+        isMenuLayer={isMenuLayer}
+        readOnly={readOnly}
+        updateLinkHelp={(newLinkHelp) => setLinkHelp(newLinkHelp)}
+        updateHelpText={(newHelpText) => setHelpText(newHelpText)}
+        onRaise={setRaisedLink}
+      />
+    );
+  }
+
   return (
     <>
       {(helpText || nodeHelp || linkHelp) && (
@@ -265,46 +323,45 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
         />
         <g id="workflow-g" ref={gRef}>
           {nodePositions && [
-            links.map((link: WorkflowLink) => {
-              if (
-                nodePositions[link.source.id] &&
-                nodePositions[link.target.id]
-              ) {
-                return (
-                  <VisualizerLink
-                    key={`link-${link.source.id}-${link.target.id}`}
-                    link={link}
-                    readOnly={readOnly}
-                    updateLinkHelp={(newLinkHelp) => setLinkHelp(newLinkHelp)}
-                    updateHelpText={(newHelpText) => setHelpText(newHelpText)}
-                  />
-                );
-              }
-              return null;
-            }),
-            nodes.map((node: WorkflowNode) => {
-              if (node.id > 1 && nodePositions[node.id] && !node.isDeleted) {
-                return (
-                  <VisualizerNode
-                    key={`node-${node.id}`}
-                    node={node}
-                    readOnly={readOnly}
-                    updateHelpText={(newHelpText) => setHelpText(newHelpText)}
-                    updateNodeHelp={(newNodeHelp) => setNodeHelp(newNodeHelp)}
-                    {...(addingLink && {
-                      onMouseOver: () => drawPotentialLinkToNode(node),
-                    })}
-                  />
-                );
-              }
-              return null;
-            }),
+            links.map((link: WorkflowLink) => renderLink(link)),
+            [...nodes]
+              .sort((a: WorkflowNode, b: WorkflowNode) => {
+                if (a.id === raisedNode?.id) return 1;
+                if (b.id === raisedNode?.id) return -1;
+                return 0;
+              })
+              .map((node: WorkflowNode) => {
+                if (node.id > 1 && nodePositions[node.id] && !node.isDeleted) {
+                  return (
+                    <VisualizerNode
+                      key={`node-${node.id}`}
+                      node={node}
+                      readOnly={readOnly}
+                      updateHelpText={(newHelpText) => setHelpText(newHelpText)}
+                      updateNodeHelp={(newNodeHelp) => setNodeHelp(newNodeHelp)}
+                      onRaise={setRaisedNode}
+                      {...(addingLink && {
+                        onMouseOver: () => drawPotentialLinkToNode(node),
+                      })}
+                    />
+                  );
+                }
+                return null;
+              }),
             <WorkflowStartNode
               key="start"
               showActionTooltip={!readOnly}
               onUpdateHelpText={setHelpText}
               readOnly={readOnly}
             />,
+            /*
+             * The open menu last of all, and only the menu. Svg paints in
+             * document order and every node is drawn after every link, so a
+             * menu drawn with its line came up underneath whichever node it
+             * hangs over; drawing the whole link here instead put its line over
+             * the nodes, which is just as wrong the other way round.
+             */
+            hoveredLink ? renderLink(hoveredLink, true) : null,
           ]}
           {addingLink && (
             <polyline

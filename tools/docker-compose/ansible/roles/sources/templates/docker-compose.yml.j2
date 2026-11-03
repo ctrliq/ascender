@@ -175,14 +175,6 @@ services:
       - '../../docker-compose/_sources/ldap_certs:/opt/bitnami/openldap/certs'
       - '../../docker-compose/_sources/ldap_diffs:/opt/bitnami/openldap/ldiffs'
 {% endif %}
-{% if enable_tacacs|bool %}
-  tacacs:
-    image: mirror.gcr.io/dchidell/docker-tacacs
-    container_name: tools_tacacs_1
-    hostname: tacacs
-    ports:
-      - "49:49"
-{% endif %}
   postgres:
     image: quay.io/sclorg/postgresql-15-c9s
     container_name: tools_postgres_1

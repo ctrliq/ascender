@@ -7,6 +7,6 @@ import ContentEmpty from './ContentEmpty';
 describe('ContentEmpty', () => {
   test('renders the expected content', () => {
     renderWithContexts(<ContentEmpty />);
-    expect(screen.getByText('No items found.')).toBeInTheDocument();
+    expect(screen.getByText('No Items Found')).toBeInTheDocument();
   });
 });

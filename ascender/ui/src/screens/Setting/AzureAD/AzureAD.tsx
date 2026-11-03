@@ -3,6 +3,9 @@ import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
+import { useConfig } from 'contexts/Config';
+import ResourceTabs from 'components/ResourceTabs';
+import { SettingsPage } from '../shared';
 import AzureADDetail from './AzureADDetail';
 import AzureADEdit from './AzureADEdit';
 import AzureADTenantEdit from './AzureADTenantEdit';
@@ -21,37 +24,84 @@ function CategoryRedirect({ baseURL }: CategoryRedirectProps) {
 
 function AzureAD() {
   const { t } = useLingui();
-  const baseURL = '/settings/azure';
+  const { me } = useConfig();
+  // Only a superuser may change these settings, as on every other settings
+  // screen: anyone else who reaches an edit address, by a bookmark or by
+  // typing it, lands on the details of the same tab instead.
+  const onlyForSuperuser = (element: React.ReactElement) =>
+    me?.is_superuser ? (
+      element
+    ) : (
+      <Navigate to="../details" relative="path" replace />
+    );
+  const baseURL = '/authentication/azure';
+
+  const breadcrumbConfig = {
+    '/authentication': t`Authentication`,
+    '/authentication/azure': null,
+    '/authentication/azure/entra': null,
+    '/authentication/azure/entra/details': t`Microsoft Entra ID`,
+    '/authentication/azure/entra/edit': t`Edit Microsoft Entra ID`,
+    '/authentication/azure/default': null,
+    '/authentication/azure/default/details': t`Azure AD`,
+    '/authentication/azure/default/edit': t`Edit Azure AD`,
+    '/authentication/azure/tenant': null,
+    '/authentication/azure/tenant/details': t`Azure AD`,
+    '/authentication/azure/tenant/edit': t`Edit Azure AD`,
+  };
 
   return (
-    <PageSection hasBodyWrapper={false}>
-      <Card>
-        <Routes>
-          <Route
-            index
-            element={<Navigate to={`${baseURL}/entra/details`} replace />}
+    <SettingsPage breadcrumbConfig={breadcrumbConfig}>
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          {/* The Azure AD configurations are one object set up more than one
+            way, so they are tabs of this page rather than pages of their own
+            reached through a list. */}
+          <ResourceTabs
+            aria-label={t`Azure AD tabs`}
+            ouiaId="azure-tabs"
+            tabs={[
+              { label: t`Microsoft Entra ID`, path: `${baseURL}/entra` },
+              { label: t`Default (Legacy)`, path: `${baseURL}/default` },
+              { label: t`Tenant (Legacy)`, path: `${baseURL}/tenant` },
+            ]}
           />
-          <Route
-            path=":category"
-            element={<CategoryRedirect baseURL={baseURL} />}
-          />
-          <Route path=":category/details" element={<AzureADDetail />} />
-          <Route path="entra/edit" element={<EntraIDEdit />} />
-          <Route path="default/edit" element={<AzureADEdit />} />
-          <Route path="tenant/edit" element={<AzureADTenantEdit />} />
-          <Route
-            path="*"
-            element={
-              <ContentError isNotFound>
-                <Link to={`${baseURL}/entra/details`}>
-                  {t`View Microsoft Entra ID settings`}
-                </Link>
-              </ContentError>
-            }
-          />
-        </Routes>
-      </Card>
-    </PageSection>
+          <Routes>
+            <Route
+              index
+              element={<Navigate to={`${baseURL}/entra/details`} replace />}
+            />
+            <Route
+              path=":category"
+              element={<CategoryRedirect baseURL={baseURL} />}
+            />
+            <Route path=":category/details" element={<AzureADDetail />} />
+            <Route
+              path="entra/edit"
+              element={onlyForSuperuser(<EntraIDEdit />)}
+            />
+            <Route
+              path="default/edit"
+              element={onlyForSuperuser(<AzureADEdit />)}
+            />
+            <Route
+              path="tenant/edit"
+              element={onlyForSuperuser(<AzureADTenantEdit />)}
+            />
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to={`${baseURL}/entra/details`}>
+                    {t`View Microsoft Entra ID Settings`}
+                  </Link>
+                </ContentError>
+              }
+            />
+          </Routes>
+        </Card>
+      </PageSection>
+    </SettingsPage>
   );
 }
 

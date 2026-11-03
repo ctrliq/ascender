@@ -18,6 +18,7 @@ import workflowReducer, {
   initReducer,
 } from 'components/Workflow/workflowReducer';
 import { WorkflowJobsAPI } from 'api';
+import { getRunActionLabels } from 'util/jobs';
 import WorkflowOutputGraph from './WorkflowOutputGraph';
 import WorkflowOutputToolbar from './WorkflowOutputToolbar';
 import useWsWorkflowOutput from './useWsWorkflowOutput';
@@ -45,7 +46,8 @@ export interface WorkflowOutputProps {
 }
 
 function WorkflowOutput({ job }: WorkflowOutputProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  const actionLabels = getRunActionLabels('workflow_job');
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(workflowReducer, {}, initReducer);
   const { contentError, links, nodePositions, nodes } = state;
@@ -57,7 +59,7 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
   } = useRequest(
     useCallback(async () => {
       await WorkflowJobsAPI.destroy(job.id);
-      navigate('/jobs');
+      navigate('/runs');
     }, [job.id, navigate])
   );
   const { error: dismissableDeleteError, dismissError: dismissDeleteError } =
@@ -131,10 +133,10 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
         <AlertModal
           isOpen={dismissableDeleteError}
           variant="error"
-          title={t`Job Delete Error`}
+          title={i18n._(actionLabels.deleteError)}
           onClose={dismissDeleteError}
         >
-          {t`Failed to delete job.`}
+          {i18n._(actionLabels.deleteErrorMessage)}
           <ErrorDetail error={dismissableDeleteError} />
         </AlertModal>
       )}

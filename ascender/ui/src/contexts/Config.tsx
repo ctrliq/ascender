@@ -14,6 +14,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
 import { setCustomTheme } from 'themeRegistry';
+import { MAX_ROWS_STORAGE_KEY } from 'components/CodeEditor/constants';
 import { applyAccountTheme } from '../accountTheme';
 import { useSession } from './Session';
 
@@ -83,13 +84,11 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         systemConfig = systemConfigResults as Record<string, unknown>;
       }
 
-      let uiConfig: Record<string, unknown> = {};
-      try {
-        const { data: uiConfigResults } = await SettingsAPI.readCategory('ui');
-        uiConfig = uiConfigResults as Record<string, unknown>;
-      } catch (e) {
-        uiConfig = {};
-      }
+      // The installation's UI defaults arrive with /api/v2/config/ rather than
+      // /api/v2/settings/ui/, which answers only administrators and system
+      // auditors. These defaults are for everyone else too, and above all for
+      // the users who have not chosen a theme or a language of their own.
+      const uiConfig = (data ?? {}) as Record<string, unknown>;
 
       // The themes that ship with the product are bundled at build time, so an
       // administrator's own stylesheet can only arrive here, once the settings
@@ -97,10 +96,26 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
       // may well be that stylesheet: App.tsx applied the browser's cached
       // theme on mount, before either was known.
       setCustomTheme(
-        uiConfig.CUSTOM_THEME as string,
-        uiConfig.CUSTOM_THEME_NAME as string
+        uiConfig.custom_theme as string,
+        uiConfig.custom_theme_name as string
       );
-      applyAccountTheme(me);
+
+      // The theme and the language are both decided before this request
+      // answers: the theme on mount, the language on the first render.
+      // Mirroring them lets the next load start in the right one, which is the
+      // same thing localStorage already does for the account's own theme.
+      const mirror = (key: string, value: unknown) => {
+        if (value) localStorage.setItem(key, value as string);
+        else localStorage.removeItem(key);
+      };
+      mirror('default_theme', uiConfig.default_ui_theme);
+      mirror('default_language', uiConfig.default_ui_language);
+      // Read at render by every editor on the page, which is why it is left
+      // here rather than passed down: the screens that hold one have no other
+      // reason to know about the config.
+      mirror(MAX_ROWS_STORAGE_KEY, uiConfig.max_ui_editor_rows);
+
+      applyAccountTheme(me, uiConfig.default_ui_theme as string);
 
       const [
         { data: adminOrgData },
@@ -132,15 +147,22 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         );
         await dynamicActivate(me.preferred_language as string);
       } else {
+        // No language on the account, so the installation's default decides.
+        // It sits above the browser deliberately: an install set to one
+        // language wants it for everyone who has not chosen, which is the only
+        // case that reaches here. A language the account did choose is handled
+        // above and is never overridden.
         localStorage.removeItem('preferred_language');
+        const installDefault = uiConfig.default_ui_language as string;
         const browserLang = (navigator.language || '')
           .toLowerCase()
           .split(/[_-]+/)[0];
-        await dynamicActivate(
-          Object.keys(locales).includes(browserLang ?? '')
-            ? (browserLang as string)
-            : 'en'
-        );
+        const known = (lang?: string) =>
+          Boolean(lang) && Object.keys(locales).includes(lang as string);
+        let language = 'en';
+        if (known(installDefault)) language = installDefault;
+        else if (known(browserLang)) language = browserLang as string;
+        await dynamicActivate(language);
       }
       return {
         ...(data as Record<string, unknown>),
@@ -149,13 +171,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         notifAdminCount,
         execEnvAdminCount,
         systemConfig,
-        uiConfig,
-        custom_logo: uiConfig.CUSTOM_LOGO || rootData.custom_logo,
-        custom_header_logo:
-          uiConfig.CUSTOM_HEADER_LOGO || rootData.custom_header_logo,
-        custom_title: uiConfig.CUSTOM_TITLE || rootData.custom_title,
-        custom_theme: uiConfig.CUSTOM_THEME,
-        custom_theme_name: uiConfig.CUSTOM_THEME_NAME,
+        custom_logo: rootData.custom_logo,
+        custom_header_logo: rootData.custom_header_logo,
+        custom_title: rootData.custom_title,
       };
     }, []),
     {
@@ -163,7 +181,6 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
       notifAdminCount: 0,
       execEnvAdminCount: 0,
       systemConfig: {},
-      uiConfig: {},
     }
   );
 

@@ -340,3 +340,48 @@ def test_manual_projects_no_update(manual_project, get, admin_user):
     response = get(reverse('api:project_detail', kwargs={'pk': manual_project.pk}), admin_user, expect=200)
     assert not response.data['summary_fields']['user_capabilities']['start']
     assert not response.data['summary_fields']['user_capabilities']['schedule']
+
+
+@pytest.mark.django_db
+class TestCancelCapability:
+    """
+    The cancel capability mirrors what a cancel request would be told: the
+    run's creator or an admin of what it ran may cancel it, a superuser always
+    may, and nobody may once the run has finished.
+    """
+
+    def cancel_capability(self, get, job, user):
+        response = get(job.get_absolute_url(), user, expect=200)
+        return response.data['summary_fields']['user_capabilities']['cancel']
+
+    def test_creator_and_template_admin_may_cancel(self, get, job_factory, jt_linked, alice, bob, rando):
+        jt_linked.execute_role.members.add(alice, rando)
+        jt_linked.admin_role.members.add(bob)
+        job = job_factory(created_by=alice, initial_state='running')
+
+        assert self.cancel_capability(get, job, alice)
+        assert self.cancel_capability(get, job, bob)
+        assert not self.cancel_capability(get, job, rando)
+
+    def test_superuser_may_cancel(self, get, job_factory, admin):
+        job = job_factory(created_by=None, initial_state='pending')
+        assert self.cancel_capability(get, job, admin)
+
+    def test_finished_run_cannot_be_canceled(self, get, job_factory, admin, alice):
+        job = job_factory(created_by=alice, initial_state='successful')
+        assert not self.cancel_capability(get, job, admin)
+
+    def test_system_job_is_left_to_superusers(self, get, system_job_factory, admin, system_auditor):
+        job = system_job_factory(initial_state='running')
+        assert self.cancel_capability(get, job, admin)
+        assert not self.cancel_capability(get, job, system_auditor)
+
+    def test_unified_job_list_reports_cancel(self, get, job_factory, alice, rando, jt_linked):
+        jt_linked.execute_role.members.add(alice, rando)
+        job = job_factory(created_by=alice, initial_state='running')
+        url = reverse('api:unified_job_list')
+        by_user = {}
+        for user in (alice, rando):
+            results = get(url, user, expect=200).data['results']
+            by_user[user.username] = [r for r in results if r['id'] == job.id][0]['summary_fields']['user_capabilities']['cancel']
+        assert by_user == {'alice': True, 'rando': False}

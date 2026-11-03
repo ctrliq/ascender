@@ -2,12 +2,13 @@ import type { Instance } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Switch, Tooltip } from '@patternfly/react-core';
+import { Switch } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import { InstancesAPI } from 'api';
 import { useConfig } from 'contexts/Config';
 import ErrorDetail from '../ErrorDetail';
 import AlertModal from '../AlertModal';
+import Tooltip from '../Tooltip';
 
 export interface InstanceToggleProps {
   className?: string;
@@ -67,8 +68,9 @@ function InstanceToggle({
         <Switch
           className={className}
           id={`host-${instance.id}-toggle`}
-          label={t`Enabled`}
-
+          // PatternFly 6 dropped labelOff, so the label follows the state
+          // itself, as the host toggle's does.
+          label={isEnabled ? t`On` : t`Off`}
           isChecked={Boolean(isEnabled)}
           isDisabled={isLoading || !me?.is_superuser}
           onChange={toggleInstance}

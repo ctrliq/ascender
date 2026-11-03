@@ -22,6 +22,7 @@ describe('ListHeader', () => {
       onSearch?: (key: string, value: string) => void;
       onRemove?: (key: string, value: string) => void;
       onReplaceSearch?: (key: string, value: string) => void;
+      onLiveSearch?: (key: string, value: string | null) => void;
       clearAllFilters?: () => void;
       [key: string]: unknown;
     } = {};
@@ -47,6 +48,38 @@ describe('ListHeader', () => {
       { context: { router: { history } } }
     );
     expect(container).toBeInTheDocument();
+  });
+
+  /*
+   * The search box as it is typed in: one value for the key, the first page
+   * again, and the address written in place of the last rather than after it,
+   * so a typed word leaves one entry in the history and not one per letter.
+   */
+  test('should replace the address when the toolbar searches live', async () => {
+    const history = createMemoryHistory({
+      initialEntries: [
+        '/organizations/1/teams?item.page=3&item.foo__icontains=a',
+      ],
+    });
+    const { captured, renderToolbar } = makeCapturingToolbar();
+    renderWithContexts(
+      <ListHeader
+        itemCount={50}
+        renderToolbar={renderToolbar}
+        {...baseProps}
+      />,
+      { context: { router: { history } } }
+    );
+
+    const before = history.index;
+    act(() => captured.onLiveSearch?.('foo__icontains', 'ab'));
+
+    expect(history.location.search).toEqual('?item.foo__icontains=ab');
+    expect(history.index).toEqual(before);
+
+    act(() => captured.onLiveSearch?.('foo__icontains', null));
+    expect(history.location.search).toEqual('');
+    expect(history.index).toEqual(before);
   });
 
   test('should navigate when DataListToolbar calls onSort prop', async () => {

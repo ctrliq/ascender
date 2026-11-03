@@ -22,10 +22,7 @@ function mountAt(path: string, config?: TestContexts['config']) {
   return renderWithContexts(
     <SettingsProvider value={JSON.parse(JSON.stringify(settingOptions))}>
       <Routes>
-        <Route
-          path="/settings/miscellaneous_system/*"
-          element={<MiscSystem />}
-        />
+        <Route path="/system/*" element={<MiscSystem />} />
       </Routes>
     </SettingsProvider>,
     { context }
@@ -47,34 +44,36 @@ describe('<MiscSystem />', () => {
   });
 
   test('should render miscellaneous system details', async () => {
-    mountAt('/settings/miscellaneous_system/details');
-    expect(await screen.findByText('Details')).toBeInTheDocument();
+    mountAt('/system/details');
+    expect(
+      await screen.findByText('Enable Activity Stream')
+    ).toBeInTheDocument();
     await waitFor(() =>
       expect(SettingsAPI.readCategory).toHaveBeenCalledWith('system')
     );
   });
 
   test('should render miscellaneous system edit', async () => {
-    mountAt('/settings/miscellaneous_system/edit');
+    mountAt('/system/edit');
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    mountAt('/settings/miscellaneous_system/foo');
-    expect(
-      await screen.findByText('View Miscellaneous System settings')
-    ).toBeInTheDocument();
+    mountAt('/system/foo');
+    expect(await screen.findByText('View System Settings')).toBeInTheDocument();
   });
 
   test('should redirect to details for users without system admin permissions', async () => {
-    mountAt('/settings/miscellaneous_system/edit', {
+    mountAt('/system/edit', {
       me: { is_superuser: false },
     });
     // Non-superusers are redirected from edit to the read-only Details tab, so
     // the Save button never renders.
-    expect(await screen.findByText('Details')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Enable Activity Stream')
+    ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Save' })
     ).not.toBeInTheDocument();

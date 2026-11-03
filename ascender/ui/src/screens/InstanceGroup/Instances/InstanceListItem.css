@@ -6,19 +6,44 @@
 
 .ascender-instance-group-instance-list-item__slider-holder {
   display: flex;
-  align-items: center;
+  /* The used capacity bar beside it hangs at the bottom of its own block, and
+     the two read as one row only when this one hangs as low. */
+  margin-block-start: 9.5px;
+  /* The rail sits on the bottom line of its block, under the fork count, so
+     the two figures it runs between belong on that line rather than halfway
+     up the block. */
+  align-items: flex-end;
   justify-content: space-between;
+  /* CPU 32 and RAM 177 are two words apiece, and the cell is narrow enough
+     that either would break across lines before the rail gave up any width. */
+  white-space: nowrap;
+}
+
+/* The rail block hangs twelve pixels below its track, to leave the thumb the
+   touch target it is drawn with. The two figures it runs between belong on the
+   track itself rather than that low. */
+.ascender-instance-group-instance-list-item__slider-holder > div:first-child,
+.ascender-instance-group-instance-list-item__slider-holder > div:last-child {
+  margin-block-end: 4px;
 }
 
 .ascender-instance-group-instance-list-item__slider-forks {
   flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
+  min-width: 48px;
+  /* The thumb reaches half its own width past the end of the rail, so eight
+     of these pixels are already spoken for before the label starts. The rest
+     is kept small because this column is the widest in a table that has to
+     fit its card with the actions still showing. */
+  margin-inline: 14px;
   text-align: center;
 }
 
-.ascender-instance-group-instance-list-item__pf-v6-c-table-cell-MinWidth-175 {
-  --pf-v6-c-table--cell--MinWidth: 175px;
+/* The bar carries no title of its own: the column heading already says what
+   it measures, and a title beside the percentage wrapped onto a second line
+   once the figure reached 100%. Without it the column needs only the bar and
+   its figure, which is what lets the table fit its card beside the actions. */
+.ascender-instance-group-instance-list-item__used-capacity {
+  --pf-v6-c-table--cell--MinWidth: 120px;
 }
 
 .ascender-instance-group-instance-list-item__pf-v6-c-table-cell-Width-125 {

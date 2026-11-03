@@ -14,10 +14,10 @@ vi.mock('../../api/models/Users');
 // this component write tests for it
 
 // The wizard footer's primary button is labelled "Next" until the last step,
-// where it becomes "Save". Helper to grab whichever is currently shown.
+// where it becomes "Associate". Helper to grab whichever is currently shown.
 const getPrimaryButton = () =>
   screen.queryByRole('button', { name: 'Next' }) ||
-  screen.getByRole('button', { name: 'Save' });
+  screen.getByRole('button', { name: 'Associate' });
 
 describe('<AddResourceRole />', () => {
   const roles = {
@@ -135,8 +135,8 @@ describe('<AddResourceRole />', () => {
     await user.click(adminCheckbox);
     expect(adminCheckbox).toBeChecked();
 
-    // Save
-    await user.click(screen.getByRole('button', { name: 'Save' }));
+    // Associate
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     await waitFor(() =>
       expect(UsersAPI.associateRole).toHaveBeenCalledTimes(2)
     );
@@ -146,6 +146,8 @@ describe('<AddResourceRole />', () => {
 
   test('should call on error properly', async () => {
     const onError = vi.fn();
+    const onSave = vi.fn();
+    const onClose = vi.fn();
     vi.mocked(UsersAPI.associateRole).mockRejectedValue(
       Object.assign(new Error('An error occurred'), {
         response: {
@@ -160,9 +162,9 @@ describe('<AddResourceRole />', () => {
     );
     const { user } = renderWithContexts(
       <AddResourceRole
-        onClose={() => {}}
+        onClose={onClose}
         onError={onError}
-        onSave={() => {}}
+        onSave={onSave}
         roles={roles}
       />
     );
@@ -188,10 +190,14 @@ describe('<AddResourceRole />', () => {
     await user.click(adminCheckbox);
     expect(adminCheckbox).toBeChecked();
 
-    // Save
-    await user.click(screen.getByRole('button', { name: 'Save' }));
+    // Associate
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     await waitFor(() => expect(onError).toHaveBeenCalled());
     expect(UsersAPI.associateRole).toHaveBeenCalledWith(1, 1);
+    // Some of the roles may have gone through, so the list is read again
+    // rather than the wizard simply closing on it.
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   test('should update history properly', async () => {
@@ -322,8 +328,8 @@ describe('<AddResourceRole />', () => {
     });
     roleCheckboxes.forEach((box) => expect(box).not.toBeChecked());
 
-    // Save button disabled (no roles selected)
-    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+    // Associate button disabled (no roles selected)
+    expect(screen.getByRole('button', { name: 'Associate' })).toBeDisabled();
   });
 
   test('should not display team as a choice in case credential does not have organization', async () => {
@@ -378,12 +384,14 @@ describe('<AddResourceRole />', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Next' }));
 
-    // Step 3 - primary button is Save
+    // Step 3 - primary button is Associate
     const adminCheckbox = await screen.findByRole('checkbox', {
       name: 'Admin',
     });
     await user.click(adminCheckbox);
-    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Associate' })
+    ).toBeInTheDocument();
 
     // Go Back -> primary button is Next again
     await user.click(screen.getByRole('button', { name: 'Back' }));
@@ -391,10 +399,10 @@ describe('<AddResourceRole />', () => {
       await screen.findByRole('button', { name: 'Next' })
     ).toBeInTheDocument();
 
-    // Return to last step -> Save again
+    // Return to last step -> Associate again
     await user.click(screen.getByRole('button', { name: 'Next' }));
     expect(
-      await screen.findByRole('button', { name: 'Save' })
+      await screen.findByRole('button', { name: 'Associate' })
     ).toBeInTheDocument();
   });
 });

@@ -76,6 +76,10 @@ export interface PromptedResource {
   unified_job_type?: string;
   description?: string | null;
   timeout?: number | string | null;
+  /** An approval node's own settings, which no other node type carries. */
+  on_timeout?: string | null;
+  required_approvals?: number | null;
+  context_template?: string | null;
   created?: string;
   modified?: string;
   summary_fields?: SummaryFields;
@@ -156,6 +160,14 @@ function PromptDetail({
   const { t, i18n } = useLingui();
   const details = omitOverrides(resource, overrides, launchConfig.defaults);
   details.type = overrides?.nodeType || details.type;
+  // The rest of the types read well title cased from the API's own name. The
+  // workflow ones do not: the UI calls them a workflow template and a
+  // workflow, where the API says workflow job template and workflow job.
+  const resourceType = details.unified_job_type || details.type;
+  const typeLabels: Record<string, string> = {
+    workflow_job_template: t`Workflow Template`,
+    workflow_job: t`Workflow`,
+  };
   const hasOverrides = Object.keys(overrides).length > 0;
 
   return (
@@ -174,7 +186,7 @@ function PromptDetail({
         <Detail
           label={t`Type`}
           dataCy="prompt-detail-type"
-          value={toTitleCase(details.unified_job_type || details.type)}
+          value={typeLabels[resourceType ?? ''] ?? toTitleCase(resourceType)}
         />
         {workflowNode && (
           <Detail
@@ -197,6 +209,36 @@ function PromptDetail({
           dataCy="prompt-detail-timeout"
           value={formatTimeout(details?.timeout)}
         />
+        {/* The settings the node form asks of an approval, shown as it names
+            them. What happens on timeout only matters where there is one. */}
+        {details.type === 'workflow_approval_template' && (
+          <>
+            {Boolean(details.timeout) && details.on_timeout && (
+              <Detail
+                label={t`On Timeout`}
+                dataCy="prompt-detail-on-timeout"
+                value={details.on_timeout === 'approve' ? t`Approve` : t`Deny`}
+              />
+            )}
+            <Detail
+              label={t`Required Approvals`}
+              dataCy="prompt-detail-required-approvals"
+              value={details.required_approvals}
+            />
+            <Detail
+              fullWidth
+              label={t`Context Template`}
+              dataCy="prompt-detail-context-template"
+              value={
+                details.context_template ? (
+                  <pre className="ascender-prompt-detail__context-template">
+                    {details.context_template}
+                  </pre>
+                ) : null
+              }
+            />
+          </>
+        )}
         {details?.type === 'project' && (
           <PromptProjectDetail resource={details as Project} />
         )}
@@ -228,7 +270,6 @@ function PromptDetail({
         {details?.type === 'system_job_template' && (
           <VariablesDetail
             label={t`Variables`}
-            rows={4}
             value={overrides.extra_vars}
             name="extra_vars"
             dataCy="prompt-detail-variables"
@@ -437,7 +478,6 @@ function PromptDetail({
                 <VariablesDetail
                   dataCy="prompt-detail-variables"
                   label={t`Variables`}
-                  rows={4}
                   value={overrides.extra_vars}
                   name="extra_vars"
                 />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
@@ -40,33 +41,60 @@ describe('<LoggingDetail />', () => {
 
   test('initially renders without crashing', async () => {
     await renderDetail();
-    expect(screen.getByText('Enable External Logging')).toBeInTheDocument();
+    expect(screen.getByText('Logging Aggregator Username')).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
+  test('should render one tab per group of settings', async () => {
     await renderDetail();
-    expect(screen.getByText('Back to Settings')).toBeInTheDocument();
-    expect(screen.getByText('Details')).toBeInTheDocument();
+    ['Credentials', 'General', 'Miscellaneous', 'Protocol'].forEach((name) => {
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument();
+    });
   });
 
-  test('should render expected details', async () => {
-    await renderDetail();
-    assertDetail('Enable External Logging', 'Off');
-    assertDetail('Logging Aggregator', 'https://mocklog');
-    assertDetail('Logging Aggregator Port', '1234');
-    assertDetail('Logging Aggregator Type', 'logstash');
+  test("should render each tab's settings, and only those", async () => {
+    const { user } = await renderDetail();
+
     assertDetail('Logging Aggregator Username', 'logging_name');
     assertDetail('Logging Aggregator Password/Token', 'Encrypted');
-    assertDetail('Log System Tracking Facts Individually', 'Off');
-    assertDetail('Logging Aggregator Protocol', 'https');
+    expect(
+      screen.queryByText('Enable External Logging')
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: 'General' }));
+    assertDetail('Enable External Logging', 'Off');
+    assertDetail('Logging Aggregator', 'https://mocklog');
+    assertDetail('Logging Aggregator Type', 'logstash');
+
+    await user.click(screen.getByRole('tab', { name: 'Miscellaneous' }));
     assertDetail('TCP Connection Timeout', '5 seconds');
     assertDetail('Logging Aggregator Level Threshold', 'INFO');
-    assertDetail('Log Format For API 4XX Errors', 'Test Log Line');
-    assertDetail('Enable/disable HTTPS certificate verification', 'On');
-    // CodeEditor (list type) renders empty under jsdom; assert the label.
+    assertDetail('Log System Tracking Facts Individually', 'Off');
     expect(
       screen.getByText('Loggers Sending Data to Log Aggregator Form')
     ).toBeInTheDocument();
+    assertDetail('Log Format For API 4XX Errors', 'Test Log Line');
+
+    await user.click(screen.getByRole('tab', { name: 'Protocol' }));
+    // A choice reads as its label rather than the value stored.
+    assertDetail('Logging Aggregator Protocol', 'HTTPS/HTTP');
+    assertDetail('Logging Aggregator Port', '1234');
+    assertDetail('Enable/disable HTTPS certificate verification', 'On');
+  });
+
+  test('should open on the tab the address names', async () => {
+    // Where the edit form sends a reader back to after a save or a cancel.
+    const history = createMemoryHistory({
+      initialEntries: ['/logging/protocol'],
+    });
+    await renderDetail({ context: { router: { history } } });
+    assertDetail('Logging Aggregator Protocol', 'HTTPS/HTTP');
+    expect(
+      screen.queryByText('Logging Aggregator Username')
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute(
+      'href',
+      '/logging/edit/protocol'
+    );
   });
 
   test('should hide edit button from non-superusers', async () => {

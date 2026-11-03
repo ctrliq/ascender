@@ -69,8 +69,8 @@ describe('<CredentialTypeForm/>', () => {
     renderForm();
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Input configuration')).toBeInTheDocument();
-    expect(screen.getByText('Injector configuration')).toBeInTheDocument();
+    expect(screen.getByText('Input Configuration')).toBeInTheDocument();
+    expect(screen.getByText('Injector Configuration')).toBeInTheDocument();
   });
 
   test('should call onSubmit when the form is submitted', async () => {

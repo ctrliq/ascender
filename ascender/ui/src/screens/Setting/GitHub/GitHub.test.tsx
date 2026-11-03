@@ -16,7 +16,7 @@ async function setup(initialEntry: string) {
   const utils = renderWithContexts(
     <SettingsProvider value={settingOptions}>
       <Routes>
-        <Route path="/settings/github/*" element={<GitHub />} />
+        <Route path="/authentication/github/*" element={<GitHub />} />
       </Routes>
     </SettingsProvider>,
     { context: { router: { history } } }
@@ -102,8 +102,25 @@ describe('<GitHub />', () => {
     vi.clearAllMocks();
   });
 
+  test('should render one tab per GitHub provider', async () => {
+    await setup('/authentication/github/');
+    await waitFor(() =>
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    [
+      'Default',
+      'Organization',
+      'Team',
+      'Enterprise',
+      'Enterprise Organization',
+      'Enterprise Team',
+    ].forEach((name) => {
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument();
+    });
+  });
+
   test('should render github default details', async () => {
-    await setup('/settings/github/');
+    await setup('/authentication/github/');
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
@@ -111,7 +128,7 @@ describe('<GitHub />', () => {
   });
 
   test('should redirect to github organization category details', async () => {
-    await setup('/settings/github/organization');
+    await setup('/authentication/github/organization');
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
@@ -121,7 +138,7 @@ describe('<GitHub />', () => {
   });
 
   test('should render github edit', async () => {
-    await setup('/settings/github/default/edit');
+    await setup('/authentication/github/default/edit');
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
@@ -132,7 +149,7 @@ describe('<GitHub />', () => {
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    await setup('/settings/github/foo/bar');
+    await setup('/authentication/github/foo/bar');
     expect(
       await screen.findByText(/The page you requested could not be found/)
     ).toBeInTheDocument();

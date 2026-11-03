@@ -8,7 +8,7 @@ describe('RevertAllAlert', () => {
     renderWithContexts(
       <RevertAllAlert onClose={() => {}} onRevertAll={() => {}} />
     );
-    expect(screen.getByText('Revert settings')).toBeInTheDocument();
+    expect(screen.getByText('Revert Settings')).toBeInTheDocument();
     expect(screen.getByLabelText('Confirm revert all')).toBeInTheDocument();
     expect(screen.getByLabelText('Cancel revert')).toBeInTheDocument();
   });

@@ -45,7 +45,7 @@ function JobTypeRedirect({ id, view = 'output' }: JobTypeRedirectProps) {
         <Card>
           {error === NOT_FOUND ? (
             <ContentError isNotFound>
-              <Link to="/jobs">{t`View all Jobs`}</Link>
+              <Link to="/runs">{t`View all Runs`}</Link>
             </ContentError>
           ) : (
             <ContentError error={error} />
@@ -57,14 +57,12 @@ function JobTypeRedirect({ id, view = 'output' }: JobTypeRedirectProps) {
   if (isLoading || !job?.id) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
   const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
-  return <Navigate to={`/jobs/${typeSegment}/${job.id}/${view}`} replace />;
+  return <Navigate to={`/runs/${typeSegment}/${job.id}/${view}`} replace />;
 }
 
 export default JobTypeRedirect;

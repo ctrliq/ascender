@@ -1,7 +1,7 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -12,23 +12,24 @@ import {
   MenuToggle,
   NotificationBadge,
   NotificationBadgeVariant,
-  Tooltip,
 } from '@patternfly/react-core';
 import {
+  CheckIcon,
+  ExternalLinkAltIcon,
   PaletteIcon,
   QuestionCircleIcon,
   UserIcon,
 } from '@patternfly/react-icons';
-import { WorkflowApprovalsAPI } from 'api';
-import useRequest from 'hooks/useRequest';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { getThemes, applyTheme, getStoredThemeId } from 'themeRegistry';
 import { saveThemeToAccount } from '../../accountTheme';
-import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 import './PageHeaderToolbar.css';
+import Tooltip from '../Tooltip';
 
 export interface PageHeaderToolbarProps {
+  /** Approvals waiting on this user, counted once by the container. */
+  approvalCount?: number;
   isAboutDisabled?: boolean;
   onAboutClick: () => void;
   onLogoutClick: () => void;
@@ -38,6 +39,7 @@ export interface PageHeaderToolbarProps {
 }
 
 function PageHeaderToolbar({
+  approvalCount = 0,
   isAboutDisabled = false,
   onAboutClick,
   onLogoutClick,
@@ -72,65 +74,12 @@ function PageHeaderToolbar({
 
   const config = useConfig();
 
-  const { request: fetchPendingApprovalCount, result: pendingApprovals } =
-    useRequest(
-      useCallback(async () => {
-        const {
-          data: { count },
-        } = await WorkflowApprovalsAPI.read({
-          status: 'pending',
-          page_size: 1,
-        });
-        return count;
-      }, []),
-      0
-    );
-
-  const pendingApprovalsCount = useWsPendingApprovalCount(
-    pendingApprovals,
-    fetchPendingApprovalCount
-  );
-
-  useEffect(() => {
-    fetchPendingApprovalCount();
-  }, [fetchPendingApprovalCount]);
+  // The container reads the count, so the bell and the rail's badge are the
+  // same number read once rather than two requests for the same thing.
+  const pendingApprovalsCount = approvalCount;
 
   return (
     <div className="ascender-page-header-toolbar__items">
-      <Dropdown
-        isOpen={isThemeOpen}
-        onSelect={() => setIsThemeOpen(false)}
-        onOpenChange={setIsThemeOpen}
-        popperProps={{ position: 'right' }}
-        ouiaId="toolbar-theme-dropdown"
-        toggle={(toggleRef) => (
-          <Tooltip position="bottom" content={t`Theme`}>
-            <MenuToggle
-              ref={toggleRef}
-              variant="plain"
-              onClick={() => setIsThemeOpen(!isThemeOpen)}
-              isExpanded={isThemeOpen}
-              aria-label={t`Theme`}
-              ouiaId="toolbar-theme-dropdown-toggle"
-            >
-              <PaletteIcon />
-            </MenuToggle>
-          </Tooltip>
-        )}
-      >
-        <DropdownList>
-          {themes.map((theme) => (
-            <DropdownItem
-              key={theme.id}
-              onClick={() => handleThemeSelect(theme.id)}
-              isSelected={currentThemeId === theme.id}
-              ouiaId={`theme-${theme.id}-dropdown-item`}
-            >
-              {theme.name}
-            </DropdownItem>
-          ))}
-        </DropdownList>
-      </Dropdown>
       <Tooltip position="bottom" content={t`Pending Workflow Approvals`}>
         {/* The badge is the link rather than a button inside one: a bell icon
             with no text names nothing, and the button it used to render did
@@ -139,7 +88,7 @@ function PageHeaderToolbar({
           className="ascender-page-header-toolbar__notification-badge"
           id="toolbar-workflow-approval-badge"
           component={Link}
-          to="/workflow_approvals?workflow_approvals.status=pending"
+          to="/approvals?workflow_approvals.status=pending"
           aria-label={t`Pending Workflow Approvals`}
           count={pendingApprovalsCount as number}
           variant={
@@ -149,6 +98,60 @@ function PageHeaderToolbar({
           }
         />
       </Tooltip>
+      <Dropdown
+        className="ascender-theme-menu"
+        isOpen={isThemeOpen}
+        onSelect={() => setIsThemeOpen(false)}
+        onOpenChange={setIsThemeOpen}
+        popperProps={{ position: 'right' }}
+        ouiaId="toolbar-theme-dropdown"
+        toggle={(toggleRef) => (
+          <MenuToggle
+            ref={toggleRef}
+            // plainText rather than plain, so the toggle draws the caret the
+            // help and user menus draw. In this masthead a caret means the
+            // control opens a menu, and the notification bell beside it is a
+            // button with no menu, so the distinction carries information.
+            variant="plainText"
+            onClick={() => setIsThemeOpen(!isThemeOpen)}
+            isExpanded={isThemeOpen}
+            aria-label={t`Theme`}
+            ouiaId="toolbar-theme-dropdown-toggle"
+          >
+            <PaletteIcon />
+          </MenuToggle>
+        )}
+      >
+        <DropdownList>
+          {themes.map((theme) => (
+            <DropdownItem
+              key={theme.id}
+              onClick={() => handleThemeSelect(theme.id)}
+              isSelected={currentThemeId === theme.id}
+              // The tick reads before the name rather than after it, which is
+              // where a menu of mutually exclusive options puts it everywhere
+              // outside the browser. isSelected stays for aria-selected, and
+              // the icon it would draw on the trailing edge is hidden in the
+              // stylesheet. The unselected rows carry an empty icon of the
+              // same size so the names stay in one column.
+              icon={
+                currentThemeId === theme.id ? (
+                  // Labelled rather than hidden: PatternFly marks the selected
+                  // row with a class and no aria-selected, so the tick is the
+                  // only thing that says which theme is on, and a decorative
+                  // icon would say it to nobody using a screen reader.
+                  <CheckIcon aria-label={t`Current theme`} />
+                ) : (
+                  <span aria-hidden className="ascender-theme-menu__no-tick" />
+                )
+              }
+              ouiaId={`theme-${theme.id}-dropdown-item`}
+            >
+              {theme.name}
+            </DropdownItem>
+          ))}
+        </DropdownList>
+      </Dropdown>
       <Dropdown
         isOpen={isHelpOpen}
         onSelect={() => setIsHelpOpen(false)}
@@ -174,8 +177,11 @@ function PageHeaderToolbar({
             target="_blank"
             to={`${getDocsBaseUrl(config)}/userguide/index.html`}
             ouiaId="help-dropdown-item"
+            // The link leaves the application, which the label alone does not
+            // say; the icon is what marks it as going somewhere else.
+            icon={<ExternalLinkAltIcon />}
           >
-            {t`Help`}
+            {t`Documentation`}
           </DropdownItem>
           <DropdownItem
             key="about"

@@ -79,7 +79,7 @@ describe('<ExecutionEnvironmentListItem/>', () => {
     const { user } = renderItem();
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(
-      await screen.findByText('Failed to copy execution environment')
+      await screen.findByText('Failed to copy execution environment.')
     ).toBeInTheDocument();
   });
 

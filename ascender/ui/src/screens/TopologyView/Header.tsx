@@ -1,13 +1,7 @@
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-  Button,
-  PageSection,
-  Switch,
-  Title,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Button, PageSection, Switch, Title } from '@patternfly/react-core';
 
 import {
   SearchMinusIcon,
@@ -17,6 +11,7 @@ import {
   RedoAltIcon,
 } from '@patternfly/react-icons';
 
+import Tooltip from 'components/Tooltip';
 import type { Zoom } from './utils/useZoom';
 
 export interface HeaderProps {
@@ -29,6 +24,12 @@ export interface HeaderProps {
   zoomFit: Zoom['zoomFit'];
   refresh?: () => void;
   showZoomControls: boolean;
+  /**
+   * Whether Refresh is held back. By default it goes with the zoom controls,
+   * which wait for a drawn graph; a failed read has no graph but still wants
+   * a way to try again.
+   */
+  isRefreshDisabled?: boolean;
   [key: string]: unknown;
 }
 
@@ -42,6 +43,7 @@ const Header = ({
   zoomFit,
   refresh,
   showZoomControls,
+  isRefreshDisabled = !showZoomControls,
 }: HeaderProps) => {
   const { t } = useLingui();
   return (
@@ -70,50 +72,50 @@ const Header = ({
               variant="plain"
               icon={<RedoAltIcon />}
               onClick={refresh}
-              isDisabled={!showZoomControls}
+              isDisabled={isRefreshDisabled}
             />
           </Tooltip>
-          <Tooltip content={t`Zoom in`} position="top">
+          <Tooltip content={t`Zoom In`} position="top">
             <Button
               ouiaId="zoom-in-button"
-              aria-label={t`Zoom in`}
+              aria-label={t`Zoom In`}
               variant="plain"
               icon={<SearchPlusIcon />}
               onClick={zoomIn}
               isDisabled={!showZoomControls}
             />
           </Tooltip>
-          <Tooltip content={t`Zoom out`} position="top">
+          <Tooltip content={t`Zoom Out`} position="top">
             <Button
               ouiaId="zoom-out-button"
-              aria-label={t`Zoom out`}
+              aria-label={t`Zoom Out`}
               variant="plain"
               icon={<SearchMinusIcon />}
               onClick={zoomOut}
               isDisabled={!showZoomControls}
             />
           </Tooltip>
-          <Tooltip content={t`Fit to screen`} position="top">
+          <Tooltip content={t`Fit to Screen`} position="top">
             <Button
               ouiaId="fit-to-screen-button"
-              aria-label={t`Fit to screen`}
+              aria-label={t`Fit to Screen`}
               variant="plain"
               icon={<ExpandArrowsAltIcon />}
               onClick={zoomFit}
               isDisabled={!showZoomControls}
             />
           </Tooltip>
-          <Tooltip content={t`Reset zoom`} position="top">
+          <Tooltip content={t`Reset Zoom`} position="top">
             <Button
               ouiaId="reset-zoom-button"
-              aria-label={t`Reset zoom`}
+              aria-label={t`Reset Zoom`}
               variant="plain"
               icon={<ExpandIcon />}
               onClick={resetZoom}
               isDisabled={!showZoomControls}
             />
           </Tooltip>
-          <Tooltip content={t`Toggle legend`} position="top">
+          <Tooltip content={t`Toggle Legend`} position="top">
             <Switch
               id="legend-toggle-switch"
               label={t`Legend`}

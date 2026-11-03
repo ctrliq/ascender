@@ -2,22 +2,31 @@ import type { InventorySource } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal/AlertModal';
 import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
 import { InventorySourcesAPI } from 'api';
+import Tooltip from 'components/Tooltip';
 
 export interface InventorySourceSyncButtonProps {
   source?: Partial<InventorySource>;
   /** Renders the icon-only button a list row uses, rather than a labelled one. */
   icon?: boolean;
+  /**
+   * A labelled button with this text and tooltip, as a runs tab shows it,
+   * rather than the look this button takes on its own screen.
+   */
+  label?: string;
+  tooltip?: string;
 }
 
 function InventorySourceSyncButton({
   source = {},
   icon = true,
+  label,
+  tooltip,
 }: InventorySourceSyncButtonProps) {
   const { t } = useLingui();
   const {
@@ -40,15 +49,15 @@ function InventorySourceSyncButton({
 
   return (
     <>
-      <Tooltip content={t`Start sync process`} position="top">
+      <Tooltip content={tooltip ?? t`Sync Source`} position="top">
         <Button
-          ouiaId={`${source}-sync-button`}
+          ouiaId={`${source.id}-sync-button`}
           isDisabled={startSyncLoading}
-          aria-label={t`Start sync source`}
+          aria-label={label ?? t`Sync Source`}
           variant={icon ? 'plain' : 'secondary'}
           onClick={startSyncProcess}
         >
-          {icon ? <SyncIcon /> : t`Sync`}
+          {icon ? <SyncIcon /> : (label ?? t`Sync`)}
         </Button>
       </Tooltip>
 

@@ -4,7 +4,13 @@ import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
 import { dateToInputDateTime } from 'util/dates';
-import { SchedulesAPI, JobTemplatesAPI, InventoriesAPI } from 'api';
+import {
+  SchedulesAPI,
+  JobTemplatesAPI,
+  InventoriesAPI,
+  CredentialsAPI,
+  CredentialTypesAPI,
+} from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -14,6 +20,8 @@ import ScheduleForm from './ScheduleForm';
 vi.mock('../../../api/models/Schedules');
 vi.mock('../../../api/models/JobTemplates');
 vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/CredentialTypes');
 
 // PF DatePicker/Select wrap their menus in Popovers/Poppers that can schedule a
 // state update after the tree unmounts under jsdom. That benign warning is
@@ -198,7 +206,7 @@ function defaultFieldsVisible(
 ) {
   expect(byId(container, 'schedule-name')).toBeInTheDocument();
   expect(byId(container, 'schedule-description')).toBeInTheDocument();
-  expect(screen.getByLabelText('Start date')).toBeInTheDocument();
+  expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
   expect(byId(container, 'schedule-timezone')).toBeInTheDocument();
   // the run-frequency select is always present
   expect(freqSelect(container, 'schedule-frequency')).toBeInTheDocument();
@@ -216,8 +224,8 @@ function nonRRuleValuesMatch(container: HTMLElement) {
   expect(byId(container, 'schedule-description')).toHaveValue(
     'test description'
   );
-  expect(screen.getByLabelText('Start date')).toHaveValue('2020-04-02');
-  expect(screen.getByLabelText('Start time')).toHaveValue('2:45 PM');
+  expect(screen.getByLabelText('Start Date')).toHaveValue('2020-04-02');
+  expect(screen.getByLabelText('Start Time')).toHaveValue('2:45 PM');
   expect(byId(container, 'schedule-timezone')).toHaveValue('America/New_York');
 }
 
@@ -398,6 +406,63 @@ describe('<ScheduleForm />', () => {
       );
     });
 
+    test('should not let a default credential be removed without one of its type', async () => {
+      vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue([
+        { id: 1, kind: 'ssh', name: 'Machine' },
+      ] as unknown as Awaited<
+        ReturnType<typeof CredentialTypesAPI.loadAllTypes>
+      >);
+      vi.mocked(CredentialsAPI.read).mockResolvedValue({
+        data: { count: 0, results: [] },
+      } as unknown as ResponseOf<typeof CredentialsAPI.read>);
+      vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
+        data: { related_search_fields: [], actions: { GET: {} } },
+      } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
+      const machine = {
+        id: 4,
+        name: 'Cred 4',
+        kind: 'ssh',
+        credential_type: 1,
+        inputs: {},
+        summary_fields: { credential_type: { id: 1, name: 'Machine' } },
+      };
+      const { user, container } = renderWithContexts(
+        <ScheduleForm
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
+          resource={{
+            id: 23,
+            type: 'job_template',
+            inventory: 1,
+            name: 'Foo Job Template',
+            description: '',
+          }}
+          launchConfig={{
+            ...fullLaunchConfig,
+            ask_inventory_on_launch: false,
+            inventory_needed_to_start: false,
+            ask_credential_on_launch: true,
+          }}
+          surveyConfig={{ spec: [] }}
+          resourceDefaultCredentials={[machine]}
+        />
+      );
+      await waitForForm(container);
+      await user.click(await screen.findByRole('button', { name: 'Prompt' }));
+      const dialog = await screen.findByRole('dialog');
+      // The template's own Machine credential starts selected; taking it off
+      // with nothing of its type in its place is what the step refuses.
+      const chip = await within(dialog).findByRole('button', {
+        name: /Cred 4/,
+      });
+      await user.click(chip);
+      expect(
+        await within(dialog).findByText(
+          /Job Template default credentials must be replaced/
+        )
+      ).toBeInTheDocument();
+    });
+
     test('should render prompt button with disabled save button', async () => {
       const { container } = renderPrompt(
         {
@@ -460,8 +525,8 @@ describe('<ScheduleForm />', () => {
 
       expect(byId(container, 'schedule-name')).toHaveValue('');
       expect(byId(container, 'schedule-description')).toHaveValue('');
-      expect(screen.getByLabelText('Start date')).toHaveValue(`${date}`);
-      expect(screen.getByLabelText('Start time')).toHaveValue(`${time}`);
+      expect(screen.getByLabelText('Start Date')).toHaveValue(`${date}`);
+      expect(screen.getByLabelText('Start Time')).toHaveValue(`${time}`);
       expect(byId(container, 'schedule-timezone')).toHaveValue('UTC');
     });
 
@@ -594,7 +659,7 @@ describe('<ScheduleForm />', () => {
         byId(container, 'end-on-date-frequencyOptions-minute')
       ).toBeChecked();
 
-      const endDate = screen.getByLabelText('End date');
+      const endDate = screen.getByLabelText('End Date');
       fireEvent.change(endDate, { target: { value: '2020-03-14' } });
 
       expect(
@@ -816,8 +881,8 @@ describe('<ScheduleForm />', () => {
       expect(
         byId(container, 'schedule-days-of-week-fri-frequencyOptions-week')
       ).toBeChecked();
-      expect(screen.getByLabelText('End date')).toHaveValue('2021-01-01');
-      expect(screen.getByLabelText('End time')).toHaveValue('12:00 AM');
+      expect(screen.getByLabelText('End Date')).toHaveValue('2021-01-01');
+      expect(screen.getByLabelText('End Time')).toHaveValue('12:00 AM');
     });
 
     test('initially renders expected fields and values with existing schedule that runs every month on the last weekday', async () => {

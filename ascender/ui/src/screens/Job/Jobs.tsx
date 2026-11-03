@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import { PageSection } from '@patternfly/react-core';
+import { Card, PageSection } from '@patternfly/react-core';
 
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import JobList from 'components/JobList';
@@ -23,19 +23,19 @@ function TypeRedirect({ view }: TypeRedirectProps) {
   return <JobTypeRedirect id={id} view={view} />;
 }
 
-// Legacy /jobs/system/:id URLs map to the canonical /jobs/management/:id;
+// Legacy /runs/system/:id URLs map to the canonical /runs/management/:id;
 // preserve any trailing sub-path (the splat) on the redirect.
 function SystemRedirect() {
   const { id, '*': rest } = useParams() as { id: string; '*': string };
   return (
-    <Navigate to={`/jobs/management/${id}${rest ? `/${rest}` : ''}`} replace />
+    <Navigate to={`/runs/management/${id}${rest ? `/${rest}` : ''}`} replace />
   );
 }
 
 function Jobs() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/jobs': t`Jobs`,
+    '/runs': t`Runs`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -46,10 +46,10 @@ function Jobs() {
 
       const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type as string];
       setBreadcrumbConfig({
-        '/jobs': t`Jobs`,
-        [`/jobs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,
-        [`/jobs/${typeSegment}/${job.id}/output`]: t`Output`,
-        [`/jobs/${typeSegment}/${job.id}/details`]: t`Details`,
+        '/runs': t`Runs`,
+        [`/runs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,
+        [`/runs/${typeSegment}/${job.id}/output`]: `${job.id} - ${job.name}`,
+        [`/runs/${typeSegment}/${job.id}/details`]: `${job.id} - ${job.name}`,
       });
     },
     [t]
@@ -57,15 +57,22 @@ function Jobs() {
 
   return (
     <>
-      <ScreenHeader streamType="job" breadcrumbConfig={breadcrumbConfig} />
+      <ScreenHeader
+        streamType="job,workflow_job,ad_hoc_command"
+        breadcrumbConfig={breadcrumbConfig}
+      />
       <Routes>
         <Route
           index
           element={
             <PageSection hasBodyWrapper={false}>
-              <PersistentFilters pageKey="jobs">
-                <JobList showTypeColumn />
-              </PersistentFilters>
+              {/* The card is the page's rather than the list's: every other
+                  JobList sits in a tab of a card that is already there. */}
+              <Card>
+                <PersistentFilters pageKey="jobs">
+                  <JobList showTypeColumn />
+                </PersistentFilters>
+              </Card>
             </PageSection>
           }
         />

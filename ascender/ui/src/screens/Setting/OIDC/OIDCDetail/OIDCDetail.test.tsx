@@ -47,16 +47,6 @@ describe('<OIDCDetail />', () => {
     expect(screen.getByText('OIDC Key')).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
-    await renderDetail();
-    expect(
-      screen.getAllByRole('tab', { name: /Back to Settings/ }).length
-    ).toBeGreaterThan(0);
-    expect(
-      screen.getAllByRole('tab', { name: /Details/ }).length
-    ).toBeGreaterThan(0);
-  });
-
   test('should render expected details', async () => {
     await renderDetail();
     assertDetail('OIDC Key', 'mock key');

@@ -47,6 +47,10 @@ describe('<UserTokenForm />', () => {
     expect(await screen.findByText('Application')).toBeInTheDocument();
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
     expect(screen.getByText('Scope')).toBeInTheDocument();
+    // An empty scope reads as a prompt, the way the other selects do.
+    expect(
+      screen.getByRole('option', { name: 'Choose a scope' })
+    ).toBeDisabled();
   });
 
   test('inputs should update form value on change', async () => {
@@ -107,7 +111,7 @@ describe('<UserTokenForm />', () => {
     await user.click(await screen.findByRole('button', { name: 'Save' }));
 
     expect(
-      await screen.findByText('Please enter a value.')
+      await screen.findByText('Select a value for this field')
     ).toBeInTheDocument();
     expect(handleSubmit).not.toHaveBeenCalled();
   });

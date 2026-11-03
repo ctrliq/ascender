@@ -25,15 +25,18 @@ describe('<DeleteRoleConfirmationModal />', () => {
     );
     // The modal title (rendered as the dialog's <Title>) reflects the team variant.
     expect(
-      screen.getByRole('dialog', { name: /Remove Team Access/ })
+      screen.getByRole('dialog', { name: /Disassociate Team Role/ })
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
+    ).toHaveTextContent('Disassociate');
     // Body text spans two paragraphs joined by <br/>; assert the dialog body content.
     const body = document.querySelector('.pf-v6-c-modal-box__body');
     expect(body).toHaveTextContent(
-      'Are you sure you want to remove Member access from The Team? Doing so affects all members of the team.'
+      'Are you sure you want to disassociate the Member role from The Team? Doing so affects all members of the team.'
     );
     expect(body).toHaveTextContent(
-      'If you only want to remove access for this particular user, please remove them from the team.'
+      'If you only want to remove access for this particular user, disassociate them from the team instead.'
     );
   });
 
@@ -51,11 +54,11 @@ describe('<DeleteRoleConfirmationModal />', () => {
       />
     );
     expect(
-      screen.getByRole('dialog', { name: /Remove User Access/ })
+      screen.getByRole('dialog', { name: /Disassociate User Role/ })
     ).toBeInTheDocument();
     const body = document.querySelector('.pf-v6-c-modal-box__body');
     expect(body).toHaveTextContent(
-      'Are you sure you want to remove Member access from jane?'
+      'Are you sure you want to disassociate the Member role from jane?'
     );
   });
 });

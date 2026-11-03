@@ -55,7 +55,7 @@ function AdvancedInventoryHostDetail({
         <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
-          label={t`Last modified`}
+          label={t`Last Modified`}
           user={modified_by}
         />
         <VariablesDetail

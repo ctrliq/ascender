@@ -16,9 +16,15 @@ vi.mock('../shared/TeamForm', () => ({
     handleSubmit,
     handleCancel,
     submitError,
-  }: MockHandlerFormProps) {
+    team,
+  }: MockHandlerFormProps & {
+    team?: { summary_fields?: { organization?: { name: string } } };
+  }) {
     return (
       <div>
+        <span data-testid="form-organization">
+          {team?.summary_fields?.organization?.name ?? ''}
+        </span>
         {submitError ? <div data-testid="form-submit-error" /> : null}
         <button
           type="button"
@@ -83,5 +89,34 @@ describe('<TeamAdd />', () => {
     const { user } = renderAdd();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     expect(await screen.findByTestId('form-submit-error')).toBeInTheDocument();
+  });
+
+  describe('when opened from an organization', () => {
+    const renderFromOrganization = () => {
+      history = createMemoryHistory({
+        initialEntries: [
+          {
+            pathname: '/teams/add',
+            state: { organization: { id: 71, name: 'measure-org' } },
+          },
+        ],
+      });
+      return renderWithContexts(<TeamAdd />, {
+        context: { router: { history } },
+      });
+    };
+
+    test('starts the form in that organization', () => {
+      renderFromOrganization();
+      expect(screen.getByTestId('form-organization')).toHaveTextContent(
+        'measure-org'
+      );
+    });
+
+    test('cancels back to the organization it came from', async () => {
+      const { user } = renderFromOrganization();
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
+      expect(history.location.pathname).toEqual('/organizations/71/teams');
+    });
   });
 });

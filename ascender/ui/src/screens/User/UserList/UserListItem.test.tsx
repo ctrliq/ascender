@@ -33,7 +33,10 @@ describe('UserListItem with full permissions', () => {
   });
 
   test('should display user data', () => {
-    expect(screen.getByText('System Administrator')).toBeInTheDocument();
+    expect(screen.getByText('System Administrator')).toHaveAttribute(
+      'data-label',
+      'User Type'
+    );
     expect(screen.getByLabelText('social login')).toHaveTextContent('SOCIAL');
   });
 });

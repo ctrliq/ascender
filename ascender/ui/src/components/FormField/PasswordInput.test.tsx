@@ -25,6 +25,16 @@ describe('PasswordInput', () => {
     expect(container.querySelector('#test-password')).toBeInTheDocument();
   });
 
+  test('puts the reveal toggle after the input, in an input group', () => {
+    const { container } = renderInput();
+    const input = container.querySelector('#test-password');
+    const toggle = screen.getByRole('button', { name: 'Toggle Password' });
+    const items = container.querySelectorAll('.pf-v6-c-input-group__item');
+    expect(items).toHaveLength(2);
+    expect(items[0]).toContainElement(input as HTMLElement);
+    expect(items[1]).toContainElement(toggle);
+  });
+
   test('properly responds to show/hide toggles', async () => {
     const { container, user } = renderInput();
     const input = container.querySelector('#test-password');

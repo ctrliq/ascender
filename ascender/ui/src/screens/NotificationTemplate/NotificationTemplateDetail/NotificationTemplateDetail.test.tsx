@@ -1,6 +1,7 @@
 import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
+import { NotificationTemplatesAPI } from 'api';
 import type { DefaultMessages } from '../shared/NotificationTemplateForm';
 
 import {
@@ -114,5 +115,41 @@ describe('<NotificationTemplateDetail />', () => {
       />
     );
     await assertCommonDetails();
+  });
+
+  test('shows the changed messages beside the others', async () => {
+    renderWithContexts(
+      <NotificationTemplateDetail
+        template={
+          {
+            ...mockTemplate,
+            messages: {
+              changed: { message: 'It changed', body: 'What changed' },
+            },
+          } as unknown as NotificationTemplate
+        }
+        defaultMessages={defaultMessages}
+      />
+    );
+    expect(await screen.findByText('Changed Message')).toBeInTheDocument();
+    expect(screen.getByText('Changed Message Body')).toBeInTheDocument();
+  });
+
+  test('names the test as the row does and says so when it fails', async () => {
+    vi.mocked(NotificationTemplatesAPI.test).mockRejectedValue(
+      new Error('nope')
+    );
+    const { user } = renderWithContexts(
+      <NotificationTemplateDetail
+        template={mockTemplate as unknown as NotificationTemplate}
+        defaultMessages={defaultMessages}
+      />
+    );
+    await user.click(
+      await screen.findByRole('button', { name: 'Test Notification' })
+    );
+    expect(
+      await screen.findByText('Failed to send test notification.')
+    ).toBeInTheDocument();
   });
 });

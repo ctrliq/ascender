@@ -86,11 +86,11 @@ function AddResourceRole({
       },
       {
         name: t`Created By (Username)`,
-        key: 'created_by__username',
+        key: 'created_by__username__icontains',
       },
       {
         name: t`Modified By (Username)`,
-        key: 'modified_by__username',
+        key: 'modified_by__username__icontains',
       },
     ],
     [t]
@@ -169,7 +169,10 @@ function AddResourceRole({
       onSave();
     } catch (err) {
       onError(err);
-      onClose();
+      // One request failing does not stop the others, so some of the roles
+      // may well have been associated. The list is read again rather than
+      // left showing none of them, which is also what closes this wizard.
+      onSave();
     }
   };
 
@@ -188,13 +191,13 @@ function AddResourceRole({
 
   switch (resourceType) {
     case 'users':
-      wizardTitle = t`Add User Roles`;
+      wizardTitle = t`Associate User Roles`;
       break;
     case 'teams':
-      wizardTitle = t`Add Team Roles`;
+      wizardTitle = t`Associate Team Roles`;
       break;
     default:
-      wizardTitle = t`Add Roles`;
+      wizardTitle = t`Associate Roles`;
   }
 
   const steps = [
@@ -277,7 +280,7 @@ function AddResourceRole({
           selectedRoleRows={rolesSelected}
         />
       ),
-      nextButtonText: t`Save`,
+      nextButtonText: t`Associate`,
       enableNext: rolesSelected.length > 0,
       canJumpTo: maxEnabledStep >= 3,
     },

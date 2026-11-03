@@ -210,12 +210,12 @@ describe('Visualizer', () => {
     await waitFor(() =>
       expect(container.querySelector('g#node-1')).toBeInTheDocument()
     );
-    expect(screen.queryByText('Remove All Nodes')).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
-    expect(screen.getByText('Remove All Nodes')).toBeInTheDocument();
+    expect(screen.queryByText('Delete All Nodes')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Delete All Nodes' }));
+    expect(screen.getByText('Delete All Nodes')).toBeInTheDocument();
     // PF Modal portals into document.body, outside the render container
     fireEvent.click(
-      screen.getByRole('button', { name: 'Confirm removal of all nodes' })
+      screen.getByRole('button', { name: 'Confirm Delete All Nodes' })
     );
     // With no nodes left, the start screen prompts the user to begin again
     expect(

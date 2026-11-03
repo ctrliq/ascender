@@ -24,9 +24,31 @@ import {
 import './VisualizerLink.css';
 
 export interface VisualizerLinkProps {
+  /**
+   * Tells the graph the pointer is on this link, or has left it. The graph
+   * holds which link that is, and hands it back as isHovered below.
+   */
+  onRaise?: (link: WorkflowLink | null) => void;
+  /**
+   * Draws the open menu rather than the line.
+   *
+   * Svg has no z-index and paints in document order, and every node is drawn
+   * after every link, so a menu drawn with its line came up underneath whatever
+   * node it hangs over. The graph draws the hovered link a second time after
+   * the nodes, for the menu alone: drawing the whole link there put its line
+   * over the nodes instead.
+   */
+  isMenuLayer?: boolean;
   link: WorkflowLink;
   /** Tells the visualizer which link is hovered, or null when none is. */
   updateLinkHelp: (link: WorkflowLink | null) => void;
+  /**
+   * Whether this is the link the pointer is on. The graph holds it, because it
+   * is the same link the graph raises and there can only be one: held here, a
+   * link that never saw the pointer leave kept its menu open under a neighbour
+   * that had just opened its own.
+   */
+  isHovered?: boolean;
   readOnly: boolean;
   updateHelpText: (helpText: React.ReactNode) => void;
   [key: string]: unknown;
@@ -37,16 +59,15 @@ function VisualizerLink({
   updateLinkHelp,
   readOnly,
   updateHelpText,
+  isHovered = false,
+  isMenuLayer = false,
+  onRaise = () => {},
 }: VisualizerLinkProps) {
   const { t } = useLingui();
   const ref = useRef<SVGGElement>(null);
-  const [hovering, setHovering] = useState<boolean>(false);
-  const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
     'var(--pf-t--global--border--color--default)'
   );
-  const [tooltipX, setTooltipX] = useState(0);
-  const [tooltipY, setTooltipY] = useState(0);
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
@@ -56,23 +77,32 @@ function VisualizerLink({
     WorkflowStateContext
   ) as WorkflowState & { nodePositions: NodePositions };
 
+  /*
+   * The line and the menu's anchor follow from the positions, so they are
+   * worked out while drawing. Set from an effect they were a paint late: the
+   * first frame of an opened menu stood at the corner of the graph, and the
+   * line was missing, until the effect ran and drew again.
+   */
+  const linePoints = getLinePoints(link, nodePositions);
+  const pathD = generateLine(linePoints);
+  const tooltipX = (linePoints[0].x + linePoints[1].x) / 2;
+  const tooltipY = (linePoints[0].y + linePoints[1].y) / 2;
+
   const addNodeAction = (
     <WorkflowActionTooltipItem
-      label={t`Add a node between these two`}
+      label={t`Add Node Between`}
       id="link-add-node"
       key="add"
       onClick={() => {
         updateHelpText(null);
-        setHovering(false);
+        onRaise(null);
         dispatch({
           type: 'START_ADD_NODE',
           sourceNodeId: link.source.id,
           targetNodeId: link.target.id,
         });
       }}
-      onMouseEnter={() =>
-        updateHelpText(t`Add a new node between these two nodes`)
-      }
+      onMouseEnter={() => updateHelpText(t`Add Node Between`)}
       onMouseLeave={() => updateHelpText(null)}
     >
       <PlusIcon />
@@ -85,48 +115,45 @@ function VisualizerLink({
       : [
           addNodeAction,
           <WorkflowActionTooltipItem
-            label={t`Edit this link`}
+            label={t`Edit Link`}
             id="link-edit"
             key="edit"
             onClick={() => {
               updateHelpText(null);
-              setHovering(false);
+              onRaise(null);
               dispatch({ type: 'SET_LINK_TO_EDIT', value: link });
             }}
-            onMouseEnter={() => updateHelpText(t`Edit this link`)}
+            onMouseEnter={() => updateHelpText(t`Edit Link`)}
             onMouseLeave={() => updateHelpText(null)}
           >
             <PencilAltIcon />
           </WorkflowActionTooltipItem>,
           <WorkflowActionTooltipItem
-            label={t`Delete this link`}
+            label={t`Delete Link`}
             id="link-delete"
             key="delete"
             onClick={() => {
               updateHelpText(null);
-              setHovering(false);
+              onRaise(null);
               dispatch({ type: 'START_DELETE_LINK', link });
             }}
-            onMouseEnter={() => updateHelpText(t`Delete this link`)}
+            onMouseEnter={() => updateHelpText(t`Delete Link`)}
             onMouseLeave={() => updateHelpText(null)}
           >
             <TrashAltIcon />
           </WorkflowActionTooltipItem>,
         ];
 
-  // A hovered link is moved to the front of its group so its overlay is not
-  // covered by the links drawn after it.
+  // Raising is the graph's to do. Moving the group here went behind React's
+  // back, and the render the graph schedules could put it straight back,
+  // leaving this link's action menu under its neighbours. Telling the graph is
+  // also what opens the menu, since the graph hands isHovered back down.
   const handleLinkMouseEnter = () => {
-    const linkNode = ref.current;
-    const startNode = document.getElementById('node-1');
-    linkNode?.parentNode?.insertBefore(linkNode, startNode);
-    setHovering(true);
+    onRaise(link);
   };
 
   const handleLinkMouseLeave = () => {
-    const linkNode = ref.current;
-    linkNode?.parentNode?.prepend(linkNode);
-    setHovering(false);
+    onRaise(null);
   };
 
   useEffect(() => {
@@ -144,12 +171,23 @@ function VisualizerLink({
     }
   }, [link.linkType]);
 
-  useEffect(() => {
-    const linePoints = getLinePoints(link, nodePositions);
-    setPathD(generateLine(linePoints));
-    setTooltipX((linePoints[0].x + linePoints[1].x) / 2);
-    setTooltipY((linePoints[0].y + linePoints[1].y) / 2);
-  }, [link, nodePositions]);
+  if (isMenuLayer) {
+    return (
+      <g
+        id={`link-${link.source.id}-${link.target.id}-menu`}
+        onMouseEnter={handleLinkMouseEnter}
+        onMouseLeave={handleLinkMouseLeave}
+      >
+        {!readOnly && isHovered && (
+          <WorkflowActionTooltip
+            actions={tooltipActions}
+            pointX={tooltipX}
+            pointY={tooltipY}
+          />
+        )}
+      </g>
+    );
+  }
 
   return (
     <g
@@ -161,12 +199,12 @@ function VisualizerLink({
       onMouseLeave={handleLinkMouseLeave}
       ref={ref}
     >
-      <polygon
-        style={{ fill: 'var(--pf-t--global--background--color--200)' }}
-        id={`link-${link.source.id}-${link.target.id}-background`}
-        opacity={hovering ? '1' : '0'}
-        points={getLinkOverlayPoints(link, nodePositions)}
-      />
+      {/* The band that used to sit here was filled opaque and painted over
+          every link crossing the hovered one, which is what cut the lines. It
+          was already switched off in the dark and default themes, where the
+          fill was overridden to nothing, so it had been doing nothing in half
+          the product. The hover has its own feedback: the help panel, and in
+          the visualizer the action menu. */}
       <path d={pathD ?? undefined} stroke={pathStroke} strokeWidth="2px" />
       <polygon
         id={`link-${link.source.id}-${link.target.id}-overlay`}
@@ -175,13 +213,6 @@ function VisualizerLink({
         opacity="0"
         points={getLinkOverlayPoints(link, nodePositions)}
       />
-      {!readOnly && hovering && (
-        <WorkflowActionTooltip
-          actions={tooltipActions}
-          pointX={tooltipX}
-          pointY={tooltipY}
-        />
-      )}
     </g>
   );
 }

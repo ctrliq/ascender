@@ -197,6 +197,29 @@ function WizardWrapper({
     </PFWizard>
   );
 
+  /*
+   * Escape closes whatever is on top, one layer at a time. The modal listens
+   * on the page body, which hears the key before a dropdown, date picker or
+   * popover inside the wizard does, so it used to close the whole wizard,
+   * and everything typed into it, when the reader only meant to close a
+   * menu. While one of those is open the modal stands aside and lets it close
+   * on this key; the next Escape closes the wizard as before.
+   */
+  const handleEscapePress = (event: KeyboardEvent) => {
+    const somethingOpen = document.querySelector(
+      [
+        '.pf-v6-c-menu-toggle[aria-expanded="true"]',
+        '.pf-v6-c-menu',
+        '.pf-v6-c-popover',
+      ].join(', ')
+    );
+    if (somethingOpen) {
+      return;
+    }
+    onClose?.();
+    event.stopPropagation();
+  };
+
   if (isOpen !== undefined) {
     return (
       <Modal
@@ -205,6 +228,7 @@ function WizardWrapper({
         showClose={false}
         hasNoBodyWrapper
         onClose={onClose}
+        onEscapePress={handleEscapePress}
         aria-label={String(title || 'Wizard')}
       >
         {wizardContent}

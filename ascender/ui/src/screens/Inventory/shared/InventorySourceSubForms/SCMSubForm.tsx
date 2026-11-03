@@ -139,7 +139,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
       <FormGroup
         fieldId="source_path"
         isRequired
-        label={t`Inventory file`}
+        label={t`Inventory File`}
         labelHelp={<Popover content={helpText.sourcePath} />}
       >
         <Select
@@ -161,6 +161,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
             <MenuToggle
               ref={toggleRef}
               variant="typeahead"
+              isFullWidth
               onClick={() => setIsOpen(!isOpen)}
               isExpanded={isOpen}
               status={isValid ? undefined : 'danger'}

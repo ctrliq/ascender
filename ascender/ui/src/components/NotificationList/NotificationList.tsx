@@ -1,19 +1,28 @@
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { NotificationTemplate, NotificationsApiModel } from 'types/api';
+import type {
+  NotificationTemplate,
+  NotificationsApiModel,
+  SummaryFieldRef,
+} from 'types/api';
 import type { QSParams } from 'util/qs';
 import React, { useEffect, useCallback, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useSelected from 'hooks/useSelected';
 import { NotificationTemplatesAPI } from 'api';
+import { getNotificationTypeOptions } from 'util/notificationTypes';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import NotificationListItem from './NotificationListItem';
+import DataListToolbar from '../DataListToolbar';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
+  ToolbarAddButton,
+  ToolbarDeleteButton,
   getSearchableKeys,
 } from '../PaginatedTable';
 
@@ -25,6 +34,13 @@ const QS_CONFIG = getQSConfig('notification', {
 
 export interface NotificationListProps {
   apiModel: NotificationsApiModel;
+  /**
+   * The organization a template added from here belongs to, on an
+   * organization's own tab: the form opens with it filled in, and Cancel comes
+   * back to the tab. Other resources' tabs have no organization of their own
+   * to give a template, so the form opens empty from them.
+   */
+  addOrganization?: SummaryFieldRef | null;
   canToggleNotifications: boolean;
   id: number | string;
   showApprovalsToggle?: boolean;
@@ -36,12 +52,14 @@ function NotificationList({
   apiModel,
   canToggleNotifications,
   id,
+  addOrganization = null,
 
   showApprovalsToggle = false,
   showChangedToggle = false,
 }: NotificationListProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const location = useLocation();
+  const navigate = useNavigate();
   const [loadingToggleIds, setLoadingToggleIds] = useState<number[]>([]);
   const [toggleError, setToggleError] = useState<unknown>(null);
 
@@ -55,9 +73,9 @@ function NotificationList({
       startedTemplateIds,
       successTemplateIds,
       errorTemplateIds,
-      typeLabels,
       relatedSearchableKeys,
       searchableKeys,
+      canCreateTemplates,
     },
     error: contentError,
     isLoading,
@@ -75,16 +93,6 @@ function NotificationList({
         NotificationTemplatesAPI.read(params),
         NotificationTemplatesAPI.readOptions(),
       ]);
-
-      const labels = (
-        actionsResponse.data.actions.GET?.notification_type?.choices ?? []
-      ).reduce(
-        (map: Record<string, string>, [value, label]) => ({
-          ...map,
-          [String(value)]: label,
-        }),
-        {}
-      );
 
       const idMatchParams: QSParams =
         notificationsResults.length > 0
@@ -111,9 +119,9 @@ function NotificationList({
         errorTemplateIds: number[];
         approvalsTemplateIds: number[];
         changedTemplateIds: number[];
-        typeLabels: Record<string, string>;
         relatedSearchableKeys: string[];
         searchableKeys: SearchableKey[];
+        canCreateTemplates: boolean;
       } = {
         notifications: notificationsResults,
         approvalsTemplateIds: [],
@@ -122,11 +130,13 @@ function NotificationList({
         startedTemplateIds: startedTemplates.results.map((st) => st.id),
         successTemplateIds: successTemplates.results.map((su) => su.id),
         errorTemplateIds: errorTemplates.results.map((e) => e.id),
-        typeLabels: labels,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+        // The api offers POST to whoever may make a notification template,
+        // which is who the empty tab's way to one is for.
+        canCreateTemplates: Boolean(actionsResponse.data.actions?.POST),
       };
 
       if (showApprovalsToggle && apiModel.readNotificationTemplatesApprovals) {
@@ -157,9 +167,9 @@ function NotificationList({
       startedTemplateIds: [],
       successTemplateIds: [],
       errorTemplateIds: [],
-      typeLabels: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
+      canCreateTemplates: false,
     }
   );
 
@@ -211,15 +221,102 @@ function NotificationList({
     }
   };
 
+  const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
+    useSelected(notifications);
+
+  /*
+   * This tab lists every notification template the viewer can see, not only
+   * the ones switched on for this resource, so Delete here destroys the
+   * template itself, as the Notification Templates list does. The switches
+   * are what take one off this resource alone, and the dialog says so.
+   */
+  const {
+    isLoading: isDeleteLoading,
+    deleteItems: deleteTemplates,
+    deletionError,
+    clearDeletionError,
+  } = useDeleteItems(
+    useCallback(
+      () =>
+        Promise.all(
+          selected.map((template) =>
+            NotificationTemplatesAPI.destroy(template.id)
+          )
+        ),
+      [selected]
+    ),
+    {
+      qsConfig: QS_CONFIG,
+      allItemsSelected: isAllSelected,
+      fetchItems: fetchNotifications,
+    }
+  );
+
+  const handleDelete = async () => {
+    await deleteTemplates();
+    clearSelected();
+  };
+
+  /*
+   * A notification template is made on its own screen and then switched on
+   * here, so Add goes to that screen, for whoever the api would let make one.
+   */
+  let addButton: React.ReactNode = null;
+  if (canCreateTemplates) {
+    addButton = addOrganization ? (
+      <ToolbarAddButton
+        key="add"
+        tooltip={t`Add Notification Template`}
+        onClick={() =>
+          navigate('/notifications/add', {
+            state: { organization: addOrganization },
+          })
+        }
+      />
+    ) : (
+      <ToolbarAddButton
+        key="add"
+        tooltip={t`Add Notification Template`}
+        linkTo="/notifications/add"
+      />
+    );
+  }
+
   return (
     <>
       <PaginatedTable
         contentError={contentError}
-        hasContentLoading={isLoading}
+        hasContentLoading={isLoading || isDeleteLoading}
         items={notifications}
         itemCount={itemCount}
-        pluralizedItemName={t`Notifications`}
+        pluralizedItemName={t`Notification Templates`}
+        emptyContentMessage={
+          // The way to one is on this tab now, for whoever may make one; to
+          // anybody else the tab can only say what would appear on it.
+          canCreateTemplates
+            ? t`Add a notification template to enable it here`
+            : t`Notification templates you can use appear here`
+        }
         qsConfig={QS_CONFIG}
+        clearSelected={clearSelected}
+        renderToolbar={(props) => (
+          <DataListToolbar
+            {...props}
+            isAllSelected={isAllSelected}
+            onSelectAll={selectAll}
+            qsConfig={QS_CONFIG}
+            additionalControls={[
+              ...(addButton ? [addButton] : []),
+              <ToolbarDeleteButton
+                key="delete"
+                onDelete={handleDelete}
+                itemsToDelete={selected}
+                pluralizedItemName={t`Notification Templates`}
+                warningMessage={t`This deletes the notification templates themselves, for every resource that uses them, not only this one. To stop one notifying here alone, turn its switches off instead.`}
+              />,
+            ]}
+          />
+        )}
         toolbarSearchColumns={[
           {
             name: t`Name`,
@@ -231,21 +328,12 @@ function NotificationList({
             key: 'description__icontains',
           },
           {
-            name: t`Notification type`,
+            name: t`Notification Type`,
             key: 'or__notification_type',
-            options: [
-              ['email', t`Email`],
-              ['grafana', t`Grafana`],
-              ['hipchat', t`Hipchat`],
-              ['irc', t`IRC`],
-              ['matrix', t`Matrix`],
-              ['mattermost', t`Mattermost`],
-              ['pagerduty', t`Pagerduty`],
-              ['rocketchat', t`Rocket.Chat`],
-              ['slack', t`Slack`],
-              ['twilio', t`Twilio`],
-              ['webhook', t`Webhook`],
-            ],
+            // The api's types, read from the one list the rows and the form
+            // name them by, so a filter and a row never call a type two
+            // different things.
+            options: getNotificationTypeOptions(i18n),
           },
           {
             name: t`Created By (Username)`,
@@ -259,7 +347,7 @@ function NotificationList({
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         headerRow={
-          <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
+          <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
             <HeaderCell sortKey="notification_type">{t`Type`}</HeaderCell>
             <HeaderCell>{t`Options`}</HeaderCell>
@@ -269,7 +357,7 @@ function NotificationList({
           <NotificationListItem
             key={notification.id}
             notification={notification}
-            detailUrl={`/notification_templates/${notification.id}/details`}
+            detailUrl={`/notifications/${notification.id}/details`}
             canToggleNotifications={
               canToggleNotifications &&
               !loadingToggleIds.includes(notification.id)
@@ -280,9 +368,10 @@ function NotificationList({
             errorTurnedOn={errorTemplateIds.includes(notification.id)}
             startedTurnedOn={startedTemplateIds.includes(notification.id)}
             successTurnedOn={successTemplateIds.includes(notification.id)}
-            typeLabels={typeLabels}
             showApprovalsToggle={showApprovalsToggle}
             showChangedToggle={showChangedToggle}
+            isSelected={selected.some((row) => row.id === notification.id)}
+            onSelect={() => handleSelect(notification)}
             rowIndex={index}
           />
         )}
@@ -298,6 +387,15 @@ function NotificationList({
           <ErrorDetail error={toggleError} />
         </AlertModal>
       )}
+      <AlertModal
+        isOpen={Boolean(deletionError)}
+        variant="error"
+        title={t`Error!`}
+        onClose={clearDeletionError}
+      >
+        {t`Failed to delete one or more notification templates.`}
+        <ErrorDetail error={deletionError} />
+      </AlertModal>
     </>
   );
 }

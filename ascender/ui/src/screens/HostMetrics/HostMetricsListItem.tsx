@@ -10,6 +10,11 @@ export interface HostMetricsListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   rowIndex: number;
+  /**
+   * Whether the row carries a checkbox. Selecting a row is only ever for the
+   * soft delete, so a viewer the api refuses it to has nothing to select.
+   */
+  isSelectable?: boolean;
   [key: string]: unknown;
 }
 
@@ -18,6 +23,7 @@ function HostMetricsListItem({
   isSelected,
   onSelect,
   rowIndex,
+  isSelectable = true,
 }: HostMetricsListItemProps) {
   const { t } = useLingui();
   return (
@@ -25,12 +31,17 @@ function HostMetricsListItem({
       id={`host_metrics-row-${item.hostname}`}
       ouiaId={`host-metrics-row-${item.hostname}`}
     >
-      <Td select={{ rowIndex, isSelected, onSelect }} dataLabel={t`Selected`} />
+      {isSelectable && (
+        <Td
+          select={{ rowIndex, isSelected, onSelect }}
+          dataLabel={t`Selected`}
+        />
+      )}
       <Td dataLabel={t`Hostname`}>{item.hostname}</Td>
-      <Td dataLabel={t`First automation`}>
+      <Td dataLabel={t`First Automated`} modifier="nowrap">
         {formatDateString(item.first_automation)}
       </Td>
-      <Td dataLabel={t`Last automation`}>
+      <Td dataLabel={t`Last Automated`} modifier="nowrap">
         {formatDateString(item.last_automation)}
       </Td>
       <Td dataLabel={t`Automation`}>{item.automated_counter}</Td>

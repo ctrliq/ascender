@@ -29,7 +29,7 @@ function NotificationTemplate({ setBreadcrumb }: NotificationTemplateProps) {
   const { t } = useLingui();
   const { id: templateId } = useParams() as { id: string };
   const location = useLocation();
-  const baseUrl = `/notification_templates/${templateId}`;
+  const baseUrl = `/notifications/${templateId}`;
   const {
     result: { template, defaultMessages },
     isLoading,
@@ -44,14 +44,25 @@ function NotificationTemplate({ setBreadcrumb }: NotificationTemplateProps) {
       setBreadcrumb(detail.data);
       return {
         template: detail.data,
-        // The default message bodies the api ships, which the OPTIONS block
-        // carries as the messages field's own default.
+        // The default message bodies the api ships, one set per notification
+        // type, which the OPTIONS block carries as keys of the messages field
+        // named after each type. Its own default is one set of empty messages
+        // for every type, so reading that one left every default blank and
+        // an untouched message was saved as an empty string. The Add screen
+        // reads the same map.
         defaultMessages:
-          (options.data.actions?.POST?.messages?.default as DefaultMessages) ??
-          {},
+          (options.data.actions?.POST
+            ?.messages as unknown as DefaultMessages) ?? {},
       };
     }, [templateId, setBreadcrumb]),
-    { template: null, defaultMessages: {} as DefaultMessages }
+    // Loading from the first render: the read starts in an effect, after the
+    // routes below have drawn once, and until then an idle hook with no
+    // template sent every address to Not Found for a moment.
+    {
+      template: null,
+      defaultMessages: {} as DefaultMessages,
+      isLoading: true,
+    }
   );
 
   useEffect(() => {
@@ -71,9 +82,7 @@ function NotificationTemplate({ setBreadcrumb }: NotificationTemplateProps) {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Notification Template not found.`}{' '}
-                <Link to="/notification_templates">
-                  {t`View all Notification Templates.`}
-                </Link>
+                <Link to="/notifications">{t`View all Notifications.`}</Link>
               </span>
             )}
           </ContentError>
@@ -91,46 +100,70 @@ function NotificationTemplate({ setBreadcrumb }: NotificationTemplateProps) {
           {t`Back to Notifications`}
         </>
       ),
-      link: `/notification_templates`,
+      link: `/notifications`,
       id: 99,
       persistentFilterKey: 'notificationTemplates',
     },
     {
       name: t`Details`,
-      link: `/notification_templates/${templateId}/details`,
+      link: `/notifications/${templateId}/details`,
       id: 0,
     },
   ];
+  /*
+   * One loading animation, in the place the content will be. Drawn per route
+   * inside the card, the page arrived in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the template rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  /* The bare address is let through to its redirect, which has nothing to
+     wait for: the read is skipped there and starts once it lands. */
+  if (isLoading && !template && location.pathname !== baseUrl) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabs} />}
         <Routes>
           <Route index element={<Navigate to="details" replace />} />
-          <Route
-            path="edit"
-            element={
-              template ? (
+          {template && (
+            <Route
+              path="edit"
+              element={
                 <NotificationTemplateEdit
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              ) : (
-                <ContentLoading />
-              )
-            }
-          />
-          <Route
-            path="details"
-            element={
-              template ? (
+              }
+            />
+          )}
+          {template && (
+            <Route
+              path="details"
+              element={
                 <NotificationTemplateDetail
                   template={template}
                   defaultMessages={defaultMessages}
                 />
-              ) : (
-                <ContentLoading />
-              )
+              }
+            />
+          )}
+          {/* A tab this template has no such thing as, rather than an empty
+              card under the tab strip. */}
+          <Route
+            path="*"
+            element={
+              <ContentError isNotFound>
+                <Link to={`/notifications/${templateId}/details`}>
+                  {t`View Notification Template Details`}
+                </Link>
+              </ContentError>
             }
           />
         </Routes>

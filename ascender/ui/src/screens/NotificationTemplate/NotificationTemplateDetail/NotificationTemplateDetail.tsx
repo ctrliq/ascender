@@ -19,7 +19,7 @@ import { NotificationTemplatesAPI, NotificationsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import StatusLabel from 'components/StatusLabel';
 import hasCustomMessages from '../shared/hasCustomMessages';
-import { NOTIFICATION_TYPES } from '../constants';
+import { getNotificationTypeLabel } from '../constants';
 import type {
   DefaultMessages,
   NotificationMessages,
@@ -37,7 +37,7 @@ function NotificationTemplateDetail({
   template,
   defaultMessages,
 }: NotificationTemplateDetailProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const helpText = {
     emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
     emailTimeout: t`The amount of time (in seconds) before the email
@@ -123,7 +123,7 @@ function NotificationTemplateDetail({
   } = useRequest(
     useCallback(async () => {
       await NotificationTemplatesAPI.destroy(template.id);
-      navigate(`/notification_templates`);
+      navigate(`/notifications`);
     }, [template.id, navigate])
   );
 
@@ -187,11 +187,7 @@ function NotificationTemplateDetail({
         )}
         <Detail
           label={t`Notification Type`}
-          value={
-            NOTIFICATION_TYPES[
-              template.notification_type as keyof typeof NOTIFICATION_TYPES
-            ] || template.notification_type
-          }
+          value={getNotificationTypeLabel(template.notification_type, i18n)}
           dataCy="nt-detail-type"
         />
         {template.notification_type === 'email' && (
@@ -292,7 +288,7 @@ function NotificationTemplateDetail({
               dataCy="nt-detail-channels"
             />
             <Detail
-              label={t`SSL Connection`}
+              label={t`Use SSL`}
               value={configuration.use_ssl ? t`True` : t`False`}
               dataCy="nt-detail-irc-ssl"
             />
@@ -497,7 +493,7 @@ function NotificationTemplateDetail({
             <Button
               ouiaId="notification-template-detail-edit-button"
               component={Link}
-              to={`/notification_templates/${template.id}/edit`}
+              to={`/notifications/${template.id}/edit`}
               aria-label={t`Edit`}
             >
               {t`Edit`}
@@ -509,14 +505,15 @@ function NotificationTemplateDetail({
               // while a test was pending, so a second one could be started.
               isDisabled={['running', 'pending'].includes(testStatus ?? '')}
             >
-              {t`Test`}
+              {/* Named as the row's action is, so the two read as one. */}
+              {t`Test Notification`}
             </Button>
           </>
         )}
         {summary_fields.user_capabilities?.delete && (
           <DeleteButton
             name={template.name}
-            modalTitle={t`Delete Notification`}
+            modalTitle={t`Delete Notification Template`}
             onConfirm={deleteTemplate}
             isDisabled={isLoading}
           >
@@ -532,8 +529,8 @@ function NotificationTemplateDetail({
           onClose={dismissError}
         >
           {deleteError
-            ? t`Failed to delete notification.`
-            : t`Notification test failed.`}
+            ? t`Failed to delete notification template.`
+            : t`Failed to send test notification.`}
           <ErrorDetail error={error} />
         </AlertModal>
       )}
@@ -559,7 +556,7 @@ function CustomMessageDetails({
     <>
       {showMessages && (
         <CodeDetail
-          label={t`Start message`}
+          label={t`Start Message`}
           value={messages?.started?.message || defaults.started?.message}
           mode="jinja2"
           rows={2}
@@ -568,7 +565,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Start message body`}
+          label={t`Start Message Body`}
           value={messages?.started?.body || defaults.started?.body}
           mode="jinja2"
           rows={6}
@@ -577,7 +574,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Success message`}
+          label={t`Success Message`}
           value={messages?.success?.message || defaults.success?.message}
           mode="jinja2"
           rows={2}
@@ -586,7 +583,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Success message body`}
+          label={t`Success Message Body`}
           value={messages?.success?.body || defaults.success?.body}
           mode="jinja2"
           rows={6}
@@ -595,7 +592,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Error message`}
+          label={t`Error Message`}
           value={messages?.error?.message || defaults.error?.message}
           mode="jinja2"
           rows={2}
@@ -604,8 +601,28 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Error message body`}
+          label={t`Error Message Body`}
           value={messages?.error?.body || defaults.error?.body}
+          mode="jinja2"
+          rows={6}
+          fullWidth
+        />
+      )}
+      {/* The form sets the changed pair between error and the workflow
+          ones, so the details show it in the same place. */}
+      {showMessages && (
+        <CodeDetail
+          label={t`Changed Message`}
+          value={messages?.changed?.message || defaults.changed?.message}
+          mode="jinja2"
+          rows={2}
+          fullWidth
+        />
+      )}
+      {showBodies && (
+        <CodeDetail
+          label={t`Changed Message Body`}
+          value={messages?.changed?.body || defaults.changed?.body}
           mode="jinja2"
           rows={6}
           fullWidth
@@ -613,7 +630,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Workflow approved message`}
+          label={t`Workflow Approved Message`}
           value={
             messages?.workflow_approval?.approved?.message ||
             defaults.workflow_approval?.approved?.message
@@ -625,7 +642,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Workflow approved message body`}
+          label={t`Workflow Approved Message Body`}
           value={
             messages?.workflow_approval?.approved?.body ||
             defaults.workflow_approval?.approved?.body
@@ -637,7 +654,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Workflow denied message`}
+          label={t`Workflow Denied Message`}
           value={
             messages?.workflow_approval?.denied?.message ||
             defaults.workflow_approval?.denied?.message
@@ -649,7 +666,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Workflow denied message body`}
+          label={t`Workflow Denied Message Body`}
           value={
             messages?.workflow_approval?.denied?.body ||
             defaults.workflow_approval?.denied?.body
@@ -661,7 +678,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Workflow pending message`}
+          label={t`Workflow Pending Message`}
           value={
             messages?.workflow_approval?.running?.message ||
             defaults.workflow_approval?.running?.message
@@ -673,7 +690,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Workflow pending message body`}
+          label={t`Workflow Pending Message Body`}
           value={
             messages?.workflow_approval?.running?.body ||
             defaults.workflow_approval?.running?.body
@@ -685,7 +702,7 @@ function CustomMessageDetails({
       )}
       {showMessages && (
         <CodeDetail
-          label={t`Workflow timed out message`}
+          label={t`Workflow Timed Out Message`}
           value={
             messages?.workflow_approval?.timed_out?.message ||
             defaults.workflow_approval?.timed_out?.message
@@ -697,7 +714,7 @@ function CustomMessageDetails({
       )}
       {showBodies && (
         <CodeDetail
-          label={t`Workflow timed out message body`}
+          label={t`Workflow Timed Out Message Body`}
           value={
             messages?.workflow_approval?.timed_out?.body ||
             defaults.workflow_approval?.timed_out?.body

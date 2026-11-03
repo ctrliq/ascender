@@ -2936,12 +2936,84 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /**
+     * @description Labels used to have no way to be deleted. They were owned by whatever
+     *     carried them: the sublist view above deletes one when its last attachment
+     *     goes, so a label that nothing references stopped existing on its own and
+     *     the only labels reachable were the ones in use.
+     *
+     *     A label can now be created on its own, from the Labels screen, and one made
+     *     that way is attached to nothing, so that cleanup never fires and it would
+     *     have been permanent. Deleting is how it goes away.
+     *
+     *     Only a label attached to nothing can be deleted. A label is shared across
+     *     everything that carries it, templates, inventories, schedules and workflow
+     *     nodes of any organization as well as finished jobs, and deleting it would
+     *     strip it from all of them at once. Detaching never touches job history,
+     *     since Label.is_detached keeps a label that any job still carries, so a
+     *     DELETE on a label in use is refused with 409 and the label has to be
+     *     detached from its holders first.
+     */
     get: operations['labels_retrieve'];
+    /**
+     * @description Labels used to have no way to be deleted. They were owned by whatever
+     *     carried them: the sublist view above deletes one when its last attachment
+     *     goes, so a label that nothing references stopped existing on its own and
+     *     the only labels reachable were the ones in use.
+     *
+     *     A label can now be created on its own, from the Labels screen, and one made
+     *     that way is attached to nothing, so that cleanup never fires and it would
+     *     have been permanent. Deleting is how it goes away.
+     *
+     *     Only a label attached to nothing can be deleted. A label is shared across
+     *     everything that carries it, templates, inventories, schedules and workflow
+     *     nodes of any organization as well as finished jobs, and deleting it would
+     *     strip it from all of them at once. Detaching never touches job history,
+     *     since Label.is_detached keeps a label that any job still carries, so a
+     *     DELETE on a label in use is refused with 409 and the label has to be
+     *     detached from its holders first.
+     */
     put: operations['labels_update'];
     post?: never;
-    delete?: never;
+    /**
+     * @description Labels used to have no way to be deleted. They were owned by whatever
+     *     carried them: the sublist view above deletes one when its last attachment
+     *     goes, so a label that nothing references stopped existing on its own and
+     *     the only labels reachable were the ones in use.
+     *
+     *     A label can now be created on its own, from the Labels screen, and one made
+     *     that way is attached to nothing, so that cleanup never fires and it would
+     *     have been permanent. Deleting is how it goes away.
+     *
+     *     Only a label attached to nothing can be deleted. A label is shared across
+     *     everything that carries it, templates, inventories, schedules and workflow
+     *     nodes of any organization as well as finished jobs, and deleting it would
+     *     strip it from all of them at once. Detaching never touches job history,
+     *     since Label.is_detached keeps a label that any job still carries, so a
+     *     DELETE on a label in use is refused with 409 and the label has to be
+     *     detached from its holders first.
+     */
+    delete: operations['labels_destroy'];
     options?: never;
     head?: never;
+    /**
+     * @description Labels used to have no way to be deleted. They were owned by whatever
+     *     carried them: the sublist view above deletes one when its last attachment
+     *     goes, so a label that nothing references stopped existing on its own and
+     *     the only labels reachable were the ones in use.
+     *
+     *     A label can now be created on its own, from the Labels screen, and one made
+     *     that way is attached to nothing, so that cleanup never fires and it would
+     *     have been permanent. Deleting is how it goes away.
+     *
+     *     Only a label attached to nothing can be deleted. A label is shared across
+     *     everything that carries it, templates, inventories, schedules and workflow
+     *     nodes of any organization as well as finished jobs, and deleting it would
+     *     strip it from all of them at once. Detaching never touches job history,
+     *     since Label.is_detached keeps a label that any job still carries, so a
+     *     DELETE on a label in use is refused with 409 and the label has to be
+     *     detached from its holders first.
+     */
     patch: operations['labels_partial_update'];
     trace?: never;
   };
@@ -7178,6 +7250,30 @@ export interface components {
        */
       injectors: unknown;
     };
+    /**
+     * @description * `` - Follow the browser
+     *     * `en` - English
+     *     * `ar` - Arabic
+     *     * `zh` - Chinese
+     *     * `nl` - Dutch
+     *     * `fr` - French
+     *     * `hi` - Hindi
+     *     * `ja` - Japanese
+     *     * `ko` - Korean
+     *     * `es` - Spanish
+     * @enum {string}
+     */
+    DEFAULTUILANGUAGEEnum:
+      'en' | 'ar' | 'zh' | 'nl' | 'fr' | 'hi' | 'ja' | 'ko' | 'es';
+    /**
+     * @description * `default` - Default
+     *     * `light` - Light
+     *     * `dark` - Dark
+     *     * `classic` - Classic
+     *     * `custom` - Custom
+     * @enum {string}
+     */
+    DEFAULTUITHEMEEnum: 'default' | 'light' | 'dark' | 'classic' | 'custom';
     /**
      * @description * `runner_on_failed` - Host Failed
      *     * `runner_on_start` - Host Started
@@ -11794,7 +11890,7 @@ export interface components {
       };
       /**
        * Allow External Users to Create OAuth2 Tokens
-       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
+       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
        * @default false
        */
       ALLOW_OAUTH2_FOR_EXTERNAL_USERS: boolean;
@@ -11833,6 +11929,7 @@ export interface components {
        */
       CUSTOM_HEADER_LOGO: string;
       /**
+       * Custom Theme CSS
        * @description The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme="custom"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme="custom"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.
        * @default
        */
@@ -11842,6 +11939,43 @@ export interface components {
        * @default
        */
       CUSTOM_THEME_NAME: string;
+      /**
+       * Default Theme
+       * @description The theme a user sees before they choose one of their own. There is no blank: a user can always pick a different theme, so an unset value would only mean Default by another name.
+       *
+       *     * `default` - Default
+       *     * `light` - Light
+       *     * `dark` - Dark
+       *     * `classic` - Classic
+       *     * `custom` - Custom
+       * @default default
+       */
+      DEFAULT_UI_THEME: components['schemas']['DEFAULTUITHEMEEnum'];
+      /**
+       * Default Language
+       * @description The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.
+       *
+       *     * `` - Follow the browser
+       *     * `en` - English
+       *     * `ar` - Arabic
+       *     * `zh` - Chinese
+       *     * `nl` - Dutch
+       *     * `fr` - French
+       *     * `hi` - Hindi
+       *     * `ja` - Japanese
+       *     * `ko` - Korean
+       *     * `es` - Spanish
+       * @default
+       */
+      DEFAULT_UI_LANGUAGE:
+        | components['schemas']['DEFAULTUILANGUAGEEnum']
+        | components['schemas']['BlankEnum'];
+      /**
+       * Max Editor Rows
+       * @description How far a read-only variables editor grows to fit its value before the rest scrolls. The editor renders a line of DOM per line of content, so this is what keeps a job with thousands of facts from costing seconds to paint. A reader can still set the height of a single editor past this; the setting governs the height it takes on its own.
+       * @default 50
+       */
+      MAX_UI_EDITOR_ROWS: number;
       /**
        * Max Job Events Retrieved by UI
        * @description Maximum number of job events for the UI to retrieve within a single request.
@@ -12644,60 +12778,6 @@ export interface components {
           [key: string]: string;
         };
       };
-      /**
-       * @description Hostname/IP of RADIUS server. RADIUS authentication is disabled if this setting is empty.
-       * @default
-       */
-      RADIUS_SERVER: string;
-      /**
-       * @description Port of RADIUS server.
-       * @default 1812
-       */
-      RADIUS_PORT: number;
-      /**
-       * @description Shared secret for authenticating to RADIUS server.
-       * @default
-       */
-      RADIUS_SECRET: string;
-      /**
-       * TACACS+ Server
-       * @description Hostname of TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_HOST: string;
-      /**
-       * TACACS+ Port
-       * @description Port number of TACACS+ server.
-       * @default 49
-       */
-      TACACSPLUS_PORT: number;
-      /**
-       * TACACS+ Secret
-       * @description Shared secret for authenticating to TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_SECRET: string;
-      /**
-       * TACACS+ Auth Session Timeout
-       * @description TACACS+ session timeout value in seconds, 0 disables timeout.
-       * @default 5
-       */
-      TACACSPLUS_SESSION_TIMEOUT: number;
-      /**
-       * TACACS+ Authentication Protocol
-       * @description Choose the authentication protocol used by TACACS+ client.
-       *
-       *     * `ascii` - ascii
-       *     * `pap` - pap
-       * @default ascii
-       */
-      TACACSPLUS_AUTH_PROTOCOL: components['schemas']['TACACSPLUSAUTHPROTOCOLEnum'];
-      /**
-       * TACACS+ client address sending enabled
-       * @description Enable the client address sending by TACACS+ client.
-       * @default false
-       */
-      TACACSPLUS_REM_ADDR: boolean;
       /**
        * Google OAuth2 Key
        * @description The OAuth2 key from your web application.
@@ -15047,7 +15127,7 @@ export interface components {
       };
       /**
        * Allow External Users to Create OAuth2 Tokens
-       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
+       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
        * @default false
        */
       ALLOW_OAUTH2_FOR_EXTERNAL_USERS: boolean;
@@ -15086,6 +15166,7 @@ export interface components {
        */
       CUSTOM_HEADER_LOGO: string;
       /**
+       * Custom Theme CSS
        * @description The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme="custom"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme="custom"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.
        * @default
        */
@@ -15095,6 +15176,43 @@ export interface components {
        * @default
        */
       CUSTOM_THEME_NAME: string;
+      /**
+       * Default Theme
+       * @description The theme a user sees before they choose one of their own. There is no blank: a user can always pick a different theme, so an unset value would only mean Default by another name.
+       *
+       *     * `default` - Default
+       *     * `light` - Light
+       *     * `dark` - Dark
+       *     * `classic` - Classic
+       *     * `custom` - Custom
+       * @default default
+       */
+      DEFAULT_UI_THEME: components['schemas']['DEFAULTUITHEMEEnum'];
+      /**
+       * Default Language
+       * @description The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.
+       *
+       *     * `` - Follow the browser
+       *     * `en` - English
+       *     * `ar` - Arabic
+       *     * `zh` - Chinese
+       *     * `nl` - Dutch
+       *     * `fr` - French
+       *     * `hi` - Hindi
+       *     * `ja` - Japanese
+       *     * `ko` - Korean
+       *     * `es` - Spanish
+       * @default
+       */
+      DEFAULT_UI_LANGUAGE:
+        | components['schemas']['DEFAULTUILANGUAGEEnum']
+        | components['schemas']['BlankEnum'];
+      /**
+       * Max Editor Rows
+       * @description How far a read-only variables editor grows to fit its value before the rest scrolls. The editor renders a line of DOM per line of content, so this is what keeps a job with thousands of facts from costing seconds to paint. A reader can still set the height of a single editor past this; the setting governs the height it takes on its own.
+       * @default 50
+       */
+      MAX_UI_EDITOR_ROWS: number;
       /**
        * Max Job Events Retrieved by UI
        * @description Maximum number of job events for the UI to retrieve within a single request.
@@ -15899,60 +16017,6 @@ export interface components {
           [key: string]: string;
         };
       };
-      /**
-       * @description Hostname/IP of RADIUS server. RADIUS authentication is disabled if this setting is empty.
-       * @default
-       */
-      RADIUS_SERVER: string;
-      /**
-       * @description Port of RADIUS server.
-       * @default 1812
-       */
-      RADIUS_PORT: number;
-      /**
-       * @description Shared secret for authenticating to RADIUS server.
-       * @default
-       */
-      RADIUS_SECRET: string;
-      /**
-       * TACACS+ Server
-       * @description Hostname of TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_HOST: string;
-      /**
-       * TACACS+ Port
-       * @description Port number of TACACS+ server.
-       * @default 49
-       */
-      TACACSPLUS_PORT: number;
-      /**
-       * TACACS+ Secret
-       * @description Shared secret for authenticating to TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_SECRET: string;
-      /**
-       * TACACS+ Auth Session Timeout
-       * @description TACACS+ session timeout value in seconds, 0 disables timeout.
-       * @default 5
-       */
-      TACACSPLUS_SESSION_TIMEOUT: number;
-      /**
-       * TACACS+ Authentication Protocol
-       * @description Choose the authentication protocol used by TACACS+ client.
-       *
-       *     * `ascii` - ascii
-       *     * `pap` - pap
-       * @default ascii
-       */
-      TACACSPLUS_AUTH_PROTOCOL: components['schemas']['TACACSPLUSAUTHPROTOCOLEnum'];
-      /**
-       * TACACS+ client address sending enabled
-       * @description Enable the client address sending by TACACS+ client.
-       * @default false
-       */
-      TACACSPLUS_REM_ADDR: boolean;
       /**
        * Google OAuth2 Callback URL
        * @description Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.
@@ -17279,7 +17343,7 @@ export interface components {
       };
       /**
        * Allow External Users to Create OAuth2 Tokens
-       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
+       * @description For security reasons, users from external auth providers (LDAP, SAML, SSO, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.
        * @default false
        */
       ALLOW_OAUTH2_FOR_EXTERNAL_USERS: boolean;
@@ -17318,6 +17382,7 @@ export interface components {
        */
       CUSTOM_HEADER_LOGO: string;
       /**
+       * Custom Theme CSS
        * @description The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme="custom"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme="custom"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.
        * @default
        */
@@ -17327,6 +17392,43 @@ export interface components {
        * @default
        */
       CUSTOM_THEME_NAME: string;
+      /**
+       * Default Theme
+       * @description The theme a user sees before they choose one of their own. There is no blank: a user can always pick a different theme, so an unset value would only mean Default by another name.
+       *
+       *     * `default` - Default
+       *     * `light` - Light
+       *     * `dark` - Dark
+       *     * `classic` - Classic
+       *     * `custom` - Custom
+       * @default default
+       */
+      DEFAULT_UI_THEME: components['schemas']['DEFAULTUITHEMEEnum'];
+      /**
+       * Default Language
+       * @description The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.
+       *
+       *     * `` - Follow the browser
+       *     * `en` - English
+       *     * `ar` - Arabic
+       *     * `zh` - Chinese
+       *     * `nl` - Dutch
+       *     * `fr` - French
+       *     * `hi` - Hindi
+       *     * `ja` - Japanese
+       *     * `ko` - Korean
+       *     * `es` - Spanish
+       * @default
+       */
+      DEFAULT_UI_LANGUAGE:
+        | components['schemas']['DEFAULTUILANGUAGEEnum']
+        | components['schemas']['BlankEnum'];
+      /**
+       * Max Editor Rows
+       * @description How far a read-only variables editor grows to fit its value before the rest scrolls. The editor renders a line of DOM per line of content, so this is what keeps a job with thousands of facts from costing seconds to paint. A reader can still set the height of a single editor past this; the setting governs the height it takes on its own.
+       * @default 50
+       */
+      MAX_UI_EDITOR_ROWS: number;
       /**
        * Max Job Events Retrieved by UI
        * @description Maximum number of job events for the UI to retrieve within a single request.
@@ -18129,60 +18231,6 @@ export interface components {
           [key: string]: string;
         };
       };
-      /**
-       * @description Hostname/IP of RADIUS server. RADIUS authentication is disabled if this setting is empty.
-       * @default
-       */
-      RADIUS_SERVER: string;
-      /**
-       * @description Port of RADIUS server.
-       * @default 1812
-       */
-      RADIUS_PORT: number;
-      /**
-       * @description Shared secret for authenticating to RADIUS server.
-       * @default
-       */
-      RADIUS_SECRET: string;
-      /**
-       * TACACS+ Server
-       * @description Hostname of TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_HOST: string;
-      /**
-       * TACACS+ Port
-       * @description Port number of TACACS+ server.
-       * @default 49
-       */
-      TACACSPLUS_PORT: number;
-      /**
-       * TACACS+ Secret
-       * @description Shared secret for authenticating to TACACS+ server.
-       * @default
-       */
-      TACACSPLUS_SECRET: string;
-      /**
-       * TACACS+ Auth Session Timeout
-       * @description TACACS+ session timeout value in seconds, 0 disables timeout.
-       * @default 5
-       */
-      TACACSPLUS_SESSION_TIMEOUT: number;
-      /**
-       * TACACS+ Authentication Protocol
-       * @description Choose the authentication protocol used by TACACS+ client.
-       *
-       *     * `ascii` - ascii
-       *     * `pap` - pap
-       * @default ascii
-       */
-      TACACSPLUS_AUTH_PROTOCOL: components['schemas']['TACACSPLUSAUTHPROTOCOLEnum'];
-      /**
-       * TACACS+ client address sending enabled
-       * @description Enable the client address sending by TACACS+ client.
-       * @default false
-       */
-      TACACSPLUS_REM_ADDR: boolean;
       /**
        * Google OAuth2 Key
        * @description The OAuth2 key from your web application.
@@ -19156,12 +19204,6 @@ export interface components {
           )
         | null;
     };
-    /**
-     * @description * `ascii` - ascii
-     *     * `pap` - pap
-     * @enum {string}
-     */
-    TACACSPLUSAUTHPROTOCOLEnum: 'ascii' | 'pap';
     Team: {
       readonly id: number;
       readonly type: string;
@@ -19537,6 +19579,7 @@ export interface components {
       /** @description The Receptor work unit ID associated with this job. */
       readonly work_unit_id: string | null;
       readonly can_approve_or_deny: string;
+      readonly can_cancel_workflow: string;
       readonly approval_expiration: string;
       /** @description Shows when an approval node (with a timeout assigned to it) has timed out. */
       readonly timed_out: boolean;
@@ -19610,6 +19653,7 @@ export interface components {
       /** @description The Receptor work unit ID associated with this job. */
       readonly work_unit_id: string | null;
       readonly can_approve_or_deny: string;
+      readonly can_cancel_workflow: string;
       readonly approval_expiration: string;
       /** @description Shows when an approval node (with a timeout assigned to it) has timed out. */
       readonly timed_out: boolean;
@@ -27940,6 +27984,26 @@ export interface operations {
         content: {
           'application/json': components['schemas']['Label'];
         };
+      };
+    };
+  };
+  labels_destroy: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };

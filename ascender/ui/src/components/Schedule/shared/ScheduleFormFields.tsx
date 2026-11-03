@@ -19,6 +19,7 @@ import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 import { SubFormLayout, FormColumnLayout } from '../../FormLayout';
 import FrequencyDetailSubform from './FrequencyDetailSubform';
 import DateTimePicker from './DateTimePicker';
+import { MAX_RETENTION, parseDays } from '../../JobList/LaunchDaysPrompt';
 import sortFrequencies from './sortFrequencies';
 import type { ScheduleFrequency } from './types';
 import './ScheduleFormFields.css';
@@ -101,13 +102,13 @@ export default function ScheduleFormFields({
       <DateTimePicker
         dateFieldName="startDate"
         timeFieldName="startTime"
-        label={t`Start date/time`}
+        label={t`Start Date/Time`}
       />
       <FormGroup
         name="timezone"
         fieldId="schedule-timezone"
         isRequired
-        label={t`Local time zone`}
+        label={t`Local Time Zone`}
         labelHelp={<Popover content={helpText.localTimeZone(config)} />}
       >
         <AnsibleSelect
@@ -131,14 +132,14 @@ export default function ScheduleFormFields({
       <FormGroup
         name="frequency"
         fieldId="schedule-frequency"
-        label={t`Repeat frequency`}
+        label={t`Repeat Frequency`}
       >
         <FrequencySelect
           id="schedule-frequency"
           onChange={updateFrequency(frequencyHelper.setValue)}
           value={frequency.value}
           placeholderText={
-            frequency.value.length ? t`Select frequency` : t`None (run once)`
+            frequency.value.length ? t`Select frequency` : t`None (Run Once)`
           }
           onBlur={frequencyHelper.setTouched}
         >
@@ -146,7 +147,7 @@ export default function ScheduleFormFields({
             className="ascender-schedule-form-fields__select-clear-option"
             value="none"
           >
-            {t`None (run once)`}
+            {t`None (Run Once)`}
           </SelectOption>
           <SelectOption value="minute">{t`Minute`}</SelectOption>
           <SelectOption value="hour">{t`Hour`}</SelectOption>
@@ -171,7 +172,14 @@ export default function ScheduleFormFields({
           label={t`Days of Data to Keep`}
           name="daysToKeep"
           type="number"
-          validate={required(null)}
+          // The rule the cleanup job's own prompt holds to: a whole number
+          // the api takes, and never an empty field read as 0, which would
+          // delete every record the job covers.
+          validate={(value: unknown) =>
+            parseDays(String(value ?? '')) === null
+              ? t`Enter a whole number of days from 0 to ${MAX_RETENTION}.`
+              : undefined
+          }
           isRequired
         />
       ) : null}
@@ -199,7 +207,7 @@ export default function ScheduleFormFields({
             <FormGroup
               name="exceptions"
               fieldId="exception-frequency"
-              label={t`Add exceptions`}
+              label={t`Exception Frequency`}
             >
               <FrequencySelect
                 id="exception-frequency"

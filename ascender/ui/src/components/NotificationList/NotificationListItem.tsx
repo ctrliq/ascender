@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { Switch } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
+import { getNotificationTypeLabel } from 'util/notificationTypes';
 import { ActionsTd, ActionItem } from '../PaginatedTable';
 
 /** A notification template as its list row reads it. */
@@ -24,10 +25,12 @@ export interface NotificationListItemProps {
     isCurrentlyOn: boolean,
     status: 'started' | 'success' | 'error' | 'approvals' | 'changed'
   ) => unknown;
-  /** Human readable names for each notification type, keyed by its value. */
-  typeLabels: Record<string, string>;
   showApprovalsToggle?: boolean;
   showChangedToggle?: boolean;
+  isSelected: boolean;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -41,24 +44,33 @@ function NotificationListItem({
   errorTurnedOn = false,
   changedTurnedOn = false,
   toggleNotification,
-
-  typeLabels,
   showApprovalsToggle = false,
   showChangedToggle = false,
+  isSelected,
+  onSelect,
+  rowIndex,
 }: NotificationListItemProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   return (
     <Tr
       id={`notification-row-${notification.id}`}
       ouiaId={`notification-row-${notification.id}`}
     >
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
       <Td id={`notification-${notification.id}`} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{notification.name}</b>
         </Link>
       </Td>
       <Td dataLabel={t`Type`}>
-        {typeLabels[notification.notification_type as string]}
+        {getNotificationTypeLabel(notification.notification_type, i18n)}
       </Td>
       <ActionsTd
         dataLabel={t`Options`}

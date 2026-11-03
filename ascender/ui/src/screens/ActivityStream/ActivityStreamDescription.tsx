@@ -2,6 +2,25 @@ import type { ActivityStreamEntry, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
+import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
+import settingUrl from './settingUrl';
+
+/*
+ * The objects whose screen sits at the plural of their name, and nothing
+ * else: the fallback used to build that address for any object it met, which
+ * sent a sent notification, an access token or a workflow node to a page
+ * nothing answers.
+ */
+const LISTED_AT_PLURAL = new Set([
+  'credential',
+  'credential_type',
+  'execution_environment',
+  'instance',
+  'organization',
+  'project',
+  'team',
+  'user',
+]);
 
 const buildAnchor = (
   obj: SummaryFieldRef,
@@ -32,7 +51,9 @@ const buildAnchor = (
     }
     switch (resource) {
       case 'custom_inventory_script':
-        url = `/inventory_scripts/${obj.id}/`;
+        // Inventory scripts are gone, and their screen with them: the name is
+        // all an old entry can still show.
+        url = null;
         break;
       case 'group':
         if (
@@ -54,7 +75,21 @@ const buildAnchor = (
         url = `/hosts/${obj.id}/`;
         break;
       case 'job':
-        url = `/jobs/${obj.id}/`;
+      case 'ad_hoc_command':
+      case 'project_update':
+      case 'inventory_update':
+      case 'system_job':
+        // Runs are shown under their type, which the default case below would
+        // turn into an address nothing answers, /ad_hoc_commands/<id>.
+        url = `/runs/${JOB_TYPE_URL_SEGMENTS[resource]}/${obj.id}/details`;
+        break;
+      case 'instance_group':
+        // Container groups are instance groups to the api, but have a list and
+        // a screen of their own.
+        url =
+          (obj.is_container_group ?? named('instance_group').is_container_group)
+            ? `/container_groups/${obj.id}/details`
+            : `/instance_groups/${obj.id}/details`;
         break;
       case 'inventory':
         url =
@@ -88,10 +123,15 @@ const buildAnchor = (
         }
         break;
       case 'setting':
-        url = `/settings/`;
+        // The page the setting is on: there is no settings index any more, and
+        // the address it had lands on Appearance whatever changed.
+        // Named from the summary field too: a created setting is otherwise
+        // named by its change set, which carries only its value and id.
+        url = settingUrl(named('setting'));
+        name = named('setting').name ?? undefined;
         break;
       case 'notification_template':
-        url = `/notification_templates/${obj.id}/`;
+        url = `/notifications/${obj.id}/`;
         break;
       case 'role':
         throw new Error(
@@ -110,7 +150,7 @@ const buildAnchor = (
         break;
       }
       case 'workflow_job':
-        url = `/jobs/workflow/${obj.id}/`;
+        url = `/runs/workflow/${obj.id}/`;
         break;
       case 'label':
         url = null;
@@ -126,7 +166,7 @@ const buildAnchor = (
         url = `/applications/${obj.id}/`;
         break;
       case 'workflow_approval':
-        url = `/jobs/workflow/${named('workflow_job').id}/output/`;
+        url = `/runs/workflow/${named('workflow_job').id}/output/`;
         name = `${named('workflow_job').name} | ${named('workflow_approval').name}`;
         break;
       case 'workflow_approval_template':
@@ -135,8 +175,37 @@ const buildAnchor = (
           named('workflow_approval_template').name
         }`;
         break;
+      case 'notification': {
+        // A sent notification has no screen of its own: the template that
+        // sent it does, and the stream names it by id. Without one it is
+        // named but not linked.
+        const { notification_template_id: templateId, notification_type } =
+          named('notification') as SummaryFieldRef & {
+            notification_template_id?: number | null;
+            notification_type?: string;
+          };
+        url = templateId ? `/notifications/${templateId}/details` : null;
+        name = notification_type
+          ? `${notification_type} #${obj.id}`
+          : `#${obj.id}`;
+        break;
+      }
+      case 'o_auth2_access_token': {
+        // A token is read under the user it belongs to, which the stream
+        // names by id; it has no name, so its description stands in for one.
+        const token = named('o_auth2_access_token') as SummaryFieldRef & {
+          user_id?: number | null;
+        };
+        url = token.user_id
+          ? `/users/${token.user_id}/tokens/${obj.id}/details`
+          : null;
+        name = token.description || `#${obj.id}`;
+        break;
+      }
       default:
-        url = `/${resource}s/${obj.id}/`;
+        url = LISTED_AT_PLURAL.has(resource)
+          ? `/${resource}s/${obj.id}/`
+          : null;
     }
 
     name = name || obj.name || (obj as { username?: string }).username;

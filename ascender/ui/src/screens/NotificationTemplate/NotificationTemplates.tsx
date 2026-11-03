@@ -12,8 +12,8 @@ import NotificationTemplate from './NotificationTemplate';
 function NotificationTemplates() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/notification_templates': t`Notification Templates`,
-    '/notification_templates/add': t`Create New Notification Template`,
+    '/notifications': t`Notifications`,
+    '/notifications/add': t`Create New Notification Template`,
   });
 
   const updateBreadcrumbConfig = useCallback(
@@ -23,11 +23,11 @@ function NotificationTemplates() {
       }
       const { id } = notification;
       setBreadcrumbConfig({
-        '/notification_templates': t`Notification Templates`,
-        '/notification_templates/add': t`Create New Notification Template`,
-        [`/notification_templates/${id}`]: notification.name,
-        [`/notification_templates/${id}/edit`]: t`Edit Details`,
-        [`/notification_templates/${id}/details`]: t`Details`,
+        '/notifications': t`Notifications`,
+        '/notifications/add': t`Create New Notification Template`,
+        [`/notifications/${id}`]: notification.name,
+        [`/notifications/${id}/edit`]: t`Edit ${notification.name}`,
+        [`/notifications/${id}/details`]: notification.name,
       });
     },
     [t]

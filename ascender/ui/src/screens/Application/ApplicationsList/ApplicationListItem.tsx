@@ -52,18 +52,18 @@ function ApplicationListItem({
           <b>{application.summary_fields.organization?.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={t`Last Modified`}>
+      <Td dataLabel={t`Last Modified`} modifier="nowrap">
         {formatDateString(application.modified)}
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={application.summary_fields.user_capabilities?.edit}
-          tooltip={t`Edit application`}
+          tooltip={t`Edit Application`}
         >
           <Button
             icon={<PencilAltIcon />}
             ouiaId={`${application.id}-edit-button`}
-            aria-label={t`Edit application`}
+            aria-label={t`Edit Application`}
             variant="plain"
             component={Link}
             to={`/applications/${application.id}/edit`}

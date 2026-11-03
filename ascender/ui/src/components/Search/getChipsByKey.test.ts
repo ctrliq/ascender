@@ -19,9 +19,9 @@ describe('getChipsByKey', () => {
       name: 'Job Type',
       key: 'or__type',
       options: [
-        ['project_update', 'Source Control Update'],
+        ['project_update', 'Project Sync'],
         ['inventory_update', 'Inventory Sync'],
-        ['job', 'Playbook Run'],
+        ['job', 'Job'],
         ['ad_hoc_command', 'Command'],
         ['system_job', 'Management Job'],
         ['workflow_job', 'Workflow Job'],

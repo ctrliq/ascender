@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import { Card } from '@patternfly/react-core';
 import { JobTemplatesAPI } from 'api';
 import AlertModal from 'components/AlertModal';
 import DatalistToolbar from 'components/DataListToolbar';
@@ -166,7 +165,9 @@ function RelatedTemplateList({
   } else {
     linkTo = '/templates/job_template/add';
   }
-  const addButton = <ToolbarAddButton key="add" linkTo={linkTo} />;
+  const addButton = (
+    <ToolbarAddButton tooltip={t`Add Job Template`} key="add" linkTo={linkTo} />
+  );
 
   const deleteDetailsRequests = relatedResourceDeleteRequests.template(
     selected[0]
@@ -174,93 +175,94 @@ function RelatedTemplateList({
 
   return (
     <>
-      <Card>
-        <PaginatedTable
-          contentError={contentError}
-          hasContentLoading={isDeleteLoading || isLoading}
-          items={jobTemplates}
-          itemCount={itemCount}
-          pluralizedItemName={t`Job templates`}
-          qsConfig={QS_CONFIG}
-          clearSelected={clearSelected}
-          toolbarSearchColumns={[
-            {
-              name: t`Name`,
-              key: 'name__icontains',
-              isDefault: true,
-            },
-            {
-              name: t`Created By (Username)`,
-              key: 'created_by__username__icontains',
-            },
-            {
-              name: t`Modified By (Username)`,
-              key: 'modified_by__username__icontains',
-            },
-            {
-              name: t`Playbook name`,
-              key: 'job_template__playbook__icontains',
-            },
-            {
-              name: t`Label`,
-              key: 'labels__name__icontains',
-            },
-          ]}
-          toolbarSearchableKeys={searchableKeys}
-          toolbarRelatedSearchableKeys={relatedSearchableKeys}
-          headerRow={
-            <HeaderRow qsConfig={QS_CONFIG} isExpandable>
-              <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-              <HeaderCell sortKey="type">{t`Type`}</HeaderCell>
-              <HeaderCell>{t`Recent jobs`}</HeaderCell>
-              <HeaderCell>{t`Actions`}</HeaderCell>
-            </HeaderRow>
-          }
-          renderToolbar={(props) => (
-            <DatalistToolbar
-              {...props}
-              isAllSelected={isAllSelected}
-              onSelectAll={selectAll}
-              isAllExpanded={isAllExpanded}
-              onExpandAll={expandAll}
-              qsConfig={QS_CONFIG}
-              additionalControls={[
-                ...(canAddJT ? [addButton] : []),
-                <ToolbarDeleteButton
-                  key="delete"
-                  onDelete={handleTemplateDelete}
-                  itemsToDelete={selected}
-                  pluralizedItemName={t`Job templates`}
-                  deleteDetailsRequests={deleteDetailsRequests}
-                  deleteMessage={
-                    <Plural
-                      value={selected.length}
-                      one="This template is currently being used by some workflow nodes. Are you sure you want to delete it?"
-                      other="Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
-                    />
-                  }
-                />,
-              ]}
-            />
-          )}
-          renderRow={(template, index) => (
-            <TemplateListItem
-              key={template.id}
-              value={template.name}
-              template={template}
-              detailUrl={`/templates/${template.type}/${template.id}`}
-              onSelect={() => handleSelect(template)}
-              isExpanded={expanded.some((row) => row.id === template.id)}
-              onExpand={() => handleExpand(template)}
-              onCopy={handleCopy}
-              isSelected={selected.some((row) => row.id === template.id)}
-              fetchTemplates={fetchTemplates}
-              rowIndex={index}
-            />
-          )}
-          emptyStateControls={canAddJT && addButton}
-        />
-      </Card>
+      <PaginatedTable
+        contentError={contentError}
+        hasContentLoading={isDeleteLoading || isLoading}
+        items={jobTemplates}
+        itemCount={itemCount}
+        pluralizedItemName={t`Job Templates`}
+        qsConfig={QS_CONFIG}
+        clearSelected={clearSelected}
+        toolbarSearchColumns={[
+          {
+            name: t`Name`,
+            key: 'name__icontains',
+            isDefault: true,
+          },
+          {
+            name: t`Created By (Username)`,
+            key: 'created_by__username__icontains',
+          },
+          {
+            name: t`Modified By (Username)`,
+            key: 'modified_by__username__icontains',
+          },
+          {
+            name: t`Playbook Name`,
+            key: 'playbook__icontains',
+          },
+          {
+            name: t`Label`,
+            key: 'labels__name__icontains',
+          },
+        ]}
+        toolbarSearchableKeys={searchableKeys}
+        toolbarRelatedSearchableKeys={relatedSearchableKeys}
+        headerRow={
+          // The same columns TemplateListItem renders, in its order. The
+          // list only ever holds job templates, so it leaves out the Type
+          // column the way a narrowed tab of the main list does.
+          <HeaderRow qsConfig={QS_CONFIG} isExpandable>
+            <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+            <HeaderCell>{t`Activity`}</HeaderCell>
+            <HeaderCell sortKey="last_job_run">{t`Last Ran`}</HeaderCell>
+            <HeaderCell>{t`Actions`}</HeaderCell>
+          </HeaderRow>
+        }
+        renderToolbar={(props) => (
+          <DatalistToolbar
+            {...props}
+            isAllSelected={isAllSelected}
+            onSelectAll={selectAll}
+            isAllExpanded={isAllExpanded}
+            onExpandAll={expandAll}
+            qsConfig={QS_CONFIG}
+            additionalControls={[
+              ...(canAddJT ? [addButton] : []),
+              <ToolbarDeleteButton
+                key="delete"
+                onDelete={handleTemplateDelete}
+                itemsToDelete={selected}
+                pluralizedItemName={t`Job Templates`}
+                deleteDetailsRequests={deleteDetailsRequests}
+                deleteMessage={
+                  <Plural
+                    value={selected.length}
+                    one="This template is currently being used by some workflow nodes. Are you sure you want to delete it?"
+                    other="Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
+                  />
+                }
+              />,
+            ]}
+          />
+        )}
+        renderRow={(template, index) => (
+          <TemplateListItem
+            key={template.id}
+            value={template.name}
+            template={template}
+            detailUrl={`/templates/${template.type}/${template.id}`}
+            onSelect={() => handleSelect(template)}
+            isExpanded={expanded.some((row) => row.id === template.id)}
+            onExpand={() => handleExpand(template)}
+            onCopy={handleCopy}
+            isSelected={selected.some((row) => row.id === template.id)}
+            fetchTemplates={fetchTemplates}
+            rowIndex={index}
+            hasTypeColumn={false}
+          />
+        )}
+      />
       <Toast {...toastProps} />
       <AlertModal
         isOpen={Boolean(deletionError)}

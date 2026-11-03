@@ -54,7 +54,7 @@ describe('<InventoryHost />', () => {
       'Details',
       'Facts',
       'Groups',
-      'Jobs',
+      'Runs',
     ];
     expectedTabs.forEach((name) =>
       expect(screen.getByRole('tab', { name })).toBeInTheDocument()

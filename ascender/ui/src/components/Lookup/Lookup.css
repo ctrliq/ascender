@@ -1,10 +1,34 @@
-.ascender-lookup__chip-holder {
-  --pf-v6-c-form-control--Height: auto;
-  min-height: 37px;
+/*
+ * The multiple-value lookup renders a chip holder where the single-value one
+ * renders a text input. PatternFly gives .pf-v6-c-form-control its height from
+ * the inner <input>'s padding and line height, so a holder with no chips in it
+ * collapses to nothing and the field reads as a stray rule. Rebuild that height
+ * from the same tokens, and keep min-block-size rather than height so a holder
+ * that fills up with chips still grows.
+ *
+ * A disabled holder takes PatternFly's own pf-m-disabled rather than a colour
+ * of its own, so it matches a disabled text input under every theme. The global
+ * disabled token it used to take is a light grey that stood out on dark themes.
+ *
+ * The rule doubles its class: a single class ties with .pf-v6-c-form-control
+ * on specificity and loses on order, which is why the previous height override
+ * never applied.
+ */
+.ascender-lookup__chip-holder.ascender-lookup__chip-holder {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-}
-
-.ascender-lookup__chip-holder--disabled {
-  background-color: var(--pf-t--global--text--color--disabled);
+  gap: var(--pf-t--global--spacer--xs);
+  padding-block: var(--pf-v6-c-form-control--PaddingBlockStart)
+    var(--pf-v6-c-form-control--PaddingBlockEnd);
+  padding-inline: var(--pf-v6-c-form-control--PaddingInlineStart)
+    var(--pf-v6-c-form-control--PaddingInlineEnd);
+  min-block-size: calc(
+    var(--pf-v6-c-form-control--PaddingBlockStart) +
+      var(--pf-v6-c-form-control--PaddingBlockEnd) +
+      (
+        var(--pf-v6-c-form-control--FontSize) *
+          var(--pf-v6-c-form-control--LineHeight)
+      )
+  );
 }

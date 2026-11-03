@@ -25,6 +25,9 @@ describe('<OrganizationExecEnvListItem/>', () => {
               executionEnvironment as unknown as ExecutionEnvironment
             }
             detailUrl="execution_environments/1/details"
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>

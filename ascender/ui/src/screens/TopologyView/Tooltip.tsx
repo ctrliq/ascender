@@ -33,9 +33,7 @@ import { formatDateString } from 'util/dates';
 import './Tooltip.css';
 
 const buildLinkURL = (inst: InstanceGroup) =>
-  inst.is_container_group
-    ? '/instance_groups/container_group/'
-    : '/instance_groups/';
+  inst.is_container_group ? '/container_groups/' : '/instance_groups/';
 
 function renderInstanceGroups(instanceGroups: InstanceGroup[]) {
   return instanceGroups.map((ig: InstanceGroup) => (
@@ -66,7 +64,7 @@ function usedCapacity(instance: Partial<Instance>, t: Translate) {
         value={Math.round(100 - Number(instance.percent_capacity_remaining))}
         measureLocation={ProgressMeasureLocation.top}
         size={ProgressSize.sm}
-        title={t`Used capacity`}
+        title={t`Used Capacity`}
       />
     );
   }
@@ -201,6 +199,7 @@ function Tooltip({
                     {renderNodeIcon}
                   </PFButton>{' '}
                   <PFButton
+                    className="ascender-tooltip__hostname"
                     variant="link"
                     isInline
                     onClick={redirectToDetailsPage}
@@ -211,7 +210,7 @@ function Tooltip({
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
               <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
-                <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance Status`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-state">
                   <StatusLabel
                     status={instanceDetail.node_state ?? undefined}
@@ -219,7 +218,7 @@ function Tooltip({
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
               <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
-                <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance Type`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
@@ -227,7 +226,7 @@ function Tooltip({
               {instanceDetail.related?.install_bundle && (
                 <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                   <DescriptionListTerm>
-                    {t`Download bundle`}
+                    {t`Download Bundle`}
                   </DescriptionListTerm>
                   <DescriptionListDescription>
                     <PFButton
@@ -246,7 +245,7 @@ function Tooltip({
               )}
               {instanceDetail.ip_address && (
                 <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
-                  <DescriptionListTerm>{t`IP address`}</DescriptionListTerm>
+                  <DescriptionListTerm>{t`IP Address`}</DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
                   </DescriptionListDescription>
@@ -255,7 +254,7 @@ function Tooltip({
               {instanceGroups && (
                 <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                   <DescriptionListTerm>
-                    {t`Instance groups`}
+                    {t`Instance Groups`}
                   </DescriptionListTerm>
                   <DescriptionListDescription data-cy="instance-groups">
                     {renderInstanceGroups(instanceGroups.results)}
@@ -326,17 +325,17 @@ function Tooltip({
               )}
 
               <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
-                <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
+                <DescriptionListTerm>{t`Last Modified`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
               <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
-                <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
+                <DescriptionListTerm>{t`Last Seen`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-seen">
                   {instanceDetail.last_seen
                     ? formatDateString(instanceDetail.last_seen)
-                    : `not found`}
+                    : t`not found`}
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
             </PFDescriptionList>

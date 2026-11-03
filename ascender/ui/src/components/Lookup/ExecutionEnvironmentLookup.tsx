@@ -8,7 +8,6 @@ import {
   FormHelperText,
   HelperText,
   HelperTextItem,
-  Tooltip,
 } from '@patternfly/react-core';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -21,6 +20,7 @@ import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
+import Tooltip from '../Tooltip';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,
@@ -201,11 +201,11 @@ function ExecutionEnvironmentLookup({
         fieldName={fieldName}
         validate={validate}
         qsConfig={QS_CONFIG}
-        isLoading={isLoading || isProjectLoading}
         isDisabled={isDisabled}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
+            isLoading={isLoading || isProjectLoading}
             options={executionEnvironments}
             optionCount={count}
             searchColumns={[

@@ -23,6 +23,7 @@ import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import RoutedTabs from 'components/RoutedTabs';
 import JobList from 'components/JobList';
+import InventoryRunMenu from 'components/JobList/InventoryRunMenu';
 import InventoryHostDetail from '../InventoryHostDetail';
 import InventoryHostEdit from '../InventoryHostEdit';
 import InventoryHostFacts from '../InventoryHostFacts';
@@ -98,8 +99,8 @@ function InventoryHost({ setBreadcrumb, inventory }: InventoryHostProps) {
       id: 3,
     },
     {
-      name: t`Jobs`,
-      link: `${hostBaseUrl}/jobs`,
+      name: t`Runs`,
+      link: `${hostBaseUrl}/runs`,
       id: 4,
     },
   ];
@@ -144,10 +145,27 @@ function InventoryHost({ setBreadcrumb, inventory }: InventoryHostProps) {
           />
           <Route path="facts" element={<InventoryHostFacts host={host} />} />
           {/* /* so the nested <InventoryHostGroups> route tree can match */}
-          <Route path="groups/*" element={<InventoryHostGroups />} />
           <Route
-            path="jobs"
-            element={<JobList defaultParams={{ job__hosts: host.id }} />}
+            path="groups/*"
+            element={<InventoryHostGroups host={host} />}
+          />
+          {/* The tab's address before the rail called these runs. */}
+          <Route path="jobs" element={<Navigate to="../runs" replace />} />
+          <Route
+            path="runs"
+            element={
+              <JobList
+                defaultParams={{ job__hosts: host.id }}
+                // The hosts list's Run menu, aimed at this one host.
+                runControl={
+                  <InventoryRunMenu
+                    inventoryId={host.inventory as number}
+                    items={[{ id: host.id, name: host.name }]}
+                    tooltip={t`Run on Host`}
+                  />
+                }
+              />
+            }
           />
           <Route
             path="*"

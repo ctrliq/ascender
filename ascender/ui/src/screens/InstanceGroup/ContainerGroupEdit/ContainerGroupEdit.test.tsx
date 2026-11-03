@@ -154,9 +154,7 @@ describe('<ContainerGroupEdit/>', () => {
       { context: { router: { history } } }
     );
     await user.click(await screen.findByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual(
-      '/instance_groups/container_group/123/details'
-    );
+    expect(history.location.pathname).toEqual('/container_groups/123/details');
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
@@ -178,8 +176,6 @@ describe('<ContainerGroupEdit/>', () => {
         is_container_group: true,
       })
     );
-    expect(history.location.pathname).toEqual(
-      '/instance_groups/container_group/123/details'
-    );
+    expect(history.location.pathname).toEqual('/container_groups/123/details');
   });
 });

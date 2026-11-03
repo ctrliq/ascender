@@ -34,6 +34,6 @@ describe('<ExecutionEnvironmentTemplateListItem/>', () => {
 
   test('should distinguish workflow job templates', () => {
     renderItem({ template: { ...template, type: 'workflow_job_template' } });
-    expect(screen.getByText('Workflow Job Template')).toBeInTheDocument();
+    expect(screen.getByText('Workflow Template')).toBeInTheDocument();
   });
 });

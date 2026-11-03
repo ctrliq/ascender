@@ -28,6 +28,7 @@ describe('<MiscAuthenticationDetail />', () => {
         },
         ALLOW_OAUTH2_FOR_EXTERNAL_USERS: false,
         LOGIN_REDIRECT_OVERRIDE: 'https://foohost',
+        ALLOW_METRICS_FOR_ANONYMOUS_USERS: false,
         AUTHENTICATION_BACKENDS: [
           'awx.sso.backends.TACACSPlusBackend',
           'awx.main.backends.AWXModelBackend',
@@ -64,31 +65,37 @@ describe('<MiscAuthenticationDetail />', () => {
     ).toBeInTheDocument();
   });
 
-  test('should render expected tabs', async () => {
-    await renderDetail();
-    const expectedTabs = ['Back to Settings', 'Details'];
-    expectedTabs.forEach((tab) => {
-      expect(screen.getByRole('tab', { name: tab })).toBeInTheDocument();
-    });
-  });
-
   test('should render expected details', async () => {
     await renderDetail();
+    assertDetail('Idle Time Force Log Out', '30 minutes (1,800 seconds)');
+    assertDetail(
+      'Maximum number of simultaneous logged in sessions',
+      'Unlimited'
+    );
     assertDetail('Disable the built-in authentication system', 'Off');
-    // CodeEditor (object/list types) renders empty under jsdom; assert the label.
-    expect(screen.getByText('OAuth 2 Timeout Settings')).toBeInTheDocument();
-    assertDetail('Login redirect override URL', 'https://foohost');
-    expect(screen.getByText('Authentication Backends')).toBeInTheDocument();
-    expect(
-      screen.getByText('Social Auth Organization Map')
-    ).toBeInTheDocument();
-    expect(screen.getByText('Social Auth Team Map')).toBeInTheDocument();
-    expect(screen.getByText('Social Auth User Fields')).toBeInTheDocument();
-    assertDetail('Use Email address for usernames', 'Off');
-    assertDetail('Allow External Users to Create OAuth2 Tokens', 'Off');
     assertDetail('Enable HTTP Basic Auth', 'On');
-    assertDetail('Idle Time Force Log Out', '1800 seconds');
-    assertDetail('Maximum number of simultaneous logged in sessions', '-1');
+    assertDetail('Login redirect override URL', 'https://foohost');
+    assertDetail('Allow anonymous users to poll metrics', 'Off');
+  });
+
+  /*
+   * The tokens, the mapping and the password rules arrive in the same
+   * category and belong to the three tabs beside this one.
+   */
+  test('should leave the other tabs their own settings', async () => {
+    await renderDetail();
+    [
+      'OAuth 2 Timeout Settings',
+      'Allow External Users to Create OAuth2 Tokens',
+      'Authentication Backends',
+      'Social Auth Organization Map',
+      'Social Auth Team Map',
+      'Social Auth User Fields',
+      'Use Email address for usernames',
+      'Minimum number of characters in local password',
+    ].forEach((label) =>
+      expect(screen.queryByText(label)).not.toBeInTheDocument()
+    );
   });
 
   test('should hide edit button from non-superusers', async () => {

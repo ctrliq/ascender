@@ -1,0 +1,46 @@
+/*
+ * The two count columns hold numbers, which read from the right: the digits
+ * line up under each other, and the heading sits over them rather than at the
+ * far side of the column from what it names.
+ */
+.ascender-label-lists__count {
+  text-align: right;
+}
+
+/*
+ * The sort button holds sixteen pixels of padding after its arrow, which is
+ * what stood the arrow that far inside the column while the digits below it
+ * ran to the edge. Without it the button ends where the numbers do, and the
+ * arrow sits over the last of them.
+ */
+.ascender-label-lists__count .pf-v6-c-table__button {
+  padding-inline-end: 0;
+}
+
+/*
+ * The actions read from the right here, where every other list reads them from
+ * the left: this is the last column of a row that ends in numbers, and holding
+ * the icons to the right puts them over the heading and at the edge the counts
+ * already run to. Doubled with PatternFly's own class, since a bare class ties
+ * with the alignment ActionsTd sets and would be settled by file order.
+ */
+.pf-v6-c-table__td.ascender-label-lists__actions,
+.pf-v6-c-table__th.ascender-label-lists__actions {
+  text-align: right;
+}
+
+.ascender-label-lists__actions .ascender-actions-td__grid {
+  justify-content: flex-end;
+}
+
+/*
+ * Thirty pixels on top of the sixteen every cell carries. The gap after a
+ * heading is the width of its column less the heading itself, and Name is the
+ * shortest heading in the table: without this its column would have to be that
+ * much narrower than the others to leave the same gap, and a column narrower
+ * than the rest grows more slowly, which put the gap back as the window
+ * widened. Padding is the same at every width, so the correction holds.
+ */
+.pf-v6-c-table tr > .ascender-label-lists__name {
+  padding-inline-start: 46px;
+}

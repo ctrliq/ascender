@@ -37,10 +37,10 @@ def test_personal_access_token_creation(oauth_application, post, alice):
 @pytest.mark.django_db
 @pytest.mark.parametrize('allow_oauth, status', [(True, 201), (False, 403)])
 def test_token_creation_disabled_for_external_accounts(oauth_application, post, alice, allow_oauth, status):
-    UserEnterpriseAuth(user=alice, provider='radius').save()
+    UserEnterpriseAuth(user=alice, provider='saml').save()
     url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
 
-    with override_settings(RADIUS_SERVER='example.org', ALLOW_OAUTH2_FOR_EXTERNAL_USERS=allow_oauth):
+    with override_settings(ALLOW_OAUTH2_FOR_EXTERNAL_USERS=allow_oauth):
         resp = post(
             url,
             data='grant_type=password&username=alice&password=alice&scope=read',
@@ -57,9 +57,9 @@ def test_token_creation_disabled_for_external_accounts(oauth_application, post, 
 
 @pytest.mark.django_db
 def test_existing_token_enabled_for_external_accounts(oauth_application, get, post, admin):
-    UserEnterpriseAuth(user=admin, provider='radius').save()
+    UserEnterpriseAuth(user=admin, provider='saml').save()
     url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
-    with override_settings(RADIUS_SERVER='example.org', ALLOW_OAUTH2_FOR_EXTERNAL_USERS=True):
+    with override_settings(ALLOW_OAUTH2_FOR_EXTERNAL_USERS=True):
         resp = post(
             url,
             data='grant_type=password&username=admin&password=admin&scope=read',
@@ -74,7 +74,7 @@ def test_existing_token_enabled_for_external_accounts(oauth_application, get, po
             resp = get(drf_reverse('api:user_me_list', kwargs={'version': 'v2'}), HTTP_AUTHORIZATION='Bearer ' + token, status=200)
             assert json.loads(resp.content)['results'][0]['username'] == 'admin'
 
-    with override_settings(RADIUS_SERVER='example.org', ALLOW_OAUTH2_FOR_EXTERNAL_USER=False):
+    with override_settings(ALLOW_OAUTH2_FOR_EXTERNAL_USER=False):
         with immediate_on_commit():
             resp = get(drf_reverse('api:user_me_list', kwargs={'version': 'v2'}), HTTP_AUTHORIZATION='Bearer ' + token, status=200)
             assert json.loads(resp.content)['results'][0]['username'] == 'admin'
@@ -424,8 +424,8 @@ def test_personal_token_for_missing_user(post, admin):
 @pytest.mark.django_db
 def test_personal_token_for_another_external_user(post, admin, alice):
     # the external-account check applies to the owner, not to the superuser issuing it
-    UserEnterpriseAuth(user=alice, provider='radius').save()
-    with override_settings(RADIUS_SERVER='example.org', ALLOW_OAUTH2_FOR_EXTERNAL_USERS=False):
+    UserEnterpriseAuth(user=alice, provider='saml').save()
+    with override_settings(ALLOW_OAUTH2_FOR_EXTERNAL_USERS=False):
         response = post(reverse('api:user_personal_token_list', kwargs={'pk': alice.pk}), {'scope': 'read'}, admin, expect=403)
     assert 'external authentication provider' in str(response.data['detail'])
     assert AccessToken.objects.count() == 0
