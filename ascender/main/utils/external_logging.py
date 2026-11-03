@@ -550,6 +550,18 @@ def existing_tls_files(directory=TLS_DIRECTORY):
     return [path for path in (os.path.join(directory, os.path.basename(name)) for name in names) if os.path.lexists(path)]
 
 
+def remove_stale_tls_files(paths):
+    """Remove each file that is still there. A file already gone is fine; any other failure is logged and the rest are
+    still tried, so the configurer stays up (its caller runs at startup) and the key is not kept for another file's sake."""
+    for path in paths:
+        try:
+            os.unlink(path)
+        except FileNotFoundError:
+            pass
+        except OSError as exc:
+            logger.error('Could not remove %s: %s: %s', path, type(exc).__name__, exc)
+
+
 def stopped_reason(path=RSYSLOG_CONF):
     """Why the current rsyslog.conf ships nothing, if the generator stopped external logging; None otherwise."""
     try:
@@ -584,6 +596,4 @@ def reconfigure_rsyslog():
             f.write(tmpl + '\n')
         shutil.move(path, '/var/lib/ascender/rsyslog/rsyslog.conf')
     supervisor_service_command(command='restart', service='rsyslogd')
-    for path in stale_tls_files:
-        if os.path.lexists(path):
-            os.unlink(path)
+    remove_stale_tls_files(stale_tls_files)

@@ -1,6 +1,7 @@
 """TLS for the TCP (omfwd) and RELP (omrelp) external logging actions."""
 
 import base64
+import errno
 import os
 import shutil
 import stat
@@ -338,6 +339,50 @@ def test_reconfigure_stops_shipping_when_the_tls_files_cannot_be_written(tmp_pat
     assert errors and errors[0].startswith('External logging is stopped: its TLS files could not be written to')
     assert os.listdir(directory) == []  # the earlier run's key is gone too
     assert external_logging.stopped_reason(str(tmp_path / 'rsyslog.conf')).startswith('its TLS files could not be written to')
+
+
+def test_reconfigure_survives_a_tls_directory_that_became_read_only(tmp_path, monkeypatch):
+    # e.g. a read-only file system or a directory another account owns: writing the files fails (handled), and so does
+    # removing the earlier run's key; neither may escape, because run_rsyslog_configurer calls this at startup
+    directory = tmp_path / 'tls'
+    write_tls_files(_settings('tcp', ca=CA, certificate=CERTIFICATE, key=KEY), directory=str(directory))
+    real_unlink = os.unlink
+
+    def read_only(*args, **kwargs):
+        raise OSError(errno.EROFS, 'Read-only file system')
+
+    def unlink(path, *args, **kwargs):
+        return read_only() if str(path).startswith(str(directory)) else real_unlink(path, *args, **kwargs)
+
+    errors = []
+    monkeypatch.setattr(external_logging.logger, 'error', lambda message, *args: errors.append(message % args))
+    monkeypatch.setattr(external_logging, 'write_tls_files', read_only)
+    monkeypatch.setattr(external_logging.os, 'unlink', unlink)
+    conf, restarts = _reconfigure(monkeypatch, tmp_path, _settings('tcp', ca=CA, certificate=CERTIFICATE, key=KEY))
+    monkeypatch.undo()
+    assert external_logging.STOPPED_MARKER in conf and 'omfwd' not in conf
+    assert restarts == [dict(command='restart', service='rsyslogd')]
+    assert any(message.startswith('Could not remove ') and 'client.key' in message for message in errors)
+
+
+def test_a_failed_removal_does_not_stop_the_others_and_a_vanished_file_is_fine(tmp_path, monkeypatch):
+    first, vanished, last = (tmp_path / name for name in ('ca.pem', 'client.crt', 'client.key'))
+    first.write_text('x')
+    last.write_text(KEY)
+    errors = []
+    monkeypatch.setattr(external_logging.logger, 'error', lambda message, *args: errors.append(message % args))
+    real_unlink = os.unlink
+
+    def unlink(path, *args, **kwargs):
+        if path == str(first):
+            raise PermissionError('read-only file system')
+        return real_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(external_logging.os, 'unlink', unlink)
+    external_logging.remove_stale_tls_files([str(first), str(vanished), str(last)])
+    monkeypatch.undo()
+    assert first.exists() and not last.exists()  # the key goes even though another file could not
+    assert len(errors) == 1 and str(first) in errors[0]  # nothing logged for the file that was already gone
 
 
 def test_construct_errors_are_not_swallowed(tmp_path, monkeypatch):
