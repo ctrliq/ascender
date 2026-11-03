@@ -1,13 +1,17 @@
+import pytest
 from django.db.migrations.executor import MigrationExecutor
 
 
-def test_token_checksum_column_is_added_before_oauth2_provider_fills_it():
+@pytest.mark.django_db
+def test_token_checksum_column_is_added_before_oauth2_provider_fills_it(settings):
     """
     oauth2_provider 0012 saves every existing access token with update_fields=['token_checksum'] on the swapped
     model, so main 0198, which adds that column, has to run first. Plan a plain `migrate` for a database at the
     state of a 25.4.0 install and check the order it would use. Applied in the other order, a database that has
     access tokens fails with ValueError: 'token_checksum' does not exist in this model.
     """
+    # The test database is built with --nomigrations, which hides the migration graph from the loader.
+    settings.MIGRATION_MODULES = {}
     executor = MigrationExecutor(None)
     graph = executor.loader.graph
     applied = set(graph.forwards_plan(('main', '0197_add_federated_inventory_kind')))
