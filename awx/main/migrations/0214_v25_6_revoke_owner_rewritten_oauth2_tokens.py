@@ -71,9 +71,12 @@ class Migration(migrations.Migration):
     them into the main app, copying the revoked column with them.
     """
 
+    # Depends on the refresh token's first migrations only. Naming a later oauth2_provider migration here makes
+    # `migrate` apply oauth2_provider 0012, which fills token_checksum, before main 0198 adds that column. A plain
+    # `migrate` then orders main first; `migrate oauth2_provider` alone does not. See test_migration_order.py.
     dependencies = [
         ('main', '0213_v25_6_backfill_finished_on_terminal_jobs'),
-        ('oauth2_provider', '0014_alter_help_text'),
+        ('oauth2_provider', '0005_auto_20211222_2352'),
     ]
 
     operations = [
