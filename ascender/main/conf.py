@@ -773,7 +773,7 @@ def validate_unencrypted_private_key(data):
     try:
         pems = validate_private_key(data)
     except (DjangoValidationError, serializers.ValidationError):
-        raise serializers.ValidationError(_('Must be one PEM-encoded private key.'))
+        raise serializers.ValidationError(_('Must be one PEM-encoded private key.')) from None  # the chained error quotes the key
     if any(pem.get('key_enc') for pem in pems):
         raise serializers.ValidationError(_('The private key must not be encrypted with a passphrase.'))
     return data

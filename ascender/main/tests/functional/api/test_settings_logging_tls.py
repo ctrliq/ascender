@@ -461,3 +461,54 @@ def test_an_expired_ca_is_ignored_for_tcp_without_verification(patch, admin, url
     patch(url, user=admin, data={**TLS_ON, 'LOG_AGGREGATOR_VERIFY_CERT': False, 'LOG_AGGREGATOR_TLS_CA_CERTIFICATE': pki['expired_ca'].pem}, expect=200)
     response = patch(url, user=admin, data={'LOG_AGGREGATOR_VERIFY_CERT': True}, expect=400)
     assert 'Expired CA' in str(response.data)
+
+
+DAMAGED_KEYS = {
+    'unterminated': '-----BEGIN PRIVATE KEY-----\nTOPSECRETKEYBODYabcdefghijklmnop\n',
+    'passphrase': '-----BEGIN RSA PRIVATE KEY-----\nProc-Type: 4,ENCRYPTED\nDEK-Info: AES-128-CBC,0123456789ABCDEF0123456789ABCDEF\n\nTOPSECRETKEYBODYabcdefghijklmnop\n-----END RSA PRIVATE KEY-----\n',
+}
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('damaged', DAMAGED_KEYS.values(), ids=DAMAGED_KEYS.keys())
+def test_a_stored_key_that_fails_validation_is_not_logged(caplog, damaged):
+    # a value that reached the database without API validation is validated again whenever the setting is read, and the
+    # wrapper logs the failure: neither the value nor the validator's chained exception (which quotes its start) may appear
+    from django.conf import settings
+
+    _store_bypassing_validation(LOG_AGGREGATOR_TLS_CLIENT_KEY=damaged)
+    with caplog.at_level('WARNING', logger='ascender.conf.settings'):
+        assert settings.LOG_AGGREGATOR_TLS_CLIENT_KEY == ''  # falls back to the default
+    assert 'LOG_AGGREGATOR_TLS_CLIENT_KEY' in caplog.text and 'is invalid' in caplog.text  # still reported
+    assert 'TOPSECRETKEYBODY' not in caplog.text and 'PRIVATE KEY' not in caplog.text and 'DEK-Info' not in caplog.text
+
+
+@pytest.mark.django_db
+def test_an_invalid_stored_value_of_a_setting_that_is_not_encrypted_is_still_logged_in_full(caplog):
+    # only encrypted settings are redacted; nothing changes for the rest
+    from django.conf import settings
+
+    _store_bypassing_validation(LOG_AGGREGATOR_LEVEL='NOT-A-LEVEL')
+    with caplog.at_level('WARNING', logger='ascender.conf.settings'):
+        settings.LOG_AGGREGATOR_LEVEL
+    assert 'The current value "\'NOT-A-LEVEL\'" for setting "LOG_AGGREGATOR_LEVEL" is invalid.' in caplog.text
+    assert 'Traceback' in caplog.text
+
+
+@pytest.mark.django_db
+def test_assigning_a_key_that_fails_validation_does_not_log_it(caplog):
+    from django.conf import settings
+
+    with caplog.at_level('WARNING', logger='ascender.conf.settings'), pytest.raises(Exception):
+        settings.LOG_AGGREGATOR_TLS_CLIENT_KEY = DAMAGED_KEYS['unterminated']
+    assert 'LOG_AGGREGATOR_TLS_CLIENT_KEY' in caplog.text
+    assert 'TOPSECRETKEYBODY' not in caplog.text and 'PRIVATE KEY' not in caplog.text
+
+
+@pytest.mark.django_db
+def test_a_rejected_key_error_does_not_chain_the_validators_quote():
+    from ascender.main.conf import validate_unencrypted_private_key
+
+    with pytest.raises(Exception) as caught:
+        validate_unencrypted_private_key(DAMAGED_KEYS['unterminated'])
+    assert caught.value.__cause__ is None and caught.value.__suppress_context__

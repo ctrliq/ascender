@@ -469,8 +469,12 @@ class SettingsWrapper(UserSettingsHolder):
                         return field.run_validation(value)
                     else:
                         return value
-            except Exception:
-                logger.warning('The current value "%r" for setting "%s" is invalid.', value, name, exc_info=True)
+            except Exception as e:
+                if self.registry.is_setting_encrypted(name):
+                    # no traceback either: the exception chain can quote the start of the value (validate_private_key)
+                    logger.warning('The current value of encrypted setting "%s" is invalid (%s) and is not logged.', name, type(e).__name__)
+                else:
+                    logger.warning('The current value "%r" for setting "%s" is invalid.', value, name, exc_info=True)
         return empty
 
     def _get_default(self, name):
@@ -517,7 +521,10 @@ class SettingsWrapper(UserSettingsHolder):
             setting_value = field.run_validation(data)
             db_value = None if setting_value is None and isinstance(field, PrimaryKeyRelatedField) else field.to_representation(setting_value)
         except Exception as e:
-            logger.exception('Unable to assign value "%r" to setting "%s".', value, name, exc_info=True)
+            if self.registry.is_setting_encrypted(name):
+                logger.error('Unable to assign the value of encrypted setting "%s" (%s); it is not logged.', name, type(e).__name__)
+            else:
+                logger.exception('Unable to assign value "%r" to setting "%s".', value, name, exc_info=True)
             raise e
 
         setting = Setting.objects.filter(key=name, user__isnull=True).order_by('pk').first()
