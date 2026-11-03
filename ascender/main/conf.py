@@ -739,18 +739,30 @@ register(
 )
 
 
-def validate_tls_certificates(data):
+def validate_tls_certificates(data, loadable_public_keys=False):
     """One or more PEM X.509 certificates. Errors never repeat the submitted text.
 
     Validity dates are checked with the other settings (logging_tls_errors), and only while TLS is in use, so an
     expired certificate can't block unrelated saves such as turning external logging off.
+
+    loadable_public_keys also requires every certificate's public key algorithm to be one the library can load. The
+    client certificate needs it: the TLS library loads every certificate that follows the first and rejects the
+    chain if it can't, whereas a CA bundle is only consulted for the certificates a server's chain leads to.
     """
     try:
         validate_certificate(data)
-        load_x509_certificates(data)
+        load_x509_certificates(data, loadable_public_keys=loadable_public_keys)
     except (DjangoValidationError, serializers.ValidationError, ValueError, TypeError):
         raise serializers.ValidationError(_('Must be one or more PEM-encoded X.509 certificates.'))
     return data
+
+
+def validate_tls_client_certificates(data):
+    """validate_tls_certificates, plus: no certificate's public key uses an algorithm that can't be loaded."""
+    try:
+        return validate_tls_certificates(data, loadable_public_keys=True)
+    except serializers.ValidationError:
+        raise serializers.ValidationError(_('Must be one or more PEM-encoded X.509 certificates whose public keys can be loaded.')) from None
 
 
 def validate_unencrypted_private_key(data):
@@ -800,7 +812,7 @@ register(
     field_class=fields.CharField,
     allow_blank=True,
     default='',
-    validators=[validate_tls_certificates],
+    validators=[validate_tls_client_certificates],
     label=_('TLS client certificate for the log aggregator'),
     help_text=_(
         'PEM-encoded certificate presented to the log aggregator over TCP or RELP when LOG_AGGREGATOR_TLS'

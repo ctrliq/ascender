@@ -177,12 +177,13 @@ def validate_certificate(data):
     return validate_pem(data, max_keys=0, min_certs=1)
 
 
-def load_x509_certificates(data):
+def load_x509_certificates(data, loadable_public_keys=False):
     """Every certificate in PEM text, parsed as X.509 (cryptography's own parser, not just the PEM framing).
 
     Text without BEGIN/END lines is read as one base64 certificate, the same leniency validate_certificate has,
     so a value that passes validate_certificate is also one this can turn into PEM a TLS library will load.
-    Raises ValueError if any certificate does not parse.
+    Raises ValueError if any certificate does not parse, or, with loadable_public_keys, if the public key of any of them
+    uses an algorithm the library cannot load (parsing succeeds for these).
     """
     from cryptography import x509
 
@@ -191,7 +192,16 @@ def load_x509_certificates(data):
         data = '-----BEGIN CERTIFICATE-----\n{}'.format(data)
     if 'END ' not in data:
         data = '{}\n-----END CERTIFICATE-----'.format(data)
-    return x509.load_pem_x509_certificates(data.encode())
+    certificates = x509.load_pem_x509_certificates(data.encode())
+    if loadable_public_keys:
+        from cryptography.exceptions import UnsupportedAlgorithm
+
+        for certificate in certificates:
+            try:
+                certificate.public_key()
+            except UnsupportedAlgorithm:
+                raise ValueError('The certificate has a public key algorithm that cannot be loaded.') from None
+    return certificates
 
 
 def logging_tls_errors(get, check_validity=True):
@@ -222,7 +232,7 @@ def logging_tls_errors(get, check_validity=True):
         from cryptography.hazmat.primitives import serialization
 
         try:
-            public_key = load_x509_certificates(certificate)[0].public_key()
+            public_key = load_x509_certificates(certificate, loadable_public_keys=True)[0].public_key()
             private_key = serialization.load_pem_private_key(key.encode(), password=None)
         except (TypeError, ValueError, UnsupportedAlgorithm):
             return errors + ['LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE or LOG_AGGREGATOR_TLS_CLIENT_KEY cannot be loaded.']

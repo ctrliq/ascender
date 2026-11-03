@@ -581,3 +581,11 @@ def test_the_generator_refuses_a_certificate_it_cannot_load():
     certificate = x509.load_der_x509_certificate(der).public_bytes(Encoding.PEM).decode()
     conf = construct_rsyslog_conf_template(_settings('relp', certificate=certificate, key=_client.key_pem))
     assert external_logging.STOPPED_MARKER in conf and 'omrelp' not in conf
+
+
+def test_the_generator_refuses_a_client_chain_with_a_certificate_it_cannot_load():
+    # only the first certificate was loaded before; the TLS library loads (and rejects) the whole chain
+    der = _other_client.certificate.public_bytes(Encoding.DER).replace(bytes.fromhex('06072a8648ce3d0201'), bytes.fromhex('06072a8648ce3d0263'))
+    unloadable = x509.load_der_x509_certificate(der).public_bytes(Encoding.PEM).decode()
+    conf = construct_rsyslog_conf_template(_settings('relp', certificate=CERTIFICATE + unloadable, key=KEY))
+    assert external_logging.STOPPED_MARKER in conf and 'omrelp' not in conf and 'cannot be loaded' in conf

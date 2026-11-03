@@ -404,7 +404,24 @@ def _unsupported_key_certificate(leaf):
 def test_a_certificate_with_an_unsupported_key_algorithm_is_rejected_not_a_500(patch, admin, url, pki):
     data = {'LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE': _unsupported_key_certificate(pki['client']), 'LOG_AGGREGATOR_TLS_CLIENT_KEY': pki['client'].key_pem}
     response = patch(url, user=admin, data=data, expect=400)
-    assert 'cannot be loaded' in str(response.data)
+    assert 'whose public keys can be loaded' in str(response.data['LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE'])
+
+
+@pytest.mark.django_db
+def test_an_unsupported_key_algorithm_later_in_the_client_chain_is_rejected(patch, admin, url, pki):
+    # only the first certificate's key is loaded to match the private key; the TLS library loads the rest of the chain
+    chain = pki['client'].pem + _unsupported_key_certificate(pki['other_client'])
+    response = patch(url, user=admin, data={'LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE': chain, 'LOG_AGGREGATOR_TLS_CLIENT_KEY': pki['client'].key_pem}, expect=400)
+    assert 'whose public keys can be loaded' in str(response.data['LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE'])
+    assert not Setting.objects.filter(key='LOG_AGGREGATOR_TLS_CLIENT_CERTIFICATE').exists()
+
+
+@pytest.mark.django_db
+def test_a_ca_bundle_may_hold_a_certificate_with_an_unsupported_key_algorithm(patch, admin, url, pki):
+    # OpenSSL only uses a CA entry when a server's chain leads to it, and skips the others, so a bundle with an exotic
+    # root still verifies servers signed by its other CAs; rejecting it would block valid bundles
+    bundle = _unsupported_key_certificate(pki['other_client']) + pki['ca'].pem
+    patch(url, user=admin, data={'LOG_AGGREGATOR_TLS_CA_CERTIFICATE': bundle}, expect=200)
 
 
 def _store_bypassing_validation(**values):
