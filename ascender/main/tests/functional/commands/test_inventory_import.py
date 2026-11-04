@@ -464,6 +464,16 @@ class TestEnabledVar:
     def test_enabled_var_is_enabled_value(self, cmd):
         assert cmd._get_enabled({'foo': {'bar': 'barfoo'}}) is True
 
+    def test_enabled_var_unsafe_wrapped(self, cmd):
+        # ansible-core 2.19+ --export wraps plugin-set strings
+        assert cmd._get_enabled({'foo': {'bar': {'__ansible_unsafe': 'barfoo'}}}) is True
+
+
+def test_instance_id_var_unsafe_wrapped():
+    cmd = inventory_import.Command()
+    cmd.instance_id_var = 'foo.id'
+    assert cmd._get_instance_id({'foo': {'id': {'__ansible_unsafe': 'i-0abc'}}}) == 'i-0abc'
+
 
 @pytest.mark.django_db
 @mock.patch.object(inventory_import.Command, 'set_logging_level', mock_logging)

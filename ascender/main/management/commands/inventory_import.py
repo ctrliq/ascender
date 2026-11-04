@@ -22,6 +22,7 @@ from django.utils.encoding import smart_str
 # Ascender inventory imports
 from ascender.main.models.inventory import Inventory, InventorySource, InventoryUpdate
 from ascender.main.models.jobs import JobHostSummary
+from ascender.main.utils.ansible import unsafe_literal
 from ascender.main.utils.mem_inventory import MemInventory, dict_to_mem_data
 from ascender.main.utils.safe_yaml import sanitize_jinja
 
@@ -205,6 +206,7 @@ class Command(BaseCommand):
                         break
                     instance_id = from_dict.get(key, default)
                     from_dict = instance_id
+                instance_id = unsafe_literal(instance_id)
                 if instance_id:
                     break
         return smart_str(instance_id)
@@ -227,6 +229,7 @@ class Command(BaseCommand):
                     break
                 enabled = from_dict.get(key, default)
                 from_dict = enabled
+            enabled = unsafe_literal(enabled)
             if enabled is not default:
                 enabled_value = getattr(self, 'enabled_value', None)
                 if enabled_value is not None:

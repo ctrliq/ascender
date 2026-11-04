@@ -746,6 +746,18 @@ def test_callback_find_matching_hosts(mocker, get, job_template_prompts, admin_u
 
 @pytest.mark.django_db
 @pytest.mark.job_runtime_vars
+def test_callback_matches_unsafe_wrapped_ansible_host(get, job_template_prompts, admin_user):
+    job_template = job_template_prompts(False)
+    job_template.host_config_key = "foo"
+    job_template.save()
+    Host(name='wrapped', variables={'ansible_host': {'__ansible_unsafe': '1.2.3.4'}}, inventory=job_template.inventory).save()
+    Host(name='vaulted', variables={'ansible_host': {'__ansible_vault': 'ciphertext'}}, inventory=job_template.inventory).save()
+    r = get(reverse('api:job_template_callback', kwargs={'pk': job_template.pk}), user=admin_user, expect=200, REMOTE_ADDR='1.2.3.4')
+    assert tuple(r.data['matching_hosts']) == ('wrapped',)
+
+
+@pytest.mark.django_db
+@pytest.mark.job_runtime_vars
 def test_callback_extra_var_takes_priority_over_host_name(mocker, get, job_template_prompts, admin_user):
     job_template = job_template_prompts(False)
     job_template.host_config_key = "foo"
