@@ -17,6 +17,7 @@ from collections import OrderedDict
 from ascender.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
+from django.db.models import Q
 from django.utils.encoding import smart_str
 
 # Ascender inventory imports
@@ -272,7 +273,10 @@ class Command(BaseCommand):
         if self.instance_id_var:
             host_qs = self.inventory_source.hosts.all()
             for instance_id_part in reversed(self.instance_id_var.split(',')):
-                host_qs = host_qs.filter(instance_id='', variables__contains=instance_id_part.split('.')[0])
+                # also re-read IDs stored as the repr of an ansible-core 2.19+ {"__ansible_unsafe": ...} value
+                host_qs = host_qs.filter(
+                    Q(instance_id='') | Q(instance_id__startswith="{'__ansible_unsafe': "), variables__contains=instance_id_part.split('.')[0]
+                )
                 for host in host_qs:
                     instance_id = self._get_instance_id(host.variables_dict)
                     if not instance_id:
