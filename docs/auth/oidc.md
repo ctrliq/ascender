@@ -62,11 +62,42 @@ The same works with `SOCIAL_AUTH_OIDC_USERNAME_KEY` set to `email`.
 
 This only shapes accounts as they are created. An existing account is found by
 the provider's `sub` claim, not by name, so turning it on later does not rename
-anyone and does not split anyone's account in two. Two users whose addresses
-differ only in the domain would come out with the same name; the second one to
-log in gets a random suffix added to it, as social auth does for any name that
-is already taken. Rules match on claims, not on the username, so they are not
-affected.
+anyone and does not split anyone's account in two. Rules match on claims, not on
+the username, so they are not affected.
+
+When `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS` is enabled, a first login whose
+desired username is already taken fails instead of receiving a random suffix.
+The user sees a message with the request ID of the failed sign-in. The same ID
+is on the security log entry for the refusal, with the blocking account and the
+incoming identity, and in the failed request's `X-API-Request-Id` header. An
+email match still wins over the username collision, because that login links to
+the existing account rather than creating a new one; several accounts with that
+email are refused. The check runs as steps of the default social auth pipeline, so a
+deployment with its own `SOCIAL_AUTH_PIPELINE` needs to add
+`check_external_login_collision` and `check_final_username_collision` from
+`ascender/settings/defaults.py`.
+
+Username comparisons are exact and case-sensitive, as in social auth itself.
+
+## Linking and editing accounts
+
+On a first login, social auth links the identity to the one existing account
+with the same email, local accounts included. Only use this with a provider that
+issues verified emails, and keep the email of shared, recycled or placeholder
+mailboxes off local accounts, since whoever holds that address can sign in as
+the account. A password or token that account already had keeps working after
+the link.
+
+`RESTRICT_USER_IDENTITY_TO_SUPERUSERS` (**Settings > System**) is off by
+default. When on, only superusers can set the email of a new user or change the
+email or username of any user, themselves included. Everyone else can still
+create users, but without an email, and keeps their other permissions.
+Unchanged values are accepted, so edit forms keep working, and the fields LDAP
+manages stay locked for LDAP users as before. It keeps others from creating
+an account that a provider user will later link to, and from renaming or
+re-addressing an account to match an organization or team map entry or a
+username list. Turn it on if you use username lists: otherwise anyone who can
+edit their own username can take a listed name.
 
 ## Who can log in
 
@@ -138,20 +169,68 @@ shared one no longer applies to OIDC.
 
 ## Superusers and system auditors
 
-`SOCIAL_AUTH_OIDC_USER_FLAGS` hands out the two system wide flags:
+`SOCIAL_AUTH_OIDC_USER_FLAGS` hands out the two system wide flags. Each flag
+can be driven by a trigger rule, by a list of usernames, or by both:
 
 ```json
 {
   "triggers_superuser": {"groups": {"has_or": ["ascender-superusers"]}},
+  "is_superuser": ["fernando.roca"],
   "triggers_system_auditor": {"groups": {"has_or": ["ascender-auditors"]}},
+  "is_system_auditor": ["auditor"],
   "remove_superusers": true,
   "remove_system_auditors": true
 }
 ```
 
-A flag without a rule is left alone. With a rule, a user who matches gets the
-flag and a user who does not loses it at their next login, unless the matching
-`remove_` key is false.
+When both are given for a flag, the trigger rule is evaluated first and the
+usernames can grant a user the rule says nothing about, the same precedence the
+organization and team maps use. Only a list without a rule revokes the users it
+does not name; with a rule, an explicit deny revokes regardless of the `remove_`
+key, which only keeps a rule that skips a user from revoking. `is_superuser` and
+`is_system_auditor` are lists of usernames, the Ascender usernames, and are
+matched exactly and case-sensitively; they do not take the booleans,
+emails or regular expressions the organization and team maps do. Every entry
+must be a non-blank string; surrounding whitespace is trimmed and duplicate
+names are ignored. A bare string is not a list, so write the value as a JSON
+array even for one username. Use the trigger rules for matching on the
+provider's claims. The API rejects a value that is not an array of non-blank
+strings, but a value written directly into a settings file is not validated: at
+login, non-list values and blank or non-string entries are ignored with a
+warning, and the list is evaluated from the names that remain.
+
+A flag with neither a rule nor a username list is left alone. A list with no
+rule is authoritative: a user it does not name loses the flag at their next
+login unless the matching `remove_` key is false. An empty list is ignored with
+a warning, like `null`, so a list that ends up empty by mistake cannot strip the
+flag from every user. To deliberately revoke a flag from everyone, use a trigger
+rule that denies everyone:
+
+```json
+{"triggers_superuser": {"never": {}}}
+```
+
+This revokes the flag at each user's next login whatever the `remove_` key says,
+and it overrides any username list for that flag. With a trigger rule, the list never
+revokes: a user the rule skips is still handled by the rule's own `remove_` key,
+and when the rule cannot be evaluated, listed users are still granted while
+everyone else is left alone. An empty rule (`{}`) is treated as no rule, so a
+username list alongside it decides by itself. A list that contains only blank
+or non-string entries is ignored with a warning rather than treated as an empty
+list. Each flag is handled independently, so this decides `is_superuser` and
+`is_system_auditor` separately.
+
+Usernames are the Ascender usernames, which
+`SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN` may have shortened to the part before
+the `@` when the account was created, and an existing account keeps the name it
+had. List a user by the name Ascender shows, not by the claim the provider
+sent. The lists match against the stored username, so see
+[Linking and editing accounts](#linking-and-editing-accounts) for who can change it.
+
+A username can also be claimed before the intended account exists, so treat
+these lists as a convenience rather than a proof of identity. For a grant that
+has to follow an immutable identifier, use a trigger rule on the provider's
+`sub` claim or on a group instead.
 
 Keep a local superuser that does not log in through OIDC. The social auth
 pipeline links an OIDC identity to an existing account with the same email, and

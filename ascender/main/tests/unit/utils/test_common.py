@@ -47,6 +47,13 @@ def test_parse_yaml_or_json(input_, output):
     assert common.parse_yaml_or_json(input_) == output
 
 
+def test_sanitize_log_value_escapes_control_characters():
+    assert common.sanitize_log_value('evil\nadmin\rfake=line') == '"evil\\nadmin\\rfake=line"'
+    assert common.sanitize_log_value(None) == ''
+    assert common.sanitize_log_value('x' * 300, max_length=20).endswith('...')
+    assert len(common.sanitize_log_value('x' * 300, max_length=20)) == 23
+
+
 def test_recursive_vars_not_allowed():
     rdict = {}
     rdict['a'] = rdict
