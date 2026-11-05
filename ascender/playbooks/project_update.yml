@@ -46,6 +46,15 @@
             track_submodules: "{{ scm_track_submodules | default(omit) }}"
             accept_hostkey: "{{ scm_accept_hostkey | default(omit) }}"
           register: git_result
+          # A new GitHub App installation token can get a 404 for a repository it can access for a short time after
+          # it is minted, so retry that failure for token URLs only.
+          retries: 3
+          delay: 10
+          until: >-
+            git_result is succeeded or
+            'x-access-token' not in (scm_url | default('')) or
+            ('not found' not in (git_result.msg | default('') | lower) and
+            '404' not in (git_result.msg | default('')))
 
         - name: Set the git repository version
           ansible.builtin.set_fact:
