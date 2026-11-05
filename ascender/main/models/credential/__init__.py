@@ -38,6 +38,7 @@ from ascender.main.constants import RESERVED_NAMESPACE_NAMES
 from ascender.main.utils import decrypt_field, classproperty, set_environ
 from ascender.main.utils.safe_yaml import safe_dump
 from ascender.main.utils.execution_environments import to_container_path
+from ascender.main.utils import workload_identity
 from ascender.main.validators import validate_ssh_private_key
 from ascender.main.models.base import CommonModelNameNotUnique, PasswordFieldsModel, PrimordialModel
 from ascender.main.models.mixins import ResourceMixin
@@ -197,6 +198,10 @@ class Credential(PasswordFieldsModel, CommonModelNameNotUnique, ResourceMixin):
         try:
             ssh_key_data = self.get_input('ssh_key_data')
         except AttributeError:
+            return False
+        except workload_identity.WorkloadIdentityError:
+            # Looked up as the job: it can only be read once one runs, so
+            # whether it is encrypted is not known while editing or launching
             return False
 
         try:
@@ -416,6 +421,10 @@ class CredentialType(CommonModelNameNotUnique):
     @property
     def secret_fields(self):
         return [field['id'] for field in self.inputs.get('fields', []) if field.get('secret', False) is True]
+
+    @property
+    def wants_workload_identity_token(self):
+        return any(field.get('internal') and field['id'] == workload_identity.TOKEN_FIELD for field in self.inputs.get('fields', []))
 
     @property
     def askable_fields(self):
@@ -1314,6 +1323,27 @@ ManagedCredentialType(
     },
 )
 
+ManagedCredentialType(
+    namespace='oidc_workload_identity',
+    kind='cloud',
+    name=gettext_noop('OIDC Workload Identity Token'),
+    managed=True,
+    inputs={
+        'fields': [
+            {
+                'id': 'audience',
+                'label': gettext_noop('Audience'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'Who the token is for, as the system that will accept it expects to see it in the aud claim, '
+                    'e.g. sts.amazonaws.com, api://AzureADTokenExchange or the address of a Vault server.'
+                ),
+            },
+        ],
+        'required': ['audience'],
+    },
+)
+
 
 class CredentialInputSource(PrimordialModel):
     class Meta:
@@ -1375,10 +1405,52 @@ class CredentialInputSource(PrimordialModel):
         return self.source_credential
 
     def clean_input_field_name(self):
-        defined_fields = self.target_credential.credential_type.defined_fields
+        target_type = self.target_credential.credential_type
+        # an internal field is filled in by the platform, never looked up
+        defined_fields = [field['id'] for field in target_type.inputs.get('fields', []) if not field.get('internal')]
         if self.input_field_name not in defined_fields:
             raise ValidationError(_('Input field must be defined on target credential (options are {}).'.format(', '.join(sorted(defined_fields)))))
+        if self.source_credential_id and self._source_looks_up_as_the_job() and (self.input_field_name == 'vault_id' or self._target_feeds_a_vault_id()):
+            # The vault id tells a template's vault credentials apart when they
+            # are attached and launched, with no job running to sign a token for
+            raise ValidationError(_('A vault id cannot be looked up as the job: it is needed before any job runs.'))
         return self.input_field_name
+
+    def _source_looks_up_as_the_job(self):
+        """
+        Whether reading from the source needs a job, because it logs in as one
+        or because a credential further up does: a lookup resolves every input
+        source of the credential it reads from.
+        """
+        seen = set()
+        pending = [self.source_credential]
+        while pending:
+            credential = pending.pop()
+            if credential.pk in seen:
+                continue
+            seen.add(credential.pk)
+            if credential.credential_type.wants_workload_identity_token:
+                return True
+            links = CredentialInputSource.objects.filter(target_credential=credential).select_related('source_credential__credential_type')
+            pending.extend(link.source_credential for link in links)
+        return False
+
+    def _target_feeds_a_vault_id(self):
+        """Whether a vault id is already looked up from the target, directly or further down."""
+        seen = set()
+        pending = [self.target_credential_id]
+        while pending:
+            credential_id = pending.pop()
+            if credential_id in seen:
+                continue
+            seen.add(credential_id)
+            for field_name, target_id in CredentialInputSource.objects.filter(source_credential_id=credential_id).values_list(
+                'input_field_name', 'target_credential_id'
+            ):
+                if field_name == 'vault_id':
+                    return True
+                pending.append(target_id)
+        return False
 
     def get_input_value(self):
         backend = self.source_credential.credential_type.plugin.backend
@@ -1396,6 +1468,12 @@ class CredentialInputSource(PrimordialModel):
                 backend_kwargs[field_name] = self.source_credential._get_dynamic_input(field_name)
 
         backend_kwargs.update(self.metadata)
+
+        # A plugin that authenticates as the job itself declares an internal
+        # field for the token, which is signed here for the job being run,
+        # with the plugin's server as the audience
+        if self.source_credential.credential_type.wants_workload_identity_token:
+            backend_kwargs[workload_identity.TOKEN_FIELD] = workload_identity.token_for_current_workload(backend_kwargs.get('url'))
 
         with set_environ(**settings.ASCENDER_TASK_ENV):
             return backend(**backend_kwargs)

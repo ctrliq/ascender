@@ -5,6 +5,9 @@ import {
   Alert,
   AlertActionCloseButton,
   AlertGroup,
+  CodeBlock,
+  CodeBlockCode,
+  ExpandableSection,
 } from '@patternfly/react-core';
 
 /**
@@ -12,7 +15,20 @@ import {
  * either a plain message or an HTTP status and a json body on the next line.
  */
 export interface CredentialTestError {
-  response?: { data?: { inputs?: string } };
+  response?: { data?: { inputs?: string } & SentClaims };
+}
+
+/**
+ * A credential that logs in as the job is tested with a token signed for the
+ * template picked, and the api hands back the claims that went in it.
+ */
+interface SentClaims {
+  details?: { sent_jwt_payload?: Record<string, unknown> };
+}
+
+function sentClaims(response: unknown) {
+  return (response as { data?: SentClaims } | null)?.data?.details
+    ?.sent_jwt_payload;
 }
 
 export interface CredentialPluginTestAlertProps {
@@ -32,6 +48,7 @@ function CredentialPluginTestAlert({
   const [testVariant, setTestVariant] = useState<'danger' | 'success' | null>(
     null
   );
+  const claims = sentClaims(errorResponse?.response ?? successResponse);
   useEffect(() => {
     if (errorResponse) {
       const inputsError = errorResponse?.response?.data?.inputs;
@@ -81,6 +98,18 @@ function CredentialPluginTestAlert({
             <>
               <b id="credential-plugin-test-name">{credentialName}</b>
               <p id="credential-plugin-test-message">{testMessage}</p>
+              {claims && (
+                <ExpandableSection
+                  toggleText={t`Claims sent`}
+                  id="credential-plugin-test-claims"
+                >
+                  <CodeBlock>
+                    <CodeBlockCode>
+                      {JSON.stringify(claims, null, 2)}
+                    </CodeBlockCode>
+                  </CodeBlock>
+                </ExpandableSection>
+              )}
             </>
           }
           variant={testVariant}

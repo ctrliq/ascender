@@ -363,6 +363,37 @@ Below shows an example of a configured HashiCorp SSH Secrets Engine credential.
 .. image:: ../common/images/credentials-create-hashicorp-ssh-credential.png 
    :alt: Example new HashiCorp Vault Signed SSH credential lookup dialog
 
+.. _ug_credentials_hashivault_oidc:
+
+HashiCorp Vault Secret Lookup (OIDC)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. index::
+   pair: credential; HashiCorp KV OIDC
+   pair: workload identity; HashiCorp KV
+
+Works like **HashiCorp Vault Secret Lookup**, but stores no secret to log in to Vault with: each job logs in as itself, with a short lived token Ascender signs for it, through the JWT auth method of Vault. Workload identity has to be turned on, and Vault set up to trust Ascender, as described in :ref:`ag_workload_identity`.
+
+- **Server URL** (required): the URL of Vault. It is also the audience of the token, so it has to match ``bound_audiences`` in the Vault role exactly, port included
+- **API Version** (required): ``v1`` for static key/value lookups, ``v2`` for versioned ones
+- **CA Certificate**: the CA certificate used to verify the certificate of Vault
+- **Path to Auth** (required): where the JWT auth method is mounted, ``jwt`` by default
+- **JWT Role** (required): the role in the JWT auth method that decides, by the claims of the token, which jobs may log in and with which policies
+- **Namespace name**: the namespace to use (Vault Enterprise only)
+
+The metadata of a lookup is the same as for **HashiCorp Vault Secret Lookup**, with **Path to Auth** naming the JWT mount when it is not the default one.
+
+The **Test** button asks for a job template: the test logs in with a token carrying the claims of that template, and shows the claims that were sent.
+
+.. _ug_credentials_hashivaultssh_oidc:
+
+HashiCorp Vault Signed SSH (OIDC)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. index::
+   pair: credential; HashiCorp SSH OIDC
+   pair: workload identity; HashiCorp SSH
+
+Works like **HashiCorp Vault Signed SSH**, logging in to Vault as the job instead of with a stored secret. It takes the same fields as **HashiCorp Vault Secret Lookup (OIDC)** except **API Version**, and the same metadata as **HashiCorp Vault Signed SSH**. See :ref:`ag_workload_identity`.
+
 .. _ug_credentials_azurekeyvault:
 
 Microsoft Azure Key Vault

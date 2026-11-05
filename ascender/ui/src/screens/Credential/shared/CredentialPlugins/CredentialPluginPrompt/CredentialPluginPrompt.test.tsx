@@ -2,7 +2,7 @@ import type { Credential } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import { CredentialsAPI, CredentialTypesAPI, JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import selectedCredentialData from '../../data.cyberArkCredential.json';
@@ -254,6 +254,136 @@ describe('<CredentialPluginPrompt />', () => {
           metadata: { secret_path: '/foo/bar', secret_version: '9000' },
         })
       );
+    });
+  });
+
+  describe('Workload identity lookup', () => {
+    // The first step still lists the credentials of the mocked page (the
+    // CyberArk one is preselected); only its type is the Vault OIDC one.
+    beforeEach(() => {
+      vi.mocked(CredentialTypesAPI.readDetail).mockResolvedValue({
+        data: {
+          ...mockCredentialTypeDetail.data,
+          name: 'HashiCorp Vault Secret Lookup (OIDC)',
+          namespace: 'hashivault_kv_oidc',
+          inputs: {
+            fields: [{ id: 'url', label: 'Server URL', type: 'string' }],
+            metadata: [
+              { id: 'secret_path', label: 'Path to Secret', type: 'string' },
+              { id: 'secret_key', label: 'Key Name', type: 'string' },
+            ],
+            required: ['url', 'secret_path', 'secret_key'],
+          },
+        },
+      } as unknown as ApiResponse<unknown>);
+      vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+        data: { count: 1, results: [{ id: 7, name: 'patch' }] },
+      } as unknown as ApiResponse<unknown>);
+      vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue(
+        mockCredentialOptions as unknown as ApiResponse<unknown>
+      );
+    });
+
+    test('tests as the template picked, which is not saved with the lookup', async () => {
+      const onSubmit = vi.fn();
+      const { user } = renderWithContexts(
+        <CredentialPluginPrompt
+          onClose={vi.fn()}
+          onSubmit={onSubmit}
+          initialValues={{
+            credential: selectedCredential,
+            inputs: {
+              secret_path: 'secret/linux/root',
+              secret_key: 'password',
+            },
+          }}
+        />
+      );
+      await screen.findByText('CyberArk Conjur Secrets Manager Lookup');
+      await user.click(screen.getByRole('button', { name: 'Next' }));
+      await screen.findByText('Path to Secret');
+
+      const jobTemplateInput = document.querySelector(
+        'input#job_template'
+      ) as HTMLInputElement;
+      await waitFor(() => expect(jobTemplateInput).toBeEnabled());
+      await user.type(jobTemplateInput, 'patch');
+      // the lookup resolves what was typed a second after typing stops
+      await waitFor(
+        () =>
+          expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+            name: 'patch',
+            role_level: 'execute_role',
+          }),
+        { timeout: 3000 }
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Test' }));
+      await waitFor(() =>
+        expect(CredentialsAPI.test).toHaveBeenCalledWith(1, {
+          metadata: {
+            secret_path: 'secret/linux/root',
+            secret_key: 'password',
+            job_template_id: 7,
+          },
+        })
+      );
+
+      await user.click(screen.getByRole('button', { name: 'OK' }));
+      await waitFor(() =>
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            inputs: {
+              secret_path: 'secret/linux/root',
+              secret_key: 'password',
+            },
+          }),
+          expect.anything()
+        )
+      );
+    });
+
+    test('a template name that matches nothing does not stop the lookup being saved', async () => {
+      vi.mocked(JobTemplatesAPI.read).mockImplementation(((params: {
+        name?: string;
+      }) =>
+        Promise.resolve({
+          data: params?.name
+            ? { count: 0, results: [] }
+            : { count: 1, results: [{ id: 7, name: 'patch' }] },
+        })) as unknown as typeof JobTemplatesAPI.read);
+      const onSubmit = vi.fn();
+      const { user } = renderWithContexts(
+        <CredentialPluginPrompt
+          onClose={vi.fn()}
+          onSubmit={onSubmit}
+          initialValues={{
+            credential: selectedCredential,
+            inputs: {
+              secret_path: 'secret/linux/root',
+              secret_key: 'password',
+            },
+          }}
+        />
+      );
+      await screen.findByText('CyberArk Conjur Secrets Manager Lookup');
+      await user.click(screen.getByRole('button', { name: 'Next' }));
+      await screen.findByText('Path to Secret');
+      const jobTemplateInput = document.querySelector(
+        'input#job_template'
+      ) as HTMLInputElement;
+      await waitFor(() => expect(jobTemplateInput).toBeEnabled());
+      await user.type(jobTemplateInput, 'nope');
+      await waitFor(
+        () =>
+          expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+            name: 'nope',
+            role_level: 'execute_role',
+          }),
+        { timeout: 3000 }
+      );
+      await user.click(screen.getByRole('button', { name: 'OK' }));
+      await waitFor(() => expect(onSubmit).toHaveBeenCalled());
     });
   });
 });
