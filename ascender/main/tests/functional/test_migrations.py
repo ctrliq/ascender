@@ -127,3 +127,16 @@ class TestMigrationSmoke:
         bar_peers = bar.peers.all()
         assert len(bar_peers) == 1
         assert fooaddr in bar_peers
+
+
+def test_token_checksum_column_added_before_oauth2_provider_backfill():
+    """
+    main.0198 adds token_checksum to the swapped access token model. It must
+    run before oauth2_provider.0012, whose backfill saves that field.
+    """
+    from django.db import connection
+    from django.db.migrations.loader import MigrationLoader
+
+    loader = MigrationLoader(connection, ignore_no_migrations=True)
+    plan = loader.graph.forwards_plan(('oauth2_provider', '0012_add_token_checksum'))
+    assert ('main', '0198_oauth2accesstoken_token_checksum_and_more') in plan

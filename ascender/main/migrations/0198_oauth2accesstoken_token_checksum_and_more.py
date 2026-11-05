@@ -18,6 +18,15 @@ class Migration(migrations.Migration):
     dependencies = [
         ('main', '0197_add_federated_inventory_kind'),
     ]
+    run_before = [
+        # The access token model is swapped to main.OAuth2AccessToken, so
+        # oauth2_provider's 0012 backfill loads this model. Some
+        # django-oauth-toolkit releases (3.3.0 and earlier) save every existing
+        # token with update_fields=['token_checksum'], which fails if the column
+        # is not in the model state yet. Without this, Django can schedule 0012
+        # first and upgrades with existing tokens fail.
+        ('oauth2_provider', '0012_add_token_checksum'),
+    ]
 
     operations = [
         # Stage 1: add the checksum column as nullable (no unique constraint yet,
