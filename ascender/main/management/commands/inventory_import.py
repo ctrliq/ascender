@@ -201,7 +201,7 @@ class Command(BaseCommand):
         if getattr(self, 'instance_id_var', None):
             for single_instance_id in self.instance_id_var.split(','):
                 from_dict = variables
-                for key in single_instance_id.split('.'):
+                for key in single_instance_id.strip().split('.'):
                     if not hasattr(from_dict, 'get'):
                         instance_id = default
                         break
@@ -271,13 +271,10 @@ class Command(BaseCommand):
         """
         self.db_instance_id_map = {}
         if self.instance_id_var:
-            host_qs = self.inventory_source.hosts.all()
+            # also re-read IDs stored as the repr of an ansible-core 2.19+ {"__ansible_unsafe": ...} value
+            host_qs = self.inventory_source.hosts.filter(Q(instance_id='') | Q(instance_id__startswith="{'__ansible_unsafe': "))
             for instance_id_part in reversed(self.instance_id_var.split(',')):
-                # also re-read IDs stored as the repr of an ansible-core 2.19+ {"__ansible_unsafe": ...} value
-                host_qs = host_qs.filter(
-                    Q(instance_id='') | Q(instance_id__startswith="{'__ansible_unsafe': "), variables__contains=instance_id_part.split('.')[0]
-                )
-                for host in host_qs:
+                for host in host_qs.filter(variables__contains=instance_id_part.strip().split('.')[0]):
                     instance_id = self._get_instance_id(host.variables_dict)
                     if not instance_id:
                         continue

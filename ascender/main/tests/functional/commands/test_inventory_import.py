@@ -154,15 +154,16 @@ class TestMigrationCases:
                 host = inventory.hosts.get(name=host_name)
                 assert host.instance_id == ('fooval' if id_var else '')
 
+    @pytest.mark.parametrize('instance_id_var', ('foo.id', 'foo.id,other', 'other, foo.id'))
     @pytest.mark.parametrize('overwrite', (True, False))
-    def test_renamed_host_keeps_identity_with_legacy_wrapped_instance_id(self, inventory, overwrite):
+    def test_renamed_host_keeps_identity_with_legacy_wrapped_instance_id(self, inventory, overwrite, instance_id_var):
         # Before unsafe_literal, ansible-core 2.19+ wrapped IDs were stored as the dict's repr.
         inv_src = InventorySource.objects.create(inventory=inventory, source='gce')
         wrapped = {'foo': {'id': {'__ansible_unsafe': 'fooval'}}}
         host = inventory.hosts.create(name='old-name', instance_id=str(wrapped['foo']['id']), variables=json.dumps(wrapped))
         inv_src.hosts.add(host)
         data = {'_meta': {'hostvars': {'new-name': wrapped}}, 'ungrouped': {'hosts': ['new-name']}}
-        inventory_import.Command().perform_update(dict(overwrite=overwrite, instance_id_var='foo.id'), data, inv_src.create_unified_job())
+        inventory_import.Command().perform_update(dict(overwrite=overwrite, instance_id_var=instance_id_var), data, inv_src.create_unified_job())
         assert inventory.hosts.count() == 1
         host.refresh_from_db()
         assert (host.name, host.instance_id) == ('new-name', 'fooval')
