@@ -140,4 +140,5 @@ jobs:
             -e repo=${{ github.repository }} \
             -e awx_image=ghcr.io/${{ github.repository }} \
             -e version=${{ github.event.inputs.version }} \
+            -e target_commitish=${{ github.sha }} \
             -e github_token=${{ secrets.GITHUB_TOKEN }}
