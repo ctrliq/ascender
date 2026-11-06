@@ -17,11 +17,13 @@ from collections import OrderedDict
 from ascender.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
+from django.db.models import Q
 from django.utils.encoding import smart_str
 
 # Ascender inventory imports
 from ascender.main.models.inventory import Inventory, InventorySource, InventoryUpdate
 from ascender.main.models.jobs import JobHostSummary
+from ascender.main.utils.ansible import unsafe_literal
 from ascender.main.utils.mem_inventory import MemInventory, dict_to_mem_data
 from ascender.main.utils.safe_yaml import sanitize_jinja
 
@@ -199,12 +201,13 @@ class Command(BaseCommand):
         if getattr(self, 'instance_id_var', None):
             for single_instance_id in self.instance_id_var.split(','):
                 from_dict = variables
-                for key in single_instance_id.split('.'):
+                for key in single_instance_id.strip().split('.'):
                     if not hasattr(from_dict, 'get'):
                         instance_id = default
                         break
                     instance_id = from_dict.get(key, default)
                     from_dict = instance_id
+                instance_id = unsafe_literal(instance_id)
                 if instance_id:
                     break
         return smart_str(instance_id)
@@ -227,6 +230,7 @@ class Command(BaseCommand):
                     break
                 enabled = from_dict.get(key, default)
                 from_dict = enabled
+            enabled = unsafe_literal(enabled)
             if enabled is not default:
                 enabled_value = getattr(self, 'enabled_value', None)
                 if enabled_value is not None:
@@ -267,10 +271,10 @@ class Command(BaseCommand):
         """
         self.db_instance_id_map = {}
         if self.instance_id_var:
-            host_qs = self.inventory_source.hosts.all()
+            # also re-read IDs stored as the repr of an ansible-core 2.19+ {"__ansible_unsafe": ...} value
+            host_qs = self.inventory_source.hosts.filter(Q(instance_id='') | Q(instance_id__startswith="{'__ansible_unsafe': "))
             for instance_id_part in reversed(self.instance_id_var.split(',')):
-                host_qs = host_qs.filter(instance_id='', variables__contains=instance_id_part.split('.')[0])
-                for host in host_qs:
+                for host in host_qs.filter(variables__contains=instance_id_part.strip().split('.')[0]):
                     instance_id = self._get_instance_id(host.variables_dict)
                     if not instance_id:
                         continue
