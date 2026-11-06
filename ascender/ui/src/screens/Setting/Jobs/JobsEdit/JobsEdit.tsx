@@ -98,6 +98,10 @@ function JobsEdit() {
               config={jobs.ASCENDER_COLLECTIONS_ENABLED}
             />
             <BooleanField
+              name="ASCENDER_COLLECTIONS_FROM_EE"
+              config={jobs.ASCENDER_COLLECTIONS_FROM_EE}
+            />
+            <BooleanField
               name="ENABLE_ANSIBLE_29"
               config={jobs.ENABLE_ANSIBLE_29}
             />
