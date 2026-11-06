@@ -62,7 +62,7 @@ Restore reads from ``ascender_install_artifacts/backups/current``, so put the ba
 
 After a restore, confirm the pods come back and sign in with the administrator credentials from the backup, not the ones you were using before. If you are restoring into a disaster recovery deployment that should not run jobs, disable schedules before it starts reconciling.
 
-To restore onto a rebuilt or replacement machine, see `Restoring onto a rebuilt k3s node <https://github.com/ctrliq/ascender-install/blob/main/docs/configuration/backup_restore.md>`_ in the installer repository, or `Restoring onto a new cluster`_ below.
+To restore onto a rebuilt or replacement machine, see `Restoring onto a rebuilt k3s node <https://github.com/ctrliq/ascender-install/blob/main/docs/configuration/backup_restore.md#restoring-onto-a-rebuilt-k3s-node>`_ in the installer repository, or `Restoring onto a new cluster`_ below.
 
 Backing up and restoring manually
 ===================================
@@ -81,13 +81,11 @@ Create an ``AWXBackup`` naming the deployment to back up::
 	  namespace: ascender
 	spec:
 	  deployment_name: ascender-app
-	  backup_storage_requirements:
-	    requests:
-	      storage: 20Gi
+	  backup_storage_requirements: 20Gi
 
 Give each backup a distinct name, with the date in it. Re-applying an existing ``AWXBackup`` updates that resource rather than producing a new backup, and the resources stay in the namespace as the record of what you have.
 
-``deployment_name`` is the only required field. The operator creates a persistent volume claim named ``<deployment_name>-backup-claim`` unless you point ``backup_pvc`` at one you made yourself. Set ``backup_storage_requirements``, because the default is empty and leaves the size to whatever your storage class does with an unset value.
+``deployment_name`` is the only required field. The operator creates a persistent volume claim named ``<deployment_name>-backup-claim`` unless you point ``backup_pvc`` at one you made yourself. Set ``backup_storage_requirements`` to a size string such as ``20Gi``. If you leave it unset, the operator creates a 5Gi claim, which is often too small for the database dump.
 
 Apply it and wait for the operator to finish::
 
@@ -107,8 +105,10 @@ The operator writes to the claim and stops there. To get the files out, run a po
 	BACKUP_DIR=$(kubectl get awxbackup ascender-backup-2026-08-28 -n ascender \
 	  -o jsonpath='{.status.backupDirectory}')
 
-	kubectl cp ascender/backup-access:$BACKUP_DIR ./ascender-backup
+	kubectl cp --retries=10 ascender/backup-access:$BACKUP_DIR ./ascender-backup
 	kubectl delete pod backup-access -n ascender
+
+``--retries`` lets the copy resume if the stream drops partway through, which is common with a large ``tower.db`` over a remote connection. Check that the three files arrived with the same sizes as on the claim.
 
 .. note::
 
@@ -200,9 +200,29 @@ Then name the claim and the directory instead of a backup::
 
 Apply it the same way. The restored deployment takes its name from ``deployment_name`` and its configuration from the ``awx_object`` file in the backup, so it comes back as it was rather than as a fresh install.
 
+That configuration includes the old cluster's storage classes. Check the backup for any that will not exist on the new cluster before you apply the restore::
+
+	grep -n storage_class ./ascender-backup/awx_object
+
+Override them in the ``AWXRestore`` with ``spec_overrides``, which the operator merges into the backed-up specification before it recreates the Ascender resource::
+
+	apiVersion: awx.ansible.com/v1beta1
+	kind: AWXRestore
+	metadata:
+	  name: ascender-restore
+	  namespace: ascender
+	spec:
+	  deployment_name: ascender-app
+	  backup_pvc: ascender-app-backup-claim
+	  backup_dir: /backups/ascender-restore
+	  spec_overrides:
+	    postgres_storage_class: <new-storage-class>
+
+Include only the keys you need to change, such as ``projects_storage_class`` if the backup sets it. The merge is not recursive, so a nested setting such as ``ingress_hosts`` in ``spec_overrides`` replaces the whole value from the backup. The same mechanism covers other settings tied to the old cluster, such as the hostname. If the backup sets no storage class, the volumes use the new cluster's default class and no override is needed.
+
 External databases
 ===================
 
 .. warning::
 
-	Backup and restore cover the database the operator manages. If you set ``ASCENDER_PGSQL_HOST`` to use your own PostgreSQL server, restore stops without doing anything, and backup runs without capturing your database. Back up an external database with your own tooling, and keep ``secrets.yml`` from an Ascender backup alongside it so the secret key survives.
+	Backup and restore cover the database the operator manages. If you set ``ASCENDER_PGSQL_HOST`` to use your own PostgreSQL server, ``./setup.sh -r`` stops without doing anything. ``./setup.sh -b`` still runs, and the operator runs ``pg_dump`` against your server, but the installer does not support restoring that dump. An ``AWXRestore`` you create by hand runs ``pg_restore --clean`` against the same server and overwrites its contents. Back up an external database with your own tooling, and keep ``secrets.yml`` from an Ascender backup alongside it so the secret key survives.
