@@ -152,7 +152,7 @@ services:
 {% endif %}
 {% if enable_ldap|bool %}
   ldap:
-    image: bitnami/openldap:2
+    image: bitnamilegacy/openldap:2
     container_name: tools_ldap_1
     hostname: ldap
     user: "{{ ansible_user_uid }}"
