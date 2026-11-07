@@ -52,7 +52,7 @@
           delay: 10
           until: >-
             git_result is succeeded or
-            'x-access-token' not in (scm_url | default('')) or
+            (scm_url | default('')) is not search('(^|//)x-access-token[:@]') or
             ('not found' not in (git_result.msg | default('') | lower) and
             '404' not in (git_result.msg | default('')))
 
