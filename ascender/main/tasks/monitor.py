@@ -25,6 +25,7 @@ import threading
 import uuid
 
 from django.db import DatabaseError, connection, transaction
+from django.db.models import Case, Q, Value, When
 from django.utils.timezone import now
 
 from ascender.settings.typed import settings
@@ -325,8 +326,8 @@ def sweep_job_monitors():
     retired = retire_stale_leases()
     if retired:
         logger.info(f'Job monitor sweep removed {retired} lease(s) of jobs that are no longer running')
-    expired = list(JobMonitorLease.objects.expired()[: settings.JOB_MONITOR_SWEEP_BATCH])
-    if not expired:
+    expired = JobMonitorLease.objects.expired()
+    if not expired.exists():
         return 0
     try:
         me = Instance.objects.me()
@@ -336,6 +337,10 @@ def sweep_job_monitors():
     if me.node_state != Instance.States.READY or me.node_type not in (Instance.Types.CONTROL, Instance.Types.HYBRID):
         logger.debug(f'Job monitor sweep skipped on {me.hostname}: not a ready control node')
         return 0
+    # This node's own jobs come first. It takes them back whatever its capacity, so a batch of the
+    # oldest leases, all of jobs it may not take, must not keep it from ever reaching its own.
+    own = Q(unified_job__controller_node=me.hostname) | Q(unified_job__execution_node=me.hostname)
+    expired = list(expired.annotate(theirs=Case(When(own, then=Value(0)), default=Value(1))).order_by('theirs', 'expires')[: settings.JOB_MONITOR_SWEEP_BATCH])
 
     claimed_ct = 0
     out_of_capacity = False

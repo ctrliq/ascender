@@ -245,6 +245,23 @@ def test_sweep_stops_at_control_capacity(me):
 
 
 @pytest.mark.django_db
+def test_a_full_node_reaches_its_own_jobs_behind_a_batch_of_others_it_cannot_take(me, settings):
+    """The batch is the oldest expired leases; if they are all another node's, this node's own must still come first."""
+    settings.JOB_MONITOR_SWEEP_BATCH = 2
+    me.capacity = 0
+    me.save()
+    foreign = [running_job(work_unit_id=f'foreign{i}') for i in range(2)]
+    for job in foreign:
+        lease = leased(job)
+        JobMonitorLease.objects.filter(pk=lease.pk).update(expires=now() - timedelta(minutes=5))
+    own = running_job(controller_node=me.hostname, work_unit_id='own')
+    leased(own)
+    with mock.patch.object(monitor.resume_job, 'apply_async') as dispatch:
+        assert sweep_job_monitors() == 1
+    assert dispatch.call_args.args[0] == [own.pk]
+
+
+@pytest.mark.django_db
 def test_sweep_declines_on_a_node_that_is_not_ready(me):
     me.node_state = 'unavailable'
     me.save()
