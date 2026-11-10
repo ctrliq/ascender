@@ -8,7 +8,7 @@ import datetime
 from ascender.settings.typed import settings
 from django.utils.functional import cached_property
 from django.utils.timezone import now as tz_now
-from django.db import transaction, connection as django_connection
+from django.db import transaction, IntegrityError, connection as django_connection
 from django_guid import set_guid
 
 import psutil
@@ -26,6 +26,15 @@ from .base import BaseWorker
 logger = logging.getLogger('ascender.main.commands.run_callback_receiver')
 
 
+def _is_unique_constraint_violation(exc):
+    """True for a unique-key IntegrityError: the event is already stored, so it is safe to drop."""
+    cause = getattr(exc, '__cause__', None)
+    # psycopg 3 names it sqlstate; psycopg 2 called it pgcode
+    if '23505' in (getattr(cause, 'sqlstate', None), getattr(cause, 'pgcode', None)):
+        return True
+    return 'duplicate key value violates unique constraint' in str(exc)
+
+
 def job_stats_wrapup(job_identifier, event=None):
     """Fill in the unified job host_status_counts, fire off notifications if needed"""
     try:
@@ -38,6 +47,9 @@ def job_stats_wrapup(job_identifier, event=None):
         # Update host_status_counts while holding the row lock
         with transaction.atomic():
             uj = UnifiedJob.objects.select_for_update().get(pk=job_identifier)
+            # Already set means the stats event was processed before, by a controller that was
+            # lost after saving it; its replay must not send a second notification below.
+            already_processed = uj.host_status_counts is not None
             uj.host_status_counts = host_status_counts
             uj.save(update_fields=['host_status_counts'])
 
@@ -45,7 +57,7 @@ def job_stats_wrapup(job_identifier, event=None):
 
         # If the status was a finished state before this update was made, send notifications
         # If not, we will send notifications when the status changes
-        if uj.status not in ACTIVE_STATES:
+        if uj.status not in ACTIVE_STATES and not already_processed:
             uj.send_notification_templates('succeeded' if uj.status == 'successful' else 'failed')
 
     except Exception:
@@ -163,6 +175,7 @@ class CallbackBrokerWorker(BaseWorker):
             metrics_events_batch_save_errors = 0
             metrics_events_broadcast = 0
             metrics_events_missing_created = 0
+            metrics_duplicates_dropped = 0
             metrics_total_job_event_processing_seconds = datetime.timedelta(seconds=0)
             for cls, events in self.buff.items():
                 if not events:
@@ -198,6 +211,13 @@ class CallbackBrokerWorker(BaseWorker):
                             events.remove(e)
                             saved_events.append(e)  # Importantly, remove successfully saved events from the buffer
                         except Exception as exc_indv:
+                            if isinstance(exc_indv, IntegrityError) and _is_unique_constraint_violation(exc_indv):
+                                # The same event arrived twice, from a stream that was replayed when
+                                # the job's monitoring was resumed. It is stored; drop this copy.
+                                events.remove(e)
+                                metrics_duplicates_dropped += 1
+                                continue
+
                             retry_count = getattr(e, '_retry_count', 0) + 1
                             e._retry_count = retry_count
 
@@ -221,6 +241,9 @@ class CallbackBrokerWorker(BaseWorker):
                     if getattr(e, '_notification_trigger_event', False):
                         job_stats_wrapup(getattr(e, e.JOB_REFERENCE), event=e)
             self.last_flush = time.time()
+            if metrics_duplicates_dropped:
+                logger.info(f'Dropped {metrics_duplicates_dropped} replayed event(s) that were already saved')
+                self.subsystem_metrics.inc('callback_receiver_events_in_memory', -metrics_duplicates_dropped)
             # only update metrics if we saved events
             if (metrics_bulk_events_saved + metrics_singular_events_saved) > 0:
                 self.subsystem_metrics.inc('callback_receiver_batch_events_errors', metrics_events_batch_save_errors)

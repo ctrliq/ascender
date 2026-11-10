@@ -12,7 +12,7 @@ import signal
 
 # Django
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from django.utils.timezone import now as tz_now
 from ascender.settings.typed import settings
@@ -808,10 +808,15 @@ class TaskManager(TaskBase):
         # elsewhere
         # Ordinary pending jobs have no execution_node yet; exclude them in SQL so a deep queue
         # is not materialized as full objects here on every cycle.
+        # A running job with a monitor lease whose controller is the missing node is left to the job
+        # monitor sweep, which decides whether its output can be read somewhere else or the job has to
+        # be re-queued or failed. One controlled by another node is reaped as before: that node is
+        # still reading it, and would wait for the missing execution node indefinitely.
         orphaned = (
             UnifiedJob.objects.filter(status__in=['pending', 'waiting', 'running'])
             .exclude(execution_node='')
             .exclude(execution_node__in=Instance.objects.exclude(node_type='hop').values_list('hostname', flat=True))
+            .filter(Q(monitor_lease__isnull=True) | ~Q(controller_node=F('execution_node')))
         )
         for j in orphaned:
             if j.execution_node and not j.is_container_group_task:
