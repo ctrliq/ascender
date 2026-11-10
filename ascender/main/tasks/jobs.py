@@ -672,17 +672,8 @@ class BaseTask(object):
                 res = receptor_job.run()
                 self.unit_id = receptor_job.unit_id
 
-                if receptor_job.detached or receptor_job.lease_lost:
-                    # The job is still running where it was sent; the next monitor reads it.
-                    self._leave_to_resume(receptor_job)
-                    return
-                if receptor_job.requeued:
-                    # The shutdown signal cancelled the work (see AWXReceptorJob._handle_signal); start over from scheduling.
-                    if job_can_detach(self.instance):
-                        reason = 'its controller stopped before the execution environment received its payload'
-                    else:
-                        reason = 'its controller stopped, and a project update is run again rather than left running without the lock on its project'
-                    requeue_job(self.instance, reason)
+                if receptor_job.detached or receptor_job.lease_lost or receptor_job.requeued:
+                    self._end_without_finalizing(receptor_job)
                     return
 
                 if not res:
@@ -722,6 +713,37 @@ class BaseTask(object):
         if not self.owner_task_id:
             return True
         return self.model.objects.filter(pk=pk, celery_task_id=self.owner_task_id).exists()
+
+    def _end_without_finalizing(self, receptor_job):
+        """
+        The run ends without its post-run hook and final status: the job was left running for the
+        next monitor to read, taken over by another task, or stopped to be run again.
+        """
+        # The post-run hook is what releases a project update's lock on its project. The dispatcher
+        # worker lives on after this task, and so would the lock, holding up every later update of
+        # the project on this node. The work is stopped by now if it ever will be: a re-queued job's
+        # by the shutdown, a project update's that lost its lease by AWXReceptorJob, and a project
+        # update is never left running for the next monitor.
+        self._release_project_lock()
+        if receptor_job.requeued:
+            # The shutdown signal cancelled the work (see AWXReceptorJob._handle_signal); start over from scheduling.
+            if job_can_detach(self.instance):
+                reason = 'its controller stopped before the execution environment received its payload'
+            else:
+                reason = 'its controller stopped, and a project update is run again rather than left running without the lock on its project'
+            requeue_job(self.instance, reason)
+            return
+        # The job is still running where it was sent; the next monitor reads it.
+        self._leave_to_resume(receptor_job)
+
+    def _release_project_lock(self):
+        """Let go of the project lock taken in a pre-run hook, for a run that ends without the post-run hook."""
+        if self.lock_fd is None:
+            return
+        try:
+            self.release_lock(self.instance.project)
+        except Exception:
+            logger.exception(f'{self.instance.log_format}: could not release the lock on its project')
 
     def _leave_to_resume(self, receptor_job):
         """The stream ended without a result and the job is still running; say why, and let it be resumed."""
@@ -773,6 +795,7 @@ class BaseTask(object):
         if not self._owns_job(pk):
             self.lost_ownership = True
             logger.warning(f'{self.instance.log_format}: another task took over its monitoring; this task stands down without finalizing')
+            self._release_project_lock()
             return
 
         try:

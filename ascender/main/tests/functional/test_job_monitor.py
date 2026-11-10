@@ -5,9 +5,13 @@ These run against the database with transaction=True where a stream is actually 
 ansible-runner's process streamer runs in a thread with its own connection.
 """
 
+import concurrent.futures
+import fcntl
 import io
 import json
 import os
+import subprocess
+import sys
 from datetime import timedelta
 from unittest import mock
 import uuid
@@ -21,7 +25,7 @@ from ascender.main.dispatch import reaper
 from ascender.main.models import Instance, Job, JobEvent, JobMonitorLease, LeaseLost, ProjectUpdate, UnifiedJob
 from ascender.main.tasks import monitor
 from ascender.main.tasks.callback import RunnerCallback, persisted_event_counters
-from ascender.main.tasks.jobs import RunJob
+from ascender.main.tasks.jobs import RunJob, RunProjectUpdate
 from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
 from ascender.main.tasks.receptor import AWXReceptorJob, _PhaseResult
 from ascender.main.tasks.streams import PodLogIncomplete
@@ -1036,6 +1040,56 @@ def test_a_project_update_is_never_left_running_on_shutdown(project, kind, worke
         assert receptor_job.requeued and stream.cancelled and res.status == 'canceled'
     else:
         assert stream.cancelled and not receptor_job.requeued and not receptor_job.detached and res.status == 'canceled'
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('kind', ['job', 'project_update'])
+def test_a_reader_that_loses_its_lease_stops_the_work_of_a_project_update_only(project, settings, kind):
+    """A project update is never read by another task, and its task is about to give up the project lock: its work is stopped too."""
+    settings.JOB_MONITOR_RENEW_SECONDS = 0.01
+    if kind == 'job':
+        job = running_job()
+    else:
+        job = ProjectUpdate.objects.create(project=project, status='running', celery_task_id='t', work_unit_id='u', launch_type='manual')
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.__init__(mock.Mock(instance=job), {'private_data_dir': '/tmp/x'}, resuming=True)
+    receptor_job.unit_id = 'u'
+    stream = FakeStream([])
+    processor_future = mock.Mock()
+    processor_future.result.side_effect = [concurrent.futures.TimeoutError(), _PhaseResult('error', 1)]
+    with mock.patch.object(JobMonitorLease.objects, 'renew', side_effect=LeaseLost(job.pk, 't')):
+        receptor_job._await_processor(processor_future, stream, owner_task_id='t')
+    assert receptor_job.lease_lost and stream.interrupted
+    assert stream.cancelled is (kind == 'project_update')
+
+
+def lockable_by_another_process(path):
+    """fcntl locks belong to a process, which can always lock again what it holds itself."""
+    probe = 'import fcntl, os, sys; fcntl.lockf(os.open(sys.argv[1], os.O_RDWR), fcntl.LOCK_EX | fcntl.LOCK_NB)'
+    return subprocess.run([sys.executable, '-c', probe, str(path)], capture_output=True).returncode == 0
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('how', ['requeued', 'lease_lost', 'taken_over_before_finishing'])
+def test_a_run_that_ends_without_its_post_run_hook_releases_the_project_lock(project, tmp_path, how):
+    """The dispatcher worker outlives the task; a lock it kept would hold up every later update of the project on the node."""
+    update = ProjectUpdate.objects.create(project=project, status='running', celery_task_id='t', work_unit_id='u', launch_type='manual')
+    lock_file = tmp_path / 'project.lock'
+    task = RunProjectUpdate()
+    task.instance = update
+    task.lock_fd = os.open(lock_file, os.O_RDWR | os.O_CREAT)
+    fcntl.lockf(task.lock_fd, fcntl.LOCK_EX)
+    assert not lockable_by_another_process(lock_file)
+    with mock.patch('ascender.main.tasks.jobs.requeue_job') as requeue, mock.patch.object(RunProjectUpdate, 'post_run_hook') as post_run_hook:
+        if how == 'taken_over_before_finishing':
+            task.owner_task_id = 'a-task-that-lost-the-job'
+            task.finish_run(update.pk, 'successful', 0, str(tmp_path))
+        else:
+            task._end_without_finalizing(mock.Mock(detached=False, lease_lost=how == 'lease_lost', requeued=how == 'requeued', unit_id='u'))
+    assert task.lock_fd is None
+    assert lockable_by_another_process(lock_file)
+    assert requeue.called is (how == 'requeued')
+    post_run_hook.assert_not_called()
 
 
 @pytest.mark.django_db

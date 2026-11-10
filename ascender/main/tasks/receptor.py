@@ -729,6 +729,8 @@ class AWXReceptorJob:
 
     def _await_processor(self, processor_future, stream, owner_task_id):
         """Wait for the streamer, renewing the lease, and stop reading the moment the job is no longer ours."""
+        from ascender.main.tasks.monitor import job_can_detach  # circular import
+
         interval = settings.JOB_MONITOR_RENEW_SECONDS
         job = self.task.instance
         while True:
@@ -744,6 +746,11 @@ class AWXReceptorJob:
                 except LeaseLost:
                     self.lease_lost = True
                     logger.warning(f'{job.log_format}: its monitoring was taken over by another task; dropping this stream')
+                    if not job_can_detach(job):
+                        # A project update is never read by another task: its new owner stops it and runs it
+                        # again. Stop it from here as well, before this task gives up the lock on its project.
+                        self._stop_work(stream, processor_future)
+                        return _PhaseResult('error', 1)
                     stream.interrupt()
                     return self._drain(processor_future, 'error')
                 self._record_progress()
