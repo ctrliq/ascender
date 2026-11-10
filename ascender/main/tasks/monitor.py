@@ -12,10 +12,11 @@ compare-and-set on the job's celery_task_id and dispatches resume_job, which rea
 of the output from wherever it survived: the pod's log for a container group job, the
 receptor work unit for anything else.
 
-Nothing here decides anything from an instance's heartbeat. The lease is the single statement
-of who is reading a job, and an expired lease is the single reason to read it elsewhere. The
-one thing the sweep asks of the instance table is which node's receptor runs a unit that
-cannot be read anywhere else, so that a job is only claimed by a node that can read it.
+Nothing here decides from an instance's heartbeat that a job needs a new reader. The lease is
+the single statement of who is reading a job, and an expired lease is the single reason to read
+it elsewhere. What the sweep asks of the instance table is which node's receptor runs a unit
+that cannot be read anywhere else, and whether that node is still around, so that such a job is
+left to the one node that can read it.
 """
 
 import logging
@@ -157,9 +158,23 @@ def local_unit_holder(job):
     return None
 
 
-def node_is_ready(hostname):
-    """The node's heartbeat is current. A node that misses its heartbeats is marked unavailable by its peers."""
-    return Instance.objects.filter(hostname=hostname, node_state=Instance.States.READY).exists()
+def holder_is_present(hostname):
+    """
+    Is the node whose own receptor runs a job's work unit there to read it, or about to be back?
+
+    A ready node is. So is one that went unavailable less than the time its peers give a node
+    that stops sending heartbeats before they declare it lost (see Instance.is_lost): a node marks
+    itself unavailable as its dispatcher stops (inform_cluster_of_shutdown), before that
+    dispatcher's tasks detach from their jobs, and is ready again once its dispatcher is back,
+    while its receptor and the work units in it run on throughout. Only that node can read such a
+    unit, so nobody else gives up on it while the node may still return.
+    """
+    holder = Instance.objects.filter(hostname=hostname).only('node_type', 'node_state', 'last_seen').first()
+    if holder is None:
+        return False
+    if holder.node_state == Instance.States.READY:
+        return True
+    return holder.node_state == Instance.States.UNAVAILABLE and not holder.is_lost()
 
 
 def discard_abandoned_events(job):
@@ -267,7 +282,7 @@ def sweep_job_monitors():
     for lease in expired:
         job = lease.unified_job
         holder = local_unit_holder(job)
-        if holder and holder != me.hostname and node_is_ready(holder):
+        if holder and holder != me.hostname and holder_is_present(holder):
             # Only that node's receptor has the unit, and its own sweep resumes the job
             continue
         if job.controller_node != me.hostname and holder != me.hostname:
@@ -387,8 +402,8 @@ def _plan_receptor(job, lease, receptor_ctl=None):
         return ResumePlan(RESUME, f'its work unit {unit_id} is known to this node', stream=stream)
 
     holder = local_unit_holder(job)
-    if holder and holder != settings.CLUSTER_HOST_ID and node_is_ready(holder):
-        return ResumePlan(WAIT, f'its work unit runs on {holder}, which is up and reads it itself')
+    if holder and holder != settings.CLUSTER_HOST_ID and holder_is_present(holder):
+        return ResumePlan(WAIT, f'its work unit runs on {holder}, which reads it itself once its dispatcher is back')
 
     node = job.execution_node
     if not holder and node and node != settings.CLUSTER_HOST_ID and job_can_detach(job):

@@ -43,7 +43,10 @@ claims each expired lease of a running job with one compare-and-set on the job's
 `controller_node`, and dispatches `resume_job` under the new task id. Which node may claim:
 
 - Work that ran locally on a hybrid node, or a project update on a control node, can only be
-  read through that node's own receptor. While that node is ready, only it claims the job.
+  read through that node's own receptor. While that node is ready, only it claims the job, and
+  so it does for as long after it went unavailable as its peers would wait before declaring it
+  lost: a node marks itself unavailable as its dispatcher stops, before that dispatcher's tasks
+  detach, and its receptor runs the unit on while the dispatcher restarts.
 - A node always takes back its own jobs: they already count against its capacity.
 - Any other job is taken only by an enabled node with control capacity to spare, because a
   resumed job occupies a dispatcher worker for the rest of its run. The rest is left to a

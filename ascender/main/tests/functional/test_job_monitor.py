@@ -185,9 +185,14 @@ def test_sweep_leaves_a_unit_to_the_live_node_that_runs_it(me):
     with mock.patch.object(monitor.resume_job, 'apply_async') as dispatch:
         assert sweep_job_monitors() == 0
     dispatch.assert_not_called()
+    # A node marks itself unavailable as its dispatcher stops, before its tasks detach, and is ready
+    # again once the dispatcher is back; its receptor runs the unit throughout, so it is left the job.
+    peer.mark_offline(update_last_seen=True, errors='Instance received normal shutdown signal')
+    with mock.patch.object(monitor.resume_job, 'apply_async') as dispatch:
+        assert sweep_job_monitors() == 0
+    dispatch.assert_not_called()
     # once that node is gone, any node takes the job, to re-queue or fail it
-    peer.node_state = 'unavailable'
-    peer.save()
+    Instance.objects.filter(pk=peer.pk).update(last_seen=now() - timedelta(minutes=10))
     with mock.patch.object(monitor.resume_job, 'apply_async') as dispatch:
         assert sweep_job_monitors() == 1
 
@@ -466,8 +471,10 @@ def test_receptor_plan_leaves_local_work_to_the_node_that_runs_it():
     lease = leased(job, worker_started=True)
     with mock.patch.object(monitor, 'ReceptorUnitStream', side_effect=fake_receptor_streams(False)):
         assert plan_resume(job, lease, receptor_ctl=mock.Mock()).action == WAIT
-        peer.node_state = 'unavailable'
-        peer.save()
+        # restarting its dispatcher: unavailable, but back before its peers would declare it lost
+        peer.mark_offline(update_last_seen=True, errors='Instance received normal shutdown signal')
+        assert plan_resume(job, lease, receptor_ctl=mock.Mock()).action == WAIT
+        Instance.objects.filter(pk=peer.pk).update(last_seen=now() - timedelta(minutes=10))
         assert plan_resume(job, lease, receptor_ctl=mock.Mock()).action == FAIL
 
 
