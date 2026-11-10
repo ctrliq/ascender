@@ -15,18 +15,6 @@ VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py 2> /dev/null)
 # NOTE: This defaults the container image version to the branch that's active
 COMPOSE_TAG ?= $(GIT_BRANCH)
 MAIN_NODE_TYPE ?= hybrid
-# If set to true docker-compose will also start a pgbouncer instance and use it
-PGBOUNCER ?= false
-# If set to true docker-compose will also start a keycloak instance
-KEYCLOAK ?= false
-# If set to true docker-compose will also start an ldap instance
-LDAP ?= false
-# If set to true docker-compose will also start a hashicorp vault instance
-VAULT ?= false
-# If set to true docker-compose will also start a hashicorp vault instance with TLS enabled
-VAULT_TLS ?= false
-# If set to true docker-compose will also start a tacacs+ instance
-TACACS ?= false
 
 EDITABLE_DEPENDENCIES ?= false
 
@@ -514,21 +502,10 @@ docker-compose-sources: .git/hooks/pre-commit
 	    -e control_plane_node_count=$(CONTROL_PLANE_NODE_COUNT) \
 	    -e execution_node_count=$(EXECUTION_NODE_COUNT) \
 	    -e minikube_container_group=$(MINIKUBE_CONTAINER_GROUP) \
-	    -e enable_pgbouncer=$(PGBOUNCER) \
-	    -e enable_keycloak=$(KEYCLOAK) \
-	    -e enable_ldap=$(LDAP) \
-	    -e enable_vault=$(VAULT) \
-	    -e vault_tls=$(VAULT_TLS) \
-	    -e enable_tacacs=$(TACACS) \
 		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
 	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
 
 docker-compose: ascender/projects docker-compose-sources
-	ansible-galaxy install --ignore-certs -r tools/docker-compose/ansible/requirements.yml;
-	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/initialize_containers.yml \
-	    -e enable_vault=$(VAULT) \
-	    -e vault_tls=$(VAULT_TLS) \
-	    -e enable_ldap=$(LDAP); \
 	$(MAKE) docker-compose-up
 
 docker-compose-up:
@@ -536,10 +513,6 @@ docker-compose-up:
 
 docker-compose-down:
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) down --remove-orphans
-
-docker-compose-credential-plugins: ascender/projects docker-compose-sources
-	echo -e "\033[0;31mTo generate a CyberArk Conjur API key: docker exec -it tools_conjur_1 conjurctl account create quick-start\033[0m"
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/docker-credential-plugins-override.yml up --no-recreate ascender_1 --remove-orphans
 
 docker-compose-test: ascender/projects docker-compose-sources
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports ascender_1 /bin/bash
@@ -602,7 +575,7 @@ docker-clean:
 	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
 
 docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_var_lib_awx tools_awx_db tools_vault_1 tools_ldap_1 $(docker volume ls --filter name=tools_valkey_socket_ -q)
+	docker volume rm -f tools_var_lib_awx tools_awx_db $(docker volume ls --filter name=tools_valkey_socket_ -q)
 
 docker-refresh: docker-clean docker-compose
 
