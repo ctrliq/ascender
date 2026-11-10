@@ -499,6 +499,26 @@ def test_an_unknown_unit_is_told_from_an_unreachable_receptor():
         ReceptorUnitStream(job, FakeReceptorCtl(error=ValueError('Socket path does not exist')), 'u1').is_known()
 
 
+@pytest.mark.parametrize('result, adopted', [('Adopted', True), ('Adopt Pending', True), ('unit not found', False)])
+def test_adopt_accepts_both_answers_receptor_gives_for_an_adopted_unit(result, adopted):
+    """receptor answers "Adopt Pending" when it has allocated the unit and is still connecting to its node (finalizeAdoptRestart)."""
+    ctl = mock.Mock()
+    ctl.read_and_parse_json.return_value = {'unitid': 'u1', 'result': result}
+    stream = ReceptorUnitStream(mock.Mock(log_format='job 7'), ctl, 'u1', node='exec-1', config_data={})
+    with (
+        mock.patch('ascender.main.tasks.receptor.get_conn_type') as conn_type,
+        mock.patch('ascender.main.tasks.receptor.get_tls_client', return_value=None),
+        mock.patch('ascender.main.tasks.receptor.work_signing_enabled', return_value=False),
+    ):
+        conn_type.return_value.name = 'STREAM'
+        if adopted:
+            assert stream.adopt()['result'] == result
+        else:
+            with pytest.raises(RuntimeError):
+                stream.adopt()
+    assert json.loads(ctl.writestr.call_args.args[0]) == {'command': 'work', 'subcommand': 'adopt', 'node': 'exec-1', 'unitid': 'u1'}
+
+
 def test_a_unit_stream_stalls_only_while_its_reader_waits():
     """A reader busy with events it already has is slow, not stalled; one waiting on the socket past the limit, for a finished unit, is."""
     job = mock.Mock(log_format='job 7')

@@ -360,7 +360,9 @@ class ReceptorUnitStream:
         self.receptor_ctl.connect()
         self.receptor_ctl.writestr(json.dumps(command) + '\n')
         reply = self.receptor_ctl.read_and_parse_json()
-        if reply.get('result') not in ('Adopted', 'Already Adopted'):
+        # "Adopt Pending" is an adoption too: the unit is allocated here and connects to the node in
+        # the background, and ``work results`` serves its output as it arrives.
+        if reply.get('result') not in ('Adopted', 'Adopt Pending'):
             raise RuntimeError(f'receptor did not adopt work unit {self.unit_id} from {self.node}: {reply}')
         return reply
 
