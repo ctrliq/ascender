@@ -14,6 +14,7 @@ import uuid
 
 import pytest
 
+from django.db import OperationalError
 from django.utils.timezone import now
 
 from ascender.main.dispatch import reaper
@@ -1057,6 +1058,27 @@ def test_an_abandoned_stream_sends_no_eof():
     receptor_job.finished_callback(None)
     assert receptor_job.eof_held
     assert task.runner_callback.finished_callback.call_count == 1
+
+
+@pytest.mark.django_db
+def test_a_database_error_recording_the_pod_is_tried_again_not_fatal():
+    """Like a failed renewal, a failed write of the pod's name must not end the read of a job that is running."""
+    job = running_job()
+    leased(job, expired=False)
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.task, receptor_job.unit_id, receptor_job.pod_recorded = mock.Mock(instance=job), 'unit1', False
+    ctl = mock.Mock()
+    ctl.simple_command.return_value = {'ExtraData': {'PodName': 'automation-job-1-abcde', 'KubeNamespace': 'ascender'}}
+    with (
+        mock.patch.object(Job, 'is_container_group_task', new_callable=mock.PropertyMock, return_value=True),
+        mock.patch.object(AWXReceptorJob, 'mesh_node', new_callable=mock.PropertyMock, return_value=None),
+    ):
+        with mock.patch.object(JobMonitorLease.objects, 'record', side_effect=OperationalError('server closed the connection unexpectedly')):
+            receptor_job._record_pod(ctl)
+        assert receptor_job.pod_recorded is False
+        receptor_job._record_pod(ctl)
+    assert receptor_job.pod_recorded is True
+    assert JobMonitorLease.objects.get(unified_job=job).pod_name == 'automation-job-1-abcde'
 
 
 @pytest.mark.django_db

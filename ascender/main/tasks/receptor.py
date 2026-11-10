@@ -675,7 +675,12 @@ class AWXReceptorJob:
         pod_name, namespace = extra.get('PodName'), extra.get('KubeNamespace')
         if not pod_name or not namespace:
             return
-        JobMonitorLease.objects.record(self.task.instance, pod_name=pod_name, pod_namespace=namespace)
+        try:
+            JobMonitorLease.objects.record(self.task.instance, pod_name=pod_name, pod_namespace=namespace)
+        except DatabaseError as exc:
+            # Like a lease renewal that fails, not a reason to stop reading: the next renewal tick tries again
+            logger.warning(f'{self.task.instance.log_format}: could not record its pod {pod_name} on its monitor lease: {exc}')
+            return
         self.task.instance.log_lifecycle("pod_recorded")
         self.pod_recorded = True
 
