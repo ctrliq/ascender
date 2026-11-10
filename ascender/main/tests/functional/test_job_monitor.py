@@ -697,6 +697,32 @@ def test_requeue_is_fenced_by_the_owning_task(me):
     assert job.get_event_queryset().count() == 2
 
 
+@pytest.mark.django_db(transaction=True)
+def test_a_requeue_and_a_claim_take_their_locks_in_the_same_order():
+    """Both lock the lease row before the job's; in the opposite order they deadlock, and PostgreSQL aborts one."""
+    job = running_job()
+    leased(job)
+    owner = job.celery_task_id
+    locked = threading.Event()
+
+    @in_a_thread_with_its_own_connection
+    def claim_in_progress():
+        with transaction.atomic():
+            JobMonitorLease.objects.select_for_update().filter(unified_job_id=job.pk).first()
+            locked.set()
+            time.sleep(1)  # the re-queue reaches its first lock meanwhile
+            UnifiedJob.objects.filter(pk=job.pk).update(celery_task_id='the-claimer')
+
+    with mock.patch.object(UnifiedJob, 'websocket_emit_status'), mock.patch('ascender.main.tasks.jobs.ScheduleTaskManager'):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            claimer = pool.submit(claim_in_progress)
+            assert locked.wait(10)
+            requeue = pool.submit(in_a_thread_with_its_own_connection(lambda: requeue_job(job, 'its pod never received its payload', owner)))
+            claimer.result(timeout=15)
+            assert requeue.result(timeout=15) is False
+    assert Job.objects.get(pk=job.pk).status == 'running'
+
+
 @pytest.mark.parametrize(
     'value,expected',
     [('2h', 7200), ('30m', 1800), ('1h30m', 5400), ('1.5h', 5400), ('500ms', 0.5), ('90', 90), (90, 90), ('', 7), (None, 7), ('soon', 7), ('1h 30m', 7)],

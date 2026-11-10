@@ -208,6 +208,9 @@ def requeue_job(job, reason, owner_task_id):
     """
     explanation = f'The job was re-queued because {reason}.'
     with transaction.atomic():
+        # The lease row first, then the job's, the order claim_job takes them in: the other order
+        # deadlocks against a claim of the same job.
+        list(JobMonitorLease.objects.select_for_update().filter(unified_job_id=job.pk).values_list('pk', flat=True))
         jobs = UnifiedJob.objects.filter(pk=job.pk, status='running')
         if owner_task_id:
             jobs = jobs.filter(celery_task_id=owner_task_id)
