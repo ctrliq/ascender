@@ -20,7 +20,7 @@ from django.utils.timezone import now
 from ascender.main.dispatch import reaper
 from ascender.main.models import Instance, Job, JobEvent, JobMonitorLease, LeaseLost, ProjectUpdate, UnifiedJob
 from ascender.main.tasks import monitor
-from ascender.main.tasks.callback import persisted_event_counters
+from ascender.main.tasks.callback import RunnerCallback, persisted_event_counters
 from ascender.main.tasks.jobs import RunJob
 from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
 from ascender.main.tasks.receptor import AWXReceptorJob, _PhaseResult
@@ -1079,6 +1079,26 @@ def test_a_database_error_recording_the_pod_is_tried_again_not_fatal():
         receptor_job._record_pod(ctl)
     assert receptor_job.pod_recorded is True
     assert JobMonitorLease.objects.get(unified_job=job).pod_name == 'automation-job-1-abcde'
+
+
+@pytest.mark.django_db
+def test_a_failed_write_of_the_worker_start_is_tried_again_at_the_next_renewal():
+    """A lease that never learns that the worker started would let a later reader re-queue a job that ran."""
+    job = running_job()
+    lease = leased(job, expired=False)
+    callback = RunnerCallback(model=Job)
+    callback.instance = job
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.task, receptor_job.receptor_ctl = mock.Mock(instance=job, runner_callback=callback), None
+    receptor_job.unit_id, receptor_job.pod_recorded = 'unit1', True
+    callback.worker_started = True
+    with mock.patch.object(JobMonitorLease.objects, 'record', side_effect=OperationalError('server closed the connection unexpectedly')):
+        callback.record_worker_started()
+    lease.refresh_from_db()
+    assert lease.worker_started is False and callback.worker_started_recorded is False
+    receptor_job._record_progress()
+    lease.refresh_from_db()
+    assert lease.worker_started is True and callback.worker_started_recorded is True
 
 
 @pytest.mark.django_db

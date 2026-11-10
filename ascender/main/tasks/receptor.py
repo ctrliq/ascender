@@ -684,6 +684,13 @@ class AWXReceptorJob:
         self.task.instance.log_lifecycle("pod_recorded")
         self.pod_recorded = True
 
+    def _record_progress(self):
+        """Write to the lease what a later reader needs, trying again at every renewal until it is written."""
+        self._record_pod(self.receptor_ctl)
+        callback = self.task.runner_callback
+        if callback.worker_started and not callback.worker_started_recorded:
+            callback.record_worker_started()
+
     def process_stream(self, stream, owner_task_id=None):
         """
         Read the job's output from ``stream`` with ansible-runner's process streamer, in a
@@ -739,7 +746,7 @@ class AWXReceptorJob:
                     logger.warning(f'{job.log_format}: its monitoring was taken over by another task; dropping this stream')
                     stream.interrupt()
                     return self._drain(processor_future, 'error')
-                self._record_pod(self.receptor_ctl)
+                self._record_progress()
                 if stream.stalled(settings.JOB_MONITOR_STREAM_IDLE_SECONDS):
                     self.stream_stalled = True
                     logger.warning(f'{job.log_format}: work unit {self.unit_id} is done but its output stopped arriving; abandoning the stream')

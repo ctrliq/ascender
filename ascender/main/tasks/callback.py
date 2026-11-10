@@ -123,6 +123,8 @@ class RunnerCallback:
         self.extra_update_fields = {}
         # ansible-runner reported 'starting': the execution environment has its payload
         self.worker_started = False
+        # ...and that is written on the job's monitor lease, where a later reader looks for it
+        self.worker_started_recorded = False
         # Set when reading a job's output is resumed on another node. Events with a counter at
         # or below the threshold, or in the set, are already saved and are not dispatched again.
         self.dedup_threshold = None
@@ -439,14 +441,18 @@ class RunnerCallback:
     def record_worker_started(self):
         """
         Note on the job's monitor lease that its execution environment has its payload.
-        Before this point a job that loses its monitor is re-queued; after it, resumed.
+        Before this point a job that loses its monitor can be re-queued; after it, only resumed.
+        A write that fails is tried again at the next lease renewal (AWXReceptorJob._record_progress):
+        left unwritten, the lease would say the job never started for as long as it runs.
         """
         from ascender.main.models import JobMonitorLease  # Circular import
 
         try:
             JobMonitorLease.objects.record(self.instance, worker_started=True)
         except Exception:
-            logger.warning(f'{self.instance.log_format}: could not record on its monitor lease that the worker started', exc_info=True)
+            logger.warning(f'{self.instance.log_format}: could not record on its monitor lease that the worker started; trying again', exc_info=True)
+            return
+        self.worker_started_recorded = True
 
     def artifacts_handler(self, artifact_dir):
         self.artifacts_processed = True
