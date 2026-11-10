@@ -813,13 +813,15 @@ class AWXReceptorJob:
             logger.warning(f'{job.log_format}: shutdown signal received; cancelling work unit {self.unit_id}, and the job cannot be re-queued')
             self._stop_work(stream, processor_future)
             return _PhaseResult('canceled', 1)
+        # Set before the stream is dropped: the streamer's finished callback runs as the stream is
+        # drained, and must send no EOF for an attempt that is given up (see finished_callback).
+        self.requeued = True
         if not self._stop_work(stream, processor_future):
-            self.detached = True
+            self.requeued, self.detached = False, True
             logger.warning(
                 f'{job.log_format}: shutdown signal received; work unit {self.unit_id} could not be cancelled, so the next monitor, not a second run, takes the job'
             )
             return _PhaseResult('detached', 1)
-        self.requeued = True
         why = 'the project update' if not job_can_detach(job) else 'its execution environment had not received its payload, so the job'
         logger.warning(f'{job.log_format}: shutdown signal received; {why} is cancelled (work unit {self.unit_id}) and re-queued')
         return _PhaseResult('canceled', 1)

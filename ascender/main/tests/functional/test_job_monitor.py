@@ -1438,6 +1438,27 @@ def test_an_abandoned_stream_sends_no_eof():
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize('cancellable', [True, False])
+def test_an_attempt_given_up_on_shutdown_sends_no_eof_while_its_stream_drains(cancellable):
+    """The streamer calls the finished callback as the stream is drained; by then the attempt must already be marked given up."""
+    job = running_job()
+    task = mock.Mock()
+    task.instance = job
+    task.runner_callback.worker_started = False
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.__init__(task, {'private_data_dir': '/tmp/x'}, resuming=True)
+    receptor_job.resuming = False
+    receptor_job.unit_id = 'u'
+    stream = FakeStream([]) if cancellable else UncancellableStream([])
+    draining = mock.Mock()
+    # what the streamer thread does as it exits on the dropped stream
+    draining.result.side_effect = lambda timeout=None: (receptor_job.finished_callback(None), _PhaseResult('error', 1))[1]
+    receptor_job._handle_signal(stream, draining)
+    assert (receptor_job.requeued, receptor_job.detached) == ((True, False) if cancellable else (False, True))
+    task.runner_callback.finished_callback.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_a_database_error_recording_the_pod_is_tried_again_not_fatal():
     """Like a failed renewal, a failed write of the pod's name must not end the read of a job that is running."""
     job = running_job()
