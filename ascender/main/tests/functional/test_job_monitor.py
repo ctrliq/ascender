@@ -637,7 +637,7 @@ def test_requeue_resets_the_job_for_scheduling():
     # the attempt given up saved some output; the next one numbers its events from 1 again
     save_events(job, [1, 2])
     with mock.patch.object(UnifiedJob, 'websocket_emit_status'), mock.patch('ascender.main.tasks.jobs.ScheduleTaskManager') as stm:
-        assert requeue_job(job, 'its pod never received its payload')
+        assert requeue_job(job, 'its pod never received its payload', job.celery_task_id)
     stm.return_value.schedule.assert_called_once()
     job.refresh_from_db()
     assert job.status == 'pending'
@@ -646,6 +646,23 @@ def test_requeue_resets_the_job_for_scheduling():
     assert 'never received its payload' in job.job_explanation
     assert not JobMonitorLease.objects.filter(unified_job=job).exists()
     assert not job.get_event_queryset().exists()
+
+
+@pytest.mark.django_db
+def test_requeue_is_fenced_by_the_owning_task(me):
+    """A task that lost the job to a claim must neither reset a job another task is reading nor remove its lease."""
+    job = running_job()
+    leased(job)
+    save_events(job, [1, 2])
+    former = job.celery_task_id
+    claimed = claim_job(job, me.hostname)
+    with mock.patch.object(UnifiedJob, 'websocket_emit_status'), mock.patch('ascender.main.tasks.jobs.ScheduleTaskManager') as stm:
+        assert requeue_job(job, 'its pod never received its payload', former) is False
+    stm.return_value.schedule.assert_not_called()
+    job.refresh_from_db()
+    assert (job.status, job.celery_task_id) == ('running', claimed)
+    assert JobMonitorLease.objects.filter(unified_job=job).exists()
+    assert job.get_event_queryset().count() == 2
 
 
 @pytest.mark.parametrize(

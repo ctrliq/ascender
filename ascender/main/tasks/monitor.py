@@ -189,38 +189,42 @@ def discard_abandoned_events(job):
     return job.get_event_queryset().delete()[0]
 
 
-def requeue_job(job, reason):
+def requeue_job(job, reason, owner_task_id):
     """
-    Hand the job back to the task manager as if it had never been dispatched.
+    Hand the job back to the task manager as if it had never been dispatched; False when
+    owner_task_id no longer owns the job, which is then left to the task that does.
 
     Only for a job that has run nothing, or whose work repeats safely. The node, the work
-    unit and the task id are cleared along with the status, and the lease goes with them:
-    the job starts over from scheduling, on whichever node has room. The events the given-up
-    attempt saved are deleted (see discard_abandoned_events), and BaseTask.run deletes any that
-    arrive after this, before the next attempt produces its own.
+    unit and the task id are cleared along with the status, and the lease and the events the
+    given-up attempt saved go with them, in the same transaction (see discard_abandoned_events);
+    BaseTask.run deletes any that arrive after this, before the next attempt produces its own.
+    The job starts over from scheduling, on whichever node has room.
     """
     explanation = f'The job was re-queued because {reason}.'
-    updated = UnifiedJob.objects.filter(pk=job.pk, status='running').update(
-        status='pending',
-        controller_node='',
-        execution_node='',
-        work_unit_id='',
-        celery_task_id='',
-        started=None,
-        job_explanation=explanation,
-    )
-    JobMonitorLease.objects.finish(job)
-    if updated:
-        discarded = discard_abandoned_events(job)
-        logger.warning(
-            f'{job.log_format} re-queued because {reason}' + (f'; the {discarded} event(s) of the attempt given up are deleted' if discarded else '')
+    with transaction.atomic():
+        jobs = UnifiedJob.objects.filter(pk=job.pk, status='running')
+        if owner_task_id:
+            jobs = jobs.filter(celery_task_id=owner_task_id)
+        updated = jobs.update(
+            status='pending',
+            controller_node='',
+            execution_node='',
+            work_unit_id='',
+            celery_task_id='',
+            started=None,
+            job_explanation=explanation,
         )
-        job.log_lifecycle('monitor_requeued')
-        job.websocket_emit_status('pending')
-        from ascender.main.tasks.jobs import ScheduleTaskManager  # circular import
+        if not updated:
+            return False
+        JobMonitorLease.objects.finish(job)
+        discarded = discard_abandoned_events(job)
+    logger.warning(f'{job.log_format} re-queued because {reason}' + (f'; the {discarded} event(s) of the attempt given up are deleted' if discarded else ''))
+    job.log_lifecycle('monitor_requeued')
+    job.websocket_emit_status('pending')
+    from ascender.main.tasks.jobs import ScheduleTaskManager  # circular import
 
-        ScheduleTaskManager().schedule()
-    return bool(updated)
+    ScheduleTaskManager().schedule()
+    return True
 
 
 def claim_job(job, hostname):

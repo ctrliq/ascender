@@ -731,7 +731,7 @@ class BaseTask(object):
                 reason = 'its controller stopped before the execution environment received its payload'
             else:
                 reason = 'its controller stopped, and a project update is run again rather than left running without the lock on its project'
-            requeue_job(self.instance, reason)
+            requeue_job(self.instance, reason, self.owner_task_id)
             return
         # The job is still running where it was sent; the next monitor reads it.
         self._leave_to_resume(receptor_job)
@@ -961,7 +961,7 @@ class BaseTask(object):
             self._try_again_later(pk)
             return
         if plan.action == REQUEUE:
-            requeue_job(job, plan.reason)
+            requeue_job(job, plan.reason, task_id)
             return
 
         private_data_dir = self.build_private_data_dir(job)
