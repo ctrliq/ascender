@@ -506,7 +506,8 @@ class PodLogStream:
             return False
 
     def cancel(self):
-        self.delete_pod()
+        """Stop the job by deleting its pod; False when it could not be."""
+        return self.delete_pod()
 
     def release(self):
         """What ``work release`` would have done for this pod: remove it, once the job is final."""

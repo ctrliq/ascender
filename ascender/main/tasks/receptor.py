@@ -791,7 +791,9 @@ class AWXReceptorJob:
         since nothing has run yet, and so is a project update, which is never left running
         without the lock on its project (see job_can_detach). An inline project sync is only
         cancelled, since the job that runs it is stopping too, and so is a job that cannot be
-        re-queued (see can_requeue).
+        re-queued (see can_requeue). A job whose work could not be cancelled is not re-queued
+        either, which would start a second copy: it is left to the next monitor, which re-queues
+        it only once it has stopped what is left.
         """
         from ascender.main.tasks.monitor import can_requeue, is_inline_sync, job_can_detach  # circular import
 
@@ -809,20 +811,29 @@ class AWXReceptorJob:
 
         if is_inline_sync(job) or not can_requeue(job):
             logger.warning(f'{job.log_format}: shutdown signal received; cancelling work unit {self.unit_id}, and the job cannot be re-queued')
-        else:
-            self.requeued = True
-            why = 'the project update' if not job_can_detach(job) else 'its execution environment had not received its payload, so the job'
-            logger.warning(f'{job.log_format}: shutdown signal received; {why} is cancelled (work unit {self.unit_id}) and re-queued')
-        self._stop_work(stream, processor_future)
+            self._stop_work(stream, processor_future)
+            return _PhaseResult('canceled', 1)
+        if not self._stop_work(stream, processor_future):
+            self.detached = True
+            logger.warning(
+                f'{job.log_format}: shutdown signal received; work unit {self.unit_id} could not be cancelled, so the next monitor, not a second run, takes the job'
+            )
+            return _PhaseResult('detached', 1)
+        self.requeued = True
+        why = 'the project update' if not job_can_detach(job) else 'its execution environment had not received its payload, so the job'
+        logger.warning(f'{job.log_format}: shutdown signal received; {why} is cancelled (work unit {self.unit_id}) and re-queued')
         return _PhaseResult('canceled', 1)
 
     def _stop_work(self, stream, processor_future):
+        """Cancel the work and drop the stream; False when the work could not be cancelled."""
         try:
-            stream.cancel()
+            cancelled = stream.cancel() is not False
         except Exception:
             logger.exception(f'{self.task.instance.log_format}: could not cancel work unit {self.unit_id}')
+            cancelled = False
         stream.interrupt()
         self._drain(processor_future, 'canceled')
+        return cancelled
 
     def _handle_work_error(self, stream, res):
         # If ansible-runner ran, but an error occured at runtime, the traceback information

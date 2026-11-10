@@ -1321,6 +1321,36 @@ def test_a_run_that_ends_without_its_post_run_hook_releases_the_project_lock(pro
     post_run_hook.assert_not_called()
 
 
+class UncancellableStream(FakeStream):
+    """A work unit receptor would not cancel, its control socket gone with the shutdown."""
+
+    def cancel(self):
+        raise RuntimeError('receptor control socket is gone')
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('kind', ['job_not_started', 'project_update'])
+def test_work_that_could_not_be_cancelled_on_shutdown_is_not_run_again(project, kind):
+    """Re-queueing it would start a second copy; the next monitor re-queues it only once it has stopped what is left."""
+    if kind == 'project_update':
+        job = ProjectUpdate.objects.create(project=project, status='running', celery_task_id='t', work_unit_id='u', launch_type='manual')
+    else:
+        job = running_job()
+    task = mock.Mock()
+    task.instance = job
+    task.runner_callback.worker_started = kind == 'project_update'
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.__init__(task, {'private_data_dir': '/tmp/x'}, resuming=True)
+    receptor_job.resuming = False
+    receptor_job.unit_id = 'u'
+    stream = UncancellableStream([])
+    done = mock.Mock()
+    done.result.return_value = _PhaseResult('error', 1)
+    res = receptor_job._handle_signal(stream, done)
+    assert receptor_job.detached and not receptor_job.requeued
+    assert res.status == 'detached' and stream.interrupted
+
+
 @pytest.mark.django_db
 def test_an_abandoned_stream_sends_no_eof():
     job = running_job()
