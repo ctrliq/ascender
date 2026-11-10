@@ -88,6 +88,11 @@ address, a local superuser included. The only accounts an Entra ID login takes
 over are those of the legacy Azure AD logins, and only when they belong to the
 same person (see [Moving from the Azure AD logins](#moving-from-the-azure-ad-logins)).
 
+For the same reason, `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS` skips the email
+part of its check for Entra ID and only refuses a first login whose desired
+username is already taken. Several existing accounts sharing the incoming email
+address do not block a login that would otherwise create a new account.
+
 ## Groups and app roles
 
 Entra only puts groups in the token once you ask for them, under *Token
@@ -166,6 +171,13 @@ These work exactly as for generic OIDC, see [oidc.md](oidc.md):
   with `triggers_admins`, `triggers_users` and `triggers` on top of the usual
   username and email expressions
 * `SOCIAL_AUTH_ENTRA_ID_USER_FLAGS`, for superusers and system auditors
+
+`SOCIAL_AUTH_ENTRA_ID_USER_FLAGS` accepts the same trigger rules and
+`is_superuser` / `is_system_auditor` username lists as generic OIDC. The lists
+name Ascender accounts by exact, case-sensitive username, and are only honored
+while `RESTRICT_USER_IDENTITY_TO_SUPERUSERS` is on; with it off, they are
+ignored with a warning because an organization administrator could otherwise
+rename or create an account to take a listed name.
 
 For example, with app roles:
 

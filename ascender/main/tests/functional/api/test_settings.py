@@ -177,6 +177,24 @@ def test_radius_settings(get, put, patch, delete, admin, settings):
 
 
 @pytest.mark.django_db
+def test_prevent_username_collisions_round_trip(get, patch, admin, settings):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'authentication'})
+    patch(url, user=admin, data={'SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS': True}, expect=200)
+    response = get(url, user=admin, expect=200)
+    assert response.data['SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS'] is True
+    assert settings.SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS is True
+
+
+@pytest.mark.django_db
+def test_restrict_user_identity_round_trip(get, patch, admin, settings):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'system'})
+    assert get(url, user=admin, expect=200).data['RESTRICT_USER_IDENTITY_TO_SUPERUSERS'] is False
+    patch(url, user=admin, data={'RESTRICT_USER_IDENTITY_TO_SUPERUSERS': True}, expect=200)
+    assert get(url, user=admin, expect=200).data['RESTRICT_USER_IDENTITY_TO_SUPERUSERS'] is True
+    assert settings.RESTRICT_USER_IDENTITY_TO_SUPERUSERS is True
+
+
+@pytest.mark.django_db
 def test_login_redirect_override_scheme(get, patch, admin, settings):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'authentication'})
     patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': '/sso/login/saml/?idp=corp'}, expect=200)
@@ -585,7 +603,7 @@ def test_oidc_rules_round_trip(get, patch, admin):
         'SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS': rule,
         'SOCIAL_AUTH_OIDC_ORGANIZATION_MAP': {'Default': {'triggers_admins': rule, 'remove_admins': True}},
         'SOCIAL_AUTH_OIDC_TEAM_MAP': {'Operators': {'organization': 'Default', 'triggers': rule}},
-        'SOCIAL_AUTH_OIDC_USER_FLAGS': {'triggers_superuser': rule, 'remove_superusers': False},
+        'SOCIAL_AUTH_OIDC_USER_FLAGS': {'triggers_superuser': rule, 'is_superuser': ['alice'], 'remove_superusers': False},
         'SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP': True,
     }
     patch(url, user=admin, data=data, expect=200)
@@ -593,6 +611,28 @@ def test_oidc_rules_round_trip(get, patch, admin):
     for key, value in data.items():
         assert response.data[key] == value
     assert response.data['SOCIAL_AUTH_OIDC_CALLBACK_URL'].endswith('/sso/complete/oidc/')
+
+
+@pytest.mark.django_db
+def test_oidc_user_flags_usernames_are_normalized(patch, get, admin):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'oidc'})
+    patch(
+        url,
+        user=admin,
+        data={'SOCIAL_AUTH_OIDC_USER_FLAGS': {'is_superuser': [' alice ', 'alice', 'bob']}},
+        expect=200,
+    )
+
+    response = get(url, user=admin, expect=200)
+
+    assert response.data['SOCIAL_AUTH_OIDC_USER_FLAGS']['is_superuser'] == ['alice', 'bob']
+
+
+@pytest.mark.django_db
+def test_oidc_user_flags_accept_an_empty_trigger_rule(patch, admin):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'oidc'})
+
+    patch(url, user=admin, data={'SOCIAL_AUTH_OIDC_USER_FLAGS': {'triggers_superuser': {}}}, expect=200)
 
 
 @pytest.mark.django_db

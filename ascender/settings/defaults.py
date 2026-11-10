@@ -665,8 +665,10 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'ascender.sso.oidc.check_login_allowed',
     'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
+    'ascender.sso.social_base_pipeline.check_external_login_collision',
     'social_core.pipeline.user.get_username',
     'ascender.sso.entra.associate_existing_account',
+    'ascender.sso.social_base_pipeline.check_final_username_collision',
     'social_core.pipeline.user.create_user',
     'ascender.sso.social_base_pipeline.check_user_found_or_created',
     'social_core.pipeline.social_auth.associate_user',
@@ -686,6 +688,7 @@ SOCIAL_AUTH_INACTIVE_USER_URL = '/sso/inactive/'
 
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
+SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS = False
 # SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_CLEAN_USERNAMES = True
 
@@ -972,6 +975,7 @@ CALLBACK_QUEUE_SOCKET_TIMEOUT = 30
 # Note: This setting may be overridden by database settings.
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
+RESTRICT_USER_IDENTITY_TO_SUPERUSERS = False
 ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
 AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS = False
 DISABLE_LOCAL_AUTH = False
