@@ -1,3 +1,4 @@
+import bisect
 import json
 import time
 import logging
@@ -7,8 +8,7 @@ from collections import deque
 from ascender.settings.typed import settings
 from django_guid import get_guid
 from django.utils.functional import cached_property
-from django.db import connections
-from django.db.models import Exists, OuterRef
+from django.db import connection, connections
 
 # Ascender
 from ascender.main.constants import ENV_BLOCKLIST
@@ -22,31 +22,27 @@ logger = logging.getLogger('ascender.main.tasks.callback')
 
 def persisted_event_counters(job):
     """
-    What a resumed read of the job's output may skip: (threshold, counters_above, persisted_count).
+    What a resumed read of the job's output may skip: the counters of the job's saved events,
+    as sorted (first, last) ranges, and how many events that is.
 
-    Events up to ``threshold`` are all saved, so a replayed event with a counter at or below
-    it is skipped by one comparison. ``counters_above`` are the few saved events past that
-    point: the callback receiver saves in parallel batches, so a later counter can land before
-    an earlier one. ``persisted_count`` seeds the event count so emitted_events and the EOF
-    counter describe the whole job rather than the replayed part. Memory is bounded by the
-    receiver's concurrency, never by the size of the job.
+    One query reads both, so they describe the same moment. The count seeds the event count, so
+    that emitted_events and the EOF counter describe the whole job rather than the replayed part:
+    every replayed event outside the ranges is dispatched and counted once, and is saved once,
+    whether as itself or as the copy a receiver that was still behind saves meanwhile, whose
+    duplicate the receiver then drops. The ranges grow with the gaps between saved events (the
+    receiver saves in parallel batches, and drops an event it cannot save), never with the size
+    of the job: a job whose events were all saved is one range.
     """
-    qs = job.get_event_queryset()
-    if not qs.filter(counter=1).exists():
-        threshold = 0
-    else:
-        has_next = Exists(qs.filter(counter=OuterRef('counter') + 1))
-        gap_event = qs.annotate(has_next=has_next).filter(has_next=False).order_by('counter').first()
-        threshold = gap_event.counter if gap_event else 0
-    above = qs.filter(counter__gt=threshold)
-    persisted_above = above.count()
-    cap = settings.JOB_EVENT_WORKERS * 1000
-    if persisted_above > cap:
-        logger.warning(
-            f'{job.log_format}: {persisted_above} saved events sit past the contiguous prefix at {threshold}, more than the {cap} tracked; the rest are rejected by the database on replay'
+    sql, params = job.get_event_queryset().order_by().values_list('counter').query.sql_with_params()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT MIN(counter), MAX(counter) FROM ('
+            f'SELECT counter, counter - ROW_NUMBER() OVER (ORDER BY counter) AS run FROM ({sql}) AS saved (counter)'
+            ') AS numbered GROUP BY run ORDER BY 1',
+            params,
         )
-    counters_above = set(above.order_by('counter').values_list('counter', flat=True)[:cap])
-    return threshold, counters_above, threshold + persisted_above
+        ranges = [(first, last) for first, last in cursor.fetchall()]
+    return ranges, sum(last - first + 1 for first, last in ranges)
 
 
 def _setting_as_bool(value, default):
@@ -125,10 +121,10 @@ class RunnerCallback:
         self.worker_started = False
         # ...and that is written on the job's monitor lease, where a later reader looks for it
         self.worker_started_recorded = False
-        # Set when reading a job's output is resumed on another node. Events with a counter at
-        # or below the threshold, or in the set, are already saved and are not dispatched again.
-        self.dedup_threshold = None
-        self.persisted_counters = frozenset()
+        # Set when reading a job's output is resumed on another node: the (first, last) ranges of
+        # the counters of the events already saved, which are not dispatched again.
+        self.persisted_ranges = []
+        self._persisted_firsts = []
         # The private data dir of the resumed read; the post-run hooks find the artifacts there.
         self.private_data_dir_override = None
 
@@ -158,7 +154,8 @@ class RunnerCallback:
             except Exception:
                 pass
         self.private_data_dir_override = private_data_dir
-        self.dedup_threshold, self.persisted_counters, self.event_ct = persisted_event_counters(instance)
+        self.persisted_ranges, self.event_ct = persisted_event_counters(instance)
+        self._persisted_firsts = [first for first, last in self.persisted_ranges]
         if reading:
             self.populate_host_map_from_inventory(instance)
         job_env = dict(instance.job_env or {})
@@ -198,9 +195,10 @@ class RunnerCallback:
 
     def _already_persisted(self, event_data):
         counter = event_data.get('counter')
-        if self.dedup_threshold is None or counter is None:
+        if not self.persisted_ranges or counter is None:
             return False
-        return counter <= self.dedup_threshold or counter in self.persisted_counters
+        at = bisect.bisect_right(self._persisted_firsts, counter) - 1
+        return at >= 0 and counter <= self.persisted_ranges[at][1]
 
     def _note_wrapup(self, event_data):
         if event_data.get('event', '') == self.wrapup_event_type:

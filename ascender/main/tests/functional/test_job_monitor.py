@@ -716,12 +716,31 @@ def save_events(job, counters):
 @pytest.mark.django_db
 def test_persisted_event_counters():
     job = running_job()
-    save_events(job, [1, 2, 3, 5, 7])
-    assert persisted_event_counters(job) == (3, {5, 7}, 5)
+    save_events(job, [1, 2, 3, 5, 7, 8])
+    assert persisted_event_counters(job) == ([(1, 3), (5, 5), (7, 8)], 6)
     gap_at_start = running_job(work_unit_id='unit2')
     save_events(gap_at_start, [2, 3])
-    assert persisted_event_counters(gap_at_start) == (0, {2, 3}, 2)
-    assert persisted_event_counters(running_job(work_unit_id='unit3')) == (0, set(), 0)
+    assert persisted_event_counters(gap_at_start) == ([(2, 3)], 2)
+    assert persisted_event_counters(running_job(work_unit_id='unit3')) == ([], 0)
+
+
+@pytest.mark.django_db
+def test_a_replay_skips_every_saved_event_past_a_gap_however_many(settings):
+    """
+    The receiver drops an event it cannot save, and the job goes on: everything saved after that
+    gap must still be skipped on replay, and counted once, or emitted_events never matches.
+    """
+    settings.JOB_EVENT_WORKERS = 1
+    job = running_job()
+    counters = [1, 2] + list(range(4, 2005))
+    at = now()
+    JobEvent.objects.bulk_create(
+        JobEvent(job=job, job_created=job.created, counter=c, event='runner_on_ok', uuid=f'u{c}', stdout='', created=at, modified=at) for c in counters
+    )
+    callback = RunnerCallback(model=Job)
+    callback.configure_for_resume(job, '/tmp/x', reading=False)
+    assert callback.event_ct == len(counters)
+    assert [c for c in range(1, 2006) if not callback._already_persisted({'counter': c})] == [3, 2005]
 
 
 # -- the signal handling of the stream ----------------------------------------------------------

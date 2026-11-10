@@ -81,9 +81,9 @@ could not start again without them.
 
 Either stream is fed to ansible-runner's process streamer unchanged, so events are parsed,
 saved and broadcast exactly as during the launch. Events are replayed from the beginning:
-`RunnerCallback` skips the counters that are already saved (one comparison against the
-contiguous saved prefix, plus the few out-of-order ones the receiver's parallel batches
-leave), and the database has a unique constraint on `(job, job_created, counter)` for every
+`RunnerCallback` skips the counters that are already saved (read with their count in one
+query, as ranges, of which there are as many as there are gaps between saved events), and
+the database has a unique constraint on `(job, job_created, counter)` for every
 event table as the guarantee, with the callback receiver dropping a duplicate rather than
 retrying it. The constraint's index replaces the plain index on the same columns, so event
 inserts maintain no more indexes than before. Host summaries and the stats wrapup are written
