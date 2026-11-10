@@ -116,6 +116,14 @@ this out at its next renewal, drops its stream, and neither finalizes nor releas
 if it only finds out at the final write, the write is refused. The result of a job is
 written once, by whoever holds the lease.
 
+The lease row is what a claim and a reader that is done with the job serialize on. A claim
+takes the row's lock and checks under it that the lease is still expired before it moves the
+task id; retiring the lease takes the same lock before it checks that its task still owns the
+job, and the pod or work unit is released only once the retirement succeeded. So a reader
+finishing just as a claim lands can neither remove the claimer's lease nor release the work
+from under it, and a claim cannot take a job whose reader has just finished with it.
+Expiring a lease on detach and putting it off are fenced by the owner's task id as well.
+
 ## What is left alone
 
 - Jobs without a lease are reaped exactly as before: those never handed to receptor,

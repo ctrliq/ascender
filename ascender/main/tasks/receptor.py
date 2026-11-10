@@ -529,31 +529,29 @@ class AWXReceptorJob:
             # read, or will not be, and the post-run hooks that follow (an inventory import, the
             # fact cache) can take longer than a lease lasts without renewal. A task that detached
             # from the unit on shutdown, or that lost the job to a resumed monitor, leaves both
-            # alone: the unit, and the pod it stands for, is what the next monitor reads.
-            if self.unit_id is not None and self._still_owns_job():
-                try:
-                    JobMonitorLease.objects.finish(self.task.instance)
-                except Exception:
-                    logger.exception(f'Could not remove the monitor lease of {self.task.instance.log_format}')
+            # alone: the unit, and the pod it stands for, is what the next monitor reads. The
+            # unit is released only once the lease is retired, which fails if the job was claimed
+            # meanwhile.
+            if self.unit_id is not None and not (self.detached or self.lease_lost) and self._retire_lease():
                 if settings.RECEPTOR_RELEASE_WORK:
                     try:
                         receptor_ctl.simple_command(f"work release {self.unit_id}")
                     except Exception:
                         logger.exception(f"Error releasing work unit {self.unit_id}.")
 
-    def _still_owns_job(self):
-        if self.detached or self.lease_lost:
-            return False
-        owner_task_id = getattr(self.task, 'owner_task_id', None)
-        if not owner_task_id:
-            return True
+    def _retire_lease(self):
+        """Remove the job's lease; True when this task still owned the job, and may release its work."""
+        job = self.task.instance
         try:
-            return UnifiedJob.objects.filter(pk=self.task.instance.pk, celery_task_id=owner_task_id).exists()
+            if JobMonitorLease.objects.retire(job, getattr(self.task, 'owner_task_id', None)):
+                return True
+            self.lease_lost = True
+            logger.warning(f'{job.log_format}: another task took over its monitoring; leaving work unit {self.unit_id} to it')
         except Exception:
             # Cannot tell; a unit left behind is cleaned up by the work unit reaper, a unit
             # released from under a resumed monitor is not recoverable.
-            logger.exception(f'Could not confirm that this task still owns {self.task.instance.log_format}; leaving work unit {self.unit_id}')
-            return False
+            logger.exception(f'Could not retire the monitor lease of {job.log_format}; leaving work unit {self.unit_id}')
+        return False
 
     def _run_internal(self, receptor_ctl):
         self._transmit_phase(receptor_ctl)

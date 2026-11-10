@@ -10,11 +10,18 @@ once; when its process is killed the lease expires by itself. Whoever finds an e
 resumes reading from wherever the output survived. The lease row exists only while the job is
 being monitored: it is created when the job is handed to receptor and deleted once its output
 has been read, before the post-run hooks, or when the job is re-queued.
+
+The owner of a lease is the task whose id is the job's celery_task_id. A claim moves that id
+while holding the lease row's lock, and checks under it that the lease is still expired; a
+retirement takes the same lock before it checks that its task still owns the job. So a reader
+that is done can never remove the lease of a task that has just claimed the job, and a claim
+can never take a job whose reader has just finished with it. Expiring and putting off a lease
+are fenced by the owner's task id as well.
 """
 
 from datetime import timedelta
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.timezone import now
 
 from ascender.settings.typed import settings
@@ -58,16 +65,39 @@ class JobMonitorLeaseManager(models.Manager):
     def record(self, job, **fields):
         return self.filter(unified_job_id=job.pk).update(**fields)
 
-    def release(self, job):
-        """Expire the lease now, so the next sweep on any node resumes the job at once."""
-        return self.filter(unified_job_id=job.pk).update(expires=now())
+    def owned(self, job, owner_task_id):
+        """The job's lease, as long as owner_task_id is still the job's task (a task without an id owns its job)."""
+        leases = self.filter(unified_job_id=job.pk)
+        if owner_task_id:
+            leases = leases.filter(unified_job__celery_task_id=owner_task_id)
+        return leases
 
-    def defer(self, job, seconds):
+    def release(self, job, owner_task_id):
+        """Expire the lease now, so the next sweep on any node resumes the job at once."""
+        return self.owned(job, owner_task_id).update(expires=now())
+
+    def defer(self, job, seconds, owner_task_id):
         """Leave the job alone for a while; used when the output is not available yet."""
-        return self.filter(unified_job_id=job.pk).update(expires=self.expiry(seconds), deferrals=models.F('deferrals') + 1)
+        return self.owned(job, owner_task_id).update(expires=self.expiry(seconds), deferrals=models.F('deferrals') + 1)
+
+    def retire(self, job, owner_task_id):
+        """
+        Remove the lease once its owner is done with the job's output. True when owner_task_id still
+        owns the job, so that the caller may release the work and finish the job; False when another
+        task claimed it meanwhile, whose lease then stays. See the module docstring.
+        """
+        from ascender.main.models.unified_jobs import UnifiedJob  # circular import
+
+        with transaction.atomic():
+            leases = list(self.select_for_update().filter(unified_job_id=job.pk).values_list('pk', flat=True))
+            if owner_task_id and not UnifiedJob.objects.filter(pk=job.pk, celery_task_id=owner_task_id).exists():
+                return False
+            if leases:
+                self.filter(pk__in=leases).delete()
+        return True
 
     def finish(self, job):
-        """Nothing is left to monitor: the output has been read, or the job was re-queued or has ended."""
+        """Nothing is left to monitor: the job was re-queued or has ended."""
         return self.filter(unified_job_id=job.pk).delete()[0]
 
     def expired(self):

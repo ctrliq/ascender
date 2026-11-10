@@ -12,13 +12,14 @@ import json
 import os
 import subprocess
 import sys
+import threading
 from datetime import timedelta
 from unittest import mock
 import uuid
 
 import pytest
 
-from django.db import OperationalError
+from django.db import OperationalError, connection, transaction
 from django.utils.timezone import now
 
 from ascender.main.dispatch import reaper
@@ -76,11 +77,118 @@ def test_lease_renewal_is_fenced_by_the_task_id():
     JobMonitorLease.objects.renew(job, job.celery_task_id)
     with pytest.raises(LeaseLost):
         JobMonitorLease.objects.renew(job, 'someone-else')
-    JobMonitorLease.objects.release(job)
+    JobMonitorLease.objects.release(job, job.celery_task_id)
     lease.refresh_from_db()
     assert lease.expires <= now()
     assert JobMonitorLease.objects.finish(job) == 1
     assert not JobMonitorLease.objects.filter(unified_job=job).exists()
+
+
+@pytest.mark.django_db
+def test_a_former_owner_can_neither_expire_nor_put_off_the_lease(me):
+    """A task that detaches or waits after its job was claimed must not touch the claimer's lease."""
+    job = running_job()
+    leased(job)
+    former = job.celery_task_id
+    claimed = claim_job(job, me.hostname)
+    before = JobMonitorLease.objects.get(unified_job=job)
+    assert JobMonitorLease.objects.release(job, former) == 0
+    assert JobMonitorLease.objects.defer(job, 30, former) == 0
+    after = JobMonitorLease.objects.get(unified_job=job)
+    assert (after.expires, after.deferrals) == (before.expires, before.deferrals)
+    assert JobMonitorLease.objects.defer(job, 30, claimed) == 1
+
+
+@pytest.mark.django_db
+def test_retirement_is_refused_to_a_task_that_lost_the_job(me):
+    job = running_job()
+    leased(job)
+    former = job.celery_task_id
+    claimed = claim_job(job, me.hostname)
+    assert JobMonitorLease.objects.retire(job, former) is False
+    assert JobMonitorLease.objects.filter(unified_job=job).exists()
+    assert JobMonitorLease.objects.retire(job, claimed) is True
+    assert not JobMonitorLease.objects.filter(unified_job=job).exists()
+
+
+@pytest.mark.django_db
+def test_a_claim_loses_to_a_renewal_or_a_retirement_since_the_sweep_read_the_lease(me):
+    """The sweep reads expired leases first and claims each after; the reader may have renewed or retired it in between."""
+    renewed = running_job()
+    leased(renewed)
+    stale = Job.objects.get(pk=renewed.pk)
+    JobMonitorLease.objects.renew(renewed, renewed.celery_task_id)
+    assert claim_job(stale, me.hostname) is None
+
+    retired = running_job(work_unit_id='unit2')
+    leased(retired)
+    stale = Job.objects.get(pk=retired.pk)
+    assert JobMonitorLease.objects.retire(retired, retired.celery_task_id) is True
+    assert claim_job(stale, me.hostname) is None
+    assert Job.objects.get(pk=retired.pk).celery_task_id == retired.celery_task_id
+
+
+def in_a_thread_with_its_own_connection(fn):
+    def run():
+        try:
+            return fn()
+        finally:
+            connection.close()
+
+    return run
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_retirement_waits_for_a_claim_in_progress_and_sees_it():
+    """The lease row is the lock: a reader finishing as a claim lands can neither remove the claimer's lease nor release its work."""
+    job = running_job()
+    leased(job)
+    locked, commit = threading.Event(), threading.Event()
+
+    @in_a_thread_with_its_own_connection
+    def claim_in_progress():
+        with transaction.atomic():
+            JobMonitorLease.objects.select_for_update().filter(unified_job_id=job.pk).first()
+            UnifiedJob.objects.filter(pk=job.pk).update(celery_task_id='the-claimer')
+            locked.set()
+            commit.wait(10)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+        claimer = pool.submit(claim_in_progress)
+        assert locked.wait(10)
+        retirement = pool.submit(in_a_thread_with_its_own_connection(lambda: JobMonitorLease.objects.retire(job, job.celery_task_id)))
+        with pytest.raises(concurrent.futures.TimeoutError):
+            retirement.result(timeout=0.5)
+        commit.set()
+        claimer.result(timeout=10)
+        assert retirement.result(timeout=10) is False
+    assert JobMonitorLease.objects.filter(unified_job_id=job.pk).exists()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_claim_waits_for_a_retirement_in_progress_and_finds_nothing_to_claim(me):
+    job = running_job()
+    leased(job)
+    locked, commit = threading.Event(), threading.Event()
+
+    @in_a_thread_with_its_own_connection
+    def retirement_in_progress():
+        with transaction.atomic():
+            JobMonitorLease.objects.select_for_update().filter(unified_job_id=job.pk).first()
+            JobMonitorLease.objects.filter(unified_job_id=job.pk).delete()
+            locked.set()
+            commit.wait(10)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+        retirer = pool.submit(retirement_in_progress)
+        assert locked.wait(10)
+        claim = pool.submit(in_a_thread_with_its_own_connection(lambda: claim_job(job, me.hostname)))
+        with pytest.raises(concurrent.futures.TimeoutError):
+            claim.result(timeout=0.5)
+        commit.set()
+        retirer.result(timeout=10)
+        assert claim.result(timeout=10) is None
+    assert Job.objects.get(pk=job.pk).celery_task_id == job.celery_task_id
 
 
 @pytest.mark.django_db
@@ -1195,6 +1303,32 @@ def test_a_failed_write_of_the_worker_start_is_tried_again_at_the_next_renewal()
     receptor_job._record_progress()
     lease.refresh_from_db()
     assert lease.worker_started is True and callback.worker_started_recorded is True
+
+
+@pytest.mark.django_db
+def test_a_launch_whose_job_was_claimed_as_it_finished_leaves_lease_and_unit_to_the_claimer(settings):
+    settings.RECEPTOR_RELEASE_WORK = True
+    job = running_job()
+    leased(job, expired=False)
+    task = mock.Mock(instance=job, owner_task_id=job.celery_task_id)
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.__init__(task, {'private_data_dir': '/tmp/x'}, resuming=True)
+    ctl = mock.Mock()
+
+    def run_internal(receptor_ctl):
+        receptor_job.unit_id = 'unit1'
+        UnifiedJob.objects.filter(pk=job.pk).update(celery_task_id='the-claimer')
+        return _PhaseResult('successful', 0)
+
+    with (
+        mock.patch('ascender.main.tasks.receptor.read_receptor_config', return_value={}),
+        mock.patch('ascender.main.tasks.receptor.get_receptor_ctl', return_value=ctl),
+        mock.patch.object(receptor_job, '_run_internal', run_internal),
+    ):
+        receptor_job.run()
+    assert receptor_job.lease_lost
+    assert JobMonitorLease.objects.filter(unified_job=job).exists()
+    ctl.simple_command.assert_not_called()
 
 
 @pytest.mark.django_db

@@ -759,7 +759,7 @@ class BaseTask(object):
             logger.warning(f'{job.log_format}: its monitoring was taken over by another task; this task stands down without finalizing or releasing anything')
             return
         job.log_lifecycle('monitor_detached')
-        JobMonitorLease.objects.release(job)
+        JobMonitorLease.objects.release(job, self.owner_task_id)
         logger.warning(f'{job.log_format}: detached from work unit {receptor_job.unit_id} on shutdown; the next job monitor sweep resumes it')
 
     def _resumed_finished_at(self):
@@ -895,8 +895,7 @@ class BaseTask(object):
 
     def _try_again_later(self, pk):
         """Put the job off for JOB_MONITOR_RETRY_SECONDS, unless another task has taken it meanwhile."""
-        if self._owns_job(pk):
-            JobMonitorLease.objects.defer(self.instance, settings.JOB_MONITOR_RETRY_SECONDS)
+        JobMonitorLease.objects.defer(self.instance, settings.JOB_MONITOR_RETRY_SECONDS, self.owner_task_id)
 
     def _cancel_unmonitored(self, pk, plan):
         """
@@ -954,12 +953,12 @@ class BaseTask(object):
             self._cancel_unmonitored(pk, plan)
             return
         if plan.action == WAIT:
-            JobMonitorLease.objects.defer(job, settings.JOB_MONITOR_RETRY_SECONDS)
+            self._try_again_later(pk)
             return
         if plan.action in (REQUEUE, FAIL) and plan.cleanup is not None and not plan.cleanup():
             # Whatever is still running could not be stopped: a second copy must not start, and a
             # job must not be reported failed while its work goes on.
-            JobMonitorLease.objects.defer(job, settings.JOB_MONITOR_RETRY_SECONDS)
+            self._try_again_later(pk)
             return
         if plan.action == REQUEUE:
             requeue_job(job, plan.reason)
@@ -983,7 +982,7 @@ class BaseTask(object):
             res = receptor_job.process_stream(plan.stream, owner_task_id=task_id)
             if receptor_job.detached:
                 job.log_lifecycle('monitor_detached')
-                JobMonitorLease.objects.release(job)
+                JobMonitorLease.objects.release(job, task_id)
                 logger.warning(f'{job.log_format}: detached again on shutdown; the next job monitor sweep resumes it')
                 return
             if receptor_job.lease_lost:
@@ -1007,15 +1006,15 @@ class BaseTask(object):
             self._try_again_later(pk)
             return
         status, rc = outcome
-        if not self._owns_job(pk):
+        # The output has been read. As at the end of a launch (see AWXReceptorJob.run), the lease
+        # and the work go before the post-run hooks, which can take longer than a lease lasts;
+        # the lease is retired first, which fails if another task claimed the job meanwhile.
+        if not JobMonitorLease.objects.retire(job, task_id):
             self.lost_ownership = True
             logger.warning(f'{job.log_format}: another task took over its monitoring; this task stands down without finalizing')
             return
         if receptor_job.eof_held:
             self.runner_callback.finished_callback(None)
-        # The output has been read. As at the end of a launch (see AWXReceptorJob.run), the lease
-        # and the work go before the post-run hooks, which can take longer than a lease lasts.
-        JobMonitorLease.objects.finish(job)
         try:
             plan.stream.release()
         except Exception:

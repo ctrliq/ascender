@@ -23,6 +23,7 @@ import logging
 import re
 import uuid
 
+from django.db import transaction
 from django.utils.timezone import now
 
 from ascender.settings.typed import settings
@@ -227,15 +228,24 @@ def claim_job(job, hostname):
     Make this node the job's controller and a new task id its owner, provided nothing has
     changed the job since it was read. Returns the new task id, or None when the claim lost.
 
-    The task id is the fence: the task that launched the job can no longer renew the lease or
-    write its final status (see update_model), and cancels now reach the task dispatched under
-    the new id on this node.
+    The task id is the fence: the task that launched the job can no longer renew the lease,
+    retire it or write its final status (see update_model), and cancels now reach the task
+    dispatched under the new id on this node. The claim holds the lease row's lock and checks
+    under it that the lease is still expired: a reader that renewed it since the sweep read it
+    keeps the job, and one that retired it, being done with the job, finishes it.
     """
     task_id = str(uuid.uuid4())
-    claimed = UnifiedJob.objects.filter(pk=job.pk, status='running', celery_task_id=job.celery_task_id).update(celery_task_id=task_id, controller_node=hostname)
-    if not claimed:
-        return None
-    JobMonitorLease.objects.filter(unified_job_id=job.pk).update(expires=JobMonitorLease.objects.expiry())
+    with transaction.atomic():
+        lease = JobMonitorLease.objects.select_for_update().filter(unified_job_id=job.pk, expires__lt=now()).first()
+        if lease is None:
+            return None
+        claimed = UnifiedJob.objects.filter(pk=job.pk, status='running', celery_task_id=job.celery_task_id).update(
+            celery_task_id=task_id, controller_node=hostname
+        )
+        if not claimed:
+            return None
+        lease.expires = JobMonitorLease.objects.expiry()
+        lease.save(update_fields=['expires', 'modified'])
     return task_id
 
 
