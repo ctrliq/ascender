@@ -893,9 +893,9 @@ class BaseTask(object):
     def _cancel_flag_set(self, pk):
         return bool(self.model.objects.filter(pk=pk).values_list('cancel_flag', flat=True).first())
 
-    def _try_again_later(self, pk):
+    def _try_again_later(self, pk, count=True):
         """Put the job off for JOB_MONITOR_RETRY_SECONDS, unless another task has taken it meanwhile."""
-        JobMonitorLease.objects.defer(self.instance, settings.JOB_MONITOR_RETRY_SECONDS, self.owner_task_id)
+        JobMonitorLease.objects.defer(self.instance, settings.JOB_MONITOR_RETRY_SECONDS, self.owner_task_id, count=count)
 
     def _cancel_unmonitored(self, pk, plan):
         """
@@ -964,7 +964,7 @@ class BaseTask(object):
             self._cancel_unmonitored(pk, plan)
             return
         if plan.action == WAIT:
-            self._try_again_later(pk)
+            self._try_again_later(pk, count=plan.counts)
             return
         if plan.action in (REQUEUE, FAIL) and plan.cleanup is not None and not plan.cleanup():
             # Whatever is still running could not be stopped: a second copy must not start, and a

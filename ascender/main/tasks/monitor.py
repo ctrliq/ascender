@@ -88,14 +88,17 @@ class ResumePlan:
     ``stream`` is the job's output where it was found, for RESUME, and also for any other
     action when the work is still there, so that a cancel can stop it. ``cleanup`` stops what
     is left of the work before a REQUEUE or a FAIL; it returns False when it could not.
+    ``counts`` is whether a WAIT counts against JOB_MONITOR_MAX_DEFERRALS; one that a limit of
+    its own ends does not.
     """
 
-    def __init__(self, action, reason='', stream=None, follow=True, cleanup=None):
+    def __init__(self, action, reason='', stream=None, follow=True, cleanup=None, counts=True):
         self.action = action
         self.reason = reason
         self.stream = stream
         self.follow = follow
         self.cleanup = cleanup
+        self.counts = counts
 
     def __repr__(self):
         return f'ResumePlan({self.action}, {self.reason!r})'
@@ -422,7 +425,8 @@ def _plan_container_group(job, lease):
         if created and (reference - created).total_seconds() > limit:
             # What receptor does with a pod that stays pending: the job fails
             return ResumePlan(FAIL, f'its pod did not start within {int(limit)} seconds', stream=stream, cleanup=stream.delete_pod)
-        return ResumePlan(WAIT, 'its pod is still pending', stream=stream)
+        # Bounded by the pending timeout above, which may well be longer than all the deferrals together
+        return ResumePlan(WAIT, 'its pod is still pending', stream=stream, counts=False)
 
     if lease.worker_started:
         return ResumePlan(RESUME, 'its pod is still running', stream=stream, follow=True)

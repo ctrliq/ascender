@@ -502,6 +502,20 @@ def test_container_group_plan(container_group_job, make_pod, worker_started, out
         assert plan.stream is fake
 
 
+@pytest.mark.django_db(transaction=True)
+def test_a_pending_pod_is_waited_for_until_its_own_timeout_not_the_deferral_budget(container_group_job, me, quiet_websockets):
+    """A pod may stay pending for ASCENDER_CONTAINER_GROUP_POD_PENDING_TIMEOUT, longer than all the deferrals together."""
+    lease = leased(container_group_job, pod_name='automation-job-1-abcde', pod_namespace='ascender')
+    task_id = claim_job(container_group_job, me.hostname)
+    with mock.patch.object(monitor, 'PodLogStream', return_value=FakePodStream(pod(phase='Pending'))):
+        plan = plan_resume(container_group_job, lease)
+        assert (plan.action, plan.counts) == (WAIT, False)
+        RunJob().resume(container_group_job.pk, task_id)
+    lease.refresh_from_db()
+    assert lease.deferrals == 0
+    assert lease.expires > now()
+
+
 @pytest.mark.django_db
 def test_plan_gives_up_after_too_many_deferrals(container_group_job, settings):
     settings.JOB_MONITOR_MAX_DEFERRALS = 3

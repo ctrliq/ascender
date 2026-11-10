@@ -76,9 +76,12 @@ class JobMonitorLeaseManager(models.Manager):
         """Expire the lease now, so the next sweep on any node resumes the job at once."""
         return self.owned(job, owner_task_id).update(expires=now())
 
-    def defer(self, job, seconds, owner_task_id):
+    def defer(self, job, seconds, owner_task_id, count=True):
         """Leave the job alone for a while; used when the output is not available yet."""
-        return self.owned(job, owner_task_id).update(expires=self.expiry(seconds), deferrals=models.F('deferrals') + 1)
+        fields = {'expires': self.expiry(seconds)}
+        if count:
+            fields['deferrals'] = models.F('deferrals') + 1
+        return self.owned(job, owner_task_id).update(**fields)
 
     def retire(self, job, owner_task_id):
         """
