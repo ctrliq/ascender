@@ -21,21 +21,23 @@ left to the one node that can read it.
 
 import logging
 import re
+import threading
 import uuid
 
-from django.db import transaction
+from django.db import DatabaseError, connection, transaction
 from django.utils.timezone import now
 
 from ascender.settings.typed import settings
 from ascender.main.dispatch import get_task_queuename
 from ascender.main.dispatch.publish import task
-from ascender.main.models import Instance, InventoryUpdate, JobMonitorLease, ProjectUpdate, UnifiedJob
+from ascender.main.models import Instance, InventoryUpdate, JobMonitorLease, LeaseLost, ProjectUpdate, UnifiedJob
 from ascender.main.tasks.receptor import ReceptorUnitStream, get_receptor_ctl
 from ascender.main.tasks.streams import PodLogStream, TERMINAL_PHASES, container_started_at, container_terminated, pod_created_at, pod_phase
 
 logger = logging.getLogger('ascender.main.tasks.monitor')
 
 __all__ = [
+    'LeaseKeeper',
     'RESUME',
     'REQUEUE',
     'FAIL',
@@ -251,6 +253,50 @@ def claim_job(job, hostname):
         lease.expires = JobMonitorLease.objects.expiry()
         lease.save(update_fields=['expires', 'modified'])
     return task_id
+
+
+class LeaseKeeper:
+    """
+    Renew a job's monitor lease from a thread, for as long as its owner is busy with something
+    that has no renewal loop of its own: preparing to resume reading a job, which can mean
+    finding its pod and building the host map of a large inventory. A claim leaves the new owner
+    one lease to get its stream open; without this, setup that outlasts it hands the job to the
+    next sweep before this task ever reads it, and setup that always does never lets anyone.
+
+    ``lost`` is set when a renewal found that another task owns the job now.
+    """
+
+    def __init__(self, job, owner_task_id):
+        self.job = job
+        self.owner_task_id = owner_task_id
+        self.lost = False
+        # Read here: the settings wrapper is not for threads
+        self._interval = settings.JOB_MONITOR_RENEW_SECONDS
+        self._lease_seconds = settings.JOB_MONITOR_LEASE_SECONDS
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._renew, name=f'lease-keeper-{job.pk}', daemon=True)
+
+    def __enter__(self):
+        self._thread.start()
+        return self
+
+    def __exit__(self, *exc_info):
+        self._stop.set()
+        self._thread.join()
+        return False
+
+    def _renew(self):
+        try:
+            while not self._stop.wait(self._interval):
+                try:
+                    JobMonitorLease.objects.renew(self.job, self.owner_task_id, seconds=self._lease_seconds)
+                except LeaseLost:
+                    self.lost = True
+                    return
+                except DatabaseError as exc:
+                    logger.warning(f'{self.job.log_format}: could not renew its monitor lease: {exc}')
+        finally:
+            connection.close()
 
 
 def retire_stale_leases():

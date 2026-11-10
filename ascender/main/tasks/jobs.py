@@ -91,7 +91,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.timezone import now
 from ascender.main.utils.update_model import update_model, NotOwner
 from ascender.main.models.monitor import JobMonitorLease
-from ascender.main.tasks.monitor import discard_abandoned_events, job_can_detach, plan_resume, requeue_job, REQUEUE, FAIL, WAIT
+from ascender.main.tasks.monitor import LeaseKeeper, discard_abandoned_events, job_can_detach, plan_resume, requeue_job, REQUEUE, RESUME, FAIL, WAIT
 from ascender.main.utils import workload_identity
 from rest_framework.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
@@ -947,9 +947,20 @@ class BaseTask(object):
             logger.info(f'{job.log_format}: no monitor lease left to resume')
             return
 
-        plan = plan_resume(job, lease)
+        # Planning, and getting ready to read, can take a while; the lease is renewed meanwhile, and
+        # nothing is done about the plan by a task that lost the job before it was ready.
+        with LeaseKeeper(job, task_id) as keeper:
+            plan = plan_resume(job, lease)
+            canceled = bool(job.cancel_flag or self._cancel_flag_set(pk))
+            if plan.action == RESUME and not canceled:
+                private_data_dir = self.build_private_data_dir(job)
+                self.runner_callback.configure_for_resume(job, private_data_dir)
+        if keeper.lost:
+            self.lost_ownership = True
+            logger.warning(f'{job.log_format}: another task took over its monitoring while this one got ready to resume it; this task stands down')
+            return
         logger.info(f'{job.log_format}: resume plan is to {plan.action} because {plan.reason}')
-        if job.cancel_flag or self._cancel_flag_set(pk):
+        if canceled:
             self._cancel_unmonitored(pk, plan)
             return
         if plan.action == WAIT:
@@ -964,15 +975,14 @@ class BaseTask(object):
             requeue_job(job, plan.reason, task_id)
             return
 
-        private_data_dir = self.build_private_data_dir(job)
         if plan.action == FAIL:
             job.log_lifecycle('monitor_resume_failed')
+            private_data_dir = self.build_private_data_dir(job)
             self.runner_callback.configure_for_resume(job, private_data_dir, reading=False)
             self.runner_callback.delay_update(job_explanation=f'The job failed because {plan.reason}.')
             self.finish_run(pk, 'failed', None, private_data_dir, post_run_hook=False)
             return
 
-        self.runner_callback.configure_for_resume(job, private_data_dir)
         self.runner_callback.delay_update(job_explanation=f'Output monitoring was resumed on {settings.CLUSTER_HOST_ID} after the node reading it stopped.')
         JobMonitorLease.objects.record(job, resumed=F('resumed') + 1)
         job.log_lifecycle('monitor_resumed')

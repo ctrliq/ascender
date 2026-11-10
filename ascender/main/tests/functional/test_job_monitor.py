@@ -13,6 +13,7 @@ import os
 import subprocess
 import sys
 import threading
+import time
 from datetime import timedelta
 from unittest import mock
 import uuid
@@ -27,7 +28,7 @@ from ascender.main.models import Instance, Job, JobEvent, JobMonitorLease, Lease
 from ascender.main.tasks import monitor
 from ascender.main.tasks.callback import RunnerCallback, persisted_event_counters
 from ascender.main.tasks.jobs import RunJob, RunProjectUpdate
-from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
+from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, LeaseKeeper, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
 from ascender.main.tasks.receptor import AWXReceptorJob, _PhaseResult
 from ascender.main.tasks.streams import PodLogIncomplete
 from ascender.main.utils.update_model import NotOwner, update_model
@@ -909,6 +910,67 @@ def test_resume_requeues_and_fails_as_planned(me, quiet_websockets, inventory, p
     assert other.status == 'failed'
     assert 'its pod no longer exists' in other.job_explanation
     assert not JobMonitorLease.objects.filter(unified_job=other).exists()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_lease_keeper_renews_while_its_owner_is_busy_and_tells_when_the_job_is_lost(settings):
+    settings.JOB_MONITOR_RENEW_SECONDS = 0.05
+    job = running_job()
+    lease = leased(job, expired=False)
+    JobMonitorLease.objects.filter(pk=lease.pk).update(expires=now() + timedelta(seconds=1))
+    with LeaseKeeper(job, job.celery_task_id) as keeper:
+        time.sleep(0.3)
+    lease.refresh_from_db()
+    assert lease.expires > now() + timedelta(seconds=30)
+    assert not keeper.lost
+    with LeaseKeeper(job, job.celery_task_id) as keeper:
+        UnifiedJob.objects.filter(pk=job.pk).update(celery_task_id='the-claimer')
+        time.sleep(0.3)
+    assert keeper.lost
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_slow_resume_keeps_its_lease_until_it_is_ready(me, quiet_websockets, inventory, project, settings):
+    """Setup that outlasts a lease, such as the host map of a large inventory, must not hand the job to the next sweep before it is read."""
+    settings.JOB_MONITOR_LEASE_SECONDS = 1
+    settings.JOB_MONITOR_RENEW_SECONDS = 0.1
+    job = running_job(inventory=inventory, project=project)
+    leased(job, worker_started=True)
+    task_id = claim_job(job, me.hostname)
+    stale = Job.objects.get(pk=job.pk)
+    claims = []
+
+    def slow_plan(job, lease):
+        time.sleep(1.5)
+        claims.append(claim_job(stale, 'another-node'))
+        return ResumePlan(WAIT, 'its pod is still pending')
+
+    with mock.patch('ascender.main.tasks.jobs.plan_resume', side_effect=slow_plan):
+        RunJob().resume(job.pk, task_id)
+    assert claims == [None]
+    job.refresh_from_db()
+    assert job.celery_task_id == task_id
+    assert JobMonitorLease.objects.get(unified_job=job).deferrals == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_resume_that_loses_its_job_while_planning_does_nothing_about_the_plan(me, quiet_websockets, inventory, project, settings):
+    settings.JOB_MONITOR_RENEW_SECONDS = 0.05
+    job = running_job(inventory=inventory, project=project)
+    leased(job)
+    task_id = claim_job(job, me.hostname)
+    cleanup = mock.Mock(return_value=True)
+
+    def plan_while_claimed(job, lease):
+        UnifiedJob.objects.filter(pk=job.pk).update(celery_task_id='the-claimer')
+        time.sleep(0.3)
+        return ResumePlan(REQUEUE, 'its pod never received its payload', cleanup=cleanup)
+
+    with mock.patch('ascender.main.tasks.jobs.plan_resume', side_effect=plan_while_claimed):
+        RunJob().resume(job.pk, task_id)
+    cleanup.assert_not_called()
+    job.refresh_from_db()
+    assert (job.status, job.celery_task_id) == ('running', 'the-claimer')
 
 
 @pytest.mark.django_db(transaction=True)
