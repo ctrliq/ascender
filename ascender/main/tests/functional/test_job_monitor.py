@@ -786,6 +786,35 @@ def test_resume_requeues_and_fails_as_planned(me, quiet_websockets, inventory, p
     assert not JobMonitorLease.objects.filter(unified_job=other).exists()
 
 
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('how', ['failed', 'canceled'])
+def test_finishing_a_project_update_it_never_read_leaves_the_project_alone(me, quiet_websockets, project, settings, tmp_path, how):
+    """Another update of the project may be writing its stage directory, under the lock this resume does not hold."""
+    settings.PROJECTS_ROOT = str(tmp_path)
+    sync = ProjectUpdate.objects.create(
+        project=project,
+        status='running',
+        controller_node='dead-node',
+        execution_node='dead-node',
+        celery_task_id='t',
+        work_unit_id='u',
+        launch_type='sync',
+        local_path='_1__monitor_test',
+    )
+    leased(sync, worker_started=True)
+    task_id = claim_job(sync, me.hostname)
+    stage = os.path.join(sync.get_cache_path(), 'stage')
+    os.makedirs(stage)
+    if how == 'canceled':
+        ProjectUpdate.objects.filter(pk=sync.pk).update(cancel_flag=True)
+    with mock.patch('ascender.main.tasks.jobs.plan_resume', return_value=ResumePlan(FAIL, 'its work unit was lost with its controller')):
+        with pytest.raises(Exception):
+            RunProjectUpdate().resume(sync.pk, task_id)
+    sync.refresh_from_db()
+    assert sync.status == how
+    assert os.path.isdir(stage)
+
+
 @pytest.mark.django_db
 def test_resume_waits_when_the_output_is_not_reachable_yet(me, inventory, project, settings):
     job = running_job(inventory=inventory, project=project)

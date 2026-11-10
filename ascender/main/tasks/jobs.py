@@ -786,7 +786,7 @@ class BaseTask(object):
         started = self.instance.started or ended
         return min(max(ended, started), right_now)
 
-    def finish_run(self, pk, status, rc, private_data_dir):
+    def finish_run(self, pk, status, rc, private_data_dir, post_run_hook=True):
         """
         Everything that happens once a job's output has been read: the post-run hook, the
         final status, notifications, the final-run hook. Shared by run() and resume().
@@ -794,6 +794,10 @@ class BaseTask(object):
         The final write is fenced by the task id this task owns the job under. If reading the
         job's output was taken over by another task meanwhile, the result is that task's to
         write, and this one stands down without touching the job.
+
+        Without ``post_run_hook`` the job is finished without its output having been read here,
+        by a resume that fails or cancels it: the hook has nothing to process, and a project
+        update's would clear the project's stage directory without holding the project's lock.
         """
         if not self._owns_job(pk):
             self.lost_ownership = True
@@ -802,7 +806,8 @@ class BaseTask(object):
             return
 
         try:
-            self.post_run_hook(self.instance, status)
+            if post_run_hook:
+                self.post_run_hook(self.instance, status)
         except PostRunError as exc:
             if status == 'successful':
                 status = exc.status
@@ -913,7 +918,7 @@ class BaseTask(object):
         job.log_lifecycle('monitor_resume_canceled')
         private_data_dir = self.build_private_data_dir(job)
         self.runner_callback.configure_for_resume(job, private_data_dir, reading=False)
-        self.finish_run(pk, 'canceled', None, private_data_dir)
+        self.finish_run(pk, 'canceled', None, private_data_dir, post_run_hook=False)
 
     @with_path_cleanup
     @with_signal_handling
@@ -965,7 +970,7 @@ class BaseTask(object):
             job.log_lifecycle('monitor_resume_failed')
             self.runner_callback.configure_for_resume(job, private_data_dir, reading=False)
             self.runner_callback.delay_update(job_explanation=f'The job failed because {plan.reason}.')
-            self.finish_run(pk, 'failed', None, private_data_dir)
+            self.finish_run(pk, 'failed', None, private_data_dir, post_run_hook=False)
             return
 
         self.runner_callback.configure_for_resume(job, private_data_dir)
