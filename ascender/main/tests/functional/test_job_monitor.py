@@ -581,6 +581,21 @@ def test_receptor_plan_adopts_from_a_live_execution_node():
 
 
 @pytest.mark.django_db
+def test_receptor_plan_waits_for_an_execution_node_that_is_unavailable_but_not_lost():
+    """Its receptor may still be running the unit: failing or re-queueing the job now could leave its work running."""
+    node = Instance.objects.create(hostname='exec-1', node_type='execution', node_state='ready', capacity=10)
+    node.mark_offline(update_last_seen=True, errors='health check failed')
+    job = running_job(execution_node='exec-1')
+    lease = leased(job, worker_started=True)
+    with mock.patch.object(monitor, 'ReceptorUnitStream', side_effect=fake_receptor_streams(False)):
+        plan = plan_resume(job, lease, receptor_ctl=mock.Mock())
+        assert (plan.action, plan.counts) == (WAIT, True), plan.reason
+        # once its peers would declare it lost, the unit is given up as before
+        Instance.objects.filter(pk=node.pk).update(last_seen=now() - timedelta(minutes=10))
+        assert plan_resume(job, lease, receptor_ctl=mock.Mock()).action == FAIL
+
+
+@pytest.mark.django_db
 def test_receptor_plan_waits_when_adoption_fails():
     Instance.objects.create(hostname='exec-1', node_type='execution', node_state='ready', capacity=10)
     job = running_job(execution_node='exec-1')

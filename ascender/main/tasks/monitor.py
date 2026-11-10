@@ -479,10 +479,17 @@ def _plan_receptor(job, lease, receptor_ctl=None):
 
     node = job.execution_node
     if not holder and node and node != settings.CLUSTER_HOST_ID and job_can_detach(job):
-        node_is_up = Instance.objects.filter(
-            hostname=node, node_type__in=(Instance.Types.EXECUTION, Instance.Types.HOP), node_state=Instance.States.READY
-        ).exists()
-        if node_is_up:
+        remote = (
+            Instance.objects.filter(hostname=node, node_type__in=(Instance.Types.EXECUTION, Instance.Types.HOP))
+            .only('node_type', 'node_state', 'last_seen')
+            .first()
+        )
+        if remote is not None and remote.node_state == Instance.States.UNAVAILABLE and not remote.is_lost():
+            # Out of reach for now (a failed health check, a link down), but not declared lost: its receptor
+            # may well be running the unit still. Look again later, until it is back, or lost, or the job
+            # runs out of deferrals.
+            return ResumePlan(WAIT, f'its work unit runs on {node}, which is unavailable for now')
+        if remote is not None and remote.node_state == Instance.States.READY:
             stream = ReceptorUnitStream(job, receptor_ctl, unit_id, node=node)
             try:
                 stream.adopt()

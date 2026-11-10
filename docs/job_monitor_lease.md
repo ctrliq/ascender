@@ -98,9 +98,10 @@ a credential could have set.
 
 What a resume cannot settle now, a later sweep settles. The lease is put off by
 `JOB_MONITOR_RETRY_SECONDS`, up to `JOB_MONITOR_MAX_DEFERRALS` times before the job is failed,
-when the output is not reachable yet, when reading it fails (the Kubernetes API or receptor
-is unreachable), and when the stream ends without a result while the pod or unit is still
-running. A stream that ends without a result once the work is done takes the job's status
+when the output is not reachable yet (an execution node that is unavailable but not yet
+declared lost may still be running the unit), when reading it fails (the Kubernetes API or
+receptor is unreachable), and when the stream ends without a result while the pod or unit is
+still running. A stream that ends without a result once the work is done takes the job's status
 from the pod's exit code or the unit's state.
 
 Once the output has been read, the lease is removed and the pod or unit released, as at the
