@@ -49,6 +49,17 @@ WORKER_CONTAINER = 'worker'
 _TIMESTAMP_RE = re.compile(rb'^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d{1,9}))?(Z|[+-]\d\d:\d\d) ')
 
 
+class PodLogIncomplete(RuntimeError):
+    """
+    The last read of a pod's log broke off, so the log was not read to its end.
+
+    Not an OSError on purpose: ansible-runner's processor takes an OSError from the stream for
+    the end of the job's output, and the job would be finished from the pod's exit code with the
+    rest of its events and its artifacts unread. Raised, it fails the read, and the resume tries
+    again later, with the pod still there.
+    """
+
+
 def pod_phase(pod):
     return ((pod or {}).get('status') or {}).get('phase')
 
@@ -358,7 +369,8 @@ class PodLogStream:
         The next raw log line, reconnecting while the pod is live. b'' once nothing more will come.
 
         An error from the Kubernetes API while deciding whether to reconnect is raised: the
-        caller cannot tell a finished pod from an unreachable API, and must not guess.
+        caller cannot tell a finished pod from an unreachable API, and must not guess. So is a
+        read that breaks off during the final pass, which is the last chance to read the log.
         """
         while True:
             if self._chunks is None or self._interrupted:
@@ -368,6 +380,8 @@ class PodLogStream:
             except Exception as exc:
                 if self._interrupted:
                     return b''
+                if self._final_pass_done:
+                    raise PodLogIncomplete(f'the log of pod {self.pod_name} could not be read to its end: {exc!r}') from exc
                 if isinstance(exc, ReadTimeoutError):
                     logger.debug(
                         f'Log stream of pod {self.pod_name} for {self.job.log_format} idle for {settings.JOB_MONITOR_STREAM_IDLE_SECONDS}s; reopening it'

@@ -429,6 +429,19 @@ def test_an_api_error_while_checking_the_pod_is_raised_not_taken_for_the_end():
         stream.readline()
 
 
+def test_a_final_pass_that_breaks_off_is_an_error_not_the_end_of_the_log():
+    """What the last read did not deliver was never read; taken for EOF, the pod would be released with it unread."""
+    first = [stamped([b'{"counter": 1}\n']), ProtocolError('Connection broken')]
+    final = [stamped([b'{"counter": 1}\n']), ProtocolError('Connection broken')]
+    stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [first, final])
+    stream.open(follow=False)
+    assert json.loads(stream.readline())['counter'] == 1
+    with pytest.raises(streams.PodLogIncomplete):
+        stream.readline()
+    # ansible-runner's processor turns an OSError from its input into the end of the output
+    assert not issubclass(streams.PodLogIncomplete, OSError)
+
+
 def test_the_final_pass_of_a_pod_that_is_gone_ends_the_stream():
     stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [stamped([b'{"counter": 1}\n'])])
     stream.open(follow=False)

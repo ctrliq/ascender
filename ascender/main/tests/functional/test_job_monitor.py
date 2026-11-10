@@ -23,6 +23,7 @@ from ascender.main.tasks.callback import persisted_event_counters
 from ascender.main.tasks.jobs import RunJob
 from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
 from ascender.main.tasks.receptor import AWXReceptorJob, _PhaseResult
+from ascender.main.tasks.streams import PodLogIncomplete
 from ascender.main.utils.update_model import NotOwner, update_model
 
 
@@ -922,6 +923,32 @@ def test_resume_tries_again_later_when_reading_fails(me, quiet_websockets, inven
     assert lease.deferrals == 1 and lease.expires > now()
     assert not stream.released and not stream.cancelled
     quiet_websockets.assert_not_called()
+
+
+class CutStream(FakeStream):
+    """Serves its lines, then breaks off the way a pod log's final pass does when its connection drops."""
+
+    def readline(self, *args):
+        line = self.bio.readline(*args)
+        if not line:
+            raise PodLogIncomplete('the log of pod automation-job-1 could not be read to its end')
+        return line
+
+
+@pytest.mark.django_db(transaction=True)
+def test_resume_tries_again_later_when_the_last_read_of_a_pod_log_breaks_off(me, quiet_websockets, inventory, project):
+    """Through ansible-runner's processor: a log cut short is not the end of the job, and the pod is kept for the next try."""
+    job = running_job(inventory=inventory, project=project)
+    lease = leased(job, worker_started=True)
+    task_id = claim_job(job, me.hostname)
+    stream = CutStream(runner_stream([1, 2, 3])[:3])
+    with mock.patch('ascender.main.tasks.jobs.plan_resume', return_value=ResumePlan(RESUME, 'test', stream=stream, follow=False)):
+        RunJob().resume(job.pk, task_id)
+    job.refresh_from_db()
+    lease.refresh_from_db()
+    assert job.status == 'running'
+    assert lease.deferrals == 1
+    assert not stream.released and not stream.cancelled
 
 
 @pytest.mark.django_db(transaction=True)
