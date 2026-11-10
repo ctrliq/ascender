@@ -1063,6 +1063,19 @@ def test_a_reader_that_loses_its_lease_stops_the_work_of_a_project_update_only(p
     assert stream.cancelled is (kind == 'project_update')
 
 
+@pytest.mark.django_db
+@pytest.mark.parametrize('work_type, kept', [('local', True), ('ansible-runner', False), ('kubernetes-incluster-auth', False)])
+def test_a_detached_job_keeps_its_private_data_dir_only_for_local_work(work_type, kept):
+    """The execution environment of local work has the directory bind-mounted; remote work took a copy, and the directory holds credentials."""
+    job = running_job()
+    leased(job, expired=False)
+    task = RunJob()
+    task.instance = job
+    task.cleanup_paths = ['/tmp/awx_1_abcd']
+    task._leave_to_resume(mock.Mock(detached=True, lease_lost=False, work_type=work_type, unit_id='unit1'))
+    assert (task.cleanup_paths == []) is kept
+
+
 def lockable_by_another_process(path):
     """fcntl locks belong to a process, which can always lock again what it holds itself."""
     probe = 'import fcntl, os, sys; fcntl.lockf(os.open(sys.argv[1], os.O_RDWR), fcntl.LOCK_EX | fcntl.LOCK_NB)'

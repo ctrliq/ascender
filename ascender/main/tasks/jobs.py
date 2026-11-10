@@ -748,10 +748,13 @@ class BaseTask(object):
     def _leave_to_resume(self, receptor_job):
         """The stream ended without a result and the job is still running; say why, and let it be resumed."""
         job = self.instance
-        # The work goes on without this task, and on a hybrid node it goes on inside this very
-        # directory: the execution environment of local work has it bind-mounted. Leave it to
-        # the periodic cleanup, which only removes the folders of jobs that are no longer running.
-        self.cleanup_paths = []
+        if receptor_job.work_type == 'local':
+            # The work goes on without this task inside this very directory: the execution
+            # environment of local work has it bind-mounted. Leave it to the periodic cleanup, which
+            # only removes the folders of jobs that are no longer running. Remote work took a copy
+            # with its payload, so the directory, credentials and all, goes now as it would have at
+            # the end of the job; on Kubernetes there is no periodic cleanup to remove it later.
+            self.cleanup_paths = []
         if receptor_job.lease_lost:
             logger.warning(f'{job.log_format}: its monitoring was taken over by another task; this task stands down without finalizing or releasing anything')
             return
