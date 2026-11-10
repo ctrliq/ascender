@@ -20,6 +20,8 @@ class FakeResponse:
     read timeout or a dropped connection surfaces from urllib3.
     """
 
+    status = 200
+
     def __init__(self, payload):
         self.payload = payload
         self.closed = False
@@ -45,6 +47,45 @@ class FakeResponse:
         self.calls.append('close')
 
 
+# What the generated client's read_namespaced_pod_log accepts; anything else raises ApiTypeError
+POD_LOG_PARAMS = {
+    'container',
+    'follow',
+    'insecure_skip_tls_verify_backend',
+    'limit_bytes',
+    'pretty',
+    'previous',
+    'since_seconds',
+    'stream',
+    'tail_lines',
+    'timestamps',
+    'async_req',
+    '_return_http_data_only',
+    '_preload_content',
+    '_request_timeout',
+    '_request_auth',
+    '_content_type',
+    '_headers',
+}
+
+
+class FakeApiClient:
+    """The lower-level ApiClient.call_api, which is how a log is requested with sinceTime."""
+
+    def __init__(self, api):
+        self.api = api
+
+    def select_header_accept(self, accepts):
+        return ', '.join(accepts)
+
+    def call_api(self, resource_path, method, path_params=None, query_params=None, **kwargs):
+        assert (resource_path, method) == ('/api/v1/namespaces/{namespace}/pods/{name}/log', 'GET')
+        query = dict(query_params)
+        call = {'since_time': query.pop('sinceTime'), '_request_timeout': kwargs.get('_request_timeout')}
+        call.update(query)
+        return self.api.serve_log(call)
+
+
 class FakeKubeApi:
     """Serves a pod and successive versions of its log, the way the API would across reconnects."""
 
@@ -54,6 +95,7 @@ class FakeKubeApi:
         self.log_calls = []
         self.responses = []
         self.deleted = []
+        self.api_client = FakeApiClient(self)
 
     def read_namespaced_pod(self, name, namespace, **kwargs):
         if self.pod is None:
@@ -68,9 +110,16 @@ class FakeKubeApi:
         return v
 
     def read_namespaced_pod_log(self, name, namespace, **kwargs):
-        self.log_calls.append(kwargs)
+        unexpected = set(kwargs) - POD_LOG_PARAMS
+        if unexpected:
+            raise TypeError(f'Got an unexpected keyword argument {unexpected.pop()!r} to method read_namespaced_pod_log')
         if kwargs.get('tail_lines'):
+            self.log_calls.append(kwargs)
             return FakeResponse(self.logs[0][-200:] if self.logs else b'')
+        return self.serve_log(kwargs)
+
+    def serve_log(self, call):
+        self.log_calls.append(call)
         payload = self.logs.pop(0) if self.logs else b''
         self.responses.append(FakeResponse(payload))
         return self.responses[-1]
@@ -152,6 +201,40 @@ def test_dropped_connection_resumes_from_last_timestamp_without_duplicates():
     assert counters == [1, 2, 3]
     assert api.log_calls[1]['since_time'] == '2026-11-10T09:00:05Z'
     assert stream.reconnects == 2
+
+
+def test_a_reconnect_sends_since_time_through_the_real_client():
+    """
+    The generated client leaves sinceTime out of read_namespaced_pod_log and rejects since_time,
+    so the stream sends the request itself. Checked down to the urllib3 call, against the real
+    client's parameter validation and request building, not a fake that takes any keyword.
+    """
+    from kubernetes import client as k8s
+
+    api = k8s.CoreV1Api(k8s.ApiClient(k8s.Configuration(host='https://k8s.invalid')))
+    with pytest.raises(TypeError, match='since_time'):
+        api.read_namespaced_pod_log('automation-job-7-abcde', 'ascender', since_time='2026-11-10T09:00:05Z')
+
+    sent = []
+
+    def request(method, url, fields=None, headers=None, **kwargs):
+        sent.append((method, url, dict(fields or ()), dict(headers or {})))
+        return FakeResponse(stamped([b'{"counter": 2}\n'], second=5))
+
+    pm = mock.Mock(kube_api=api, namespace='ascender')
+    stream = PodLogStream(mock.Mock(id=7, log_format='job 7'), pod_name='automation-job-7-abcde', namespace='ascender', pod_manager=pm)
+    stream.pod = running_pod()
+    with mock.patch.object(api.api_client.rest_client.pool_manager, 'request', side_effect=request):
+        stream._open_stream(since=None)
+        stream._open_stream(since='2026-11-10T09:00:05Z')
+    (method, url, query, headers), (since_method, since_url, since_query, since_headers) = sent
+    assert since_method == method == 'GET'
+    assert since_url == url == 'https://k8s.invalid/api/v1/namespaces/ascender/pods/automation-job-7-abcde/log'
+    # The request the generated method sends, with sinceTime added; the API server refuses an Accept of text/plain alone
+    assert since_query.pop('sinceTime') == '2026-11-10T09:00:05Z'
+    assert since_query == query == {'container': 'worker', 'follow': True, 'timestamps': True}
+    assert since_headers == headers
+    assert stream.readline() == b'{"counter": 2}\n'
 
 
 def test_finished_pod_gets_one_final_pass():

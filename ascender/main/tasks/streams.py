@@ -225,23 +225,52 @@ class PodLogStream:
         return self
 
     def _open_stream(self, since):
-        kwargs = dict(
-            name=self.pod_name,
-            namespace=self._namespace,
-            container=self.container_name,
-            follow=self.follow,
-            timestamps=True,
-            _preload_content=False,
-            _request_timeout=self._stream_timeout,
-        )
-        if since is not None:
-            kwargs['since_time'] = since
-        self._resp = self.api.read_namespaced_pod_log(**kwargs)
+        if since is None:
+            self._resp = self.api.read_namespaced_pod_log(
+                name=self.pod_name,
+                namespace=self._namespace,
+                container=self.container_name,
+                follow=self.follow,
+                timestamps=True,
+                _preload_content=False,
+                _request_timeout=self._stream_timeout,
+            )
+        else:
+            self._resp = self._read_log_since(since)
         # Chunk by chunk as the API sends them, never waiting to fill a buffer: a followed log
         # is served with chunked transfer encoding, one chunk per write by the container, and
         # a buffered reader over it would hold each event back until 8 KiB had accumulated.
         self._chunks = self._resp.stream(amt=65536, decode_content=False)
         self._rawbuf = b''
+
+    def _read_log_since(self, since):
+        """
+        The pod's log from the second ``since`` on, which is how receptor itself reconnects to these pods.
+
+        The log API takes sinceTime, but the generated client's read_namespaced_pod_log leaves the
+        parameter out and rejects since_time as an unexpected keyword argument. This sends the request
+        that method sends, with sinceTime added. sinceSeconds would work only as far as this node's
+        clock agrees with the kubelet's.
+        """
+        client = self.api.api_client
+        return client.call_api(
+            '/api/v1/namespaces/{namespace}/pods/{name}/log',
+            'GET',
+            path_params={'name': self.pod_name, 'namespace': self._namespace},
+            query_params=[('container', self.container_name), ('follow', self.follow), ('sinceTime', since), ('timestamps', True)],
+            # The media types read_namespaced_pod_log offers, of which the client picks JSON: the API
+            # server answers a log request that accepts only text/plain with 406 Not Acceptable.
+            header_params={
+                'Accept': client.select_header_accept(
+                    ['text/plain', 'application/json', 'application/yaml', 'application/vnd.kubernetes.protobuf', 'application/cbor']
+                )
+            },
+            auth_settings=['BearerToken'],
+            response_types_map={200: 'str', 401: None},
+            _return_http_data_only=True,
+            _preload_content=False,
+            _request_timeout=self._stream_timeout,
+        )
 
     def _raw_readline(self):
         """The next raw line of the current connection, as soon as it is complete; b'' at its end."""
