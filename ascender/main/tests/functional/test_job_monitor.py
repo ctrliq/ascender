@@ -1285,6 +1285,34 @@ def test_resume_tries_again_later_when_the_last_read_of_a_pod_log_breaks_off(me,
 
 
 @pytest.mark.django_db(transaction=True)
+def test_resume_counts_a_failure_to_get_ready_against_the_deferrals(me, quiet_websockets, inventory, project):
+    """Uncounted, a failure that persists would have the job claimed and fail again forever, never running out of deferrals."""
+    job = running_job(inventory=inventory, project=project)
+    lease = leased(job, worker_started=True)
+    task_id = claim_job(job, me.hostname)
+    with mock.patch('ascender.main.tasks.jobs.plan_resume', side_effect=RuntimeError('invalid kubeconfig in the container group credential')):
+        RunJob().resume(job.pk, task_id)
+    job.refresh_from_db()
+    lease.refresh_from_db()
+    assert job.status == 'running'
+    assert lease.deferrals == 1 and lease.expires > now()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_a_job_out_of_deferrals_is_failed_without_the_setup_that_kept_failing(me, quiet_websockets, inventory, project, settings):
+    job = running_job(inventory=inventory, project=project)
+    leased(job, worker_started=True, deferrals=settings.JOB_MONITOR_MAX_DEFERRALS)
+    task_id = claim_job(job, me.hostname)
+    with mock.patch.object(RunJob, 'build_private_data_dir', side_effect=OSError(28, 'No space left on device')):
+        with pytest.raises(Exception):  # finish_run raises for a failed job, as at the end of a launch
+            RunJob().resume(job.pk, task_id)
+    job.refresh_from_db()
+    assert job.status == 'failed'
+    assert 'stayed unreachable' in job.job_explanation
+    assert not JobMonitorLease.objects.filter(unified_job=job).exists()
+
+
+@pytest.mark.django_db(transaction=True)
 def test_resume_tries_again_later_when_the_stream_ends_while_the_work_runs(me, quiet_websockets, inventory, project):
     """A stream that broke off is not the end of a job whose pod or unit is still running."""
     job = running_job(inventory=inventory, project=project)

@@ -144,7 +144,8 @@ class RunnerCallback:
         Set up to read the rest of a job's output on this node, after the task that launched
         it is gone: stamp events the way the launch did, skip the ones already saved, and point
         the post-run hooks at this run's private data dir. Without ``reading`` the job is only
-        finished here, and needs no host map; its event count is still the one it reports.
+        finished here: it needs no host map, and its stored environment stays as the launch left
+        it; its event count is still the one it reports.
         """
         self.instance = instance
         self.job_created = str(instance.created)
@@ -156,8 +157,9 @@ class RunnerCallback:
         self.private_data_dir_override = private_data_dir
         self.persisted_ranges, self.event_ct = persisted_event_counters(instance)
         self._persisted_firsts = [first for first, last in self.persisted_ranges]
-        if reading:
-            self.populate_host_map_from_inventory(instance)
+        if not reading:
+            return
+        self.populate_host_map_from_inventory(instance)
         job_env = dict(instance.job_env or {})
         if job_env and job_env.get('AWX_PRIVATE_DATA_DIR') != private_data_dir:
             job_env['AWX_PRIVATE_DATA_DIR'] = private_data_dir

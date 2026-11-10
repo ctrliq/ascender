@@ -502,16 +502,17 @@ class BaseTask(object):
         Hook for any steps to run after job/task is marked as complete.
         """
         instance.log_lifecycle("finalize_run")
-        artifact_dir = os.path.join(private_data_dir, 'artifacts', str(self.instance.id))
-        collections_info = os.path.join(artifact_dir, 'collections.json')
-        ansible_version_file = os.path.join(artifact_dir, 'ansible_version.txt')
+        # A job a resume finished without reading its output has no private data dir, and no artifacts
+        artifact_dir = os.path.join(private_data_dir, 'artifacts', str(self.instance.id)) if private_data_dir else None
+        collections_info = os.path.join(artifact_dir, 'collections.json') if artifact_dir else None
+        ansible_version_file = os.path.join(artifact_dir, 'ansible_version.txt') if artifact_dir else None
 
-        if os.path.exists(collections_info):
+        if collections_info and os.path.exists(collections_info):
             with open(collections_info) as ee_json_info:
                 ee_collections_info = json.loads(ee_json_info.read())
                 instance.installed_collections = ee_collections_info
                 instance.save(update_fields=['installed_collections'])
-        if os.path.exists(ansible_version_file):
+        if ansible_version_file and os.path.exists(ansible_version_file):
             with open(ansible_version_file) as ee_ansible_info:
                 ansible_version_info = ee_ansible_info.readline()
                 instance.ansible_version = ansible_version_info
@@ -924,9 +925,16 @@ class BaseTask(object):
         elif plan.cleanup is not None:
             plan.cleanup()
         job.log_lifecycle('monitor_resume_canceled')
-        private_data_dir = self.build_private_data_dir(job)
-        self.runner_callback.configure_for_resume(job, private_data_dir, reading=False)
-        self.finish_run(pk, 'canceled', None, private_data_dir, post_run_hook=False)
+        self._finish_unread(pk, 'canceled')
+
+    def _finish_unread(self, pk, status):
+        """
+        Finish a job whose output this task never read, failed or cancelled by a resume. There is
+        nothing to process, so it takes no private data dir and no post-run hook: nothing that can
+        fail again the way getting ready to read may have, so a job out of deferrals always ends.
+        """
+        self.runner_callback.configure_for_resume(self.instance, '', reading=False)
+        self.finish_run(pk, status, None, '', post_run_hook=False)
 
     @with_path_cleanup
     @with_signal_handling
@@ -958,12 +966,20 @@ class BaseTask(object):
 
         # Planning, and getting ready to read, can take a while; the lease is renewed meanwhile, and
         # nothing is done about the plan by a task that lost the job before it was ready.
-        with LeaseKeeper(job, task_id) as keeper:
-            plan = plan_resume(job, lease)
-            canceled = bool(job.cancel_flag or self._cancel_flag_set(pk))
-            if plan.action == RESUME and not canceled:
-                private_data_dir = self.build_private_data_dir(job)
-                self.runner_callback.configure_for_resume(job, private_data_dir)
+        try:
+            with LeaseKeeper(job, task_id) as keeper:
+                plan = plan_resume(job, lease)
+                canceled = bool(job.cancel_flag or self._cancel_flag_set(pk))
+                if plan.action == RESUME and not canceled:
+                    private_data_dir = self.build_private_data_dir(job)
+                    self.runner_callback.configure_for_resume(job, private_data_dir)
+        except Exception:
+            # Counted like any other wait, so that a failure that persists (a container group whose
+            # credential is broken, a full disk) ends with the job failed once its deferrals run out,
+            # by a plan that needs none of this, rather than with the job claimed again forever.
+            logger.exception(f'{job.log_format}: getting ready to resume it failed; the next job monitor sweep tries again')
+            self._try_again_later(pk)
+            return
         if keeper.lost:
             self.lost_ownership = True
             logger.warning(f'{job.log_format}: another task took over its monitoring while this one got ready to resume it; this task stands down')
@@ -986,10 +1002,8 @@ class BaseTask(object):
 
         if plan.action == FAIL:
             job.log_lifecycle('monitor_resume_failed')
-            private_data_dir = self.build_private_data_dir(job)
-            self.runner_callback.configure_for_resume(job, private_data_dir, reading=False)
             self.runner_callback.delay_update(job_explanation=f'The job failed because {plan.reason}.')
-            self.finish_run(pk, 'failed', None, private_data_dir, post_run_hook=False)
+            self._finish_unread(pk, 'failed')
             return
 
         self.runner_callback.delay_update(job_explanation=f'Output monitoring was resumed on {settings.CLUSTER_HOST_ID} after the node reading it stopped.')
