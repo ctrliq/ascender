@@ -12,16 +12,21 @@ socket was read, as a file-like object with readline() for the event lines and r
 base64 artifacts archive at the end, so ansible-runner's process streamer consumes it unchanged.
 
 The kubelet serves the log with one timestamp per line when asked. Those are what let a dropped
-connection be resumed in place: the stream reopens from the last timestamp seen and skips the
-lines it already delivered, which is the same reconnect receptor itself uses for these pods.
-A connection that stays silent for JOB_MONITOR_STREAM_IDLE_SECONDS is reopened the same way,
-so a connection that died without being closed cannot hold the stream forever.
+connection be resumed in place: the stream reopens from the second of the last line it delivered,
+which is the same reconnect receptor itself uses for these pods, and skips what that repeats.
+Lines can share a timestamp (CRI-O stamps every line of one read from the container alike), so
+what a reconnect repeats is told by counting the lines delivered at the last timestamp, and a
+line is never dropped for its timestamp alone. A connection that stays silent for
+JOB_MONITOR_STREAM_IDLE_SECONDS is reopened the same way, so a connection that died without
+being closed cannot hold the stream forever.
 """
 
+import calendar
 import io
 import logging
 import re
 import socket
+import time
 from datetime import datetime, timezone
 
 from kubernetes.client.rest import ApiException
@@ -39,8 +44,9 @@ LIVE_PHASES = ('Pending', 'Running')
 # receptor names the container it streams, and the one the pod spec must contain, "worker"
 WORKER_CONTAINER = 'worker'
 
-# "2026-11-10T20:01:02.123456789Z <message>"; the kubelet trims trailing zeros of the fraction
-_TIMESTAMP_RE = re.compile(rb'^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d{1,9}))?Z ')
+# "2026-11-10T20:01:02.123456789Z <message>". The fraction may come with its trailing zeros
+# trimmed, and a container runtime on a node whose clock is not in UTC writes its offset, not Z.
+_TIMESTAMP_RE = re.compile(rb'^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d{1,9}))?(Z|[+-]\d\d:\d\d) ')
 
 
 def pod_phase(pod):
@@ -113,7 +119,15 @@ class PodLogStream:
         self._chunks = None
         self._rawbuf = b''
         self._buf = b''
+        # The last line delivered: its timestamp in nanoseconds since the epoch, and how many of the
+        # lines delivered carry that same timestamp.
         self._last_stamp = None
+        self._at_last_stamp = 0
+        # After a reconnect, [timestamp, count]: the new connection starts at the second of the last
+        # line delivered, so the lines it serves before that timestamp, and the first count lines at
+        # it, were delivered already.
+        self._replay = None
+        self._stamp_cache = (None, 0)
         self._interrupted = False
         self._final_pass_done = False
         self._eof = False
@@ -273,7 +287,13 @@ class PodLogStream:
         )
 
     def _raw_readline(self):
-        """The next raw line of the current connection, as soon as it is complete; b'' at its end."""
+        """
+        The next raw line of the current connection, as soon as it is complete; b'' at its end.
+
+        A followed connection that ends inside a line ends there: the reconnect serves that line
+        again in full. Only a read that does not follow, of a log that is complete, may end with a
+        line that lacks its newline.
+        """
         while b'\n' not in self._rawbuf:
             if self._chunks is None:
                 break
@@ -285,6 +305,9 @@ class PodLogStream:
                 self._rawbuf += chunk
         if b'\n' not in self._rawbuf:
             line, self._rawbuf = self._rawbuf, b''
+            if line and self.follow:
+                logger.debug(f'Log stream of pod {self.pod_name} for {self.job.log_format} ended inside a line; it is read again on reconnecting')
+                return b''
             return line
         line, _, self._rawbuf = self._rawbuf.partition(b'\n')
         return line + b'\n'
@@ -304,16 +327,30 @@ class PodLogStream:
             except Exception:
                 pass
 
+    def _stamp(self, match):
+        """A log line's timestamp as nanoseconds since the epoch."""
+        second, zone = match.group(1), match.group(3)
+        key, seconds = self._stamp_cache
+        if key != (second, zone):
+            seconds = calendar.timegm(time.strptime(second.decode(), '%Y-%m-%dT%H:%M:%S'))
+            if zone != b'Z':
+                offset = int(zone[1:3]) * 3600 + int(zone[4:6]) * 60
+                seconds -= offset if zone[:1] == b'+' else -offset
+            self._stamp_cache = ((second, zone), seconds)
+        return seconds * 1_000_000_000 + int((match.group(2) or b'0').ljust(9, b'0'))
+
     def _since(self):
-        """The last timestamp seen at second precision, which is all the log API accepts."""
+        """The second of the last line delivered, in UTC: the log API takes sinceTime at second precision."""
         if self._last_stamp is None:
             return None
-        return self._last_stamp[0].decode() + 'Z'
+        return datetime.fromtimestamp(self._last_stamp // 1_000_000_000, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
     def _reconnect(self, follow):
         self.reconnects += 1
         self._close_resp()
         self.follow = follow
+        if self._last_stamp is not None:
+            self._replay = [self._last_stamp, self._at_last_stamp]
         self._open_stream(since=self._since())
 
     def _next_line(self):
@@ -364,12 +401,21 @@ class PodLogStream:
                 return False
             m = _TIMESTAMP_RE.match(line)
             if m:
-                stamp = (m.group(1), int((m.group(2) or b'0').ljust(9, b'0')))
+                stamp = self._stamp(m)
                 body = line[m.end() :]
-                # A reconnect replays from the last timestamp at second precision; these were delivered already.
-                if self._last_stamp is not None and stamp <= self._last_stamp:
-                    continue
-                self._last_stamp = stamp
+                if self._replay is not None:
+                    # Repeated by the reconnect: delivered before it
+                    boundary, repeated = self._replay
+                    if stamp < boundary:
+                        continue
+                    if stamp == boundary and repeated:
+                        self._replay[1] -= 1
+                        continue
+                    self._replay = None
+                if stamp == self._last_stamp:
+                    self._at_last_stamp += 1
+                else:
+                    self._last_stamp, self._at_last_stamp = stamp, 1
             else:
                 body = line
             if not body.strip():

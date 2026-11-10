@@ -6,7 +6,7 @@ from unittest import mock
 
 import pytest
 from kubernetes.client.rest import ApiException
-from urllib3.exceptions import ReadTimeoutError
+from urllib3.exceptions import ProtocolError, ReadTimeoutError
 
 from ascender.main.tasks import streams
 from ascender.main.tasks.receptor import ReceptorUnitStream
@@ -203,6 +203,65 @@ def test_dropped_connection_resumes_from_last_timestamp_without_duplicates():
     assert stream.reconnects == 2
 
 
+def test_lines_that_share_a_timestamp_are_all_delivered():
+    """CRI-O stamps every line of one read from the container alike; none of them may be dropped for it."""
+    same = b'2026-11-10T09:00:05.000000100Z '
+    log = same + b'{"counter": 1}\n' + same + b'{"counter": 2}\n' + same + b'{"counter": 3}\n'
+    stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [log])
+    stream.open(follow=False)
+    assert [json.loads(stream.readline())['counter'] for _ in range(3)] == [1, 2, 3]
+
+
+def test_a_reconnect_skips_exactly_what_it_repeats_at_a_shared_timestamp():
+    """The replay starts at the second of the last line delivered; only the lines delivered before are skipped."""
+    t050, t100, t200 = (f'2026-11-10T09:00:05.000000{n}Z '.encode() for n in ('050', '100', '200'))
+    first = [t050 + b'{"counter": 1}\n' + t100 + b'{"counter": 2}\n' + t100 + b'{"counter": 3}\n', ProtocolError('Connection broken')]
+    second = t050 + b'{"counter": 1}\n' + t100 + b'{"counter": 2}\n' + t100 + b'{"counter": 3}\n' + t100 + b'{"counter": 4}\n' + t200 + b'{"counter": 5}\n'
+    stream, api = make_stream(running_pod(started_at=datetime(2026, 11, 10, 9, 0, tzinfo=timezone.utc)), [first, second, b''])
+    live = [True, False]
+    stream.is_live = lambda: live.pop(0)
+    stream.open(follow=True)
+    counters = []
+    while line := stream.readline():
+        counters.append(json.loads(line)['counter'])
+    assert counters == [1, 2, 3, 4, 5]
+    assert api.log_calls[1]['since_time'] == '2026-11-10T09:00:05Z'
+
+
+def test_a_followed_connection_that_ends_inside_a_line_reads_it_again_in_full():
+    """The fragment is not delivered and the cursor does not move past it, so the reconnect serves the whole line once."""
+    first = stamped([b'{"counter": 1}\n'], second=5) + b'2026-11-10T09:00:05.000000200Z {"coun'
+    second = stamped([b'{"counter": 1}\n'], second=5) + b'2026-11-10T09:00:05.000000200Z {"counter": 2}\n'
+    stream, api = make_stream(running_pod(started_at=datetime(2026, 11, 10, 9, 0, tzinfo=timezone.utc)), [first, second, b''])
+    live = [True, False]
+    stream.is_live = lambda: live.pop(0)
+    stream.open(follow=True)
+    assert json.loads(stream.readline()) == {'counter': 1}
+    assert json.loads(stream.readline()) == {'counter': 2}
+    assert stream.readline() == b''
+
+
+def test_a_complete_log_may_end_without_a_newline():
+    log = stamped([b'{"counter": 1}\n']) + b'2026-11-10T09:00:00.000000200Z {"eof": true}'
+    stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [log])
+    stream.open(follow=False)
+    assert json.loads(stream.readline()) == {'counter': 1}
+    assert json.loads(stream.readline()) == {'eof': True}
+
+
+def test_a_timestamp_with_an_offset_is_read_as_the_moment_it_names():
+    """A runtime on a node whose clock is not in UTC writes its offset; the reconnect asks for that moment in UTC."""
+    first = [b'2026-11-10T11:00:05.000000100+02:00 {"counter": 1}\n', ProtocolError('Connection broken')]
+    second = b'2026-11-10T11:00:05.000000100+02:00 {"counter": 1}\n2026-11-10T11:00:06.000000100+02:00 {"counter": 2}\n'
+    stream, api = make_stream(running_pod(started_at=datetime(2026, 11, 10, 9, 0, tzinfo=timezone.utc)), [first, second, b''])
+    live = [True, False]
+    stream.is_live = lambda: live.pop(0)
+    stream.open(follow=True)
+    assert json.loads(stream.readline()) == {'counter': 1}
+    assert json.loads(stream.readline()) == {'counter': 2}
+    assert api.log_calls[1]['since_time'] == '2026-11-10T09:00:05Z'
+
+
 def test_a_reconnect_sends_since_time_through_the_real_client():
     """
     The generated client leaves sinceTime out of read_namespaced_pod_log and rejects since_time,
@@ -305,7 +364,15 @@ def test_release_deletes_the_pod_unless_work_is_kept(settings):
     assert api.deleted == ['automation-job-7-abcde']
 
 
-@pytest.mark.parametrize('line', [b'2026-11-10T09:00:05.1Z {"a": 1}\n', b'2026-11-10T09:00:05Z {"a": 1}\n', b'2026-11-10T09:00:05.123456789Z {"a": 1}\n'])
+@pytest.mark.parametrize(
+    'line',
+    [
+        b'2026-11-10T09:00:05.1Z {"a": 1}\n',
+        b'2026-11-10T09:00:05Z {"a": 1}\n',
+        b'2026-11-10T09:00:05.123456789Z {"a": 1}\n',
+        b'2026-11-10T04:00:05.123456789-05:00 {"a": 1}\n',
+    ],
+)
 def test_timestamp_regex_accepts_trimmed_fractions(line):
     m = streams._TIMESTAMP_RE.match(line)
     assert m is not None
