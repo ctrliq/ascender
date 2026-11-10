@@ -186,6 +186,11 @@ class EntraIDOAuth2(AzureADV2TenantOAuth2):
         }
 
 
+def links_by_email(backend):
+    """True when a first login through this backend may link to an existing account by email."""
+    return backend.name != ENTRA_ID_BACKEND_NAME
+
+
 def associate_existing_account(backend, details, user=None, *args, **kwargs):
     """
     Link a first login to an account that already exists.
@@ -198,7 +203,7 @@ def associate_existing_account(backend, details, user=None, *args, **kwargs):
     when that one is the same person: the ID token kept from its last login has
     the same object ID and tenant.
     """
-    if backend.name != ENTRA_ID_BACKEND_NAME:
+    if links_by_email(backend):
         return social_auth.associate_by_email(backend, details, user, *args, **kwargs)
     if user:
         return None

@@ -8,12 +8,19 @@ import urllib.parse
 from ascender.settings.typed import settings
 from django.utils.functional import LazyObject
 from django.shortcuts import redirect
+from django.utils.translation import gettext as _
 
 # Python Social Auth
 from social_core.exceptions import SocialAuthBaseException
 from social_core.utils import social_logger
 from social_django import utils
 from social_django.middleware import SocialAuthExceptionMiddleware
+
+from ascender.sso.social_base_pipeline import AuthInactive, AuthNotFound, ExternalLoginCollision
+
+#: Exceptions whose message Ascender writes itself and may show on the login page.
+#: Anything else, including provider text, could be supplied by the request.
+USER_VISIBLE_AUTH_ERRORS = (AuthInactive, AuthNotFound, ExternalLoginCollision)
 
 
 class SocialAuthMiddleware(SocialAuthExceptionMiddleware):
@@ -66,7 +73,7 @@ class SocialAuthMiddleware(SocialAuthExceptionMiddleware):
             social_logger.error(message)
 
             url = self.get_redirect_uri(request, exception)
-            request.session['social_auth_error'] = (full_backend_name, message)
+            request.session['social_auth_error'] = (full_backend_name, self.get_display_message(request, exception))
             return redirect(url)
 
     def get_message(self, request, exception):
@@ -74,6 +81,11 @@ class SocialAuthMiddleware(SocialAuthExceptionMiddleware):
         if msg and msg[-1] not in '.?!':
             msg = msg + '.'
         return msg
+
+    def get_display_message(self, request, exception):
+        if isinstance(exception, USER_VISIBLE_AUTH_ERRORS):
+            return self.get_message(request, exception)
+        return _('Sign-in could not be completed. Please try again.')
 
     def get_redirect_uri(self, request, exception):
         strategy = getattr(request, 'social_strategy', None)

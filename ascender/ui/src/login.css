@@ -128,3 +128,7 @@
 .ascender-login .ascender-login__sso .pf-v6-c-button + .pf-v6-c-button {
   margin-top: 0.5rem;
 }
+
+.ascender-login .ascender-login__sso-error {
+  margin-bottom: 1.5rem;
+}
