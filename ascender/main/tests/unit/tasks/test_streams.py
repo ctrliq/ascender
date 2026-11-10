@@ -246,6 +246,17 @@ def test_a_followed_connection_that_ends_inside_a_line_reads_it_again_in_full():
     assert stream.readline() == b''
 
 
+def test_a_line_that_arrives_in_many_chunks_is_read_whole():
+    """The artifacts archive is one long base64 line, which reaches the reader in many chunks."""
+    body = b'2026-11-10T09:00:00.000000100Z ' + b'QUJD' * 50000 + b'\n2026-11-10T09:00:00.000000200Z {"eof": true}\n'
+    stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [])
+    stream.follow = False
+    stream._chunks = iter([body[i : i + 1000] for i in range(0, len(body), 1000)])
+    assert stream._raw_readline() == body.split(b'\n')[0] + b'\n'
+    assert stream._raw_readline() == b'2026-11-10T09:00:00.000000200Z {"eof": true}\n'
+    assert stream._raw_readline() == b''
+
+
 def test_a_complete_log_may_end_without_a_newline():
     log = stamped([b'{"counter": 1}\n']) + b'2026-11-10T09:00:00.000000200Z {"eof": true}'
     stream, api = make_stream(running_pod(terminated={'exit_code': 0}), [log])

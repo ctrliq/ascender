@@ -310,16 +310,25 @@ class PodLogStream:
         A followed connection that ends inside a line ends there: the reconnect serves that line
         again in full. Only a read that does not follow, of a log that is complete, may end with a
         line that lacks its newline.
+
+        A line that arrives in many chunks, such as the base64 artifacts archive, is gathered in a
+        list and joined once, each chunk searched on its own for the newline: added to the buffer
+        chunk by chunk, it would be copied and searched whole for every chunk, quadratic in its length.
         """
-        while b'\n' not in self._rawbuf:
-            if self._chunks is None:
-                break
+        if b'\n' not in self._rawbuf:
+            parts = [self._rawbuf]
             try:
-                chunk = next(self._chunks)
-            except StopIteration:
-                break
-            if chunk:
-                self._rawbuf += chunk
+                while self._chunks is not None:
+                    try:
+                        chunk = next(self._chunks)
+                    except StopIteration:
+                        break
+                    if chunk:
+                        parts.append(chunk)
+                        if b'\n' in chunk:
+                            break
+            finally:
+                self._rawbuf = b''.join(parts)
         if b'\n' not in self._rawbuf:
             line, self._rawbuf = self._rawbuf, b''
             if line and self.follow:
