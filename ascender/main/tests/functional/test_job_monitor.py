@@ -1187,6 +1187,20 @@ def test_resume_hides_what_a_credential_could_have_set_when_the_launch_stored_no
     assert job.job_env['JOB_ID'] == '1'
 
 
+@pytest.mark.django_db
+def test_a_resumed_jobs_post_run_hook_finds_its_artifacts_without_a_stored_environment(inventory, project):
+    """A launch that never stored the environment, and a log whose start was rotated away, leave no AWX_PRIVATE_DATA_DIR in job_env."""
+    job = running_job(inventory=inventory, project=project)
+    assert not job.job_env
+    task = RunJob()
+    task.instance = job
+    task.runner_callback.private_data_dir_override = '/tmp/awx_resumed'
+    task.runner_callback.artifacts_processed = True
+    with mock.patch.object(RunJob, 'should_use_fact_cache', return_value=True), mock.patch('ascender.main.tasks.jobs.finish_fact_cache') as finish_fact_cache:
+        task.post_run_hook(job, 'successful')
+    assert finish_fact_cache.call_args.kwargs['artifacts_dir'] == f'/tmp/awx_resumed/artifacts/{job.id}'
+
+
 @pytest.mark.django_db(transaction=True)
 def test_resume_tries_again_later_when_reading_fails(me, quiet_websockets, inventory, project):
     job = running_job(inventory=inventory, project=project)

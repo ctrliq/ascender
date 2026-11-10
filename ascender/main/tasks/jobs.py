@@ -488,6 +488,15 @@ class BaseTask(object):
         """
         instance.log_lifecycle("post_run")
 
+    def artifacts_private_data_dir(self, instance):
+        """
+        The private data dir that holds this run's artifacts, for the post-run hooks. A launch
+        records it in the job's stored environment. A resumed read has its own, and may have no
+        stored environment to record it in: a launch that never got to store one, and a log
+        whose start was rotated away before it was read again, leave none.
+        """
+        return self.runner_callback.private_data_dir_override or (instance.job_env or {}).get('AWX_PRIVATE_DATA_DIR')
+
     def final_run_hook(self, instance, status, private_data_dir):
         """
         Hook for any steps to run after job/task is marked as complete.
@@ -1534,7 +1543,7 @@ class RunJob(SourceControlMixin, BaseTask):
     def post_run_hook(self, job, status):
         super(RunJob, self).post_run_hook(job, status)
         job.refresh_from_db(fields=['job_env'])
-        private_data_dir = job.job_env.get('AWX_PRIVATE_DATA_DIR')
+        private_data_dir = self.artifacts_private_data_dir(job)
         if not private_data_dir:
             # If there's no private data dir, that means we didn't get into the
             # actual `run()` call; this _usually_ means something failed in
@@ -2317,7 +2326,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             return  # nothing to save, step out of the way to allow error reporting
 
         inventory_update.refresh_from_db()
-        private_data_dir = inventory_update.job_env.get('AWX_PRIVATE_DATA_DIR')
+        private_data_dir = self.artifacts_private_data_dir(inventory_update)
         if not private_data_dir:
             logger.warning('AWX_PRIVATE_DATA_DIR not found in job_env, skipping inventory save')
             return
