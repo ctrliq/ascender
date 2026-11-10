@@ -13,6 +13,11 @@ from ascender.main.tasks.receptor import ReceptorUnitStream
 from ascender.main.tasks.streams import PodLogStream, pod_exit_code, container_terminated, container_started_at
 
 
+@pytest.fixture(autouse=True)
+def no_reopen_pause(monkeypatch):
+    monkeypatch.setattr(streams, 'FOLLOW_REOPEN_PAUSE', 0)
+
+
 class FakeResponse:
     """
     What read_namespaced_pod_log returns with _preload_content=False: a raw urllib3 response,
@@ -413,6 +418,22 @@ def test_an_idle_follow_is_reopened_from_the_last_line(settings):
     assert stream.readline() == b''
     assert api.log_calls[0]['_request_timeout'] == (settings.ASCENDER_CONTAINER_GROUP_K8S_API_TIMEOUT, 120)
     assert api.log_calls[1]['follow'] is True and api.log_calls[1]['since_time'] == '2026-11-10T09:00:07Z'
+
+
+def test_a_followed_log_the_kubelet_ended_is_reopened_after_a_pause():
+    """
+    The kubelet ends a followed log as the container exits, a moment before the pod's status says
+    so. Reopened at once, the log would end at once, as fast as the API answers, until it does.
+    """
+    stream, api = make_stream(running_pod(started_at=datetime(2026, 11, 10, 9, 0, tzinfo=timezone.utc)), [stamped([b'{"counter": 1}\n']), b'', b'', b''])
+    live = [True, True, False]
+    stream.is_live = lambda: live.pop(0)
+    stream._woken = mock.Mock()
+    stream.open(follow=True)
+    assert json.loads(stream.readline()) == {'counter': 1}
+    assert stream.readline() == b''
+    assert stream._woken.wait.call_count == 2
+    assert [call['follow'] for call in api.log_calls] == [True, True, True, False]
 
 
 def test_an_api_error_while_checking_the_pod_is_raised_not_taken_for_the_end():

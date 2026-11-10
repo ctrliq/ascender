@@ -26,6 +26,7 @@ import io
 import logging
 import re
 import socket
+import threading
 import time
 from datetime import datetime, timezone
 
@@ -43,6 +44,10 @@ LIVE_PHASES = ('Pending', 'Running')
 
 # receptor names the container it streams, and the one the pod spec must contain, "worker"
 WORKER_CONTAINER = 'worker'
+
+# How long to wait before reopening a followed log that the kubelet ended while the pod still
+# looks live: it ends the log as the container exits, a moment before the pod's status says so.
+FOLLOW_REOPEN_PAUSE = 1
 
 # "2026-11-10T20:01:02.123456789Z <message>". The fraction may come with its trailing zeros
 # trimmed, and a container runtime on a node whose clock is not in UTC writes its offset, not Z.
@@ -140,6 +145,7 @@ class PodLogStream:
         self._replay = None
         self._stamp_cache = (None, 0)
         self._interrupted = False
+        self._woken = threading.Event()
         self._final_pass_done = False
         self._eof = False
         self.reconnects = 0
@@ -375,8 +381,10 @@ class PodLogStream:
         while True:
             if self._chunks is None or self._interrupted:
                 return b''
+            ended = False
             try:
                 line = self._raw_readline()
+                ended = not line
             except Exception as exc:
                 if self._interrupted:
                     return b''
@@ -394,6 +402,13 @@ class PodLogStream:
             if self._interrupted or self._final_pass_done:
                 return b''
             if self.follow and self.is_live():
+                if ended:
+                    # Not a dropped or idle connection: the kubelet ended it, which it does when the
+                    # container exits. Reopened at once, it would end at once, until the pod's status
+                    # catches up; wait for that, unless the reader is interrupted meanwhile.
+                    self._woken.wait(FOLLOW_REOPEN_PAUSE)
+                    if self._interrupted:
+                        return b''
                 self._reconnect(follow=True)
                 continue
             # The pod has finished, or this is a harvest of a finished pod. A stream that ended on its
@@ -477,6 +492,7 @@ class PodLogStream:
     def interrupt(self):
         """Unblock a reader thread stuck in readline(): close the connection under it."""
         self._interrupted = True
+        self._woken.set()
         resp = self._resp
         if resp is None:
             return
