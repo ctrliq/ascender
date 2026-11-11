@@ -198,7 +198,6 @@
     # new project revision with unchanged requirements reuses them instead of installing again.
     # The post-run hook in the task system publishes and evicts these directories.
     - name: Check for reusable roles and collections
-      when: requirements_cache_enabled | default(true) | bool
       tags:
         - install_roles
         - install_collections
@@ -222,34 +221,45 @@
               galaxy: "{{ requirements_cache_salt | default({}) }}"
           register: requirements_key
 
-        - name: Explain why requirements are installed on every update
-          ansible.builtin.debug:
-            msg: "Requirements are not reused between revisions: {{ requirements_key.reason }}"
-          when:
-            - requirements_key.requirements_hash | length > 0
-            - not requirements_key.cacheable
-
-        - name: Check requirements cache
-          ansible.builtin.stat:
-            path: "{{ awx_cache_path }}/reqcache_{{ requirements_key.requirements_hash }}"
-            get_checksum: false
-            get_attributes: false
-            get_mime: false
-          register: reqcache_stat
-          when: requirements_key.cacheable
-
-        - name: Record requirements cache key for the post-run cache handling
+        # A git requirement on a branch can change without the project revision, so the post-run hook
+        # refreshes every node. Recorded with reuse off too, since nodes still cache by that revision.
+        - name: Record that the requirements can change while the project does not
           ansible.builtin.copy:
-            content: "{{ requirements_key.requirements_hash }}"
-            dest: "{{ awx_cache_path }}/stage/.requirements_hash"
+            content: "{{ requirements_key.mutable_reason }}"
+            dest: "{{ awx_cache_path }}/stage/.requirements_mutable"
             mode: "0644"
-          when: requirements_key.cacheable
+          when: requirements_key.mutable_reason is defined
 
-        - name: Set requirements cache hit
-          ansible.builtin.set_fact:
-            requirements_cache_hit: >-
-              {{ requirements_key.cacheable and not (requirements_cache_refresh | default(false) | bool)
-                 and (reqcache_stat.stat.exists | default(false)) }}
+        - when: requirements_cache_enabled | default(true) | bool
+          block:
+            - name: Explain why requirements are installed on every update
+              ansible.builtin.debug:
+                msg: "Requirements are not reused between revisions: {{ requirements_key.reason }}"
+              when:
+                - requirements_key.requirements_hash | length > 0
+                - not requirements_key.cacheable
+
+            - name: Check requirements cache
+              ansible.builtin.stat:
+                path: "{{ awx_cache_path }}/reqcache_{{ requirements_key.requirements_hash }}"
+                get_checksum: false
+                get_attributes: false
+                get_mime: false
+              register: reqcache_stat
+              when: requirements_key.cacheable
+
+            - name: Record requirements cache key for the post-run cache handling
+              ansible.builtin.copy:
+                content: "{{ requirements_key.requirements_hash }}"
+                dest: "{{ awx_cache_path }}/stage/.requirements_hash"
+                mode: "0644"
+              when: requirements_key.cacheable
+
+            - name: Set requirements cache hit
+              ansible.builtin.set_fact:
+                requirements_cache_hit: >-
+                  {{ requirements_key.cacheable and not (requirements_cache_refresh | default(false) | bool)
+                     and (reqcache_stat.stat.exists | default(false)) }}
 
     - block:
         - name: Fetch galaxy roles from roles/requirements.(yml/yaml)
