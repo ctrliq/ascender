@@ -30,6 +30,7 @@ from ascender.main.tasks.callback import RunnerCallback, persisted_event_counter
 from ascender.main.tasks.jobs import RunJob, RunProjectUpdate
 from ascender.main.tasks.monitor import FAIL, REQUEUE, RESUME, WAIT, LeaseKeeper, ResumePlan, claim_job, plan_resume, requeue_job, sweep_job_monitors
 from ascender.main.tasks.receptor import AWXReceptorJob, _PhaseResult
+from ascender.main.tasks.signals import signal_state
 from ascender.main.tasks.streams import PodLogIncomplete
 from ascender.main.utils.update_model import NotOwner, update_model
 
@@ -1441,6 +1442,29 @@ def test_a_reader_that_loses_its_lease_stops_the_work_of_a_project_update_only(p
         receptor_job._await_processor(processor_future, stream, owner_task_id='t')
     assert receptor_job.lease_lost and stream.interrupted
     assert stream.cancelled is (kind == 'project_update')
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('armed', [False, True])
+def test_waiting_for_the_streamer_leaves_signal_handling_as_the_caller_set_it(armed):
+    """
+    process_stream arms signal_state for the wait and disarms it after. Left armed behind the
+    caller's back, the next SIGTERM anywhere in the process raises SignalExit in code that does not
+    expect it, as test_signals.py did when it ran after a test of this in the same worker.
+    """
+    job = running_job()
+    receptor_job = AWXReceptorJob.__new__(AWXReceptorJob)
+    receptor_job.__init__(mock.Mock(instance=job), {'private_data_dir': '/tmp/x'}, resuming=True)
+    receptor_job.unit_id = 'u'
+    processor_future = mock.Mock()
+    processor_future.result.side_effect = [concurrent.futures.TimeoutError(), _PhaseResult('error', 1)]
+    signal_state.raise_exception = armed
+    try:
+        with mock.patch.object(JobMonitorLease.objects, 'renew', side_effect=LeaseLost(job.pk, 't')):
+            receptor_job._await_processor(processor_future, FakeStream([]), owner_task_id='t')
+        assert signal_state.raise_exception is armed
+    finally:
+        signal_state.reset()
 
 
 @pytest.mark.django_db

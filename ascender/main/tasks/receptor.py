@@ -733,6 +733,9 @@ class AWXReceptorJob:
 
         interval = settings.JOB_MONITOR_RENEW_SECONDS
         job = self.task.instance
+        # Whether a signal interrupts the wait is for the caller to say (process_stream arms it for the
+        # wait and disarms it after), and this leaves it as the caller set it on every way out.
+        armed = signal_state.raise_exception
         while True:
             try:
                 return processor_future.result(timeout=interval)
@@ -760,7 +763,7 @@ class AWXReceptorJob:
                     stream.interrupt()
                     return self._drain(processor_future, 'error')
             finally:
-                signal_state.raise_exception = True
+                signal_state.raise_exception = armed
             if signal_callback():
                 raise SignalExit()
 
