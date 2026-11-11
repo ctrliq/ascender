@@ -104,7 +104,7 @@ class JobMonitorLeaseManager(models.Manager):
         return self.filter(unified_job_id=job.pk).delete()[0]
 
     def expired(self):
-        return self.filter(expires__lt=now(), unified_job__status='running').select_related('unified_job').order_by('expires')
+        return self.filter(expires__lt=now(), unified_job__status='running').order_by('expires')
 
 
 class JobMonitorLease(models.Model):

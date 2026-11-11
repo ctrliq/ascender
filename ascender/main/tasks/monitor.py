@@ -347,11 +347,16 @@ def sweep_job_monitors():
     # oldest leases, all of jobs it may not take, must not keep it from ever reaching its own.
     own = Q(unified_job__controller_node=me.hostname) | Q(unified_job__execution_node=me.hostname)
     expired = list(expired.annotate(theirs=Case(When(own, then=Value(0)), default=Value(1))).order_by('theirs', 'expires')[: settings.JOB_MONITOR_SWEEP_BATCH])
+    # Each job as its own type, which the polymorphic manager gives: through its lease a job is a
+    # plain UnifiedJob, which says it is never a container group task and logs as 'unified_job N'.
+    jobs = UnifiedJob.objects.in_bulk([lease.unified_job_id for lease in expired])
 
     claimed_ct = 0
     out_of_capacity = False
     for lease in expired:
-        job = lease.unified_job
+        job = jobs.get(lease.unified_job_id)
+        if job is None:
+            continue
         holder = local_unit_holder(job)
         if holder and holder != me.hostname and holder_is_present(holder):
             # Only that node's receptor has the unit, and its own sweep resumes the job

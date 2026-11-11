@@ -232,6 +232,22 @@ def test_sweep_claims_only_expired_leases_of_running_jobs(me):
 
 
 @pytest.mark.django_db
+def test_sweep_sees_each_job_as_its_own_type(me):
+    """Through its lease a job is a plain UnifiedJob, which is never a container group task and logs as 'unified_job N'."""
+    job = running_job()
+    leased(job)
+    seen = []
+
+    def holder(candidate):
+        seen.append(candidate)
+        return None
+
+    with mock.patch.object(monitor, 'local_unit_holder', side_effect=holder), mock.patch.object(monitor.resume_job, 'apply_async'):
+        assert sweep_job_monitors() == 1
+    assert [type(candidate) for candidate in seen] == [Job]
+
+
+@pytest.mark.django_db
 def test_sweep_stops_at_control_capacity(me):
     me.capacity = 1
     me.save()
