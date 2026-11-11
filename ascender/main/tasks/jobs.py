@@ -2089,12 +2089,19 @@ class RunProjectUpdate(BaseTask):
                     os.rename(stage_path, cache_path)
                     logger.debug('{0} wrote to cache at {1}'.format(instance.log_format, cache_path))
                     refresh = instance.launch_type in REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES
+                    if not refresh and instance.job_type == 'check' and os.path.exists(os.path.join(cache_path, '.requirements_mutable')):
+                        # a git requirement on a branch can change while the revision other nodes cache by does not, so refresh
+                        # them all; a job's own local sync ('run', not 'check') only follows, or nodes would keep invalidating each other
+                        refresh = True
+                        self.requirements_generation = instance.pk
+                        logger.info(f'{instance.log_format} installed requirements that can change without the project, refreshing them on every node')
                     self.sync_requirements_cache(base_path, cache_path, refresh=refresh)
                     if refresh:
                         # Publish the refresh before the lock is released: the update is only saved as
                         # successful after this hook, and a job waiting on the lock must not key its
                         # requirements by the generation this refresh replaces
                         Project.objects.filter(pk=instance.project_id, requirements_generation__lt=instance.pk).update(requirements_generation=instance.pk)
+                    # an older refresh finishing after a newer one writes its own generation, costing one extra reinstall
                     if self.requirements_generation is not None:
                         try:
                             with open(os.path.join(cache_path, '.requirements_generation'), 'w') as f:
