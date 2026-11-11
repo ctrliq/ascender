@@ -1440,6 +1440,25 @@ def test_a_detached_job_keeps_its_private_data_dir_only_for_local_work(work_type
     assert (task.cleanup_paths == []) is kept
 
 
+@pytest.mark.django_db
+def test_a_job_does_not_go_on_after_its_inline_sync_was_taken_over(project, tmp_path):
+    """
+    run() returns without finishing an inline sync whose monitoring another task took over, and
+    that task stops the sync and fails it. The job that started the sync fails with it instead
+    of recording the sync's revision and running against a half-updated project.
+    """
+    job = running_job(project=project, controller_node='')
+    task = RunJob()
+    task.instance = job
+    with mock.patch.object(RunJob, 'get_sync_needs', return_value=['update_project']), mock.patch.object(RunProjectUpdate, 'run', return_value=None):
+        with pytest.raises(RuntimeError):
+            task.sync_and_copy_without_lock(project, str(tmp_path))
+    job.refresh_from_db()
+    assert job.status == 'failed'
+    assert 'Previous Task Failed' in job.job_explanation
+    assert job.project_update.launch_type == 'sync' and job.project_update.status == 'running'
+
+
 def lockable_by_another_process(path):
     """fcntl locks belong to a process, which can always lock again what it holds itself."""
     probe = 'import fcntl, os, sys; fcntl.lockf(os.open(sys.argv[1], os.O_RDWR), fcntl.LOCK_EX | fcntl.LOCK_NB)'

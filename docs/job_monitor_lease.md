@@ -114,7 +114,9 @@ timestamp, so a job that was done while nobody was watching is not stamped minut
 row and refuses the write with `NotOwner` if the job's `celery_task_id` has moved on. A
 launch whose lease was taken over (say its node was partitioned from the database) finds
 this out at its next renewal, drops its stream, and neither finalizes nor releases anything;
-if it only finds out at the final write, the write is refused. The result of a job is
+if it only finds out at the final write, the write is refused. A project update also stops
+its work as it drops the stream, since it is never left running without its task's lock on
+the project, and the job whose inline sync it was fails with it. The result of a job is
 written once, by whoever holds the lease.
 
 The lease row is what a claim and a reader that is done with the job serialize on. A claim

@@ -1152,6 +1152,11 @@ class SourceControlMixin(BaseTask):
                 sync_task = RunProjectUpdate(job_private_data_dir=private_data_dir)
                 sync_task.run(local_project_sync.id)
                 local_project_sync.refresh_from_db()
+                if local_project_sync.status != 'successful':
+                    # run() raises when the sync fails, but returns without finishing it when another task
+                    # took over its monitoring (see BaseTask._end_without_finalizing), which stops the sync
+                    # and fails it. The job must not go on with a half-updated project.
+                    raise RuntimeError(f'{local_project_sync.log_format} did not finish')
                 self.instance = self.update_model(self.instance.pk, scm_revision=local_project_sync.scm_revision)
             except Exception:
                 local_project_sync.refresh_from_db()
