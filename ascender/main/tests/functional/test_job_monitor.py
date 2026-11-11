@@ -1459,6 +1459,17 @@ def test_a_job_does_not_go_on_after_its_inline_sync_was_taken_over(project, tmp_
     assert job.project_update.launch_type == 'sync' and job.project_update.status == 'running'
 
 
+@pytest.mark.django_db
+def test_a_project_update_that_lost_its_lease_does_not_keep_its_private_data_dir(project):
+    """Its work was stopped as it lost the lease, so nothing uses the directory, which holds its SCM credentials."""
+    update = ProjectUpdate.objects.create(project=project, status='running', celery_task_id='t', work_unit_id='u', launch_type='manual')
+    task = RunProjectUpdate()
+    task.instance = update
+    task.cleanup_paths = ['/tmp/awx_1_abcd']
+    task._leave_to_resume(mock.Mock(detached=False, lease_lost=True, work_type='local', unit_id='u'))
+    assert task.cleanup_paths == ['/tmp/awx_1_abcd']
+
+
 def lockable_by_another_process(path):
     """fcntl locks belong to a process, which can always lock again what it holds itself."""
     probe = 'import fcntl, os, sys; fcntl.lockf(os.open(sys.argv[1], os.O_RDWR), fcntl.LOCK_EX | fcntl.LOCK_NB)'
