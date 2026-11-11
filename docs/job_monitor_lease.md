@@ -129,10 +129,12 @@ Expiring a lease on detach and putting it off are fenced by the owner's task id 
 
 - Jobs without a lease are reaped exactly as before: those never handed to receptor,
   those launched before this change, and those whose output has been read and whose task
-  dies during the post-run hooks. The reapers step around a leased job only when the node
-  they reap is its controller. A leased job whose execution node is lost, or no longer
-  registered, is reaped as before: its controller is still reading it, and receptor would
-  wait for that node indefinitely.
+  dies during the post-run hooks. The reapers step around a leased job when the node they
+  reap is its controller, or, for the heartbeat's reaper, the control or hybrid node whose
+  own receptor runs its unit: a peer that claimed such a job re-queues or fails it within
+  moments. A leased job whose execution or hop node is lost, or whose execution node is no
+  longer registered, is reaped as before: its controller is still reading it, and receptor
+  would wait for that node indefinitely.
 - Cancelling reaches the task that holds the lease, through the job's `controller_node` and
   `celery_task_id`, which the claim keeps current. A job cancelled while nobody holds its
   lease is marked canceled at once; the existing reapers then delete its pod, or cancel its

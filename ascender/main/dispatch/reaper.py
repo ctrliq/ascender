@@ -82,19 +82,25 @@ def reap(instance=None, status='failed', job_explanation=None, excluded_uuids=No
     """
     Reap all jobs in running for this instance.
 
-    A job that holds a monitor lease is left out when this instance is its controller: whether
-    the instance is this one or a lost peer, the lease lapses once nobody renews it, and the
-    job's output is read again by whichever node sweeps it. A leased job that only executes on
-    this instance is reaped as before. Its controller is alive and still reading it, and would
-    wait for a lost execution node for as long as receptor does, which is indefinitely.
+    A job that holds a monitor lease is left to the job monitor sweep when this instance is a
+    control or hybrid node. Such a node executes only work it controls, so its leased jobs are
+    ones it was reading, whose lease lapses once nobody renews it, and ones a peer claimed after
+    this node was lost, whose unit only this node's receptor had: that peer re-queues or fails
+    them within moments. A leased job whose work is on an execution or hop node is reaped as
+    before: its controller is alive and still reading it, and would wait for a lost node for as
+    long as receptor does, which is indefinitely.
     """
     if instance is None:
         hostname = Instance.objects.my_hostname()
+        node_type = Instance.objects.filter(hostname=hostname).values_list('node_type', flat=True).first()
     else:
-        hostname = instance.hostname
+        hostname, node_type = instance.hostname, instance.node_type
     workflow_ctype_id = ContentType.objects.get_for_model(WorkflowJob).id
     base_Q = Q(status='running') & (Q(execution_node=hostname) | Q(controller_node=hostname)) & ~Q(polymorphic_ctype_id=workflow_ctype_id)
-    base_Q &= Q(monitor_lease__isnull=True) | ~Q(controller_node=hostname)
+    if node_type in (Instance.Types.CONTROL, Instance.Types.HYBRID):
+        base_Q &= Q(monitor_lease__isnull=True)
+    else:
+        base_Q &= Q(monitor_lease__isnull=True) | ~Q(controller_node=hostname)
     if ref_time:
         jobs = UnifiedJob.objects.filter(base_Q & Q(started__lte=ref_time))
     else:

@@ -374,6 +374,21 @@ def test_lost_instance_reap_skips_leased_jobs():
 
 
 @pytest.mark.django_db
+def test_reaping_a_lost_hybrid_node_leaves_a_claimed_local_job_to_its_claimer():
+    """The peer that claimed it re-queues or fails it within moments; the heartbeat reaping the lost node must not fail it first."""
+    lost = Instance.objects.create(hostname='hybrid-2', node_type='hybrid', node_state='unavailable')
+    claimed = running_job(controller_node='live-node', execution_node='hybrid-2')
+    leased(claimed, expired=False)
+    plain = running_job(controller_node='hybrid-2', execution_node='hybrid-2', work_unit_id='')
+    with mock.patch.object(UnifiedJob, 'websocket_emit_status'):
+        reaper.reap(lost, job_explanation='Job reaped due to instance shutdown')
+    claimed.refresh_from_db()
+    plain.refresh_from_db()
+    assert claimed.status == 'running'
+    assert plain.status == 'failed'
+
+
+@pytest.mark.django_db
 def test_lost_execution_node_reap_still_reaps_leased_jobs():
     # The controller is alive and renewing the lease, so no sweep would ever take the job, and
     # receptor waits for a lost execution node indefinitely: the job is reaped as it always was.
