@@ -14,9 +14,17 @@ logger = logging.getLogger('ascender.main.dispatch')
 def startup_reaping():
     """
     If this particular instance is starting, then we know that any running jobs are invalid
-    so we will reap those jobs as a special action here
+    so we will reap those jobs as a special action here.
+
+    A running job that holds a monitor lease is not one of them: its work was handed to
+    receptor, and may well still be running on an execution node or in a pod. The job
+    monitor sweep resumes or re-queues it, see ascender.main.tasks.monitor.
     """
-    jobs = UnifiedJob.objects.filter(status='running', controller_node=Instance.objects.my_hostname())
+    hostname = Instance.objects.my_hostname()
+    leased = list(UnifiedJob.objects.filter(status='running', controller_node=hostname, monitor_lease__isnull=False).values_list('id', flat=True))
+    if leased:
+        logger.warning(f'Unified jobs {leased} were running under a monitor lease at dispatch startup; left to the job monitor sweep')
+    jobs = UnifiedJob.objects.filter(status='running', controller_node=hostname, monitor_lease__isnull=True)
     job_ids = []
     for j in jobs:
         job_ids.append(j.id)
@@ -73,13 +81,26 @@ def reap_waiting(instance=None, status='failed', job_explanation=None, grace_per
 def reap(instance=None, status='failed', job_explanation=None, excluded_uuids=None, ref_time=None):
     """
     Reap all jobs in running for this instance.
+
+    A job that holds a monitor lease is left to the job monitor sweep when this instance is a
+    control or hybrid node. Such a node executes only work it controls, so its leased jobs are
+    ones it was reading, whose lease lapses once nobody renews it, and ones a peer claimed after
+    this node was lost, whose unit only this node's receptor had: that peer re-queues or fails
+    them within moments. A leased job whose work is on an execution or hop node is reaped as
+    before: its controller is alive and still reading it, and would wait for a lost node for as
+    long as receptor does, which is indefinitely.
     """
     if instance is None:
         hostname = Instance.objects.my_hostname()
+        node_type = Instance.objects.filter(hostname=hostname).values_list('node_type', flat=True).first()
     else:
-        hostname = instance.hostname
+        hostname, node_type = instance.hostname, instance.node_type
     workflow_ctype_id = ContentType.objects.get_for_model(WorkflowJob).id
     base_Q = Q(status='running') & (Q(execution_node=hostname) | Q(controller_node=hostname)) & ~Q(polymorphic_ctype_id=workflow_ctype_id)
+    if node_type in (Instance.Types.CONTROL, Instance.Types.HYBRID):
+        base_Q &= Q(monitor_lease__isnull=True)
+    else:
+        base_Q &= Q(monitor_lease__isnull=True) | ~Q(controller_node=hostname)
     if ref_time:
         jobs = UnifiedJob.objects.filter(base_Q & Q(started__lte=ref_time))
     else:

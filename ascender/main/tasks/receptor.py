@@ -2,6 +2,8 @@
 from collections import namedtuple
 import concurrent.futures
 from enum import Enum
+import io
+import json
 import logging
 import os
 import shutil
@@ -11,7 +13,7 @@ import yaml
 
 # Django
 from ascender.settings.typed import settings
-from django.db import connections
+from django.db import connections, DatabaseError, connection as django_connection
 
 # Runner
 import ansible_runner
@@ -26,7 +28,7 @@ from ascender.main.utils.common import (
 )
 from ascender.main.constants import MAX_ISOLATED_PATH_COLON_DELIMITER
 from ascender.main.tasks.signals import signal_state, signal_callback, SignalExit
-from ascender.main.models import Instance, InstanceLink, UnifiedJob, ReceptorAddress
+from ascender.main.models import Instance, InstanceLink, UnifiedJob, ReceptorAddress, JobMonitorLease, LeaseLost
 from ascender.main.dispatch import get_task_queuename
 from ascender.main.dispatch.publish import task
 from ascender.main.utils.pglock import advisory_lock
@@ -294,13 +296,220 @@ def worker_cleanup(node_name, vargs, timeout=300.0):
     return stdout
 
 
+_PhaseResult = namedtuple('result', ['status', 'rc'])
+
+RECEPTOR_TERMINAL_STATES = ('Succeeded', 'Failed', 'Canceled')
+
+
+class ReceptorUnitStream:
+    """
+    A receptor work unit's results, read from the start, as the process streamer's input.
+
+    The unit may be this node's own, the one the launch submitted or one it adopted earlier,
+    or one on another node (an execution node, or the hop node that runs a container group's
+    pods), which ``adopt()`` makes this receptor track. Either way ``work results`` serves the
+    whole stdout the unit holds, so a resumed read sees the same stream the launch did.
+    """
+
+    kind = 'receptor'
+
+    def __init__(self, job, receptor_ctl, unit_id, node=None, config_data=None):
+        self.job = job
+        self.receptor_ctl = receptor_ctl
+        self.unit_id = unit_id
+        self.node = node
+        self.config_data = config_data
+        self.sock = None
+        self.sockfile = None
+        self.bytes_read = 0
+        # When the reader started waiting for bytes that have not come yet; None while it is not waiting
+        self._waiting_since = None
+        self.closed = False
+        self._interrupted = False
+
+    def status(self):
+        return self.receptor_ctl.simple_command(f'work status {self.unit_id}')
+
+    def is_known(self):
+        """Does this node's receptor have the unit? Raises when receptor cannot be asked at all."""
+        try:
+            self.status()
+        except RuntimeError as exc:
+            # receptor's answer for a unit it has no record of
+            if str(exc).startswith('unknown work unit'):
+                return False
+            raise
+        return True
+
+    def adopt(self):
+        """
+        Track, on this node, a unit that another node submitted to ``node``, so that
+        ``work results`` can serve it here. receptor's ``work adopt``; the JSON form of the
+        command is sent directly because receptorctl 1.6 has no client for it.
+        """
+        if self.config_data is None:
+            self.config_data = read_receptor_config()
+        use_stream_tls = get_conn_type(self.node, self.receptor_ctl).name == 'STREAMTLS'
+        command = {'command': 'work', 'subcommand': 'adopt', 'node': self.node, 'unitid': self.unit_id}
+        tls_client = get_tls_client(self.config_data, use_stream_tls)
+        if tls_client:
+            command['tlsclient'] = tls_client
+        if work_signing_enabled(self.config_data):
+            # the string form, which is what receptorctl sends for submit as well
+            command['signwork'] = 'true'
+        self.receptor_ctl.connect()
+        self.receptor_ctl.writestr(json.dumps(command) + '\n')
+        reply = self.receptor_ctl.read_and_parse_json()
+        # "Adopt Pending" is an adoption too: the unit is allocated here and connects to the node in
+        # the background, and ``work results`` serves its output as it arrives.
+        if reply.get('result') not in ('Adopted', 'Adopt Pending'):
+            raise RuntimeError(f'receptor did not adopt work unit {self.unit_id} from {self.node}: {reply}')
+        return reply
+
+    def open(self, follow=True, startpos=0):
+        self.sock, self.sockfile = self.receptor_ctl.get_work_results(self.unit_id, startpos=startpos, return_socket=True, return_sockfile=True)
+        return self
+
+    def _wait_for(self, reader, *args):
+        self._waiting_since = time.monotonic()
+        try:
+            data = reader(*args)
+        finally:
+            self._waiting_since = None
+        if data:
+            self.bytes_read += len(data)
+        return data
+
+    def readline(self, *args):
+        return self._wait_for(self.sockfile.readline, *args)
+
+    def read(self, *args):
+        return self._wait_for(self.sockfile.read, *args)
+
+    def readable(self):
+        return True
+
+    def writable(self):
+        return False
+
+    def write(self, data):
+        # ansible-runner's Base64IO insists the stream it wraps has write(), close(), closed and flush() too
+        raise io.UnsupportedOperation('not writable')
+
+    def flush(self):
+        pass
+
+    def interrupt(self):
+        """Unblock a reader thread stuck in readline(): take the socket away from under it."""
+        self._interrupted = True
+        self.close()
+
+    def close(self):
+        self.closed = True
+        if self.sock is not None:
+            try:
+                self.sock.shutdown(socket.SHUT_RDWR)
+            except Exception:
+                pass
+        if self.sockfile is not None:
+            try:
+                self.sockfile.close()
+            except Exception:
+                pass
+        if self.sock is not None:
+            try:
+                self.sock.close()
+            except Exception:
+                pass
+
+    def cancel(self):
+        self.receptor_ctl.simple_command(f'work cancel {self.unit_id}')
+
+    def release(self):
+        if settings.RECEPTOR_RELEASE_WORK:
+            self.receptor_ctl.simple_command(f'work release {self.unit_id}')
+
+    def discard(self):
+        """Stop the unit and let receptor forget it; False when receptor would not."""
+        try:
+            self.cancel()
+            self.release()
+        except Exception:
+            logger.exception(f'Could not cancel and release work unit {self.unit_id} of {self.job.log_format}')
+            return False
+        return True
+
+    def is_live(self):
+        """The unit may still produce output. Raises when receptor cannot be asked."""
+        return self.status().get('StateName') in RECEPTOR_ACTIVE_STATES
+
+    def stalled(self, idle_seconds):
+        """
+        The reader has waited idle_seconds for bytes, the unit is done, and its stdout holds more
+        than has arrived: the stream between here and the node that holds the output is what
+        failed, not the job. A reader that is busy with the events it already has is not waiting,
+        however long that takes.
+        """
+        waiting_since = self._waiting_since
+        if waiting_since is None or time.monotonic() - waiting_since < idle_seconds:
+            return False
+        try:
+            status = self.status()
+        except Exception:
+            return False
+        if status.get('StateName') not in RECEPTOR_TERMINAL_STATES:
+            return False
+        return self.bytes_read < (status.get('StdoutSize') or 0)
+
+    def final_status(self):
+        """(status, rc) from the work unit itself, for when the stream carried no status line."""
+        status = self.status()
+        state = status.get('StateName')
+        if state == 'Succeeded':
+            return 'successful', 0
+        if state == 'Canceled':
+            return 'canceled', 1
+        return 'failed', 1
+
+    def tail(self, nbytes=1000):
+        """The last bytes of the unit's stdout, for a job that failed before producing events."""
+        stdout_size = self.status().get('StdoutSize') or 0
+        sock, sockfile = self.receptor_ctl.get_work_results(self.unit_id, startpos=max(stdout_size - nbytes, 0), return_socket=True, return_sockfile=True)
+        try:
+            return b"".join(sockfile.readlines()).decode()
+        finally:
+            for closer in (sockfile.close, sock.close):
+                try:
+                    closer()
+                except Exception:
+                    pass
+
+
 class AWXReceptorJob:
-    def __init__(self, task, runner_params=None):
+    def __init__(self, task, runner_params=None, resuming=False):
         self.task = task
         self.runner_params = runner_params
         self.unit_id = None
+        self.config_data = None
+        self.receptor_ctl = None
+        self.stream = None
+        # Reading the output of a job another task launched, see BaseTask.resume
+        self.resuming = resuming
+        # Why the stream ended without a result, for the caller to act on:
+        # detached: a shutdown signal arrived and the work was left running for the next monitor
+        # requeued: a shutdown signal arrived and the work was cancelled so that the job runs again,
+        #   either because the worker never had its payload or because the job is a project update
+        # lease_lost: another task took over the job while this one was reading it
+        # stream_stalled: the unit finished but the rest of its output never arrived here
+        self.detached = False
+        self.requeued = False
+        self.lease_lost = False
+        self.stream_stalled = False
+        self.pod_recorded = False
+        # A resumed read holds back the streamer's EOF until the job is known to be done
+        self.eof_held = False
 
-        if self.task and not self.task.instance.is_container_group_task:
+        if self.task and not self.task.instance.is_container_group_task and not resuming:
             execution_environment_params = self.task.build_execution_environment_params(self.task.instance, runner_params['private_data_dir'])
             self.runner_params.update(execution_environment_params)
 
@@ -311,20 +520,67 @@ class AWXReceptorJob:
         # We establish a connection to the Receptor socket
         self.config_data = read_receptor_config()
         receptor_ctl = get_receptor_ctl(self.config_data)
+        self.receptor_ctl = receptor_ctl
 
         res = None
         try:
             res = self._run_internal(receptor_ctl)
             return res
         finally:
-            # Make sure to always release the work unit if we established it
-            if self.unit_id is not None and settings.RECEPTOR_RELEASE_WORK:
-                try:
-                    receptor_ctl.simple_command(f"work release {self.unit_id}")
-                except Exception:
-                    logger.exception(f"Error releasing work unit {self.unit_id}.")
+            # Once this task is done with the work unit, so is the lease: the output has been
+            # read, or will not be, and the post-run hooks that follow (an inventory import, the
+            # fact cache) can take longer than a lease lasts without renewal. A task that detached
+            # from the unit on shutdown, or that lost the job to a resumed monitor, leaves both
+            # alone: the unit, and the pod it stands for, is what the next monitor reads. The
+            # unit is released only once the lease is retired, which fails if the job was claimed
+            # meanwhile.
+            if self.unit_id is not None and not (self.detached or self.lease_lost) and self._retire_lease():
+                if settings.RECEPTOR_RELEASE_WORK:
+                    try:
+                        receptor_ctl.simple_command(f"work release {self.unit_id}")
+                    except Exception:
+                        logger.exception(f"Error releasing work unit {self.unit_id}.")
+
+    def _retire_lease(self):
+        """Remove the job's lease; True when this task still owned the job, and may release its work."""
+        job = self.task.instance
+        try:
+            if JobMonitorLease.objects.retire(job, getattr(self.task, 'owner_task_id', None)):
+                return True
+            self.lease_lost = True
+            logger.warning(f'{job.log_format}: another task took over its monitoring; leaving work unit {self.unit_id} to it')
+        except Exception:
+            # Cannot tell; a unit left behind is cleaned up by the work unit reaper, a unit
+            # released from under a resumed monitor is not recoverable.
+            logger.exception(f'Could not retire the monitor lease of {job.log_format}; leaving work unit {self.unit_id}')
+        return False
 
     def _run_internal(self, receptor_ctl):
+        self._transmit_phase(receptor_ctl)
+
+        stream = ReceptorUnitStream(self.task.instance, receptor_ctl, self.unit_id, config_data=self.config_data)
+        res = self.process_stream(stream, owner_task_id=getattr(self.task, 'owner_task_id', None))
+        if self.detached or self.requeued or self.lease_lost:
+            return res
+        if self.stream_stalled:
+            return self.stalled_result(stream)
+
+        if res.status == 'error':
+            return self._handle_work_error(stream, res)
+        return res
+
+    def stalled_result(self, stream):
+        """The job's result from its work unit, for a stream abandoned after the unit finished."""
+        status, rc = stream.final_status()
+        callback = self.task.runner_callback
+        # The streamer's own complaint about the cut stream is not what happened to the job
+        callback.extra_update_fields.pop('job_explanation', None)
+        callback.delay_update(
+            job_explanation=f'The output of work unit {self.unit_id} stopped arriving after the unit finished; the final status was taken from the unit, which reported it as {status}.'
+        )
+        return _PhaseResult(status, rc)
+
+    def _transmit_phase(self, receptor_ctl):
         # Create a socketpair. Where the left side will be used for writing our payload
         # (private data dir, kwargs). The right side will be passed to Receptor for
         # reading.
@@ -366,9 +622,15 @@ class AWXReceptorJob:
             self.task.update_model(self.task.instance.pk, work_unit_id=result['unitid'])
             self.task.instance.log_lifecycle("work_unit_id_assigned")
 
-        # Throws an exception if the transmit failed.
-        # Will be caught by the try/except in BaseTask#run.
-        transmitter_future.result()
+            # From here the job is monitored: it is leased to this task until its output has been
+            # read. submit_work returns once receptor has the whole payload, so the unit is running
+            # or about to, whatever happens to this task.
+            JobMonitorLease.objects.start(self.task.instance)
+            self.task.instance.log_lifecycle("monitor_leased")
+
+            # Throws an exception if the transmit failed.
+            # Will be caught by the try/except in BaseTask#run.
+            transmitter_future.result()
 
         # Artifacts are an output, but sometimes they are an input as well
         # this is the case with fact cache, where clearing facts deletes a file, and this must be captured
@@ -376,7 +638,66 @@ class AWXReceptorJob:
         if self.work_type != 'local' and os.path.exists(artifact_dir):
             shutil.rmtree(artifact_dir)
 
-        resultsock, resultfile = receptor_ctl.get_work_results(self.unit_id, return_socket=True, return_sockfile=True)
+        self._record_pod(receptor_ctl)
+
+    def _renew_lease(self, owner_task_id):
+        """Extend the job's monitor lease; raises LeaseLost when another task owns the job now."""
+        job = self.task.instance
+        try:
+            if owner_task_id:
+                JobMonitorLease.objects.renew(job, owner_task_id)
+            else:
+                JobMonitorLease.objects.filter(unified_job_id=job.pk).update(expires=JobMonitorLease.objects.expiry())
+        except LeaseLost:
+            raise
+        except DatabaseError as exc:
+            # Transient, with luck: the lease holds for JOB_MONITOR_LEASE_SECONDS without this.
+            logger.warning(f'{job.log_format}: could not renew its monitor lease: {exc}')
+        finally:
+            # Do not hold an idle connection for the rest of the job over a query every few seconds.
+            django_connection.close()
+
+    def _record_pod(self, receptor_ctl):
+        """Note which pod a container group job runs in, so its log can be read if this task is lost."""
+        if self.pod_recorded or receptor_ctl is None or not self.unit_id:
+            return
+        if not self.task.instance.is_container_group_task or self.mesh_node:
+            self.pod_recorded = True
+            return
+        try:
+            status = receptor_ctl.simple_command(f'work status {self.unit_id}')
+        except Exception:
+            return
+        extra = status.get('ExtraData') or {}
+        if not isinstance(extra, dict):
+            return
+        # receptor settles the namespace before it creates the pod, so both are there once the pod is
+        pod_name, namespace = extra.get('PodName'), extra.get('KubeNamespace')
+        if not pod_name or not namespace:
+            return
+        try:
+            JobMonitorLease.objects.record(self.task.instance, pod_name=pod_name, pod_namespace=namespace)
+        except DatabaseError as exc:
+            # Like a lease renewal that fails, not a reason to stop reading: the next renewal tick tries again
+            logger.warning(f'{self.task.instance.log_format}: could not record its pod {pod_name} on its monitor lease: {exc}')
+            return
+        self.task.instance.log_lifecycle("pod_recorded")
+        self.pod_recorded = True
+
+    def _record_progress(self):
+        """Write to the lease what a later reader needs, trying again at every renewal until it is written."""
+        self._record_pod(self.receptor_ctl)
+        callback = self.task.runner_callback
+        if callback.worker_started and not callback.worker_started_recorded:
+            callback.record_worker_started()
+
+    def process_stream(self, stream, owner_task_id=None):
+        """
+        Read the job's output from ``stream`` with ansible-runner's process streamer, in a
+        thread, while this thread keeps the job's monitor lease and watches for signals.
+        """
+        self.stream = stream
+        reader = stream.open()
 
         connections.close_all()
 
@@ -385,66 +706,181 @@ class AWXReceptorJob:
         # we yank the socket out from underneath the processor, which will cause it to exit.
         # The ThreadPoolExecutor context manager ensures we do not leave any threads laying around.
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            processor_future = executor.submit(self.processor, resultfile)
+            processor_future = executor.submit(self.processor, reader)
 
             try:
                 signal_state.raise_exception = True
                 # address race condition where SIGTERM was issued after this dispatcher task started
                 if signal_callback():
                     raise SignalExit()
-                res = processor_future.result()
+                res = self._await_processor(processor_future, stream, owner_task_id)
             except SignalExit:
-                receptor_ctl.simple_command(f"work cancel {self.unit_id}")
-                resultsock.shutdown(socket.SHUT_RDWR)
-                resultfile.close()
-                result = namedtuple('result', ['status', 'rc'])
-                res = result('canceled', 1)
+                # Nothing below may be interrupted by a second signal
+                signal_state.raise_exception = False
+                res = self._handle_signal(stream, processor_future)
             finally:
                 signal_state.raise_exception = False
-
-            if res.status == 'error':
-                # If ansible-runner ran, but an error occured at runtime, the traceback information
-                # is saved via the status_handler passed in to the processor.
-                if 'result_traceback' in self.task.runner_callback.extra_update_fields:
-                    return res
-
                 try:
-                    unit_status = receptor_ctl.simple_command(f'work status {self.unit_id}')
-                    detail = unit_status.get('Detail', None)
-                    state_name = unit_status.get('StateName', None)
-                    stdout_size = unit_status.get('StdoutSize', 0)
+                    stream.close()
                 except Exception:
-                    detail = ''
-                    state_name = ''
-                    stdout_size = 0
-                    logger.exception(f'An error was encountered while getting status for work unit {self.unit_id}')
+                    pass
 
-                if 'exceeded quota' in detail:
-                    logger.warning(detail)
-                    log_name = self.task.instance.log_format
-                    logger.warning(f"Could not launch pod for {log_name}. Exceeded quota.")
-                    self.task.update_model(self.task.instance.pk, status='pending')
-                    return
+        return res
 
+    def _await_processor(self, processor_future, stream, owner_task_id):
+        """Wait for the streamer, renewing the lease, and stop reading the moment the job is no longer ours."""
+        from ascender.main.tasks.monitor import job_can_detach  # circular import
+
+        interval = settings.JOB_MONITOR_RENEW_SECONDS
+        job = self.task.instance
+        # Whether a signal interrupts the wait is for the caller to say (process_stream arms it for the
+        # wait and disarms it after), and this leaves it as the caller set it on every way out.
+        armed = signal_state.raise_exception
+        while True:
+            try:
+                return processor_future.result(timeout=interval)
+            except concurrent.futures.TimeoutError:
+                pass
+            # Database work here must not be torn by a signal; one that arrives is acted on after.
+            signal_state.raise_exception = False
+            try:
                 try:
-                    receptor_output = ''
-                    if state_name == 'Failed' and self.task.runner_callback.event_ct == 0:
-                        # if receptor work unit failed and no events were emitted, work results may
-                        # contain useful information about why the job failed. In case stdout is
-                        # massive, only ask for last 1000 bytes
-                        startpos = max(stdout_size - 1000, 0)
-                        resultsock, resultfile = receptor_ctl.get_work_results(self.unit_id, startpos=startpos, return_socket=True, return_sockfile=True)
-                        lines = resultfile.readlines()
-                        receptor_output = b"".join(lines).decode()
-                    if receptor_output:
-                        self.task.runner_callback.delay_update(result_traceback=f'Worker output:\n{receptor_output}')
-                    elif detail:
-                        self.task.runner_callback.delay_update(result_traceback=f'Receptor detail:\n{detail}')
-                    else:
-                        logger.warning(f'No result details or output from {self.task.instance.log_format}, status:\n{state_name}')
-                except Exception:
-                    logger.exception(f'Work results error from job id={self.task.instance.id} work_unit={self.task.instance.work_unit_id}')
-                    raise RuntimeError(detail)
+                    self._renew_lease(owner_task_id)
+                except LeaseLost:
+                    self.lease_lost = True
+                    logger.warning(f'{job.log_format}: its monitoring was taken over by another task; dropping this stream')
+                    if not job_can_detach(job):
+                        # A project update is never read by another task: its new owner stops it and runs it
+                        # again. Stop it from here as well, before this task gives up the lock on its project.
+                        self._stop_work(stream, processor_future)
+                        return _PhaseResult('error', 1)
+                    stream.interrupt()
+                    return self._drain(processor_future, 'error')
+                self._record_progress()
+                if stream.stalled(settings.JOB_MONITOR_STREAM_IDLE_SECONDS):
+                    self.stream_stalled = True
+                    logger.warning(f'{job.log_format}: work unit {self.unit_id} is done but its output stopped arriving; abandoning the stream')
+                    stream.interrupt()
+                    return self._drain(processor_future, 'error')
+            finally:
+                signal_state.raise_exception = armed
+            if signal_callback():
+                raise SignalExit()
+
+    def _drain(self, processor_future, status):
+        """Let the streamer thread notice its closed stream and exit, then answer for it."""
+        try:
+            processor_future.result(timeout=settings.JOB_MONITOR_RENEW_SECONDS)
+        except concurrent.futures.TimeoutError:
+            logger.error(f'{self.task.instance.log_format}: the streamer thread did not stop after its stream was closed')
+        except Exception:
+            pass
+        return _PhaseResult(status, 1)
+
+    def _cancel_requested(self):
+        """
+        The job row's cancel_flag, which UnifiedJob.cancel() commits before it signals the
+        dispatcher, is what tells a cancel from a shutdown: the signal itself cannot.
+        """
+        try:
+            return bool(UnifiedJob.objects.filter(pk=self.task.instance.pk).values_list('cancel_flag', flat=True).first())
+        except Exception:
+            logger.warning(f'{self.task.instance.log_format}: could not read its cancel flag; treating the signal as a shutdown', exc_info=True)
+            return False
+
+    def _handle_signal(self, stream, processor_future):
+        """
+        A SIGTERM reached this task. Only a cancel means the work should stop. On a shutdown
+        the work goes on without us: an execution environment that has its payload is left
+        running for the next monitor. One that has not is cancelled and the job re-queued,
+        since nothing has run yet, and so is a project update, which is never left running
+        without the lock on its project (see job_can_detach). An inline project sync is only
+        cancelled, since the job that runs it is stopping too, and so is a job that cannot be
+        re-queued (see can_requeue). A job whose work could not be cancelled is not re-queued
+        either, which would start a second copy: it is left to the next monitor, which re-queues
+        it only once it has stopped what is left.
+        """
+        from ascender.main.tasks.monitor import can_requeue, is_inline_sync, job_can_detach  # circular import
+
+        job = self.task.instance
+        if self._cancel_requested():
+            self._stop_work(stream, processor_future)
+            return _PhaseResult('canceled', 1)
+
+        if self.resuming or (self.task.runner_callback.worker_started and job_can_detach(job)):
+            self.detached = True
+            logger.warning(f'{job.log_format}: shutdown signal received; detaching from its output without stopping the job')
+            stream.interrupt()
+            self._drain(processor_future, 'error')
+            return _PhaseResult('detached', 1)
+
+        if is_inline_sync(job) or not can_requeue(job):
+            logger.warning(f'{job.log_format}: shutdown signal received; cancelling work unit {self.unit_id}, and the job cannot be re-queued')
+            self._stop_work(stream, processor_future)
+            return _PhaseResult('canceled', 1)
+        # Set before the stream is dropped: the streamer's finished callback runs as the stream is
+        # drained, and must send no EOF for an attempt that is given up (see finished_callback).
+        self.requeued = True
+        if not self._stop_work(stream, processor_future):
+            self.requeued, self.detached = False, True
+            logger.warning(
+                f'{job.log_format}: shutdown signal received; work unit {self.unit_id} could not be cancelled, so the next monitor, not a second run, takes the job'
+            )
+            return _PhaseResult('detached', 1)
+        why = 'the project update' if not job_can_detach(job) else 'its execution environment had not received its payload, so the job'
+        logger.warning(f'{job.log_format}: shutdown signal received; {why} is cancelled (work unit {self.unit_id}) and re-queued')
+        return _PhaseResult('canceled', 1)
+
+    def _stop_work(self, stream, processor_future):
+        """Cancel the work and drop the stream; False when the work could not be cancelled."""
+        try:
+            cancelled = stream.cancel() is not False
+        except Exception:
+            logger.exception(f'{self.task.instance.log_format}: could not cancel work unit {self.unit_id}')
+            cancelled = False
+        stream.interrupt()
+        self._drain(processor_future, 'canceled')
+        return cancelled
+
+    def _handle_work_error(self, stream, res):
+        # If ansible-runner ran, but an error occured at runtime, the traceback information
+        # is saved via the status_handler passed in to the processor.
+        if 'result_traceback' in self.task.runner_callback.extra_update_fields:
+            return res
+
+        try:
+            unit_status = stream.status()
+            detail = unit_status.get('Detail', None)
+            state_name = unit_status.get('StateName', None)
+        except Exception:
+            detail = ''
+            state_name = ''
+            logger.exception(f'An error was encountered while getting status for work unit {self.unit_id}')
+
+        if 'exceeded quota' in detail:
+            logger.warning(detail)
+            log_name = self.task.instance.log_format
+            logger.warning(f"Could not launch pod for {log_name}. Exceeded quota.")
+            JobMonitorLease.objects.finish(self.task.instance)
+            self.task.update_model(self.task.instance.pk, status='pending')
+            return
+
+        try:
+            receptor_output = ''
+            if state_name == 'Failed' and self.task.runner_callback.event_ct == 0:
+                # if receptor work unit failed and no events were emitted, work results may
+                # contain useful information about why the job failed. In case stdout is
+                # massive, only ask for last 1000 bytes
+                receptor_output = stream.tail(1000)
+            if receptor_output:
+                self.task.runner_callback.delay_update(result_traceback=f'Worker output:\n{receptor_output}')
+            elif detail:
+                self.task.runner_callback.delay_update(result_traceback=f'Receptor detail:\n{detail}')
+            else:
+                logger.warning(f'No result details or output from {self.task.instance.log_format}, status:\n{state_name}')
+        except Exception:
+            logger.exception(f'Work results error from job id={self.task.instance.id} work_unit={self.task.instance.work_unit_id}')
+            raise RuntimeError(detail)
 
         return res
 
@@ -458,6 +894,21 @@ class AWXReceptorJob:
             # Socket must be shutdown here, or the reader will hang forever.
             _socket.shutdown(socket.SHUT_WR)
 
+    def finished_callback(self, runner_obj):
+        """
+        The streamer calls this however its stream ended. A stream abandoned for another task
+        to read is not the end of the job's output, so it sends no EOF, which would announce an
+        event count the job has not reached and, for most job types, wrap the job up early. A
+        resumed read only learns afterwards whether a stream that ended without a status line
+        ended with the job, so it holds the EOF back for BaseTask.resume to send.
+        """
+        if self.detached or self.requeued or self.lease_lost:
+            return
+        if self.resuming:
+            self.eof_held = True
+            return
+        self.task.runner_callback.finished_callback(runner_obj)
+
     @cleanup_new_process
     def processor(self, resultfile):
         return ansible_runner.interface.run(
@@ -465,7 +916,7 @@ class AWXReceptorJob:
             quiet=True,
             _input=resultfile,
             event_handler=self.task.runner_callback.event_handler,
-            finished_callback=self.task.runner_callback.finished_callback,
+            finished_callback=self.finished_callback,
             status_handler=self.task.runner_callback.status_handler,
             artifacts_handler=self.task.runner_callback.artifacts_handler,
             **self.runner_params,

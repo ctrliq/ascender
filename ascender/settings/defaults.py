@@ -616,6 +616,25 @@ CLUSTER_NODE_MISSED_HEARTBEAT_TOLERANCE = 2
 RECEPTOR_SERVICE_ADVERTISEMENT_PERIOD = 60  # https://github.com/ansible/receptor/blob/aa1d589e154d8a0cb99a220aff8f98faf2273be6/pkg/netceptor/netceptor.go#L34
 EXECUTION_NODE_REMEDIATION_CHECKS = 60 * 30  # once every 30 minutes check if an execution node errors have been resolved
 
+# A dispatcher task reading a running job's output holds the job's monitor lease and renews it
+# every JOB_MONITOR_RENEW_SECONDS; past JOB_MONITOR_LEASE_SECONDS without a renewal the job is
+# taken to be unmonitored, and the sweep that runs on every control node claims it and resumes
+# reading its output there. A graceful shutdown lets the lease expire at once.
+JOB_MONITOR_LEASE_SECONDS = 60
+JOB_MONITOR_RENEW_SECONDS = 10
+# How many expired leases one sweep claims at most, how long a resume waits before looking again at
+# a job whose output is not reachable yet or could not be read, and how many such waits it is allowed.
+JOB_MONITOR_SWEEP_BATCH = 50
+JOB_MONITOR_RETRY_SECONDS = 30
+JOB_MONITOR_MAX_DEFERRALS = 120
+# A container group pod that has been running this long without writing anything is taken to be
+# waiting for a payload its lost controller never finished sending; it is deleted and its job re-queued.
+JOB_MONITOR_WEDGE_SECONDS = 60
+# A receptor stream that has waited this long for bytes after its work unit finished, short of the
+# unit's stdout size, is abandoned and the job's result taken from the unit. A container group pod's
+# log connection that stays silent this long is reopened from the last line read.
+JOB_MONITOR_STREAM_IDLE_SECONDS = 120
+
 # Amount of time dispatcher will try to reconnect to database for jobs and consuming new work
 DISPATCHER_DB_DOWNTIME_TOLERANCE = 40
 
@@ -631,6 +650,7 @@ CELERYBEAT_SCHEDULE = {
     'dependency_manager': {'task': 'ascender.main.scheduler.tasks.dependency_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'k8s_reaper': {'task': 'ascender.main.tasks.system.awx_k8s_reaper', 'schedule': timedelta(seconds=60), 'options': {'expires': 50}},
     'receptor_reaper': {'task': 'ascender.main.tasks.system.awx_receptor_workunit_reaper', 'schedule': timedelta(seconds=60)},
+    'job_monitor_sweep': {'task': 'ascender.main.tasks.monitor.sweep_job_monitors', 'schedule': timedelta(seconds=30), 'options': {'expires': 25}},
     'send_subsystem_metrics': {'task': 'ascender.main.analytics.analytics_tasks.send_subsystem_metrics', 'schedule': timedelta(seconds=20)},
     'cleanup_images': {'task': 'ascender.main.tasks.system.cleanup_images_and_files', 'schedule': timedelta(hours=3)},
     'cleanup_host_metrics': {'task': 'ascender.main.tasks.host_metrics.cleanup_host_metrics', 'schedule': timedelta(hours=3, minutes=30)},
