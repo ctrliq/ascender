@@ -12,6 +12,22 @@ const HIDDEN_PASSWORD_PROMPTS = [
   'BECOME password[defaults to SSH password]: ',
 ];
 
+// React 19.2 rewrites innerHTML whenever the dangerouslySetInnerHTML object is
+// a new one, even with the same __html. The output re-renders while a text
+// selection is being dragged (selectionchange widens the rendered range), and
+// rewriting the line replaces the text node holding the selection anchor, so
+// the selection jumps to the start of the line. Memoizing on the html string
+// leaves an unchanged line's DOM alone.
+const JobEventLineHtml = React.memo(({ html }) => (
+  <JobEventLineText
+    type="job_event_line_text"
+    dangerouslySetInnerHTML={{
+      __html: html,
+    }}
+  />
+));
+JobEventLineHtml.displayName = 'JobEventLineHtml';
+
 function JobEvent({
   style,
   lineTextHtml,
@@ -74,12 +90,7 @@ function JobEvent({
               {!event.isTracebackOnly ? lineNumber : ''}
               <JobEventEllipsis isCollapsed={isCollapsed && canToggle} />
             </JobEventLineNumber>
-            <JobEventLineText
-              type="job_event_line_text"
-              dangerouslySetInnerHTML={{
-                __html: html,
-              }}
-            />
+            <JobEventLineHtml html={html} />
           </JobEventLine>
         );
       })}
