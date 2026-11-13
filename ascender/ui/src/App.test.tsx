@@ -76,6 +76,38 @@ describe('<App />', () => {
     expect(container).toHaveTextContent('Loading...');
   });
 
+  test('returns to the page saved before the SSO round trip', async () => {
+    // The provider sends the browser back to "/", and the deep link the user
+    // opened survives only in sessionStorage. App must navigate there once
+    // mounted; a navigate() during render is dropped by React Router.
+    const deepLink = '/jobs/playbook/42/output';
+    window.history.replaceState(null, '', '/');
+    window.sessionStorage.setItem(SESSION_REDIRECT_URL, deepLink);
+
+    render(<App />);
+
+    await waitFor(() => expect(window.location.hash).toEqual(`#${deepLink}`));
+    expect(window.sessionStorage.getItem(SESSION_REDIRECT_URL)).toBeNull();
+
+    window.history.replaceState(null, '', '/');
+  });
+
+  test('ignores a saved redirect to the home page', async () => {
+    // "/" and "/home" are where the user lands anyway, so the key is
+    // consumed without navigating.
+    window.history.replaceState(null, '', '/#/login');
+    window.sessionStorage.setItem(SESSION_REDIRECT_URL, '/home');
+
+    render(<App />);
+
+    await waitFor(() =>
+      expect(window.sessionStorage.getItem(SESSION_REDIRECT_URL)).toBeNull()
+    );
+    expect(window.location.hash).toEqual('#/login');
+
+    window.history.replaceState(null, '', '/');
+  });
+
   test('redirect to login override', async () => {
     const replaceSpy = vi
       .spyOn(navigation, 'default')
