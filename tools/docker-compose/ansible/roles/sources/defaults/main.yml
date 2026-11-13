@@ -4,6 +4,10 @@ ascender_image: 'ghcr.io/ctrliq/ascender_devel'
 pg_port: 5432
 pg_username: 'awx'
 pg_database: 'awx'
+pg_image: 'quay.io/sclorg/postgresql-18-c9s'
+pg_volume: 'tools_awx_db_18'
+pg_previous_image: 'quay.io/sclorg/postgresql-15-c9s'
+pg_previous_volume: 'tools_awx_db_15'
 control_plane_node_count: 1
 minikube_container_group: false
 receptor_socket_file: /var/run/ascender-receptor/receptor.sock
