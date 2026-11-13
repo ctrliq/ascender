@@ -62,6 +62,7 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'prevent_instance_group_fallback',
             'allow_deletes_while_in_use',
             'allow_jobs_while_syncing',
+            'variables_from_sources_only',
         )
         extra_kwargs = {
             # required/default must be explicit since DRF 3.16: nullable FKs now
@@ -140,6 +141,8 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
 
         if kind == 'smart' and not host_filter:
             raise serializers.ValidationError({'host_filter': _('Smart inventories must specify host_filter')})
+        if kind and attrs.get('variables_from_sources_only'):
+            raise serializers.ValidationError({'variables_from_sources_only': _('Only regular inventories have inventory sources of their own.')})
         return super(InventorySerializer, self).validate(attrs)
 
 
@@ -190,7 +193,7 @@ class ConstructedInventorySerializer(InventorySerializer):
 
     class Meta:
         model = Inventory
-        fields = ('*', '-host_filter') + CONSTRUCTED_INVENTORY_SOURCE_EDITABLE_FIELDS
+        fields = ('*', '-host_filter', '-variables_from_sources_only') + CONSTRUCTED_INVENTORY_SOURCE_EDITABLE_FIELDS
         read_only_fields = ('*', 'kind')
 
     def pop_inv_src_data(self, data):
@@ -231,7 +234,7 @@ class ConstructedInventorySerializer(InventorySerializer):
 class FederatedInventorySerializer(InventorySerializer):
     class Meta:
         model = Inventory
-        fields = ('*', '-host_filter', '-instance_groups', '-prevent_instance_group_fallback')
+        fields = ('*', '-host_filter', '-instance_groups', '-prevent_instance_group_fallback', '-variables_from_sources_only')
         read_only_fields = ('*', 'kind')
 
     def create(self, validated_data):

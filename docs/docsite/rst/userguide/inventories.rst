@@ -639,7 +639,7 @@ The type of inventory is identified at the top of the create form.
 
 - **Limit**: (Only applicable to constructed inventories) Restricts the number of returned hosts for the inventory source associated with the constructed inventory. You can paste a group name into the limit field to only include hosts in that group. See :ref:`Source vars<constr_inv_source_vars>` for more detail.
 
-- **Options**: Check the **Prevent Instance Group Fallback** option (only applicable to standard inventories) to allow only the instance groups listed in the **Instance Groups** field above to execute the job. If unchecked, all available instances in the execution pool will be used based on the hierarchy described in :ref:`ag_instance_groups_control_where_job_runs`. Click the |help| icon for additional information.
+- **Options**: Check the **Prevent Instance Group Fallback** option (only applicable to standard inventories) to allow only the instance groups listed in the **Instance Groups** field above to execute the job. If unchecked, all available instances in the execution pool will be used based on the hierarchy described in :ref:`ag_instance_groups_control_where_job_runs`. Click the |help| icon for additional information. Check the **Variables From Sources Only** option (only applicable to standard inventories) to have every inventory source sync remove the inventory variables that no source of the inventory provides, including the ones added or edited by hand.
 
 .. note::
 
@@ -893,7 +893,7 @@ This opens the Create Source window.
 
     When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process.
 
-  -  **Overwrite Variables**: If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source. Inventory variables this source added on an earlier sync (for example from a ``group_vars/all.yml`` file) are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them. When not checked, a merge will be performed, combining local variables with those found on the external source.
+  -  **Overwrite Variables**: If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source. Inventory variables this source added on an earlier sync (for example from a ``group_vars/all.yml`` file) are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them. To remove every inventory variable that no source provides, check **Variables From Sources Only** on the inventory. When not checked, a merge will be performed, combining local variables with those found on the external source.
 
   -  **Update on Launch**: Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks. To avoid job overflows if jobs are spawned faster than the inventory can sync, selecting this allows you to configure a **Cache Timeout** to cache prior inventory syncs for a certain number of seconds.
 
