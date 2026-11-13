@@ -132,7 +132,7 @@ services:
   {% endfor %}
 {% endif %}
   postgres:
-    image: quay.io/sclorg/postgresql-15-c9s
+    image: {{ pg_image }}
     container_name: tools_postgres_1
     # additional logging settings for postgres can be found https://www.postgresql.org/docs/current/runtime-config-logging.html
     command: run-postgresql -c log_destination=stderr -c log_min_messages=info -c log_min_duration_statement={{ pg_log_min_duration_statement|default(1000) }} -c max_connections={{ pg_max_connections|default(1024) }}
@@ -141,7 +141,7 @@ services:
       POSTGRESQL_DATABASE: {{ pg_database }}
       POSTGRESQL_PASSWORD: {{ pg_password }}
     volumes:
-      - "awx_db_15:/var/lib/pgsql/data"
+      - "awx_db_18:/var/lib/pgsql/data"
       # Grants CREATEDB to the application role so the test suite can build its
       # own databases. See the script for why it lives in a start hook.
       - "../../docker-compose/postgres-start:/opt/app-root/src/postgresql-start:Z"
@@ -188,8 +188,8 @@ volumes:
     name: tools_var_lib_awx
 {% endif %}
 {# For the postgres 15 db upgrade we changed the mount name because 15 can't load a 12 DB #}
-  awx_db_15:
-    name: tools_awx_db_15
+  awx_db_18:
+    name: {{ pg_volume }}
 {% for i in range(control_plane_node_count|int) -%}
   {% set container_postfix = loop.index %}
   valkey_socket_{{ container_postfix }}:

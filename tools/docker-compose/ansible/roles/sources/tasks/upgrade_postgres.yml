@@ -1,0 +1,68 @@
+---
+# pg_dump/pg_restore because the sclorg 18 image's pg_upgrade only upgrades from 17.
+- name: Look for the database volumes
+  command: docker volume ls --quiet --filter name=^tools_awx_db_
+  register: _pg_volumes
+  changed_when: false
+
+- name: Copy the PostgreSQL 15 database into PostgreSQL 18
+  when:
+    - pg_previous_volume in _pg_volumes.stdout_lines
+    - pg_volume not in _pg_volumes.stdout_lines
+  block:
+    # It may still be running on the old volume.
+    - name: Stop the database container
+      command: docker rm --force tools_postgres_1
+      changed_when: true
+
+    - name: Start PostgreSQL 15 on the old volume
+      command: >-
+        docker run --detach --rm --name tools_postgres_upgrade_15
+        --volume {{ pg_previous_volume }}:/var/lib/pgsql/data
+        --env POSTGRESQL_USER={{ pg_username }} --env POSTGRESQL_DATABASE={{ pg_database }}
+        --env POSTGRESQL_PASSWORD={{ pg_password }}
+        {{ pg_previous_image }}
+      changed_when: true
+      no_log: true
+
+    - name: Start PostgreSQL 18 on the new volume
+      command: docker compose --file {{ sources_dest }}/{{ compose_name }} up --detach --no-deps --quiet-pull postgres
+      args:
+        chdir: "{{ playbook_dir }}"
+      changed_when: true
+
+    - name: Wait for both servers
+      command: docker exec {{ item }} pg_isready
+      register: _pg_ready
+      until: _pg_ready.rc == 0
+      retries: 60
+      delay: 2
+      changed_when: false
+      loop:
+        - tools_postgres_upgrade_15
+        - tools_postgres_1
+
+    - name: Copy the database
+      shell: >-
+        set -o pipefail;
+        docker exec tools_postgres_upgrade_15 pg_dump --format=custom --dbname={{ pg_database }}
+        | docker exec --interactive tools_postgres_1 pg_restore --exit-on-error --dbname={{ pg_database }}
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+  rescue:
+    # Otherwise the next run would skip the copy.
+    - name: Remove the incomplete PostgreSQL 18 volume
+      shell: docker rm --force tools_postgres_1; docker volume rm --force {{ pg_volume }}
+      changed_when: true
+
+    - name: Report the failed copy
+      fail:
+        msg: Copying the database to {{ pg_volume }} failed, see the task above. {{ pg_previous_volume }} is untouched.
+
+  always:
+    - name: Stop PostgreSQL 15
+      command: docker rm --force tools_postgres_upgrade_15
+      changed_when: false
+      failed_when: false

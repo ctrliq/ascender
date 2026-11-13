@@ -29,7 +29,7 @@ jobs:
     # files for those to read, so they connect with the fallback.
     services:
       postgres:
-        image: postgres:15
+        image: postgres:18
         env:
           POSTGRES_USER: ascender
           POSTGRES_PASSWORD: ascenderpass

@@ -56,6 +56,8 @@ Ascender requires access to a PostgreSQL database, and by default, one will be c
 
 > If you are coming from a Local Docker installation of Ascender, consider migrating your data first, see the [data migration section](#migrating-data-from-local-docker) below.
 
+The database runs PostgreSQL 18. If you have a `tools_awx_db_15` volume, `make docker-compose` copies it over once and leaves it in place; remove it with `docker volume rm tools_awx_db_15` when you're done with it.
+
 ## Starting the Development Environment
 
 ### Build the Image
