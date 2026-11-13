@@ -76,9 +76,8 @@ JOB_EVENT_RETENTION_DAYS = 0
 JOB_EVENT_ARCHIVE_DIR = None
 
 # Optional manual override for how long a database connection is kept and
-# reused, in seconds. Unset, a web process reuses one for a minute and every
-# other process opens one per request, which is Django's default. 0 turns
-# reuse off everywhere.
+# reused, in seconds. Unset, every process opens one per request, which is
+# Django's default. 0 turns reuse off everywhere.
 DATABASE_CONN_MAX_AGE = None
 
 # Special database overrides for dispatcher connections listening to pg_notify
