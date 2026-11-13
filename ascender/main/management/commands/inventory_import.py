@@ -466,17 +466,41 @@ class Command(BaseCommand):
                 del db_variables[key]
                 logger.debug('Inventory variable "%s" removed, no longer provided by the source', key)
 
+    def _remove_variables_not_from_sources(self, db_variables, source_variables):
+        """
+        Remove inventory variables that no source of this inventory provides. Skipped while
+        any other source has not recorded its variables yet, since its keys are unknown.
+        """
+        other_sources = self.inventory.inventory_sources.exclude(pk=self.inventory_source.pk)
+        unrecorded = list(other_sources.filter(managed_inventory_variables_recorded=False).values_list('name', flat=True))
+        if unrecorded:
+            logger.warning(
+                'Inventory variables not provided by any source were kept: %s must sync before they can be removed',
+                ', '.join('"{}"'.format(name) for name in sorted(unrecorded)),
+            )
+            return
+        provided = set(source_variables)
+        for other_managed in other_sources.values_list('managed_inventory_variables', flat=True):
+            provided.update(other_managed)
+        for key in [key for key in db_variables if key not in provided]:
+            del db_variables[key]
+            logger.info('Inventory variable "%s" removed, no source of this inventory provides it', key)
+
     def _update_inventory(self):
         """
         Update inventory variables from "all" group.
         """
         # Merged rather than replaced so variables from users and other sources survive; with
         # overwrite_vars, only variables this source previously wrote are removed. See ansible/awx#11623.
+        # With variables_from_sources_only, variables no source of the inventory provides are removed too.
         source_variables = self.all_group.variables
         # Reread under the perform_update lock; the cached inventory and source may predate a concurrent sync.
-        self.inventory.refresh_from_db(fields=['variables'])
+        self.inventory.refresh_from_db(fields=['variables', 'variables_from_sources_only'])
         original_variables = self.inventory.variables_dict
-        previous = InventorySource.objects.filter(pk=self.inventory_source.pk).values_list('managed_inventory_variables', flat=True).first() or {}
+        previous, recorded = InventorySource.objects.filter(pk=self.inventory_source.pk).values_list(
+            'managed_inventory_variables', 'managed_inventory_variables_recorded'
+        ).first() or ({}, False)
+        previous = previous or {}
 
         if self.inventory.kind == 'constructed' and self.inventory_source.overwrite_vars:
             # NOTE: we had to add a exception case to not merge variables
@@ -486,6 +510,8 @@ class Command(BaseCommand):
             db_variables = dict(original_variables)
             if self.overwrite_vars:
                 self._remove_stale_inventory_variables(db_variables, source_variables, previous)
+            if self.inventory.variables_from_sources_only:
+                self._remove_variables_not_from_sources(db_variables, source_variables)
             db_variables.update(source_variables)
 
         if db_variables != original_variables:
@@ -496,10 +522,11 @@ class Command(BaseCommand):
             logger.debug('Inventory variables unmodified')
 
         managed = {key: self._hash_variable(value) for key, value in source_variables.items()}
-        if managed != previous:
+        if managed != previous or not recorded:
             # update() skips InventorySource.save(), which recomputes inventory fields and fires signals.
-            InventorySource.objects.filter(pk=self.inventory_source.pk).update(managed_inventory_variables=managed)
+            InventorySource.objects.filter(pk=self.inventory_source.pk).update(managed_inventory_variables=managed, managed_inventory_variables_recorded=True)
             self.inventory_source.managed_inventory_variables = managed
+            self.inventory_source.managed_inventory_variables_recorded = True
 
     def _create_update_groups(self):
         """

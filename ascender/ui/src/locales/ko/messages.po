@@ -261,7 +261,7 @@ msgstr "이전 스크롤"
 msgid "Failed to copy project."
 msgstr "프로젝트를 복사하지 못했습니다."
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Hide description"
 msgstr "설명 숨기기"
@@ -367,7 +367,7 @@ msgstr "체크아웃할 브랜치입니다. 브랜치 외에도 태그, 커밋 �
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:74
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:182
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:93
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:124
 #: screens/Inventory/InventoryList/InventoryList.tsx:238
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:136
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:216
@@ -422,7 +422,7 @@ msgid "Timed out"
 msgstr "시간 초과"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 msgid "Select {0}"
 msgstr "{0} 선택"
 
@@ -862,7 +862,7 @@ msgstr "메시지에 사용 가능한 여러 변수를 적용할 수 있습니�
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:387
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:208
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:224
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:231
 msgid "Failed to delete inventory."
 msgstr "인벤토리를 삭제하지 못했습니다."
 
@@ -883,7 +883,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:238
+#: components/Lookup/Lookup.tsx:271
 msgid "Lookup modal"
 msgstr "검색 모달"
 
@@ -1082,7 +1082,7 @@ msgstr "업데이트를 수행하기 전에 로컬 리포지토리를 완전히 
 msgid "Setting category"
 msgstr "카테고리 설정"
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "인증 정보로 돌아가기"
 
@@ -1681,8 +1681,8 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:122
-#: components/Lookup/JobTemplateLookup.tsx:132
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -1783,7 +1783,7 @@ msgstr "새 페더레이션 인벤토리 만들기"
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:49
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:112
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:119
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
@@ -2045,7 +2045,7 @@ msgstr "키"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:350
+#: screens/Login/Login.tsx:363
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2158,9 +2158,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "조건이 평가되기 전에 부모 노드 결과가 필요합니다."
 
 #: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:103
-#: components/Lookup/JobTemplateLookup.tsx:108
-#: components/Lookup/JobTemplateLookup.tsx:138
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2226,7 +2226,7 @@ msgstr "필드는 지정된 정규식과 일치합니다."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:348
+#: screens/Login/Login.tsx:361
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2461,7 +2461,7 @@ msgid "Management job launch error"
 msgstr "관리 작업 시작 오류"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:183
+#: components/Lookup/Lookup.tsx:209
 msgid "Search"
 msgstr "검색"
 
@@ -2536,7 +2536,7 @@ msgstr "{0} (삭제됨)"
 msgid "The inventory that this host belongs to."
 msgstr "이 호스트가 속할 인벤토리입니다."
 
-#: screens/Login/Login.tsx:333
+#: screens/Login/Login.tsx:346
 msgid "Log In"
 msgstr "로그인"
 
@@ -2628,7 +2628,7 @@ msgstr "자세한 내용"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:371
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:192
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:207
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:214
 msgid "Delete Inventory"
 msgstr "인벤토리 삭제"
 
@@ -2724,11 +2724,12 @@ msgstr "출력 복사"
 msgid "No results found"
 msgstr "결과를 찾을 수 없음"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:214
+#: screens/Inventory/shared/Inventory.helptext.tsx:215
 msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish."
 msgstr ""
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -3041,12 +3042,12 @@ msgstr "{0, plural, one {유효한 전화번호를 입력하십시오.} other {�
 msgid "Facts"
 msgstr "팩트"
 
-#: screens/Login/Login.tsx:357
+#: screens/Login/Login.tsx:370
 msgid "or"
 msgstr "또는"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3226,7 +3227,7 @@ msgstr "변수 이름에 권장되는 형식은 소문자와\n"
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 작업 템플릿은 현재 다른 리소스에서 사용하고 있습니다. 삭제하시겠습니까?"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "모든 인증 정보 보기"
 
@@ -3416,7 +3417,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:376
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:212
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:219
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
@@ -3519,7 +3520,7 @@ msgstr "순서 편집"
 msgid "Minimum"
 msgstr "최소"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:96
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:97
 msgid "Refresh Token Expiration"
 msgstr "토큰 만료 새로 고침"
 
@@ -3570,7 +3571,7 @@ msgstr "GitHub 팀"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:334
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:184
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
@@ -3699,9 +3700,9 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:155
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
-#: components/LaunchPrompt/LaunchPrompt.tsx:181
+#: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:260
+#: components/Lookup/Lookup.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -4046,7 +4047,7 @@ msgstr "없음"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:267
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:269
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:94
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:96
 #: screens/Inventory/shared/ConstructedInventoryForm.tsx:183
 #: screens/Inventory/shared/InventoryForm.tsx:117
 msgid "Allow Jobs While Syncing"
@@ -4170,7 +4171,7 @@ msgstr "인증 정보 삭제"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:201
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:208
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
@@ -4197,8 +4198,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:122
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:128
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4255,7 +4256,7 @@ msgstr "시간 초과가 지정되지 않음"
 msgid "On Timeout"
 msgstr "시간 초과 시"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:208
+#: screens/Inventory/shared/Inventory.helptext.tsx:209
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "인스턴스 그룹 폴백 방지: 활성화된 경우, 인벤토리에서 연결된 작업 템플릿을 실행하도록 기본 인스턴스 그룹 목록에 조직 인스턴스 그룹을 추가할 수 없습니다."
 
@@ -4436,7 +4437,7 @@ msgstr "테마"
 msgid "Filter on nested group name"
 msgstr "중첩된 그룹 이름 필터링"
 
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:89
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:91
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
 msgstr "사용 중 삭제 허용"
@@ -4587,7 +4588,7 @@ msgstr "동료를 제거하시겠습니까?"
 msgid "Search text input"
 msgstr "검색 텍스트 입력"
 
-#: components/Lookup/Lookup.tsx:100
+#: components/Lookup/Lookup.tsx:118
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "이 값을 찾을 수 없습니다. 유효한 값을 입력하거나 선택하십시오."
 
@@ -4623,7 +4624,7 @@ msgstr "조직 세부 정보 보기"
 #: components/JobList/JobList.tsx:335
 #: components/JobList/JobList.tsx:346
 #: components/LaunchButton/LaunchButton.tsx:305
-#: components/LaunchPrompt/LaunchPrompt.tsx:118
+#: components/LaunchPrompt/LaunchPrompt.tsx:119
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:268
@@ -4657,7 +4658,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:384
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:221
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:228
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
@@ -5055,10 +5056,10 @@ msgstr "삭제할 질문을 선택"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
 #: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:176
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:183
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
-#: screens/Inventory/shared/InventoryForm.tsx:126
+#: screens/Inventory/shared/InventoryForm.tsx:132
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
@@ -5122,6 +5123,10 @@ msgstr "연결할 수 없는 호스트"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:242
 msgid "On timeout"
 msgstr "시간 초과 시"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:205
+msgid "If enabled, each sync of an inventory source removes the inventory variables that no source of this inventory provides, including variables added or edited by hand and variables left over from older syncs. Nothing is removed until every source of the inventory has synced at least once."
+msgstr ""
 
 #: screens/Team/Teams.tsx:17
 #: screens/Team/Teams.tsx:28
@@ -5217,7 +5222,7 @@ msgstr "접기"
 
 #: components/JobList/JobListItem.tsx:341
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:257
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5226,7 +5231,7 @@ msgstr "접기"
 #: routeConfig.tsx:96
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:282
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:155
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:162
 #: screens/Inventory/shared/InventoryForm.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Labels/Labels.tsx:13
@@ -5567,7 +5572,7 @@ msgstr "빈도 세부 정보"
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:47
 #: components/AdHocCommands/useAdHocExecutionEnvironmentStep.tsx:26
 #: components/AdHocCommands/useAdHocInstanceGroupsStep.tsx:27
-#: components/LaunchPrompt/LaunchPrompt.tsx:182
+#: components/LaunchPrompt/LaunchPrompt.tsx:183
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
@@ -5575,7 +5580,7 @@ msgid "Next"
 msgstr "다음"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:263
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5668,7 +5673,7 @@ msgstr "자동화"
 msgid "Node Type"
 msgstr "노드 유형"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "인증 정보 세부 정보보기"
 
@@ -5732,7 +5737,7 @@ msgstr "지난 2주"
 
 #: components/AddRole/AddResourceRole.tsx:300
 #: components/AdHocCommands/AdHocCommandsWizard.tsx:68
-#: components/LaunchPrompt/LaunchPrompt.tsx:180
+#: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:97
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
@@ -5900,7 +5905,7 @@ msgstr "테스트 알림"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:152
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:344
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:368
@@ -5951,7 +5956,7 @@ msgstr "소스 제어 분기"
 #: screens/InstanceGroup/InstanceGroups.tsx:32
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:250
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:130
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:137
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:429
@@ -6376,7 +6381,7 @@ msgstr "{brandName} 애플리케이션에 대한 간편 로그인 활성화"
 msgid "Thursday"
 msgstr "목요일"
 
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Credential/Credentials.tsx:33
 #: screens/Inventory/ConstructedInventory.tsx:85
 #: screens/Inventory/FederatedInventory.tsx:81
@@ -6747,6 +6752,11 @@ msgstr "시간"
 msgid "Send HTML formatted body"
 msgstr "HTML 형식 본문 보내기"
 
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:101
+#: screens/Inventory/shared/InventoryForm.tsx:123
+msgid "Variables From Sources Only"
+msgstr ""
+
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
 msgid "Create new instance group"
@@ -6818,7 +6828,7 @@ msgid "Minimum number of instances that will be automatically assigned to this g
 msgstr "새 인스턴스가 온라인 상태가 되면 이 그룹에 자동으로 할당되는 최소 인스턴스 수입니다."
 
 #. placeholder {0}: resource.name
-#: components/LaunchPrompt/LaunchPrompt.tsx:152
+#: components/LaunchPrompt/LaunchPrompt.tsx:153
 msgid "Launch | {0}"
 msgstr "시작 | {0}"
 
@@ -6854,7 +6864,7 @@ msgstr "{label}에 대한 추가 정보"
 
 #: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Credential/Credentials.tsx:32
 #: screens/Inventory/ConstructedInventory.tsx:76
 #: screens/Inventory/FederatedInventory.tsx:76
@@ -6999,7 +7009,7 @@ msgstr "위의 필터를 사용하여 다른 검색을 시도하십시오."
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "로그인 리디렉션 재정의 URL을 편집하시겠습니까? 편집하는 경우 로컬 인증이 비활성화되어 있는 동안 사용자가 시스템에 로그인하는 데 영향을 미칠 수 있습니다."
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "인증 정보를 찾을 수 없습니다."
 
@@ -7289,7 +7299,7 @@ msgstr "아티팩트와 비교할 값입니다. 가능한 경우 JSON으로 해�
 msgid "Failed to delete one or more groups."
 msgstr "하나 이상의 그룹을 삭제하지 못했습니다."
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:211
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:212
 msgid "Confirm Disable Local Authorization"
 msgstr "로컬 인증 비활성화 확인"
 
@@ -7455,6 +7465,10 @@ msgstr "프로젝트를 최신으로 간주하는 시간(초)입니다. 작업 �
 #: components/JobList/JobListCancelButton.tsx:177
 msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
 msgstr "{numJobsToCancel, plural, one {이 작업은 다음 작업을 취소합니다:} other {이 작업은 다음 작업을 취소합니다:}}"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:218
+msgid "Variables From Sources Only: If enabled, inventory syncs remove the inventory variables that no inventory source provides."
+msgstr ""
 
 #: screens/ActivityStream/ActivityStream.tsx:237
 msgid "Keyword"
@@ -7634,7 +7648,7 @@ msgstr "동기화"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:123
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
@@ -8085,7 +8099,7 @@ msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:84
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8380,7 +8394,7 @@ msgstr "프로젝트 동기화 실패"
 msgid "Run on"
 msgstr "실행"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "설명 표시"
@@ -8434,8 +8448,8 @@ msgstr "패널 ID (선택 사항)"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:258
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:260
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:137
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:86
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:144
 #: screens/Inventory/shared/InventoryForm.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:147
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:350
@@ -8863,7 +8877,7 @@ msgstr "응답 변수 이름"
 
 #: components/JobList/JobListItem.tsx:114
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:251
+#: components/Lookup/Lookup.tsx:284
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "선택"
@@ -8982,7 +8996,7 @@ msgstr "프로젝트를 동기화하지 못했습니다."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:210
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:109
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:126
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:133
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:125
 msgid "Total hosts"
 msgstr "총 호스트"
@@ -9044,7 +9058,7 @@ msgstr "기타 인증"
 msgid "Download bundle"
 msgstr "번들 다운로드"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:175
+#: components/LaunchPrompt/LaunchPrompt.tsx:176
 #: components/Schedule/shared/SchedulePromptableFields.tsx:147
 msgid "Content Loading"
 msgstr "콘텐츠 로딩 중"
@@ -9310,7 +9324,7 @@ msgstr "업데이트 옵션"
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:114
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:189
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:196
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:607
@@ -9486,7 +9500,7 @@ msgstr "워크플로우 거부 메시지 본문"
 msgid "Generic OIDC settings"
 msgstr "일반 OIDC 설정"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:211
+#: screens/Inventory/shared/Inventory.helptext.tsx:212
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "사용 중 삭제 허용: 활성화하면 이 인벤토리에 대해 작업이 실행 중인 동안에도 호스트를 삭제할 수 있습니다."
 
@@ -10049,7 +10063,7 @@ msgstr "툴 전환"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:119
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:126
 #: screens/Inventory/InventoryList/InventoryList.tsx:209
 #: screens/Inventory/InventoryList/InventoryList.tsx:239
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:139
@@ -10075,7 +10089,7 @@ msgstr "툴 전환"
 msgid "Organization"
 msgstr "조직"
 
-#: screens/Login/Login.tsx:311
+#: screens/Login/Login.tsx:315
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "세션이 만료되었습니다. 세션이 만료되기 전의 위치에서 계속하려면 로그인하십시오."
 
@@ -10095,7 +10109,7 @@ msgstr "인벤토리 동기화 실패"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:195
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:210
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:217
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 인벤토리는 현재 다른 리소스에서 사용하고 있습니다. 삭제하시겠습니까?"
 
@@ -10138,7 +10152,7 @@ msgstr "Azure AD Tenant로 로그인"
 msgid "Case-insensitive version of endswith."
 msgstr "마지막에 대소문자를 구분하지 않는 버전입니다."
 
-#: components/Lookup/Lookup.tsx:258
+#: components/Lookup/Lookup.tsx:291
 msgid "Cancel lookup"
 msgstr "검색 취소"
 
@@ -10147,7 +10161,7 @@ msgstr "검색 취소"
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:85
 #: screens/Application/Applications.tsx:38
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:31
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/CredentialType/CredentialTypes.tsx:29
@@ -10186,7 +10200,7 @@ msgstr "검색 취소"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:91
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:93
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -11492,7 +11506,7 @@ msgstr "성공적으로 거부됨"
 msgid "Not configured for inventory sync."
 msgstr "인벤토리 동기화에 대해 구성되지 않았습니다."
 
-#: components/Lookup/JobTemplateLookup.tsx:124
+#: components/Lookup/JobTemplateLookup.tsx:133
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11700,7 +11714,7 @@ msgstr "재고 동기화를 현재로 간주하는 데 걸리는 시간 (초) �
 #~ msgid "Automation controller version"
 #~ msgstr "Automation Controller 버전"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:91
 msgid "Access Token Expiration"
 msgstr "액세스 토큰 만료"
 
@@ -11854,7 +11868,7 @@ msgstr "취소된 노드, 새 변수"
 #~ msgid "Insights system ID"
 #~ msgstr "Insights 시스템 ID"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:104
 msgid "Authorization Code Expiration"
 msgstr "인증 코드 만료"
 
@@ -12138,7 +12152,7 @@ msgstr "호스트를 삭제하지 못했습니다."
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:128
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177
@@ -12292,7 +12306,7 @@ msgstr "알림 시작 전환"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:128
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:57
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:124
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
 #: screens/Job/JobDetail/JobDetail.tsx:110

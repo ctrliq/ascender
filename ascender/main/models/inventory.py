@@ -85,6 +85,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         'prevent_instance_group_fallback',
         'allow_deletes_while_in_use',
         'allow_jobs_while_syncing',
+        'variables_from_sources_only',
     ]
     KIND_CHOICES = [
         ('', _('Hosts have a direct link to this inventory.')),
@@ -231,6 +232,14 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             'using the hosts it had before the sync. By default they wait for the sync to finish. '
             'With update on launch, a job still waits for a sync started for it, '
             'and for a running one when that source has never synced successfully.'
+        ),
+    )
+    variables_from_sources_only = models.BooleanField(
+        default=False,
+        help_text=_(
+            'If enabled, each sync of an inventory source removes the inventory variables that no source '
+            'of this inventory provides, including variables added by hand or left over from older syncs. '
+            'Nothing is removed until every source of the inventory has synced at least once.'
         ),
     )
 
@@ -1178,6 +1187,11 @@ class InventorySource(UnifiedJobTemplate, InventorySourceOptions, RelatedJobsMix
         blank=True,
         editable=False,
         help_text=_('Inventory variable names written by the last sync of this source, mapped to a hash of the value written.'),
+    )
+    managed_inventory_variables_recorded = models.BooleanField(
+        default=False,
+        editable=False,
+        help_text=_('Whether a sync of this source has recorded managed_inventory_variables.'),
     )
 
     @classmethod

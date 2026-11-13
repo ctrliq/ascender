@@ -246,6 +246,38 @@ def test_allow_jobs_while_syncing_is_editable(get, patch, organization, admin, k
     assert inventory.allow_jobs_while_syncing is True
 
 
+@pytest.mark.django_db
+def test_variables_from_sources_only_is_editable(get, patch, inventory, admin):
+    url = reverse('api:inventory_detail', kwargs={'pk': inventory.pk})
+    assert get(url, admin, expect=200).data['variables_from_sources_only'] is False
+
+    patch(url, {'variables_from_sources_only': True}, admin, expect=200)
+    inventory.refresh_from_db()
+    assert inventory.variables_from_sources_only is True
+
+
+@pytest.mark.django_db
+def test_variables_from_sources_only_rejected_on_smart_inventory(post, patch, organization, admin):
+    data = {'name': 'smart', 'kind': 'smart', 'host_filter': 'name=foo', 'organization': organization.pk, 'variables_from_sources_only': True}
+    resp = post(reverse('api:inventory_list'), data, admin, expect=400)
+    assert 'variables_from_sources_only' in resp.data
+
+    smart = Inventory.objects.create(name='smart2', kind='smart', host_filter='name=foo', organization=organization)
+    patch(reverse('api:inventory_detail', kwargs={'pk': smart.pk}), {'variables_from_sources_only': True}, admin, expect=400)
+    # Turning it off is always allowed.
+    patch(reverse('api:inventory_detail', kwargs={'pk': smart.pk}), {'variables_from_sources_only': False}, admin, expect=200)
+
+
+@pytest.mark.django_db
+def test_variables_from_sources_only_not_on_constructed_inventory(get, patch, organization, admin):
+    inventory = Inventory.objects.create(name='inv', kind='constructed', organization=organization)
+    url = reverse('api:constructed_inventory_detail', kwargs={'pk': inventory.pk})
+    assert 'variables_from_sources_only' not in get(url, admin, expect=200).data
+    patch(url, {'variables_from_sources_only': True}, admin, expect=200)
+    inventory.refresh_from_db()
+    assert inventory.variables_from_sources_only is False
+
+
 @pytest.mark.parametrize('order_by', ('extra_vars', '-extra_vars', 'extra_vars,pk', '-extra_vars,pk'))
 @pytest.mark.django_db
 def test_list_cannot_order_by_unsearchable_field(get, organization, alice, order_by):
