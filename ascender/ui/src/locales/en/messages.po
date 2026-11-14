@@ -365,6 +365,10 @@ msgstr "Execute regardless of the parent node's final state."
 #~ msgid "Are you sure you want to remove this node?"
 #~ msgstr "Are you sure you want to remove this node?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+
 #~ msgid "Edit this link"
 #~ msgstr "Edit this link"
 
@@ -494,7 +498,7 @@ msgid "Timed out"
 msgstr "Timed out"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 msgid "Select {0}"
 msgstr "Select {0}"
 
@@ -628,7 +632,7 @@ msgstr "Repeat Frequency"
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:58
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:75
 msgid "Something went wrong with the request to test this credential and metadata."
 msgstr "Something went wrong with the request to test this credential and metadata."
 
@@ -685,7 +689,7 @@ msgstr "Project Sync Cancel Error"
 #: components/PromptDetail/PromptProjectDetail.tsx:156
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:122
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Credential/shared/TypeInputsSubForm.tsx:52
+#: screens/Credential/shared/TypeInputsSubForm.tsx:60
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:262
@@ -1023,7 +1027,7 @@ msgid "All Runs"
 msgstr "All Runs"
 
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:244
+#: components/Lookup/Lookup.tsx:277
 msgid "Lookup modal"
 msgstr "Lookup modal"
 
@@ -1163,7 +1167,7 @@ msgstr "This schedule uses complex rules that are not supported in the\n"
 #: components/JobList/TemplateLaunchControl.tsx:44
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:102
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Inventory/InventorySource/InventorySource.tsx:208
 #: screens/ManagementJob/ManagementJobLaunchButton.tsx:44
 #: screens/ManagementJob/ManagementJobList/ManagementJobRunButton.tsx:44
@@ -1288,7 +1292,7 @@ msgstr "Add Organization"
 #~ msgid "Google OAuth 2"
 #~ msgstr "Google OAuth 2"
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "Back to Credentials"
 
@@ -1804,7 +1808,7 @@ msgstr "Stdout"
 msgid "Only if Missing"
 msgstr "Only if Missing"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:152
 msgid "Metadata"
 msgstr "Metadata"
 
@@ -1821,6 +1825,10 @@ msgstr "Past Week"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:200
 msgid "Filter..."
 msgstr "Filter..."
+
+#: screens/Credential/shared/ExternalTestModal.tsx:190
+msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
+msgstr "The test logs in to Vault as a job from this template would, with a token carrying its claims."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
@@ -1905,6 +1913,8 @@ msgstr "Minute"
 
 #: components/CodeEditor/EditorActions.tsx:142
 #: components/CodeEditor/EditorActions.tsx:160
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1981,6 +1991,8 @@ msgstr "Hour"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:229
 #: components/Lookup/MultiCredentialsLookup.tsx:244
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2385,7 +2397,7 @@ msgstr "Key"
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:202
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:233
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.tsx:45
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:374
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:196
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:332
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:382
@@ -2482,7 +2494,7 @@ msgstr "Allowed URIs list, space separated"
 #~ msgid "Select your Ansible Automation Platform subscription to use."
 #~ msgstr "Select your Ansible Automation Platform subscription to use."
 
-#: screens/Credential/shared/TypeInputsSubForm.tsx:30
+#: screens/Credential/shared/TypeInputsSubForm.tsx:35
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:60
 #: screens/Project/shared/ProjectForm.tsx:328
 msgid "Type Details"
@@ -2505,6 +2517,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Parent node outcome required before the condition is evaluated."
 
 #: components/JobList/JobListItem.tsx:257
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Schedule/ScheduleList/ScheduleResourcePicker.tsx:60
 #: components/TemplateList/TemplateList.tsx:328
@@ -2524,6 +2539,10 @@ msgstr "Job Template"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:221
 msgid "Install Bundle"
 msgstr "Install Bundle"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
+msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
+msgstr "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:615
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:184
@@ -2582,7 +2601,7 @@ msgstr "Field matches the given regular expression."
 #~ msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 #~ msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:359
+#: screens/Login/Login.tsx:372
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:150
 #: screens/Setting/Authentication/tabs.ts:17
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
@@ -2751,8 +2770,8 @@ msgstr "Please add survey questions to populate this list"
 msgid "Association modal"
 msgstr "Association modal"
 
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
-#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:182
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:185
 msgid "System tabs"
 msgstr "System tabs"
 
@@ -2844,7 +2863,7 @@ msgstr "This schedule is missing an Inventory"
 #~ msgstr "Management job launch error"
 
 #: components/Lookup/HostFilterLookup.tsx:310
-#: components/Lookup/Lookup.tsx:189
+#: components/Lookup/Lookup.tsx:215
 msgid "Search"
 msgstr "Search"
 
@@ -2934,7 +2953,7 @@ msgstr "{0} (deleted)"
 msgid "The inventory that this host belongs to."
 msgstr "The inventory that this host belongs to."
 
-#: screens/Login/Login.tsx:344
+#: screens/Login/Login.tsx:357
 msgid "Log In"
 msgstr "Log In"
 
@@ -3630,12 +3649,12 @@ msgstr "{0, plural, one {Please enter a valid phone number.} other {Please enter
 msgid "Facts"
 msgstr "Facts"
 
-#: screens/Login/Login.tsx:368
+#: screens/Login/Login.tsx:381
 msgid "or"
 msgstr "or"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 #: components/PaginatedTable/PaginatedTable.tsx:81
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:54
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:37
@@ -3823,7 +3842,7 @@ msgstr "The suggested format for variable names is lowercase and\n"
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "This job template is currently being used by other resources. Are you sure you want to delete it?"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "View all Credentials."
 
@@ -4084,7 +4103,7 @@ msgstr "This workflow does not have any nodes configured."
 msgid "View Logging Settings"
 msgstr "View Logging Settings"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:72
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:78
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 
@@ -4390,7 +4409,7 @@ msgstr "View Node Details"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:135
 #: components/Lookup/HostFilterLookup.tsx:420
-#: components/Lookup/Lookup.tsx:266
+#: components/Lookup/Lookup.tsx:299
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:243
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:49
 #: components/Schedule/shared/ScheduleForm.tsx:693
@@ -4401,8 +4420,8 @@ msgstr "View Node Details"
 #: components/Schedule/shared/UnsupportedScheduleForm.tsx:37
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:473
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:100
-#: screens/Credential/shared/ExternalTestModal.tsx:111
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:106
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:178
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:192
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5018,8 +5037,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Mapping/MappingDetail/MappingDetail.tsx:69
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:73
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:77
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:130
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:129
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:133
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:63
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:67
 #: screens/Setting/Password/PasswordDetail/PasswordDetail.tsx:67
@@ -5454,7 +5473,7 @@ msgstr "Example URLs for Subversion Source Control include:"
 msgid "Search text input"
 msgstr "Search text input"
 
-#: components/Lookup/Lookup.tsx:98
+#: components/Lookup/Lookup.tsx:116
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "That value was not found. Please enter or select a valid value."
 
@@ -6360,6 +6379,8 @@ msgid "Users with a role on this resource appear here"
 msgstr "Users with a role on this resource appear here"
 
 #: components/CopyButton/CopyButton.tsx:54
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -6624,7 +6645,7 @@ msgstr "Frequency Details"
 #: components/LaunchPrompt/LaunchPrompt.tsx:136
 #: components/Schedule/shared/SchedulePromptableFields.tsx:161
 #: components/Schedule/shared/ScheduleWizardBody.tsx:148
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "Next"
@@ -6705,6 +6726,10 @@ msgstr "Option Details"
 msgid "View all Tokens."
 msgstr "View all Tokens."
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
+msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
+msgstr "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
+
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Managed instances cannot be deleted: {hostnames}"
 msgstr "Managed instances cannot be deleted: {hostnames}"
@@ -6767,7 +6792,7 @@ msgstr "Privilege Escalation Password"
 msgid "Node Type"
 msgstr "Node Type"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "View Credential Details"
 
@@ -6844,7 +6869,7 @@ msgstr "Secret shared with the webhook service. The service uses it to sign its 
 #: components/LaunchPrompt/LaunchPrompt.tsx:134
 #: components/Schedule/shared/SchedulePromptableFields.tsx:159
 #: components/Schedule/shared/ScheduleWizardBody.tsx:146
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:90
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:96
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -7395,6 +7420,10 @@ msgstr "Answer Variable Name"
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# month} other {# months}}"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "The issuer to trust could not be read from the server. Try again later."
+
 #: screens/Project/shared/ProjectForm.tsx:285
 msgid "Choose a source control type"
 msgstr "Choose a source control type"
@@ -7605,7 +7634,7 @@ msgstr "Field ends with value."
 #~ msgid "Clear subscription selection"
 #~ msgstr "Clear subscription selection"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:80
 msgid "Test passed"
 msgstr "Test passed"
 
@@ -7669,7 +7698,7 @@ msgstr "Thursday"
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:236
 #: components/TemplateList/TemplateList.tsx:285
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:88
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Inventory/ConstructedInventory.tsx:82
 #: screens/Inventory/FederatedInventory.tsx:82
 #: screens/Inventory/Inventory.tsx:82
@@ -7966,6 +7995,10 @@ msgstr "A GitHub account, organization, team or enterprise"
 msgid "Playbook Complete"
 msgstr "Playbook Complete"
 
+#: screens/Setting/MiscSystem/groups.ts:72
+msgid "Workload Identity"
+msgstr "Workload Identity"
+
 #: screens/Job/JobOutput/HostEventModal.tsx:196
 msgid "Details tab"
 msgstr "Details tab"
@@ -7981,7 +8014,7 @@ msgstr "IRC Server Password"
 #: components/AdHocCommands/AdHocPreviewStep.tsx:58
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:107
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:138
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:91
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:323
@@ -8264,7 +8297,7 @@ msgstr "More information for {label}"
 
 #: routeConfig.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:210
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Inventory/ConstructedInventory.tsx:77
 #: screens/Inventory/FederatedInventory.tsx:77
 #: screens/Inventory/Inventory.tsx:76
@@ -8428,7 +8461,7 @@ msgstr "Please try another search using the filter above"
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "Credential not found."
 
@@ -8534,6 +8567,10 @@ msgstr "View SAML Settings"
 #: screens/Job/JobOutput/HostEventModal.tsx:184
 msgid "Host Details"
 msgstr "Host Details"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
+msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
+msgstr "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
 
 #: screens/Job/Job.helptext.tsx:11
 #: screens/Template/shared/JobTemplate.helptext.tsx:13
@@ -9068,7 +9105,7 @@ msgstr "Run on Inventory"
 
 #: screens/Credential/shared/CredentialForm.tsx:450
 #: screens/Credential/shared/CredentialForm.tsx:456
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:80
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:86
 msgid "Test"
 msgstr "Test"
 
@@ -9488,7 +9525,7 @@ msgstr "Logging tabs"
 msgid "Relaunch Workflow Job"
 msgstr "Relaunch Workflow Job"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:157
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:164
 msgid "External Secret Management System"
 msgstr "External Secret Management System"
 
@@ -10723,10 +10760,14 @@ msgstr "Preview"
 
 #: components/JobList/JobListItem.tsx:115
 #: components/Lookup/HostFilterLookup.tsx:412
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:290
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "Select"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
+msgstr "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:120
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:90
@@ -11356,6 +11397,10 @@ msgstr "Recent Templates"
 msgid "Add Federated Inventory"
 msgstr "Add Federated Inventory"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
+msgid "Workload identity is not available"
+msgstr "Workload identity is not available"
+
 #: screens/Dashboard/shared/LineChart.tsx:194
 msgid "Job Runs"
 msgstr "Job Runs"
@@ -11555,6 +11600,10 @@ msgstr "Parameter"
 #: components/SelectedList/DraggableSelectedList.tsx:248
 msgid "Remove"
 msgstr "Remove"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:103
+msgid "Claims sent"
+msgstr "Claims sent"
 
 #: screens/InstanceGroup/Instances/InstanceList.tsx:267
 #: screens/Instances/InstanceList/InstanceList.tsx:198
@@ -12148,7 +12197,7 @@ msgstr "Organization"
 msgid "Cleanup Job"
 msgstr "Cleanup Job"
 
-#: screens/Login/Login.tsx:322
+#: screens/Login/Login.tsx:326
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Your session has expired. Please log in to continue where you left off."
 
@@ -12191,7 +12240,7 @@ msgstr "This inventory is currently being used by other resources. Are you sure 
 msgid "Disassociate the user from these teams?"
 msgstr "Disassociate the user from these teams?"
 
-#: screens/Credential/shared/ExternalTestModal.tsx:90
+#: screens/Credential/shared/ExternalTestModal.tsx:102
 msgid "Test External Credential"
 msgstr "Test External Credential"
 
@@ -12269,7 +12318,7 @@ msgstr "Survey Disabled"
 msgid "Case-insensitive version of endswith."
 msgstr "Case-insensitive version of endswith."
 
-#: components/Lookup/Lookup.tsx:264
+#: components/Lookup/Lookup.tsx:297
 msgid "Cancel lookup"
 msgstr "Cancel lookup"
 
@@ -12281,7 +12330,7 @@ msgstr "Failed to disassociate one or more instance groups."
 #: components/ErrorDetail/ErrorDetail.tsx:78
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:93
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:79
 #: screens/Host/Host.tsx:67
@@ -13529,6 +13578,10 @@ msgstr "Invalid time format"
 msgid "Unknown Project"
 msgstr "Unknown Project"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
+msgid "Each job gets a short lived token signed for it, with no secret stored here"
+msgstr "Each job gets a short lived token signed for it, with no secret stored here"
+
 #: components/LabelLists/LabelLists.tsx:522
 msgid "Failed to delete one or more labels."
 msgstr "Failed to delete one or more labels."
@@ -13720,8 +13773,9 @@ msgstr "Successfully Denied"
 msgid "Not configured for inventory sync."
 msgstr "Not configured for inventory sync."
 
-#~ msgid "Playbook name"
-#~ msgstr "Playbook name"
+#: components/Lookup/JobTemplateLookup.tsx:133
+msgid "Playbook name"
+msgstr "Playbook name"
 
 #~ msgid "Add constructed inventory"
 #~ msgstr "Add constructed inventory"
@@ -13874,6 +13928,10 @@ msgstr "How many times was the host automated"
 
 #~ msgid "Expand input"
 #~ msgstr "Expand input"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "Could not read the workload identity configuration"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:304
 #: screens/Template/shared/JobTemplateForm.tsx:549
@@ -14385,7 +14443,7 @@ msgstr "Survey preview modal"
 
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:113
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:33
 msgid "OK"
 msgstr "OK"
@@ -14469,6 +14527,7 @@ msgstr "Failed to delete host."
 #: components/Lookup/CredentialLookup.tsx:248
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:234
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

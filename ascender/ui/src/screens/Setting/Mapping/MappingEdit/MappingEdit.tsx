@@ -21,6 +21,10 @@ function MappingEdit() {
             name="SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL"
             config={authentication.SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL}
           />
+          <BooleanField
+            name="SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS"
+            config={authentication.SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS}
+          />
           <ObjectField
             name="SOCIAL_AUTH_ORGANIZATION_MAP"
             config={authentication.SOCIAL_AUTH_ORGANIZATION_MAP}

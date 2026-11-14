@@ -2,6 +2,8 @@
 # All Rights Reserved
 
 # Python
+import json
+
 import pytest
 from unittest import mock
 import os
@@ -151,6 +153,20 @@ class TestMigrationCases:
             for host_name in hosts:
                 host = inventory.hosts.get(name=host_name)
                 assert host.instance_id == ('fooval' if id_var else '')
+
+    @pytest.mark.parametrize('instance_id_var', ('foo.id', 'foo.id,other', 'other, foo.id'))
+    @pytest.mark.parametrize('overwrite', (True, False))
+    def test_renamed_host_keeps_identity_with_legacy_wrapped_instance_id(self, inventory, overwrite, instance_id_var):
+        # Before unsafe_literal, ansible-core 2.19+ wrapped IDs were stored as the dict's repr.
+        inv_src = InventorySource.objects.create(inventory=inventory, source='gce')
+        wrapped = {'foo': {'id': {'__ansible_unsafe': 'fooval'}}}
+        host = inventory.hosts.create(name='old-name', instance_id=str(wrapped['foo']['id']), variables=json.dumps(wrapped))
+        inv_src.hosts.add(host)
+        data = {'_meta': {'hostvars': {'new-name': wrapped}}, 'ungrouped': {'hosts': ['new-name']}}
+        inventory_import.Command().perform_update(dict(overwrite=overwrite, instance_id_var=instance_id_var), data, inv_src.create_unified_job())
+        assert inventory.hosts.count() == 1
+        host.refresh_from_db()
+        assert (host.name, host.instance_id) == ('new-name', 'fooval')
 
 
 @pytest.mark.django_db
@@ -463,6 +479,16 @@ class TestEnabledVar:
 
     def test_enabled_var_is_enabled_value(self, cmd):
         assert cmd._get_enabled({'foo': {'bar': 'barfoo'}}) is True
+
+    def test_enabled_var_unsafe_wrapped(self, cmd):
+        # ansible-core 2.19+ --export wraps plugin-set strings
+        assert cmd._get_enabled({'foo': {'bar': {'__ansible_unsafe': 'barfoo'}}}) is True
+
+
+def test_instance_id_var_unsafe_wrapped():
+    cmd = inventory_import.Command()
+    cmd.instance_id_var = 'foo.id'
+    assert cmd._get_instance_id({'foo': {'id': {'__ansible_unsafe': 'i-0abc'}}}) == 'i-0abc'
 
 
 @pytest.mark.django_db

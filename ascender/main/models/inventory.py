@@ -54,6 +54,7 @@ from ascender.main.models.notifications import (
 )
 from ascender.main.models.credential.injectors import _openstack_data
 from ascender.main.utils import _inventory_updates
+from ascender.main.utils.ansible import unsafe_literal
 from ascender.main.utils.safe_yaml import sanitize_jinja
 from ascender.main.utils.execution_environments import to_container_path, get_control_plane_execution_environment
 
@@ -661,10 +662,11 @@ class Host(CommonModelNameNotUnique, RelatedJobsMixin):
         command run.
         """
         host_name = self.name
-        if 'ansible_ssh_host' in self.variables_dict:
-            host_name = self.variables_dict['ansible_ssh_host']
-        if 'ansible_host' in self.variables_dict:
-            host_name = self.variables_dict['ansible_host']
+        variables = self.variables_dict
+        for var in ('ansible_ssh_host', 'ansible_host'):  # later wins
+            value = unsafe_literal(variables.get(var))
+            if isinstance(value, str):
+                host_name = value
         return host_name
 
     def _update_host_smart_inventory_memeberships(self):

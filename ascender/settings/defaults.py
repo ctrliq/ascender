@@ -611,6 +611,25 @@ CLUSTER_NODE_MISSED_HEARTBEAT_TOLERANCE = 2
 RECEPTOR_SERVICE_ADVERTISEMENT_PERIOD = 60  # https://github.com/ansible/receptor/blob/aa1d589e154d8a0cb99a220aff8f98faf2273be6/pkg/netceptor/netceptor.go#L34
 EXECUTION_NODE_REMEDIATION_CHECKS = 60 * 30  # once every 30 minutes check if an execution node errors have been resolved
 
+# A dispatcher task reading a running job's output holds the job's monitor lease and renews it
+# every JOB_MONITOR_RENEW_SECONDS; past JOB_MONITOR_LEASE_SECONDS without a renewal the job is
+# taken to be unmonitored, and the sweep that runs on every control node claims it and resumes
+# reading its output there. A graceful shutdown lets the lease expire at once.
+JOB_MONITOR_LEASE_SECONDS = 60
+JOB_MONITOR_RENEW_SECONDS = 10
+# How many expired leases one sweep claims at most, how long a resume waits before looking again at
+# a job whose output is not reachable yet or could not be read, and how many such waits it is allowed.
+JOB_MONITOR_SWEEP_BATCH = 50
+JOB_MONITOR_RETRY_SECONDS = 30
+JOB_MONITOR_MAX_DEFERRALS = 120
+# A container group pod that has been running this long without writing anything is taken to be
+# waiting for a payload its lost controller never finished sending; it is deleted and its job re-queued.
+JOB_MONITOR_WEDGE_SECONDS = 60
+# A receptor stream that has waited this long for bytes after its work unit finished, short of the
+# unit's stdout size, is abandoned and the job's result taken from the unit. A container group pod's
+# log connection that stays silent this long is reopened from the last line read.
+JOB_MONITOR_STREAM_IDLE_SECONDS = 120
+
 # Amount of time dispatcher will try to reconnect to database for jobs and consuming new work
 DISPATCHER_DB_DOWNTIME_TOLERANCE = 40
 
@@ -626,6 +645,7 @@ CELERYBEAT_SCHEDULE = {
     'dependency_manager': {'task': 'ascender.main.scheduler.tasks.dependency_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'k8s_reaper': {'task': 'ascender.main.tasks.system.awx_k8s_reaper', 'schedule': timedelta(seconds=60), 'options': {'expires': 50}},
     'receptor_reaper': {'task': 'ascender.main.tasks.system.awx_receptor_workunit_reaper', 'schedule': timedelta(seconds=60)},
+    'job_monitor_sweep': {'task': 'ascender.main.tasks.monitor.sweep_job_monitors', 'schedule': timedelta(seconds=30), 'options': {'expires': 25}},
     'send_subsystem_metrics': {'task': 'ascender.main.analytics.analytics_tasks.send_subsystem_metrics', 'schedule': timedelta(seconds=20)},
     'cleanup_images': {'task': 'ascender.main.tasks.system.cleanup_images_and_files', 'schedule': timedelta(hours=3)},
     'cleanup_host_metrics': {'task': 'ascender.main.tasks.host_metrics.cleanup_host_metrics', 'schedule': timedelta(hours=3, minutes=30)},
@@ -660,8 +680,10 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'ascender.sso.oidc.check_login_allowed',
     'ascender.sso.oidc.strip_username_domain',
     'social_core.pipeline.social_auth.social_user',
+    'ascender.sso.social_base_pipeline.check_external_login_collision',
     'social_core.pipeline.user.get_username',
     'ascender.sso.entra.associate_existing_account',
+    'ascender.sso.social_base_pipeline.check_final_username_collision',
     'social_core.pipeline.user.create_user',
     'ascender.sso.social_base_pipeline.check_user_found_or_created',
     'social_core.pipeline.social_auth.associate_user',
@@ -681,6 +703,7 @@ SOCIAL_AUTH_INACTIVE_USER_URL = '/sso/inactive/'
 
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
+SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS = False
 # SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_CLEAN_USERNAMES = True
 
@@ -967,12 +990,22 @@ CALLBACK_QUEUE_SOCKET_TIMEOUT = 30
 # Note: This setting may be overridden by database settings.
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
+RESTRICT_USER_IDENTITY_TO_SUPERUSERS = False
 ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
 AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS = False
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
 ASCENDER_URL_BASE = constants.ASCENDER_URL_BASE_PLACEHOLDER
+
+# Workload identity: the platform signs a short lived JWT for each job that
+# uses a credential which asks for one, and publishes the key to verify it at
+# /api/o/.well-known/. Off until an administrator turns it on.
+# Note: These settings may be overridden by database settings.
+WORKLOAD_IDENTITY_ENABLED = False
+# Lifetime, in seconds, of the token a lookup logs in with. The token handed
+# to a playbook lasts as long as the job timeout, or this long without one.
+WORKLOAD_IDENTITY_DEFAULT_TTL = 300
 
 
 # Settings related to external logger configuration

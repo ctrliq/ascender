@@ -1,4 +1,4 @@
-import type { Credential } from 'types/api';
+import type { Credential, SummaryFieldRef } from 'types/api';
 import { FormRoot, useField } from 'components/Form';
 import type { FieldProps } from 'components/Form';
 import React, { useCallback } from 'react';
@@ -16,6 +16,7 @@ import CredentialsStep from './CredentialsStep';
 import MetadataStep from './MetadataStep';
 import { CredentialPluginTestAlert } from '..';
 import type { CredentialTestError } from '../CredentialPluginTestAlert';
+import { withTestJobTemplate } from '../../workloadIdentity';
 
 /** One step of the plugin wizard, in the shape PatternFly's Wizard takes. */
 export interface PluginWizardStep {
@@ -31,6 +32,11 @@ export interface PluginWizardStep {
 export interface CredentialPluginValues {
   credential: Credential | null;
   inputs: Record<string, unknown>;
+  /**
+   * The template a workload identity lookup is tested as. Only sent with the
+   * test, never saved with the lookup.
+   */
+  job_template?: SummaryFieldRef | null;
   touched?: boolean;
 }
 
@@ -116,6 +122,7 @@ function CredentialPluginWizard({
   const { t } = useLingui();
   const [selectedCredential] = useField<Credential | null>('credential');
   const [inputValues] = useField<Record<string, unknown>>('inputs');
+  const [jobTemplate] = useField<SummaryFieldRef | null>('job_template');
 
   const {
     result: testPluginSuccess,
@@ -125,9 +132,9 @@ function CredentialPluginWizard({
     useCallback(
       async () =>
         CredentialsAPI.test(selectedCredential.value?.id as number, {
-          metadata: inputValues.value,
+          metadata: withTestJobTemplate(inputValues.value, jobTemplate.value),
         }),
-      [selectedCredential, inputValues]
+      [selectedCredential, inputValues, jobTemplate]
     ),
     null
   );
@@ -194,6 +201,7 @@ function CredentialPluginPrompt({
       initialValues={{
         credential: initialValues?.credential || null,
         inputs: initialValues?.inputs || {},
+        job_template: null,
       }}
       onSubmit={onSubmit}
     >

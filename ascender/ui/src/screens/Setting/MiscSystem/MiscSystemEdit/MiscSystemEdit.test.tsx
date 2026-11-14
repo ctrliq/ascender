@@ -30,9 +30,12 @@ const systemData = {
   AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS: false,
   DEFAULT_EXECUTION_ENVIRONMENT: 1,
   MANAGE_ORGANIZATION_AUTH: true,
+  RESTRICT_USER_IDENTITY_TO_SUPERUSERS: false,
   ORG_ADMINS_CAN_SEE_ALL_USERS: true,
   REMOTE_HOST_HEADERS: ['REMOTE_ADDR', 'REMOTE_HOST'],
   ASCENDER_URL_BASE: 'https://localhost:3000',
+  WORKLOAD_IDENTITY_ENABLED: false,
+  WORKLOAD_IDENTITY_DEFAULT_TTL: 300,
   PROXY_IP_ALLOWED_LIST: [],
   CSRF_TRUSTED_ORIGINS: [],
 };
@@ -99,6 +102,14 @@ describe('<MiscSystemEdit />', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
+  test('shows the workload identity settings', async () => {
+    await mountEdit('workload_identity');
+    expect(screen.getByText('Enable Workload Identity')).toBeInTheDocument();
+    expect(
+      screen.getByText('Workload Identity Token Lifetime')
+    ).toBeInTheDocument();
+  });
+
   test('save button should call updateAll', async () => {
     const { user } = await mountEdit();
     await selectExecutionEnvironment(user);
@@ -121,6 +132,8 @@ describe('<MiscSystemEdit />', () => {
       ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS:
         systemData.ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS,
       MANAGE_ORGANIZATION_AUTH: systemData.MANAGE_ORGANIZATION_AUTH,
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS:
+        systemData.RESTRICT_USER_IDENTITY_TO_SUPERUSERS,
     });
   });
 

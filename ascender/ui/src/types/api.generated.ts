@@ -11382,6 +11382,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -11400,6 +11406,18 @@ export interface components {
        * @default https://ascenderhost
        */
       ASCENDER_URL_BASE: string;
+      /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -12016,6 +12034,12 @@ export interface components {
        * @default false
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
+      /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
       /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.
@@ -13171,7 +13195,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -13335,7 +13359,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;
@@ -14599,6 +14623,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -14617,6 +14647,18 @@ export interface components {
        * @default https://ascenderhost
        */
       ASCENDER_URL_BASE: string;
+      /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -15255,6 +15297,12 @@ export interface components {
        * @default false
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
+      /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
       /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.
@@ -16450,7 +16498,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -16629,7 +16677,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;
@@ -16835,6 +16883,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Only Superusers Can Set User Emails and Change Usernames
+       * @description When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.
+       * @default false
+       */
+      RESTRICT_USER_IDENTITY_TO_SUPERUSERS: boolean;
+      /**
        * Hide System Roles from Access Lists
        * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
        * @default false
@@ -16853,6 +16907,18 @@ export interface components {
        * @default https://ascenderhost
        */
       ASCENDER_URL_BASE: string;
+      /**
+       * Enable Workload Identity
+       * @description Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.
+       * @default false
+       */
+      WORKLOAD_IDENTITY_ENABLED: boolean;
+      /**
+       * Workload Identity Token Lifetime
+       * @description How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.
+       * @default 300
+       */
+      WORKLOAD_IDENTITY_DEFAULT_TTL: number;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -17469,6 +17535,12 @@ export interface components {
        * @default false
        */
       SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: boolean;
+      /**
+       * Prevent username collisions on first login
+       * @description When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.
+       * @default false
+       */
+      SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS: boolean;
       /**
        * LDAP Server URI
        * @description URI to connect to LDAP server, such as "ldap://ldap.example.com:389" (non-SSL) or "ldaps://ldap.example.com:636" (SSL). Multiple LDAP servers may be specified by separating with spaces or commas. LDAP authentication is disabled if this parameter is empty.
@@ -18624,7 +18696,7 @@ export interface components {
       } | null;
       /**
        * Entra ID User Flags
-       * @description Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.
        */
       SOCIAL_AUTH_ENTRA_ID_USER_FLAGS?: {
         [key: string]: string;
@@ -18788,7 +18860,7 @@ export interface components {
       } | null;
       /**
        * OIDC User Flags
-       * @description Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.
+       * @description Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {"never": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.
        */
       SOCIAL_AUTH_OIDC_USER_FLAGS?: {
         [key: string]: string;

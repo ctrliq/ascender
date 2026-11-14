@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useReducer, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useField } from 'components/Form';
 import type { FieldValidator } from 'components/Form';
@@ -55,7 +55,17 @@ export interface LookupProps {
   }) => React.ReactNode;
   isDisabled?: boolean;
   /** Looks up what the user typed, a moment after they stop typing. */
-  onDebounce?: (name: string) => void;
+  /**
+   * Called a second after typing stops. isStale says whether the text has
+   * changed since, for a caller that goes off to look the name up.
+   */
+  onDebounce?: (name: string, isStale: () => boolean) => void;
+  /**
+   * Drop the selected item as soon as its name is edited, rather than when the
+   * name typed has been looked up. For a form that acts on the selection
+   * straight away, which must not act on the item no longer on screen.
+   */
+  clearOnType?: boolean;
   fieldName: string;
   validate?: FieldValidator;
   modalDescription?: React.ReactNode;
@@ -81,6 +91,7 @@ function Lookup({
   renderOptionsList,
   isDisabled = false,
   onDebounce = () => undefined,
+  clearOnType = false,
   fieldName,
   validate = () => undefined,
   modalDescription = '',
@@ -90,6 +101,13 @@ function Lookup({
   const location = useLocation();
   const navigate = useNavigate();
   const [typedText, setTypedText] = useState('');
+  const latestText = useRef('');
+  // The value was cleared by typing, so what was typed stays in the input
+  const keepTypedText = useRef(false);
+  const showText = (text: string) => {
+    latestText.current = text;
+    setTypedText(text);
+  };
   const debounceRequest = useDebounce(onDebounce, 1000);
   useField({
     name: fieldName,
@@ -121,14 +139,22 @@ function Lookup({
   useEffect(() => {
     dispatch({ type: 'SET_VALUE', value: value ?? null });
     const name = Array.isArray(value) ? null : value?.name;
-    setTypedText(typeof name === 'string' ? name : '');
+    if (typeof name === 'string') {
+      keepTypedText.current = false;
+      showText(name);
+    } else if (!keepTypedText.current) {
+      showText('');
+    }
   }, [value, multiple]);
 
   useEffect(() => {
     if (!multiple) {
-      setTypedText(
-        state.selectedItems[0] ? (state.selectedItems[0].name as string) : ''
-      );
+      if (state.selectedItems[0]) {
+        keepTypedText.current = false;
+        showText(state.selectedItems[0].name as string);
+      } else if (!keepTypedText.current) {
+        showText('');
+      }
     }
   }, [state.selectedItems, multiple]);
 
@@ -227,9 +253,16 @@ function Lookup({
               ouiaId={`${id}-input`}
               value={typedText}
               onChange={(_event, inputValue) => {
-                setTypedText(inputValue);
+                showText(inputValue);
                 if (singleValue?.name !== inputValue) {
-                  debounceRequest(inputValue);
+                  if (clearOnType && singleValue) {
+                    keepTypedText.current = true;
+                    onChange(null);
+                  }
+                  debounceRequest(
+                    inputValue,
+                    () => latestText.current !== inputValue
+                  );
                 }
               }}
               isDisabled={isDisabled}

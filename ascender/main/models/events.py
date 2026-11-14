@@ -483,8 +483,13 @@ class JobEvent(BasePlaybookEvent):
             models.Index(fields=['job', 'job_created', 'event']),
             models.Index(fields=['job', 'job_created', 'uuid']),
             models.Index(fields=['job', 'job_created', 'parent_uuid']),
-            models.Index(fields=['job', 'job_created', 'counter']),
         ]
+        # An event is saved once, however many times its stream is read. Monitoring of a running job
+        # may be resumed on another node, which replays the output from the start; the counter is the
+        # identity of an event within its job, and job_created is the partition key, which every
+        # unique constraint on a partitioned table has to carry. The constraint's index takes the place
+        # of the plain (job, job_created, counter) index, with the same columns in the same order.
+        constraints = [models.UniqueConstraint(fields=['job', 'job_created', 'counter'], name='main_jobevent_counter_unique')]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     job = models.ForeignKey(
@@ -561,9 +566,17 @@ class JobEvent(BasePlaybookEvent):
 
             existing_host_ids = set(h.id for h in all_hosts)
 
+            # A job's playbook_on_stats can be processed more than once: a controller that was
+            # lost mid-job may have saved it before dying, and the node that resumes the job
+            # replays the same stream. Skip the hosts already recorded so the replay is a
+            # no-op, and in particular so host metrics are not counted twice.
+            already_recorded = set(JobHostSummary.objects.filter(job_id=job.id).values_list('host_name', flat=True))
+
             summaries = dict()
             updated_hosts_list = list()
             for host in hostnames:
+                if host in already_recorded:
+                    continue
                 updated_hosts_list.append(host.lower())
                 host_id = host_map.get(host)
                 if host_id not in existing_host_ids:
@@ -581,7 +594,8 @@ class JobEvent(BasePlaybookEvent):
                 summary.failed = bool(summary.dark or summary.failures)
                 summaries[(host_id, host)] = summary
 
-            JobHostSummary.objects.bulk_create(summaries.values())
+            # ignore_conflicts is the backstop for a genuine race, where a peer writes between the query above and this insert.
+            JobHostSummary.objects.bulk_create(summaries.values(), ignore_conflicts=True)
 
             # Create/update Host Metrics
             self._update_host_metrics(updated_hosts_list)
@@ -629,8 +643,13 @@ class ProjectUpdateEvent(BasePlaybookEvent):
         indexes = [
             models.Index(fields=['project_update', 'job_created', 'event']),
             models.Index(fields=['project_update', 'job_created', 'uuid']),
-            models.Index(fields=['project_update', 'job_created', 'counter']),
         ]
+        # An event is saved once, however many times its stream is read. Monitoring of a running job
+        # may be resumed on another node, which replays the output from the start; the counter is the
+        # identity of an event within its job, and job_created is the partition key, which every
+        # unique constraint on a partitioned table has to carry. The constraint's index takes the place
+        # of the plain (job, job_created, counter) index, with the same columns in the same order.
+        constraints = [models.UniqueConstraint(fields=['project_update', 'job_created', 'counter'], name='main_projectupdateevent_counter_unique')]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     project_update = models.ForeignKey(
@@ -767,8 +786,13 @@ class AdHocCommandEvent(BaseCommandEvent):
         indexes = [
             models.Index(fields=['ad_hoc_command', 'job_created', 'event']),
             models.Index(fields=['ad_hoc_command', 'job_created', 'uuid']),
-            models.Index(fields=['ad_hoc_command', 'job_created', 'counter']),
         ]
+        # An event is saved once, however many times its stream is read. Monitoring of a running job
+        # may be resumed on another node, which replays the output from the start; the counter is the
+        # identity of an event within its job, and job_created is the partition key, which every
+        # unique constraint on a partitioned table has to carry. The constraint's index takes the place
+        # of the plain (job, job_created, counter) index, with the same columns in the same order.
+        constraints = [models.UniqueConstraint(fields=['ad_hoc_command', 'job_created', 'counter'], name='main_adhoccommandevent_counter_unique')]
 
     EVENT_TYPES = [
         # (event, verbose name, failed)
@@ -871,8 +895,13 @@ class InventoryUpdateEvent(BaseCommandEvent):
         ordering = ('-pk',)
         indexes = [
             models.Index(fields=['inventory_update', 'job_created', 'uuid']),
-            models.Index(fields=['inventory_update', 'job_created', 'counter']),
         ]
+        # An event is saved once, however many times its stream is read. Monitoring of a running job
+        # may be resumed on another node, which replays the output from the start; the counter is the
+        # identity of an event within its job, and job_created is the partition key, which every
+        # unique constraint on a partitioned table has to carry. The constraint's index takes the place
+        # of the plain (job, job_created, counter) index, with the same columns in the same order.
+        constraints = [models.UniqueConstraint(fields=['inventory_update', 'job_created', 'counter'], name='main_inventoryupdateevent_counter_unique')]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     inventory_update = models.ForeignKey(
@@ -916,8 +945,13 @@ class SystemJobEvent(BaseCommandEvent):
         ordering = ('-pk',)
         indexes = [
             models.Index(fields=['system_job', 'job_created', 'uuid']),
-            models.Index(fields=['system_job', 'job_created', 'counter']),
         ]
+        # An event is saved once, however many times its stream is read. Monitoring of a running job
+        # may be resumed on another node, which replays the output from the start; the counter is the
+        # identity of an event within its job, and job_created is the partition key, which every
+        # unique constraint on a partitioned table has to carry. The constraint's index takes the place
+        # of the plain (job, job_created, counter) index, with the same columns in the same order.
+        constraints = [models.UniqueConstraint(fields=['system_job', 'job_created', 'counter'], name='main_systemjobevent_counter_unique')]
 
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     system_job = models.ForeignKey(

@@ -54,6 +54,20 @@ register(
 )
 
 register(
+    'RESTRICT_USER_IDENTITY_TO_SUPERUSERS',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Only Superusers Can Set User Emails and Change Usernames'),
+    help_text=_(
+        'When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. '
+        'This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. '
+        'The OIDC and Entra ID user flags ignore their username lists while this is off.'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
     'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
     field_class=fields.BooleanField,
     default=False,
@@ -95,6 +109,36 @@ register(
     help_text=_('This setting is used by services like notifications to render a valid url to the service.'),
     category=_('System'),
     category_slug='system',
+)
+
+register(
+    'WORKLOAD_IDENTITY_ENABLED',
+    field_class=fields.BooleanField,
+    label=_('Enable Workload Identity'),
+    help_text=_(
+        'Sign a short lived token for each job that uses a workload identity credential, and publish the keys '
+        'that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. '
+        'The issuer is the Base URL of the service followed by /api/o.'
+    ),
+    category=_('System'),
+    category_slug='system',
+)
+
+register(
+    'WORKLOAD_IDENTITY_DEFAULT_TTL',
+    field_class=fields.IntegerField,
+    min_value=1,
+    max_value=86400,
+    default=300,
+    label=_('Workload Identity Token Lifetime'),
+    help_text=_(
+        'How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long '
+        'as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute '
+        'is always added to allow for clock drift.'
+    ),
+    category=_('System'),
+    category_slug='system',
+    unit=_('seconds'),
 )
 
 register(

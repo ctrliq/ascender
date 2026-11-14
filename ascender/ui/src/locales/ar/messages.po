@@ -366,6 +366,10 @@ msgstr "التنفيذ بغض النظر عن الحالة النهائية لل
 #~ msgid "Are you sure you want to remove this node?"
 #~ msgstr "هل أنت متأكد من أنك تريد إزالة هذه العقدة؟"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "تجد المهمة الرمز في الملف الذي يحدده متغير البيئة ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE."
+
 #~ msgid "Edit this link"
 #~ msgstr "تحرير هذا الرابط"
 
@@ -495,7 +499,7 @@ msgid "Timed out"
 msgstr "انتهت المهلة"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 msgid "Select {0}"
 msgstr "حدد {0}"
 
@@ -629,7 +633,7 @@ msgstr "تكرار التردد"
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "المتغيرات المستخدمة لتكوين ملحق المخزون المُنشأ. للحصول على وصف مفصل لكيفية تكوين هذا الملحق، انظر"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:58
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:75
 msgid "Something went wrong with the request to test this credential and metadata."
 msgstr "حدث خطأ ما في طلب اختبار بيانات الاعتماد والبيانات الوصفية هذه."
 
@@ -686,7 +690,7 @@ msgstr ""
 #: components/PromptDetail/PromptProjectDetail.tsx:156
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:122
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Credential/shared/TypeInputsSubForm.tsx:52
+#: screens/Credential/shared/TypeInputsSubForm.tsx:60
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:262
@@ -1024,7 +1028,7 @@ msgid "All Runs"
 msgstr ""
 
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:244
+#: components/Lookup/Lookup.tsx:277
 msgid "Lookup modal"
 msgstr "نافذة البحث"
 
@@ -1164,7 +1168,7 @@ msgstr "يستخدم هذا الجدول قواعد معقدة غير مدعوم
 #: components/JobList/TemplateLaunchControl.tsx:44
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:102
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Inventory/InventorySource/InventorySource.tsx:208
 #: screens/ManagementJob/ManagementJobLaunchButton.tsx:44
 #: screens/ManagementJob/ManagementJobList/ManagementJobRunButton.tsx:44
@@ -1289,7 +1293,7 @@ msgstr ""
 #~ msgid "Google OAuth 2"
 #~ msgstr ""
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "العودة إلى بيانات الاعتماد"
 
@@ -1805,7 +1809,7 @@ msgstr "Stdout"
 msgid "Only if Missing"
 msgstr "فقط إذا كان مفقودًا"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:152
 msgid "Metadata"
 msgstr "البيانات الوصفية"
 
@@ -1822,6 +1826,10 @@ msgstr "الأسبوع الماضي"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:200
 msgid "Filter..."
 msgstr "تصفية..."
+
+#: screens/Credential/shared/ExternalTestModal.tsx:190
+msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
+msgstr "يسجّل الاختبار الدخول إلى Vault كما تفعل مهمة من هذا القالب، باستخدام رمز يحمل مطالباتها."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
@@ -1906,6 +1914,8 @@ msgstr "دقيقة"
 
 #: components/CodeEditor/EditorActions.tsx:142
 #: components/CodeEditor/EditorActions.tsx:160
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1982,6 +1992,8 @@ msgstr "ساعة"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:229
 #: components/Lookup/MultiCredentialsLookup.tsx:244
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2386,7 +2398,7 @@ msgstr "المفتاح"
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:202
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:233
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.tsx:45
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:374
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:196
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:332
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:382
@@ -2483,7 +2495,7 @@ msgstr "قائمة عناوين URI المسموح بها، مفصولة بمس�
 #~ msgid "Select your Ansible Automation Platform subscription to use."
 #~ msgstr "حدد اشتراك Ansible Automation Platform الخاص بك لاستخدامه."
 
-#: screens/Credential/shared/TypeInputsSubForm.tsx:30
+#: screens/Credential/shared/TypeInputsSubForm.tsx:35
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:60
 #: screens/Project/shared/ProjectForm.tsx:328
 msgid "Type Details"
@@ -2506,6 +2518,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "نتيجة العقدة الأصل مطلوبة قبل تقييم الشرط."
 
 #: components/JobList/JobListItem.tsx:257
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Schedule/ScheduleList/ScheduleResourcePicker.tsx:60
 #: components/TemplateList/TemplateList.tsx:328
@@ -2525,6 +2540,10 @@ msgstr "قالب المهمة"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:221
 msgid "Install Bundle"
 msgstr "تثبيت الحزمة"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
+msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
+msgstr "يمكن لمسؤول النظام تشغيلها من الإعدادات، النظام (متفرقات)، حيث يجب أيضًا تعيين عنوان URL الأساسي للخدمة."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:615
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:184
@@ -2583,7 +2602,7 @@ msgstr "الحقل يطابق التعبير النمطي المحدد."
 #~ msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 #~ msgstr "{0, plural, one {نوع بيانات الاعتماد هذا قيد الاستخدام حاليًا من قبل بعض بيانات الاعتماد ولا يمكن حذفه.} other {لا يمكن حذف أنواع بيانات الاعتماد التي تستخدمها بيانات الاعتماد. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
-#: screens/Login/Login.tsx:359
+#: screens/Login/Login.tsx:372
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:150
 #: screens/Setting/Authentication/tabs.ts:17
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
@@ -2752,8 +2771,8 @@ msgstr ""
 msgid "Association modal"
 msgstr "نافذة الربط"
 
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
-#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:182
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:185
 msgid "System tabs"
 msgstr ""
 
@@ -2845,7 +2864,7 @@ msgstr "هذا الجدول يفتقد مخزونًا"
 #~ msgstr "خطأ في إطلاق مهمة الإدارة"
 
 #: components/Lookup/HostFilterLookup.tsx:310
-#: components/Lookup/Lookup.tsx:189
+#: components/Lookup/Lookup.tsx:215
 msgid "Search"
 msgstr "بحث"
 
@@ -2935,7 +2954,7 @@ msgstr "{0} (محذوف)"
 msgid "The inventory that this host belongs to."
 msgstr "المخزون الذي ينتمي إليه هذا المضيف."
 
-#: screens/Login/Login.tsx:344
+#: screens/Login/Login.tsx:357
 msgid "Log In"
 msgstr "تسجيل الدخول"
 
@@ -3018,7 +3037,6 @@ msgstr "تفاصيل المستخدم"
 msgid "Delete Execution Environment"
 msgstr "حذف بيئة التنفيذ"
 
-#: screens/Setting/AzureAD/AzureAD.tsx:87
 #~ msgid "View Azure AD Settings"
 #~ msgstr "عرض إعدادات Azure AD"
 
@@ -3631,12 +3649,12 @@ msgstr "{0, plural, one {يرجى إدخال رقم هاتف صالح.} other {�
 msgid "Facts"
 msgstr "الحقائق"
 
-#: screens/Login/Login.tsx:368
+#: screens/Login/Login.tsx:381
 msgid "or"
 msgstr "أو"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 #: components/PaginatedTable/PaginatedTable.tsx:81
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:54
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:37
@@ -3824,7 +3842,7 @@ msgstr "التنسيق المقترح لأسماء المتغيرات هو أح�
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "قالب المهمة هذا قيد الاستخدام حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "عرض جميع بيانات الاعتماد."
 
@@ -4085,7 +4103,7 @@ msgstr "لا يحتوي سير العمل هذا على أي عقد مُكوّن
 msgid "View Logging Settings"
 msgstr "عرض إعدادات التسجيل"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:72
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:78
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "انقر على هذا الزر للتحقق من الاتصال بنظام إدارة الأسرار باستخدام بيانات الاعتماد المحددة والمدخلات المُحددة."
 
@@ -4391,7 +4409,7 @@ msgstr "عرض تفاصيل العقدة"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:135
 #: components/Lookup/HostFilterLookup.tsx:420
-#: components/Lookup/Lookup.tsx:266
+#: components/Lookup/Lookup.tsx:299
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:243
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:49
 #: components/Schedule/shared/ScheduleForm.tsx:693
@@ -4402,8 +4420,8 @@ msgstr "عرض تفاصيل العقدة"
 #: components/Schedule/shared/UnsupportedScheduleForm.tsx:37
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:473
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:100
-#: screens/Credential/shared/ExternalTestModal.tsx:111
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:106
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:178
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:192
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5019,8 +5037,8 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Setting/Mapping/MappingDetail/MappingDetail.tsx:69
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:73
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:77
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:130
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:129
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:133
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:63
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:67
 #: screens/Setting/Password/PasswordDetail/PasswordDetail.tsx:67
@@ -5455,7 +5473,7 @@ msgstr "تتضمن أمثلة عناوين URL للتحكم في مصدر Subver
 msgid "Search text input"
 msgstr "إدخال نص البحث"
 
-#: components/Lookup/Lookup.tsx:98
+#: components/Lookup/Lookup.tsx:116
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "لم يتم العثور على تلك القيمة. يرجى إدخال أو تحديد قيمة صالحة."
 
@@ -6361,6 +6379,8 @@ msgid "Users with a role on this resource appear here"
 msgstr ""
 
 #: components/CopyButton/CopyButton.tsx:54
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -6625,7 +6645,7 @@ msgstr "تفاصيل التردد"
 #: components/LaunchPrompt/LaunchPrompt.tsx:136
 #: components/Schedule/shared/SchedulePromptableFields.tsx:161
 #: components/Schedule/shared/ScheduleWizardBody.tsx:148
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "التالي"
@@ -6706,6 +6726,10 @@ msgstr "تفاصيل الخيار"
 msgid "View all Tokens."
 msgstr "عرض جميع الرموز المميزة."
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
+msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
+msgstr "بالنسبة إلى HashiCorp Vault، فعّل طريقة مصادقة JWT ووجّهها إلى جهة الإصدار:"
+
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Managed instances cannot be deleted: {hostnames}"
 msgstr ""
@@ -6768,7 +6792,7 @@ msgstr "كلمة مرور تصعيد الامتيازات"
 msgid "Node Type"
 msgstr "نوع العقدة"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "عرض تفاصيل بيانات الاعتماد"
 
@@ -6845,7 +6869,7 @@ msgstr "السر المشترك مع خدمة Webhook. تستخدمه الخدم
 #: components/LaunchPrompt/LaunchPrompt.tsx:134
 #: components/Schedule/shared/SchedulePromptableFields.tsx:159
 #: components/Schedule/shared/ScheduleWizardBody.tsx:146
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:90
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:96
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -7083,7 +7107,6 @@ msgstr ""
 #~ msgid "Select job type"
 #~ msgstr "حدد نوع المهمة"
 
-#: screens/Setting/AzureAD/AzureAD.tsx:61
 #~ msgid "Tenant"
 #~ msgstr ""
 
@@ -7396,6 +7419,10 @@ msgstr "اسم متغير الإجابة"
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# شهر} other {# أشهر}}"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "تعذّرت قراءة جهة الإصدار الموثوقة من الخادم. حاول مرة أخرى لاحقًا."
+
 #: screens/Project/shared/ProjectForm.tsx:285
 msgid "Choose a source control type"
 msgstr "اختر نوع التحكم بالمصدر"
@@ -7606,7 +7633,7 @@ msgstr "الحقل ينتهي بالقيمة."
 #~ msgid "Clear subscription selection"
 #~ msgstr "مسح تحديد الاشتراك"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:80
 msgid "Test passed"
 msgstr "نجح الاختبار"
 
@@ -7670,7 +7697,7 @@ msgstr "الخميس"
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:236
 #: components/TemplateList/TemplateList.tsx:285
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:88
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Inventory/ConstructedInventory.tsx:82
 #: screens/Inventory/FederatedInventory.tsx:82
 #: screens/Inventory/Inventory.tsx:82
@@ -7962,6 +7989,10 @@ msgstr ""
 msgid "Playbook Complete"
 msgstr "اكتمل Playbook"
 
+#: screens/Setting/MiscSystem/groups.ts:72
+msgid "Workload Identity"
+msgstr ""
+
 #: screens/Job/JobOutput/HostEventModal.tsx:196
 msgid "Details tab"
 msgstr "علامة تبويب التفاصيل"
@@ -7977,7 +8008,7 @@ msgstr "كلمة مرور خادم IRC"
 #: components/AdHocCommands/AdHocPreviewStep.tsx:58
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:107
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:138
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:91
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:323
@@ -8260,7 +8291,7 @@ msgstr "مزيد من المعلومات حول {label}"
 
 #: routeConfig.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:210
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Inventory/ConstructedInventory.tsx:77
 #: screens/Inventory/FederatedInventory.tsx:77
 #: screens/Inventory/Inventory.tsx:76
@@ -8424,7 +8455,7 @@ msgstr "يرجى تجربة بحث آخر باستخدام المرشح أعلا
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "هل أنت متأكد من أنك تريد تحرير عنوان URL لتجاوز إعادة توجيه تسجيل الدخول؟ قد يؤثر ذلك على قدرة المستخدمين على تسجيل الدخول إلى النظام بمجرد تعطيل المصادقة المحلية أيضًا."
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "لم يتم العثور على بيانات الاعتماد."
 
@@ -8530,6 +8561,10 @@ msgstr "عرض إعدادات SAML"
 #: screens/Job/JobOutput/HostEventModal.tsx:184
 msgid "Host Details"
 msgstr "تفاصيل المضيف"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
+msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
+msgstr "يُستخدم في الاختبار فقط، الذي يسجّل الدخول إلى Vault كما تفعل مهمة من هذا القالب. تسجّل المهام الدخول بهويتها الخاصة."
 
 #: screens/Job/Job.helptext.tsx:11
 #: screens/Template/shared/JobTemplate.helptext.tsx:13
@@ -9064,7 +9099,7 @@ msgstr ""
 
 #: screens/Credential/shared/CredentialForm.tsx:450
 #: screens/Credential/shared/CredentialForm.tsx:456
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:80
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:86
 msgid "Test"
 msgstr "اختبار"
 
@@ -9484,7 +9519,7 @@ msgstr ""
 msgid "Relaunch Workflow Job"
 msgstr ""
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:157
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:164
 msgid "External Secret Management System"
 msgstr "نظام إدارة الأسرار الخارجي"
 
@@ -10717,10 +10752,14 @@ msgstr "معاينة"
 
 #: components/JobList/JobListItem.tsx:115
 #: components/Lookup/HostFilterLookup.tsx:412
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:290
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "تحديد"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
+msgstr "يجب على النظام الذي يقبله أن يثق بجهة الإصدار هذه، وهي أيضًا عنوان URL لاكتشاف OIDC:"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:120
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:90
@@ -11350,6 +11389,10 @@ msgstr "القوالب الأخيرة"
 msgid "Add Federated Inventory"
 msgstr "إضافة مخزون موحّد"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
+msgid "Workload identity is not available"
+msgstr "هوية عبء العمل غير متاحة"
+
 #: screens/Dashboard/shared/LineChart.tsx:194
 msgid "Job Runs"
 msgstr "تشغيلات المهمة"
@@ -11549,6 +11592,10 @@ msgstr "المعلمة"
 #: components/SelectedList/DraggableSelectedList.tsx:248
 msgid "Remove"
 msgstr "إزالة"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:103
+msgid "Claims sent"
+msgstr "المطالبات المرسلة"
 
 #: screens/InstanceGroup/Instances/InstanceList.tsx:267
 #: screens/Instances/InstanceList/InstanceList.tsx:198
@@ -12142,7 +12189,7 @@ msgstr "المؤسسة"
 msgid "Cleanup Job"
 msgstr ""
 
-#: screens/Login/Login.tsx:322
+#: screens/Login/Login.tsx:326
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "انتهت جلستك. يرجى تسجيل الدخول للمتابعة من حيث توقفت."
 
@@ -12185,7 +12232,7 @@ msgstr "هذا المخزون قيد الاستخدام حاليًا من قبل
 msgid "Disassociate the user from these teams?"
 msgstr ""
 
-#: screens/Credential/shared/ExternalTestModal.tsx:90
+#: screens/Credential/shared/ExternalTestModal.tsx:102
 msgid "Test External Credential"
 msgstr "اختبار بيانات الاعتماد الخارجية"
 
@@ -12263,7 +12310,7 @@ msgstr ""
 msgid "Case-insensitive version of endswith."
 msgstr "نسخة غير حساسة لحالة الأحرف من endswith."
 
-#: components/Lookup/Lookup.tsx:264
+#: components/Lookup/Lookup.tsx:297
 msgid "Cancel lookup"
 msgstr "إلغاء البحث"
 
@@ -12275,7 +12322,7 @@ msgstr ""
 #: components/ErrorDetail/ErrorDetail.tsx:78
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:93
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:79
 #: screens/Host/Host.tsx:67
@@ -13523,6 +13570,10 @@ msgstr "تنسيق وقت غير صالح"
 msgid "Unknown Project"
 msgstr "مشروع غير معروف"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
+msgid "Each job gets a short lived token signed for it, with no secret stored here"
+msgstr "تحصل كل مهمة على رمز قصير الأجل موقّع لها، دون تخزين أي سر هنا"
+
 #: components/LabelLists/LabelLists.tsx:522
 msgid "Failed to delete one or more labels."
 msgstr ""
@@ -13714,8 +13765,9 @@ msgstr "تم الرفض بنجاح"
 msgid "Not configured for inventory sync."
 msgstr "غير مُكوّن لمزامنة المخزون."
 
-#~ msgid "Playbook name"
-#~ msgstr "اسم Playbook"
+#: components/Lookup/JobTemplateLookup.tsx:133
+msgid "Playbook name"
+msgstr "اسم Playbook"
 
 #~ msgid "Add constructed inventory"
 #~ msgstr "إضافة مخزون مُنشأ"
@@ -13868,6 +13920,10 @@ msgstr "كم مرة تمت أتمتة المضيف"
 
 #~ msgid "Expand input"
 #~ msgstr "توسيع الإدخال"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "تعذّرت قراءة إعدادات هوية عبء العمل"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:304
 #: screens/Template/shared/JobTemplateForm.tsx:549
@@ -14379,7 +14435,7 @@ msgstr "نافذة معاينة الاستبيان"
 
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:113
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:33
 msgid "OK"
 msgstr "موافق"
@@ -14458,6 +14514,7 @@ msgstr "فشل حذف المضيف."
 #: components/Lookup/CredentialLookup.tsx:248
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:234
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177

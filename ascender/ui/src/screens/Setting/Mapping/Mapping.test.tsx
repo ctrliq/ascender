@@ -103,6 +103,7 @@ describe('<Mapping />', () => {
     >;
     expect(Object.keys(sent).sort()).toEqual([
       'SOCIAL_AUTH_ORGANIZATION_MAP',
+      'SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS',
       'SOCIAL_AUTH_TEAM_MAP',
       'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL',
       'SOCIAL_AUTH_USER_FIELDS',

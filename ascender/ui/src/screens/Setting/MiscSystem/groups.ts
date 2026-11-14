@@ -6,7 +6,7 @@ import type { SettingGroup } from '../shared/settingGroups';
 export type { SettingGroup };
 
 /**
- * What this screen sets, in the four groups its tabs offer.
+ * What this screen sets, in the six groups its tabs offer.
  *
  * The activity stream is one decision taken twice, once for the stream and once
  * for what inventory syncs write to it. What an organization admin may see and
@@ -60,6 +60,16 @@ export const GROUPS: SettingGroup[] = [
       'ORG_ADMINS_CAN_SEE_ALL_USERS',
       'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
       'MANAGE_ORGANIZATION_AUTH',
+      // Whether only a superuser may change a username or an email, which the
+      // username lists in the OIDC and Entra ID user flags depend on.
+      'RESTRICT_USER_IDENTITY_TO_SUPERUSERS',
     ],
+  },
+  {
+    // Whether each job that uses a workload identity credential gets a signed
+    // token an external system such as Vault can trust, and how long it lasts.
+    id: 'workload_identity',
+    label: msg`Workload Identity`,
+    keys: ['WORKLOAD_IDENTITY_ENABLED', 'WORKLOAD_IDENTITY_DEFAULT_TTL'],
   },
 ];

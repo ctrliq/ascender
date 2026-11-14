@@ -56,6 +56,15 @@
               "category_slug": "system",
               "default": true
           },
+          "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Only Superusers Can Set User Emails and Change Usernames",
+              "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "ASCENDER_URL_BASE": {
               "type": "string",
               "required": true,
@@ -64,6 +73,27 @@
               "category": "System",
               "category_slug": "system",
               "default": "https://localhost:8043"
+          },
+          "WORKLOAD_IDENTITY_ENABLED": {
+              "type": "boolean",
+              "required": true,
+              "label": "Enable Workload Identity",
+              "help_text": "Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
+          "WORKLOAD_IDENTITY_DEFAULT_TTL": {
+              "type": "integer",
+              "required": true,
+              "label": "Workload Identity Token Lifetime",
+              "help_text": "How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.",
+              "min_value": 1,
+              "max_value": 86400,
+              "category": "System",
+              "category_slug": "system",
+              "unit": "seconds",
+              "default": 300
           },
           "REMOTE_HOST_HEADERS": {
               "type": "list",
@@ -1093,6 +1123,15 @@
               "required": false,
               "label": "Use Email address for usernames",
               "help_text": "Enabling this setting will tell social auth to use the full Email as username instead of the full name",
+              "category": "Authentication",
+              "category_slug": "authentication",
+              "default": false
+          },
+          "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Prevent username collisions on first login",
+              "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.",
               "category": "Authentication",
               "category_slug": "authentication",
               "default": false
@@ -4146,7 +4185,7 @@
               "type": "nested object",
               "required": false,
               "label": "Entra ID User Flags",
-              "help_text": "Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "help_text": "Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.",
               "category": "Microsoft Entra ID",
               "category_slug": "entra-id",
               "placeholder": {
@@ -4157,6 +4196,9 @@
                           ]
                       }
                   },
+                  "is_superuser": [
+                      "admin"
+                  ],
                   "triggers_system_auditor": {
                       "groups": {
                           "has_or": [
@@ -4164,6 +4206,9 @@
                           ]
                       }
                   },
+                  "is_system_auditor": [
+                      "auditor"
+                  ],
                   "remove_superusers": true,
                   "remove_system_auditors": true
               },
@@ -4369,7 +4414,7 @@
               "type": "nested object",
               "required": false,
               "label": "OIDC User Flags",
-              "help_text": "Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "help_text": "Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {\"never\": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.",
               "category": "Generic OIDC",
               "category_slug": "oidc",
               "placeholder": {
@@ -4380,6 +4425,9 @@
                           ]
                       }
                   },
+                  "is_superuser": [
+                      "admin"
+                  ],
                   "triggers_system_auditor": {
                       "groups": {
                           "has_or": [
@@ -4387,6 +4435,9 @@
                           ]
                       }
                   },
+                  "is_system_auditor": [
+                      "auditor"
+                  ],
                   "remove_superusers": true,
                   "remove_system_auditors": true
               },
@@ -4919,12 +4970,40 @@
               "category_slug": "system",
               "defined_in_file": false
           },
+          "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+              "type": "boolean",
+              "required": false,
+              "label": "Only Superusers Can Set User Emails and Change Usernames",
+              "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "ASCENDER_URL_BASE": {
               "type": "string",
               "label": "Base URL of the service",
               "help_text": "This setting is used by services like notifications to render a valid url to the service.",
               "category": "System",
               "category_slug": "system",
+              "defined_in_file": false
+          },
+          "WORKLOAD_IDENTITY_ENABLED": {
+              "type": "boolean",
+              "label": "Enable Workload Identity",
+              "help_text": "Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.",
+              "category": "System",
+              "category_slug": "system",
+              "defined_in_file": false
+          },
+          "WORKLOAD_IDENTITY_DEFAULT_TTL": {
+              "type": "integer",
+              "label": "Workload Identity Token Lifetime",
+              "help_text": "How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.",
+              "min_value": 1,
+              "max_value": 86400,
+              "category": "System",
+              "category_slug": "system",
+              "unit": "seconds",
               "defined_in_file": false
           },
           "REMOTE_HOST_HEADERS": {
@@ -5800,6 +5879,14 @@
               "type": "boolean",
               "label": "Use Email address for usernames",
               "help_text": "Enabling this setting will tell social auth to use the full Email as username instead of the full name",
+              "category": "Authentication",
+              "category_slug": "authentication",
+              "defined_in_file": false
+          },
+          "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+              "type": "boolean",
+              "label": "Prevent username collisions on first login",
+              "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP, RADIUS and TACACS+ already refuse an existing username.",
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false
@@ -7846,7 +7933,7 @@
           "SOCIAL_AUTH_ENTRA_ID_USER_FLAGS": {
               "type": "nested object",
               "label": "Entra ID User Flags",
-              "help_text": "Trigger rules that make an Entra ID user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "help_text": "Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.",
               "category": "Microsoft Entra ID",
               "category_slug": "entra-id",
               "defined_in_file": false,
@@ -7991,7 +8078,7 @@
           "SOCIAL_AUTH_OIDC_USER_FLAGS": {
               "type": "nested object",
               "label": "OIDC User Flags",
-              "help_text": "Trigger rules that make an OIDC user a superuser (triggers_superuser) or a system auditor (triggers_system_auditor). A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag without a rule is left alone.",
+              "help_text": "Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {\"never\": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.",
               "category": "Generic OIDC",
               "category_slug": "oidc",
               "defined_in_file": false,

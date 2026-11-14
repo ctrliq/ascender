@@ -1,5 +1,6 @@
 # Python
 from collections import OrderedDict
+import contextlib
 import errno
 import functools
 import hashlib
@@ -16,6 +17,7 @@ import yaml
 import tempfile
 import traceback
 import time
+import datetime
 import urllib.parse as urlparse
 
 # Django
@@ -84,7 +86,13 @@ from ascender.main.utils.common import (
 )
 from ascender.main.utils.handlers import SpecialInventoryHandler
 from ascender.main.tasks.system import update_smart_memberships_for_inventory, update_inventory_computed_fields
-from ascender.main.utils.update_model import update_model
+from django.db.models import F
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import now
+from ascender.main.utils.update_model import update_model, NotOwner
+from ascender.main.models.monitor import JobMonitorLease
+from ascender.main.tasks.monitor import LeaseKeeper, discard_abandoned_events, job_can_detach, plan_resume, requeue_job, REQUEUE, RESUME, FAIL, WAIT
+from ascender.main.utils import workload_identity
 from rest_framework.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
 
@@ -138,6 +146,14 @@ class BaseTask(object):
         self.update_attempts = int(getattr(settings, 'DISPATCHER_DB_DOWNTOWN_TOLLERANCE', settings.DISPATCHER_DB_DOWNTIME_TOLERANCE) / 5)
         self.runner_callback = self.callback_class(model=self.model)
         self.lock_fd = None
+        # The task id this task owns the job under: what it was dispatched as, or what the
+        # monitor sweep claimed it under. The job's final status is written only by its owner.
+        self.owner_task_id = None
+        self.lost_ownership = False
+        # Reading a job's output after the task that launched it is gone, see resume()
+        self.resuming = False
+        # The receptor work unit this task submitted, once it has
+        self.unit_id = None
 
     def update_model(self, pk, _attempt=0, **updates):
         return update_model(self.model, pk, _attempt=0, _max_attempts=self.update_attempts, **updates)
@@ -344,12 +360,8 @@ class BaseTask(object):
         return self.write_private_data_file(private_data_dir, file_name, file_content, sub_dir='inventory', file_permissions=0o700)
 
     def build_inventory(self, instance, private_data_dir):
-        script_params = dict(hostvars=True, ascendervars=True)
-        if hasattr(instance, 'job_slice_number'):
-            script_params['slice_number'] = instance.job_slice_number
-            script_params['slice_count'] = instance.job_slice_count
-            script_params['slice_pinned_hosts'] = instance.job_slice_pinned_hosts_list
-
+        # The same arguments a resumed read uses to rebuild the host map, see RunnerCallback.populate_host_map_from_inventory
+        script_params = self.runner_callback.inventory_script_params(instance)
         return self.write_inventory_file(instance.inventory, private_data_dir, 'hosts', script_params)
 
     def build_args(self, instance, private_data_dir, passwords):
@@ -476,21 +488,31 @@ class BaseTask(object):
         """
         instance.log_lifecycle("post_run")
 
+    def artifacts_private_data_dir(self, instance):
+        """
+        The private data dir that holds this run's artifacts, for the post-run hooks. A launch
+        records it in the job's stored environment. A resumed read has its own, and may have no
+        stored environment to record it in: a launch that never got to store one, and a log
+        whose start was rotated away before it was read again, leave none.
+        """
+        return self.runner_callback.private_data_dir_override or (instance.job_env or {}).get('AWX_PRIVATE_DATA_DIR')
+
     def final_run_hook(self, instance, status, private_data_dir):
         """
         Hook for any steps to run after job/task is marked as complete.
         """
         instance.log_lifecycle("finalize_run")
-        artifact_dir = os.path.join(private_data_dir, 'artifacts', str(self.instance.id))
-        collections_info = os.path.join(artifact_dir, 'collections.json')
-        ansible_version_file = os.path.join(artifact_dir, 'ansible_version.txt')
+        # A job a resume finished without reading its output has no private data dir, and no artifacts
+        artifact_dir = os.path.join(private_data_dir, 'artifacts', str(self.instance.id)) if private_data_dir else None
+        collections_info = os.path.join(artifact_dir, 'collections.json') if artifact_dir else None
+        ansible_version_file = os.path.join(artifact_dir, 'ansible_version.txt') if artifact_dir else None
 
-        if os.path.exists(collections_info):
+        if collections_info and os.path.exists(collections_info):
             with open(collections_info) as ee_json_info:
                 ee_collections_info = json.loads(ee_json_info.read())
                 instance.installed_collections = ee_collections_info
                 instance.save(update_fields=['installed_collections'])
-        if os.path.exists(ansible_version_file):
+        if ansible_version_file and os.path.exists(ansible_version_file):
             with open(ansible_version_file) as ee_ansible_info:
                 ansible_version_info = ee_ansible_info.readline()
                 instance.ansible_version = ansible_version_info
@@ -527,6 +549,7 @@ class BaseTask(object):
         # self.instance because of the update_model pattern and when it's used in callback handlers
         self.instance = self.update_model(pk, status='running', start_args='')  # blank field to remove encrypted passwords
         self.instance.websocket_emit_status("running")
+        self.owner_task_id = self.instance.celery_task_id or None
         status, rc = 'error', None
         self.runner_callback.event_ct = 0
 
@@ -536,8 +559,13 @@ class BaseTask(object):
 
         self.safe_cred_env = {}
         private_data_dir = None
+        # Any credential resolved while the job is prepared can be handed a
+        # workload identity token for it. Entered inside the try, so that a
+        # failure there is reported like any other; closed in the finally
+        workload_identity_scope = contextlib.ExitStack()
 
         try:
+            workload_identity_scope.enter_context(workload_identity.workload_identity_for(self.instance, self.get_instance_timeout(self.instance) or None))
             self.instance.send_notification_templates("running")
             private_data_dir = self.build_private_data_dir(self.instance)
             self.pre_run_hook(self.instance, private_data_dir)
@@ -645,9 +673,18 @@ class BaseTask(object):
                     **params,
                 )
             else:
+                if self.instance.get_event_queryset().exists():
+                    # Only a re-queued job has events before it runs: ones its abandoned attempt
+                    # dispatched before it was given up, saved since. They would take the counters
+                    # this attempt produces (see discard_abandoned_events).
+                    logger.warning(f'{self.instance.log_format}: deleting {discard_abandoned_events(self.instance)} event(s) left by an earlier attempt')
                 receptor_job = AWXReceptorJob(self, params)
                 res = receptor_job.run()
                 self.unit_id = receptor_job.unit_id
+
+                if receptor_job.detached or receptor_job.lease_lost or receptor_job.requeued:
+                    self._end_without_finalizing(receptor_job)
+                    return
 
                 if not res:
                     return
@@ -670,15 +707,119 @@ class BaseTask(object):
                     status = 'failed'
         except ReceptorNodeNotFound as exc:
             self.runner_callback.delay_update(job_explanation=str(exc))
+        except workload_identity.WorkloadIdentityError as exc:
+            self.runner_callback.delay_update(job_explanation=f'Could not issue a workload identity token for this job: {exc}')
         except Exception:
             # this could catch programming or file system errors
             self.runner_callback.delay_update(result_traceback=traceback.format_exc())
             logger.exception('%s Exception occurred while running task', self.instance.log_format)
         finally:
+            workload_identity_scope.close()
             logger.debug('%s finished running, producing %s events.', self.instance.log_format, self.runner_callback.event_ct)
 
+        self.finish_run(pk, status, rc, private_data_dir)
+
+    def _owns_job(self, pk):
+        if not self.owner_task_id:
+            return True
+        return self.model.objects.filter(pk=pk, celery_task_id=self.owner_task_id).exists()
+
+    def _end_without_finalizing(self, receptor_job):
+        """
+        The run ends without its post-run hook and final status: the job was left running for the
+        next monitor to read, taken over by another task, or stopped to be run again.
+        """
+        # The post-run hook is what releases a project update's lock on its project. The dispatcher
+        # worker lives on after this task, and so would the lock, holding up every later update of
+        # the project on this node. The work is stopped by now if it ever will be: a re-queued job's
+        # by the shutdown, a project update's that lost its lease by AWXReceptorJob, and a project
+        # update is never left running for the next monitor.
+        self._release_project_lock()
+        if receptor_job.requeued:
+            # The shutdown signal cancelled the work (see AWXReceptorJob._handle_signal); start over from scheduling.
+            if job_can_detach(self.instance):
+                reason = 'its controller stopped before the execution environment received its payload'
+            else:
+                reason = 'its controller stopped, and a project update is run again rather than left running without the lock on its project'
+            requeue_job(self.instance, reason, self.owner_task_id)
+            return
+        # The job is still running where it was sent; the next monitor reads it.
+        self._leave_to_resume(receptor_job)
+
+    def _release_project_lock(self):
+        """Let go of the project lock taken in a pre-run hook, for a run that ends without the post-run hook."""
+        if self.lock_fd is None:
+            return
         try:
-            self.post_run_hook(self.instance, status)
+            self.release_lock(self.instance.project)
+        except Exception:
+            logger.exception(f'{self.instance.log_format}: could not release the lock on its project')
+
+    def _leave_to_resume(self, receptor_job):
+        """The stream ended without a result and the job is still running; say why, and let it be resumed."""
+        job = self.instance
+        if receptor_job.work_type == 'local' and job_can_detach(job):
+            # The work goes on without this task inside this very directory: the execution
+            # environment of local work has it bind-mounted. Leave it to the periodic cleanup, which
+            # only removes the folders of jobs that are no longer running. Remote work took a copy
+            # with its payload, and the work of a project update, which only gets here by losing its
+            # lease, was stopped as it lost it (see AWXReceptorJob._await_processor). For those the
+            # directory, credentials and all, goes now as it would have at the end of the job; on
+            # Kubernetes there is no periodic cleanup to remove it later.
+            self.cleanup_paths = []
+        if receptor_job.lease_lost:
+            logger.warning(f'{job.log_format}: its monitoring was taken over by another task; this task stands down without finalizing or releasing anything')
+            return
+        job.log_lifecycle('monitor_detached')
+        JobMonitorLease.objects.release(job, self.owner_task_id)
+        logger.warning(f'{job.log_format}: detached from work unit {receptor_job.unit_id} on shutdown; the next job monitor sweep resumes it')
+
+    def _resumed_finished_at(self):
+        """
+        When a resumed job really ended. The launch stamps `finished` as it commits, within
+        a second of the playbook ending; a resumed job may have been done for as long as it
+        took to notice that nobody was reading it. The wrapup event carries the execution
+        node's clock for that moment. Clamped between `started` and now, so clock skew can
+        never produce a negative elapsed time.
+        """
+        ended = self.runner_callback.wrapup_event_created
+        if ended is None:
+            return None
+        if not isinstance(ended, datetime.datetime):
+            try:
+                ended = parse_datetime(str(ended))
+            except (TypeError, ValueError):
+                return None
+        if ended is None:
+            return None
+        if ended.tzinfo is None:
+            ended = ended.replace(tzinfo=datetime.timezone.utc)
+        right_now = now()
+        started = self.instance.started or ended
+        return min(max(ended, started), right_now)
+
+    def finish_run(self, pk, status, rc, private_data_dir, post_run_hook=True):
+        """
+        Everything that happens once a job's output has been read: the post-run hook, the
+        final status, notifications, the final-run hook. Shared by run() and resume().
+
+        The final write is fenced by the task id this task owns the job under. If reading the
+        job's output was taken over by another task meanwhile, the result is that task's to
+        write, and this one stands down without touching the job.
+
+        Without ``post_run_hook`` the job is finished without its output having been read here,
+        by a resume that fails or cancels it: the hook has nothing to process, and a project
+        update's would clear the project's stage directory without holding the project's lock.
+        """
+        if not self._owns_job(pk):
+            self.lost_ownership = True
+            logger.warning(f'{self.instance.log_format}: another task took over its monitoring; this task stands down without finalizing')
+            self._release_project_lock()
+            return
+
+        try:
+            if post_run_hook:
+                self.post_run_hook(self.instance, status)
         except PostRunError as exc:
             if status == 'successful':
                 status = exc.status
@@ -689,7 +830,26 @@ class BaseTask(object):
             logger.exception('{} Post run hook errored.'.format(self.instance.log_format))
 
         self.instance = self.update_model(pk)
-        self.instance = self.update_model(pk, status=status, select_for_update=True, **self.runner_callback.get_delayed_update_fields())
+        if self.instance is None:
+            logger.error(f'Unified job pk={pk} appears to have been deleted while running')
+            return
+        update_fields = self.runner_callback.get_delayed_update_fields()
+        if self.resuming:
+            finished = self._resumed_finished_at()
+            if finished is not None:
+                update_fields['finished'] = finished
+        try:
+            self.instance = self.update_model(pk, status=status, select_for_update=True, owner_task_id=self.owner_task_id, **update_fields)
+        except NotOwner as exc:
+            self.lost_ownership = True
+            logger.warning(f'{self.instance.log_format} is owned by task {exc.current_task_id} now; this task does not write status {status}')
+            return
+        if self.instance is None:
+            return
+        if self.instance.work_unit_id or self.resuming:
+            # Only a job that was handed to receptor holds a lease, and it is normally gone by now
+            # (see AWXReceptorJob.run); this catches one left by a failure on the way here.
+            JobMonitorLease.objects.finish(self.instance)
 
         # Field host_status_counts is used as a metric to check if event processing is finished
         # we send notifications if it is, if not, callback receiver will send them
@@ -707,6 +867,194 @@ class BaseTask(object):
                 raise AwxTaskError.TaskCancel(self.instance, rc)
             else:
                 raise AwxTaskError.TaskError(self.instance, rc)
+
+    def _resumed_status(self, pk, res, stream):
+        """
+        The job's final (status, rc) from what a resumed read produced, with the pod or unit as
+        the fallback. None when the stream ended without a result while the work is still
+        running: the job is not done, and its output is read again later.
+        """
+        status, rc = res.status, res.rc
+        if status == 'canceled':
+            self.instance = self.update_model(pk)
+            if getattr(self.instance, 'cancel_flag', False) is False:
+                self.runner_callback.delay_update(skip_if_already_set=True, job_explanation="The running ansible process received a shutdown signal.")
+                status = 'failed'
+            return status, rc
+        if status == 'error' and 'result_traceback' not in self.runner_callback.extra_update_fields:
+            # No runner status line was read: the stream broke off, the start of a pod log was
+            # rotated away, or a work unit failed before producing output. Only the pod or the
+            # unit can say how the job ended, and only once it has.
+            if stream.is_live():
+                return None
+            stream_status, stream_rc = stream.final_status()
+            # The streamer's complaint about the stream ending is kept only if the job did not succeed
+            explanation = self.runner_callback.extra_update_fields.pop('job_explanation', '')
+            if stream_status != 'successful' and explanation:
+                self.runner_callback.delay_update(job_explanation=explanation)
+            self.runner_callback.delay_update(
+                job_explanation=f'The final status was taken from the job\'s {stream.kind}, which reported it as {stream_status}.'
+            )
+            return stream_status, stream_rc
+        if status in ('timeout', 'error'):
+            self.runner_callback.delay_update(skip_if_already_set=True, job_explanation=f"Job terminated due to {status}")
+            if status == 'timeout':
+                status = 'failed'
+        return status, rc
+
+    def _cancel_flag_set(self, pk):
+        return bool(self.model.objects.filter(pk=pk).values_list('cancel_flag', flat=True).first())
+
+    def _try_again_later(self, pk, count=True):
+        """Put the job off for JOB_MONITOR_RETRY_SECONDS, unless another task has taken it meanwhile."""
+        JobMonitorLease.objects.defer(self.instance, settings.JOB_MONITOR_RETRY_SECONDS, self.owner_task_id, count=count)
+
+    def _cancel_unmonitored(self, pk, plan):
+        """
+        Finish, as canceled, a job that was cancelled while nobody was reading it: the cancel
+        reached a resume that then had to wait, or arrived while this one was planning.
+
+        The work is stopped where the plan found it. When it found nothing it can reach, the pod
+        and work unit reapers stop what is left once the job is final.
+        """
+        job = self.instance
+        if plan.stream is not None:
+            try:
+                plan.stream.cancel()
+                plan.stream.release()
+            except Exception:
+                logger.exception(f'{job.log_format}: could not stop its {plan.stream.kind} after it was cancelled')
+        elif plan.cleanup is not None:
+            plan.cleanup()
+        job.log_lifecycle('monitor_resume_canceled')
+        self._finish_unread(pk, 'canceled')
+
+    def _finish_unread(self, pk, status):
+        """
+        Finish a job whose output this task never read, failed or cancelled by a resume. There is
+        nothing to process, so it takes no private data dir and no post-run hook: nothing that can
+        fail again the way getting ready to read may have, so a job out of deferrals always ends.
+        """
+        self.runner_callback.configure_for_resume(self.instance, '', reading=False)
+        self.finish_run(pk, status, None, '', post_run_hook=False)
+
+    @with_path_cleanup
+    @with_signal_handling
+    def resume(self, pk, task_id):
+        """
+        Pick up reading a running job's output after the task that launched it is gone.
+
+        Everything the launch did before handing the job to receptor stays done: the playbook
+        is running, or has run, wherever it was sent. This reads the rest of its output from
+        where it survived (see ascender.main.tasks.monitor.plan_resume), skips the events that
+        are already saved, and finishes the job the way the launch would have. Called by the
+        resume_job task, under the task id the monitor sweep claimed the job with.
+
+        What cannot be decided now is decided again by a later sweep: the lease is put off by
+        JOB_MONITOR_RETRY_SECONDS when the output is not reachable yet, when reading it fails,
+        and when the stream ends while the work is still running.
+        """
+        self.instance = self.model.objects.get(pk=pk)
+        job = self.instance
+        self.owner_task_id = task_id
+        self.resuming = True
+        if job.status != 'running' or job.celery_task_id != task_id:
+            logger.info(f'{job.log_format}: not resuming, it is {job.status} and owned by task {job.celery_task_id}')
+            return
+        lease = JobMonitorLease.objects.filter(unified_job_id=pk).first()
+        if lease is None:
+            logger.info(f'{job.log_format}: no monitor lease left to resume')
+            return
+
+        # Planning, and getting ready to read, can take a while; the lease is renewed meanwhile, and
+        # nothing is done about the plan by a task that lost the job before it was ready.
+        try:
+            with LeaseKeeper(job, task_id) as keeper:
+                plan = plan_resume(job, lease)
+                canceled = bool(job.cancel_flag or self._cancel_flag_set(pk))
+                if plan.action == RESUME and not canceled:
+                    private_data_dir = self.build_private_data_dir(job)
+                    self.runner_callback.configure_for_resume(job, private_data_dir)
+        except Exception:
+            # Counted like any other wait, so that a failure that persists (a container group whose
+            # credential is broken, a full disk) ends with the job failed once its deferrals run out,
+            # by a plan that needs none of this, rather than with the job claimed again forever.
+            logger.exception(f'{job.log_format}: getting ready to resume it failed; the next job monitor sweep tries again')
+            self._try_again_later(pk)
+            return
+        if keeper.lost:
+            self.lost_ownership = True
+            logger.warning(f'{job.log_format}: another task took over its monitoring while this one got ready to resume it; this task stands down')
+            return
+        logger.info(f'{job.log_format}: resume plan is to {plan.action} because {plan.reason}')
+        if canceled:
+            self._cancel_unmonitored(pk, plan)
+            return
+        if plan.action == WAIT:
+            self._try_again_later(pk, count=plan.counts)
+            return
+        if plan.action in (REQUEUE, FAIL) and plan.cleanup is not None and not plan.cleanup():
+            # Whatever is still running could not be stopped: a second copy must not start, and a
+            # job must not be reported failed while its work goes on.
+            self._try_again_later(pk)
+            return
+        if plan.action == REQUEUE:
+            requeue_job(job, plan.reason, task_id)
+            return
+
+        if plan.action == FAIL:
+            job.log_lifecycle('monitor_resume_failed')
+            self.runner_callback.delay_update(job_explanation=f'The job failed because {plan.reason}.')
+            self._finish_unread(pk, 'failed')
+            return
+
+        self.runner_callback.delay_update(job_explanation=f'Output monitoring was resumed on {settings.CLUSTER_HOST_ID} after the node reading it stopped.')
+        JobMonitorLease.objects.record(job, resumed=F('resumed') + 1)
+        job.log_lifecycle('monitor_resumed')
+        plan.stream.follow = plan.follow
+        receptor_job = AWXReceptorJob(self, {'private_data_dir': private_data_dir, 'ident': job.id}, resuming=True)
+        try:
+            res = receptor_job.process_stream(plan.stream, owner_task_id=task_id)
+            if receptor_job.detached:
+                job.log_lifecycle('monitor_detached')
+                JobMonitorLease.objects.release(job, task_id)
+                logger.warning(f'{job.log_format}: detached again on shutdown; the next job monitor sweep resumes it')
+                return
+            if receptor_job.lease_lost:
+                return
+            outcome = self._resumed_status(pk, res, plan.stream)
+        except Exception:
+            logger.exception(f'{job.log_format}: reading its output failed; the next job monitor sweep tries again')
+            self._try_again_later(pk)
+            return
+        finally:
+            try:
+                plan.stream.close()
+            except Exception:
+                pass
+            logger.debug('%s finished resuming, producing %s events.', job.log_format, self.runner_callback.event_ct)
+
+        if outcome is None:
+            logger.warning(
+                f'{job.log_format}: its output stream ended while its {plan.stream.kind} is still running; the next job monitor sweep reads it again'
+            )
+            self._try_again_later(pk)
+            return
+        status, rc = outcome
+        # The output has been read. As at the end of a launch (see AWXReceptorJob.run), the lease
+        # and the work go before the post-run hooks, which can take longer than a lease lasts;
+        # the lease is retired first, which fails if another task claimed the job meanwhile.
+        if not JobMonitorLease.objects.retire(job, task_id):
+            self.lost_ownership = True
+            logger.warning(f'{job.log_format}: another task took over its monitoring; this task stands down without finalizing')
+            return
+        if receptor_job.eof_held:
+            self.runner_callback.finished_callback(None)
+        try:
+            plan.stream.release()
+        except Exception:
+            logger.exception(f'{job.log_format}: could not release its {plan.stream.kind} after resuming it')
+        self.finish_run(pk, status, rc, private_data_dir)
 
 
 class SourceControlMixin(BaseTask):
@@ -806,6 +1154,11 @@ class SourceControlMixin(BaseTask):
                 sync_task = RunProjectUpdate(job_private_data_dir=private_data_dir)
                 sync_task.run(local_project_sync.id)
                 local_project_sync.refresh_from_db()
+                if local_project_sync.status != 'successful':
+                    # run() raises when the sync fails, but returns without finishing it when another task
+                    # took over its monitoring (see BaseTask._end_without_finalizing), which stops the sync
+                    # and fails it. The job must not go on with a half-updated project.
+                    raise RuntimeError(f'{local_project_sync.log_format} did not finish')
                 self.instance = self.update_model(self.instance.pk, scm_revision=local_project_sync.scm_revision)
             except Exception:
                 local_project_sync.refresh_from_db()
@@ -1211,7 +1564,7 @@ class RunJob(SourceControlMixin, BaseTask):
     def post_run_hook(self, job, status):
         super(RunJob, self).post_run_hook(job, status)
         job.refresh_from_db(fields=['job_env'])
-        private_data_dir = job.job_env.get('AWX_PRIVATE_DATA_DIR')
+        private_data_dir = self.artifacts_private_data_dir(job)
         if not private_data_dir:
             # If there's no private data dir, that means we didn't get into the
             # actual `run()` call; this _usually_ means something failed in
@@ -1994,7 +2347,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             return  # nothing to save, step out of the way to allow error reporting
 
         inventory_update.refresh_from_db()
-        private_data_dir = inventory_update.job_env.get('AWX_PRIVATE_DATA_DIR')
+        private_data_dir = self.artifacts_private_data_dir(inventory_update)
         if not private_data_dir:
             logger.warning('AWX_PRIVATE_DATA_DIR not found in job_env, skipping inventory save')
             return

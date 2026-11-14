@@ -61,6 +61,12 @@ class CredentialTypeSerializer(BaseSerializer):
     def to_representation(self, data):
         value = super(CredentialTypeSerializer, self).to_representation(data)
 
+        # internal fields are filled in by the platform, so they are neither
+        # shown nor asked for
+        inputs = value.get('inputs')
+        if isinstance(inputs, dict) and isinstance(inputs.get('fields'), list):
+            value['inputs'] = dict(inputs, fields=[f for f in inputs['fields'] if not f.get('internal')])
+
         # translate labels and help_text for credential fields "managed"
         if value.get('managed'):
             value['name'] = _(value['name'])

@@ -54,11 +54,14 @@ function MiscSystemEdit() {
         'ACTIVITY_STREAM_ENABLED',
         'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC',
         'MANAGE_ORGANIZATION_AUTH',
+        'RESTRICT_USER_IDENTITY_TO_SUPERUSERS',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS',
         'AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS',
         'REMOTE_HOST_HEADERS',
         'ASCENDER_URL_BASE',
+        'WORKLOAD_IDENTITY_ENABLED',
+        'WORKLOAD_IDENTITY_DEFAULT_TTL',
         'DEFAULT_EXECUTION_ENVIRONMENT',
         'PROXY_IP_ALLOWED_LIST',
         'CSRF_TRUSTED_ORIGINS'
@@ -244,6 +247,20 @@ function MiscSystemEdit() {
                         type="url"
                       />
                     )}
+                    {is('workload_identity') && (
+                      <>
+                        <BooleanField
+                          name="WORKLOAD_IDENTITY_ENABLED"
+                          config={system.WORKLOAD_IDENTITY_ENABLED}
+                        />
+                        <InputField
+                          name="WORKLOAD_IDENTITY_DEFAULT_TTL"
+                          config={system.WORKLOAD_IDENTITY_DEFAULT_TTL}
+                          type="number"
+                          isRequired
+                        />
+                      </>
+                    )}
                     {is('security') && (
                       <>
                         <ObjectField
@@ -279,6 +296,10 @@ function MiscSystemEdit() {
                         <BooleanField
                           name="MANAGE_ORGANIZATION_AUTH"
                           config={system.MANAGE_ORGANIZATION_AUTH}
+                        />
+                        <BooleanField
+                          name="RESTRICT_USER_IDENTITY_TO_SUPERUSERS"
+                          config={system.RESTRICT_USER_IDENTITY_TO_SUPERUSERS}
                         />
                       </>
                     )}

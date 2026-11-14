@@ -1,3 +1,4 @@
+import bisect
 import json
 import time
 import logging
@@ -7,15 +8,41 @@ from collections import deque
 from ascender.settings.typed import settings
 from django_guid import get_guid
 from django.utils.functional import cached_property
-from django.db import connections
+from django.db import connection, connections
 
 # Ascender
+from ascender.main.constants import ENV_BLOCKLIST
 from ascender.main.redact import UriCleaner
 from ascender.main.constants import MINIMAL_EVENTS, ANSIBLE_RUNNER_NEEDS_UPDATE_MESSAGE
 from ascender.main.utils.update_model import update_model
 from ascender.main.queue import CallbackQueueDispatcher
 
 logger = logging.getLogger('ascender.main.tasks.callback')
+
+
+def persisted_event_counters(job):
+    """
+    What a resumed read of the job's output may skip: the counters of the job's saved events,
+    as sorted (first, last) ranges, and how many events that is.
+
+    One query reads both, so they describe the same moment. The count seeds the event count, so
+    that emitted_events and the EOF counter describe the whole job rather than the replayed part:
+    every replayed event outside the ranges is dispatched and counted once, and is saved once,
+    whether as itself or as the copy a receiver that was still behind saves meanwhile, whose
+    duplicate the receiver then drops. The ranges grow with the gaps between saved events (the
+    receiver saves in parallel batches, and drops an event it cannot save), never with the size
+    of the job: a job whose events were all saved is one range.
+    """
+    sql, params = job.get_event_queryset().order_by().values_list('counter').query.sql_with_params()
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT MIN(counter), MAX(counter) FROM ('
+            f'SELECT counter, counter - ROW_NUMBER() OVER (ORDER BY counter) AS run FROM ({sql}) AS saved (counter)'
+            ') AS numbered GROUP BY run ORDER BY 1',
+            params,
+        )
+        ranges = [(first, last) for first, last in cursor.fetchall()]
+    return ranges, sum(last - first + 1 for first, last in ranges)
 
 
 def _setting_as_bool(value, default):
@@ -87,8 +114,19 @@ class RunnerCallback:
         self.model = model
         self.update_attempts = int(getattr(settings, 'DISPATCHER_DB_DOWNTOWN_TOLLERANCE', settings.DISPATCHER_DB_DOWNTIME_TOLERANCE) / 5)
         self.wrapup_event_dispatched = False
+        self.wrapup_event_created = None  # the execution node's clock on the wrapup event
         self.artifacts_processed = False
         self.extra_update_fields = {}
+        # ansible-runner reported 'starting': the execution environment has its payload
+        self.worker_started = False
+        # ...and that is written on the job's monitor lease, where a later reader looks for it
+        self.worker_started_recorded = False
+        # Set when reading a job's output is resumed on another node: the (first, last) ranges of
+        # the counters of the events already saved, which are not dispatched again.
+        self.persisted_ranges = []
+        self._persisted_firsts = []
+        # The private data dir of the resumed read; the post-run hooks find the artifacts there.
+        self.private_data_dir_override = None
 
     def update_model(self, pk, _attempt=0, **updates):
         return update_model(self.model, pk, _attempt=0, _max_attempts=self.update_attempts, **updates)
@@ -100,6 +138,85 @@ class RunnerCallback:
     @cached_property
     def event_data_key(self):
         return self.instance.event_class.JOB_REFERENCE
+
+    def configure_for_resume(self, instance, private_data_dir, reading=True):
+        """
+        Set up to read the rest of a job's output on this node, after the task that launched
+        it is gone: stamp events the way the launch did, skip the ones already saved, and point
+        the post-run hooks at this run's private data dir. Without ``reading`` the job is only
+        finished here: it needs no host map, and its stored environment stays as the launch left
+        it; its event count is still the one it reports.
+        """
+        self.instance = instance
+        self.job_created = str(instance.created)
+        if getattr(instance, 'spawned_by_workflow', False):
+            try:
+                self.parent_workflow_job_id = instance.get_workflow_job().id
+            except Exception:
+                pass
+        self.private_data_dir_override = private_data_dir
+        self.persisted_ranges, self.event_ct = persisted_event_counters(instance)
+        self._persisted_firsts = [first for first, last in self.persisted_ranges]
+        if not reading:
+            return
+        self.populate_host_map_from_inventory(instance)
+        job_env = dict(instance.job_env or {})
+        if job_env and job_env.get('AWX_PRIVATE_DATA_DIR') != private_data_dir:
+            job_env['AWX_PRIVATE_DATA_DIR'] = private_data_dir
+            from ascender.main.signals import disable_activity_stream  # Circular import
+
+            with disable_activity_stream():
+                self.instance = self.update_model(instance.pk, job_env=job_env) or instance
+
+    @staticmethod
+    def inventory_script_params(instance):
+        """The arguments the launch passes to Inventory.get_script_data for the inventory file."""
+        script_params = dict(hostvars=True, ascendervars=True)
+        if hasattr(instance, 'job_slice_number'):
+            script_params['slice_number'] = instance.job_slice_number
+            script_params['slice_count'] = instance.job_slice_count
+            script_params['slice_pinned_hosts'] = instance.job_slice_pinned_hosts_list
+        return script_params
+
+    def populate_host_map_from_inventory(self, instance):
+        """
+        The launch of a playbook or an ad hoc command filled host_map while writing the
+        inventory file (BaseTask.build_inventory; the other job types write none). A resumed read
+        writes no inventory file, so it builds the map from the same script data, which keeps
+        slicing, smart and constructed inventories mapped the way the launch mapped them.
+        """
+        if self.event_data_key not in ('job_id', 'ad_hoc_command_id') or not getattr(instance, 'inventory_id', None):
+            return
+        try:
+            script_data = instance.inventory.get_script_data(**self.inventory_script_params(instance))
+        except Exception:
+            logger.warning(f'{instance.log_format}: could not build its host map; replayed events will carry no host id', exc_info=True)
+            return
+        for hostname, hv in script_data.get('_meta', {}).get('hostvars', {}).items():
+            self.host_map[hostname] = hv.get('remote_tower_id', '')
+
+    def _already_persisted(self, event_data):
+        counter = event_data.get('counter')
+        if not self.persisted_ranges or counter is None:
+            return False
+        at = bisect.bisect_right(self._persisted_firsts, counter) - 1
+        return at >= 0 and counter <= self.persisted_ranges[at][1]
+
+    def _note_wrapup(self, event_data):
+        if event_data.get('event', '') == self.wrapup_event_type:
+            self.wrapup_event_dispatched = True
+            self.wrapup_event_created = event_data.get('created')
+
+    def _collect_artifacts(self, event_data):
+        artifact_data = event_data.get('event_data', {}).get('artifact_data', {})
+        if event_data.get('event', '') == 'playbook_on_stats' and self.event_data_key == 'job_id':
+            stats_artifacts = self.get_stats_artifacts(event_data.get('event_data', {}))
+            if stats_artifacts:
+                # set_stats data provided by the playbook wins over the automatic keys
+                stats_artifacts.update(artifact_data)
+                artifact_data = stats_artifacts
+        if artifact_data:
+            self.delay_update(artifacts=artifact_data)
 
     def delay_update(self, skip_if_already_set=False, **kwargs):
         """Stash fields that should be saved along with the job status change"""
@@ -144,6 +261,14 @@ class RunnerCallback:
         # logger
         if event_data.get('event') == 'keepalive':
             return
+
+        if self._already_persisted(event_data):
+            # Replayed by a resumed read and already in the database. Nothing is dispatched, but
+            # the job's artifacts and wrapup still have to be noted, since the launch that saw
+            # this event first never got to finalize the job.
+            self._note_wrapup(event_data)
+            self._collect_artifacts(event_data)
+            return False
 
         if event_data.get(self.event_data_key, None):
             if self.event_data_key != 'job_id':
@@ -216,25 +341,13 @@ class RunnerCallback:
         elif self.recent_event_timings.maxlen:
             self.recent_event_timings.append(time.time())
 
-        if event_data.get('event', '') == self.wrapup_event_type:
-            self.wrapup_event_dispatched = True
+        self._note_wrapup(event_data)
 
         event_data.setdefault(self.event_data_key, self.instance.id)
         self.dispatcher.dispatch(event_data)
         self.event_ct += 1
 
-        '''
-        Handle artifacts
-        '''
-        artifact_data = event_data.get('event_data', {}).get('artifact_data', {})
-        if event_data.get('event', '') == 'playbook_on_stats' and self.event_data_key == 'job_id':
-            stats_artifacts = self.get_stats_artifacts(event_data.get('event_data', {}))
-            if stats_artifacts:
-                # set_stats data provided by the playbook wins over the automatic keys
-                stats_artifacts.update(artifact_data)
-                artifact_data = stats_artifacts
-        if artifact_data:
-            self.delay_update(artifacts=artifact_data)
+        self._collect_artifacts(event_data)
 
         return False
 
@@ -276,17 +389,24 @@ class RunnerCallback:
         Ansible runner callback triggered on status transition
         """
         if status_data['status'] == 'starting':
-            job_env = dict(runner_config.env)
-            '''
-            Take the safe environment variables and overwrite
-            '''
-            for k, v in self.safe_env.items():
-                if k in job_env:
-                    job_env[k] = v
-            from ascender.main.signals import disable_activity_stream  # Circular import
+            if self.private_data_dir_override:
+                start_fields = self._resumed_start_fields(runner_config)
+            else:
+                job_env = dict(runner_config.env)
+                '''
+                Take the safe environment variables and overwrite
+                '''
+                for k, v in self.safe_env.items():
+                    if k in job_env:
+                        job_env[k] = v
+                start_fields = dict(job_args=json.dumps(runner_config.command), job_cwd=runner_config.cwd, job_env=job_env)
+            if start_fields:
+                from ascender.main.signals import disable_activity_stream  # Circular import
 
-            with disable_activity_stream():
-                self.instance = self.update_model(self.instance.pk, job_args=json.dumps(runner_config.command), job_cwd=runner_config.cwd, job_env=job_env)
+                with disable_activity_stream():
+                    self.instance = self.update_model(self.instance.pk, **start_fields)
+            self.worker_started = True
+            self.record_worker_started()
             # We opened a connection just for that save, close it here now
             connections.close_all()
         elif status_data['status'] == 'error':
@@ -294,6 +414,45 @@ class RunnerCallback:
                 field_value = status_data.get(field_name, None)
                 if field_value:
                     self.delay_update(**{field_name: field_value})
+
+    def _resumed_start_fields(self, runner_config):
+        """
+        What a resumed read stores when it replays the worker's 'starting' status.
+
+        The launch stored the job's environment with every value its credentials injected
+        replaced by the masked value it injected alongside, and a resumed read has none of
+        those. So the launch's record stands (configure_for_resume has pointed it at this run's
+        private data dir), and only a job whose launch never got that far is given one here,
+        with every value hidden that a credential could have set: credentials may set neither
+        ANSIBLE_* variables nor those on ENV_BLOCKLIST (see CredentialTypeInjectorField), and
+        build_safe_env masks those by name as it does for every job.
+        """
+        if self.instance.job_env:
+            return {}
+        from ascender.main.models.credential import HIDDEN_PASSWORD, build_safe_env  # Circular import
+
+        job_env = build_safe_env(dict(runner_config.env))
+        for key in job_env:
+            if not key.startswith('ANSIBLE_') and key not in ENV_BLOCKLIST:
+                job_env[key] = HIDDEN_PASSWORD
+        job_env['AWX_PRIVATE_DATA_DIR'] = self.private_data_dir_override
+        return dict(job_args=json.dumps(runner_config.command), job_cwd=runner_config.cwd, job_env=job_env)
+
+    def record_worker_started(self):
+        """
+        Note on the job's monitor lease that its execution environment has its payload.
+        Before this point a job that loses its monitor can be re-queued; after it, only resumed.
+        A write that fails is tried again at the next lease renewal (AWXReceptorJob._record_progress):
+        left unwritten, the lease would say the job never started for as long as it runs.
+        """
+        from ascender.main.models import JobMonitorLease  # Circular import
+
+        try:
+            JobMonitorLease.objects.record(self.instance, worker_started=True)
+        except Exception:
+            logger.warning(f'{self.instance.log_format}: could not record on its monitor lease that the worker started; trying again', exc_info=True)
+            return
+        self.worker_started_recorded = True
 
     def artifacts_handler(self, artifact_dir):
         self.artifacts_processed = True

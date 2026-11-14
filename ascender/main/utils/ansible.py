@@ -13,7 +13,7 @@ from django.utils.encoding import smart_str
 logger = logging.getLogger('ascender.main.utils.ansible')
 
 
-__all__ = ['skip_directory', 'could_be_playbook', 'could_be_inventory']
+__all__ = ['skip_directory', 'could_be_playbook', 'could_be_inventory', 'unsafe_literal']
 
 
 valid_playbook_re = re.compile(r'^\s*?-?\s*?(?:hosts|(ansible\.builtin\.)?include|(ansible\.builtin\.)?import_playbook):\s*?.*?$')
@@ -112,3 +112,14 @@ def read_ansible_config(project_path, variables_of_interest):
     except Exception:
         logger.exception('Failed to read ansible configuration(s) {}'.format(fnames))
     return values
+
+
+def unsafe_literal(value):
+    """Return the string inside an ansible-core 2.19+ ``{"__ansible_unsafe": "..."}`` value, else ``value``.
+
+    ``ansible-inventory --export`` wraps plugin-set strings this way. Use this only to compare
+    or match a value in Python; store and pass on the original so ansible keeps it untrusted.
+    """
+    if isinstance(value, dict) and len(value) == 1 and isinstance(value.get('__ansible_unsafe'), str):
+        return value['__ansible_unsafe']
+    return value

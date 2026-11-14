@@ -131,50 +131,6 @@ services:
     - "ascender_{{ container_postfix }}"
   {% endfor %}
 {% endif %}
-{% if enable_keycloak|bool %}
-  keycloak:
-    image: quay.io/keycloak/keycloak:15.0.2
-    container_name: tools_keycloak_1
-    hostname: keycloak
-    user: "{{ ansible_user_uid }}"
-    networks:
-      - awx
-    ports:
-      - "8443:8443"
-    environment:
-      DB_VENDOR: postgres
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: {{ pg_username }}
-      DB_PASSWORD: {{ pg_password }}
-    depends_on:
-      - postgres
-{% endif %}
-{% if enable_ldap|bool %}
-  ldap:
-    image: bitnami/openldap:2
-    container_name: tools_ldap_1
-    hostname: ldap
-    user: "{{ ansible_user_uid }}"
-    networks:
-      - awx
-    ports:
-      - "389:1389"
-      - "636:1636"
-    environment:
-      LDAP_ADMIN_USERNAME: admin
-      LDAP_ADMIN_PASSWORD: admin
-      LDAP_CUSTOM_LDIF_DIR: /opt/bitnami/openldap/ldiffs
-      LDAP_ENABLE_TLS: "yes"
-      LDAP_LDAPS_PORT_NUMBER: 1636
-      LDAP_TLS_CERT_FILE: /opt/bitnami/openldap/certs/{{ ldap_public_key_file_name }}
-      LDAP_TLS_CA_FILE: /opt/bitnami/openldap/certs/{{ ldap_public_key_file_name }}
-      LDAP_TLS_KEY_FILE: /opt/bitnami/openldap/certs/{{ ldap_private_key_file_name }}
-    volumes:
-      - 'openldap_data:/bitnami/openldap'
-      - '../../docker-compose/_sources/ldap_certs:/opt/bitnami/openldap/certs'
-      - '../../docker-compose/_sources/ldap_diffs:/opt/bitnami/openldap/ldiffs'
-{% endif %}
   postgres:
     image: quay.io/sclorg/postgresql-15-c9s
     container_name: tools_postgres_1
@@ -193,27 +149,6 @@ services:
       - awx
     ports:
        - "${AWX_PG_PORT:-5441}:5432"
-{% if enable_pgbouncer|bool %}
-  pgbouncer:
-    image: mirror.gcr.io/bitnami/pgbouncer:latest
-    container_name: tools_pgbouncer_1
-    hostname: pgbouncer
-    networks:
-      - awx
-    environment:
-      POSTGRESQL_USERNAME: {{ pg_username }}
-      POSTGRESQL_DATABASE: {{ pg_database }}
-      PGBOUNCER_DATABASE: {{ pg_database }}
-      POSTGRESQL_PASSWORD: {{ pg_password }}
-      POSTGRESQL_HOST: {{ pg_hostname | default('postgres') }}
-      POSTGRESQL_PORT: {{ pg_port }}
-      PGBOUNCER_AUTH_TYPE: trust
-      PGBOUNCER_PORT: {{ pgbouncer_port }}
-      PGBOUNCER_DEFAULT_POOL_SIZE: {{ pgbouncer_max_pool_size }}
-      # This is the default, but we're being explicit here because it's important:
-      # pg_notify will NOT work in transaction mode.
-      PGBOUNCER_POOL_MODE: session
-{% endif %}
 {% if execution_node_count|int > 0 %}
   receptor-hop:
     image: {{ receptor_image }}
@@ -246,30 +181,6 @@ services:
     privileged: true
   {% endfor %}
 {% endif %}
-{% if enable_vault | bool %}
-  vault:
-    image: mirror.gcr.io/hashicorp/vault:1.14
-    container_name: tools_vault_1
-    command: server
-    hostname: vault
-    networks:
-      - awx
-    ports:
-      - "1234:1234"
-    environment:
-{% if vault_tls | bool %}
-      VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "listener": [{"tcp": { "address": "0.0.0.0:1234", "tls_disable": false, "tls_cert_file": "/vault/tls/server.crt", "tls_key_file": "/vault/tls/server.key"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
-{% else %}
-      VAULT_LOCAL_CONFIG: '{"storage": {"file": {"path": "/vault/file"}}, "listener": [{"tcp": { "address": "0.0.0.0:1234", "tls_disable": true}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
-{% endif %}
-    cap_add:
-      - IPC_LOCK
-    volumes:
-{% if vault_tls | bool %}
-      - '../../docker-compose/_sources/vault_certs:/vault/tls'
-{% endif %}
-      - 'hashicorp_vault_data:/vault/file'
-{% endif %}
 
 volumes:
 {% if editable_dependencies | length > 0 %}
@@ -284,15 +195,6 @@ volumes:
   valkey_socket_{{ container_postfix }}:
     name: tools_valkey_socket_{{ container_postfix }}
 {% endfor -%}
-{% if enable_ldap|bool %}
-  openldap_data:
-    name: tools_ldap_1
-    driver: local
-{% endif %}
-{% if enable_vault|bool %}
-  hashicorp_vault_data:
-    name: tools_vault_1
-{% endif %}
 
 networks:
   awx:

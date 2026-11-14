@@ -365,6 +365,10 @@ msgstr "親ノードの最終状態に関係なく実行します。"
 #~ msgid "Are you sure you want to remove this node?"
 #~ msgstr "このノードを削除してもよろしいですか?"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:101
+msgid "The job finds the token in the file named by the ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE environment variable."
+msgstr "ジョブは環境変数 ASCENDER_WORKLOAD_IDENTITY_TOKEN_FILE が指すファイルでトークンを取得できます。"
+
 #~ msgid "Edit this link"
 #~ msgstr "このリンクの編集"
 
@@ -494,7 +498,7 @@ msgid "Timed out"
 msgstr "タイムアウト"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 msgid "Select {0}"
 msgstr "{0} の選択"
 
@@ -628,7 +632,7 @@ msgstr "繰り返しの頻度"
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "構築されたインベントリプラグインを構成するために使用される変数。このプラグインの設定方法の詳細については、"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:58
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:75
 msgid "Something went wrong with the request to test this credential and metadata."
 msgstr "この認証情報とメタデータをテストするリクエストで問題が発生しました。"
 
@@ -685,7 +689,7 @@ msgstr ""
 #: components/PromptDetail/PromptProjectDetail.tsx:156
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:122
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Credential/shared/TypeInputsSubForm.tsx:52
+#: screens/Credential/shared/TypeInputsSubForm.tsx:60
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:112
 #: screens/Instances/Shared/InstanceForm.tsx:106
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:262
@@ -1023,7 +1027,7 @@ msgid "All Runs"
 msgstr ""
 
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:244
+#: components/Lookup/Lookup.tsx:277
 msgid "Lookup modal"
 msgstr "ルックアップモーダル"
 
@@ -1163,7 +1167,7 @@ msgstr "このスケジュールは UI でサポートされていない複雑�
 #: components/JobList/TemplateLaunchControl.tsx:44
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
-#: screens/Credential/shared/ExternalTestModal.tsx:102
+#: screens/Credential/shared/ExternalTestModal.tsx:116
 #: screens/Inventory/InventorySource/InventorySource.tsx:208
 #: screens/ManagementJob/ManagementJobLaunchButton.tsx:44
 #: screens/ManagementJob/ManagementJobList/ManagementJobRunButton.tsx:44
@@ -1288,7 +1292,7 @@ msgstr ""
 #~ msgid "Google OAuth 2"
 #~ msgstr ""
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "認証情報に戻る"
 
@@ -1804,7 +1808,7 @@ msgstr "Stdout"
 msgid "Only if Missing"
 msgstr "見つからない場合のみ"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:152
 msgid "Metadata"
 msgstr "メタデータ"
 
@@ -1821,6 +1825,10 @@ msgstr "過去 1 週間"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:200
 msgid "Filter..."
 msgstr "フィルター..."
+
+#: screens/Credential/shared/ExternalTestModal.tsx:190
+msgid "The test logs in to Vault as a job from this template would, with a token carrying its claims."
+msgstr "テストは、このテンプレートのジョブと同じように、そのクレームを含むトークンで Vault にログインします。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
@@ -1905,6 +1913,8 @@ msgstr "分"
 
 #: components/CodeEditor/EditorActions.tsx:142
 #: components/CodeEditor/EditorActions.tsx:160
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:82
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:94
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -1981,6 +1991,8 @@ msgstr "時間"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:229
 #: components/Lookup/MultiCredentialsLookup.tsx:244
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -2385,7 +2397,7 @@ msgstr "キー"
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:202
 #: screens/Application/ApplicationTokens/ApplicationTokenList.tsx:233
 #: screens/Application/ApplicationTokens/ApplicationTokenListItem.tsx:45
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:374
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:196
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:332
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:382
@@ -2482,7 +2494,7 @@ msgstr "許可される URI のリスト (スペース区切り)"
 #~ msgid "Select your Ansible Automation Platform subscription to use."
 #~ msgstr "使用する Ansible Automation Platform サブスクリプションを選択します。"
 
-#: screens/Credential/shared/TypeInputsSubForm.tsx:30
+#: screens/Credential/shared/TypeInputsSubForm.tsx:35
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:60
 #: screens/Project/shared/ProjectForm.tsx:328
 msgid "Type Details"
@@ -2505,6 +2517,9 @@ msgid "Parent node outcome required before the condition is evaluated."
 msgstr "条件が評価される前に、親ノードの結果が必要です。"
 
 #: components/JobList/JobListItem.tsx:257
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Schedule/ScheduleList/ScheduleResourcePicker.tsx:60
 #: components/TemplateList/TemplateList.tsx:328
@@ -2524,6 +2539,10 @@ msgstr "ジョブテンプレート"
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:221
 msgid "Install Bundle"
 msgstr "バンドルのインストール"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:59
+msgid "A system administrator can turn it on in Settings, Miscellaneous System, where the Base URL of the service has to be set too."
+msgstr "システム管理者は「設定」の「その他のシステム」で有効にできます。そこでサービスのベース URL も設定する必要があります。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:615
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:184
@@ -2582,7 +2601,7 @@ msgstr "特定の正規表現に一致するフィールド。"
 #~ msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 #~ msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:359
+#: screens/Login/Login.tsx:372
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:150
 #: screens/Setting/Authentication/tabs.ts:17
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
@@ -2751,8 +2770,8 @@ msgstr ""
 msgid "Association modal"
 msgstr "関連付けモーダル"
 
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
-#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:182
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemEdit/MiscSystemEdit.tsx:185
 msgid "System tabs"
 msgstr ""
 
@@ -2844,7 +2863,7 @@ msgstr "このスケジュールにはインベントリーがありません"
 #~ msgstr "管理ジョブの起動エラー"
 
 #: components/Lookup/HostFilterLookup.tsx:310
-#: components/Lookup/Lookup.tsx:189
+#: components/Lookup/Lookup.tsx:215
 msgid "Search"
 msgstr "検索"
 
@@ -2934,7 +2953,7 @@ msgstr "{0} (削除済み)"
 msgid "The inventory that this host belongs to."
 msgstr "このホストが属するインベントリー。"
 
-#: screens/Login/Login.tsx:344
+#: screens/Login/Login.tsx:357
 msgid "Log In"
 msgstr "ログイン"
 
@@ -3017,7 +3036,6 @@ msgstr "ユーザーの詳細"
 msgid "Delete Execution Environment"
 msgstr "実行環境の削除"
 
-#: screens/Setting/AzureAD/AzureAD.tsx:87
 #~ msgid "View Azure AD Settings"
 #~ msgstr "Azure AD 設定の表示"
 
@@ -3630,12 +3648,12 @@ msgstr "{0, plural, one {有効な電話番号を入力してください。} ot
 msgid "Facts"
 msgstr "ファクト"
 
-#: screens/Login/Login.tsx:368
+#: screens/Login/Login.tsx:381
 msgid "or"
 msgstr "または"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:243
+#: components/Lookup/Lookup.tsx:276
 #: components/PaginatedTable/PaginatedTable.tsx:81
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:54
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:37
@@ -3823,7 +3841,7 @@ msgstr "変数名として推奨される形式は、小文字で\n"
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "このジョブテンプレートは、現在他のリソースで使用されています。削除してもよろしいですか?"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "すべての認証情報を表示します。"
 
@@ -4083,7 +4101,7 @@ msgstr "このワークフローには、ノードが構成されていません
 msgid "View Logging Settings"
 msgstr "ロギング設定の表示"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:72
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:78
 msgid "Click this button to verify connection to the secret management system using the selected credential and specified inputs."
 msgstr "このボタンをクリックして、選択した認証情報と指定した入力を使用してシークレット管理システムへの接続を確認します。"
 
@@ -4389,7 +4407,7 @@ msgstr "ノードの詳細の表示"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:135
 #: components/Lookup/HostFilterLookup.tsx:420
-#: components/Lookup/Lookup.tsx:266
+#: components/Lookup/Lookup.tsx:299
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:243
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:49
 #: components/Schedule/shared/ScheduleForm.tsx:693
@@ -4400,8 +4418,8 @@ msgstr "ノードの詳細の表示"
 #: components/Schedule/shared/UnsupportedScheduleForm.tsx:37
 #: screens/Credential/shared/CredentialForm.tsx:462
 #: screens/Credential/shared/CredentialForm.tsx:473
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:100
-#: screens/Credential/shared/ExternalTestModal.tsx:111
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:106
+#: screens/Credential/shared/ExternalTestModal.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:178
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:192
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:118
@@ -5017,8 +5035,8 @@ msgstr "認証情報の削除"
 #: screens/Setting/Mapping/MappingDetail/MappingDetail.tsx:69
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:73
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:77
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:130
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:129
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:133
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:63
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:67
 #: screens/Setting/Password/PasswordDetail/PasswordDetail.tsx:67
@@ -5453,7 +5471,7 @@ msgstr "Subversion ソースコントロールの URL の例には次が含ま�
 msgid "Search text input"
 msgstr "テキスト入力の検索"
 
-#: components/Lookup/Lookup.tsx:98
+#: components/Lookup/Lookup.tsx:116
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "値が見つかりませんでした。有効な値を入力または選択してください。"
 
@@ -6359,6 +6377,8 @@ msgid "Users with a role on this resource appear here"
 msgstr ""
 
 #: components/CopyButton/CopyButton.tsx:54
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:81
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:93
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:177
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:264
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:335
@@ -6623,7 +6643,7 @@ msgstr "頻度の詳細"
 #: components/LaunchPrompt/LaunchPrompt.tsx:136
 #: components/Schedule/shared/SchedulePromptableFields.tsx:161
 #: components/Schedule/shared/ScheduleWizardBody.tsx:148
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "次へ"
@@ -6704,6 +6724,10 @@ msgstr "オプションの詳細"
 msgid "View all Tokens."
 msgstr "すべてのトークンを表示します。"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:89
+msgid "For HashiCorp Vault, enable the JWT auth method and point it at the issuer:"
+msgstr "HashiCorp Vault では、JWT 認証方式を有効にして発行者を指定してください:"
+
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Managed instances cannot be deleted: {hostnames}"
 msgstr ""
@@ -6766,7 +6790,7 @@ msgstr "権限昇格のパスワード"
 msgid "Node Type"
 msgstr "ノードタイプ"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "認証情報の詳細の表示"
 
@@ -6843,7 +6867,7 @@ msgstr "webhook サービスと共有されるシークレット。サービス�
 #: components/LaunchPrompt/LaunchPrompt.tsx:134
 #: components/Schedule/shared/SchedulePromptableFields.tsx:159
 #: components/Schedule/shared/ScheduleWizardBody.tsx:146
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:90
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:96
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -7081,7 +7105,6 @@ msgstr ""
 #~ msgid "Select job type"
 #~ msgstr "ジョブタイプの選択"
 
-#: screens/Setting/AzureAD/AzureAD.tsx:61
 #~ msgid "Tenant"
 #~ msgstr ""
 
@@ -7394,6 +7417,10 @@ msgstr "回答の変数名"
 msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# か月} other {# か月}}"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:60
+msgid "The issuer to trust could not be read from the server. Try again later."
+msgstr "信頼する発行者をサーバーから読み取れませんでした。後でもう一度お試しください。"
+
 #: screens/Project/shared/ProjectForm.tsx:285
 msgid "Choose a source control type"
 msgstr "ソースコントロールタイプの選択"
@@ -7604,7 +7631,7 @@ msgstr "値で終了するフィールド。"
 #~ msgid "Clear subscription selection"
 #~ msgstr "サブスクリプションの選択解除"
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:63
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:80
 msgid "Test passed"
 msgstr "テスト合格。"
 
@@ -7668,7 +7695,7 @@ msgstr "木曜"
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:236
 #: components/TemplateList/TemplateList.tsx:285
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:88
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Inventory/ConstructedInventory.tsx:82
 #: screens/Inventory/FederatedInventory.tsx:82
 #: screens/Inventory/Inventory.tsx:82
@@ -7960,6 +7987,10 @@ msgstr ""
 msgid "Playbook Complete"
 msgstr "Playbook の完了"
 
+#: screens/Setting/MiscSystem/groups.ts:72
+msgid "Workload Identity"
+msgstr ""
+
 #: screens/Job/JobOutput/HostEventModal.tsx:196
 msgid "Details tab"
 msgstr "詳細タブ"
@@ -7975,7 +8006,7 @@ msgstr "IRC サーバーパスワード"
 #: components/AdHocCommands/AdHocPreviewStep.tsx:58
 #: components/AdHocCommands/useAdHocCredentialStep.tsx:27
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:107
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:138
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:145
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:91
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:323
@@ -8258,7 +8289,7 @@ msgstr "{label} の詳細情報"
 
 #: routeConfig.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:210
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Inventory/ConstructedInventory.tsx:77
 #: screens/Inventory/FederatedInventory.tsx:77
 #: screens/Inventory/Inventory.tsx:76
@@ -8422,7 +8453,7 @@ msgstr "上記のフィルターを使用して別の検索を試してくださ
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "ログインリダイレクトのオーバーライド URL を編集してもよろしいですか？これを行うと、ローカルの認証情報も無効になると、ユーザーのシステムへのログイン機能に影響があります。"
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "認証情報が見つかりません。"
 
@@ -8528,6 +8559,10 @@ msgstr "SAML 設定の表示"
 #: screens/Job/JobOutput/HostEventModal.tsx:184
 msgid "Host Details"
 msgstr "ホストの詳細"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/MetadataStep.tsx:138
+msgid "Only used by the test, which logs in to Vault as a job from this template would. Jobs log in as themselves."
+msgstr "テストでのみ使用され、このテンプレートのジョブと同じように Vault にログインします。ジョブは自分自身としてログインします。"
 
 #: screens/Job/Job.helptext.tsx:11
 #: screens/Template/shared/JobTemplate.helptext.tsx:13
@@ -9062,7 +9097,7 @@ msgstr ""
 
 #: screens/Credential/shared/CredentialForm.tsx:450
 #: screens/Credential/shared/CredentialForm.tsx:456
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:80
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:86
 msgid "Test"
 msgstr "テスト"
 
@@ -9482,7 +9517,7 @@ msgstr ""
 msgid "Relaunch Workflow Job"
 msgstr ""
 
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:157
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:164
 msgid "External Secret Management System"
 msgstr "外部シークレット管理システム"
 
@@ -10714,10 +10749,14 @@ msgstr "プレビュー"
 
 #: components/JobList/JobListItem.tsx:115
 #: components/Lookup/HostFilterLookup.tsx:412
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:290
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "選択"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:78
+msgid "The system that accepts it has to trust this issuer, which is also its OIDC discovery URL:"
+msgstr "これを受け入れるシステムは、この発行者を信頼する必要があります。これは OIDC ディスカバリー URL でもあります:"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:120
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:90
@@ -11347,6 +11386,10 @@ msgstr "最近のテンプレート"
 msgid "Add Federated Inventory"
 msgstr "フェデレーションインベントリーの追加"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:53
+msgid "Workload identity is not available"
+msgstr "ワークロード ID は利用できません"
+
 #: screens/Dashboard/shared/LineChart.tsx:194
 msgid "Job Runs"
 msgstr "ジョブの実行"
@@ -11546,6 +11589,10 @@ msgstr "パラメーター"
 #: components/SelectedList/DraggableSelectedList.tsx:248
 msgid "Remove"
 msgstr "削除"
+
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginTestAlert.tsx:103
+msgid "Claims sent"
+msgstr "送信されたクレーム"
 
 #: screens/InstanceGroup/Instances/InstanceList.tsx:267
 #: screens/Instances/InstanceList/InstanceList.tsx:198
@@ -12139,7 +12186,7 @@ msgstr "組織"
 msgid "Cleanup Job"
 msgstr ""
 
-#: screens/Login/Login.tsx:322
+#: screens/Login/Login.tsx:326
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "セッションの期限が切れました。中断したところから続行するには、ログインしてください。"
 
@@ -12182,7 +12229,7 @@ msgstr "このインベントリーは、現在他のリソースで使用され
 msgid "Disassociate the user from these teams?"
 msgstr ""
 
-#: screens/Credential/shared/ExternalTestModal.tsx:90
+#: screens/Credential/shared/ExternalTestModal.tsx:102
 msgid "Test External Credential"
 msgstr "外部認証情報のテスト"
 
@@ -12260,7 +12307,7 @@ msgstr ""
 msgid "Case-insensitive version of endswith."
 msgstr "endswith で大文字小文字の区別なし。"
 
-#: components/Lookup/Lookup.tsx:264
+#: components/Lookup/Lookup.tsx:297
 msgid "Cancel lookup"
 msgstr "ルックアップの取り消し"
 
@@ -12272,7 +12319,7 @@ msgstr ""
 #: components/ErrorDetail/ErrorDetail.tsx:78
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:93
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:79
 #: screens/Host/Host.tsx:67
@@ -13520,6 +13567,10 @@ msgstr "無効な時間形式です"
 msgid "Unknown Project"
 msgstr "不明なプロジェクト"
 
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:75
+msgid "Each job gets a short lived token signed for it, with no secret stored here"
+msgstr "各ジョブにはそのジョブ用に署名された短期間有効なトークンが渡され、ここにシークレットは保存されません"
+
 #: components/LabelLists/LabelLists.tsx:522
 msgid "Failed to delete one or more labels."
 msgstr ""
@@ -13711,8 +13762,9 @@ msgstr "正常に拒否されました"
 msgid "Not configured for inventory sync."
 msgstr "インベントリーの同期に設定されていません。"
 
-#~ msgid "Playbook name"
-#~ msgstr "Playbook 名"
+#: components/Lookup/JobTemplateLookup.tsx:133
+msgid "Playbook name"
+msgstr "Playbook 名"
 
 #~ msgid "Add constructed inventory"
 #~ msgstr "建設されたインベントリを追加"
@@ -13865,6 +13917,10 @@ msgstr "ホストが自動化された回数"
 
 #~ msgid "Expand input"
 #~ msgstr "入力の展開"
+
+#: screens/Credential/shared/CredentialFormFields/WorkloadIdentityInfo.tsx:54
+msgid "Could not read the workload identity configuration"
+msgstr "ワークロード ID の設定を読み取れませんでした"
 
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:304
 #: screens/Template/shared/JobTemplateForm.tsx:549
@@ -14376,7 +14432,7 @@ msgstr "Survey プレビューモーダル"
 
 #: components/StatusLabel/StatusLabel.tsx:56
 #: components/Workflow/WorkflowNodeHelp.tsx:113
-#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
+#: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:33
 msgid "OK"
 msgstr "OK"
@@ -14455,6 +14511,7 @@ msgstr "ホストを削除できませんでした。"
 #: components/Lookup/CredentialLookup.tsx:248
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:234
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177
