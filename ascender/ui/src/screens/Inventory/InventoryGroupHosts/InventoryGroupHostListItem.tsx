@@ -2,7 +2,7 @@ import type { Host, RecentJob } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
 import { Td, Tr } from '@patternfly/react-table';
@@ -64,27 +64,22 @@ function InventoryGroupHostListItem({
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
-        <ActionItem
-          visible={host.summary_fields.user_capabilities?.edit}
-          tooltip={t`Toggle host`}
-        >
-          <HostToggle host={host} />
-        </ActionItem>
+        {/* The toggle brings its own tooltip, and disables itself for
+            whoever may not edit the host, as on the other host lists. */}
+        <HostToggle host={host} />
         {!isReadOnlyInventoryType(inventoryType) && (
           <ActionItem
             tooltip={t`Edit Host`}
             visible={host.summary_fields.user_capabilities?.edit}
           >
-            <Tooltip content={t`Edit Host`} position="top">
-              <Button
-                icon={<PencilAltIcon />}
-                ouiaId={`${host.id}-edit-button`}
-                aria-label={t`Edit Host`}
-                variant="plain"
-                component={Link}
-                to={`${editUrl}`}
-              />
-            </Tooltip>
+            <Button
+              icon={<PencilAltIcon />}
+              ouiaId={`${host.id}-edit-button`}
+              aria-label={t`Edit Host`}
+              variant="plain"
+              component={Link}
+              to={`${editUrl}`}
+            />
           </ActionItem>
         )}
       </ActionsTd>

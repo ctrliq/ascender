@@ -84,24 +84,30 @@ function JobEvent({
         }
         const canToggle = index === toggleLineIndex && !event.isTracebackOnly;
         return (
-          <JobEventLine
-            onClick={isClickable ? handleClick : undefined}
-            key={`${event.counter}-${lineNumber}`}
-            $isClickable={isClickable}
-          >
+          <JobEventLine key={`${event.counter}-${lineNumber}`}>
             <JobEventLineToggle
               canToggle={canToggle}
               isCollapsed={isCollapsed}
               onToggle={onToggleCollapsed}
             />
             <JobEventLineNumber>
-              {!event.isTracebackOnly ? lineNumber : ''}
+              {/* Counted from one, as a reader counts lines; the api counts
+                  them from zero, which is what the number above goes by. */}
+              {!event.isTracebackOnly ? lineNumber + 1 : ''}
               <JobEventEllipsis isCollapsed={isCollapsed && canToggle} />
             </JobEventLineNumber>
+            {/*
+              What opens the event is the line's text, rather than the row it
+              sits in. The row runs the width of the output, so a pointer on it
+              followed the line past its last character and offered a click on
+              the empty space after it, and on the line number as well.
+            */}
             <JobEventLineText
               {...({
                 type: 'job_event_line_text',
               } as React.HTMLAttributes<HTMLDivElement>)}
+              onClick={isClickable ? handleClick : undefined}
+              $isClickable={isClickable}
               dangerouslySetInnerHTML={{
                 __html: html,
               }}

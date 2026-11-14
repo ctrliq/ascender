@@ -106,10 +106,19 @@ class FieldLookupBackend(BaseFilterBackend):
 
         # Type names are stored without underscores internally, but are presented and
         # and serialized over the API containing underscores so we remove `_`
-        # for polymorphic_ctype__model lookups.
+        # for polymorphic_ctype__model lookups. The value stays a model name
+        # whatever the suffix: the field here is the content type key, which
+        # would read it as an id. Only __in goes further, splitting its list so
+        # that type__in matches each listed type rather than one joined string.
         if new_lookup.startswith('polymorphic_ctype__model'):
             value = value.replace('_', '')
-        elif new_lookup.endswith('__isnull'):
+            if new_lookup.endswith('__in'):
+                if not value:
+                    raise ValueError(_('cannot provide empty value for __in'))
+                value = value.split(',')
+            return value, new_lookup, needs_distinct
+
+        if new_lookup.endswith('__isnull'):
             value = to_python_boolean(value)
         elif new_lookup.endswith('__in'):
             items = []
@@ -199,7 +208,10 @@ class FieldLookupBackend(BaseFilterBackend):
                         search_filter_relation = 'AND'
                         values = reduce(lambda list1, list2: list1 + list2, [i.split(',') for i in values])
                     for value in values:
-                        search_value, new_keys, _ = self.value_to_python(queryset.model, key, force_str(value))
+                        # Not "_": assigning that anywhere in this method makes it
+                        # local throughout, and the role_level ParseError below then
+                        # fails on gettext with an UnboundLocalError instead.
+                        search_value, new_keys, _distinct = self.value_to_python(queryset.model, key, force_str(value))
                         assert isinstance(new_keys, list)
                         search_filters[search_value] = new_keys
                     # by definition, search *only* joins across relations,

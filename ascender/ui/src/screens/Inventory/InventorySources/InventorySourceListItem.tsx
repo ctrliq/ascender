@@ -2,7 +2,7 @@ import type { InventorySource, UnifiedJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
 
@@ -10,7 +10,9 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import StatusLabel from 'components/StatusLabel';
 import JobCancelButton from 'components/JobCancelButton';
 import { formatDateString } from 'util/dates';
-import { isJobRunning } from 'util/jobs';
+import { getRunActionLabels, isJobCancelable, isJobRunning } from 'util/jobs';
+import useCanCancelSync from 'hooks/useCanCancelSync';
+import Tooltip from 'components/Tooltip';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 
 export interface InventorySourceListItemProps {
@@ -32,7 +34,7 @@ function InventorySourceListItem({
   label,
   rowIndex,
 }: InventorySourceListItemProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const generateLastJobTooltip = (job: UnifiedJob) => (
     <>
       <div>{t`MOST RECENT SYNC`}</div>
@@ -57,6 +59,12 @@ function InventorySourceListItem({
   } else if (source.summary_fields?.last_job) {
     job = source.summary_fields.last_job;
   }
+  const canCancelSync = useCanCancelSync(
+    'inventory_update',
+    job?.id,
+    job?.status,
+    source.summary_fields?.user_capabilities?.edit
+  );
 
   return (
     <Tr id={`source-row-${source.id}`} ouiaId={`source-row-${source.id}`}>
@@ -81,7 +89,7 @@ function InventorySourceListItem({
             content={generateLastJobTooltip(job as UnifiedJob)}
             key={job.id}
           >
-            <Link to={`/jobs/inventory/${job.id}`}>
+            <Link to={`/runs/inventory/${job.id}`}>
               <StatusLabel status={job.status} />
             </Link>
           </Tooltip>
@@ -89,32 +97,31 @@ function InventorySourceListItem({
       </Td>
       <Td dataLabel={t`Type`}>{label}</Td>
       <ActionsTd dataLabel={t`Actions`}>
-        {['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
-          <ActionItem visible={source.summary_fields?.user_capabilities?.start}>
-            {source.summary_fields?.current_job?.id && (
+        {isJobCancelable(job?.status) ? (
+          <ActionItem visible={canCancelSync}>
+            {job?.id && (
               <JobCancelButton
                 job={{
                   type: 'inventory_update',
-                  id: source?.summary_fields?.current_job?.id,
+                  id: job.id,
                 }}
-                errorTitle={t`Inventory Source Sync Error`}
-                errorMessage={t`Failed to cancel Inventory Source Sync`}
-                title={t`Cancel Inventory Source Sync`}
+                /* The shared wording for this kind of run, the one the runs
+                   list and the run's own page use. */
+                title={i18n._(getRunActionLabels('inventory_update').cancel)}
                 showIconButton
               />
             )}
           </ActionItem>
         ) : (
-          <ActionItem
-            visible={source.summary_fields.user_capabilities?.start}
-            tooltip={t`Sync`}
-          >
+          /* The button carries its own Sync Source tooltip, so the item
+             adds none of its own. */
+          <ActionItem visible={source.summary_fields.user_capabilities?.start}>
             <InventorySourceSyncButton source={source} />
           </ActionItem>
         )}
         <ActionItem
           visible={source.summary_fields.user_capabilities?.edit}
-          tooltip={t`Edit`}
+          tooltip={t`Edit Source`}
         >
           <Button
             icon={<PencilAltIcon />}

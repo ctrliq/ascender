@@ -1,7 +1,12 @@
 import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { InventoriesAPI, UnifiedJobsAPI } from 'api';
+import {
+  InventoriesAPI,
+  JobTemplatesAPI,
+  UnifiedJobsAPI,
+  WorkflowJobTemplatesAPI,
+} from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
@@ -32,6 +37,13 @@ describe('<SmartInventoryDetail />', () => {
           results: [{ id: 1, name: 'mock instance group' }],
         },
       } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
+      // What the delete dialog counts as relying on the inventory.
+      vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+        data: { count: 0 },
+      } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+      vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
+        data: { count: 0 },
+      } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
     });
 
     afterEach(() => {
@@ -50,14 +62,14 @@ describe('<SmartInventoryDetail />', () => {
       assertDetail('Description', 'smart inv description');
       assertDetail('Type', 'Smart inventory');
       assertDetail('Organization', 'Default');
-      assertDetail('Smart host filter', 'name__icontains=local');
-      assertDetail('Instance groups', 'mock instance group');
-      assertDetail('Total hosts', '2');
+      assertDetail('Smart Host Filter', 'name__icontains=local');
+      assertDetail('Instance Groups', 'mock instance group');
+      assertDetail('Total Hosts', '2');
 
       expect(screen.getByText('Activity')).toBeInTheDocument();
       expect(screen.getByText('Variables')).toBeInTheDocument();
       expect(screen.getByText('Created')).toBeInTheDocument();
-      expect(screen.getByText('Last modified')).toBeInTheDocument();
+      expect(screen.getByText('Last Modified')).toBeInTheDocument();
     });
 
     test('should show edit button for users with edit permission', async () => {
@@ -67,7 +79,7 @@ describe('<SmartInventoryDetail />', () => {
         />
       );
 
-      const editLink = await screen.findByRole('link', { name: 'edit' });
+      const editLink = await screen.findByRole('link', { name: 'Edit' });
       expect(editLink).toHaveAttribute(
         'href',
         `/inventories/smart_inventory/${mockSmartInventory.id}/edit`
@@ -104,6 +116,29 @@ describe('<SmartInventoryDetail />', () => {
       await waitFor(() =>
         expect(InventoriesAPI.destroy).toHaveBeenCalledTimes(1)
       );
+    });
+
+    test('delete dialog names the templates that rely on the inventory', async () => {
+      vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+        data: { count: 2 },
+      } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+      const { user } = renderWithContexts(
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
+      );
+
+      await user.click(await screen.findByRole('button', { name: 'Delete' }));
+
+      expect(
+        await screen.findByText(
+          'This inventory is currently being used by other resources. Are you sure you want to delete it?'
+        )
+      ).toBeInTheDocument();
+      expect(screen.getByLabelText('Job Templates: 2')).toBeInTheDocument();
+      expect(JobTemplatesAPI.read).toHaveBeenCalledWith({
+        inventory: mockSmartInventory.id,
+      });
     });
 
     test('Error dialog shown for failed deletion', async () => {
@@ -161,7 +196,7 @@ describe('<SmartInventoryDetail />', () => {
       );
 
       await screen.findByText('Smart Inv');
-      expect(screen.queryByText('Instance groups')).not.toBeInTheDocument();
+      expect(screen.queryByText('Instance Groups')).not.toBeInTheDocument();
     });
   });
 
@@ -196,7 +231,7 @@ describe('<SmartInventoryDetail />', () => {
 
       await screen.findByText('Smart Inv');
       expect(
-        screen.queryByRole('link', { name: 'edit' })
+        screen.queryByRole('link', { name: 'Edit' })
       ).not.toBeInTheDocument();
     });
 

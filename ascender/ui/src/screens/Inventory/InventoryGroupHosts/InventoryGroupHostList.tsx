@@ -1,9 +1,8 @@
-import type { ApiEntity } from 'types/api';
+import type { ApiEntity, Group } from 'types/api';
 import React, { useCallback, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import { DropdownItem } from '@patternfly/react-core';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import { GroupsAPI, InventoriesAPI } from 'api';
 
@@ -19,12 +18,12 @@ import ErrorDetail from 'components/ErrorDetail';
 import PaginatedTable, {
   HeaderCell,
   HeaderRow,
+  ToolbarAddButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
-import AddDropDownButton from 'components/AddDropDownButton';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import type { QSParams } from 'util/qs';
 import InventoryGroupHostListItem from './InventoryGroupHostListItem';
 import { isReadOnlyInventoryType } from '../shared/utils';
@@ -35,7 +34,17 @@ const QS_CONFIG = getQSConfig('host', {
   order_by: 'name',
 });
 
-function InventoryGroupHostList() {
+export interface InventoryGroupHostListProps {
+  /**
+   * The group this list sits under, which a run with nothing ticked is
+   * aimed at rather than at the whole inventory.
+   */
+  inventoryGroup?: Group;
+}
+
+function InventoryGroupHostList({
+  inventoryGroup,
+}: InventoryGroupHostListProps = {}) {
   const { t } = useLingui();
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +53,6 @@ function InventoryGroupHostList() {
     groupId,
     inventoryType,
   } = useParams() as { id: string; groupId: string; inventoryType: string };
-  const navigate = useNavigate();
   const location = useLocation();
 
   const {
@@ -93,7 +101,7 @@ function InventoryGroupHostList() {
     }
   );
 
-  const { selected, isAllSelected, handleSelect, setSelected } =
+  const { selected, isAllSelected, handleSelect, setSelected, clearSelected } =
     useSelected(hosts);
 
   const {
@@ -158,33 +166,25 @@ function InventoryGroupHostList() {
     Object.prototype.hasOwnProperty.call(actions, 'POST') &&
     isNotReadOnlyInventory;
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_hosts/add`;
-  const addExistingHost = t`Add existing host`;
-  const addNewHost = t`Add new host`;
-
-  const addButton = (
-    <AddDropDownButton
-      ouiaId="add-hosts-button"
+  /*
+   * Two buttons rather than one menu, each saying what it does: Add makes a
+   * new host in this group, Associate puts an existing one in it.
+   */
+  const addButtons = [
+    <ToolbarAddButton
       key="add"
-      dropdownItems={[
-        <DropdownItem
-          onClick={() => setIsModalOpen(true)}
-          key={addExistingHost}
-          aria-label={addExistingHost}
-          ouiaId="add-existing-host-dropdown-item"
-        >
-          {addExistingHost}
-        </DropdownItem>,
-        <DropdownItem
-          onClick={() => navigate(addFormUrl)}
-          key={addNewHost}
-          aria-label={addNewHost}
-          ouiaId="add-new-host-dropdown-item"
-        >
-          {addNewHost}
-        </DropdownItem>,
-      ]}
-    />
-  );
+      ouiaId="group-hosts-add-button"
+      tooltip={t`Add Host`}
+      linkTo={addFormUrl}
+    />,
+    <ToolbarAddButton
+      key="associate"
+      ouiaId="group-hosts-associate-button"
+      defaultLabel={t`Associate`}
+      tooltip={t`Associate Host`}
+      onClick={() => setIsModalOpen(true)}
+    />,
+  ];
   return (
     <>
       <PaginatedTable
@@ -196,6 +196,7 @@ function InventoryGroupHostList() {
         itemCount={hostCount}
         pluralizedItemName={t`Hosts`}
         qsConfig={QS_CONFIG}
+        clearSelected={clearSelected}
         onRowClick={handleSelect}
         toolbarSearchColumns={[
           {
@@ -237,24 +238,29 @@ function InventoryGroupHostList() {
             }
             qsConfig={QS_CONFIG}
             additionalControls={[
-              ...(canAdd ? [addButton] : []),
-              ...(!isAdHocDisabled
-                ? [
-                    <AdHocCommands
-                      adHocItems={selected}
-                      hasListItems={hostCount > 0}
-                      moduleOptions={moduleOptions}
-                      onLaunchLoading={setIsAdHocLaunchLoading}
-                    />,
-                  ]
-                : []),
+              <RunSelectionMenu
+                key="run"
+                ouiaId="inventory-group-host-list-run-menu"
+                items={selected}
+                inventoryId={inventoryId}
+                moduleOptions={moduleOptions}
+                onLaunchLoading={setIsAdHocLaunchLoading}
+                canRunCommand={!isAdHocDisabled}
+                scope={
+                  inventoryGroup && {
+                    item: inventoryGroup,
+                    label: t`Run on Group`,
+                  }
+                }
+              />,
+              ...(canAdd ? addButtons : []),
               ...(isNotReadOnlyInventory
                 ? [
                     <DisassociateButton
                       key="disassociate"
                       onDisassociate={handleDisassociate}
                       itemsToDisassociate={selected}
-                      modalTitle={t`Disassociate host from group?`}
+                      modalTitle={t`Disassociate these hosts from the group?`}
                       modalNote={t`
                         Note that only hosts directly in this group can
                         be disassociated. Hosts in sub-groups must be disassociated
@@ -277,7 +283,6 @@ function InventoryGroupHostList() {
             onSelect={() => handleSelect(host)}
           />
         )}
-        emptyStateControls={canAdd && addButton}
       />
       {isModalOpen && (
         <AssociateModal
@@ -287,7 +292,7 @@ function InventoryGroupHostList() {
           isModalOpen={isModalOpen}
           onAssociate={handleAssociate}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Hosts`}
+          title={t`Associate Hosts`}
         />
       )}
       {associateError && (
@@ -297,7 +302,7 @@ function InventoryGroupHostList() {
           title={t`Error!`}
           variant="error"
         >
-          {t`Failed to associate.`}
+          {t`Failed to associate one or more hosts.`}
           <ErrorDetail error={associateError} />
         </AlertModal>
       )}

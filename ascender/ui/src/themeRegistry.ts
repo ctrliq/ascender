@@ -41,12 +41,40 @@ export function getThemes() {
   return custom ? [...themes, custom] : themes;
 }
 
+/**
+ * Theme ids that were renamed, by the id they used to have.
+ *
+ * The id is the stylesheet's file name, and themes/awx.css is
+ * themes/classic.css now. An account preference, a browser's stored choice
+ * and an installation's DEFAULT_UI_THEME can all still hold the old id, and
+ * each of them asked for that theme rather than for Default.
+ */
+const RENAMED_THEMES: Record<string, string> = {
+  awx: 'classic',
+};
+
+/**
+ * The current id of a theme, wherever the id was stored.
+ *
+ * Args:
+ *     themeId: A theme id as it was stored, possibly one since renamed.
+ *
+ * Returns:
+ *     The id the theme has now; an id that was never renamed, and an empty
+ *     one, come back as they were given.
+ */
+export function resolveThemeId<T extends string | null | undefined>(
+  themeId: T
+): T | string {
+  return (themeId && RENAMED_THEMES[themeId]) || themeId;
+}
+
 export function getStoredThemeId() {
   const session = sessionStorage.getItem('theme');
-  if (session) return session;
+  if (session) return resolveThemeId(session);
 
   const stored = localStorage.getItem('theme');
-  if (stored) return stored;
+  if (stored) return resolveThemeId(stored);
 
   const darkMode = localStorage.getItem('darkMode');
   if (darkMode !== null) {
@@ -56,19 +84,26 @@ export function getStoredThemeId() {
     return id;
   }
 
+  /* What the installation asks for, mirrored by the Config context once the
+     settings have answered. It is only a fallback: anything the account or this
+     browser already chose is returned above. */
+  const installDefault = localStorage.getItem('default_theme');
+  if (installDefault) return resolveThemeId(installDefault);
+
   return 'default';
 }
 
 export function getSavedThemeId() {
-  return localStorage.getItem('theme') || 'default';
+  return resolveThemeId(localStorage.getItem('theme')) || 'default';
 }
 
 let activeThemeId: string | null = null;
 
 export function applyTheme(themeId?: string | null, persist = false) {
   const allThemes = getThemes();
+  const wanted = resolveThemeId(themeId);
   // There is always a themes/default.css, so the last fallback always hits.
-  const theme = (allThemes.find((t) => t.id === themeId) ||
+  const theme = (allThemes.find((t) => t.id === wanted) ||
     allThemes.find((t) => t.id === 'default') ||
     allThemes[0]) as Theme;
 

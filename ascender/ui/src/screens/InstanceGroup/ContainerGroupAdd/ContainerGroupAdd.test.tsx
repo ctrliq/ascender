@@ -117,9 +117,7 @@ describe('<ContainerGroupAdd/>', () => {
       })
     );
     expect(screen.queryByText('FormSubmitError')).not.toBeInTheDocument();
-    expect(history.location.pathname).toBe(
-      '/instance_groups/container_group/123/details'
-    );
+    expect(history.location.pathname).toBe('/container_groups/123/details');
   });
 
   test('a group behind a mesh node is sent without a credential', async () => {
@@ -145,6 +143,6 @@ describe('<ContainerGroupAdd/>', () => {
       context: { router: { history } },
     });
     await user.click(await screen.findByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/instance_groups');
+    expect(history.location.pathname).toEqual('/container_groups');
   });
 });

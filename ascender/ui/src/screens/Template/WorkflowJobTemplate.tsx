@@ -20,6 +20,7 @@ import AppendBody from 'components/AppendBody';
 import ContentError from 'components/ContentError';
 import FullPage from 'components/FullPage';
 import JobList from 'components/JobList';
+import TemplateLaunchControl from 'components/JobList/TemplateLaunchControl';
 import NotificationList from 'components/NotificationList';
 import { Schedules } from 'components/Schedule';
 import { ResourceAccessList } from 'components/ResourceAccessList';
@@ -130,6 +131,20 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
     { name: t`Access`, link: `${baseUrl}/access` },
   ];
 
+  /* Runs last, after the tabs that belong to this kind of object and the
+     Notifications and Schedules every template has, as on a project's and
+     an inventory's screens. */
+  tabsArray.push(
+    {
+      name: t`Visualizer`,
+      link: `${baseUrl}/visualizer`,
+    },
+    {
+      name: canAddAndEditSurvey ? t`Survey` : t`View Survey`,
+      link: `${baseUrl}/survey`,
+    }
+  );
+
   if (canSeeNotificationsTab) {
     tabsArray.push({
       name: t`Notifications`,
@@ -144,20 +159,10 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
     });
   }
 
-  tabsArray.push(
-    {
-      name: t`Visualizer`,
-      link: `${baseUrl}/visualizer`,
-    },
-    {
-      name: t`Jobs`,
-      link: `${baseUrl}/jobs`,
-    },
-    {
-      name: canAddAndEditSurvey ? t`Survey` : t`View Survey`,
-      link: `${baseUrl}/survey`,
-    }
-  );
+  tabsArray.push({
+    name: t`Runs`,
+    link: `${baseUrl}/runs`,
+  });
 
   // Ids come from position rather than from the literals, since which tabs
   // exist depends on the template and on who is looking at it.
@@ -165,9 +170,12 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
 
   let showCardHeader = true;
 
+  /* The survey's add and edit forms stand on their own, as they do on a
+     job template's screen, with Cancel rather than tabs to leave by. */
   if (
     location.pathname.endsWith('edit') ||
-    location.pathname.includes('schedules/')
+    location.pathname.includes('schedules/') ||
+    location.pathname.includes('survey/')
   ) {
     showCardHeader = false;
   }
@@ -263,14 +271,17 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
               }
             />
           )}
+          {/* The tab's address before the rail called these runs. */}
+          <Route path="jobs" element={<Navigate to="../runs" replace />} />
           {template?.id && (
             <Route
-              path="jobs"
+              path="runs"
               element={
                 <JobList
                   defaultParams={{
                     workflow_job__workflow_job_template: template.id,
                   }}
+                  runControl={<TemplateLaunchControl template={template} />}
                 />
               }
             />

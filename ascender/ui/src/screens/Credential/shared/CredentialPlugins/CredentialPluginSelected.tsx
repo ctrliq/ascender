@@ -1,10 +1,11 @@
 import type { Credential } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { KeyIcon } from '@patternfly/react-icons';
 import CredentialChip from 'components/CredentialChip';
 import './CredentialPluginSelected.css';
+import Tooltip from 'components/Tooltip';
 
 export interface CredentialPluginSelectedProps {
   credential: Credential;

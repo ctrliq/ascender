@@ -23,6 +23,7 @@ import JobList from 'components/JobList';
 import InstanceGroupDetails from './InstanceGroupDetails';
 import InstanceGroupEdit from './InstanceGroupEdit';
 import Instances from './Instances/Instances';
+import { useQueueNames } from './shared/queueNames';
 
 export interface InstanceGroupProps {
   setBreadcrumb: SetBreadcrumb;
@@ -33,6 +34,9 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
   const { t } = useLingui();
   const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
+  // Read once for the screen rather than with the group, which is read again
+  // on every tab: the names are the install's and do not change between tabs.
+  const queueNames = useQueueNames();
 
   const {
     isLoading,
@@ -83,8 +87,8 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
       id: 1,
     },
     {
-      name: t`Jobs`,
-      link: `/instance_groups/${id}/jobs`,
+      name: t`Runs`,
+      link: `/instance_groups/${id}/runs`,
       id: 2,
     },
   ];
@@ -96,8 +100,7 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
           <ContentError error={contentError}>
             {(contentError as DetailedError).response?.status === 404 && (
               <span>
-                {t`Instance group not found.`}
-
+                {t`Instance group not found.`}{' '}
                 <Link to="/instance_groups">{t`View all instance groups`}</Link>
               </span>
             )}
@@ -107,23 +110,55 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
     );
   }
 
+  /*
+   * A container group reached at an instance group address: a link built from
+   * the type alone, a role or an old bookmark, cannot tell the two apart, and
+   * the instance groups list no longer holds container groups. Send it to the
+   * container group screen, keeping the tab where that screen has one.
+   */
+  if (instanceGroup?.is_container_group) {
+    const tab = pathname.split('/')[3] ?? '';
+    const keptTab = ['details', 'edit', 'runs', 'jobs'].includes(tab)
+      ? `/${tab}`
+      : '';
+    return <Navigate replace to={`/container_groups/${id}${keptTab}`} />;
+  }
+
   let cardHeader: React.ReactNode = <RoutedTabs tabsArray={tabsArray} />;
 
   if (['edit', 'instances/'].some((name) => pathname.includes(name))) {
     cardHeader = null;
   }
 
+  /*
+   * One loading animation, in the place the content will be. Drawn inside the
+   * card it made the page arrive in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the instanceGroup rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  if (isLoading && !instanceGroup) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
-        {isLoading && <ContentLoading />}
-        {!isLoading && instanceGroup && (
+        {instanceGroup && (
           <Routes>
             <Route index element={<Navigate to="details" replace />} />
             <Route
               path="edit"
-              element={<InstanceGroupEdit instanceGroup={instanceGroup} />}
+              element={
+                <InstanceGroupEdit
+                  instanceGroup={instanceGroup}
+                  queueNames={queueNames}
+                />
+              }
             />
             <Route
               path="details"
@@ -135,16 +170,22 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
               element={
                 <Instances
                   instanceGroup={instanceGroup}
+                  controlPlaneName={queueNames.controlPlane}
                   setBreadcrumb={setBreadcrumb}
                 />
               }
             />
+            {/* The tab's address before the rail called these runs. */}
+            <Route path="jobs" element={<Navigate to="../runs" replace />} />
             <Route
-              path="jobs"
+              path="runs"
               element={
                 <JobList
                   showTypeColumn
                   defaultParams={{ instance_group: instanceGroup.id }}
+                  // Nothing is launched from a group, so the generic Run
+                  // menu has no place here.
+                  runControl={false}
                 />
               }
             />

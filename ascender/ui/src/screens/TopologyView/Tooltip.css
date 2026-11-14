@@ -3,7 +3,10 @@
 .ascender-tooltip__wrapper {
   position: absolute;
   right: 0;
-  padding: 0 10px;
+  /* The theme leaves a card body four pixels at the top, which sat this panel
+     against the tab bar above it. Twenty more make the twenty-four that every
+     other card body in the app carries. */
+  padding: 20px 10px 0;
   width: 25%;
   background-color: var(--pf-v6-global--BackgroundColor--100);
   overflow: auto;
@@ -25,9 +28,28 @@
   gap: 0;
 }
 
+/* With a node selected, the first row of the detail list is what follows the
+   divider, and it takes the same sixteen pixels the sentence takes when no
+   node is selected. */
+.ascender-tooltip__description-list-group:first-child {
+  margin-block-start: 16px;
+}
+
+/* The title carries a ten pixel top margin that the empty state cancels with
+   an inline style of its own, so it sat lower once a node was clicked. */
+.ascender-tooltip__wrapper .ascender-tooltip__text:first-child {
+  margin-block-start: 0;
+}
+
 .ascender-tooltip__description-list-group {
   align-items: center;
   margin-top: 10px;
+}
+
+/* The title leaves sixteen pixels above the divider, so the text under it
+   takes the same sixteen rather than the ten the rest of the panel uses. */
+.pf-v6-c-divider + .ascender-tooltip__text {
+  margin-block-start: 16px;
 }
 
 .ascender-tooltip__text {
@@ -40,13 +62,41 @@
 
 .ascender-tooltip__slider-holder {
   display: flex;
-  align-items: center;
+  /* The rail sits on the bottom line of its block, under the fork count, so
+     the two figures it runs between belong on that line rather than halfway
+     up the block. */
+  align-items: flex-end;
   justify-content: space-between;
+  /* CPU 32 and RAM 177 are two words apiece, and the panel is narrow enough
+     that either would break across lines before the rail gave up any width. */
+  white-space: nowrap;
+}
+
+/* The rail block hangs twelve pixels below its track, to leave the thumb the
+   touch target it is drawn with. The two figures it runs between belong on the
+   track itself rather than that low. */
+.ascender-tooltip__slider-holder > div:first-child,
+.ascender-tooltip__slider-holder > div:last-child {
+  margin-block-end: 4px;
 }
 
 .ascender-tooltip__slider-forks {
   flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
+  min-width: 48px;
+  /* The thumb reaches half its own width past the end of the rail, so eight
+     of these pixels are already spoken for before the label starts. */
+  margin-inline: 20px;
   text-align: center;
+}
+
+/* As in the legend: the node's letters as the canvas draws them, not in the
+   capitals the themes give button text. The hostname beside them is a name
+   the canvas labels in its own case, and capitals would make it another. */
+.ascender-tooltip__wrapper
+  .ascender-tooltip__button.ascender-tooltip__button.ascender-tooltip__button
+  .pf-v6-c-button__text,
+.ascender-tooltip__wrapper
+  .ascender-tooltip__hostname.ascender-tooltip__hostname.ascender-tooltip__hostname
+  .pf-v6-c-button__text {
+  text-transform: none;
 }

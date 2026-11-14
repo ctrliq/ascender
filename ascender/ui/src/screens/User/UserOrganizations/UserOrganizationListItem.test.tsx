@@ -18,6 +18,9 @@ describe('<UserOrganizationListItem />', () => {
                 description: 'Bar',
               } as unknown as Organization
             }
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>
@@ -36,13 +39,17 @@ describe('<UserOrganizationListItem />', () => {
                 description: 'Bar',
               } as unknown as Organization
             }
+            isSelected={false}
+            onSelect={() => {}}
+            rowIndex={0}
           />
         </tbody>
       </table>
     );
     const cells = screen.getAllByRole('cell');
-    expect(cells[0]).toHaveTextContent('foo');
-    expect(cells[1]).toHaveTextContent('Bar');
+    // The first cell is the row's checkbox.
+    expect(cells[1]).toHaveTextContent('foo');
+    expect(cells[2]).toHaveTextContent('Bar');
     expect(screen.getByRole('link', { name: 'foo' })).toHaveAttribute(
       'href',
       '/organizations/1/details'

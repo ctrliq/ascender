@@ -155,7 +155,7 @@ function UserFormFields({ user }: UserFormFieldsProps) {
             data={userTypeOptions}
             {...userTypeField}
           />
-          {userTypeMeta.error && (
+          {userTypeMeta.touched && userTypeMeta.error && (
             <FormHelperText>
               <HelperText>
                 <HelperTextItem variant="error">

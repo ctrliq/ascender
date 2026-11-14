@@ -24,11 +24,11 @@ test.describe('workflow job selector', () => {
   test('shows which of the workflow jobs is on screen', async ({ page }) => {
     const { nodes } = fixtures();
     for (let i = 0; i < nodes.length; i += 1) {
-      await page.goto(route(`/jobs/management/${nodes[i].jobId}/output`), {
+      await page.goto(route(`/runs/management/${nodes[i].jobId}/output`), {
         waitUntil: 'domcontentloaded',
       });
       await expect(workflowToggle(page)).toHaveText(
-        `Workflow Job ${i + 1}/${nodes.length}`
+        `Job ${i + 1}/${nodes.length}`
       );
     }
   });
@@ -36,7 +36,7 @@ test.describe('workflow job selector', () => {
   test('switches to the job picked from the menu', async ({ page }) => {
     const { nodes } = fixtures();
     const [first, , third] = nodes;
-    await page.goto(route(`/jobs/management/${first.jobId}/output`), {
+    await page.goto(route(`/runs/management/${first.jobId}/output`), {
       waitUntil: 'domcontentloaded',
     });
     const console_ = watchConsole(page);
@@ -44,8 +44,8 @@ test.describe('workflow job selector', () => {
     await workflowToggle(page).click();
     await menuItem(page, third.identifier).click();
 
-    await expect(page).toHaveURL(new RegExp(`/jobs/management/${third.jobId}/output$`));
-    await expect(workflowToggle(page)).toHaveText(`Workflow Job 3/${nodes.length}`);
+    await expect(page).toHaveURL(new RegExp(`/runs/management/${third.jobId}/output$`));
+    await expect(workflowToggle(page)).toHaveText(`Job 3/${nodes.length}`);
     console_.expectQuiet();
   });
 
@@ -54,24 +54,24 @@ test.describe('workflow job selector', () => {
     // move it still offered the jobs belonging to the page you came from
     const { nodes } = fixtures();
     const [first, second, third] = nodes;
-    await page.goto(route(`/jobs/management/${first.jobId}/output`), {
+    await page.goto(route(`/runs/management/${first.jobId}/output`), {
       waitUntil: 'domcontentloaded',
     });
 
     await workflowToggle(page).click();
     await menuItem(page, third.identifier).click();
-    await expect(page).toHaveURL(new RegExp(`/jobs/management/${third.jobId}/output$`));
+    await expect(page).toHaveURL(new RegExp(`/runs/management/${third.jobId}/output$`));
 
     await workflowToggle(page).click();
     await menuItem(page, second.identifier).click();
-    await expect(page).toHaveURL(new RegExp(`/jobs/management/${second.jobId}/output$`));
-    await expect(workflowToggle(page)).toHaveText(`Workflow Job 2/${nodes.length}`);
+    await expect(page).toHaveURL(new RegExp(`/runs/management/${second.jobId}/output$`));
+    await expect(workflowToggle(page)).toHaveText(`Job 2/${nodes.length}`);
   });
 
   test('lists every job node, and picking the current one is harmless', async ({ page }) => {
     const { nodes } = fixtures();
     const current = nodes[1];
-    await page.goto(route(`/jobs/management/${current.jobId}/output`), {
+    await page.goto(route(`/runs/management/${current.jobId}/output`), {
       waitUntil: 'domcontentloaded',
     });
     await workflowToggle(page).click();
@@ -79,12 +79,12 @@ test.describe('workflow job selector', () => {
       await expect(menuItem(page, node.identifier)).toBeVisible();
     }
     await menuItem(page, current.identifier).click();
-    await expect(page).toHaveURL(new RegExp(`/jobs/management/${current.jobId}/output$`));
+    await expect(page).toHaveURL(new RegExp(`/runs/management/${current.jobId}/output$`));
   });
 
   test('filters the list by status', async ({ page }) => {
     const { nodes } = fixtures();
-    await page.goto(route(`/jobs/management/${nodes[0].jobId}/output`), {
+    await page.goto(route(`/runs/management/${nodes[0].jobId}/output`), {
       waitUntil: 'domcontentloaded',
     });
     await workflowToggle(page).click();
@@ -111,7 +111,7 @@ test.describe('job output layout', () => {
     const loops = await watchLayoutLoops(page);
     await login(page);
     const { nodes } = fixtures();
-    await page.goto(route(`/jobs/management/${nodes[0].jobId}/output`), {
+    await page.goto(route(`/runs/management/${nodes[0].jobId}/output`), {
       waitUntil: 'domcontentloaded',
     });
     const scroller = page.locator('.ascender-output-scroll');

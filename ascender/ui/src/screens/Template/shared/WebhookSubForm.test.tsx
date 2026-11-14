@@ -69,11 +69,12 @@ describe('<WebhookSubForm />', () => {
     expect(screen.getByLabelText('Webhook URL')).toHaveValue(
       '/api/v2/job_templates/51/github/'
     );
-    expect(
-      screen.getByLabelText('workflow job template webhook key')
-    ).toHaveValue('webhook key');
-    // credential lookup input is populated with the credential name
-    expect(document.getElementById('credential')).toHaveValue(
+    expect(screen.getByLabelText('template webhook key')).toHaveValue(
+      'webhook key'
+    );
+    // credential lookup input is populated with the credential name; the
+    // lookup is identified by the field it fills
+    expect(document.getElementById('webhook_credential')).toHaveValue(
       'Github credential'
     );
   });
@@ -100,9 +101,7 @@ describe('<WebhookSubForm />', () => {
     );
     // switching to another service clears the key: a new one is generated on
     // save unless the user types their own
-    expect(
-      screen.getByLabelText('workflow job template webhook key')
-    ).toHaveValue('');
+    expect(screen.getByLabelText('template webhook key')).toHaveValue('');
   });
 
   test('should have disabled button to update webhook key when there is no saved key', async () => {
@@ -123,9 +122,7 @@ describe('<WebhookSubForm />', () => {
   test('should accept a user supplied webhook key', async () => {
     renderForm(initialValues, 'job_template', 'templates/job_template/51/edit');
 
-    const keyInput = await screen.findByLabelText(
-      'workflow job template webhook key'
-    );
+    const keyInput = await screen.findByLabelText('template webhook key');
     fireEvent.change(keyInput, { target: { value: 'my-own-secret' } });
 
     await waitFor(() => expect(keyInput).toHaveValue('my-own-secret'));

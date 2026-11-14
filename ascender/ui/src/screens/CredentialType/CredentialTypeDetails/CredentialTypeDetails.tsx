@@ -26,7 +26,14 @@ export interface CredentialTypeDetailsProps {
 
 function CredentialTypeDetails({ credentialType }: CredentialTypeDetailsProps) {
   const { t } = useLingui();
-  const { id, name, description, injectors, inputs } = credentialType;
+  const { id, name, description, injectors, inputs, managed } = credentialType;
+  // Built-in types report edit and delete capabilities to an administrator,
+  // but the API refuses both for them, so the buttons would only lead to an
+  // error.
+  const canEdit =
+    !managed && credentialType.summary_fields.user_capabilities?.edit;
+  const canDelete =
+    !managed && credentialType.summary_fields.user_capabilities?.delete;
   const navigate = useNavigate();
 
   const {
@@ -80,7 +87,7 @@ function CredentialTypeDetails({ credentialType }: CredentialTypeDetailsProps) {
         />
         <Detail label={t`Description`} value={description} />
         <VariablesDetail
-          label={t`Input configuration`}
+          label={t`Input Configuration`}
           value={jsonToYaml(JSON.stringify(inputs))}
           rows={6}
           name="input"
@@ -88,7 +95,7 @@ function CredentialTypeDetails({ credentialType }: CredentialTypeDetailsProps) {
           helpText={t`Input schema which defines a set of ordered fields for that type.`}
         />
         <VariablesDetail
-          label={t`Injector configuration`}
+          label={t`Injector Configuration`}
           value={jsonToYaml(JSON.stringify(injectors))}
           rows={6}
           name="injector"
@@ -107,32 +114,30 @@ function CredentialTypeDetails({ credentialType }: CredentialTypeDetailsProps) {
         />
       </DetailList>
       <CardActionsRow>
-        {credentialType.summary_fields.user_capabilities &&
-          credentialType.summary_fields.user_capabilities.edit && (
-            <Button
-              ouiaId="credential-type-detail-edit-button"
-              aria-label={t`edit`}
-              component={Link}
-              to={`/credential_types/${id}/edit`}
-            >
-              {t`Edit`}
-            </Button>
-          )}
-        {credentialType.summary_fields.user_capabilities &&
-          credentialType.summary_fields.user_capabilities.delete && (
-            <DeleteButton
-              name={name}
-              modalTitle={t`Delete credential type`}
-              onConfirm={deleteCredentialType}
-              isDisabled={isLoading || isDeleteDisabled}
-              disabledTooltip={
-                isDeleteDisabled &&
-                t`This credential type is currently being used by some credentials and cannot be deleted`
-              }
-            >
-              {t`Delete`}
-            </DeleteButton>
-          )}
+        {canEdit && (
+          <Button
+            ouiaId="credential-type-detail-edit-button"
+            aria-label={t`Edit`}
+            component={Link}
+            to={`/credential_types/${id}/edit`}
+          >
+            {t`Edit`}
+          </Button>
+        )}
+        {canDelete && (
+          <DeleteButton
+            name={name}
+            modalTitle={t`Delete Credential Type`}
+            onConfirm={deleteCredentialType}
+            isDisabled={isLoading || isDeleteDisabled}
+            disabledTooltip={
+              isDeleteDisabled &&
+              t`This credential type is currently being used by some credentials and cannot be deleted`
+            }
+          >
+            {t`Delete`}
+          </DeleteButton>
+        )}
       </CardActionsRow>
 
       {Boolean(error) && (

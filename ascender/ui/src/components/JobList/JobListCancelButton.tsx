@@ -1,20 +1,26 @@
 import type { UnifiedJob } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
-import { Plural, useLingui } from '@lingui/react/macro';
-import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react/macro';
+import { Button, DropdownItem } from '@patternfly/react-core';
 
 import { KebabifiedContext } from 'contexts/Kebabified';
-import { isJobRunning } from 'util/jobs';
+import { canCancelJob, isJobCancelable } from 'util/jobs';
 import AlertModal from '../AlertModal';
+import Tooltip from '../Tooltip';
 
+/*
+ * The same rule as a row's own Cancel, the details page and the output
+ * toolbars: the api's cancel capability, which covers the run's creator, an
+ * admin of what it ran and a superuser, and a cleanup job for superusers only.
+ * The start capability it used to read let an executor who may not cancel
+ * pick a cleanup job or someone else's run and be refused.
+ */
 function cannotCancelBecausePermissions(job: UnifiedJob) {
-  return (
-    !job.summary_fields.user_capabilities?.start && isJobRunning(job.status)
-  );
+  return isJobCancelable(job.status) && !canCancelJob(job);
 }
 
 function cannotCancelBecauseNotRunning(job: UnifiedJob) {
-  return !isJobRunning(job.status);
+  return !isJobCancelable(job.status);
 }
 
 export interface JobListCancelButtonProps {
@@ -62,11 +68,7 @@ function JobListCancelButton({
         <div>
           {cannotCancelPermissions.length > 0 && (
             <div>
-              <Plural
-                value={cannotCancelPermissions.length}
-                one="You do not have permission to cancel the following job:"
-                other="You do not have permission to cancel the following jobs:"
-              />
+              {t`You do not have permission to cancel:`}
               {cannotCancelPermissions.map((job, i) => (
                 <strong key={job}>
                   {' '}
@@ -78,11 +80,7 @@ function JobListCancelButton({
           )}
           {cannotCancelNotRunning.length > 0 && (
             <div>
-              <Plural
-                value={cannotCancelNotRunning.length}
-                one="You cannot cancel the following job because it is not running:"
-                other="You cannot cancel the following jobs because they are not running:"
-              />
+              {t`Not running, so nothing to cancel:`}
               {cannotCancelNotRunning.map((job, i) => (
                 <strong key={job}>
                   {' '}
@@ -96,24 +94,16 @@ function JobListCancelButton({
       );
     }
     if (numJobsToCancel > 0) {
-      return (
-        <Plural
-          value={numJobsToCancel}
-          one="Cancel selected job"
-          other="Cancel selected jobs"
-        />
-      );
+      return t`Cancel the selection`;
     }
-    return t`Select a job to cancel`;
+    return t`Select a row to cancel`;
   };
 
   const isDisabled =
     jobsToCancel.length === 0 ||
     jobsToCancel.some(cannotCancelBecausePermissions) ||
     jobsToCancel.some(cannotCancelBecauseNotRunning);
-  const cancelJobText = (
-    <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" />
-  );
+  const cancelJobText = t`Cancel`;
 
   return (
     <>
@@ -122,7 +112,9 @@ function JobListCancelButton({
           key="cancel-job"
           isDisabled={isDisabled}
           component="button"
-          aria-labelledby="jobs-list-cancel-button"
+          // Named by its own text: the toolbar button whose id the label
+          // used to point at is not rendered while the actions sit in a
+          // kebab.
           onClick={toggleModal}
           ouiaId="cancel-job-dropdown-item"
         >
@@ -156,10 +148,9 @@ function JobListCancelButton({
               id="cancel-job-confirm-button"
               key="delete"
               variant="danger"
-              aria-labelledby="cancel-job-confirm-button"
               onClick={handleCancelJob}
             >
-              {cancelJobText}
+              {t`Confirm Cancellation`}
             </Button>,
             <Button
               ouiaId="cancel-job-return-button"
@@ -174,11 +165,7 @@ function JobListCancelButton({
           ]}
         >
           <div style={{ marginBottom: '0.75rem' }}>
-            <Plural
-              value={numJobsToCancel}
-              one="This action will cancel the following job:"
-              other="This action will cancel the following jobs:"
-            />
+            {t`This action will cancel:`}
           </div>
           {jobsToCancel.map((job) => (
             <span key={job.id}>

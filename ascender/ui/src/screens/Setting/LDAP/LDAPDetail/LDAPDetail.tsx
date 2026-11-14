@@ -3,12 +3,10 @@ import React, { useEffect, useCallback } from 'react';
 import { Link, Navigate, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { DetailList } from 'components/DetailList';
-import RoutedTabs from 'components/RoutedTabs';
 import { SettingsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
@@ -39,7 +37,7 @@ function LDAPDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options = {} } = useSettings();
-  const category = useMatch('/settings/ldap/:category/details')?.params
+  const category = useMatch('/authentication/ldap/:category/details')?.params
     ?.category as string;
 
   const {
@@ -96,91 +94,46 @@ function LDAPDetail() {
     request();
   }, [request]);
 
-  const baseURL = '/settings/ldap';
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`Default`,
-      link: `${baseURL}/default/details`,
-      id: 0,
-    },
-    {
-      name: t`LDAP1`,
-      link: `${baseURL}/1/details`,
-      id: 1,
-    },
-    {
-      name: t`LDAP2`,
-      link: `${baseURL}/2/details`,
-      id: 2,
-    },
-    {
-      name: t`LDAP3`,
-      link: `${baseURL}/3/details`,
-      id: 3,
-    },
-    {
-      name: t`LDAP4`,
-      link: `${baseURL}/4/details`,
-      id: 4,
-    },
-    {
-      name: t`LDAP5`,
-      link: `${baseURL}/5/details`,
-      id: 5,
-    },
-  ];
+  const baseURL = '/authentication/ldap';
 
   if (!Object.keys(LDAPDetails).includes(category)) {
     return <Navigate to={`${baseURL}/default/details`} replace />;
   }
 
   return (
-    <>
-      <RoutedTabs tabsArray={tabsArray} />
-      <CardBody>
-        <>
-          {isLoading && <ContentLoading />}
-          {!isLoading && Boolean(error) && <ContentError error={error} />}
-          {!isLoading && !Object.values(LDAPDetails)?.includes(null) && (
-            <DetailList>
-              {LDAPDetails[category]?.map(([key, detail]) => (
-                <SettingDetail
-                  key={key}
-                  id={key}
-                  helpText={detail?.help_text}
-                  label={detail?.label}
-                  type={detail?.type}
-                  unit={detail?.unit}
-                  value={detail?.value}
-                />
-              ))}
-            </DetailList>
-          )}
-        </>
-        {me?.is_superuser && (
-          <CardActionsRow>
-            <Button
-              ouiaId="ldap-detail-edit-button"
-              aria-label={t`Edit`}
-              component={Link}
-              to={`${baseURL}/${category}/edit`}
-            >
-              {t`Edit`}
-            </Button>
-          </CardActionsRow>
+    <CardBody>
+      <>
+        {isLoading && <ContentLoading />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
+        {!isLoading && !Object.values(LDAPDetails)?.includes(null) && (
+          <DetailList>
+            {LDAPDetails[category]?.map(([key, detail]) => (
+              <SettingDetail
+                key={key}
+                id={key}
+                helpText={detail?.help_text}
+                label={detail?.label}
+                type={detail?.type}
+                unit={detail?.unit}
+                value={detail?.value}
+              />
+            ))}
+          </DetailList>
         )}
-      </CardBody>
-    </>
+      </>
+      {me?.is_superuser && (
+        <CardActionsRow>
+          <Button
+            ouiaId="ldap-detail-edit-button"
+            aria-label={t`Edit`}
+            component={Link}
+            to={`${baseURL}/${category}/edit`}
+          >
+            {t`Edit`}
+          </Button>
+        </CardActionsRow>
+      )}
+    </CardBody>
   );
 }
 

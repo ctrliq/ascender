@@ -23,7 +23,7 @@ export const SourceVarsField = ({
       <VariablesField
         id="source_vars"
         name="source_vars"
-        label={t`Source variables`}
+        label={t`Source Variables`}
         tooltip={
           <>
             {popoverContent}
@@ -77,7 +77,7 @@ export const OptionsField = () => {
   return (
     <>
       <FormFullWidthLayout>
-        <FormGroup fieldId="option-checkboxes" label={t`Update options`}>
+        <FormGroup fieldId="option-checkboxes" label={t`Update Options`}>
           <FormCheckboxLayout>
             <CheckboxField
               id="overwrite"
@@ -88,13 +88,13 @@ export const OptionsField = () => {
             <CheckboxField
               id="overwrite_vars"
               name="overwrite_vars"
-              label={t`Overwrite variables`}
+              label={t`Overwrite Variables`}
               tooltip={helpText.subFormOptions.overwriteVariables}
             />
             <CheckboxField
               id="update_on_launch"
               name="update_on_launch"
-              label={t`Update on launch`}
+              label={t`Update on Launch`}
               tooltip={helpText.subFormOptions.updateOnLaunch(projectField)}
             />
           </FormCheckboxLayout>
@@ -108,7 +108,7 @@ export const OptionsField = () => {
           min="0"
           max="2147483647"
           validate={minMaxValue(0, 2147483647)}
-          label={t`Cache timeout (seconds)`}
+          label={t`Cache Timeout (Seconds)`}
           tooltip={helpText.subFormOptions.cachedTimeOut}
         />
       )}

@@ -131,7 +131,7 @@ export const ScmTypeOptions = ({
             <CheckboxField
               id="option-scm-track-submodules"
               name="scm_track_submodules"
-              label={t`Track submodules`}
+              label={t`Track Submodules`}
               tooltip={projectHelpStrings.options.trackSubModules}
             />
           ) : null}

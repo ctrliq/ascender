@@ -130,29 +130,24 @@ describe('<OrganizationForm />', () => {
     expect(screen.getAllByTestId('galaxy-credential-chip')).toHaveLength(1);
   });
 
-  test('should request related instance groups from api', async () => {
+  /*
+   * The form used to read these itself, which landed after the page had drawn:
+   * the form replaced itself with a second loading animation inside the card
+   * the page had already put on screen. The screen reads them alongside the
+   * organization now and hands them here.
+   */
+  test('should show the instance groups it is given without reading them', async () => {
     renderWithContexts(
       <OrganizationForm
         organization={mockData}
+        instanceGroups={mockInstanceGroups as unknown as SummaryFieldRef[]}
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
-    expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
-  });
-
-  test('componentDidMount should set instanceGroups to state', async () => {
-    renderWithContexts(
-      <OrganizationForm
-        organization={mockData}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
-      />
-    );
-    await screen.findByTestId('instance-groups-lookup');
-    expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalled();
     expect(screen.getAllByTestId('instance-group-chip')).toHaveLength(2);
+    expect(OrganizationsAPI.readInstanceGroups).not.toHaveBeenCalled();
   });
 
   test('Instance group is rendered when added', async () => {
@@ -238,6 +233,7 @@ describe('<OrganizationForm />', () => {
     const { user } = renderWithContexts(
       <OrganizationForm
         organization={mockData}
+        instanceGroups={mockInstanceGroups as unknown as SummaryFieldRef[]}
         onSubmit={onSubmit}
         onCancel={vi.fn()}
       />
@@ -269,6 +265,7 @@ describe('<OrganizationForm />', () => {
     const { user } = renderWithContexts(
       <OrganizationForm
         organization={mockDataString}
+        instanceGroups={mockInstanceGroups as unknown as SummaryFieldRef[]}
         onSubmit={onSubmit}
         onCancel={vi.fn()}
       />

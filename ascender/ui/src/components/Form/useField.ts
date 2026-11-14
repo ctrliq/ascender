@@ -48,12 +48,23 @@ export default function useField<V = any>(
   });
   box.current.current = config.validate;
 
+  // Each call adds its own box to the name's set and takes only that box out
+  // again, so a bare useField on a name another component validates cannot
+  // replace or remove that component's validator.
   useEffect(() => {
     const { boxes } = registry;
     const mine = box.current;
-    boxes.set(name, mine);
+    let forName = boxes.get(name);
+    if (!forName) {
+      forName = new Set();
+      boxes.set(name, forName);
+    }
+    forName.add(mine);
     return () => {
-      if (boxes.get(name) === mine) boxes.delete(name);
+      const current = boxes.get(name);
+      if (!current) return;
+      current.delete(mine);
+      if (current.size === 0) boxes.delete(name);
     };
   }, [name, registry]);
 

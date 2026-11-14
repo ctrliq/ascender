@@ -1,0 +1,17 @@
+/*
+ * A switch is a <label> wrapping its checkbox, so every pixel of its box
+ * toggles the value. PatternFly gives it display: inline-grid, which keeps the
+ * box the width of the toggle and its own label text; but a switch in a form
+ * group is a flex item, that blockifies inline-grid to grid, and the group's
+ * align-items: stretch then runs the box out to the full width of the form.
+ * The label track absorbs the free space, and the result is a strip of empty
+ * label reaching to the right edge of the form that flips the switch when it
+ * is clicked, several hundred pixels away from anything that looks clickable.
+ *
+ * Sizing the box to its contents puts the box back where the component draws
+ * itself. Only the inline size is constrained, never the alignment, so a switch
+ * that sits in a row of other controls keeps the vertical centring it has.
+ */
+.pf-v6-c-switch {
+  inline-size: fit-content;
+}

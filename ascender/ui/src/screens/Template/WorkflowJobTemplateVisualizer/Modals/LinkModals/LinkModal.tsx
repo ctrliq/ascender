@@ -123,7 +123,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
         <>
           <FormGroup
             fieldId="link-condition-trigger"
-            label={t`Evaluate on`}
+            label={t`Evaluate On`}
             labelHelp={
               <Popover
                 content={t`Parent node outcome required before the condition is evaluated.`}
@@ -156,7 +156,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
           </FormGroup>
           <FormGroup
             fieldId="link-condition-artifact-key"
-            label={t`Artifact key`}
+            label={t`Artifact Key`}
             isRequired
             labelHelp={
               <Popover
@@ -171,7 +171,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
               isRequired
               validated={artifactKey === '' ? 'error' : 'default'}
               onChange={(event, value) => setArtifactKey(value)}
-              aria-label={t`Artifact key`}
+              aria-label={t`Artifact Key`}
             />
           </FormGroup>
           <FormGroup fieldId="link-condition-operator" label={t`Operator`}>
@@ -188,7 +188,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
                 {
                   value: 'ne',
                   key: 'ne',
-                  label: t`Not equals`,
+                  label: t`Not Equals`,
                 },
               ]}
               onChange={(event, value) => setOperator(value)}
@@ -196,7 +196,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
           </FormGroup>
           <FormGroup
             fieldId="link-condition-expected-value"
-            label={t`Expected value`}
+            label={t`Expected Value`}
             labelHelp={
               <Popover
                 content={t`Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string.`}
@@ -208,7 +208,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
               type="text"
               value={expectedValue}
               onChange={(event, value) => setExpectedValue(value)}
-              aria-label={t`Expected value`}
+              aria-label={t`Expected Value`}
             />
           </FormGroup>
         </>

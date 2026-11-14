@@ -102,7 +102,7 @@ function CredentialPasswordsStep({
       {showcredentialPasswordSsh && (
         <PasswordField
           id="launch-ssh-password"
-          label={t`SSH password`}
+          label={t`SSH Password`}
           name="credential_passwords.ssh_password"
           isRequired
         />
@@ -110,7 +110,7 @@ function CredentialPasswordsStep({
       {showcredentialPasswordPrivateKeyPassphrase && (
         <PasswordField
           id="launch-private-key-passphrase"
-          label={t`Private key passphrase`}
+          label={t`Private Key Passphrase`}
           name="credential_passwords.ssh_key_unlock"
           isRequired
         />
@@ -118,7 +118,7 @@ function CredentialPasswordsStep({
       {showcredentialPasswordPrivilegeEscalation && (
         <PasswordField
           id="launch-privilege-escalation-password"
-          label={t`Privilege escalation password`}
+          label={t`Privilege Escalation Password`}
           name="credential_passwords.become_password"
           isRequired
         />
@@ -128,7 +128,7 @@ function CredentialPasswordsStep({
           id={`launch-vault-password-${credId}`}
           key={credId}
           label={
-            credId === '' ? t`Vault password` : t`Vault password | ${credId}`
+            credId === '' ? t`Vault Password` : t`Vault Password | ${credId}`
           }
           name={`credential_passwords['vault_password${
             credId !== '' ? `.${credId}` : ''

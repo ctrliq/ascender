@@ -13,7 +13,6 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 from django.core.signals import setting_changed
-from django.utils.encoding import force_str
 from django.http import HttpResponse
 
 # django-auth-ldap
@@ -21,15 +20,6 @@ from django_auth_ldap.backend import LDAPSettings as BaseLDAPSettings
 from django_auth_ldap.backend import LDAPBackend as BaseLDAPBackend
 from django_auth_ldap.backend import populate_user
 from django.core.exceptions import ImproperlyConfigured
-
-# radiusauth
-from radiusauth.backends import RADIUSBackend as BaseRADIUSBackend
-
-# tacacs+ auth
-# tacacs_plus 2.x ships an empty top-level __init__.py, so both names are
-# imported from the modules that define them rather than off the package.
-from tacacs_plus.client import TACACSClient
-from tacacs_plus.flags import TAC_PLUS_AUTHEN_TYPES
 
 # social
 from social_core.backends.saml import SAMLAuth as BaseSAMLAuth
@@ -180,95 +170,6 @@ def _decorate_enterprise_user(user, provider):
     user.save()
     enterprise_auth, _ = UserEnterpriseAuth.objects.get_or_create(user=user, provider=provider)
     return enterprise_auth
-
-
-def _get_or_set_enterprise_user(username, password, provider):
-    created = False
-    try:
-        user = User.objects.prefetch_related('enterprise_auth').get(username=username)
-    except User.DoesNotExist:
-        user = User(username=username)
-        enterprise_auth = _decorate_enterprise_user(user, provider)
-        logger.debug("Created enterprise user %s via %s backend." % (username, enterprise_auth.get_provider_display()))
-        created = True
-    if created or user.is_in_enterprise_category(provider):
-        return user
-    logger.warning("Enterprise user %s already defined in Tower." % username)
-
-
-class RADIUSBackend(BaseRADIUSBackend):
-    """RADIUS authentication, which answers only when a server is configured."""
-
-    def authenticate(self, request, username, password):
-        if not django_settings.RADIUS_SERVER:
-            return None
-        return super(RADIUSBackend, self).authenticate(request, username, password)
-
-    def get_user(self, user_id):
-        if not django_settings.RADIUS_SERVER:
-            return None
-        user = super(RADIUSBackend, self).get_user(user_id)
-        if not user.has_usable_password():
-            return user
-
-    def get_django_user(self, username, password=None, groups=[], is_staff=False, is_superuser=False):
-        return _get_or_set_enterprise_user(force_str(username), force_str(password), 'radius')
-
-
-class TACACSPlusBackend(object):
-    """
-    Custom TACACS+ auth backend for AWX
-    """
-
-    def authenticate(self, request, username, password):
-        if not django_settings.TACACSPLUS_HOST:
-            return None
-        try:
-            # Upstream TACACS+ client does not accept non-string, so convert if needed.
-            tacacs_client = TACACSClient(
-                django_settings.TACACSPLUS_HOST,
-                django_settings.TACACSPLUS_PORT,
-                django_settings.TACACSPLUS_SECRET,
-                timeout=django_settings.TACACSPLUS_SESSION_TIMEOUT,
-            )
-
-            # Validate auth protocol before dictionary lookup
-            auth_protocol = django_settings.TACACSPLUS_AUTH_PROTOCOL
-            if auth_protocol not in TAC_PLUS_AUTHEN_TYPES:
-                logger.error(f"Invalid TACACSPLUS_AUTH_PROTOCOL: {auth_protocol}. Valid options: {list(TAC_PLUS_AUTHEN_TYPES.keys())}")
-                return None
-
-            auth_kwargs = {'authen_type': TAC_PLUS_AUTHEN_TYPES[auth_protocol]}
-            if django_settings.TACACSPLUS_REM_ADDR:
-                client_ip = self._get_client_ip(request)
-                if client_ip:
-                    auth_kwargs['rem_addr'] = client_ip
-            auth = tacacs_client.authenticate(username, password, **auth_kwargs)
-        except Exception as e:
-            logger.exception("TACACS+ Authentication Error: %s" % str(e))
-            return None
-        if auth.valid:
-            return _get_or_set_enterprise_user(username, password, 'tacacs+')
-
-    def get_user(self, user_id):
-        if not django_settings.TACACSPLUS_HOST:
-            return None
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
-
-    def _get_client_ip(self, request):
-        if not request or not hasattr(request, 'META'):
-            return None
-
-        # Check X-Forwarded-For header first (comma-separated list)
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            return x_forwarded_for.split(',')[0].strip()
-
-        # Fall back to REMOTE_ADDR
-        return request.META.get('REMOTE_ADDR')
 
 
 class AscenderSAMLIdentityProvider(BaseSAMLIdentityProvider):

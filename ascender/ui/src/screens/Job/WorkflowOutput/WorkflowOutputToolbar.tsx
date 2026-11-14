@@ -6,7 +6,7 @@ import type {
 import type { AnyJob } from 'types/api';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
-import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
+import { Badge as PFBadge, Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -19,9 +19,11 @@ import {
 import StatusLabel from 'components/StatusLabel';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import {
+  canCancelJob,
+  canDeleteJob,
   canForceRelaunchNodeSuccess,
-  canOfferCancel,
   canOverwriteRelaunchVars,
+  getRunActionLabels,
 } from 'util/jobs';
 import JobCancelButton from 'components/JobCancelButton';
 import DeleteButton from 'components/DeleteButton';
@@ -34,6 +36,7 @@ import {
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import './WorkflowOutputToolbar.css';
+import Tooltip from 'components/Tooltip';
 
 // matches the 20px gap the job output toolbar puts before each info badge group
 
@@ -52,7 +55,8 @@ function WorkflowOutputToolbar({
   onDelete = () => {},
   isDeleteDisabled = false,
 }: WorkflowOutputToolbarProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  const actionLabels = getRunActionLabels('workflow_job');
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
@@ -109,11 +113,11 @@ function WorkflowOutputToolbar({
       </div>
       <div className="ascender-workflow-output-toolbar__actions">
         {workflowTemplateId && (
-          <Tooltip content={t`Edit workflow`} position="top">
+          <Tooltip content={t`Edit Workflow`} position="top">
             <Button
               className="ascender-workflow-output-toolbar__action-button"
               ouiaId="edit-workflow"
-              aria-label={t`Edit workflow`}
+              aria-label={t`Edit Workflow`}
               id="edit-workflow"
               variant="plain"
               onClick={navToWorkflow}
@@ -161,12 +165,12 @@ function WorkflowOutputToolbar({
           </PFBadge>
         </Tooltip>
 
-        {['new', 'pending', 'waiting', 'running'].includes(job?.status ?? '') &&
-        canOfferCancel(job) ? (
+        {/* The same rules as the job output toolbar and the Runs list: the
+            api's cancel and delete capabilities in the statuses it allows. */}
+        {canCancelJob(job) ? (
           <JobCancelButton
             job={job}
-            errorTitle={t`Job Cancel Error`}
-            title={t`Cancel ${job.name}`}
+            title={i18n._(actionLabels.cancel)}
             errorMessage={t`Failed to cancel ${job.name}`}
             showIconButton
           />
@@ -185,7 +189,7 @@ function WorkflowOutputToolbar({
                 // down-opening menu). Wrap the dropdown in a span so the tooltip
                 // has a DOM ref to anchor to — the dropdown component does not
                 // forward one, so an outer tooltip would silently not show.
-                <Tooltip position="top" content={t`Relaunch Job`}>
+                <Tooltip position="top" content={i18n._(actionLabels.relaunch)}>
                   <span>
                     <WorkflowReLaunchDropDown
                       handleRelaunch={handleRelaunch}
@@ -204,7 +208,7 @@ function WorkflowOutputToolbar({
           ) : (
             <LaunchButton key="relaunch-plain" resource={job}>
               {({ handleRelaunch, isLaunching }) => (
-                <Tooltip position="top" content={t`Relaunch Job`}>
+                <Tooltip position="top" content={i18n._(actionLabels.relaunch)}>
                   <Button
                     className="ascender-workflow-output-toolbar__action-button"
                     ouiaId="workflow-output-relaunch-button"
@@ -220,23 +224,20 @@ function WorkflowOutputToolbar({
             </LaunchButton>
           ))}
 
-        {job?.summary_fields?.user_capabilities?.delete &&
-          ['new', 'successful', 'failed', 'error', 'canceled'].includes(
-            job.status ?? ''
-          ) && (
-            <Tooltip content={t`Delete Job`} position="top">
-              <DeleteButton
-                ouiaId="workflow-output-delete-button"
-                name={job.name}
-                modalTitle={t`Delete Job`}
-                onConfirm={onDelete}
-                variant="plain"
-                isDisabled={isDeleteDisabled}
-              >
-                <TrashAltIcon />
-              </DeleteButton>
-            </Tooltip>
-          )}
+        {canDeleteJob(job) && (
+          <Tooltip content={i18n._(actionLabels.delete)} position="top">
+            <DeleteButton
+              ouiaId="workflow-output-delete-button"
+              name={job.name}
+              modalTitle={i18n._(actionLabels.delete)}
+              onConfirm={onDelete}
+              variant="plain"
+              isDisabled={isDeleteDisabled}
+            >
+              <TrashAltIcon />
+            </DeleteButton>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

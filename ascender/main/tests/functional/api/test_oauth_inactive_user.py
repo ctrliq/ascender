@@ -221,13 +221,13 @@ def test_websocket_authenticators_refuse_inactive_user(post, alice):
 @pytest.mark.parametrize('is_active', [True, False])
 def test_websocket_refuses_inactive_session_user(alice, settings, mocker, is_active):
     from ascender.dab.lib.channels import middleware
-    from ascender.sso.backends import TACACSPlusBackend
+    from ascender.sso.backends import LDAPBackend
 
-    settings.TACACSPLUS_HOST = 'tacacs.example.com'
+    settings.AUTH_LDAP_SERVER_URI = 'ldap://ldap.example.com'
     alice.is_active = is_active
     alice.save()
     # Unlike ModelBackend, this backend hands back inactive users, so their session still resolves to them.
-    assert TACACSPlusBackend().get_user(alice.pk) == alice
+    assert LDAPBackend().get_user(alice.pk) == alice
     mocker.patch.object(middleware, 'get_session_user', mocker.AsyncMock(return_value=alice))
     mocker.patch.object(middleware, '_get_authenticated_user', mocker.AsyncMock(return_value=None))
     denier = mocker.patch.object(middleware, 'WebsocketDenier', return_value=mocker.AsyncMock())

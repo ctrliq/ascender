@@ -6,13 +6,28 @@
 
 .ascender-instance-details__slider-holder {
   display: flex;
-  align-items: center;
+  /* The used capacity bar beside it hangs at the bottom of its own block, and
+     the two read as one row only when this one hangs as low. */
+  margin-block-start: 4px;
+  /* The rail sits on the bottom line of its block, under the fork count, so
+     the two figures it runs between belong on that line rather than halfway
+     up the block. */
+  align-items: flex-end;
   justify-content: space-between;
+}
+
+/* The rail block hangs twelve pixels below its track, to leave the thumb the
+   touch target it is drawn with. The two figures it runs between belong on the
+   track itself rather than that low. */
+.ascender-instance-details__slider-holder > div:first-child,
+.ascender-instance-details__slider-holder > div:last-child {
+  margin-block-end: 4px;
 }
 
 .ascender-instance-details__slider-forks {
   flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
+  /* The thumb reaches half its own width past the end of the rail, so eight
+     of these pixels are already spoken for before the label starts. */
+  margin-inline: 20px;
   text-align: center;
 }

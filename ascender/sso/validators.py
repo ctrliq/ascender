@@ -17,7 +17,6 @@ __all__ = [
     'validate_ldap_bind_dn',
     'validate_ldap_filter',
     'validate_ldap_filter_with_user',
-    'validate_tacacsplus_disallow_nonascii',
     'validate_trigger_rule',
     'validate_entra_tenant_id',
     'validate_entra_host',
@@ -80,13 +79,6 @@ def validate_ldap_filter(value, with_user=False):
 
 def validate_ldap_filter_with_user(value):
     validate_ldap_filter(value, with_user=True)
-
-
-def validate_tacacsplus_disallow_nonascii(value):
-    try:
-        value.encode('ascii')
-    except (UnicodeEncodeError, UnicodeDecodeError):
-        raise ValidationError(_('TACACS+ secret does not allow non-ascii characters'))
 
 
 def validate_trigger_rule(triggers):

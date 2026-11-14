@@ -179,7 +179,7 @@ groups:
         </ClipboardCopy>
       </FormGroup>
       <FormGroup
-        label={t`Source vars`}
+        label={t`Source Variables`}
         fieldId="intersection-example-source-vars"
       >
         <CodeBlock
@@ -188,7 +188,7 @@ groups:
               <ClipboardCopyButton
                 id="intersection-example-source-vars"
 
-                aria-label={t`Copy to clipboard`}
+                aria-label={t`Copy to Clipboard`}
                 onClick={(e) => onClick(e, limitToIntersectionCode)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -197,7 +197,7 @@ groups:
               >
                 {copied
                   ? t`Successfully copied to clipboard!`
-                  : t`Copy to clipboard`}
+                  : t`Copy to Clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }
@@ -266,7 +266,7 @@ function FilterOnNestedGroupExample() {
         </ClipboardCopy>
       </FormGroup>
       <FormGroup
-        label={t`Source vars`}
+        label={t`Source Variables`}
         fieldId="nested-groups-example-source-vars"
       >
         <CodeBlock
@@ -275,7 +275,7 @@ function FilterOnNestedGroupExample() {
               <ClipboardCopyButton
                 id="nested-groups-example-source-vars"
 
-                aria-label={t`Copy to clipboard`}
+                aria-label={t`Copy to Clipboard`}
                 onClick={(e) => onClick(e, nestedGroupsInventorySourceVars)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -284,7 +284,7 @@ function FilterOnNestedGroupExample() {
               >
                 {copied
                   ? t`Successfully copied to clipboard!`
-                  : t`Copy to clipboard`}
+                  : t`Copy to Clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }
@@ -336,14 +336,17 @@ groups:
           {hostsByProcessorLimit}
         </ClipboardCopy>
       </FormGroup>
-      <FormGroup label={t`Source vars`} fieldId="processor-example-source-vars">
+      <FormGroup
+        label={t`Source Variables`}
+        fieldId="processor-example-source-vars"
+      >
         <CodeBlock
           actions={
             <CodeBlockAction>
               <ClipboardCopyButton
                 id="processor-example-source-vars"
 
-                aria-label={t`Copy to clipboard`}
+                aria-label={t`Copy to Clipboard`}
                 onClick={(e) => onClick(e, hostsByProcessorSourceVars)}
                 exitDelay={copied ? 1500 : 600}
                 maxWidth="110px"
@@ -352,7 +355,7 @@ groups:
               >
                 {copied
                   ? t`Successfully copied to clipboard!`
-                  : t`Copy to clipboard`}
+                  : t`Copy to Clipboard`}
               </ClipboardCopyButton>
             </CodeBlockAction>
           }

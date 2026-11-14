@@ -4,9 +4,10 @@ import type {
   DeleteRequest,
 } from 'util/getRelatedResourceDeleteDetails';
 import React, { useState } from 'react';
-import { Alert, Badge, Button, Tooltip } from '@patternfly/react-core';
+import { Alert, Badge, Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
+import Tooltip from 'components/Tooltip';
 import AlertModal from '../../components/AlertModal';
 
 import ErrorDetail from '../../components/ErrorDetail';
@@ -71,12 +72,12 @@ function HostMetricsDeleteButton({
 
   const renderTooltip = () => {
     if (itemsToDelete.length) {
-      return t`Soft delete`;
+      return t`Soft Delete`;
     }
-    return t`Select a row to delete`;
+    return t`Select a row to soft delete`;
   };
 
-  const modalTitle = t`Soft delete ${pluralizedItemName}?`;
+  const modalTitle = t`Soft Delete ${pluralizedItemName}?`;
 
   const isDisabled = itemsToDelete.length === 0;
 
@@ -138,11 +139,11 @@ function HostMetricsDeleteButton({
             isLoading={isLoading}
             ouiaId="delete-button"
             spinnerAriaValueText={isLoading ? 'Loading' : undefined}
-            aria-label={t`Delete`}
+            aria-label={t`Soft Delete`}
             onClick={() => toggleModal(true)}
             isDisabled={isDisabled}
           >
-            {t`Delete`}
+            {t`Soft Delete`}
           </Button>
         </div>
       </Tooltip>
@@ -157,7 +158,7 @@ function HostMetricsDeleteButton({
               ouiaId="delete-modal-confirm"
               key="delete"
               variant="danger"
-              aria-label={t`confirm delete`}
+              aria-label={t`Confirm Soft Delete`}
               isDisabled={Boolean(
                 deleteDetails &&
                 (itemsToDelete[0] as { type?: string })?.type ===
@@ -165,13 +166,13 @@ function HostMetricsDeleteButton({
               )}
               onClick={handleDelete}
             >
-              {t`Delete`}
+              {t`Soft Delete`}
             </Button>,
             <Button
               ouiaId="delete-cancel"
               key="cancel"
               variant="link"
-              aria-label={t`cancel delete`}
+              aria-label={t`Cancel Soft Delete`}
               onClick={() => toggleModal(false)}
             >
               {t`Cancel`}

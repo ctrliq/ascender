@@ -1,7 +1,7 @@
 import type { OAuth2Token, SetBreadcrumb, User } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import {
   Alert,
   ClipboardCopy,
@@ -23,14 +23,30 @@ export interface UserTokensProps {
 
 function UserTokens({ setBreadcrumb, user }: UserTokensProps) {
   const { t } = useLingui();
+  const navigate = useNavigate();
   const [tokenModalSource, setTokenModalSource] = useState<OAuth2Token | null>(
     null
   );
+  /* Where to go once the token has been read, where the add form said. */
+  const [returnTo, setReturnTo] = useState<string | null>(null);
 
   const onSuccessfulAdd = useCallback(
-    (token: OAuth2Token) => setTokenModalSource(token),
+    (token: OAuth2Token, next?: string) => {
+      setReturnTo(next ?? null);
+      setTokenModalSource(token);
+    },
     [setTokenModalSource]
   );
+
+  const closeTokenModal = () => {
+    setTokenModalSource(null);
+    if (returnTo) {
+      setReturnTo(null);
+      /* The application's token list reads the API again when it mounts, so
+         the token just made is there without invalidating anything here. */
+      navigate(returnTo);
+    }
+  };
 
   return (
     <>
@@ -48,11 +64,11 @@ function UserTokens({ setBreadcrumb, user }: UserTokensProps) {
       </Routes>
       {tokenModalSource && (
         <Modal
-          aria-label={t`Token information`}
+          aria-label={t`Token Information`}
           isOpen
           variant="medium"
-          title={t`Token information`}
-          onClose={() => setTokenModalSource(null)}
+          title={t`Token Information`}
+          onClose={closeTokenModal}
         >
           <Alert
             className="ascender-user-tokens__token-alert"

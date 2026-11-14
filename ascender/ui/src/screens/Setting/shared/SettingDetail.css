@@ -1,0 +1,20 @@
+/* SettingDetail: how one setting's label and value sit in the detail grid. */
+
+/*
+ * The last word of a label and the help icon after it, held together so a long
+ * label wraps before its last word rather than between that word and the icon.
+ */
+.ascender-setting-detail__label-end {
+  white-space: nowrap;
+}
+
+/*
+ * One stretch of an address between two slashes. Shrink wrapped, it moves to
+ * the next line whole when it does not fit on this one, and only a stretch
+ * wider than the whole column breaks inside itself.
+ */
+.ascender-setting-detail__url-part {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}

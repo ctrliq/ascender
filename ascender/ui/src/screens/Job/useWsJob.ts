@@ -19,7 +19,7 @@ export default function useWsJob(initialJob: AnyJob | null) {
   const [pendingMessages, setPendingMessages] = useState<WebsocketMessage[]>(
     []
   );
-  const lastMessage = useWebsocket({
+  const messages = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
   });
@@ -40,7 +40,9 @@ export default function useWsJob(initialJob: AnyJob | null) {
     ) {
       fetchJob();
     }
-    setJob(updateJob(job, message));
+    // On the job as the message before this one left it, not as this render
+    // saw it, so a batch of messages ends on the last one's status.
+    setJob((current) => (current ? updateJob(current, message) : current));
   };
 
   async function fetchJob() {
@@ -51,18 +53,25 @@ export default function useWsJob(initialJob: AnyJob | null) {
     setJob(data as AnyJob);
   }
 
+  // Every message in the batch is handled, in order. Until the job has loaded
+  // they are held back, appended to whatever is already waiting.
   useEffect(
     () => {
-      if (!lastMessage) {
+      if (!messages.length) {
         return;
       }
       if (job) {
-        processMessage(lastMessage);
-      } else if (lastMessage.unified_job_id) {
-        setPendingMessages(pendingMessages.concat(lastMessage));
+        messages.forEach((message) => {
+          processMessage(message);
+        });
+        return;
+      }
+      const withJob = messages.filter((message) => message.unified_job_id);
+      if (withJob.length) {
+        setPendingMessages((pending) => pending.concat(withJob));
       }
     },
-    [lastMessage] // eslint-disable-line react-hooks/exhaustive-deps
+    [messages] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   useEffect(() => {

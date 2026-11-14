@@ -93,8 +93,8 @@ describe('<Host />', () => {
     expect(await screen.findByText('HostGroups subtree')).toBeInTheDocument();
   });
 
-  test('renders the jobs panel at /jobs', async () => {
-    renderAt('/hosts/1/jobs');
+  test('renders the jobs panel at /runs', async () => {
+    renderAt('/hosts/1/runs');
     expect(await screen.findByText('JobList')).toBeInTheDocument();
   });
 

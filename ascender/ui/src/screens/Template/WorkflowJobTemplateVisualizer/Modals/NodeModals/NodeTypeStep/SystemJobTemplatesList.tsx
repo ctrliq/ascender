@@ -70,6 +70,7 @@ function SystemJobTemplatesList({
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Cleanup Jobs`}
       contentError={error}
       hasContentLoading={isLoading}
       itemCount={count}

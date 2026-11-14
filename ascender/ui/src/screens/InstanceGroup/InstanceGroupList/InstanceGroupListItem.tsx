@@ -22,6 +22,11 @@ export interface InstanceGroupListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   rowIndex: number;
+  /**
+   * Whether the row carries a checkbox. A list whose viewer can do nothing
+   * with a selection leaves it out, and the header's with it.
+   */
+  isSelectable?: boolean;
   [key: string]: unknown;
 }
 
@@ -31,6 +36,7 @@ function InstanceGroupListItem({
   isSelected,
   onSelect,
   rowIndex,
+  isSelectable = true,
 }: InstanceGroupListItemProps) {
   const { t } = useLingui();
   const labelId = `check-action-${instanceGroup.id}`;
@@ -45,7 +51,7 @@ function InstanceGroupListItem({
             value={Math.round(100 - (item.percent_capacity_remaining ?? 0))}
             measureLocation={ProgressMeasureLocation.top}
             size={ProgressSize.sm}
-            title={t`Used capacity`}
+            aria-label={t`Used Capacity`}
           />
         );
       }
@@ -58,42 +64,47 @@ function InstanceGroupListItem({
 
   return (
     <Tr id={`ig-row-${instanceGroup.id}`} ouiaId={`ig-row-${instanceGroup.id}`}>
-      <Td
-        select={{
-          rowIndex,
-          isSelected,
-          onSelect,
-        }}
-        dataLabel={t`Selected`}
-      />
+      {isSelectable && (
+        <Td
+          select={{
+            rowIndex,
+            isSelected,
+            onSelect,
+          }}
+          dataLabel={t`Selected`}
+        />
+      )}
       <TdBreakWord id={labelId} dataLabel={t`Name`}>
         <Link to={`${detailUrl}`}>
           <b>{instanceGroup.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={t`Type`}>
-        {isContainerGroup(instanceGroup)
-          ? t`Container group`.toString()
-          : t`Instance group`.toString()}
-      </Td>
-      <Td dataLabel={t`Running jobs`}>{instanceGroup.jobs_running}</Td>
-      <Td dataLabel={t`Total jobs`}>{instanceGroup.jobs_total}</Td>
+      <Td dataLabel={t`Running Jobs`}>{instanceGroup.jobs_running}</Td>
+      <Td dataLabel={t`Total Jobs`}>{instanceGroup.jobs_total}</Td>
       <Td dataLabel={t`Instances`}>{instanceGroup.instances}</Td>
       <Td dataLabel={t`Capacity`}>{usedCapacity(instanceGroup)}</Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={instanceGroup.summary_fields.user_capabilities?.edit}
-          tooltip={t`Edit instance group`}
+          tooltip={
+            isContainerGroup(instanceGroup)
+              ? t`Edit Container Group`
+              : t`Edit Instance Group`
+          }
         >
           <Button
             icon={<PencilAltIcon />}
             ouiaId={`${instanceGroup.id}-edit-button`}
-            aria-label={t`Edit instance group`}
+            aria-label={
+              isContainerGroup(instanceGroup)
+                ? t`Edit Container Group`
+                : t`Edit Instance Group`
+            }
             variant="plain"
             component={Link}
             to={
               isContainerGroup(instanceGroup)
-                ? `/instance_groups/container_group/${instanceGroup.id}/edit`
+                ? `/container_groups/${instanceGroup.id}/edit`
                 : `/instance_groups/${instanceGroup.id}/edit`
             }
           />

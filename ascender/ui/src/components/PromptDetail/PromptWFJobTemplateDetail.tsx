@@ -34,6 +34,7 @@ function PromptWFJobTemplateDetail({
 }: PromptWFJobTemplateDetailProps) {
   const { t } = useLingui();
   const {
+    allow_overwrite_flow_vars_on_relaunch,
     allow_simultaneous,
     extra_vars,
     limit,
@@ -45,14 +46,23 @@ function PromptWFJobTemplateDetail({
   } = resource;
 
   let optionsList: React.ReactNode = '';
-  if (allow_simultaneous || webhook_service) {
+  if (
+    allow_simultaneous ||
+    allow_overwrite_flow_vars_on_relaunch ||
+    webhook_service
+  ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
+        {webhook_service && (
+          <Content component={ContentVariants.li}>{t`Enable Webhook`}</Content>
+        )}
         {allow_simultaneous && (
           <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
         )}
-        {webhook_service && (
-          <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
+        {allow_overwrite_flow_vars_on_relaunch && (
+          <Content component={ContentVariants.li}>
+            {t`Allow Overwriting Variables on Relaunch`}
+          </Content>
         )}
       </Content>
     );
@@ -109,7 +119,7 @@ function PromptWFJobTemplateDetail({
           value={`${window.location.origin}${related.webhook_receiver}`}
         />
       )}
-      {optionsList && <Detail label={t`Enabled Options`} value={optionsList} />}
+      {optionsList && <Detail label={t`Options`} value={optionsList} />}
       {summary_fields?.webhook_credential && (
         <Detail
           fullWidth
@@ -146,7 +156,6 @@ function PromptWFJobTemplateDetail({
       {extra_vars && (
         <VariablesDetail
           label={t`Variables`}
-          rows={4}
           value={extra_vars}
           name="extra_vars"
           dataCy="prompt-wf-jt-detail-variables"

@@ -27,7 +27,7 @@ export default function useCredentialPasswordsStep(
           id: STEP_ID,
           name: (
             <StepName hasErrors={hasError} id="credential-passwords-step">
-              {t`Credential passwords`}
+              {t`Credential Passwords`}
             </StepName>
           ),
           component: <CredentialPasswordsStep launchConfig={{}} />,

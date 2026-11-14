@@ -24,7 +24,8 @@ import useBrandName from 'hooks/useBrandName';
 import type { AppRouteGroup } from '../../routeConfig';
 import About from '../About';
 import BrandLogo from './BrandLogo';
-import NavExpandableGroup from './NavExpandableGroup';
+import NavigationGroup from './NavigationGroup';
+import usePendingApprovalCount from './usePendingApprovalCount';
 import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
 import './AppContainer.css';
@@ -51,6 +52,9 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
   const handleAboutModalClose = () => setIsAboutModalOpen(false);
 
   const brandName = useBrandName();
+  // Read once here rather than in each badge, so the rail and the masthead say
+  // the same number and the page asks for it once.
+  const approvalCount = usePendingApprovalCount();
   const alt = brandName ? t`${brandName} logo` : t`brand logo`;
 
   const header = (
@@ -72,6 +76,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
       </MastheadMain>
       <MastheadContent>
         <PageHeaderToolbar
+          approvalCount={approvalCount}
           loggedInUser={config?.me as Record<string, unknown>}
           isAboutDisabled={!config?.version}
           onAboutClick={handleAboutModalOpen}
@@ -108,11 +113,12 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
         >
           <NavList>
             {navRouteConfig.map(({ groupId, groupTitle, routes }) => (
-              <NavExpandableGroup
+              <NavigationGroup
                 key={groupId}
                 groupId={groupId}
                 groupTitle={groupTitle}
                 routes={routes}
+                approvalCount={approvalCount}
               />
             ))}
           </NavList>

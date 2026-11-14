@@ -23,7 +23,9 @@ import ContentLoading from '../../ContentLoading';
 import { FormSubmitError } from '../../FormField';
 import { FormColumnLayout, FormFullWidthLayout } from '../../FormLayout';
 import SchedulePromptableFields from './SchedulePromptableFields';
+import type { LegacyWizardStep } from '../../Wizard/Wizard';
 import ScheduleFormFields from './ScheduleFormFields';
+import ScheduleWizardBody from './ScheduleWizardBody';
 import UnsupportedScheduleForm from './UnsupportedScheduleForm';
 import parseRuleObj, { UnsupportedRRuleError } from './parseRuleObj';
 import buildRuleObj from './buildRuleObj';
@@ -65,12 +67,32 @@ export interface ScheduleFormProps {
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
   resourceDefaultCredentials?: LaunchCredential[] | null;
+  /**
+   * Renders the form as a wizard rather than a page: the schedule's own fields
+   * are one step, whatever the resource prompts for are the steps after it,
+   * and the wizard's footer is what saves. A caller in a modal uses this.
+   */
+  asWizard?: boolean;
+  /** A step of the caller's own, ahead of the schedule's fields. */
+  firstStep?: LegacyWizardStep;
+  wizardTitle?: React.ReactNode;
+  /** A class for the modal the wizard opens in, which the caller styles. */
+  wizardClassName?: string;
+  /** The step the wizard opens on, one based, as the wizard counts them. */
+  wizardStartIndex?: number;
+  onCloseWizard?: () => void;
   [key: string]: unknown;
 }
 
 function ScheduleForm({
   hasDaysToKeepField,
   handleCancel,
+  asWizard = false,
+  firstStep,
+  wizardTitle,
+  wizardClassName,
+  wizardStartIndex,
+  onCloseWizard,
   handleSubmit: submitSchedule,
   schedule = defaultSchedule,
   submitError,
@@ -454,7 +476,20 @@ function ScheduleForm({
   }
 
   if (contentLoading) {
-    return <ContentLoading />;
+    /* A wizard keeps its modal while the step loads, as the others do. */
+    return asWizard ? (
+      <ScheduleWizardBody
+        isLoading
+        firstStep={firstStep}
+        title={wizardTitle}
+        className={wizardClassName}
+        startIndex={wizardStartIndex}
+        onClose={onCloseWizard ?? handleCancel}
+        onSave={() => {}}
+      />
+    ) : (
+      <ContentLoading />
+    );
   }
 
   // Formik's error shape mirrors the values it validates: one message per
@@ -567,72 +602,107 @@ function ScheduleForm({
           }}
           validate={validate}
         >
-          {(formik) => (
-            <Form autoComplete="off" onSubmit={formik.handleSubmit}>
-              <FormColumnLayout>
-                <ScheduleFormFields
-                  hasDaysToKeepField={hasDaysToKeepField}
-                  zoneOptions={zoneOptions}
-                  zoneLinks={zoneLinks}
-                />
-                {isWizardOpen && (
-                  <SchedulePromptableFields
-                    schedule={schedule}
-                    credentials={credentials}
-                    surveyConfig={surveyConfig}
-                    launchConfig={launchConfig}
-                    resource={resource}
-                    onCloseWizard={() => {
-                      setIsWizardOpen(false);
-                    }}
-                    onSave={() => {
-                      setIsWizardOpen(false);
-                      setIsSaveDisabled(false);
-                    }}
-                    resourceDefaultCredentials={resourceDefaultCredentials}
-                    labels={originalLabels.current}
-                    instanceGroups={originalInstanceGroups.current}
+          {(formik) =>
+            asWizard ? (
+              <ScheduleWizardBody
+                firstStep={firstStep}
+                title={wizardTitle}
+                className={wizardClassName}
+                startIndex={wizardStartIndex}
+                hasDaysToKeepField={hasDaysToKeepField}
+                zoneOptions={zoneOptions}
+                zoneLinks={zoneLinks}
+                isSaveDisabled={isSaveDisabled}
+                submitError={submitError}
+                /* What the resource prompts for, as the steps after the
+                   schedule's own, the way the run wizard asks it. */
+                prompts={
+                  isTemplate && showPromptButton && launchConfig
+                    ? {
+                        launchConfig,
+                        surveyConfig,
+                        schedule,
+                        resource,
+                        credentials,
+                        resourceDefaultCredentials,
+                        labels: originalLabels.current,
+                        instanceGroups: originalInstanceGroups.current,
+                      }
+                    : null
+                }
+                onClose={onCloseWizard ?? handleCancel}
+                onSave={() => formik.handleSubmit()}
+              />
+            ) : (
+              <Form autoComplete="off" onSubmit={formik.handleSubmit}>
+                <FormColumnLayout>
+                  <ScheduleFormFields
+                    hasDaysToKeepField={hasDaysToKeepField}
+                    zoneOptions={zoneOptions}
+                    zoneLinks={zoneLinks}
                   />
-                )}
-                <FormSubmitError error={submitError} />
-                <FormFullWidthLayout>
-                  <ActionGroup>
-                    <Button
-                      ouiaId="schedule-form-save-button"
-                      aria-label={t`Save`}
-                      variant="primary"
-                      type="button"
-                      onClick={() => formik.handleSubmit()}
-                      isDisabled={isSaveDisabled}
-                    >
-                      {t`Save`}
-                    </Button>
-
-                    {isTemplate && showPromptButton && (
+                  {isWizardOpen && (
+                    <SchedulePromptableFields
+                      schedule={schedule}
+                      credentials={credentials}
+                      surveyConfig={surveyConfig}
+                      launchConfig={launchConfig}
+                      resource={resource}
+                      labels={originalLabels.current}
+                      instanceGroups={originalInstanceGroups.current}
+                      resourceDefaultCredentials={resourceDefaultCredentials}
+                      onCloseWizard={() => {
+                        setIsWizardOpen(false);
+                      }}
+                      onSave={() => {
+                        setIsWizardOpen(false);
+                        setIsSaveDisabled(false);
+                      }}
+                    />
+                  )}
+                  <FormSubmitError error={submitError} />
+                  <FormFullWidthLayout>
+                    <ActionGroup>
                       <Button
-                        ouiaId="schedule-form-prompt-button"
-                        variant="secondary"
+                        ouiaId="schedule-form-save-button"
+                        aria-label={t`Save`}
+                        variant="primary"
                         type="button"
-                        aria-label={t`Prompt`}
-                        onClick={() => setIsWizardOpen(true)}
+                        onClick={() => formik.handleSubmit()}
+                        isDisabled={isSaveDisabled}
                       >
-                        {t`Prompt`}
+                        {t`Save`}
                       </Button>
-                    )}
-                    <Button
-                      ouiaId="schedule-form-cancel-button"
-                      aria-label={t`Cancel`}
-                      variant="secondary"
-                      type="button"
-                      onClick={handleCancel}
-                    >
-                      {t`Cancel`}
-                    </Button>
-                  </ActionGroup>
-                </FormFullWidthLayout>
-              </FormColumnLayout>
-            </Form>
-          )}
+
+                      {isTemplate && showPromptButton && (
+                        // Prompt and Cancel take the link variant the Cancel
+                        // on every other form's action row has, so this row
+                        // keeps the same button size and spacing as theirs.
+                        <Button
+                          ouiaId="schedule-form-prompt-button"
+                          variant="link"
+                          type="button"
+                          aria-label={t`Prompt`}
+                          onClick={() => setIsWizardOpen(true)}
+                        >
+                          {t`Prompt`}
+                        </Button>
+                      )}
+                      <Button
+                        ouiaId="schedule-form-cancel-button"
+                        aria-label={t`Cancel`}
+                        variant="link"
+                        type="button"
+                        onClick={handleCancel}
+                      >
+                        {t`Cancel`}
+                      </Button>
+                    </ActionGroup>
+                  </FormFullWidthLayout>
+                </FormColumnLayout>
+              </Form>
+            )
+          }
         </FormRoot>
       )}
     </Config>

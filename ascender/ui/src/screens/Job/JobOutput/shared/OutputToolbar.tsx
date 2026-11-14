@@ -1,21 +1,24 @@
 import type { AnyJob } from 'types/api';
 import React, { useEffect, useState, useRef } from 'react';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
-import { canOfferCancel } from 'util/jobs';
 import {
   CopyIcon,
   DownloadIcon,
   RocketIcon,
   TrashAltIcon,
 } from '@patternfly/react-icons';
-import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
+import { Badge as PFBadge, Button } from '@patternfly/react-core';
+import AlertModal from 'components/AlertModal';
 import DeleteButton from 'components/DeleteButton';
+import ErrorDetail from 'components/ErrorDetail';
 import { LaunchButton, ReLaunchDropDown } from 'components/LaunchButton';
-import { useConfig } from 'contexts/Config';
 import { useLingui } from '@lingui/react/macro';
+import { canCancelJob, canDeleteJob, getRunActionLabels } from 'util/jobs';
 
 import JobCancelButton from 'components/JobCancelButton';
 import './OutputToolbar.css';
+import Tooltip from 'components/Tooltip';
+import { SystemJobsAPI } from 'api';
 
 const OUTPUT_NO_COUNT_JOB_TYPES = [
   'ad_hoc_command',
@@ -37,9 +40,23 @@ const OutputToolbar = ({
   isDeleteDisabled = false,
   jobStatus,
 }: OutputToolbarProps) => {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  const actionLabels = getRunActionLabels(job.type);
+  // The status the socket keeps current, which the job this toolbar was
+  // handed may lag behind.
+  const liveJob = { ...job, status: jobStatus };
   const [activeJobElapsedTime, setActiveJobElapsedTime] = useState('00:00:00');
   const [copyTooltip, setCopyTooltip] = useState<string | null>(null);
+  /*
+   * What went wrong reading or handing over the output, with the title that
+   * says which action it was. Copy and download used to await without a
+   * catch, so a refused read either said Copied over an error page's text or
+   * did nothing at all.
+   */
+  const [outputError, setOutputError] = useState<{
+    title: string;
+    error: unknown;
+  } | null>(null);
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
 
   const playCount = job?.playbook_counts?.play_count ?? 0;
@@ -50,7 +67,57 @@ const OutputToolbar = ({
   const totalHostCount = hostStatusCounts
     ? Object.values(hostStatusCounts).reduce((sum, count) => sum + count, 0)
     : 0;
-  const { me } = useConfig();
+
+  /*
+   * Every other run type has a stdout endpoint that answers as plain text or
+   * as a file. A system job has none, so its output is only on the job itself,
+   * in result_stdout: read fresh at the click, since the copy of the job this
+   * screen holds can predate the end of the run.
+   */
+  const isSystemJob = job.type === 'system_job';
+  const hasOutputText = Boolean(job.related?.stdout) || isSystemJob;
+  const readOutputText = async () => {
+    if (isSystemJob) {
+      const { data } = await SystemJobsAPI.readDetail(job.id);
+      return data.result_stdout ?? '';
+    }
+    const res = await fetch(`${job.related?.stdout}?format=txt`);
+    // fetch only rejects when the request never completes; a refused read
+    // resolves too, and its body is the error page rather than the output.
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`.trim());
+    }
+    return res.text();
+  };
+  const downloadSystemJobOutput = async () => {
+    let text: string;
+    try {
+      text = await readOutputText();
+    } catch (error) {
+      setOutputError({ title: t`Could not download the output`, error });
+      return;
+    }
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+    const link = document.createElement('a');
+    link.href = url;
+    // The name the api gives the file for the run types it serves.
+    link.download = `system_job_${job.id}.txt`;
+    link.click();
+    // Released a turn later: Firefox can drop a download whose address is
+    // revoked in the same turn as the click.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  };
+  const copyOutput = async () => {
+    try {
+      const text = await readOutputText();
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      setOutputError({ title: t`Could not copy the output`, error });
+      return;
+    }
+    setCopyTooltip(t`Copied`);
+    setTimeout(() => setCopyTooltip(null), 2000);
+  };
 
   const isMounted = useRef(false);
 
@@ -164,54 +231,53 @@ const OutputToolbar = ({
           </PFBadge>
         </Tooltip>
       </div>
-      {['pending', 'waiting', 'running'].includes(jobStatus) &&
-        (job.type === 'system_job'
-          ? me?.is_superuser
-          : canOfferCancel(job)) && (
-          <JobCancelButton
-            job={job}
-            errorTitle={t`Job Cancel Error`}
-            title={t`Cancel ${job.name}`}
-            errorMessage={t`Failed to cancel ${job.name}`}
-            showIconButton
-          />
-        )}
-      {job.summary_fields?.user_capabilities?.start && (
-        <Tooltip
-          content={
-            job.status === 'failed' && job.type === 'job'
-              ? t`Relaunch using host parameters`
-              : t`Relaunch Job`
-          }
-        >
-          {job.status === 'failed' && job.type === 'job' ? (
-            <LaunchButton resource={job}>
-              {({ handleRelaunch, isLaunching }) => (
-                <ReLaunchDropDown
-                  handleRelaunch={handleRelaunch}
-                  ouiaId="job-output-relaunch-dropdown"
-                  isLaunching={isLaunching}
-                />
-              )}
-            </LaunchButton>
-          ) : (
-            <LaunchButton resource={job}>
-              {({ handleRelaunch, isLaunching }) => (
-                <Button
-                  icon={<RocketIcon />}
-                  ouiaId="job-output-relaunch-button"
-                  variant="plain"
-                  onClick={() => handleRelaunch()}
-                  aria-label={t`Relaunch`}
-                  isDisabled={isLaunching}
-                />
-              )}
-            </LaunchButton>
-          )}
-        </Tooltip>
+      {canCancelJob(liveJob) && (
+        <JobCancelButton
+          job={job}
+          title={i18n._(actionLabels.cancel)}
+          errorMessage={t`Failed to cancel ${job.name}`}
+          showIconButton
+        />
       )}
+      {/* A cleanup job has nothing to relaunch from here, so like the
+          details page and the list row the toolbar leaves it out. */}
+      {job.type !== 'system_job' &&
+        job.summary_fields?.user_capabilities?.start && (
+          <Tooltip
+            content={
+              job.status === 'failed' && job.type === 'job'
+                ? t`Relaunch Using Host Parameters`
+                : i18n._(actionLabels.relaunch)
+            }
+          >
+            {job.status === 'failed' && job.type === 'job' ? (
+              <LaunchButton resource={job}>
+                {({ handleRelaunch, isLaunching }) => (
+                  <ReLaunchDropDown
+                    handleRelaunch={handleRelaunch}
+                    ouiaId="job-output-relaunch-dropdown"
+                    isLaunching={isLaunching}
+                  />
+                )}
+              </LaunchButton>
+            ) : (
+              <LaunchButton resource={job}>
+                {({ handleRelaunch, isLaunching }) => (
+                  <Button
+                    icon={<RocketIcon />}
+                    ouiaId="job-output-relaunch-button"
+                    variant="plain"
+                    onClick={() => handleRelaunch()}
+                    aria-label={t`Relaunch`}
+                    isDisabled={isLaunching}
+                  />
+                )}
+              </LaunchButton>
+            )}
+          </Tooltip>
+        )}
 
-      {job.related?.stdout &&
+      {hasOutputText &&
         ['successful', 'failed', 'error', 'canceled'].includes(jobStatus) && (
           <Tooltip content={copyTooltip || t`Copy Output`}>
             <Button
@@ -219,17 +285,22 @@ const OutputToolbar = ({
               ouiaId="job-output-copy-button"
               variant="plain"
               aria-label={t`Copy Output`}
-              onClick={async () => {
-                const res = await fetch(`${job.related?.stdout}?format=txt`);
-                const text = await res.text();
-                await navigator.clipboard.writeText(text);
-                setCopyTooltip(t`Copied`);
-                setTimeout(() => setCopyTooltip(null), 2000);
-              }}
+              onClick={copyOutput}
             />
           </Tooltip>
         )}
-      {job.related?.stdout && (
+      {isSystemJob && (
+        <Tooltip content={t`Download Output`}>
+          <Button
+            icon={<DownloadIcon />}
+            ouiaId="job-output-download-button"
+            variant="plain"
+            aria-label={t`Download Output`}
+            onClick={downloadSystemJobOutput}
+          />
+        </Tooltip>
+      )}
+      {!isSystemJob && job.related?.stdout && (
         <Tooltip content={t`Download Output`}>
           <a href={`${job.related.stdout}?format=txt_download`}>
             <Button
@@ -241,23 +312,31 @@ const OutputToolbar = ({
           </a>
         </Tooltip>
       )}
-      {job.summary_fields?.user_capabilities?.delete &&
-        ['new', 'successful', 'failed', 'error', 'canceled'].includes(
-          jobStatus
-        ) && (
-          <Tooltip content={t`Delete Job`}>
-            <DeleteButton
-              ouiaId="job-output-delete-button"
-              name={job.name}
-              modalTitle={t`Delete Job`}
-              onConfirm={onDelete}
-              variant="plain"
-              isDisabled={isDeleteDisabled}
-            >
-              <TrashAltIcon />
-            </DeleteButton>
-          </Tooltip>
-        )}
+      {canDeleteJob(liveJob) && (
+        <Tooltip content={i18n._(actionLabels.delete)}>
+          <DeleteButton
+            ouiaId="job-output-delete-button"
+            name={job.name}
+            modalTitle={i18n._(actionLabels.delete)}
+            onConfirm={onDelete}
+            variant="plain"
+            isDisabled={isDeleteDisabled}
+          >
+            <TrashAltIcon />
+          </DeleteButton>
+        </Tooltip>
+      )}
+      {outputError && (
+        <AlertModal
+          isOpen
+          variant="danger"
+          title={outputError.title}
+          label={outputError.title}
+          onClose={() => setOutputError(null)}
+        >
+          <ErrorDetail error={outputError.error} />
+        </AlertModal>
+      )}
     </div>
   );
 };

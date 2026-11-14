@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
 import ChartTooltip from './ChartTooltip';
 import type { ChartPoint } from './ChartTooltip';
+import './LineChart.css';
 
 /** One day of the dashboard's job graph, as DashboardGraph assembles it. */
 export interface JobGraphDay {
@@ -351,7 +352,7 @@ function LineChart({
     return () => window.removeEventListener('resize', handleResize);
   }, [draw]);
 
-  return <div id={id} style={{ marginTop: '3rem' }} />;
+  return <div id={id} className="ascender-line-chart" />;
 }
 
 // PatternFly's page context says whether the nav is open, which changes the

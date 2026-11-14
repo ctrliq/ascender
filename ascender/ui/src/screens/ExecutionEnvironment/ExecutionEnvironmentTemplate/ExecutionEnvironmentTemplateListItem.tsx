@@ -27,7 +27,7 @@ function ExecutionEnvironmentTemplateListItem({
       <Td dataLabel={t`Type`}>
         {template.type === 'job_template'
           ? t`Job Template`
-          : t`Workflow Job Template`}
+          : t`Workflow Template`}
       </Td>
     </Tr>
   );

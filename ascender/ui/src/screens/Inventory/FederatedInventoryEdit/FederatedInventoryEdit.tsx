@@ -88,9 +88,7 @@ function FederatedInventoryEdit({ inventory }: FederatedInventoryEditProps) {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }

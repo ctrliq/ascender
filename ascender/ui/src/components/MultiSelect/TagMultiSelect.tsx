@@ -60,6 +60,7 @@ function TagMultiSelect({ onChange, value }: TagMultiSelectProps) {
         <MenuToggle
           ref={toggleRef}
           variant="typeahead"
+          isFullWidth
           onClick={() => setIsExpanded(!isExpanded)}
           isExpanded={isExpanded}
           ouiaId="tag-multiselect"

@@ -113,7 +113,11 @@ const instances = [
 
 const options = { data: { actions: { POST: true } } };
 
-function setup() {
+function setup(
+  config?: Record<string, unknown>,
+  groupName = 'Alex',
+  controlPlaneName?: string
+) {
   const history = createMemoryHistory({
     initialEntries: ['/instance_groups/1/instances'],
   });
@@ -123,12 +127,13 @@ function setup() {
         path="/instance_groups/:id/instances"
         element={
           <InstanceList
-            instanceGroup={{ name: 'Alex' } as unknown as InstanceGroup}
+            instanceGroup={{ name: groupName } as unknown as InstanceGroup}
+            controlPlaneName={controlPlaneName}
           />
         }
       />
     </Routes>,
-    { context: { router: { history } } }
+    { context: { router: { history }, ...(config ? { config } : {}) } }
   );
 }
 
@@ -172,15 +177,15 @@ describe('<InstanceList/>', () => {
     const { user } = setup();
     await screen.findByRole('link', { name: 'awx' });
 
-    await user.click(screen.getByRole('button', { name: /Associate/ }));
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     expect(
-      await screen.findByRole('dialog', { name: /Select Instances/ })
+      await screen.findByRole('dialog', { name: /Associate Instances/ })
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await settleTooltips();
     expect(
-      screen.queryByRole('dialog', { name: /Select Instances/ })
+      screen.queryByRole('dialog', { name: /Associate Instances/ })
     ).not.toBeInTheDocument();
   });
 
@@ -192,7 +197,7 @@ describe('<InstanceList/>', () => {
     await screen.findByRole('link', { name: 'awx' });
 
     const healthCheck = screen.getByRole('button', {
-      name: 'Run health check',
+      name: 'Run Health Check',
     });
     expect(healthCheck).toBeDisabled();
 
@@ -221,7 +226,7 @@ describe('<InstanceList/>', () => {
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     const healthCheck = screen.getByRole('button', {
-      name: 'Run health check',
+      name: 'Run Health Check',
     });
     await waitFor(() => expect(healthCheck).toBeEnabled());
 
@@ -253,5 +258,55 @@ describe('<InstanceList/>', () => {
     await user.click(controlCheckbox!);
 
     await waitFor(() => expect(disassociate).toBeEnabled());
+  });
+
+  // The api keeps a hybrid node in whichever group its
+  // DEFAULT_CONTROL_PLANE_QUEUE_NAME setting names.
+  test('holds hybrid nodes in the control plane group under its own name', async () => {
+    const { user } = setup(undefined, 'cp', 'cp');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest(
+      'tr'
+    );
+    const box = within(row!)
+      .getAllByRole('checkbox')
+      .find((item) => item.getAttribute('aria-label') !== 'Toggle instance');
+    await user.click(box!);
+
+    const disassociate = screen.getByRole('button', { name: 'Disassociate' });
+    expect(disassociate).toBeDisabled();
+    await user.hover(disassociate.parentElement!);
+    expect(
+      await screen.findByText(
+        'Hybrid nodes cannot be disassociated from cp: foo'
+      )
+    ).toBeInTheDocument();
+  });
+
+  test('offers no disassociate to a viewer who cannot administer the group', async () => {
+    vi.mocked(InstanceGroupsAPI.readInstanceOptions).mockResolvedValue({
+      data: { actions: { GET: {} } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstanceOptions>);
+    setup({ me: { is_superuser: false } });
+    await screen.findByRole('link', { name: 'awx' });
+
+    expect(
+      screen.queryByRole('button', { name: 'Disassociate' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Associate' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers the health check to a superuser only', async () => {
+    setup({ me: { is_superuser: false } });
+    await screen.findByRole('link', { name: 'awx' });
+
+    expect(
+      screen.queryByRole('button', { name: 'Run Health Check' })
+    ).not.toBeInTheDocument();
+    // A group admin still manages membership.
+    expect(
+      screen.getByRole('button', { name: 'Disassociate' })
+    ).toBeInTheDocument();
   });
 });

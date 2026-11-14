@@ -28,7 +28,7 @@ describe('FieldWithPrompt', () => {
     );
 
     // the prompt-on-launch checkbox is always rendered
-    expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
+    expect(screen.getByLabelText('Prompt on Launch')).toBeInTheDocument();
     // no required asterisk
     expect(
       container.querySelector('.pf-v6-c-form__label-required')
@@ -63,7 +63,7 @@ describe('FieldWithPrompt', () => {
       </FormRoot>
     );
 
-    expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();
+    expect(screen.getByLabelText('Prompt on Launch')).toBeInTheDocument();
     // required asterisk present
     expect(
       container.querySelector('.pf-v6-c-form__label-required')

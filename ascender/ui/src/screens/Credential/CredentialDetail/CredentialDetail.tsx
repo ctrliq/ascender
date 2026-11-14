@@ -166,7 +166,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           id={`credential-${id}-detail`}
           key={id}
           label={label}
-          value={t`Prompt on launch`}
+          value={t`Prompt on Launch`}
         />
       );
     }
@@ -259,7 +259,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           user={modified_by}
         />
         <Detail
-          label={t`Enabled Options`}
+          label={t`Options`}
           value={
             <Content component={ContentVariants.ul}>
               {enabledBooleanFields.map(({ id, label }) => (

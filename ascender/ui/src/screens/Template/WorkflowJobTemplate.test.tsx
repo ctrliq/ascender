@@ -95,6 +95,34 @@ describe('<WorkflowJobTemplate />', () => {
     ).toBeInTheDocument();
   });
 
+  // The template's own tabs, then Notifications and Schedules, and Runs last.
+  test('orders its tabs with Runs last', async () => {
+    renderWFJT();
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(8));
+    expect(
+      screen.getAllByRole('tab').map((tab) => tab.textContent?.trim())
+    ).toEqual([
+      'Back to Templates',
+      'Details',
+      'Access',
+      'Visualizer',
+      'Survey',
+      'Notifications',
+      'Schedules',
+      'Runs',
+    ]);
+  });
+
+  // The survey's forms stand on their own, as on a job template's screen.
+  test('hides the tabs on the survey add form', async () => {
+    renderWFJT('/templates/workflow_job_template/1/survey/add');
+    // Once the form is up, the tabs have had their chance to be too.
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+      expect(screen.queryByRole('tab')).not.toBeInTheDocument();
+    });
+  });
+
   test('notifications tab hidden with reduced permissions', async () => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0, next: null, previous: null, results: [] },

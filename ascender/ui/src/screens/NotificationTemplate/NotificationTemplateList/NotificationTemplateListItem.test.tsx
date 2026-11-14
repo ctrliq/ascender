@@ -31,7 +31,7 @@ const renderItem = (props = {}) =>
           template={template}
           onAddToast={vi.fn()}
           fetchTemplates={vi.fn().mockResolvedValue(undefined)}
-          detailUrl="/notification_templates/3/detail"
+          detailUrl="/notifications/3/detail"
           {...props}
         />
       </tbody>
@@ -62,6 +62,24 @@ describe('<NotificationTemplateListItem />', () => {
     expect(screen.getByText('Running')).toBeInTheDocument();
   });
 
+  test('offers Test only to those who may edit the template', () => {
+    renderItem({
+      template: {
+        ...template,
+        summary_fields: {
+          ...template.summary_fields,
+          user_capabilities: { edit: false, copy: true },
+        },
+      },
+    });
+    expect(
+      screen.queryByRole('button', { name: 'Test Notification' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Edit Notification Template' })
+    ).not.toBeInTheDocument();
+  });
+
   test('should call api to copy template', async () => {
     vi.mocked(NotificationTemplatesAPI.copy).mockResolvedValue({
       name: 'Foo',
@@ -80,7 +98,7 @@ describe('<NotificationTemplateListItem />', () => {
     const { user } = renderItem();
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(
-      await screen.findByText('Failed to copy template.')
+      await screen.findByText('Failed to copy notification template.')
     ).toBeInTheDocument();
   });
 

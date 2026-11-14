@@ -1,0 +1,37 @@
+/* Settings: what these pages hold in common, whatever the page. */
+
+/*
+ * A settings page that shows what is set rather than a form to set it: its rows
+ * are labels and values, which stand closer together than a form's fields do,
+ * so under a tab bar the first label sat on the bar. This gives the reading
+ * view the air over its first row that the editing view already had.
+ */
+.ascender-settings .pf-v6-c-tabs + .pf-v6-c-card__body > .ascender-detail-list {
+  margin-block-start: 4px;
+}
+
+/*
+ * And less under the last value. The row carries fourteen pixels of its own
+ * below it, so the sixteen here puts the button thirty two from the last
+ * value: the thirty two PatternFly adds stood it half as far again as the
+ * reading view needs.
+ */
+.ascender-settings .ascender-card-actions-row__wrapper {
+  margin-top: 16px;
+}
+
+/*
+ * A settings page with no tabs starts its first label thirty nine pixels down
+ * the card, where a tabbed one starts twenty three under its bar: the card's
+ * own twenty four plus the fourteen the row carries. Ten leaves the same
+ * twenty four the tabbed pages read at.
+ */
+.ascender-settings.ascender-settings
+  .pf-v6-c-card
+  > .pf-v6-c-card__body:first-child {
+  /* Important, and the class doubled with itself, because the themes say the
+     same property that way and from a selector carrying html and its theme
+     attribute: a card body that is the first thing in its card gets the card's
+     own first-child padding, which is the twenty four this takes back down. */
+  padding-block-start: 10px !important;
+}

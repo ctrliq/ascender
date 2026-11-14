@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import './StepName.css';
+import Tooltip from '../../Tooltip';
 
 export interface StepNameProps {
   hasErrors?: boolean;
@@ -21,7 +21,6 @@ function StepName({ hasErrors, children, id }: StepNameProps) {
     <div className="ascender-step-name__alert-text" id={id}>
       {children}
       <Tooltip
-        position="right"
         content={t`This step contains errors`}
         trigger="click mouseenter focus"
       >

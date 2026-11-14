@@ -3,12 +3,12 @@ import React, { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-import { Button, EmptyState, EmptyStateBody } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
+import roleResourceUrl from 'util/roles';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { UsersAPI, RolesAPI } from 'api';
 import useCachedRequest from 'hooks/useCachedRequest';
-import { useDeleteItems } from 'hooks/useRequest';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -19,6 +19,11 @@ import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import DatalistToolbar from 'components/DataListToolbar';
 import UserAndTeamAccessAdd from 'components/UserAndTeamAccessAdd/UserAndTeamAccessAdd';
+import {
+  RoleRemovalButton,
+  RoleRemovalModals,
+  useRoleRemoval,
+} from '../../Roles/shared/useRoleRemoval';
 import UserRolesListItem from './UserRolesListItem';
 
 const QS_CONFIG = getQSConfig('roles', {
@@ -37,9 +42,6 @@ export interface UserRolesListProps {
 function UserRolesList({ user }: UserRolesListProps) {
   const { t } = useLingui();
   const { search } = useLocation();
-  const [roleToDisassociate, setRoleToDisassociate] = useState<Role | null>(
-    null
-  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [associateError, setAssociateError] = useState<unknown>(null);
 
@@ -55,7 +57,7 @@ function UserRolesList({ user }: UserRolesListProps) {
       searchableKeys,
     },
   } = useCachedRequest(
-    ['user-roles-list', search],
+    ['user-roles-list', user.id, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [
@@ -63,18 +65,27 @@ function UserRolesList({ user }: UserRolesListProps) {
           data: { results, count },
         },
         actionsResponse,
+        roleOptionsResponse,
       ] = await Promise.all([
         UsersAPI.readRoles(user.id, params),
         UsersAPI.readOptions(),
+        UsersAPI.readRoleOptions(user.id),
       ]);
+      /*
+       * Associate stays gated on the users endpoint as before, while the search
+       * keys come from the roles endpoint this list reads, since the fields a
+       * user has are not the fields a role can be searched by.
+       */
       return {
         roleCount: count,
         roles: results,
         actions: actionsResponse.data.actions,
         relatedSearchableKeys: (
-          actionsResponse?.data?.related_search_fields || []
+          roleOptionsResponse?.data?.related_search_fields || []
         ).map((val) => val.slice(0, -8)),
-        searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+        searchableKeys: getSearchableKeys(
+          roleOptionsResponse?.data?.actions?.GET
+        ),
       };
     }, [user.id, search]),
     {
@@ -86,42 +97,26 @@ function UserRolesList({ user }: UserRolesListProps) {
     }
   );
 
-  const {
-    isLoading: isDisassociateLoading,
-    deleteItems: disassociateRole,
-    deletionError: disassociationError,
-    clearDeletionError: clearDisassociationError,
-  } = useDeleteItems(
-    useCallback(async () => {
-      setRoleToDisassociate(null);
-      await RolesAPI.disassociateUserRole(
-        roleToDisassociate?.id as number,
-        user.id
-      );
-    }, [roleToDisassociate, user.id]),
-    { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
-  );
+  const removal = useRoleRemoval({
+    roles,
+    qsConfig: QS_CONFIG,
+    fetchRoles,
+    disassociate: useCallback(
+      (roleId: number) => RolesAPI.disassociateUserRole(roleId, user.id),
+      [user.id]
+    ),
+  });
 
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
 
-  const detailUrl = (role: Role) => {
-    const { resource_id, resource_type } = role.summary_fields;
-
-    if (!role || !resource_type) {
-      return null;
-    }
-
-    if (resource_type?.includes('template')) {
-      return `/templates/${resource_type}/${resource_id}/details`;
-    }
-    if (resource_type?.includes('inventory')) {
-      return `/inventories/${resource_type}/${resource_id}/details`;
-    }
-    return `/${resource_type}s/${resource_id}/details`;
-  };
-  const isSysAdmin = roles.some((role) => role.name === 'System Administrator');
-  if (isSysAdmin) {
+  /*
+   * A superuser holds every role there is, so the list of the ones granted
+   * says nothing about what they can do. Read off the account rather than off
+   * a role's name, which the api translates into the viewer's language, and
+   * which is on the current page only when it happens to sort there.
+   */
+  if (user.is_superuser) {
     return (
       <EmptyState
         headingLevel="h5"
@@ -130,7 +125,7 @@ function UserRolesList({ user }: UserRolesListProps) {
         variant="full"
       >
         <EmptyStateBody>
-          {t`System administrators have unrestricted access to all resources.`}
+          {t`System administrators have unrestricted access to all resources`}
         </EmptyStateBody>
       </EmptyState>
     );
@@ -139,11 +134,17 @@ function UserRolesList({ user }: UserRolesListProps) {
     <>
       <PaginatedTable
         contentError={error}
-        hasContentLoading={isLoading || isDisassociateLoading}
+        hasContentLoading={isLoading || removal.isRemoving}
         items={roles}
         itemCount={roleCount}
         pluralizedItemName={t`User Roles`}
+        emptyContentMessage={
+          canAdd
+            ? t`Associate a role to list it here`
+            : t`Roles this user holds appear here`
+        }
         qsConfig={QS_CONFIG}
+        clearSelected={removal.clearSelected}
         toolbarSearchColumns={[
           {
             name: t`Role`,
@@ -151,11 +152,17 @@ function UserRolesList({ user }: UserRolesListProps) {
             isDefault: true,
           },
         ]}
+        toolbarSortColumns={[
+          {
+            name: t`ID`,
+            key: 'id',
+          },
+        ]}
         toolbarSearchableKeys={searchableKeys}
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         headerRow={
-          <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
-            <HeaderCell>{t`Name`}</HeaderCell>
+          <HeaderRow qsConfig={QS_CONFIG}>
+            <HeaderCell>{t`Resource Name`}</HeaderCell>
             <HeaderCell>{t`Type`}</HeaderCell>
             <HeaderCell>{t`Role`}</HeaderCell>
           </HeaderRow>
@@ -165,28 +172,39 @@ function UserRolesList({ user }: UserRolesListProps) {
             key={role.id}
             value={role.name}
             role={role}
-            detailUrl={detailUrl(role)}
-            isSelected={false}
+            detailUrl={roleResourceUrl(role)}
             onSelect={(item) => {
-              setRoleToDisassociate(item);
+              removal.setRoleToDisassociate(item);
             }}
+            isSelected={removal.selected.some((row) => row.id === role.id)}
+            onSelectRow={() => removal.handleSelect(role)}
             rowIndex={index}
           />
         )}
         renderToolbar={(props) => (
           <DatalistToolbar
             {...props}
+            isAllSelected={removal.isAllSelected}
+            onSelectAll={removal.selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      defaultLabel={t`Associate`}
+                      tooltip={t`Associate Role`}
                       ouiaId="role-add-button"
                       key="add"
                       onClick={() => setShowAddModal(true)}
                     />,
                   ]
                 : []),
+              <RoleRemovalButton
+                key="disassociate"
+                removal={removal}
+                modalTitle={t`Disassociate these roles from the user?`}
+                modalNote={t`The user loses these roles. The resources themselves are not changed.`}
+              />,
             ]}
           />
         )}
@@ -199,46 +217,15 @@ function UserRolesList({ user }: UserRolesListProps) {
             setShowAddModal(false);
             fetchRoles();
           }}
-          title={t`Add user permissions`}
+          title={t`Associate User Roles`}
           onClose={() => setShowAddModal(false)}
           onError={(err) => setAssociateError(err)}
         />
       )}
-      {roleToDisassociate && (
-        <AlertModal
-          aria-label={t`Disassociate role`}
-          isOpen={roleToDisassociate}
-          variant="error"
-          title={t`Disassociate role!`}
-          onClose={() => setRoleToDisassociate(null)}
-          actions={[
-            <Button
-              ouiaId="disassociate-confirm-button"
-              key="disassociate"
-              variant="danger"
-              aria-label={t`Confirm disassociate`}
-              onClick={() => disassociateRole()}
-            >
-              {t`Disassociate`}
-            </Button>,
-            <Button
-              ouiaId="disassociate-cancel-button"
-              key="cancel"
-              variant="link"
-              aria-label={t`Cancel`}
-              onClick={() => setRoleToDisassociate(null)}
-            >
-              {t`Cancel`}
-            </Button>,
-          ]}
-        >
-          <div>
-            {t`This action will disassociate the following role from ${roleToDisassociate.summary_fields.resource_name}:`}
-            <br />
-            <strong>{roleToDisassociate.name}</strong>
-          </div>
-        </AlertModal>
-      )}
+      <RoleRemovalModals
+        removal={removal}
+        confirmMessage={t`This disassociates the following role from the user:`}
+      />
       {associateError && (
         <AlertModal
           aria-label={t`Associate role error`}
@@ -247,19 +234,8 @@ function UserRolesList({ user }: UserRolesListProps) {
           title={t`Error!`}
           onClose={() => setAssociateError(null)}
         >
-          {t`Failed to associate role`}
+          {t`Failed to associate one or more roles. Some roles may have been associated; the list now shows which.`}
           <ErrorDetail error={associateError} />
-        </AlertModal>
-      )}
-      {disassociationError && (
-        <AlertModal
-          isOpen={disassociationError}
-          variant="error"
-          title={t`Error!`}
-          onClose={clearDisassociationError}
-        >
-          {t`Failed to delete role.`}
-          <ErrorDetail error={disassociationError} />
         </AlertModal>
       )}
     </>

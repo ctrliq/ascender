@@ -182,10 +182,10 @@ describe('<ApplicationsList/>', () => {
     const fooRow = screen.getByRole('link', { name: 'Foo' }).closest('tr');
     const barRow = screen.getByRole('link', { name: 'Bar' }).closest('tr');
     expect(
-      within(fooRow!).queryByRole('link', { name: 'Edit application' })
+      within(fooRow!).queryByRole('link', { name: 'Edit Application' })
     ).not.toBeInTheDocument();
     expect(
-      within(barRow!).getByRole('link', { name: 'Edit application' })
+      within(barRow!).getByRole('link', { name: 'Edit Application' })
     ).toBeInTheDocument();
   });
 });

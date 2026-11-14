@@ -6,6 +6,7 @@ import { InstanceGroupsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ContainerGroup from './ContainerGroup';
+import { PERSISTENT_FILTER_KEY } from '../../constants';
 
 vi.mock('../../api/models/InstanceGroups');
 
@@ -41,16 +42,19 @@ const instanceGroup = {
 };
 
 // ContainerGroup uses paths relative to its parent route, so mount it under the
-// same /instance_groups/container_group/:id/* route that InstanceGroups.js
+// same /container_groups/:id/* route that InstanceGroups.js
 // gives it in the app.
 function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>
       <Route
-        path="/instance_groups/container_group/:id/*"
+        path="/container_groups/:id/*"
         element={<ContainerGroup setBreadcrumb={() => {}} />}
       />
+      {/* The list the back tab leads to, so following it lands somewhere. */}
+      <Route path="/container_groups" element={<div>ContainerGroupList</div>} />
+      <Route path="/instance_groups/*" element={<div>InstanceGroup</div>} />
     </Routes>,
     { context: { router: { history } } }
   );
@@ -68,7 +72,7 @@ describe('<ContainerGroup />', () => {
   });
 
   test('fetches the container group detail', async () => {
-    renderAt('/instance_groups/container_group/42/details');
+    renderAt('/container_groups/42/details');
     expect(
       await screen.findByText('ContainerGroupDetails')
     ).toBeInTheDocument();
@@ -76,24 +80,33 @@ describe('<ContainerGroup />', () => {
   });
 
   test('renders the edit panel at /edit', async () => {
-    renderAt('/instance_groups/container_group/42/edit');
+    renderAt('/container_groups/42/edit');
     expect(await screen.findByText('ContainerGroupEdit')).toBeInTheDocument();
   });
 
-  test('renders the jobs panel at /jobs', async () => {
-    renderAt('/instance_groups/container_group/42/jobs');
+  test('renders the jobs panel at /runs', async () => {
+    renderAt('/container_groups/42/runs');
     expect(await screen.findByText('JobList')).toBeInTheDocument();
   });
 
+  test('sends a plain instance group to its own screen, keeping the tab', async () => {
+    vi.mocked(InstanceGroupsAPI.readDetail).mockResolvedValue({
+      data: { ...instanceGroup, is_container_group: false },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readDetail>);
+    const { history } = renderAt('/container_groups/42/edit');
+
+    expect(await screen.findByText('InstanceGroup')).toBeInTheDocument();
+    expect(history.location.pathname).toBe('/instance_groups/42/edit');
+    expect(screen.queryByText('ContainerGroupEdit')).not.toBeInTheDocument();
+  });
+
   test('redirects the index path to details', async () => {
-    const { history } = renderAt('/instance_groups/container_group/42');
+    const { history } = renderAt('/container_groups/42');
     expect(
       await screen.findByText('ContainerGroupDetails')
     ).toBeInTheDocument();
     await waitFor(() =>
-      expect(history.location.pathname).toBe(
-        '/instance_groups/container_group/42/details'
-      )
+      expect(history.location.pathname).toBe('/container_groups/42/details')
     );
   });
 
@@ -102,10 +115,41 @@ describe('<ContainerGroup />', () => {
       response: { status: 404 },
     });
     vi.mocked(InstanceGroupsAPI.readDetail).mockRejectedValue(err);
-    renderAt('/instance_groups/container_group/42/details');
+    renderAt('/container_groups/42/details');
     expect(
       await screen.findByText('Container group not found.')
     ).toBeInTheDocument();
     expect(screen.queryByText('ContainerGroupDetails')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'View all container groups' })
+    ).toHaveAttribute('href', '/container_groups');
+  });
+
+  test('leads back to the container groups list', async () => {
+    const { history, user } = renderAt('/container_groups/42/details');
+    await user.click(
+      await screen.findByRole('tab', { name: /Back to Container Groups/ })
+    );
+    expect(history.location.pathname).toBe('/container_groups');
+  });
+
+  test('keeps the list filters on the way back', async () => {
+    sessionStorage.setItem(
+      PERSISTENT_FILTER_KEY,
+      JSON.stringify({ pageKey: 'containerGroups', qs: '?page=2' })
+    );
+    const { history, user } = renderAt('/container_groups/42/details');
+    await user.click(
+      await screen.findByRole('tab', { name: /Back to Container Groups/ })
+    );
+    expect(history.location.search).toBe('?page=2');
+    sessionStorage.clear();
+  });
+
+  test('offers the container groups list for an unknown tab', async () => {
+    renderAt('/container_groups/42/nope');
+    expect(
+      await screen.findByRole('link', { name: 'View all container groups' })
+    ).toHaveAttribute('href', '/container_groups');
   });
 });

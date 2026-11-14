@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import {
   renderWithContexts,
   assertDetail,
@@ -52,10 +52,7 @@ describe('PromptJobTemplateDetail', () => {
     assertDetail('Limit', 'alpha:beta');
     assertDetail('Verbosity', '3 (Debug)');
     assertDetail('Show Changes', 'Off');
-    // ' Job Slicing' label has a leading space; getByText normalizes whitespace
-    expect(
-      screen.getByText('Job Slicing').nextElementSibling
-    ).toHaveTextContent('1');
+    assertDetail('Job Slicing', '1');
     assertDetail('Host Config Key', 'a1b2c3');
     assertDetail('Webhook Service', 'Github');
     assertDetail('Webhook Key', 'PiM3n2');
@@ -96,12 +93,18 @@ describe('PromptJobTemplateDetail', () => {
     expect(screen.getByText('S_100')).toBeInTheDocument();
     expect(screen.getByText('S_200')).toBeInTheDocument();
 
-    // Enabled Options renders one <li> per enabled flag
-    expect(screen.getByText('Privilege Escalation')).toBeInTheDocument();
-    expect(screen.getByText('Provisioning Callbacks')).toBeInTheDocument();
-    expect(screen.getByText('Concurrent Jobs')).toBeInTheDocument();
-    expect(screen.getByText('Fact Storage')).toBeInTheDocument();
-    expect(screen.getByText('Webhooks')).toBeInTheDocument();
+    // Options renders one <li> per enabled flag, named as on the form
+    expect(
+      within(screen.getByText('Options').nextElementSibling as HTMLElement)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual([
+      'Privilege Escalation',
+      'Provisioning Callbacks',
+      'Enable Webhook',
+      'Concurrent Jobs',
+      'Enable Fact Storage',
+    ]);
 
     // Variables renders the extra_vars through the (mocked) CodeEditor
     expect(screen.getByText('Variables')).toBeInTheDocument();

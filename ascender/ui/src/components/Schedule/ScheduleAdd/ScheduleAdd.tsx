@@ -18,6 +18,7 @@ import type {
   SurveyConfig,
   SurveyQuestion,
 } from 'components/LaunchPrompt/types';
+import type { LegacyWizardStep } from '../../Wizard/Wizard';
 import ScheduleForm from '../shared/ScheduleForm';
 import buildRuleSet from '../shared/buildRuleSet';
 import { CardBody } from '../../Card';
@@ -31,6 +32,19 @@ export interface ScheduleAddProps {
   surveyConfig?: SurveyConfig | null;
   hasDaysToKeepField?: boolean;
   resourceDefaultCredentials?: LaunchCredential[];
+  /**
+   * What to do once the schedule exists, and what Cancel does, for a caller
+   * that is not a page of its own: the schedules list adds one from a modal,
+   * which closes rather than leaving the address it was opened from.
+   */
+  onSaved?: (scheduleId: number) => void;
+  onCancel?: () => void;
+  /** Renders the form as a wizard, with the caller's own step ahead of it. */
+  asWizard?: boolean;
+  firstStep?: LegacyWizardStep;
+  wizardTitle?: React.ReactNode;
+  wizardClassName?: string;
+  wizardStartIndex?: number;
   [key: string]: unknown;
 }
 
@@ -41,6 +55,13 @@ function ScheduleAdd({
   surveyConfig,
   hasDaysToKeepField,
   resourceDefaultCredentials,
+  onSaved,
+  onCancel,
+  asWizard,
+  firstStep,
+  wizardTitle,
+  wizardClassName,
+  wizardStartIndex,
 }: ScheduleAddProps) {
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
@@ -98,6 +119,12 @@ function ScheduleAdd({
     delete values.extra_vars;
     if (inventory) {
       submitValues.inventory = inventory.id;
+    }
+    // A blank limit on a resource with none of its own is no answer at all.
+    // Stored as an empty string it would still override, and on a workflow
+    // it replaces every node's own limit with none on each scheduled run.
+    if (submitValues.limit === '' && !resource?.limit) {
+      submitValues.limit = null;
     }
 
     if (execution_environment) {
@@ -171,26 +198,41 @@ function ScheduleAdd({
         }
       }
 
-      navigate(`${pathRoot}schedules/${scheduleId}`);
+      if (onSaved) {
+        onSaved(scheduleId as number);
+      } else {
+        navigate(`${pathRoot}schedules/${scheduleId}`);
+      }
     } catch (err) {
       setFormSubmitError(err);
     }
   };
 
-  return (
+  const form = (
+    <ScheduleForm
+      hasDaysToKeepField={hasDaysToKeepField}
+      handleCancel={onCancel ?? (() => navigate(`${pathRoot}schedules`))}
+      asWizard={asWizard}
+      firstStep={firstStep}
+      wizardTitle={wizardTitle}
+      wizardClassName={wizardClassName}
+      wizardStartIndex={wizardStartIndex}
+      onCloseWizard={onCancel}
+      handleSubmit={handleSubmit}
+      submitError={formSubmitError}
+      launchConfig={launchConfig}
+      surveyConfig={surveyConfig}
+      resource={resource}
+      resourceDefaultCredentials={resourceDefaultCredentials}
+    />
+  );
+
+  /* A wizard is the modal it opens in; a page needs the card around it. */
+  return asWizard ? (
+    form
+  ) : (
     <Card>
-      <CardBody>
-        <ScheduleForm
-          hasDaysToKeepField={hasDaysToKeepField}
-          handleCancel={() => navigate(`${pathRoot}schedules`)}
-          handleSubmit={handleSubmit}
-          submitError={formSubmitError}
-          launchConfig={launchConfig}
-          surveyConfig={surveyConfig}
-          resource={resource}
-          resourceDefaultCredentials={resourceDefaultCredentials}
-        />
-      </CardBody>
+      <CardBody>{form}</CardBody>
     </Card>
   );
 }

@@ -196,8 +196,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
             >
               <Switch
                 id="diff_mode"
-                label={t`On`}
-
+                label={diffModeField.value ? t`On` : t`Off`}
                 isChecked={diffModeField.value}
                 onChange={() => {
                   diffModeHelpers.setValue(!diffModeField.value);

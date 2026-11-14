@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import {
   CaretDownIcon,
   CaretLeftIcon,
@@ -15,6 +15,7 @@ import {
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 import type { WorkflowAction } from './workflowReducer';
 import './WorkflowTools.css';
+import Tooltip from '../Tooltip';
 
 export interface WorkflowToolsProps {
   onFitGraph: () => void;
@@ -62,11 +63,15 @@ function WorkflowTools({
           onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
         />
       </div>
+      {/*
+       * Each tooltip opens away from the buttons beside it, rather than above
+       * as tooltips do elsewhere: the panel sits at the top of the canvas with
+       * nothing above the zoom row, and the pan buttons are a cross, where a
+       * label above Pan Down or beside Pan Up would cover the button next to
+       * it, the one the pointer is likely heading for.
+       */}
       <div className="ascender-workflow-tools__tools">
-        <Tooltip
-          content={t`Fit the graph to the available screen size`}
-          position="bottom"
-        >
+        <Tooltip content={t`Fit to Screen`} position="bottom">
           <Button
             icon={<DesktopIcon />}
             className="ascender-workflow-tools__margin-right-30"
@@ -126,10 +131,7 @@ function WorkflowTools({
                 onClick={() => onPan('up')}
               />
             </Tooltip>
-            <Tooltip
-              content={t`Set zoom to 100% and center graph`}
-              position="top"
-            >
+            <Tooltip content={t`Reset Zoom`} position="top">
               <Button
                 icon={<HomeIcon />}
                 ouiaId="visualizer-pan-middle-button"

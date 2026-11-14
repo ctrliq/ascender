@@ -13,7 +13,7 @@ test.describe('signing in', () => {
   });
 
   test('an unauthenticated visit is sent to the login page', async ({ page }) => {
-    await page.goto(route('/jobs'), { waitUntil: 'domcontentloaded' });
+    await page.goto(route('/runs'), { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.location.hash.includes('/login'), {
       timeout: 30_000,
     });

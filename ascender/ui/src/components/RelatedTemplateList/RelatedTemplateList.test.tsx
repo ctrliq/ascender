@@ -98,6 +98,34 @@ describe('<RelatedTemplateList />', () => {
     });
   });
 
+  // The list reads /job_templates/, where the playbook is a field of the row
+  // itself. The job_template__ prefix only exists on /unified_job_templates/
+  // and makes this endpoint answer 400.
+  test('searching by playbook filters on the job template field', async () => {
+    const { user } = renderWithContexts(
+      <RelatedTemplateList searchParams={{ credentials__id: 1 }} />
+    );
+    await screen.findByText('Job Template 1');
+
+    await user.click(screen.getByRole('button', { name: 'Simple key select' }));
+    await user.click(
+      await screen.findByRole('option', { name: 'Playbook Name' })
+    );
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search text input' }),
+      'site'
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Search submit button' })
+    );
+
+    await waitFor(() =>
+      expect(JobTemplatesAPI.read).toHaveBeenLastCalledWith(
+        expect.objectContaining({ playbook__icontains: 'site' })
+      )
+    );
+  });
+
   test('handleSelect is called when a template list item is selected', async () => {
     const { user } = renderWithContexts(
       <RelatedTemplateList searchParams={{ credentials__id: 1 }} />

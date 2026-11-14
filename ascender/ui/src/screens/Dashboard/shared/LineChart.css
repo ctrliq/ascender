@@ -1,0 +1,10 @@
+/* LineChart: the styling that used to sit inline on the chart's own div. */
+
+/*
+ * The chart hangs under the card header that holds the filters. Three rems
+ * stood it far enough down that the filters read as their own band rather than
+ * the heading of the chart below them.
+ */
+.ascender-line-chart {
+  margin-top: 1rem;
+}

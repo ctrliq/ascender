@@ -3,9 +3,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useField } from 'components/Form';
 import {
   FormGroup,
-  InputGroup,
   Title,
-  InputGroupItem,
   FormHelperText,
   HelperText,
   HelperTextItem,
@@ -98,16 +96,12 @@ function SecretPasswordField({
         isEdit ? <RevertButton id={name} defaultValue="" /> : undefined
       }
     >
-      <InputGroup>
-        <InputGroupItem isFill>
-          <PasswordInput
-            id={id}
-            name={name}
-            validate={validate}
-            isRequired={isRequired}
-          />
-        </InputGroupItem>
-      </InputGroup>
+      <PasswordInput
+        id={id}
+        name={name}
+        validate={validate}
+        isRequired={isRequired}
+      />
       {meta.touched && meta.error && (
         <FormHelperText>
           <HelperText>
@@ -167,7 +161,7 @@ function EmailFields({ isEdit = false }) {
       />
       <ArrayTextField
         id="email-recipients"
-        label={t`Recipient list`}
+        label={t`Recipient List`}
         name="notification_configuration.recipients"
         type="textarea"
         validate={required(null)}
@@ -177,7 +171,7 @@ function EmailFields({ isEdit = false }) {
       />
       <FormField
         id="email-sender"
-        label={t`Sender e-mail`}
+        label={t`Sender Email`}
         name="notification_configuration.sender"
         type="text"
         validate={requiredEmail()}
@@ -247,26 +241,26 @@ function GrafanaFields({ isEdit = false }) {
       />
       <SecretPasswordField
         id="grafana-key"
-        label={t`Grafana API key`}
+        label={t`Grafana API Key`}
         name="notification_configuration.grafana_key"
         isEdit={isEdit}
         isRequiredOnCreate
       />
       <FormField
         id="grafana-dashboard-id"
-        label={t`ID of the dashboard (optional)`}
+        label={t`ID of the Dashboard`}
         name="notification_configuration.dashboardId"
         type="text"
       />
       <FormField
         id="grafana-panel-id"
-        label={t`ID of the panel (optional)`}
+        label={t`ID of the Panel`}
         name="notification_configuration.panelId"
         type="text"
       />
       <ArrayTextField
         id="grafana-tags"
-        label={t`Tags for the annotation (optional)`}
+        label={t`Tags for the Annotation`}
         name="notification_configuration.annotation_tags"
         type="textarea"
         rows={3}
@@ -274,7 +268,7 @@ function GrafanaFields({ isEdit = false }) {
       />
       <CheckboxField
         id="grafana-ssl"
-        label={t`Disable SSL verification`}
+        label={t`Disable SSL Verification`}
         name="notification_configuration.grafana_no_verify_ssl"
       />
     </>
@@ -292,13 +286,13 @@ function IRCFields({ isEdit = false }) {
     <>
       <SecretPasswordField
         id="irc-password"
-        label={t`IRC server password`}
+        label={t`IRC Server Password`}
         name="notification_configuration.password"
         isEdit={isEdit}
       />
       <FormField
         id="irc-port"
-        label={t`IRC server port`}
+        label={t`IRC Server Port`}
         name="notification_configuration.port"
         type="number"
         validate={required(null)}
@@ -307,7 +301,7 @@ function IRCFields({ isEdit = false }) {
       />
       <FormField
         id="irc-server"
-        label={t`IRC server address`}
+        label={t`IRC Server Address`}
         name="notification_configuration.server"
         type="text"
         validate={required(null)}
@@ -315,7 +309,7 @@ function IRCFields({ isEdit = false }) {
       />
       <FormField
         id="irc-nickname"
-        label={t`IRC nick`}
+        label={t`IRC Nick`}
         name="notification_configuration.nickname"
         type="text"
         validate={required(null)}
@@ -323,16 +317,18 @@ function IRCFields({ isEdit = false }) {
       />
       <ArrayTextField
         id="irc-targets"
-        label={t`Destination channels or users`}
+        label={t`Destination Channels or Users`}
         name="notification_configuration.targets"
         type="textarea"
         validate={required(null)}
         isRequired
         tooltip={helpText.ircTargets}
       />
+      {/* use_ssl turns SSL on, so the box says that rather than the
+          opposite, and in the words the email type and the details use. */}
       <CheckboxField
-        id="grafana-ssl"
-        label={t`Disable SSL verification`}
+        id="irc-ssl"
+        label={t`Use SSL`}
         name="notification_configuration.use_ssl"
       />
     </>
@@ -365,14 +361,14 @@ function MatrixFields({ isEdit = false }) {
       />
       <SecretPasswordField
         id="matrix-access-token"
-        label={t`Access token`}
+        label={t`Access Token`}
         name="notification_configuration.access_token"
         isEdit={isEdit}
         isRequiredOnCreate
       />
       <ArrayTextField
         id="matrix-rooms"
-        label={t`Destination rooms`}
+        label={t`Destination Rooms`}
         name="notification_configuration.rooms"
         type="textarea"
         validate={required(null)}
@@ -388,12 +384,12 @@ function MatrixFields({ isEdit = false }) {
           <CheckboxField
             id="matrix-use-html"
             name="notification_configuration.use_html"
-            label={t`Send HTML formatted body`}
+            label={t`Send HTML Formatted Body`}
           />
           <CheckboxField
             id="matrix-ssl"
             name="notification_configuration.disable_ssl_verification"
-            label={t`Disable SSL verification`}
+            label={t`Disable SSL Verification`}
           />
         </FormCheckboxLayout>
       </FormGroup>
@@ -434,7 +430,7 @@ function MattermostFields() {
       />
       <CheckboxField
         id="mattermost-ssl"
-        label={t`Disable SSL verification`}
+        label={t`Disable SSL Verification`}
         name="notification_configuration.mattermost_no_verify_ssl"
       />
     </>
@@ -454,7 +450,7 @@ function PagerdutyFields({ isEdit = false }) {
       />
       <FormField
         id="pagerduty-subdomain"
-        label={t`Pagerduty subdomain`}
+        label={t`Pagerduty Subdomain`}
         name="notification_configuration.subdomain"
         type="text"
         validate={required(null)}
@@ -462,7 +458,7 @@ function PagerdutyFields({ isEdit = false }) {
       />
       <FormField
         id="pagerduty-service-key"
-        label={t`API service/integration key`}
+        label={t`API Service/Integration Key`}
         name="notification_configuration.service_key"
         type="text"
         validate={required(null)}
@@ -470,7 +466,7 @@ function PagerdutyFields({ isEdit = false }) {
       />
       <FormField
         id="pagerduty-identifier"
-        label={t`Client identifier`}
+        label={t`Client Identifier`}
         name="notification_configuration.client_name"
         type="text"
         validate={required(null)}
@@ -507,7 +503,7 @@ function RocketChatFields() {
       />
       <CheckboxField
         id="rocketchat-ssl"
-        label={t`Disable SSL verification`}
+        label={t`Disable SSL Verification`}
         name="notification_configuration.rocketchat_no_verify_ssl"
       />
     </>
@@ -537,7 +533,7 @@ function SlackFields({ isEdit = false }) {
     <>
       <ArrayTextField
         id="slack-channels"
-        label={t`Destination channels`}
+        label={t`Destination Channels`}
         name="notification_configuration.channels"
         type="textarea"
         validate={required(null)}
@@ -553,7 +549,7 @@ function SlackFields({ isEdit = false }) {
       />
       <FormField
         id="slack-color"
-        label={t`Notification color`}
+        label={t`Notification Color`}
         name="notification_configuration.hex_color"
         type="text"
         tooltip={helpText.slackColor}
@@ -574,14 +570,14 @@ function TwilioFields({ isEdit = false }) {
     <>
       <SecretPasswordField
         id="twilio-token"
-        label={t`Account token`}
+        label={t`Account Token`}
         name="notification_configuration.account_token"
         isEdit={isEdit}
         isRequiredOnCreate
       />
       <FormField
         id="twilio-from-phone"
-        label={t`Source phone number`}
+        label={t`Source Phone Number`}
         name="notification_configuration.from_number"
         type="text"
         validate={combine([required(null), twilioPhoneNumber()])}
@@ -590,7 +586,7 @@ function TwilioFields({ isEdit = false }) {
       />
       <ArrayTextField
         id="twilio-destination-numbers"
-        label={t`Destination SMS number(s)`}
+        label={t`Destination SMS Number(s)`}
         name="notification_configuration.to_numbers"
         type="textarea"
         validate={combine([required(null), twilioPhoneNumber()])}
@@ -629,7 +625,7 @@ function WebhookFields({ isEdit = false }) {
       />
       <SecretPasswordField
         id="webhook-password"
-        label={t`Basic auth password`}
+        label={t`Basic Auth Password`}
         name="notification_configuration.password"
         isEdit={isEdit}
       />
@@ -643,7 +639,7 @@ function WebhookFields({ isEdit = false }) {
       />
       <CheckboxField
         id="webhook-ssl"
-        label={t`Disable SSL verification`}
+        label={t`Disable SSL Verification`}
         name="notification_configuration.disable_ssl_verification"
       />
       <FormFullWidthLayout>

@@ -82,7 +82,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
     {
       key: 'workflow_job_template',
       value: 'workflow_job_template',
-      label: t`Workflow Job Template`,
+      label: t`Workflow Template`,
       isDisabled: false,
     },
   ];
@@ -93,7 +93,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
         {
           key: 'system_job_template',
           value: 'system_job_template',
-          label: t`Management Job`,
+          label: t`Cleanup Job`,
           isDisabled: false,
         },
       ]
@@ -228,7 +228,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                   </div>
                 </FormGroup>
                 <FormGroup
-                  label={t`On timeout`}
+                  label={t`On Timeout`}
                   fieldId="approval-on-timeout"
                   labelHelp={
                     <Popover
@@ -239,7 +239,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                   <FormSelect
                     id="approval-on-timeout"
                     ouiaId="approval-on-timeout"
-                    aria-label={t`On timeout`}
+                    aria-label={t`On Timeout`}
                     value={onTimeoutField.value}
                     onChange={(event, val) => {
                       onTimeoutHelpers.setValue(val);
@@ -250,7 +250,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                   </FormSelect>
                 </FormGroup>
                 <FormGroup
-                  label={t`Required approvals`}
+                  label={t`Required Approvals`}
                   fieldId="approval-required-approvals"
                   labelHelp={
                     <Popover
@@ -261,7 +261,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                   <TextInput
                     className="ascender-node-type-step__timeout-input"
                     {...requiredApprovalsField}
-                    aria-label={t`Required approvals`}
+                    aria-label={t`Required Approvals`}
                     id="approval-required-approvals"
                     min="1"
                     onChange={(event) => {

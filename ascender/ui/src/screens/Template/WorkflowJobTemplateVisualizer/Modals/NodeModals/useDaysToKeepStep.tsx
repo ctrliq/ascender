@@ -14,7 +14,7 @@ export default function useDaysToKeepStep() {
   const [, daysToKeepMeta] = useField('daysToKeep');
 
   return {
-    step: getStep(t`Days to keep`, nodeResourceMeta, daysToKeepMeta),
+    step: getStep(t`Days to Keep`, nodeResourceMeta, daysToKeepMeta),
     initialValues: { daysToKeep: 30 },
     isReady: true,
     contentError: null,

@@ -1,10 +1,10 @@
 import type { Project, SummaryFieldRef } from 'types/api';
 import React, { useState, useCallback } from 'react';
-import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
+import { Button, ClipboardCopy } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import { PencilAltIcon, UndoIcon } from '@patternfly/react-icons';
+import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { formatDateString, timeOfDay } from 'util/dates';
 import { ProjectsAPI } from 'api';
@@ -12,9 +12,11 @@ import { DetailList, Detail, DeletedDetail } from 'components/DetailList';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import StatusLabel from 'components/StatusLabel';
 import { toTitleCase } from 'util/strings';
-import { isJobRunning } from 'util/jobs';
+import { getRunActionLabels, isJobCancelable, isJobRunning } from 'util/jobs';
+import useCanCancelSync from 'hooks/useCanCancelSync';
 import CopyButton from 'components/CopyButton';
 import JobCancelButton from 'components/JobCancelButton';
+import Tooltip from 'components/Tooltip';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 import './ProjectListItem.css';
 
@@ -30,8 +32,6 @@ export interface ProjectListItemProps {
   /** Re-reads the page once the copy has landed. */
   fetchProjects: () => unknown;
   rowIndex: number;
-  /** Re-reads this one project, once its sync has settled. */
-  onRefreshRow: (projectId: number) => void;
 }
 
 function ProjectListItem({
@@ -44,9 +44,8 @@ function ProjectListItem({
   detailUrl,
   fetchProjects,
   rowIndex,
-  onRefreshRow,
 }: ProjectListItemProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [isDisabled, setIsDisabled] = useState(false);
 
   const copyProject = useCallback(async () => {
@@ -87,8 +86,24 @@ function ProjectListItem({
   }, []);
 
   const renderRevision = () => {
-    if (!project.summary_fields?.current_job || project.scm_revision) {
-      return project.scm_revision ? (
+    /* A sync under way: the revision the cell holds is about to be replaced,
+       so it says what is happening rather than showing a revision that no
+       longer stands. Only while the sync is unfinished, since a sync that
+       ended in an error sends no finish time and so brings no read of the
+       row, which kept a row saying Syncing long after its sync was over. */
+    if (isJobRunning(project.summary_fields?.current_job?.status)) {
+      return (
+        <span
+          className="ascender-project-list-item__label"
+          aria-label={t`The project is syncing, and its revision follows the sync.`}
+        >
+          {t`Syncing`}
+        </span>
+      );
+    }
+
+    if (project.scm_revision) {
+      return (
         <ClipboardCopy
           data-cy={`project-copy-revision-${project.id}`}
           variant="inline-compact"
@@ -100,47 +115,16 @@ function ProjectListItem({
         >
           {project.scm_revision.substring(0, 7)}
         </ClipboardCopy>
-      ) : (
-        <span
-          className="ascender-project-list-item__label"
-          aria-label={t`The project must be synced before a revision is available.`}
-        >
-          {t`Sync for revision`}
-        </span>
-      );
-    }
-
-    if (
-      isJobRunning(project.summary_fields.current_job.status) &&
-      !project.scm_revision
-    ) {
-      return (
-        <span
-          className="ascender-project-list-item__label"
-          aria-label={t`The project is currently syncing and the revision will be available after the sync is complete.`}
-        >
-          {t`Syncing`}
-        </span>
       );
     }
 
     return (
-      <>
-        <span
-          className="ascender-project-list-item__label"
-          aria-label={t`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`}
-        >
-          {t`Refresh for revision`}
-        </span>
-        <Tooltip content={t`Refresh project revision`}>
-          <Button
-            icon={<UndoIcon />}
-            ouiaId={`project-refresh-revision-${project.id}`}
-            variant="plain"
-            onClick={() => onRefreshRow(project.id)}
-          />
-        </Tooltip>
-      </>
+      <span
+        className="ascender-project-list-item__label"
+        aria-label={t`The project must be synced before a revision is available.`}
+      >
+        {t`Sync for revision`}
+      </span>
     );
   };
 
@@ -153,6 +137,12 @@ function ProjectListItem({
   } else if (project.summary_fields?.last_job) {
     job = project.summary_fields.last_job;
   }
+  const canCancelSync = useCanCancelSync(
+    'project_update',
+    job?.id,
+    job?.status,
+    project.summary_fields?.user_capabilities?.edit
+  );
 
   return (
     <>
@@ -187,7 +177,7 @@ function ProjectListItem({
               content={generateLastJobTooltip(job)}
               key={job.id}
             >
-              <Link to={`/jobs/project/${job.id}`}>
+              <Link to={`/runs/project/${job.id}`}>
                 <StatusLabel status={job.status} />
               </Link>
             </Tooltip>
@@ -206,29 +196,6 @@ function ProjectListItem({
         </Td>
         <Td dataLabel={t`Revision`}>{renderRevision()}</Td>
         <ActionsTd dataLabel={t`Actions`}>
-          {['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
-            <ActionItem
-              visible={project.summary_fields.user_capabilities?.start}
-            >
-              <JobCancelButton
-                job={{ id: job?.id, type: 'project_update' }}
-                errorTitle={t`Project Sync Error`}
-                title={t`Cancel Project Sync`}
-                showIconButton
-                errorMessage={t`Failed to cancel Project Sync`}
-              />
-            </ActionItem>
-          ) : (
-            <ActionItem
-              visible={project.summary_fields.user_capabilities?.start}
-              tooltip={t`Sync Project`}
-            >
-              <ProjectSyncButton
-                projectId={project.id}
-                lastJobStatus={job && job.status}
-              />
-            </ActionItem>
-          )}
           <ActionItem
             visible={project.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit Project`}
@@ -255,6 +222,29 @@ function ProjectListItem({
               errorMessage={t`Failed to copy project.`}
             />
           </ActionItem>
+          {/* Last, since a manual project has no sync: ahead of edit and copy
+              it would leave those rows opening with an empty slot. */}
+          {isJobCancelable(job?.status) ? (
+            <ActionItem visible={canCancelSync}>
+              <JobCancelButton
+                job={{ id: job?.id, type: 'project_update' }}
+                /* The shared wording for this kind of run, the one the runs
+                   list and the run's own page use. */
+                title={i18n._(getRunActionLabels('project_update').cancel)}
+                showIconButton
+              />
+            </ActionItem>
+          ) : (
+            <ActionItem
+              visible={project.summary_fields.user_capabilities?.start}
+              tooltip={t`Sync Project`}
+            >
+              <ProjectSyncButton
+                projectId={project.id}
+                lastJobStatus={job && job.status}
+              />
+            </ActionItem>
+          )}
         </ActionsTd>
       </Tr>
       <Tr isExpanded={isExpanded} id={`expanded-project-row-${project.id}`}>
@@ -289,12 +279,12 @@ function ProjectListItem({
                 isDefaultEnvironment
               />
               <Detail
-                label={t`Last modified`}
+                label={t`Last Modified`}
                 value={formatDateString(project.modified)}
                 dataCy={`project-${project.id}-last-modified`}
               />
               <Detail
-                label={t`Last used`}
+                label={t`Last Used`}
                 value={formatDateString(project.last_job_run)}
                 dataCy={`project-${project.id}-last-used`}
               />

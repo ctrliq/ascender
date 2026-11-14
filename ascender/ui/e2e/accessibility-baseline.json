@@ -1,6 +1,6 @@
 {
   "login": [],
-  "jobs": [
+  "runs": [
     "button-name",
     "color-contrast",
     "link-name"

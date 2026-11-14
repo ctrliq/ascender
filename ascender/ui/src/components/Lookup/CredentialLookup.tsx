@@ -1,5 +1,5 @@
 import type { SummaryFieldRef } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import type { FieldValidator } from 'components/Form';
 import { useLocation } from 'react-router';
 
@@ -22,11 +22,25 @@ import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import type { LookupItem } from './shared/reducer';
 
-const QS_CONFIG = getQSConfig('credentials', {
-  page: 1,
-  page_size: 5,
-  order_by: 'name',
-});
+/**
+ * The paging and search of one lookup, namespaced by the form field it fills.
+ *
+ * A form can hold more than one of these, the project form's source control
+ * and signature validation credentials among them, and a shared namespace let
+ * a search in one page the other and send its request again.
+ *
+ * Args:
+ *   fieldName: The formik field the lookup fills, unique within its form.
+ *
+ * Returns:
+ *   The query string config for that lookup's modal.
+ */
+const credentialQSConfig = (fieldName: string) =>
+  getQSConfig(fieldName, {
+    page: 1,
+    page_size: 5,
+    order_by: 'name',
+  });
 
 export interface CredentialLookupProps {
   autoPopulate?: boolean;
@@ -82,13 +96,20 @@ function CredentialLookup({
   const { t } = useLingui();
   const location = useLocation();
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
+  const qsConfig = useMemo(() => credentialQSConfig(fieldName), [fieldName]);
+  /*
+   * Only this lookup's own part of the address, compared by value, so that
+   * another list or lookup on the page changing its own does not send this
+   * one's request again.
+   */
+  const paramsKey = JSON.stringify(parseQueryString(qsConfig, location.search));
+  const params = useMemo(() => JSON.parse(paramsKey) as QSParams, [paramsKey]);
   const {
     result: { count, credentials, relatedSearchableKeys, searchableKeys },
     error,
     request: fetchCredentials,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(QS_CONFIG, location.search);
       const typeIdParams: QSParams = credentialTypeId
         ? { credential_type: credentialTypeId }
         : {};
@@ -138,7 +159,7 @@ function CredentialLookup({
       credentialTypeId,
       credentialTypeKind,
       credentialTypeNamespace,
-      location.search,
+      params,
     ]),
     {
       count: 0,
@@ -188,13 +209,15 @@ function CredentialLookup({
 
   return (
     <FormGroup
-      fieldId="credential"
+      fieldId={fieldName}
       isRequired={required}
       label={label}
       labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
     >
       <Lookup
-        id="credential"
+        // The field's name rather than one fixed id, so two lookups on a form
+        // do not share their open button's id.
+        id={fieldName}
         header={label}
         value={value}
         onBlur={onBlur}
@@ -204,7 +227,7 @@ function CredentialLookup({
         fieldName={fieldName}
         validate={validate}
         required={required}
-        qsConfig={QS_CONFIG}
+        qsConfig={qsConfig}
         isDisabled={isDisabled}
         multiple={multiple}
         modalDescription={modalDescription}
@@ -214,7 +237,7 @@ function CredentialLookup({
             options={credentials}
             optionCount={count}
             header={String(label)}
-            qsConfig={QS_CONFIG}
+            qsConfig={qsConfig}
             searchColumns={[
               {
                 name: t`Name`,
@@ -243,7 +266,7 @@ function CredentialLookup({
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
             readOnly={!canDelete}
-            name="credential"
+            name={fieldName}
             selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }

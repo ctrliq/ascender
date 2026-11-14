@@ -43,7 +43,7 @@ describe('<AdvancedInventoryHostDetail />', () => {
     assertDetail('Inventory', 'Mikes Inventory');
     assertDetail('Enabled', 'On');
     assertDetail('Created', '10/28/2019, 9:26:54 PM');
-    assertDetail('Last modified', '10/29/2019, 8:18:41 PM');
+    assertDetail('Last Modified', '10/29/2019, 8:18:41 PM');
 
     // Sparkline (Activity) renders its tooltip/status for the recent job.
     const activity = screen.getByText('Activity');

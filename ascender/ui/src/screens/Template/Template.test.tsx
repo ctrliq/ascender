@@ -71,6 +71,9 @@ describe('<Template />', () => {
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
       data: {},
     } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
+    vi.mocked(JobTemplatesAPI.readInstanceGroups).mockResolvedValue({
+      data: { results: [] },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readInstanceGroups>);
     vi.mocked(JobTemplatesAPI.readWebhookKey).mockResolvedValue({
       data: { webhook_key: 'key' },
     } as unknown as ResponseOf<typeof JobTemplatesAPI.readWebhookKey>);
@@ -96,6 +99,23 @@ describe('<Template />', () => {
     expect(
       screen.getByRole('tab', { name: 'Notifications' })
     ).toBeInTheDocument();
+  });
+
+  // The template's own tabs, then Notifications and Schedules, and Runs last.
+  test('orders its tabs with Runs last', async () => {
+    renderTemplate();
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(7));
+    expect(
+      screen.getAllByRole('tab').map((tab) => tab.textContent?.trim())
+    ).toEqual([
+      'Back to Templates',
+      'Details',
+      'Access',
+      'Survey',
+      'Notifications',
+      'Schedules',
+      'Runs',
+    ]);
   });
 
   test('notifications tab hidden with reduced permissions', async () => {

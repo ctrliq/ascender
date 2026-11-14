@@ -7,29 +7,22 @@ import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
 } from 'util/getRelatedResourceDeleteDetails';
-import {
-  Button,
-  Tooltip,
-  Alert,
-  Badge,
-  DropdownItem,
-} from '@patternfly/react-core';
+import { Button, Alert, Badge, DropdownItem } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import './RemoveInstanceButton.css';
+import Tooltip from 'components/Tooltip';
 
 export interface RemoveInstanceButtonProps {
   itemsToRemove: Instance[];
   onRemove: () => void;
-  isK8s: boolean;
   [key: string]: unknown;
 }
 
 function RemoveInstanceButton({
   itemsToRemove,
   onRemove,
-  isK8s,
 }: RemoveInstanceButtonProps) {
   const { t, i18n } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
@@ -40,8 +33,12 @@ function RemoveInstanceButton({
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const cannotRemove = (item: Instance) =>
+  // Only execution and hop nodes are ever deprovisioned from here, and not
+  // a managed one even of those kinds, since the install owns its lifecycle.
+  const isWrongNodeType = (item: Instance) =>
     !(item.node_type === 'execution' || item.node_type === 'hop');
+  const cannotRemove = (item: Instance) =>
+    isWrongNodeType(item) || Boolean(item.managed);
 
   const toggleModal = async (isOpen: boolean) => {
     setRemoveDetails(null);
@@ -72,17 +69,25 @@ function RemoveInstanceButton({
   }, [isKebabified, isModalOpen, onKebabModalChange]);
 
   const renderTooltip = () => {
-    const itemsUnableToremove = itemsToRemove
-      .filter(cannotRemove)
-      .map((item) => item.hostname)
-      .join(', ');
-    if (itemsToRemove.some(cannotRemove)) {
-      return t`You do not have permission to remove instances: ${itemsUnableToremove}`;
+    const wrongNodeTypes = itemsToRemove.filter(isWrongNodeType);
+    const managedItems = itemsToRemove.filter(
+      (item) => !isWrongNodeType(item) && item.managed
+    );
+    // What stands in the way is the kind of node, not the viewer's rights.
+    // Both callers render this only on a Kubernetes install, so the install
+    // type is never the reason.
+    if (wrongNodeTypes.length) {
+      const hostnames = wrongNodeTypes.map((item) => item.hostname).join(', ');
+      return t`Only execution and hop nodes can be deleted: ${hostnames}`;
+    }
+    if (managedItems.length) {
+      const hostnames = managedItems.map((item) => item.hostname).join(', ');
+      return t`Managed instances cannot be deleted: ${hostnames}`;
     }
     if (itemsToRemove.length) {
-      return t`Remove`;
+      return t`Delete`;
     }
-    return t`Select a row to remove`;
+    return t`Select a row to delete`;
   };
 
   const isDisabled =
@@ -93,7 +98,7 @@ function RemoveInstanceButton({
       <Plural
         value={itemsToRemove.length}
         one="This instance is currently being used by other resources. Are you sure you want to delete it?"
-        other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
+        other="Deleting these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
       />
       {removeDetails &&
         removeDetails.map(({ label, count }) => (
@@ -127,7 +132,7 @@ function RemoveInstanceButton({
         <Tooltip content={renderTooltip()} position="top">
           <DropdownItem
             key="add"
-            isDisabled={isDisabled || !isK8s}
+            isDisabled={isDisabled}
             isLoading={isLoading}
             ouiaId="remove-button"
             component="button"
@@ -135,7 +140,7 @@ function RemoveInstanceButton({
               toggleModal(true);
             }}
           >
-            {t`Remove`}
+            {t`Delete`}
           </DropdownItem>
         </Tooltip>
       ) : (
@@ -147,9 +152,9 @@ function RemoveInstanceButton({
               ouiaId="remove-button"
               spinnerAriaValueText={isLoading ? 'Loading' : undefined}
               onClick={() => toggleModal(true)}
-              isDisabled={isDisabled || !isK8s}
+              isDisabled={isDisabled}
             >
-              {t`Remove`}
+              {t`Delete`}
             </Button>
           </div>
         </Tooltip>
@@ -158,7 +163,11 @@ function RemoveInstanceButton({
       {isModalOpen && (
         <AlertModal
           variant="danger"
-          title={t`Remove Instances`}
+          title={
+            itemsToRemove.length === 1
+              ? t`Delete Instance`
+              : t`Delete Instances`
+          }
           isOpen={isModalOpen}
           onClose={() => toggleModal(false)}
           actions={[
@@ -166,16 +175,16 @@ function RemoveInstanceButton({
               ouiaId="remove-modal-confirm"
               key="remove"
               variant="danger"
-              aria-label={t`Confirm remove`}
+              aria-label={t`Confirm Delete`}
               onClick={handleRemove}
             >
-              {t`Remove`}
+              {t`Delete`}
             </Button>,
             <Button
               ouiaId="remove-cancel"
               key="cancel"
               variant="link"
-              aria-label={t`cancel remove`}
+              aria-label={t`Cancel Delete`}
               onClick={() => {
                 toggleModal(false);
               }}
@@ -185,7 +194,7 @@ function RemoveInstanceButton({
           ]}
         >
           <div>
-            {t`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`}
+            {t`This action will delete the following instances, and you may need to rerun the install bundle for any instance that was previously connected to them:`}
           </div>
           {itemsToRemove.map((item) => (
             <span key={item.id} id={`item-to-be-removed-${item.id}`}>

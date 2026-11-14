@@ -20,6 +20,7 @@ vi.mock('react-router', async () => ({
     id: 1,
   }),
   useLocation: () => ({
+    pathname: '/instances',
     search: '',
   }),
 }));
@@ -115,14 +116,17 @@ describe('<InstanceList />, React testing library tests', () => {
   const user = userEvent.setup();
   const options = { data: { actions: { POST: true } } };
 
-  const customRender = (ui: React.ReactElement, isK8s = true) => {
-    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
-      me: { is_superuser: true },
-    }));
+  const customRender = (
+    ui: React.ReactElement,
+    isK8s = true,
+    me: Record<string, unknown> = { is_superuser: true },
+    results: unknown[] = instances
+  ) => {
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({ me }));
     vi.mocked(InstancesAPI.read).mockResolvedValue({
       data: {
-        count: instances.length,
-        results: instances,
+        count: results.length,
+        results,
       },
     } as unknown as ResponseOf<typeof InstancesAPI.read>);
     vi.mocked(InstancesAPI.readOptions).mockResolvedValue(
@@ -166,7 +170,7 @@ describe('<InstanceList />, React testing library tests', () => {
     const selectedRowItem = screen.getByRole('checkbox', {
       name: 'Select row 2',
     });
-    const button = screen.getByRole('button', { name: 'Remove' });
+    const button = screen.getByRole('button', { name: 'Delete' });
 
     await user.click(selectedRowItem);
     await user.click(button);
@@ -174,7 +178,7 @@ describe('<InstanceList />, React testing library tests', () => {
     await waitFor(() => screen.getByRole('dialog'));
     const deprovisionModal = screen.getByRole('dialog');
     const removeButton = within(deprovisionModal).getByRole('button', {
-      name: 'Confirm remove',
+      name: 'Confirm Delete',
     });
 
     await user.click(removeButton);
@@ -196,7 +200,7 @@ describe('<InstanceList />, React testing library tests', () => {
     const selectedRowItem = screen.getByRole('checkbox', {
       name: 'Select row 2',
     });
-    const button = screen.getByRole('button', { name: 'Run health check' });
+    const button = screen.getByRole('button', { name: 'Run Health Check' });
 
     await user.click(selectedRowItem);
     await user.click(button);
@@ -226,7 +230,7 @@ describe('<InstanceList />, React testing library tests', () => {
     const selectedRowItem = screen.getByRole('checkbox', {
       name: 'Select row 2',
     });
-    const button = screen.getByRole('button', { name: 'Run health check' });
+    const button = screen.getByRole('button', { name: 'Run Health Check' });
 
     await user.click(selectedRowItem);
     await user.click(button);
@@ -242,5 +246,78 @@ describe('<InstanceList />, React testing library tests', () => {
     await waitFor(() => customRender(<InstanceList />, false));
     const add = screen.queryByText('Add');
     expect(add).toBeNull();
+  });
+
+  test('offers no health check to a system auditor', async () => {
+    await waitFor(() =>
+      customRender(<InstanceList />, true, { is_system_auditor: true })
+    );
+    await screen.findAllByTestId('instances list item');
+    expect(
+      screen.queryByRole('button', { name: 'Run Health Check' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('allows a health check while any selected node is an execution node', async () => {
+    await waitFor(() =>
+      customRender(<InstanceList />, true, { is_superuser: true }, [
+        { ...instances[0], id: 1, hostname: 'exec', node_type: 'execution' },
+        { ...instances[0], id: 2, hostname: 'ctrl', node_type: 'control' },
+      ])
+    );
+    const button = screen.getByRole('button', { name: 'Run Health Check' });
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 1' }));
+    expect(button).toBeDisabled();
+    await user.click(screen.getByRole('checkbox', { name: 'Select row 0' }));
+    expect(button).toBeEnabled();
+  });
+
+  /*
+   * Managed only stops a node being deleted. Select All ticks every row, the
+   * health check goes out for the managed execution node as well, and Delete
+   * says by name which node it refuses.
+   */
+  test('selects managed nodes for a health check while Delete refuses them', async () => {
+    vi.mocked(InstancesAPI.healthCheck).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof InstancesAPI.healthCheck>
+    );
+    await waitFor(() =>
+      customRender(<InstanceList />, true, { is_superuser: true }, [
+        {
+          ...instances[0],
+          id: 1,
+          hostname: 'managed',
+          node_type: 'execution',
+          managed: true,
+        },
+        {
+          ...instances[0],
+          id: 2,
+          hostname: 'free',
+          node_type: 'execution',
+          managed: false,
+        },
+      ])
+    );
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 1' })
+    ).toBeChecked();
+
+    const remove = screen.getByRole('button', { name: 'Delete' });
+    expect(remove).toBeDisabled();
+    await user.hover(remove.parentElement!);
+    expect(
+      await screen.findByText('Managed instances cannot be deleted: managed')
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Run Health Check' }));
+    await waitFor(() => {
+      expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(1);
+      expect(InstancesAPI.healthCheck).toHaveBeenCalledWith(2);
+    });
   });
 });

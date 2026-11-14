@@ -78,5 +78,14 @@ describe('<MeshGraph />', () => {
     );
     await waitFor(() => screen.getByLabelText('mesh-svg'));
     expect(screen.getByLabelText('mesh-svg')).toBeVisible();
+    // The legend's headings and entries read as labels, in Title Case.
+    [
+      'Node Types',
+      'Control Node',
+      'Node State Types',
+      'Link State Types',
+    ].forEach((label) => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    });
   });
 });

@@ -40,7 +40,7 @@ function GceFileUploadField() {
   return (
     <FormGroup
       fieldId="credential-gce-file"
-      label={t`Service account JSON file`}
+      label={t`Service Account JSON File`}
     >
       <FileUpload
         id="credential-gce-file"

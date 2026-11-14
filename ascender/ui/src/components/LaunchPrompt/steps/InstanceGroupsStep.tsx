@@ -11,8 +11,9 @@ import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import ContentError from '../../ContentError';
 import type { LookupItem } from '../../Lookup/shared/reducer';
+import LAUNCH_PROMPT_NAMESPACES from '../namespaces';
 
-const QS_CONFIG = getQSConfig('instance-groups', {
+const QS_CONFIG = getQSConfig(LAUNCH_PROMPT_NAMESPACES.instanceGroups, {
   page: 1,
   page_size: 5,
   order_by: 'name',

@@ -1,7 +1,13 @@
 import React from 'react';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 import { createMemoryHistory } from 'history';
-import { screen, within, fireEvent, waitFor } from '@testing-library/react';
+import {
+  screen,
+  within,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import type { SearchColumn } from 'types/api';
 import type { QSConfig } from 'util/qs';
 import type {
@@ -67,6 +73,152 @@ describe('<Search />', () => {
 
     expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onSearch).toHaveBeenCalledWith('name__icontains', 'test-321');
+  });
+
+  /*
+   * Where the list takes a live search the box is the filter itself: what is
+   * typed applies a short pause later, without the button, and one value at a
+   * time rather than a chip beside the last.
+   */
+  describe('as it is typed in', () => {
+    const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
+
+    test('should filter a pause after the last keystroke', async () => {
+      const onLiveSearch = vi.fn();
+      const { user } = renderSearch({ columns, onLiveSearch });
+
+      await user.type(
+        screen.getByRole('searchbox', { name: 'Search text input' }),
+        'demo'
+      );
+
+      await waitFor(() =>
+        expect(onLiveSearch).toHaveBeenCalledWith('name__icontains', 'demo')
+      );
+      // One request for the word, not one per letter.
+      expect(onLiveSearch).toHaveBeenCalledTimes(1);
+    });
+
+    test('should keep what it is filtering by in the box', async () => {
+      const onLiveSearch = vi.fn();
+      const { user } = renderSearch({ columns, onLiveSearch });
+      const box = screen.getByRole('searchbox', { name: 'Search text input' });
+
+      await user.type(box, 'demo');
+      await user.click(
+        screen.getByRole('button', { name: 'Search submit button' })
+      );
+
+      // The button says now rather than adding a second filter, and the box
+      // still shows what the list is filtered by.
+      expect(onLiveSearch).toHaveBeenCalledWith('name__icontains', 'demo');
+      expect(box).toHaveValue('demo');
+    });
+
+    test('should clear the filter where the box is emptied', async () => {
+      const onLiveSearch = vi.fn();
+      const history = createMemoryHistory({
+        initialEntries: ['/organizations?organization.name__icontains=demo'],
+      });
+      const { user } = renderSearch(
+        { columns, onLiveSearch },
+        { context: { router: { history } } }
+      );
+      const box = screen.getByRole('searchbox', { name: 'Search text input' });
+
+      // It opens on what the address already says.
+      expect(box).toHaveValue('demo');
+
+      await user.clear(box);
+
+      await waitFor(() =>
+        expect(onLiveSearch).toHaveBeenCalledWith('name__icontains', null)
+      );
+    });
+
+    test('should follow the address where a chip is removed elsewhere', async () => {
+      const onLiveSearch = vi.fn();
+      const history = createMemoryHistory({
+        initialEntries: ['/organizations?organization.name__icontains=demo'],
+      });
+      renderSearch(
+        { columns, onLiveSearch },
+        { context: { router: { history } } }
+      );
+      const box = screen.getByRole('searchbox', { name: 'Search text input' });
+      expect(box).toHaveValue('demo');
+
+      // What the chip's own X does, and the back button with it: the box
+      // empties rather than putting the filter back a pause later.
+      act(() => history.push('/organizations'));
+
+      await waitFor(() => expect(box).toHaveValue(''));
+      expect(onLiveSearch).not.toHaveBeenCalled();
+    });
+
+    /*
+     * A list hands over a new callback every render, and a busy list renders on
+     * every socket message. The pause used to restart on each one, so with
+     * messages arriving faster than it ran out the typing never filtered.
+     */
+    test('should filter while the list keeps re-rendering', () => {
+      vi.useFakeTimers();
+      try {
+        const onLiveSearch = vi.fn();
+        const tree = () => (
+          <Toolbar
+            id="organization-list-toolbar"
+            clearAllFilters={() => {}}
+            collapseListedFiltersBreakpoint="lg"
+          >
+            <ToolbarContent>
+              <Search
+                qsConfig={QS_CONFIG}
+                columns={columns}
+                onShowAdvancedSearch={vi.fn()}
+                relatedSearchableKeys={[]}
+                onLiveSearch={(key, value) => onLiveSearch(key, value)}
+              />
+            </ToolbarContent>
+          </Toolbar>
+        );
+        const { rerender } = renderWithContexts(tree());
+
+        fireEvent.change(
+          screen.getByRole('searchbox', { name: 'Search text input' }),
+          { target: { value: 'demo' } }
+        );
+        // A socket message every 100 ms, each one a render with a new callback.
+        for (let i = 0; i < 6; i += 1) {
+          act(() => {
+            vi.advanceTimersByTime(100);
+          });
+          rerender(tree());
+        }
+
+        expect(onLiveSearch).toHaveBeenCalledTimes(1);
+        expect(onLiveSearch).toHaveBeenCalledWith('name__icontains', 'demo');
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    test('should leave the button alone where the list takes no live search', async () => {
+      const onSearch = vi.fn();
+      const { user } = renderSearch({ columns, onSearch });
+      const box = screen.getByRole('searchbox', { name: 'Search text input' });
+
+      await user.type(box, 'demo');
+      await waitFor(() => expect(box).toHaveValue('demo'));
+      expect(onSearch).not.toHaveBeenCalled();
+
+      await user.click(
+        screen.getByRole('button', { name: 'Search submit button' })
+      );
+      expect(onSearch).toHaveBeenCalledWith('name__icontains', 'demo');
+      // The box adds a filter and empties, as it always has.
+      expect(box).toHaveValue('');
+    });
   });
 
   test('changing key select updates which key is called for onSearch', async () => {

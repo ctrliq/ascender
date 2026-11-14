@@ -5,14 +5,20 @@ import { Card } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { ProjectsAPI } from 'api';
 import ProjectForm from '../shared/ProjectForm';
+import type { ProjectFormOptions } from '../shared/projectFormOptions';
 import type { ProjectFormValues } from '../shared/ProjectForm';
 
 export interface ProjectEditProps {
   project: Project;
   [key: string]: unknown;
+  /**
+   * What the form draws with, read by the screen above rather than by the
+   * form, so the page has one loading state rather than two.
+   */
+  formOptions: ProjectFormOptions;
 }
 
-function ProjectEdit({ project }: ProjectEditProps) {
+function ProjectEdit({ project, formOptions }: ProjectEditProps) {
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
 
@@ -59,6 +65,7 @@ function ProjectEdit({ project }: ProjectEditProps) {
       <CardBody>
         <ProjectForm
           project={project}
+          options={formOptions}
           handleCancel={handleCancel}
           handleSubmit={handleSubmit}
           submitError={formSubmitError}

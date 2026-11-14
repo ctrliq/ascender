@@ -1,6 +1,6 @@
 import type { CredentialType, LaunchCredential } from 'types/api';
 import type { QSParams } from 'util/qs';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { ToolbarItem, Alert } from '@patternfly/react-core';
@@ -52,6 +52,15 @@ function MultiCredentialsLookup({
   const { t } = useLingui();
   const [selectedType, setSelectedType] = useState<CredentialType | null>(null);
   const isMounted = useIsMounted();
+  /*
+   * Only this lookup's own part of the address, compared by value: the job
+   * template form also holds the webhook credential's lookup, and a search in
+   * that one would otherwise send this one's request again.
+   */
+  const paramsKey = JSON.stringify(
+    parseQueryString(QS_CONFIG, location.search)
+  );
+  const params = useMemo(() => JSON.parse(paramsKey) as QSParams, [paramsKey]);
 
   const {
     result: credentialTypes,
@@ -96,7 +105,6 @@ function MultiCredentialsLookup({
         };
       }
 
-      const params = parseQueryString(QS_CONFIG, location.search);
       const [{ results, count }, actionsResponse] = await Promise.all([
         loadCredentials(params, selectedType.id),
         CredentialsAPI.readOptions(),
@@ -119,7 +127,7 @@ function MultiCredentialsLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [selectedType, location]),
+    }, [selectedType, params]),
     {
       credentials: [],
       credentialsCount: 0,
@@ -167,7 +175,6 @@ function MultiCredentialsLookup({
       onChange={onChange}
       onUpdate={fetchCredentials}
       qsConfig={QS_CONFIG}
-      isLoading={isTypesLoading || isCredentialsLoading}
       renderItemChip={renderChip}
       renderOptionsList={({ state, dispatch, canDelete }) => (
         <>
@@ -214,6 +221,7 @@ function MultiCredentialsLookup({
           )}
           <OptionsList
             value={state.selectedItems}
+            isLoading={isTypesLoading || isCredentialsLoading}
             options={credentials}
             optionCount={credentialsCount}
             searchColumns={[

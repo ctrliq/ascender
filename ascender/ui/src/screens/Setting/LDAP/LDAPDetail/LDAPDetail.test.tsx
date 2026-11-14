@@ -27,7 +27,7 @@ describe('<LDAPDetail />', () => {
 
   async function renderDetail(category = 'default', context = {}) {
     const history = createMemoryHistory({
-      initialEntries: [`/settings/ldap/${category}/details`],
+      initialEntries: [`/authentication/ldap/${category}/details`],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -45,22 +45,6 @@ describe('<LDAPDetail />', () => {
     test('initially renders without crashing', async () => {
       await renderDetail();
       expect(screen.getByText('LDAP Server URI')).toBeInTheDocument();
-    });
-
-    test('should render expected tabs', async () => {
-      await renderDetail();
-      const expectedTabs = [
-        'Back to Settings',
-        'Default',
-        'LDAP1',
-        'LDAP2',
-        'LDAP3',
-        'LDAP4',
-        'LDAP5',
-      ];
-      expectedTabs.forEach((tabName) => {
-        expect(screen.getByText(tabName)).toBeInTheDocument();
-      });
     });
 
     test('should render expected details', async () => {
@@ -119,7 +103,7 @@ describe('<LDAPDetail />', () => {
       const { history } = await renderDetail('foo');
       await waitFor(() =>
         expect(history.location.pathname).toEqual(
-          '/settings/ldap/default/details'
+          '/authentication/ldap/default/details'
         )
       );
     });

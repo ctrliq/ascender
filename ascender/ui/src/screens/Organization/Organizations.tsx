@@ -28,12 +28,12 @@ function Organizations() {
         '/organizations': t`Organizations`,
         '/organizations/add': t`Create New Organization`,
         [`/organizations/${organization.id}`]: `${organization.name}`,
-        [`/organizations/${organization.id}/edit`]: t`Edit Details`,
-        [`/organizations/${organization.id}/details`]: t`Details`,
-        [`/organizations/${organization.id}/access`]: t`Access`,
-        [`/organizations/${organization.id}/teams`]: t`Teams`,
-        [`/organizations/${organization.id}/notifications`]: t`Notifications`,
-        [`/organizations/${organization.id}/execution_environments`]: t`Execution Environments`,
+        [`/organizations/${organization.id}/edit`]: t`Edit ${organization.name}`,
+        [`/organizations/${organization.id}/details`]: `${organization.name}`,
+        [`/organizations/${organization.id}/access`]: `${organization.name}`,
+        [`/organizations/${organization.id}/teams`]: `${organization.name}`,
+        [`/organizations/${organization.id}/notifications`]: `${organization.name}`,
+        [`/organizations/${organization.id}/execution_environments`]: `${organization.name}`,
       };
       setBreadcrumbConfig(breadcrumb);
     },

@@ -69,6 +69,9 @@ describe('<SurveyToolbar />', () => {
     const switchInput = screen.getByLabelText('Survey Toggle');
     expect(switchInput).toBeInTheDocument();
     expect(switchInput).not.toBeChecked();
+    // PF6 has no off label, so the label itself has to follow the state.
+    expect(screen.getByText('Survey Disabled')).toBeInTheDocument();
+    expect(screen.queryByText('Survey Enabled')).not.toBeInTheDocument();
   });
 
   test('switch is on', () => {
@@ -87,6 +90,7 @@ describe('<SurveyToolbar />', () => {
     const switchInput = screen.getByLabelText('Survey Toggle');
     expect(switchInput).toBeInTheDocument();
     expect(switchInput).toBeChecked();
+    expect(screen.getByText('Survey Enabled')).toBeInTheDocument();
   });
 
   test('all action buttons in toolbar are disabled', () => {
@@ -106,10 +110,8 @@ describe('<SurveyToolbar />', () => {
     expect(screen.getByLabelText('Select all')).toBeDisabled();
     expect(screen.getByLabelText('Survey Toggle')).toBeDisabled();
 
-    // ToolbarAddButton renders as a disabled link (aria-disabled) labelled "Add".
-    const addButton = screen.getByText('Add').closest('a, button');
-    expect(addButton).toBeInTheDocument();
-    expect(addButton).toHaveAttribute('aria-disabled', 'true');
+    // Add is left out rather than disabled, as on the other lists.
+    expect(screen.queryByText('Add')).not.toBeInTheDocument();
 
     const deleteButton = document.querySelector(
       '[data-ouia-component-id="survey-delete-button"]'
@@ -119,6 +121,52 @@ describe('<SurveyToolbar />', () => {
     expect(
       document.querySelector('[data-ouia-component-id="edit-order"]')
     ).not.toBeInTheDocument();
+  });
+
+  test('Delete tooltip gives the permission as the reason', async () => {
+    const { user } = renderWithContexts(
+      <SurveyToolbar
+        onToggleDeleteModal={() => {}}
+        surveyEnabled
+        isDeleteDisabled
+        onSelectAll={vi.fn()}
+        isAllSelected={false}
+        onToggleSurvey={vi.fn()}
+        canEdit={false}
+      />
+    );
+
+    await user.hover(
+      screen.getByRole('button', { name: 'Delete' }).parentElement!
+    );
+    expect(
+      await screen.findByText(
+        'You do not have permission to delete survey questions'
+      )
+    ).toBeInTheDocument();
+  });
+
+  // Named as the Add Question beside them is, for what they act on.
+  test('says Delete Questions and Edit Question Order', async () => {
+    const { user } = renderWithContexts(
+      <SurveyToolbar
+        onToggleDeleteModal={() => {}}
+        surveyEnabled
+        isDeleteDisabled={false}
+        onSelectAll={vi.fn()}
+        isAllSelected={false}
+        onToggleSurvey={vi.fn()}
+        onOpenOrderModal={vi.fn()}
+        canEdit
+      />
+    );
+
+    await user.hover(
+      screen.getByRole('button', { name: 'Delete' }).parentElement!
+    );
+    expect(await screen.findByText('Delete Questions')).toBeInTheDocument();
+    await user.hover(screen.getByRole('button', { name: 'Edit Order' }));
+    expect(await screen.findByText('Edit Question Order')).toBeInTheDocument();
   });
 
   test('clicking buttons fires handlers', () => {

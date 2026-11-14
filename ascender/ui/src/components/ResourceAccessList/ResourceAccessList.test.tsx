@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   CredentialsAPI,
@@ -23,6 +23,11 @@ describe('<ResourceAccessList />', () => {
     name: 'Default',
     summary_fields: {
       object_roles: {
+        member_role: {
+          description: 'User is a member of the organization',
+          name: 'Member',
+          id: 1,
+        },
         admin_role: {
           description: 'Can manage all aspects of the organization',
           name: 'Admin',
@@ -385,6 +390,35 @@ describe('<ResourceAccessList />', () => {
     expect(screen.getByRole('link', { name: 'jane' })).toBeInTheDocument();
   });
 
+  test('shows a load failure rather than an empty list', async () => {
+    vi.mocked(OrganizationsAPI.readAccessList).mockRejectedValue(
+      Object.assign(new Error('boom'), {
+        response: {
+          config: {
+            method: 'get',
+            url: '/api/v2/organizations/1/access_list/',
+          },
+          data: 'boom',
+          status: 500,
+        },
+      })
+    );
+    renderOrg();
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+  });
+
+  test('offers to associate a role when the list is empty', async () => {
+    vi.mocked(OrganizationsAPI.readAccessList).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readAccessList>);
+    renderOrg();
+    expect(
+      await screen.findByText('Associate a role to list it here')
+    ).toBeInTheDocument();
+  });
+
   test('should open and close confirmation dialog when deleting role', async () => {
     const { user } = renderOrg();
     await screen.findByRole('link', { name: 'joe' });
@@ -392,7 +426,7 @@ describe('<ResourceAccessList />', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     // Click the first role chip's close button (joe's user role).
     const chipButtons = screen.getAllByRole('button', {
-      name: /Remove Member chip/,
+      name: /Disassociate Member/,
     });
     await user.click(chipButtons[0]!);
     const dialog = await screen.findByRole('dialog');
@@ -410,13 +444,13 @@ describe('<ResourceAccessList />', () => {
     const { user } = renderOrg();
     await screen.findByRole('link', { name: 'joe' });
     const chipButtons = screen.getAllByRole('button', {
-      name: /Remove Member chip/,
+      name: /Disassociate Member/,
     });
     // Index 0 is joe's user role (id 1, user id 1).
     await user.click(chipButtons[0]!);
     const dialog = await screen.findByRole('dialog');
     await user.click(
-      within(dialog).getByRole('button', { name: 'Confirm delete' })
+      within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
     );
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -426,17 +460,118 @@ describe('<ResourceAccessList />', () => {
     expect(OrganizationsAPI.readAccessList).toHaveBeenCalledTimes(2);
   });
 
+  test("removes the ticked users' own roles from the toolbar, never a team's", async () => {
+    const { user } = renderOrg();
+    await screen.findByRole('link', { name: 'joe' });
+    const ticks = screen.getAllByRole('checkbox', { name: /Select row/ });
+    // joe holds a role of his own here; jane only one through a team.
+    expect(ticks[0]).toBeEnabled();
+    expect(ticks[1]).toBeDisabled();
+
+    await user.click(ticks[0] as HTMLElement);
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
+    );
+
+    await waitFor(() =>
+      expect(UsersAPI.disassociateRole).toHaveBeenCalledWith(1, 1)
+    );
+    expect(UsersAPI.disassociateRole).toHaveBeenCalledTimes(1);
+    expect(TeamsAPI.disassociateRole).not.toHaveBeenCalled();
+  });
+
+  const renderOrgAt = (url: string) => {
+    const history = createMemoryHistory({ initialEntries: [url] });
+    const utils = renderWithContexts(
+      <ResourceAccessList
+        resource={organization}
+        apiModel={OrganizationsAPI}
+      />,
+      { context: { router: { history } } }
+    );
+    return { ...utils, history };
+  };
+
+  /*
+   * A tick kept across a new search could sit on a user the search hides, and
+   * the toolbar's Disassociate would still take their roles off.
+   */
+  test('clears the ticks when the search changes', async () => {
+    const { user, history } = renderOrgAt('/organizations/1/access');
+    await screen.findByRole('link', { name: 'joe' });
+
+    const [tick] = screen.getAllByRole('checkbox', { name: /Select row/ });
+    await user.click(tick as HTMLElement);
+    expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
+
+    act(() =>
+      history.replace('/organizations/1/access?access.username__icontains=x')
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Disassociate' })
+      ).toBeDisabled()
+    );
+  });
+
+  test('steps back a page when every row on it loses every role', async () => {
+    vi.mocked(OrganizationsAPI.readAccessList).mockResolvedValue({
+      data: { count: 6, results: [data.results[0]] },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readAccessList>);
+    const { user, history } = renderOrgAt(
+      '/organizations/1/access?access.page=2'
+    );
+    await screen.findByRole('link', { name: 'joe' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
+    );
+
+    await waitFor(() =>
+      expect(history.location.search).not.toContain('access.page=2')
+    );
+  });
+
+  /* A user holding a team's role stays listed, so the page is not empty. */
+  test('stays on the page when a row keeps a role', async () => {
+    const { user, history } = renderOrgAt(
+      '/organizations/1/access?access.page=2'
+    );
+    await screen.findByRole('link', { name: 'joe' });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
+    );
+
+    await waitFor(() =>
+      expect(UsersAPI.disassociateRole).toHaveBeenCalledWith(1, 1)
+    );
+    await waitFor(() =>
+      expect(OrganizationsAPI.readAccessList).toHaveBeenCalledTimes(2)
+    );
+    expect(history.location.search).toContain('access.page=2');
+  });
+
   test('should delete team role', async () => {
     const { user } = renderOrg();
     await screen.findByRole('link', { name: 'jane' });
     const chipButtons = screen.getAllByRole('button', {
-      name: /Remove Member chip/,
+      name: /Disassociate Member/,
     });
     // Index 1 is jane's team role (id 3, team id 5).
     await user.click(chipButtons[1]!);
     const dialog = await screen.findByRole('dialog');
     await user.click(
-      within(dialog).getByRole('button', { name: 'Confirm delete' })
+      within(dialog).getByRole('button', { name: 'Confirm Disassociate' })
     );
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -485,7 +620,7 @@ describe('<ResourceAccessList />', () => {
       { context: { router: { history: credentialHistory } } }
     );
     expect(
-      await screen.findByRole('button', { name: /add/i })
+      await screen.findByRole('button', { name: 'Associate' })
     ).toBeInTheDocument();
   });
 
@@ -523,7 +658,7 @@ describe('<ResourceAccessList />', () => {
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
     expect(
-      screen.queryByRole('button', { name: /add/i })
+      screen.queryByRole('button', { name: 'Associate' })
     ).not.toBeInTheDocument();
   });
 
@@ -540,7 +675,7 @@ describe('<ResourceAccessList />', () => {
       { context: { router: { history: credentialHistory } } }
     );
     expect(
-      await screen.findByRole('button', { name: /add/i })
+      await screen.findByRole('button', { name: 'Associate' })
     ).toBeInTheDocument();
   });
 
@@ -566,7 +701,7 @@ describe('<ResourceAccessList />', () => {
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     );
     expect(
-      screen.queryByRole('button', { name: /add/i })
+      screen.queryByRole('button', { name: 'Associate' })
     ).not.toBeInTheDocument();
   });
 });

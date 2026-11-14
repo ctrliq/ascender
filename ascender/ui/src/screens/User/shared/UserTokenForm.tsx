@@ -27,7 +27,7 @@ function UserTokenFormFields() {
 
   const [scopeField, scopeMeta, scopeHelpers] = useField({
     name: 'scope',
-    validate: required(t`Please enter a value.`),
+    validate: required(t`Select a value for this field`),
   });
 
   const handleApplicationUpdate = useCallback(
@@ -80,7 +80,12 @@ function UserTokenFormFields() {
           {...scopeField}
           id="token-scope"
           data={[
-            { key: 'default', label: '', value: '' },
+            {
+              key: 'default',
+              label: t`Choose a scope`,
+              value: '',
+              isDisabled: true,
+            },
             { key: 'read', value: 'read', label: t`Read` },
             { key: 'write', value: 'write', label: t`Write` },
           ]}
