@@ -29,9 +29,9 @@ def test_python_and_js_licenses():
             files = os.listdir(path)
             tgz_files = [f for f in files if f.endswith('.tar.gz')]
             for tgz in tgz_files:
-                pkg_name = tgz.split('-')[0].split('_')[0]
-                if pkg_name == name:
-                    return tgz.split('-')[1].split('.tar.gz')[0]
+                pkg_name, version = tgz[: -len('.tar.gz')].rsplit('-', 1)
+                if pkg_name.replace('_', '-').lower() == name:
+                    return version
             return None
 
         list = {}
