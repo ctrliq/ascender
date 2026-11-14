@@ -475,5 +475,41 @@ def test_the_thread_closes_its_connection():
         return 'answered'
 
     with mock.patch('ascender.conf.settings.connection') as conn:
+        conn.settings_dict = {}
         assert _read_from_db(query) == 'answered'
     assert conn.close.called, 'the thread left its connection open'
+
+
+def test_the_thread_connects_outside_the_pool(monkeypatch):
+    """Waiting on the pool would wait on connections that cannot come back."""
+    from django.db import connection, connections
+
+    from ascender.conf.settings import _read_from_db
+
+    shared = connections.settings['default']
+    monkeypatch.setitem(shared, 'OPTIONS', {**shared.get('OPTIONS', {}), 'pool': {'max_size': 1}, 'sslmode': 'prefer'})
+    seen = []
+
+    def query():
+        if not seen:
+            seen.append('first')
+            raise SynchronousOnlyOperation('cannot call this from an async context')
+        seen.append(dict(connection.settings_dict['OPTIONS']))
+        return 'answered'
+
+    assert _read_from_db(query) == 'answered'
+    assert 'pool' not in seen[-1], 'the thread would take its connection from the pool'
+    assert seen[-1]['sslmode'] == 'prefer', 'the thread lost its other connection options'
+    assert shared['OPTIONS']['pool'] == {'max_size': 1}, 'the pool was turned off for every thread'
+
+
+def test_a_caller_that_stays_on_its_thread_keeps_the_pool(monkeypatch):
+    """Only the thread hop leaves the pool."""
+    from django.db import connection, connections
+
+    from ascender.conf.settings import _read_from_db
+
+    shared = connections.settings['default']
+    monkeypatch.setitem(shared, 'OPTIONS', {**shared.get('OPTIONS', {}), 'pool': {'max_size': 1}})
+
+    assert _read_from_db(lambda: connection.settings_dict['OPTIONS'].get('pool')) == {'max_size': 1}
