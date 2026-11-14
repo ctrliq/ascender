@@ -108,6 +108,28 @@ describe('<ConstructedInventoryForm />', () => {
     ).toBeChecked();
   });
 
+  test('should show the allow jobs while ad hoc checkbox', async () => {
+    const { container, unmount } = renderForm();
+    await screen.findByRole('button', { name: 'Save' });
+    expect(
+      container.querySelector('#option-allow-jobs-while-ad-hoc')
+    ).not.toBeChecked();
+    unmount();
+
+    const { container: withFlag } = renderWithContexts(
+      <ConstructedInventoryForm
+        constructedInventory={{ allow_jobs_while_ad_hoc: true }}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        options={options}
+      />
+    );
+    await screen.findByRole('button', { name: 'Save' });
+    expect(
+      withFlag.querySelector('#option-allow-jobs-while-ad-hoc')
+    ).toBeChecked();
+  });
+
   test('should show field error when form is saved without input inventories', async () => {
     const { user, container } = renderForm();
     await screen.findByRole('button', { name: 'Save' });

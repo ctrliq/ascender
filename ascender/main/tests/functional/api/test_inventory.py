@@ -246,6 +246,19 @@ def test_allow_jobs_while_syncing_is_editable(get, patch, organization, admin, k
     assert inventory.allow_jobs_while_syncing is True
 
 
+@pytest.mark.django_db
+@pytest.mark.parametrize('kind', ('', 'constructed'))
+def test_allow_jobs_while_ad_hoc_is_editable(get, patch, organization, admin, kind):
+    inventory = Inventory.objects.create(name='inv', kind=kind, organization=organization)
+    url = reverse('api:constructed_inventory_detail' if kind else 'api:inventory_detail', kwargs={'pk': inventory.pk})
+    resp = get(url, admin, expect=200)
+    assert resp.data['allow_jobs_while_ad_hoc'] is False
+
+    patch(url, {'allow_jobs_while_ad_hoc': True}, admin, expect=200)
+    inventory.refresh_from_db()
+    assert inventory.allow_jobs_while_ad_hoc is True
+
+
 @pytest.mark.parametrize('order_by', ('extra_vars', '-extra_vars', 'extra_vars,pk', '-extra_vars,pk'))
 @pytest.mark.django_db
 def test_list_cannot_order_by_unsearchable_field(get, organization, alice, order_by):
