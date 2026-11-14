@@ -38,6 +38,7 @@ msal>=1.37.0  # cryptography>=49 compatibility (msal<1.37 caps cryptography<49)
 packaging==26.3
 prometheus-client
 psycopg
+psycopg-pool
 psutil
 pygithub
 pyjwt[crypto]>=2.15.1  # CVE-2026-102268   # used by vendored ascender/dab jwt_consumer (formerly a django-ansible-base dep)

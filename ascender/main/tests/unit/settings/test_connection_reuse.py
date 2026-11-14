@@ -6,7 +6,7 @@ Which processes keep a database connection between requests, and which do not.
 
 import pytest
 
-from ascender.settings.connection_reuse import set_conn_max_age
+from ascender.settings.connection_reuse import DEFAULT_WEB_POOL, set_conn_max_age, set_connection_pool
 
 
 @pytest.fixture
@@ -67,5 +67,65 @@ class TestMissingDatabases:
         databases = {'other': {}}
 
         set_conn_max_age(databases, 60)
+
+        assert databases == {'other': {}}
+
+
+class TestPool:
+    def test_a_web_process_gets_the_pool(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+
+        set_connection_pool(databases)
+
+        assert databases['default']['OPTIONS']['pool'] == DEFAULT_WEB_POOL
+
+    def test_the_setting_replaces_the_sizes(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+
+        set_connection_pool(databases, {'min_size': 1, 'max_size': 10})
+
+        assert databases['default']['OPTIONS']['pool'] == {'min_size': 1, 'max_size': 10}
+
+    def test_the_setting_can_turn_it_off(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+
+        set_connection_pool(databases, False)
+
+        assert 'OPTIONS' not in databases['default']
+
+    def test_a_conn_max_age_leaves_it_off(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        set_conn_max_age(databases, 60)
+
+        set_connection_pool(databases)
+
+        assert 'OPTIONS' not in databases['default']
+
+    def test_a_conn_max_age_of_0_keeps_it(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        set_conn_max_age(databases, 0)
+
+        set_connection_pool(databases)
+
+        assert databases['default']['OPTIONS']['pool'] == DEFAULT_WEB_POOL
+
+    def test_other_options_are_kept(self, databases, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        databases['default']['OPTIONS'] = {'application_name': 'awx-web'}
+
+        set_connection_pool(databases)
+
+        assert databases['default']['OPTIONS'] == {'application_name': 'awx-web', 'pool': DEFAULT_WEB_POOL}
+
+    def test_a_task_process_gets_none(self, databases):
+        set_connection_pool(databases, {'max_size': 10})
+
+        assert 'OPTIONS' not in databases['default']
+
+    def test_no_default_database(self, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        databases = {'other': {}}
+
+        set_connection_pool(databases)
 
         assert databases == {'other': {}}
