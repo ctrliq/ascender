@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 /**
  * useSelected hook provides a way to read and update a selected list
@@ -20,10 +20,31 @@ export interface Selectable {
 
 export default function useSelected<T extends Selectable>(
   list: T[] = [],
-  defaultSelected: T[] = []
+  defaultSelected: T[] = [],
+  prune = false
 ) {
   const [selected, setSelected] = useState<T[]>(defaultSelected);
   const isAllSelected = selected.length > 0 && selected.length === list.length;
+
+  useEffect(() => {
+    if (!prune) return;
+    // After a refetch a selected row can leave the page or become a stack row.
+    // Keep the selection to rows that are still selectable and re-point the
+    // entries at the current row objects so bulk actions see fresh status and
+    // capabilities.  Return the same array when nothing changed, because
+    // callers often pass a freshly filtered list on every render and an
+    // unconditional update would loop.
+    setSelected((prev) => {
+      const byId = new Map(list.map((item) => [item.id, item]));
+      const next = prev
+        .map((row) => byId.get(row.id))
+        .filter((row): row is T => Boolean(row));
+      const unchanged =
+        next.length === prev.length &&
+        next.every((row, index) => row === prev[index]);
+      return unchanged ? prev : next;
+    });
+  }, [list, prune]);
 
   const handleSelect = (row: T) => {
     if (!row.id) {

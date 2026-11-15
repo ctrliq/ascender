@@ -214,3 +214,21 @@ class TestApprovalVoteAudit:
         resp = get(reverse('api:workflow_approval_vote_list'), user=rando, expect=200)
         assert resp.data['count'] == 1
         get(reverse('api:workflow_approval_vote_detail', kwargs={'pk': vote.pk}), user=rando, expect=200)
+
+
+@pytest.mark.django_db
+def test_workflow_waiting_for_approval_counts_as_running(spawn_approval, get, admin_user):
+    # A pending approval is not a job of its own in the Jobs list, but the
+    # workflow that is waiting on it is still running and must be counted.
+    wfjt, approval = spawn_approval()
+    wf_job = approval.workflow_job
+    assert wf_job.status == 'running'
+
+    url = reverse('api:unified_job_list', kwargs={'version': 'v2'}) + '?group_by=status'
+    data = get(url, admin_user, expect=200).data
+
+    ids = [row['id'] for row in data['results']]
+    assert approval.id not in ids
+    assert wf_job.id in ids
+    row = next(row for row in data['results'] if row['id'] == wf_job.id)
+    assert row['status_group'] == {'status': 'running', 'count': 1}

@@ -86,7 +86,7 @@ class TestJobSerializerSubstitution:
         assert 'my_password' not in extra_vars
 
 
-@mock.patch('ascender.api.serializers.BaseSerializer.get_summary_fields', lambda x, y: {})
+@mock.patch('ascender.api.serializers.BaseSerializer.get_summary_fields', lambda x, y, requested=None: {})
 class TestJobOptionsSerializerGetSummaryFields:
     def test__summary_field_labels_10_max(self, mocker, job_template, labels):
         job_template.labels.all = mocker.MagicMock(**{'return_value': labels})

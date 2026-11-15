@@ -173,7 +173,7 @@ msgstr "{forks, plural, one {# fork} other {# forks}}"
 #: routeConfig.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:112
 #: screens/ActivityStream/ActivityStream.tsx:185
-#: screens/Dashboard/Dashboard.tsx:89
+#: screens/Dashboard/Dashboard.tsx:91
 #: screens/Project/ProjectList/ProjectList.tsx:181
 #: screens/Project/ProjectList/ProjectList.tsx:249
 #: screens/Project/Projects.tsx:14
@@ -261,7 +261,7 @@ msgstr "Scroll previous"
 msgid "Failed to copy project."
 msgstr "Failed to copy project."
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Hide description"
 msgstr "Hide description"
@@ -342,8 +342,10 @@ msgstr "Select Roles to Apply"
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:130
+#: components/JobList/JobList.tsx:475
+#: components/JobList/JobListItem.tsx:172
+#: components/JobList/JobListItem.tsx:488
+#: components/JobList/JobListItem.tsx:609
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -417,12 +419,12 @@ msgstr "Policy Type"
 msgid "This field must not exceed {0} characters"
 msgstr "This field must not exceed {0} characters"
 
-#: components/StatusLabel/StatusLabel.tsx:62
+#: components/StatusLabel/StatusLabel.tsx:65
 msgid "Timed out"
 msgstr "Timed out"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 msgid "Select {0}"
 msgstr "Select {0}"
 
@@ -587,6 +589,10 @@ msgstr "Waiting for job output…"
 msgid "Container group"
 msgstr "Container group"
 
+#: components/JobList/GroupBySelect.tsx:107
+#~ msgid "Clear the template filter to change grouping."
+#~ msgstr "Clear the template filter to change grouping."
+
 #. placeholder {0}: cannotCancelNotRunning.length
 #: components/JobList/JobListCancelButton.tsx:81
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
@@ -720,6 +726,10 @@ msgstr "JSON:"
 msgid "Views"
 msgstr "Views"
 
+#: components/JobList/StackCancelButton.tsx:130
+msgid "{count, plural, one {This action will cancel # job of:} other {This action will cancel # jobs of:}}"
+msgstr "{count, plural, one {This action will cancel # job of:} other {This action will cancel # jobs of:}}"
+
 #: routeConfig.tsx:85
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
@@ -744,8 +754,10 @@ msgstr "Add Node"
 msgid "JSON tab"
 msgstr "JSON tab"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:134
+#: components/JobList/JobList.tsx:476
+#: components/JobList/JobListItem.tsx:176
+#: components/JobList/JobListItem.tsx:492
+#: components/JobList/JobListItem.tsx:610
 msgid "Start Time"
 msgstr "Start Time"
 
@@ -786,7 +798,7 @@ msgstr "Miscellaneous System"
 msgid "Choose a Source Control Type"
 msgstr "Choose a Source Control Type"
 
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:157
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:162
 msgid "View Inventory Host Details"
 msgstr "View Inventory Host Details"
 
@@ -883,7 +895,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:238
+#: components/Lookup/Lookup.tsx:271
 msgid "Lookup modal"
 msgstr "Lookup modal"
 
@@ -937,13 +949,13 @@ msgstr "Destination SMS number(s)"
 msgid "Source control branch"
 msgstr "Source control branch"
 
-#: screens/Dashboard/Dashboard.tsx:103
+#: screens/Dashboard/Dashboard.tsx:105
 #: screens/Job/JobOutput/HostEventModal.tsx:146
 msgid "Tabs"
 msgstr "Tabs"
 
-#: screens/Template/Template.tsx:287
-#: screens/Template/WorkflowJobTemplate.tsx:299
+#: screens/Template/Template.tsx:290
+#: screens/Template/WorkflowJobTemplate.tsx:301
 msgid "View Template Details"
 msgstr "View Template Details"
 
@@ -1048,8 +1060,8 @@ msgstr "Year"
 msgid "Reload output"
 msgstr "Reload output"
 
-#: screens/Host/Host.tsx:104
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:114
+#: screens/Host/Host.tsx:109
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:119
 msgid "Host not found."
 msgstr "Host not found."
 
@@ -1082,7 +1094,7 @@ msgstr "Delete the local repository in its entirety prior to performing an updat
 msgid "Setting category"
 msgstr "Setting category"
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "Back to Credentials"
 
@@ -1168,7 +1180,7 @@ msgstr "Error:"
 msgid "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 msgstr "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 
-#: components/JobList/JobList.tsx:257
+#: components/JobList/JobList.tsx:466
 #: screens/Job/JobDetail/JobDetail.tsx:255
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
@@ -1271,8 +1283,8 @@ msgstr "The project from which this inventory update is sourced."
 msgid "Select Items from List"
 msgstr "Select Items from List"
 
-#: components/JobList/JobList.tsx:223
-#: components/JobList/JobListItem.tsx:73
+#: components/JobList/JobList.tsx:432
+#: components/JobList/useJobTypeLabels.ts:10
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:42
 #: components/Workflow/WorkflowLegend.tsx:38
 #: screens/Job/JobDetail/JobDetail.tsx:70
@@ -1382,23 +1394,23 @@ msgstr "This workflow job template is currently being used by other resources. A
 #: routeConfig.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:187
-#: screens/Dashboard/Dashboard.tsx:67
+#: screens/Dashboard/Dashboard.tsx:69
 #: screens/Host/HostList/HostList.tsx:144
 #: screens/Host/HostList/HostList.tsx:191
 #: screens/Host/Hosts.tsx:17
 #: screens/Host/Hosts.tsx:27
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:86
-#: screens/Inventory/ConstructedInventory.tsx:77
-#: screens/Inventory/FederatedInventory.tsx:77
+#: screens/Inventory/ConstructedInventory.tsx:90
+#: screens/Inventory/FederatedInventory.tsx:89
 #: screens/Inventory/Inventories.tsx:106
 #: screens/Inventory/Inventories.tsx:120
-#: screens/Inventory/Inventory.tsx:78
+#: screens/Inventory/Inventory.tsx:91
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:87
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:197
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:284
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:112
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
-#: screens/Inventory/SmartInventory.tsx:77
+#: screens/Inventory/SmartInventory.tsx:90
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:110
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
@@ -1415,7 +1427,7 @@ msgstr "Frequency did not match an expected value"
 msgid "E-mail"
 msgstr "E-mail"
 
-#: components/JobList/JobList.tsx:219
+#: components/JobList/JobList.tsx:428
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:172
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
@@ -1557,7 +1569,7 @@ msgstr "Show less"
 msgid "Revision"
 msgstr "Revision"
 
-#: components/JobList/JobList.tsx:338
+#: components/JobList/JobList.tsx:559
 msgid "Failed to delete one or more jobs."
 msgstr "Failed to delete one or more jobs."
 
@@ -1622,7 +1634,7 @@ msgstr "Minute"
 msgid "Copied"
 msgstr "Copied"
 
-#: components/JobList/JobList.tsx:349
+#: components/JobList/JobList.tsx:570
 msgid "Failed to cancel one or more jobs."
 msgstr "Failed to cancel one or more jobs."
 
@@ -1651,9 +1663,11 @@ msgstr "Create new federated inventory"
 #: components/AssociateModal/AssociateModal.tsx:175
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
-#: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:119
+#: components/JobList/JobList.tsx:415
+#: components/JobList/JobList.tsx:473
+#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:471
+#: components/JobList/JobListItem.tsx:599
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1681,8 +1695,8 @@ msgstr "Create new federated inventory"
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:122
-#: components/Lookup/JobTemplateLookup.tsx:132
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -1911,8 +1925,8 @@ msgstr "details."
 #~ msgid "Subscription manifest"
 #~ msgstr "Subscription manifest"
 
-#: components/JobList/JobList.tsx:243
-#: components/StatusLabel/StatusLabel.tsx:56
+#: components/JobList/JobList.tsx:452
+#: components/StatusLabel/StatusLabel.tsx:59
 #: components/Workflow/WorkflowNodeHelp.tsx:101
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:211
@@ -1947,13 +1961,15 @@ msgstr "Source variables"
 msgid "Add Question"
 msgstr "Add Question"
 
-#: components/StatusLabel/StatusLabel.tsx:50
+#: components/StatusLabel/StatusLabel.tsx:53
 msgid "Approved"
 msgstr "Approved"
 
-#: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:269
-#: components/JobList/JobListItem.tsx:138
+#: components/DataListToolbar/DataListToolbar.tsx:230
+#: components/JobList/JobList.tsx:478
+#: components/JobList/JobListItem.tsx:180
+#: components/JobList/JobListItem.tsx:494
+#: components/JobList/JobListItem.tsx:612
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2022,8 +2038,8 @@ msgid "Event summary not available"
 msgstr "Event summary not available"
 
 #: routeConfig.tsx:60
-#: screens/Dashboard/Dashboard.tsx:28
-#: screens/Dashboard/Dashboard.tsx:60
+#: screens/Dashboard/Dashboard.tsx:30
+#: screens/Dashboard/Dashboard.tsx:62
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -2045,7 +2061,7 @@ msgstr "Key"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:350
+#: screens/Login/Login.tsx:363
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2157,10 +2173,11 @@ msgstr "Other prompts"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Parent node outcome required before the condition is evaluated."
 
-#: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:103
-#: components/Lookup/JobTemplateLookup.tsx:108
-#: components/Lookup/JobTemplateLookup.tsx:138
+#: components/JobList/JobListItem.tsx:290
+#: components/JobList/JobListItem.tsx:515
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2192,6 +2209,11 @@ msgstr "Example URLs for GIT Source Control include:"
 #: screens/CredentialType/shared/CredentialTypeForm.tsx:39
 msgid "Input configuration"
 msgstr "Input configuration"
+
+#: components/JobList/StackCancelButton.tsx:104
+#: components/JobList/StackCancelButton.tsx:105
+msgid "Cancel active jobs?"
+msgstr "Cancel active jobs?"
 
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:160
 msgid "Delete smart inventory"
@@ -2226,7 +2248,7 @@ msgstr "Field matches the given regular expression."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:348
+#: screens/Login/Login.tsx:361
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2237,7 +2259,7 @@ msgstr "Password"
 #~ msgid "Allow simultaneous runs of this workflow job template."
 #~ msgstr "Allow simultaneous runs of this workflow job template."
 
-#: screens/Inventory/FederatedInventory.tsx:213
+#: screens/Inventory/FederatedInventory.tsx:217
 msgid "View Federated Inventory Details"
 msgstr "View Federated Inventory Details"
 
@@ -2279,8 +2301,8 @@ msgstr "{0, plural, one {This inventory is currently being used by some template
 msgid "Select Labels"
 msgstr "Select Labels"
 
-#: screens/Template/Template.tsx:189
-#: screens/Template/WorkflowJobTemplate.tsx:188
+#: screens/Template/Template.tsx:194
+#: screens/Template/WorkflowJobTemplate.tsx:196
 msgid "View all Templates."
 msgstr "View all Templates."
 
@@ -2305,7 +2327,7 @@ msgstr "Relaunch on"
 msgid "This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:"
 msgstr "This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:"
 
-#: components/DataListToolbar/DataListToolbar.tsx:142
+#: components/DataListToolbar/DataListToolbar.tsx:148
 msgid "Is not expanded"
 msgstr "Is not expanded"
 
@@ -2339,7 +2361,7 @@ msgstr "Credential Type"
 msgid "pages"
 msgstr "pages"
 
-#: components/StatusLabel/StatusLabel.tsx:61
+#: components/StatusLabel/StatusLabel.tsx:64
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:29
 msgid "Skipped"
 msgstr "Skipped"
@@ -2461,7 +2483,7 @@ msgid "Management job launch error"
 msgstr "Management job launch error"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:183
+#: components/Lookup/Lookup.tsx:209
 msgid "Search"
 msgstr "Search"
 
@@ -2489,7 +2511,7 @@ msgstr "Case-insensitive version of contains"
 msgid "Add federated inventory"
 msgstr "Add federated inventory"
 
-#: screens/Host/Host.tsx:145
+#: screens/Host/Host.tsx:150
 msgid "View Host Details"
 msgstr "View Host Details"
 
@@ -2536,7 +2558,7 @@ msgstr "{0} (deleted)"
 msgid "The inventory that this host belongs to."
 msgstr "The inventory that this host belongs to."
 
-#: screens/Login/Login.tsx:333
+#: screens/Login/Login.tsx:346
 msgid "Log In"
 msgstr "Log In"
 
@@ -2592,7 +2614,7 @@ msgstr "User Details"
 msgid "Delete Execution Environment"
 msgstr "Delete Execution Environment"
 
-#: components/JobList/JobListItem.tsx:372
+#: components/JobList/JobListItem.tsx:414
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "Job Slice"
@@ -2683,7 +2705,7 @@ msgstr "Zoom in"
 #: routeConfig.tsx:173
 #: screens/ActivityStream/ActivityStream.tsx:120
 #: screens/ActivityStream/ActivityStream.tsx:207
-#: screens/InstanceGroup/InstanceGroup.tsx:81
+#: screens/InstanceGroup/InstanceGroup.tsx:86
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:198
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:81
 #: screens/InstanceGroup/InstanceGroups.tsx:37
@@ -2729,6 +2751,7 @@ msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not 
 msgstr "Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish."
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -2760,6 +2783,10 @@ msgstr "Failed to disassociate one or more hosts."
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "JOB ID:"
+
+#: components/JobList/StackCancelButton.tsx:115
+msgid "Cancel {count} jobs"
+msgstr "Cancel {count} jobs"
 
 #: routeConfig.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
@@ -2955,7 +2982,7 @@ msgstr "Enabled Value"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "Use one Annotation Tag per line, without commas."
 
-#: components/StatusLabel/StatusLabel.tsx:58
+#: components/StatusLabel/StatusLabel.tsx:61
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:41
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:121
 msgid "Unreachable"
@@ -3032,21 +3059,21 @@ msgstr "Occurrences"
 msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
 msgstr "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
 
-#: screens/Host/Host.tsx:71
+#: screens/Host/Host.tsx:76
 #: screens/Host/HostFacts/HostFacts.tsx:33
 #: screens/Host/Hosts.tsx:32
 #: screens/Inventory/Inventories.tsx:112
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:91
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:96
 #: screens/Inventory/InventoryHostFacts/InventoryHostFacts.tsx:33
 msgid "Facts"
 msgstr "Facts"
 
-#: screens/Login/Login.tsx:357
+#: screens/Login/Login.tsx:370
 msgid "or"
 msgstr "or"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3079,7 +3106,7 @@ msgstr "Workflow job details"
 #~ msgid "Azure AD settings"
 #~ msgstr "Azure AD settings"
 
-#: components/JobList/JobListItem.tsx:377
+#: components/JobList/JobListItem.tsx:419
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3129,7 +3156,7 @@ msgstr "Schedule details"
 #~ msgid "Close subscription modal"
 #~ msgstr "Close subscription modal"
 
-#: components/DataListToolbar/DataListToolbar.tsx:140
+#: components/DataListToolbar/DataListToolbar.tsx:146
 msgid "Is expanded"
 msgstr "Is expanded"
 
@@ -3226,7 +3253,7 @@ msgstr "The suggested format for variable names is lowercase and\n"
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "This job template is currently being used by other resources. Are you sure you want to delete it?"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "View all Credentials."
 
@@ -3352,10 +3379,10 @@ msgstr "Instance Name"
 msgid "Name of an artifact produced by the parent node via set_stats. The link is only followed when the parent job matches the chosen outcome and the condition is true. A missing key never matches."
 msgstr "Name of an artifact produced by the parent node via set_stats. The link is only followed when the parent job matches the chosen outcome and the condition is true. A missing key never matches."
 
-#: screens/Inventory/ConstructedInventory.tsx:109
-#: screens/Inventory/FederatedInventory.tsx:105
-#: screens/Inventory/Inventory.tsx:110
-#: screens/Inventory/SmartInventory.tsx:108
+#: screens/Inventory/ConstructedInventory.tsx:122
+#: screens/Inventory/FederatedInventory.tsx:117
+#: screens/Inventory/Inventory.tsx:123
+#: screens/Inventory/SmartInventory.tsx:121
 msgid "View all Inventories."
 msgstr "View all Inventories."
 
@@ -3371,7 +3398,7 @@ msgstr "Host details modal"
 msgid "Delete Notification"
 msgstr "Delete Notification"
 
-#: components/StatusLabel/StatusLabel.tsx:68
+#: components/StatusLabel/StatusLabel.tsx:71
 #: screens/TopologyView/Legend.tsx:126
 msgid "Ready"
 msgstr "Ready"
@@ -3443,7 +3470,7 @@ msgid "Delete"
 msgstr "Delete"
 
 #: components/NotificationList/NotificationListItem.tsx:131
-#: components/StatusLabel/StatusLabel.tsx:66
+#: components/StatusLabel/StatusLabel.tsx:69
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:33
 msgid "Changed"
 msgstr "Changed"
@@ -3520,7 +3547,7 @@ msgstr "Edit Order"
 msgid "Minimum"
 msgstr "Minimum"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:96
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:97
 msgid "Refresh Token Expiration"
 msgstr "Refresh Token Expiration"
 
@@ -3556,7 +3583,7 @@ msgstr "Select Hosts"
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
-#: components/JobList/JobList.tsx:253
+#: components/JobList/JobList.tsx:462
 #: components/Lookup/ApplicationLookup.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:216
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:437
@@ -3630,7 +3657,7 @@ msgstr "Remove Node {nodeName}"
 msgid "Sun"
 msgstr "Sun"
 
-#: screens/Dashboard/Dashboard.tsx:109
+#: screens/Dashboard/Dashboard.tsx:111
 msgid "Job status graph tab"
 msgstr "Job status graph tab"
 
@@ -3700,9 +3727,9 @@ msgstr "This action will disassociate all roles for this user from the selected 
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:155
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
-#: components/LaunchPrompt/LaunchPrompt.tsx:181
+#: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:260
+#: components/Lookup/Lookup.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -3741,7 +3768,7 @@ msgstr "This action will disassociate all roles for this user from the selected 
 msgid "Cancel"
 msgstr "Cancel"
 
-#: screens/Inventory/Inventory.tsx:109
+#: screens/Inventory/Inventory.tsx:122
 msgid "Inventory not found."
 msgstr "Inventory not found."
 
@@ -3833,6 +3860,11 @@ msgstr "Job Slicing"
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "Successfully copied to clipboard!"
+
+#: components/JobList/GroupBySelect.tsx:33
+#: components/JobList/GroupBySelect.tsx:40
+msgid "No grouping"
+msgstr "No grouping"
 
 #: screens/Template/shared/WebhookSubForm.tsx:120
 msgid "Choose a Webhook Service"
@@ -3936,7 +3968,7 @@ msgstr "Project checkout results"
 msgid "October"
 msgstr "October"
 
-#: components/StatusLabel/StatusLabel.tsx:64
+#: components/StatusLabel/StatusLabel.tsx:67
 #: screens/TopologyView/Legend.tsx:251
 msgid "Disabled"
 msgstr "Disabled"
@@ -3945,7 +3977,8 @@ msgstr "Disabled"
 msgid "Default Execution Environment"
 msgstr "Default Execution Environment"
 
-#: components/JobList/JobListItem.tsx:296
+#: components/JobList/JobListItem.tsx:338
+#: components/JobList/JobListItem.tsx:534
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4115,7 +4148,7 @@ msgstr "View Troubleshooting settings"
 msgid "Edit Source"
 msgstr "Edit Source"
 
-#: components/JobList/JobListItem.tsx:74
+#: components/JobList/useJobTypeLabels.ts:11
 #: screens/Job/JobDetail/JobDetail.tsx:71
 msgid "Playbook Check"
 msgstr "Playbook Check"
@@ -4133,7 +4166,7 @@ msgstr "View node details"
 msgid "Custom pod spec"
 msgstr "Custom pod spec"
 
-#: screens/Host/Host.tsx:105
+#: screens/Host/Host.tsx:110
 msgid "View all Hosts."
 msgstr "View all Hosts."
 
@@ -4198,8 +4231,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:122
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:128
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4235,7 +4268,7 @@ msgstr "Workflow job templates"
 msgid "Sets the role that this instance will play within mesh topology. Default is \"execution.\""
 msgstr "Sets the role that this instance will play within mesh topology. Default is \"execution.\""
 
-#: components/StatusLabel/StatusLabel.tsx:69
+#: components/StatusLabel/StatusLabel.tsx:72
 #: screens/TopologyView/Legend.tsx:142
 msgid "Installed"
 msgstr "Installed"
@@ -4263,6 +4296,10 @@ msgstr "Prevent Instance Group Fallback: If enabled, the inventory will prevent 
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:148
 msgid "Failed to delete application."
 msgstr "Failed to delete application."
+
+#: components/JobList/StackCancelButton.tsx:161
+msgid "Failed to cancel the stack."
+msgstr "Failed to cancel the stack."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.tsx:58
 msgid "Removing this link will orphan the rest of the branch and cause it to be executed immediately on launch."
@@ -4301,11 +4338,11 @@ msgstr "DELETED"
 msgid "You do not have permission to remove instances: {itemsUnableToremove}"
 msgstr "You do not have permission to remove instances: {itemsUnableToremove}"
 
-#: screens/Dashboard/Dashboard.tsx:129
+#: screens/Dashboard/Dashboard.tsx:131
 msgid "Recent Templates list tab"
 msgstr "Recent Templates list tab"
 
-#: screens/Inventory/ConstructedInventory.tsx:108
+#: screens/Inventory/ConstructedInventory.tsx:121
 msgid "Constructed Inventory not found."
 msgstr "Constructed Inventory not found."
 
@@ -4407,9 +4444,9 @@ msgstr "Create user token"
 #~ "                 The credentials you use will be stored for future use in\n"
 #~ "                 retrieving renewal or expanded subscriptions."
 
-#: screens/InstanceGroup/ContainerGroup.tsx:93
+#: screens/InstanceGroup/ContainerGroup.tsx:98
 #: screens/InstanceGroup/ContainerGroup.tsx:137
-#: screens/InstanceGroup/InstanceGroup.tsx:101
+#: screens/InstanceGroup/InstanceGroup.tsx:106
 #: screens/InstanceGroup/InstanceGroup.tsx:156
 msgid "View all instance groups"
 msgstr "View all instance groups"
@@ -4456,7 +4493,7 @@ msgstr "Automation"
 msgid "Select items from list"
 msgstr "Select items from list"
 
-#: screens/Dashboard/Dashboard.tsx:111
+#: screens/Dashboard/Dashboard.tsx:113
 msgid "Job status"
 msgstr "Job status"
 
@@ -4507,7 +4544,7 @@ msgstr "Zoom out"
 msgid "Choose a module"
 msgstr "Choose a module"
 
-#: screens/Inventory/SmartInventory.tsx:107
+#: screens/Inventory/SmartInventory.tsx:120
 msgid "Smart Inventory not found."
 msgstr "Smart Inventory not found."
 
@@ -4588,7 +4625,7 @@ msgstr "Remove peers?"
 msgid "Search text input"
 msgstr "Search text input"
 
-#: components/Lookup/Lookup.tsx:100
+#: components/Lookup/Lookup.tsx:118
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "That value was not found. Please enter or select a valid value."
 
@@ -4621,10 +4658,10 @@ msgstr "View Organization Details"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:335
-#: components/JobList/JobList.tsx:346
+#: components/JobList/JobList.tsx:556
+#: components/JobList/JobList.tsx:567
 #: components/LaunchButton/LaunchButton.tsx:305
-#: components/LaunchPrompt/LaunchPrompt.tsx:118
+#: components/LaunchPrompt/LaunchPrompt.tsx:119
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:268
@@ -4721,7 +4758,7 @@ msgstr "Host Unreachable"
 msgid "Replace"
 msgstr "Replace"
 
-#: components/DataListToolbar/DataListToolbar.tsx:148
+#: components/DataListToolbar/DataListToolbar.tsx:154
 msgid "Expand all rows"
 msgstr "Expand all rows"
 
@@ -4846,7 +4883,7 @@ msgstr "Initiated by"
 msgid "Delete this node"
 msgstr "Delete this node"
 
-#: components/JobList/JobListItem.tsx:270
+#: components/JobList/JobListItem.tsx:312
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "Source Workflow Job"
@@ -4913,8 +4950,8 @@ msgstr "Prevent Relaunch"
 msgid "View SAML settings"
 msgstr "View SAML settings"
 
-#: components/JobList/JobList.tsx:245
-#: components/StatusLabel/StatusLabel.tsx:65
+#: components/JobList/JobList.tsx:454
+#: components/StatusLabel/StatusLabel.tsx:68
 #: components/Workflow/WorkflowNodeHelp.tsx:107
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
@@ -4963,9 +5000,9 @@ msgstr "Workflow approved message"
 #: screens/Project/Project.tsx:126
 #: screens/Project/Projects.tsx:33
 #: screens/Schedule/AllSchedules.tsx:26
-#: screens/Template/Template.tsx:161
+#: screens/Template/Template.tsx:166
 #: screens/Template/Templates.tsx:56
-#: screens/Template/WorkflowJobTemplate.tsx:142
+#: screens/Template/WorkflowJobTemplate.tsx:150
 msgid "Schedules"
 msgstr "Schedules"
 
@@ -5006,8 +5043,8 @@ msgstr "Execution Environments"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Prompt for job type on launch."
 
-#: components/JobList/JobListItem.tsx:236
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:278
+#: components/JobList/JobListItem.tsx:286
 msgid "Schedule"
 msgstr "Schedule"
 
@@ -5216,9 +5253,9 @@ msgstr "Day"
 msgid "Collapse"
 msgstr "Collapse"
 
-#: components/JobList/JobListItem.tsx:341
+#: components/JobList/JobListItem.tsx:383
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:257
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5259,7 +5296,7 @@ msgstr "Select status"
 msgid "Month"
 msgstr "Month"
 
-#: components/JobList/JobListItem.tsx:317
+#: components/JobList/JobListItem.tsx:359
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5417,7 +5454,7 @@ msgstr "{interval, plural, one {# day} other {# days}}"
 msgid "Update settings pertaining to Jobs within {brandName}"
 msgstr "Update settings pertaining to Jobs within {brandName}"
 
-#: components/StatusLabel/StatusLabel.tsx:70
+#: components/StatusLabel/StatusLabel.tsx:73
 #: screens/TopologyView/Legend.tsx:159
 msgid "Provisioning"
 msgstr "Provisioning"
@@ -5462,8 +5499,8 @@ msgstr "Edit application"
 msgid "Use TLS"
 msgstr "Use TLS"
 
-#: components/JobList/JobList.tsx:226
-#: components/JobList/JobListItem.tsx:76
+#: components/JobList/JobList.tsx:435
+#: components/JobList/useJobTypeLabels.ts:13
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Workflow/WorkflowLegend.tsx:46
 #: components/Workflow/WorkflowNodeHelp.tsx:61
@@ -5568,7 +5605,7 @@ msgstr "Frequency Details"
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:47
 #: components/AdHocCommands/useAdHocExecutionEnvironmentStep.tsx:26
 #: components/AdHocCommands/useAdHocInstanceGroupsStep.tsx:27
-#: components/LaunchPrompt/LaunchPrompt.tsx:182
+#: components/LaunchPrompt/LaunchPrompt.tsx:183
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
@@ -5576,7 +5613,7 @@ msgid "Next"
 msgstr "Next"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:263
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5669,7 +5706,7 @@ msgstr "Last automation"
 msgid "Node Type"
 msgstr "Node Type"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "View Credential Details"
 
@@ -5683,9 +5720,9 @@ msgstr "View Credential Details"
 #: screens/Organization/Organizations.tsx:35
 #: screens/Project/Project.tsx:120
 #: screens/Project/Projects.tsx:31
-#: screens/Template/Template.tsx:154
+#: screens/Template/Template.tsx:159
 #: screens/Template/Templates.tsx:51
-#: screens/Template/WorkflowJobTemplate.tsx:135
+#: screens/Template/WorkflowJobTemplate.tsx:143
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -5711,9 +5748,9 @@ msgstr "system"
 msgid "Row select"
 msgstr "Row select"
 
-#: screens/Inventory/Inventory.tsx:242
+#: screens/Inventory/Inventory.tsx:249
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:173
-#: screens/Inventory/SmartInventory.tsx:209
+#: screens/Inventory/SmartInventory.tsx:212
 msgid "View Inventory Details"
 msgstr "View Inventory Details"
 
@@ -5733,13 +5770,17 @@ msgstr "Past two weeks"
 
 #: components/AddRole/AddResourceRole.tsx:300
 #: components/AdHocCommands/AdHocCommandsWizard.tsx:68
-#: components/LaunchPrompt/LaunchPrompt.tsx:180
+#: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:97
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
 msgstr "Back"
+
+#: components/JobList/StackCancelButton.tsx:38
+msgid "Template {templateId}"
+msgstr "Template {templateId}"
 
 #: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
@@ -5856,7 +5897,7 @@ msgstr "Select a branch for the workflow. This branch is applied to all job temp
 msgid "Management job not found."
 msgstr "Management job not found."
 
-#: components/JobList/JobList.tsx:238
+#: components/JobList/JobList.tsx:447
 #: components/Workflow/WorkflowNodeHelp.tsx:86
 msgid "New"
 msgstr "New"
@@ -5913,8 +5954,8 @@ msgstr "Enabled Options"
 msgid "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks."
 msgstr "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks."
 
-#: screens/Template/Template.tsx:172
-#: screens/Template/WorkflowJobTemplate.tsx:157
+#: screens/Template/Template.tsx:177
+#: screens/Template/WorkflowJobTemplate.tsx:165
 msgid "View Survey"
 msgstr "View Survey"
 
@@ -6096,9 +6137,9 @@ msgid "This credential is currently being used by other resources. Are you sure 
 msgstr "This credential is currently being used by other resources. Are you sure you want to delete it?"
 
 #: components/LaunchPrompt/steps/useSurveyStep.tsx:45
-#: screens/Template/Template.tsx:172
+#: screens/Template/Template.tsx:177
 #: screens/Template/Templates.tsx:53
-#: screens/Template/WorkflowJobTemplate.tsx:157
+#: screens/Template/WorkflowJobTemplate.tsx:165
 msgid "Survey"
 msgstr "Survey"
 
@@ -6193,7 +6234,7 @@ msgstr "The issuer to trust could not be read from the server. Try again later."
 msgid "here."
 msgstr "here."
 
-#: components/StatusLabel/StatusLabel.tsx:72
+#: components/StatusLabel/StatusLabel.tsx:75
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:302
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:105
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:53
@@ -6215,7 +6256,7 @@ msgstr "Play Started"
 msgid "Output tab"
 msgstr "Output tab"
 
-#: components/StatusLabel/StatusLabel.tsx:51
+#: components/StatusLabel/StatusLabel.tsx:54
 msgid "Denied"
 msgstr "Denied"
 
@@ -6287,7 +6328,7 @@ msgstr "Delete Team"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 
-#: components/JobList/JobList.tsx:215
+#: components/JobList/JobList.tsx:424
 msgid "Label Name"
 msgstr "Label Name"
 
@@ -6377,13 +6418,13 @@ msgstr "Enable simplified login for your {brandName} applications"
 msgid "Thursday"
 msgstr "Thursday"
 
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Credential/Credentials.tsx:33
-#: screens/Inventory/ConstructedInventory.tsx:85
-#: screens/Inventory/FederatedInventory.tsx:81
+#: screens/Inventory/ConstructedInventory.tsx:98
+#: screens/Inventory/FederatedInventory.tsx:93
 #: screens/Inventory/Inventories.tsx:103
-#: screens/Inventory/Inventory.tsx:86
-#: screens/Inventory/SmartInventory.tsx:84
+#: screens/Inventory/Inventory.tsx:99
+#: screens/Inventory/SmartInventory.tsx:97
 #: screens/Project/Project.tsx:113
 #: screens/Project/Projects.tsx:32
 #: util/getRelatedResourceDeleteDetails.ts:85
@@ -6463,10 +6504,10 @@ msgstr "Show only root groups"
 msgid "Toggle instance"
 msgstr "Toggle instance"
 
-#: screens/Inventory/ConstructedInventory.tsx:69
-#: screens/Inventory/FederatedInventory.tsx:69
-#: screens/Inventory/Inventory.tsx:68
-#: screens/Inventory/SmartInventory.tsx:69
+#: screens/Inventory/ConstructedInventory.tsx:82
+#: screens/Inventory/FederatedInventory.tsx:81
+#: screens/Inventory/Inventory.tsx:81
+#: screens/Inventory/SmartInventory.tsx:82
 msgid "Back to Inventories"
 msgstr "Back to Inventories"
 
@@ -6533,7 +6574,7 @@ msgstr "Health checks can only be run on execution nodes."
 
 #: components/TemplateList/TemplateListItem.tsx:175
 #: components/TemplateList/TemplateListItem.tsx:182
-#: screens/Template/WorkflowJobTemplate.tsx:149
+#: screens/Template/WorkflowJobTemplate.tsx:157
 msgid "Visualizer"
 msgstr "Visualizer"
 
@@ -6545,7 +6586,7 @@ msgstr "This run has no failed nodes that can be forced. Approvals can never be 
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 
-#: components/JobList/JobListItem.tsx:162
+#: components/JobList/JobListItem.tsx:204
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6644,6 +6685,10 @@ msgstr "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgid "Webhook Credentials"
 msgstr "Webhook Credentials"
 
+#: components/JobList/GroupBySelect.tsx:106
+#~ msgid "Clear the status filter to change grouping."
+#~ msgstr "Clear the status filter to change grouping."
+
 #: components/Search/Search.tsx:322
 msgid "Yes"
 msgstr "Yes"
@@ -6728,8 +6773,8 @@ msgstr "Expected value"
 msgid "Create New Credential"
 msgstr "Create New Credential"
 
-#: screens/Template/Template.tsx:188
-#: screens/Template/WorkflowJobTemplate.tsx:187
+#: screens/Template/Template.tsx:193
+#: screens/Template/WorkflowJobTemplate.tsx:195
 msgid "Template not found."
 msgstr "Template not found."
 
@@ -6819,10 +6864,18 @@ msgstr "Provisioning Callbacks"
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 
+#: components/JobList/StackCancelButton.tsx:111
+msgid "Confirm cancel stack"
+msgstr "Confirm cancel stack"
+
 #. placeholder {0}: resource.name
-#: components/LaunchPrompt/LaunchPrompt.tsx:152
+#: components/LaunchPrompt/LaunchPrompt.tsx:153
 msgid "Launch | {0}"
 msgstr "Launch | {0}"
+
+#: components/JobList/GroupBySelect.tsx:35
+msgid "Group by template"
+msgstr "Group by template"
 
 #: components/NotificationList/NotificationListItem.tsx:110
 msgid "Toggle notification success"
@@ -6856,22 +6909,22 @@ msgstr "More information for {label}"
 
 #: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Credential/Credentials.tsx:32
-#: screens/Inventory/ConstructedInventory.tsx:76
-#: screens/Inventory/FederatedInventory.tsx:76
+#: screens/Inventory/ConstructedInventory.tsx:89
+#: screens/Inventory/FederatedInventory.tsx:88
 #: screens/Inventory/Inventories.tsx:100
-#: screens/Inventory/Inventory.tsx:76
-#: screens/Inventory/SmartInventory.tsx:76
+#: screens/Inventory/Inventory.tsx:89
+#: screens/Inventory/SmartInventory.tsx:89
 #: screens/Organization/Organization.tsx:135
 #: screens/Organization/Organizations.tsx:33
 #: screens/Project/Project.tsx:111
 #: screens/Project/Projects.tsx:30
 #: screens/Team/Team.tsx:68
 #: screens/Team/Teams.tsx:33
-#: screens/Template/Template.tsx:149
+#: screens/Template/Template.tsx:154
 #: screens/Template/Templates.tsx:50
-#: screens/Template/WorkflowJobTemplate.tsx:130
+#: screens/Template/WorkflowJobTemplate.tsx:138
 msgid "Access"
 msgstr "Access"
 
@@ -6922,7 +6975,7 @@ msgstr "Smart Inventory"
 msgid "Slack"
 msgstr "Slack"
 
-#: screens/InstanceGroup/InstanceGroup.tsx:99
+#: screens/InstanceGroup/InstanceGroup.tsx:104
 msgid "Instance group not found."
 msgstr "Instance group not found."
 
@@ -6930,7 +6983,7 @@ msgstr "Instance group not found."
 msgid "cancel remove"
 msgstr "cancel remove"
 
-#: screens/InstanceGroup/ContainerGroup.tsx:91
+#: screens/InstanceGroup/ContainerGroup.tsx:96
 msgid "Container group not found."
 msgstr "Container group not found."
 
@@ -6961,9 +7014,9 @@ msgstr "Failure"
 msgid "Failed to cancel Constructed Inventory Source Sync"
 msgstr "Failed to cancel Constructed Inventory Source Sync"
 
-#: screens/Host/Host.tsx:58
+#: screens/Host/Host.tsx:63
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.tsx:66
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:79
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:84
 msgid "Back to Hosts"
 msgstr "Back to Hosts"
 
@@ -7001,7 +7054,7 @@ msgstr "Please try another search using the filter above"
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "Credential not found."
 
@@ -7139,7 +7192,7 @@ msgstr "Follow"
 msgid "Modified By (Username)"
 msgstr "Modified By (Username)"
 
-#: screens/InstanceGroup/ContainerGroup.tsx:66
+#: screens/InstanceGroup/ContainerGroup.tsx:71
 msgid "Back to instance groups"
 msgstr "Back to instance groups"
 
@@ -7204,7 +7257,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Choose a Playbook Directory"
 
-#: components/JobList/JobListItem.tsx:258
+#: components/JobList/JobListItem.tsx:300
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7291,7 +7344,7 @@ msgstr "Value to compare the artifact against. Interpreted as JSON when possible
 msgid "Failed to delete one or more groups."
 msgstr "Failed to delete one or more groups."
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:211
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:212
 msgid "Confirm Disable Local Authorization"
 msgstr "Confirm Disable Local Authorization"
 
@@ -7326,6 +7379,10 @@ msgstr "This field must be a number and have a value greater than {min}"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:345
 msgid "All"
 msgstr "All"
+
+#: components/JobList/StackCancelButton.tsx:92
+msgid "Cancel stack"
+msgstr "Cancel stack"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
@@ -7399,8 +7456,10 @@ msgstr "Enables creation of a provisioning\n"
 "                              and request a configuration update using this job\n"
 "                              template"
 
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:477
+#: components/JobList/JobListItem.tsx:177
+#: components/JobList/JobListItem.tsx:493
+#: components/JobList/JobListItem.tsx:611
 msgid "Finish Time"
 msgstr "Finish Time"
 
@@ -7992,8 +8051,8 @@ msgstr "Token information"
 msgid "Never Updated"
 msgstr "Never Updated"
 
-#: components/JobList/JobList.tsx:242
-#: components/StatusLabel/StatusLabel.tsx:54
+#: components/JobList/JobList.tsx:451
+#: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:98
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:218
@@ -8024,24 +8083,28 @@ msgstr "End date/time"
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Credential to authenticate with Kubernetes or OpenShift"
 
-#: screens/Inventory/FederatedInventory.tsx:104
+#: screens/Inventory/FederatedInventory.tsx:116
 msgid "Federated Inventory not found."
 msgstr "Federated Inventory not found."
 
-#: components/JobList/JobList.tsx:224
-#: components/JobList/JobListItem.tsx:74
+#: components/JobList/JobList.tsx:433
+#: components/JobList/useJobTypeLabels.ts:11
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:43
 #: screens/Job/JobDetail/JobDetail.tsx:71
 msgid "Playbook Run"
 msgstr "Playbook Run"
 
-#: screens/InstanceGroup/InstanceGroup.tsx:68
+#: screens/InstanceGroup/InstanceGroup.tsx:73
 msgid "Back to Instance Groups"
 msgstr "Back to Instance Groups"
 
 #: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
 msgid "Enable HTTPS certificate verification"
 msgstr "Enable HTTPS certificate verification"
+
+#: components/JobList/JobListItem.tsx:584
+msgid "Waiting jobs"
+msgstr "Waiting jobs"
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8072,7 +8135,7 @@ msgstr "Hop"
 msgid "Debug"
 msgstr "Debug"
 
-#: components/DataListToolbar/DataListToolbar.tsx:131
+#: components/DataListToolbar/DataListToolbar.tsx:137
 #: screens/Job/JobOutput/JobOutputSearch.tsx:155
 msgid "Clear all filters"
 msgstr "Clear all filters"
@@ -8089,7 +8152,7 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:84
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8169,8 +8232,8 @@ msgstr "Personal access token"
 msgid "Relaunch from first node"
 msgstr "Relaunch from first node"
 
-#: screens/Template/Template.tsx:142
-#: screens/Template/WorkflowJobTemplate.tsx:123
+#: screens/Template/Template.tsx:147
+#: screens/Template/WorkflowJobTemplate.tsx:131
 msgid "Back to Templates"
 msgstr "Back to Templates"
 
@@ -8250,7 +8313,7 @@ msgstr "It is hard to give a specification for\n"
 "            the inventory that has `gather_facts: true`. The\n"
 "            actual facts will differ system-to-system."
 
-#: components/JobList/JobListItem.tsx:377
+#: components/JobList/JobListItem.tsx:419
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "Job Slice Parent"
@@ -8314,7 +8377,7 @@ msgstr "Rocket.Chat"
 msgid "Frequency Exception Details"
 msgstr "Frequency Exception Details"
 
-#: components/StatusLabel/StatusLabel.tsx:74
+#: components/StatusLabel/StatusLabel.tsx:77
 msgid "Deprovisioning fail"
 msgstr "Deprovisioning fail"
 
@@ -8373,7 +8436,7 @@ msgstr "Inventory file"
 msgid "Refresh for revision"
 msgstr "Refresh for revision"
 
-#: screens/Dashboard/Dashboard.tsx:95
+#: screens/Dashboard/Dashboard.tsx:97
 msgid "Project sync failures"
 msgstr "Project sync failures"
 
@@ -8385,7 +8448,7 @@ msgstr "Project sync failures"
 msgid "Run on"
 msgstr "Run on"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "Show description"
@@ -8576,6 +8639,10 @@ msgstr "Create New Application"
 msgid "Plays"
 msgstr "Plays"
 
+#: components/JobList/JobListItem.tsx:583
+msgid "New jobs"
+msgstr "New jobs"
+
 #: screens/ActivityStream/ActivityStream.tsx:242
 msgid "Initiated by (username)"
 msgstr "Initiated by (username)"
@@ -8714,8 +8781,8 @@ msgstr "Examples include:"
 msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
 msgstr "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
 
-#: components/JobList/JobList.tsx:222
-#: components/JobList/JobListItem.tsx:72
+#: components/JobList/JobList.tsx:431
+#: components/JobList/useJobTypeLabels.ts:9
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
 #: screens/Job/JobDetail/JobDetail.tsx:69
 msgid "Source Control Update"
@@ -8748,7 +8815,7 @@ msgstr "Capacity"
 msgid "Provisioning Callback details"
 msgstr "Provisioning Callback details"
 
-#: screens/Dashboard/Dashboard.tsx:119
+#: screens/Dashboard/Dashboard.tsx:121
 msgid "Recent Jobs"
 msgstr "Recent Jobs"
 
@@ -8866,9 +8933,11 @@ msgstr "Workflow pending message body"
 msgid "Answer variable name"
 msgstr "Answer variable name"
 
-#: components/JobList/JobListItem.tsx:114
+#: components/JobList/JobListItem.tsx:156
+#: components/JobList/JobListItem.tsx:467
+#: components/JobList/JobListItem.tsx:597
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:251
+#: components/Lookup/Lookup.tsx:284
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "Select"
@@ -8907,8 +8976,8 @@ msgstr "IRC Nick"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 
-#: components/JobList/JobList.tsx:241
-#: components/StatusLabel/StatusLabel.tsx:59
+#: components/JobList/JobList.tsx:450
+#: components/StatusLabel/StatusLabel.tsx:62
 #: components/TemplateList/TemplateListItem.tsx:117
 #: components/Workflow/WorkflowNodeHelp.tsx:95
 msgid "Running"
@@ -9049,7 +9118,7 @@ msgstr "Miscellaneous Authentication"
 msgid "Download bundle"
 msgstr "Download bundle"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:175
+#: components/LaunchPrompt/LaunchPrompt.tsx:176
 #: components/Schedule/shared/SchedulePromptableFields.tsx:147
 msgid "Content Loading"
 msgstr "Content Loading"
@@ -9058,7 +9127,7 @@ msgstr "Content Loading"
 #: routeConfig.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:113
 #: screens/ActivityStream/ActivityStream.tsx:186
-#: screens/Dashboard/Dashboard.tsx:78
+#: screens/Dashboard/Dashboard.tsx:80
 #: screens/Inventory/Inventories.tsx:55
 #: screens/Inventory/InventoryList/InventoryList.tsx:190
 #: screens/Inventory/InventoryList/InventoryList.tsx:255
@@ -9098,9 +9167,11 @@ msgstr "START"
 msgid "Resources"
 msgstr "Resources"
 
-#: components/JobList/JobList.tsx:211
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:420
+#: components/JobList/JobList.tsx:472
+#: components/JobList/JobListItem.tsx:158
+#: components/JobList/JobListItem.tsx:468
+#: components/JobList/JobListItem.tsx:598
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9223,7 +9294,7 @@ msgid "View all execution environments"
 msgstr "View all execution environments"
 
 #: screens/Inventory/Inventories.tsx:125
-#: screens/Inventory/Inventory.tsx:79
+#: screens/Inventory/Inventory.tsx:92
 msgid "Sources"
 msgstr "Sources"
 
@@ -9235,7 +9306,7 @@ msgstr "Textarea"
 msgid "Unknown Status"
 msgstr "Unknown Status"
 
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:115
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:120
 msgid "View all Inventory Hosts."
 msgstr "View all Inventory Hosts."
 
@@ -9244,8 +9315,8 @@ msgstr "View all Inventory Hosts."
 msgid "Not configured"
 msgstr "Not configured"
 
-#: components/JobList/JobList.tsx:227
-#: components/JobList/JobListItem.tsx:77
+#: components/JobList/JobList.tsx:436
+#: components/JobList/useJobTypeLabels.ts:14
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:46
 #: screens/Job/JobDetail/JobDetail.tsx:74
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:268
@@ -9339,8 +9410,8 @@ msgstr "Documentation."
 msgid "Credential Name"
 msgstr "Credential Name"
 
-#: components/JobList/JobList.tsx:225
-#: components/JobList/JobListItem.tsx:75
+#: components/JobList/JobList.tsx:434
+#: components/JobList/useJobTypeLabels.ts:12
 #: screens/Job/JobOutput/HostEventModal.tsx:177
 msgid "Command"
 msgstr "Command"
@@ -9349,8 +9420,8 @@ msgstr "Command"
 msgid "Access token"
 msgstr "Access token"
 
-#: components/JobList/JobList.tsx:244
-#: components/StatusLabel/StatusLabel.tsx:57
+#: components/JobList/JobList.tsx:453
+#: components/StatusLabel/StatusLabel.tsx:60
 #: components/Workflow/WorkflowNodeHelp.tsx:104
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
@@ -9381,7 +9452,7 @@ msgstr "A job has already been launched"
 msgid "Host Async OK"
 msgstr "Host Async OK"
 
-#: screens/Dashboard/Dashboard.tsx:131
+#: screens/Dashboard/Dashboard.tsx:133
 msgid "Recent Templates"
 msgstr "Recent Templates"
 
@@ -9495,7 +9566,7 @@ msgstr "Generic OIDC settings"
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 
-#: components/DataListToolbar/DataListToolbar.tsx:123
+#: components/DataListToolbar/DataListToolbar.tsx:129
 #: screens/Job/JobOutput/JobOutputSearch.tsx:146
 msgid "Advanced"
 msgstr "Advanced"
@@ -9765,32 +9836,32 @@ msgstr "Populate field from an external secret management system"
 #~ msgid "Insights Credential"
 #~ msgstr "Insights Credential"
 
-#: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:294
+#: components/JobList/JobList.tsx:411
+#: components/JobList/JobList.tsx:508
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
 #: screens/Dashboard/shared/LineChart.tsx:118
-#: screens/Host/Host.tsx:81
+#: screens/Host/Host.tsx:86
 #: screens/Host/Hosts.tsx:34
-#: screens/InstanceGroup/ContainerGroup.tsx:78
-#: screens/InstanceGroup/InstanceGroup.tsx:86
+#: screens/InstanceGroup/ContainerGroup.tsx:83
+#: screens/InstanceGroup/InstanceGroup.tsx:91
 #: screens/InstanceGroup/InstanceGroups.tsx:40
 #: screens/InstanceGroup/InstanceGroups.tsx:45
-#: screens/Inventory/ConstructedInventory.tsx:80
-#: screens/Inventory/FederatedInventory.tsx:79
+#: screens/Inventory/ConstructedInventory.tsx:93
+#: screens/Inventory/FederatedInventory.tsx:91
 #: screens/Inventory/Inventories.tsx:101
 #: screens/Inventory/Inventories.tsx:111
-#: screens/Inventory/Inventory.tsx:81
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:101
-#: screens/Inventory/SmartInventory.tsx:79
+#: screens/Inventory/Inventory.tsx:94
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:106
+#: screens/Inventory/SmartInventory.tsx:92
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
 #: screens/Setting/Settings.tsx:83
-#: screens/Template/Template.tsx:168
+#: screens/Template/Template.tsx:173
 #: screens/Template/Templates.tsx:52
-#: screens/Template/WorkflowJobTemplate.tsx:153
+#: screens/Template/WorkflowJobTemplate.tsx:161
 msgid "Jobs"
 msgstr "Jobs"
 
@@ -9807,11 +9878,15 @@ msgstr "Copy Credential"
 msgid "Token"
 msgstr "Token"
 
+#: components/JobList/JobListItem.tsx:585
+msgid "Pending jobs"
+msgstr "Pending jobs"
+
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:35
 msgid "weekday"
 msgstr "weekday"
 
-#: components/StatusLabel/StatusLabel.tsx:71
+#: components/StatusLabel/StatusLabel.tsx:74
 #: screens/TopologyView/Legend.tsx:176
 msgid "Deprovisioning"
 msgstr "Deprovisioning"
@@ -9865,7 +9940,7 @@ msgstr "Private key passphrase"
 msgid "Start"
 msgstr "Start"
 
-#: screens/Inventory/ConstructedInventory.tsx:219
+#: screens/Inventory/ConstructedInventory.tsx:222
 msgid "View Constructed Inventory Details"
 msgstr "View Constructed Inventory Details"
 
@@ -9913,6 +9988,10 @@ msgstr "Settings"
 #: components/SelectedList/DraggableSelectedList.tsx:158
 msgid "Dragging started for {name}. Use the arrow keys to move it."
 msgstr "Dragging started for {name}. Use the arrow keys to move it."
+
+#: components/JobList/GroupBySelect.tsx:34
+msgid "Group by status"
+msgstr "Group by status"
 
 #: screens/CredentialType/CredentialType.tsx:62
 msgid "Back to credential types"
@@ -9965,7 +10044,9 @@ msgstr "View all Workflow Approvals."
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "When not checked, a merge will be performed, combining local variables with those found on the external source."
 
-#: components/JobList/JobListItem.tsx:147
+#: components/JobList/JobListItem.tsx:189
+#: components/JobList/StackCancelButton.tsx:158
+#: components/JobList/StackCancelButton.tsx:159
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9982,9 +10063,11 @@ msgstr "www.json.org"
 msgid "Inventory sources with failures"
 msgstr "Inventory sources with failures"
 
-#: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:126
+#: components/JobList/JobList.tsx:444
+#: components/JobList/JobList.tsx:474
+#: components/JobList/JobListItem.tsx:168
+#: components/JobList/JobListItem.tsx:478
+#: components/JobList/JobListItem.tsx:606
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -10019,8 +10102,8 @@ msgstr "Are you sure you want to delete:"
 msgid "Failed to retrieve full node resource object."
 msgstr "Failed to retrieve full node resource object."
 
-#: components/JobList/JobList.tsx:239
-#: components/StatusLabel/StatusLabel.tsx:60
+#: components/JobList/JobList.tsx:448
+#: components/StatusLabel/StatusLabel.tsx:63
 #: components/Workflow/WorkflowNodeHelp.tsx:89
 msgid "Pending"
 msgstr "Pending"
@@ -10029,6 +10112,7 @@ msgstr "Pending"
 msgid "Toggle Tools"
 msgstr "Toggle Tools"
 
+#: components/JobList/JobListItem.tsx:544
 #: components/LabelLists/LabelListItem.tsx:32
 #: components/LabelLists/LabelLists.tsx:61
 #: components/LabelLists/LabelLists.tsx:68
@@ -10080,7 +10164,7 @@ msgstr "Toggle Tools"
 msgid "Organization"
 msgstr "Organization"
 
-#: screens/Login/Login.tsx:311
+#: screens/Login/Login.tsx:315
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Your session has expired. Please log in to continue where you left off."
 
@@ -10094,7 +10178,7 @@ msgstr "Created by (username)"
 #~ msgid "Subscriptions consumed"
 #~ msgstr "Subscriptions consumed"
 
-#: screens/Dashboard/Dashboard.tsx:84
+#: screens/Dashboard/Dashboard.tsx:86
 msgid "Inventory sync failures"
 msgstr "Inventory sync failures"
 
@@ -10143,7 +10227,7 @@ msgstr "Sign in with Azure AD Tenant"
 msgid "Case-insensitive version of endswith."
 msgstr "Case-insensitive version of endswith."
 
-#: components/Lookup/Lookup.tsx:258
+#: components/Lookup/Lookup.tsx:291
 msgid "Cancel lookup"
 msgstr "Cancel lookup"
 
@@ -10152,31 +10236,31 @@ msgstr "Cancel lookup"
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:85
 #: screens/Application/Applications.tsx:38
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:31
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/CredentialType/CredentialTypes.tsx:29
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:72
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:28
-#: screens/Host/Host.tsx:66
+#: screens/Host/Host.tsx:71
 #: screens/Host/Hosts.tsx:31
-#: screens/InstanceGroup/ContainerGroup.tsx:73
+#: screens/InstanceGroup/ContainerGroup.tsx:78
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:193
-#: screens/InstanceGroup/InstanceGroup.tsx:76
+#: screens/InstanceGroup/InstanceGroup.tsx:81
 #: screens/InstanceGroup/InstanceGroups.tsx:36
 #: screens/InstanceGroup/InstanceGroups.tsx:44
 #: screens/Instances/Instance.tsx:41
 #: screens/Instances/Instances.tsx:29
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.tsx:73
-#: screens/Inventory/ConstructedInventory.tsx:75
-#: screens/Inventory/FederatedInventory.tsx:75
+#: screens/Inventory/ConstructedInventory.tsx:88
+#: screens/Inventory/FederatedInventory.tsx:87
 #: screens/Inventory/Inventories.tsx:102
 #: screens/Inventory/Inventories.tsx:128
-#: screens/Inventory/Inventory.tsx:75
+#: screens/Inventory/Inventory.tsx:88
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:77
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:86
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:91
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
-#: screens/Inventory/SmartInventory.tsx:75
+#: screens/Inventory/SmartInventory.tsx:88
 #: screens/Job/Job.tsx:145
 #: screens/Job/JobOutput/HostEventModal.tsx:155
 #: screens/Job/Jobs.tsx:52
@@ -10191,7 +10275,7 @@ msgstr "Cancel lookup"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:91
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:93
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10227,9 +10311,9 @@ msgstr "Cancel lookup"
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
 #: screens/Team/Team.tsx:67
 #: screens/Team/Teams.tsx:31
-#: screens/Template/Template.tsx:148
+#: screens/Template/Template.tsx:153
 #: screens/Template/Templates.tsx:48
-#: screens/Template/WorkflowJobTemplate.tsx:129
+#: screens/Template/WorkflowJobTemplate.tsx:137
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:149
 #: screens/TopologyView/Tooltip.tsx:158
 #: screens/TopologyView/Tooltip.tsx:191
@@ -10250,8 +10334,8 @@ msgstr "Fifth"
 msgid "Execution environment is missing or deleted."
 msgstr "Execution environment is missing or deleted."
 
-#: components/JobList/JobList.tsx:240
-#: components/StatusLabel/StatusLabel.tsx:63
+#: components/JobList/JobList.tsx:449
+#: components/StatusLabel/StatusLabel.tsx:66
 #: components/Workflow/WorkflowNodeHelp.tsx:92
 msgid "Waiting"
 msgstr "Waiting"
@@ -10377,7 +10461,7 @@ msgstr "Webhooks"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 
-#: components/JobList/JobListItem.tsx:160
+#: components/JobList/JobListItem.tsx:202
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "Relaunch using host parameters"
@@ -10652,6 +10736,8 @@ msgstr "Missing"
 #: components/JobCancelButton/JobCancelButton.tsx:117
 #: components/JobList/JobListCancelButton.tsx:169
 #: components/JobList/JobListCancelButton.tsx:172
+#: components/JobList/StackCancelButton.tsx:121
+#: components/JobList/StackCancelButton.tsx:125
 #: screens/Job/JobOutput/JobOutput.tsx:1188
 #: screens/Job/JobOutput/JobOutput.tsx:1191
 msgid "Return"
@@ -10739,6 +10825,10 @@ msgstr "Less than comparison."
 #~ msgid "Hosts automated"
 #~ msgstr "Hosts automated"
 
+#: components/JobList/StackCancelButton.tsx:150
+msgid "{skipped} jobs could not be canceled because you do not have permission."
+msgstr "{skipped} jobs could not be canceled because you do not have permission."
+
 #: screens/Project/shared/Project.helptext.tsx:97
 msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
 msgstr "Allow changing the Source Control branch or revision in a job template that uses this project."
@@ -10759,7 +10849,7 @@ msgstr "Failed to get instance."
 msgid "Use browser default"
 msgstr "Use browser default"
 
-#: components/JobList/JobList.tsx:231
+#: components/JobList/JobList.tsx:440
 msgid "Launched By (Username)"
 msgstr "Launched By (Username)"
 
@@ -10797,7 +10887,7 @@ msgstr "Confirm link removal"
 msgid "This field must be at least {0} characters"
 msgstr "This field must be at least {0} characters"
 
-#: components/JobList/JobListItem.tsx:224
+#: components/JobList/JobListItem.tsx:266
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10819,8 +10909,8 @@ msgstr "Inventory ID"
 msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully."
 msgstr "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully."
 
-#: components/DataListToolbar/DataListToolbar.tsx:158
-#: components/DataListToolbar/DataListToolbar.tsx:162
+#: components/DataListToolbar/DataListToolbar.tsx:164
+#: components/DataListToolbar/DataListToolbar.tsx:168
 #: screens/Template/Survey/SurveyToolbar.tsx:61
 msgid "Select all"
 msgstr "Select all"
@@ -11021,7 +11111,7 @@ msgid "Choose a job type"
 msgstr "Choose a job type"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:190
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11161,7 +11251,7 @@ msgid "The page you requested could not be found."
 msgstr "The page you requested could not be found."
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:300
+#: components/JobList/JobList.tsx:514
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 
@@ -11264,6 +11354,11 @@ msgstr "name"
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:406
 msgid "Select roles to apply"
 msgstr "Select roles to apply"
+
+#: components/JobList/StackCancelButton.tsx:147
+#: components/JobList/StackCancelButton.tsx:148
+msgid "Some jobs were not canceled"
+msgstr "Some jobs were not canceled"
 
 #: screens/Host/HostList/HostList.tsx:232
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:206
@@ -11497,7 +11592,7 @@ msgstr "Successfully Denied"
 msgid "Not configured for inventory sync."
 msgstr "Not configured for inventory sync."
 
-#: components/Lookup/JobTemplateLookup.tsx:124
+#: components/Lookup/JobTemplateLookup.tsx:133
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11555,7 +11650,7 @@ msgid "Team not found."
 msgstr "Team not found."
 
 #: components/LaunchButton/ReLaunchDropDown.tsx:64
-#: screens/Dashboard/Dashboard.tsx:73
+#: screens/Dashboard/Dashboard.tsx:75
 msgid "Failed hosts"
 msgstr "Failed hosts"
 
@@ -11583,7 +11678,7 @@ msgstr "Change PROJECTS_ROOT when deploying {brandName} to change this location.
 msgid "{intervalValue, plural, one {minute} other {minutes}}"
 msgstr "{intervalValue, plural, one {minute} other {minutes}}"
 
-#: components/StatusLabel/StatusLabel.tsx:53
+#: components/StatusLabel/StatusLabel.tsx:56
 msgid "Healthy"
 msgstr "Healthy"
 
@@ -11689,7 +11784,7 @@ msgstr "Sender e-mail"
 #~ msgstr "Welcome to Red Hat Ansible Automation Platform!\n"
 #~ "              Please complete the steps below to activate your subscription."
 
-#: components/StatusLabel/StatusLabel.tsx:73
+#: components/StatusLabel/StatusLabel.tsx:76
 msgid "Provisioning fail"
 msgstr "Provisioning fail"
 
@@ -11705,7 +11800,7 @@ msgstr "Time in seconds to consider an inventory sync to be current. During job 
 #~ msgid "Automation controller version"
 #~ msgstr "Automation controller version"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:91
 msgid "Access Token Expiration"
 msgstr "Access Token Expiration"
 
@@ -11757,13 +11852,13 @@ msgstr "Cancel Workflow"
 msgid "The container image to be used for execution."
 msgstr "The container image to be used for execution."
 
-#: components/JobList/JobList.tsx:201
+#: components/JobList/JobList.tsx:410
 msgid "Please run a job to populate this list."
 msgstr "Please run a job to populate this list."
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
-#: components/JobList/JobList.tsx:249
+#: components/JobList/JobList.tsx:458
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
@@ -11809,7 +11904,7 @@ msgstr "This project is currently being used by other resources. Are you sure yo
 msgid "Associate"
 msgstr "Associate"
 
-#: components/JobList/JobListItem.tsx:203
+#: components/JobList/JobListItem.tsx:245
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11859,7 +11954,7 @@ msgstr "Canceled node, new variables"
 #~ msgid "Insights system ID"
 #~ msgstr "Insights system ID"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:104
 msgid "Authorization Code Expiration"
 msgstr "Authorization Code Expiration"
 
@@ -12028,7 +12123,7 @@ msgstr "June"
 msgid "Launch"
 msgstr "Launch"
 
-#: components/JobList/JobListItem.tsx:365
+#: components/JobList/JobListItem.tsx:407
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Explanation"
@@ -12049,7 +12144,7 @@ msgstr "Please select an Inventory or check the Prompt on Launch option"
 msgid "Survey preview modal"
 msgstr "Survey preview modal"
 
-#: components/StatusLabel/StatusLabel.tsx:55
+#: components/StatusLabel/StatusLabel.tsx:58
 #: components/Workflow/WorkflowNodeHelp.tsx:113
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:25
@@ -12083,15 +12178,15 @@ msgstr "Leave this field blank to make the execution environment globally availa
 msgid "Failed to associate."
 msgstr "Failed to associate."
 
-#: screens/Host/Host.tsx:76
+#: screens/Host/Host.tsx:81
 #: screens/Host/HostGroups/HostGroupsList.tsx:234
 #: screens/Host/Hosts.tsx:33
-#: screens/Inventory/ConstructedInventory.tsx:78
-#: screens/Inventory/FederatedInventory.tsx:78
+#: screens/Inventory/ConstructedInventory.tsx:91
+#: screens/Inventory/FederatedInventory.tsx:90
 #: screens/Inventory/Inventories.tsx:113
 #: screens/Inventory/Inventories.tsx:115
-#: screens/Inventory/Inventory.tsx:77
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:96
+#: screens/Inventory/Inventory.tsx:90
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:101
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:245
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:147
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:265
@@ -12109,7 +12204,7 @@ msgid "Error message body"
 msgstr "Error message body"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:191
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
@@ -12144,7 +12239,7 @@ msgstr "Failed to delete host."
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:128
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177
@@ -12254,6 +12349,7 @@ msgstr "One room per line, as a room ID (!abcdef:example.org) or\n"
 "      a room alias (#automation:example.org). The user the access token\n"
 "      belongs to must already be a member of every room."
 
+#: components/JobList/JobListItem.tsx:586
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:79
 msgid "Running jobs"
 msgstr "Running jobs"
@@ -12276,7 +12372,7 @@ msgid "Toggle notification start"
 msgstr "Toggle notification start"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:280
+#: components/JobList/JobListItem.tsx:322
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12354,7 +12450,7 @@ msgstr "Microsoft Entra ID"
 msgid "Delete survey question"
 msgstr "Delete survey question"
 
-#: screens/Dashboard/Dashboard.tsx:117
+#: screens/Dashboard/Dashboard.tsx:119
 msgid "Recent Jobs list tab"
 msgstr "Recent Jobs list tab"
 
@@ -12383,6 +12479,6 @@ msgstr "Send the message body as HTML (org.matrix.custom.html)\n"
 "      Clients that cannot render HTML fall back to the plain text."
 
 #: components/NotificationList/NotificationListItem.tsx:103
-#: components/StatusLabel/StatusLabel.tsx:52
+#: components/StatusLabel/StatusLabel.tsx:55
 msgid "Success"
 msgstr "Success"

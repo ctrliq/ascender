@@ -362,20 +362,29 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
     def _get_summary_fields(self, obj):
         if obj is None:
             return {}
+        # Stack and status summary rows are synthetic placeholders.  They have
+        # no actions and do not render summary_fields, so computing the related
+        # objects would be pure overhead.
+        if getattr(obj, 'id', None) in self.context.get('summary_row_ids', ()):
+            return {}
         requested = self._requested_summary_fields()
         if requested is not None and not requested:
             # nothing was asked for, so the related objects are never fetched
             return {}
-        summary_fields = self.get_summary_fields(obj)
+        summary_fields = self.get_summary_fields(obj, requested=requested)
         if requested is None:
             return summary_fields
         return OrderedDict((key, value) for key, value in summary_fields.items() if key in requested)
 
-    def get_summary_fields(self, obj):
+    def get_summary_fields(self, obj, requested=None):
         # Return values for certain fields on related objects, to simplify
         # displaying lists of items without additional API requests.
+        # When ``requested`` is a set, only those keys are computed. ``None``
+        # means every key is computed, preserving the historical behavior.
         summary_fields = OrderedDict()
         for fk, related_fields in SUMMARIZABLE_FK_FIELDS.items():
+            if requested is not None and fk not in requested:
+                continue
             try:
                 # A few special cases where we don't want to access the field
                 # because it results in additional queries.
@@ -408,25 +417,26 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
             # Can be raised by the reverse accessor for a OneToOneField.
             except ObjectDoesNotExist:
                 pass
-        if getattr(obj, 'created_by', None):
+        if getattr(obj, 'created_by', None) and (requested is None or 'created_by' in requested):
             summary_fields['created_by'] = OrderedDict()
             for field in SUMMARIZABLE_FK_FIELDS['user']:
                 summary_fields['created_by'][field] = getattr(obj.created_by, field)
-        if getattr(obj, 'modified_by', None):
+        if getattr(obj, 'modified_by', None) and (requested is None or 'modified_by' in requested):
             summary_fields['modified_by'] = OrderedDict()
             for field in SUMMARIZABLE_FK_FIELDS['user']:
                 summary_fields['modified_by'][field] = getattr(obj.modified_by, field)
 
         # RBAC summary fields
-        roles = {}
-        for field in obj._meta.get_fields():
-            if type(field) is ImplicitRoleField:
-                roles[field.name] = role_summary_fields_generator(obj, field.name)
-        if len(roles) > 0:
-            summary_fields['object_roles'] = roles
+        if requested is None or 'object_roles' in requested:
+            roles = {}
+            for field in obj._meta.get_fields():
+                if type(field) is ImplicitRoleField:
+                    roles[field.name] = role_summary_fields_generator(obj, field.name)
+            if len(roles) > 0:
+                summary_fields['object_roles'] = roles
 
         # Advance display of RBAC capabilities
-        if hasattr(self, 'show_capabilities'):
+        if hasattr(self, 'show_capabilities') and (requested is None or 'user_capabilities' in requested):
             user_capabilities = self._obj_capability_dict(obj)
             if user_capabilities:
                 summary_fields['user_capabilities'] = user_capabilities
@@ -698,10 +708,10 @@ class UnifiedJobTemplateSerializer(BaseSerializer):
         else:
             return super(UnifiedJobTemplateSerializer, self).to_representation(obj)
 
-    def get_summary_fields(self, obj):
-        summary_fields = super().get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super().get_summary_fields(obj, requested=requested)
 
-        if self.is_detail_view:
+        if self.is_detail_view and (requested is None or 'resolved_environment' in requested):
             resolved_ee = obj.resolve_execution_environment()
             if resolved_ee is not None:
                 summary_fields['resolved_environment'] = {
@@ -776,9 +786,9 @@ class UnifiedJobSerializer(BaseSerializer):
             res['execution_environment'] = self.reverse('api:execution_environment_detail', kwargs={'pk': obj.execution_environment_id})
         return res
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(UnifiedJobSerializer, self).get_summary_fields(obj)
-        if obj.spawned_by_workflow:
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(UnifiedJobSerializer, self).get_summary_fields(obj, requested=requested)
+        if obj.spawned_by_workflow and (requested is None or 'source_workflow_job' in requested):
             summary_fields['source_workflow_job'] = {}
             try:
                 summary_obj = obj.unified_job_node.workflow_job
@@ -790,7 +800,7 @@ class UnifiedJobSerializer(BaseSerializer):
                 if val is not None:
                     summary_fields['source_workflow_job'][field] = val
 
-        if self.is_detail_view:
+        if self.is_detail_view and (requested is None or 'ancestor_job' in requested):
             ancestor = obj.ancestor_job
             if ancestor != obj:
                 summary_fields['ancestor_job'] = {
@@ -928,6 +938,18 @@ class UnifiedJobListSerializer(UnifiedJobSerializer):
             ret = serializer.to_representation(obj)
         else:
             ret = super(UnifiedJobListSerializer, self).to_representation(obj)
+        stack_map = self.context.get('stack_map') or {}
+        representative_ids = self.context.get('stack_representative_ids') or set()
+        if stack_map and getattr(obj, 'id', None) in representative_ids:
+            stack = stack_map.get(obj.unified_job_template_id)
+            if stack:
+                ret['stack'] = stack
+        status_group_map = self.context.get('status_group_map') or {}
+        status_representative_ids = self.context.get('status_group_representative_ids') or set()
+        if status_group_map and getattr(obj, 'id', None) in status_representative_ids:
+            status_group = status_group_map.get(obj.status)
+            if status_group:
+                ret['status_group'] = status_group
         if 'elapsed' in ret:
             ret['elapsed'] = float(ret['elapsed'])
         return ret
@@ -944,6 +966,33 @@ class UnifiedJobStdoutSerializer(UnifiedJobSerializer):
             return ['project_update', 'inventory_update', 'job', 'ad_hoc_command', 'system_job']
         else:
             return super(UnifiedJobStdoutSerializer, self).get_types()
+
+
+class UnifiedJobStackSummarySerializer(UnifiedJobListSerializer):
+    """The small row shape the stack summary endpoint needs.
+
+    The grouped list's summary row only reads the representative's identity,
+    label fields, start time and stack payload.  Using the full list serializer
+    here would traverse every related object it normally serializes even though
+    summary rows carry no summary_fields.
+    """
+
+    def to_representation(self, obj):
+        ret = {
+            'id': obj.id,
+            'type': obj.job_type_name,
+            'name': obj.name,
+            'status': obj.status,
+            'started': obj.started,
+            'finished': obj.finished,
+            'job_type': getattr(obj, 'job_type', None),
+            'unified_job_template': obj.unified_job_template_id,
+            'summary_fields': {},
+        }
+        stack = (self.context.get('stack_map') or {}).get(obj.unified_job_template_id)
+        if stack:
+            ret['stack'] = stack
+        return ret
 
 
 SUPPORTED_UI_LOCALES = frozenset(['', 'ar', 'en', 'es', 'fr', 'hi', 'ja', 'ko', 'nl', 'zh'])

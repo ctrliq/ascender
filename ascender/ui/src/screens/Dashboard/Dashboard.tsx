@@ -23,6 +23,8 @@ import Count from './shared/Count';
 import DashboardGraph from './DashboardGraph';
 import './Dashboard.css';
 
+const RECENT_JOBS_PARAMS = { page_size: 5 };
+
 function Dashboard() {
   const { t } = useLingui();
   useTitle(t`Dashboard`);
@@ -121,7 +123,7 @@ function Dashboard() {
               >
                 <div>
                   {activeTabId === 1 && (
-                    <JobList defaultParams={{ page_size: 5 }} />
+                    <JobList defaultParams={RECENT_JOBS_PARAMS} />
                   )}
                 </div>
               </Tab>

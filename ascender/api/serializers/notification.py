@@ -57,9 +57,10 @@ class NotificationTemplateSerializer(BaseSerializer):
     def _recent_notifications(self, obj):
         return [{'id': x.id, 'status': x.status, 'created': x.created, 'error': x.error} for x in obj.notifications.all().order_by('-created')[:5]]
 
-    def get_summary_fields(self, obj):
-        d = super(NotificationTemplateSerializer, self).get_summary_fields(obj)
-        d['recent_notifications'] = self._recent_notifications(obj)
+    def get_summary_fields(self, obj, requested=None):
+        d = super(NotificationTemplateSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is None or 'recent_notifications' in requested:
+            d['recent_notifications'] = self._recent_notifications(obj)
         return d
 
     def validate_messages(self, messages):

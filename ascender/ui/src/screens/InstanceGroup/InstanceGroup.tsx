@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import {
   Link,
   Routes,
@@ -53,6 +53,11 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
   useEffect(() => {
     fetchInstanceGroups();
   }, [fetchInstanceGroups, pathname]);
+
+  const jobListParams = useMemo(
+    () => (instanceGroup ? { instance_group: instanceGroup.id } : undefined),
+    [instanceGroup]
+  );
 
   useEffect(() => {
     if (instanceGroup) {
@@ -141,12 +146,7 @@ function InstanceGroup({ setBreadcrumb }: InstanceGroupProps) {
             />
             <Route
               path="jobs"
-              element={
-                <JobList
-                  showTypeColumn
-                  defaultParams={{ instance_group: instanceGroup.id }}
-                />
-              }
+              element={<JobList showTypeColumn defaultParams={jobListParams} />}
             />
             <Route
               path="*"
