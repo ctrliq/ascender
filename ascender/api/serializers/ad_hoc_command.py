@@ -89,9 +89,9 @@ class AdHocCommandSerializer(UnifiedJobSerializer):
         res['relaunch'] = self.reverse('api:ad_hoc_command_relaunch', kwargs={'pk': obj.pk})
         return res
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(AdHocCommandSerializer, self).get_summary_fields(obj)
-        if self.is_detail_view and obj.pk:
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(AdHocCommandSerializer, self).get_summary_fields(obj, requested=requested)
+        if self.is_detail_view and obj.pk and (requested is None or 'instance_groups' in requested):
             summary_fields['instance_groups'] = [
                 {field: getattr(ig, field) for field in SUMMARIZABLE_FK_FIELDS['instance_group']} for ig in obj.instance_groups.all()
             ]

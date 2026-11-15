@@ -119,6 +119,24 @@ describe('qs (qs.js)', () => {
       });
     });
 
+    test('should not expose the default params object to mutation', () => {
+      const config = {
+        namespace: 'foo',
+        defaultParams: { page: 1, page_size: 15 },
+        integerFields: ['page', 'page_size'],
+      };
+      const query = '';
+
+      const params = parseQueryString(config as unknown as QSConfig, query);
+      params.id__in = '1,2';
+
+      expect(config.defaultParams).toEqual({ page: 1, page_size: 15 });
+      expect(parseQueryString(config as unknown as QSConfig, query)).toEqual({
+        page: 1,
+        page_size: 15,
+      });
+    });
+
     test('should get query params with correct integer fields', () => {
       const config = {
         namespace: 'item',

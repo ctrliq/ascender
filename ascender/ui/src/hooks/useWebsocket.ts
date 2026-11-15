@@ -25,12 +25,24 @@ export interface WebsocketMessage {
 }
 
 export default function useWebsocket(
-  subscribeGroups: SubscribeGroups
+  subscribeGroups: SubscribeGroups,
+  enabled = true
 ): WebsocketMessage | null {
   const [lastMessage, setLastMessage] = useState<WebsocketMessage | null>(null);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    if (!enabled) {
+      // Do not hand a message from the previous connection to consumers when
+      // grouping is re-enabled; they would treat it as a fresh event.
+      setLastMessage(null);
+    }
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled) {
+      return () => {};
+    }
     let shouldReconnect = true;
 
     const connect = () => {
@@ -87,7 +99,7 @@ export default function useWebsocket(
         ws.current?.close();
       }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [enabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return lastMessage;
 }

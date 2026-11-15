@@ -129,8 +129,10 @@ class CredentialSerializer(BaseSerializer):
 
         return res
 
-    def get_summary_fields(self, obj):
-        summary_dict = super(CredentialSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_dict = super(CredentialSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is not None and 'owners' not in requested:
+            return summary_dict
         summary_dict['owners'] = []
 
         for user in obj.admin_role.members.all():

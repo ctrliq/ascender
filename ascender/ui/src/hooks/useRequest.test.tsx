@@ -3,7 +3,10 @@ import React from 'react';
 import { getQSConfig } from 'util/qs';
 import { render, act, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../testUtils/rtlContexts';
-import useRequest, { useDeleteItems } from './useRequest';
+import useRequest, {
+  type UseRequestOptions,
+  useDeleteItems,
+} from './useRequest';
 
 // Both hooks write here, so the slot names each of their results.
 const result: {
@@ -20,13 +23,16 @@ type TestRequest = (...args: never[]) => unknown;
 function Test({
   makeRequest,
   initialValue = {},
+  options,
 }: {
   makeRequest: TestRequest;
   initialValue?: unknown;
+  options?: UseRequestOptions;
 }) {
   result.current = useRequest(
     makeRequest as (...args: unknown[]) => Promise<unknown>,
-    initialValue
+    initialValue,
+    options
   );
   return null;
 }
@@ -151,6 +157,92 @@ describe('useRequest hooks', () => {
       });
       expect(latest().result).toEqual({});
       expect(latest().error).toEqual(error);
+    });
+
+    test('latest-only keeps the newest response when requests overlap', async () => {
+      const resolvers: ((value: unknown) => void)[] = [];
+      const makeRequest = vi.fn(
+        () =>
+          new Promise((resolve) => {
+            resolvers.push(resolve);
+          })
+      );
+      render(<Test makeRequest={makeRequest} options={{ latestOnly: true }} />);
+
+      let first: Promise<void> | undefined;
+      let second: Promise<void> | undefined;
+      await act(async () => {
+        first = latest().request();
+      });
+      await act(async () => {
+        second = latest().request();
+      });
+
+      await act(async () => {
+        resolvers[1]!({ data: 'newer' });
+        await second;
+      });
+      expect(latest().result).toEqual({ data: 'newer' });
+
+      await act(async () => {
+        resolvers[0]!({ data: 'older' });
+        await first;
+      });
+      expect(latest().result).toEqual({ data: 'newer' });
+    });
+
+    test('a silent request keeps the last result and ignores errors', async () => {
+      const makeRequest = vi
+        .fn()
+        .mockResolvedValueOnce({ data: 'first' })
+        .mockRejectedValueOnce(new Error('background failure'));
+      render(<Test makeRequest={makeRequest} />);
+
+      await act(async () => {
+        await latest().request();
+      });
+      expect(latest().result).toEqual({ data: 'first' });
+
+      await act(async () => {
+        await latest().requestSilently();
+      });
+      expect(latest().result).toEqual({ data: 'first' });
+      expect(latest().error).toBeNull();
+      expect(latest().isLoading).toBe(false);
+    });
+
+    test('latest-only lets a silent response supersede a normal request', async () => {
+      const resolvers: ((value: unknown) => void)[] = [];
+      const makeRequest = vi.fn(
+        () =>
+          new Promise((resolve) => {
+            resolvers.push(resolve);
+          })
+      );
+      render(<Test makeRequest={makeRequest} options={{ latestOnly: true }} />);
+
+      let normal: Promise<void> | undefined;
+      let silent: Promise<void> | undefined;
+      await act(async () => {
+        normal = latest().request();
+      });
+      expect(latest().isLoading).toBe(true);
+
+      await act(async () => {
+        silent = latest().requestSilently();
+      });
+      await act(async () => {
+        resolvers[1]!({ data: 'silent' });
+        await silent;
+      });
+      expect(latest().result).toEqual({ data: 'silent' });
+      expect(latest().isLoading).toBe(false);
+
+      await act(async () => {
+        resolvers[0]!({ data: 'normal' });
+        await normal;
+      });
+      expect(latest().result).toEqual({ data: 'silent' });
     });
 
     test('should not update state after unmount', async () => {

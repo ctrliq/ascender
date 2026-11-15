@@ -64,7 +64,7 @@ function Jobs() {
           element={
             <PageSection hasBodyWrapper={false}>
               <PersistentFilters pageKey="jobs">
-                <JobList showTypeColumn />
+                <JobList showTypeColumn showGroupingSelector />
               </PersistentFilters>
             </PageSection>
           }

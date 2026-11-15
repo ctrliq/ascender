@@ -411,9 +411,9 @@ class WorkflowJobTemplateNodeSerializer(LaunchConfigurationBaseSerializer):
             field_kwargs.pop('queryset', None)
         return field_class, field_kwargs
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(WorkflowJobTemplateNodeSerializer, self).get_summary_fields(obj)
-        if isinstance(obj.unified_job_template, WorkflowApprovalTemplate):
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(WorkflowJobTemplateNodeSerializer, self).get_summary_fields(obj, requested=requested)
+        if 'unified_job_template' in summary_fields and isinstance(obj.unified_job_template, WorkflowApprovalTemplate):
             summary_fields['unified_job_template']['timeout'] = obj.unified_job_template.timeout
             summary_fields['unified_job_template']['required_approvals'] = obj.unified_job_template.required_approvals
             summary_fields['unified_job_template']['on_timeout'] = obj.unified_job_template.on_timeout
@@ -479,9 +479,9 @@ class WorkflowJobNodeSerializer(LaunchConfigurationBaseSerializer):
             res['workflow_job'] = self.reverse('api:workflow_job_detail', kwargs={'pk': obj.workflow_job.pk})
         return res
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(WorkflowJobNodeSerializer, self).get_summary_fields(obj)
-        if isinstance(obj.job, WorkflowApproval):
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(WorkflowJobNodeSerializer, self).get_summary_fields(obj, requested=requested)
+        if 'job' in summary_fields and isinstance(obj.job, WorkflowApproval):
             summary_fields['job']['timed_out'] = obj.job.timed_out
         return summary_fields
 

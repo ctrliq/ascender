@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Link,
@@ -54,6 +54,19 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
   useEffect(() => {
     fetchInventory();
   }, [fetchInventory, location.pathname]);
+
+  const jobListParams = useMemo(
+    () =>
+      inventory
+        ? {
+            or__job__inventory: inventory.id,
+            or__adhoccommand__inventory: inventory.id,
+            or__inventoryupdate__inventory_source__inventory: inventory.id,
+            or__workflowjob__inventory: inventory.id,
+          }
+        : undefined,
+    [inventory]
+  );
 
   useEffect(() => {
     if (inventory) {
@@ -187,17 +200,7 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
           {inventory && (
             <Route
               path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__inventoryupdate__inventory_source__inventory:
-                      inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
-                />
-              }
+              element={<JobList defaultParams={jobListParams} />}
             />
           )}
           {inventory && (

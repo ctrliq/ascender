@@ -4,7 +4,7 @@ import type {
   Host,
   SetBreadcrumb,
 } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Link,
@@ -64,6 +64,11 @@ function InventoryHost({ setBreadcrumb, inventory }: InventoryHostProps) {
   useEffect(() => {
     fetchHost();
   }, [fetchHost, location.pathname]);
+
+  const jobListParams = useMemo(
+    () => (host?.id ? { job__hosts: host.id } : undefined),
+    [host]
+  );
 
   useEffect(() => {
     if (inventory && host) {
@@ -147,7 +152,7 @@ function InventoryHost({ setBreadcrumb, inventory }: InventoryHostProps) {
           <Route path="groups/*" element={<InventoryHostGroups />} />
           <Route
             path="jobs"
-            element={<JobList defaultParams={{ job__hosts: host.id }} />}
+            element={<JobList defaultParams={jobListParams} />}
           />
           <Route
             path="*"

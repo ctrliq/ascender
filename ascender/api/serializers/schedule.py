@@ -129,16 +129,18 @@ class ScheduleSerializer(LaunchConfigurationBaseSerializer, SchedulePreviewSeria
             res['inventory'] = obj.unified_job_template.inventory.get_absolute_url(self.context.get('request'))
         return res
 
-    def get_summary_fields(self, obj):
+    def get_summary_fields(self, obj, requested=None):
         from ascender.api.serializers.base import SUMMARIZABLE_FK_FIELDS
 
-        summary_fields = super(ScheduleSerializer, self).get_summary_fields(obj)
+        summary_fields = super(ScheduleSerializer, self).get_summary_fields(obj, requested=requested)
 
-        if isinstance(obj.unified_job_template, SystemJobTemplate):
+        if 'unified_job_template' in summary_fields and isinstance(obj.unified_job_template, SystemJobTemplate):
             summary_fields['unified_job_template']['job_type'] = obj.unified_job_template.job_type
 
         # We are not showing instance groups on summary fields because JTs don't either
 
+        if requested is not None and 'inventory' not in requested:
+            return summary_fields
         if 'inventory' in summary_fields:
             return summary_fields
 

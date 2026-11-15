@@ -8,7 +8,10 @@ import type { AnyJob } from '../types/api';
  * update with no inventory, which is what the switch below always did.
  */
 export default function getScheduleUrl(job: AnyJob): string | undefined {
-  const templateId = job.summary_fields?.unified_job_template?.id;
+  const templateId =
+    job.summary_fields?.unified_job_template?.id ??
+    job.unified_job_template ??
+    undefined;
   const scheduleId = job.summary_fields?.schedule?.id;
   const inventoryId = job.summary_fields?.inventory?.id ?? null;
   let scheduleUrl: string | undefined;
