@@ -33,6 +33,10 @@ def body(response):
     return response.getvalue() if response.streaming else response.content
 
 
+# Every event carries its own counter: an event is unique within its job by counter (see the
+# unique constraint on the event tables), as the callback receiver has always written them.
+
+
 def _mk_project_update(created=None):
     kwargs = {}
     if created:
@@ -66,7 +70,7 @@ def test_text_stdout(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=txt'
 
     response = get(url, user=admin, expect=200)
@@ -88,7 +92,7 @@ def test_ansi_stdout_filtering(Parent, Child, relation, view, download, get, adm
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk})
 
     # ansi codes in ?format=txt should get filtered
@@ -120,7 +124,7 @@ def test_colorized_html_stdout(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html'
 
     response = get(url, user=admin, expect=200)
@@ -143,7 +147,7 @@ def test_stdout_line_range(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(20):
-        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html&start_line=5&end_line=10'
 
     response = get(url, user=admin, expect=200)
@@ -156,7 +160,7 @@ def test_text_stdout_from_system_job_events(get, admin):
     job = SystemJob(created=created)
     job.save()
     for i in range(3):
-        SystemJobEvent(system_job=job, stdout='Testing {}'.format(i), start_line=i, job_created=created).save()
+        SystemJobEvent(system_job=job, stdout='Testing {}'.format(i), start_line=i, counter=i + 1, job_created=created).save()
     url = reverse('api:system_job_detail', kwargs={'pk': job.pk})
     response = get(url, user=admin, expect=200)
     assert smart_str(response.data['result_stdout']).splitlines() == ['Testing %d' % i for i in range(3)]
@@ -169,7 +173,7 @@ def test_text_stdout_with_max_stdout(get, admin):
     job.save()
     total_bytes = settings.STDOUT_MAX_BYTES_DISPLAY + 1
     large_stdout = 'X' * total_bytes
-    SystemJobEvent(system_job=job, stdout=large_stdout, start_line=0, job_created=created).save()
+    SystemJobEvent(system_job=job, stdout=large_stdout, start_line=0, counter=1, job_created=created).save()
     url = reverse('api:system_job_detail', kwargs={'pk': job.pk})
     response = get(url, user=admin, expect=200)
     assert response.data['result_stdout'] == (
@@ -197,7 +201,7 @@ def test_max_bytes_display(Parent, Child, relation, view, fmt, get, admin):
     job.save()
     total_bytes = settings.STDOUT_MAX_BYTES_DISPLAY + 1
     large_stdout = 'X' * total_bytes
-    Child(**{relation: job, 'stdout': large_stdout, 'start_line': 0, 'job_created': created}).save()
+    Child(**{relation: job, 'stdout': large_stdout, 'start_line': 0, 'counter': 1, 'job_created': created}).save()
     url = reverse(view, kwargs={'pk': job.pk})
 
     response = get(url + '?format={}'.format(fmt), user=admin, expect=200)
@@ -268,7 +272,7 @@ def test_text_with_unicode_stdout(Parent, Child, relation, view, get, admin, fmt
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': 'オ{}'.format(i), 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': 'オ{}'.format(i), 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=' + fmt
 
     response = get(url, user=admin, expect=200)
@@ -281,7 +285,7 @@ def test_unicode_with_base64_ansi(get, admin):
     job = Job(created=created)
     job.save()
     for i in range(3):
-        JobEvent(job=job, stdout='オ{}'.format(i), start_line=i, job_created=created).save()
+        JobEvent(job=job, stdout='オ{}'.format(i), start_line=i, counter=i + 1, job_created=created).save()
     url = reverse('api:job_stdout', kwargs={'pk': job.pk}) + '?format=json&content_encoding=base64'
 
     response = get(url, user=admin, expect=200)
@@ -308,7 +312,7 @@ def test_download_is_streamed_in_blocks(Parent, Child, relation, view, fmt, get,
     job = Parent()
     job.save()
     for i in range(64):
-        Child(**{relation: job, 'stdout': 'X' * 4096, 'start_line': i, 'job_created': job.created}).save()
+        Child(**{relation: job, 'stdout': 'X' * 4096, 'start_line': i, 'counter': i + 1, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=' + fmt
 
     response = get(url, user=admin, expect=200)

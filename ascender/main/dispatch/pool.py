@@ -20,7 +20,7 @@ from django_guid import set_guid
 from jinja2 import Template
 import psutil
 
-from ascender.main.models import UnifiedJob
+from ascender.main.models import UnifiedJob, JobMonitorLease
 from ascender.main.dispatch import reaper
 from ascender.main.utils.common import convert_mem_str_to_bytes, get_mem_effective_capacity, log_excess_runtime
 
@@ -427,7 +427,14 @@ class AutoscalePool(WorkerPool):
                     if w.current_task != 'QUIT':
                         try:
                             for j in UnifiedJob.objects.filter(celery_task_id=w.current_task['uuid']):
-                                reaper.reap_job(j, 'failed')
+                                # A job whose output was being read holds a monitor lease. Expiring it
+                                # hands the job to the next sweep, which resumes reading, rather than
+                                # failing a job whose work is still running somewhere. A lease another
+                                # task has claimed since is that task's.
+                                if JobMonitorLease.objects.release(j, w.current_task['uuid']):
+                                    logger.warning(f'{j.log_format}: its monitor died with worker pid:{w.pid}; its lease is released for the next sweep')
+                                elif not JobMonitorLease.objects.filter(unified_job_id=j.pk).exists():
+                                    reaper.reap_job(j, 'failed')
                         except Exception:
                             logger.exception('failed to reap job UUID {}'.format(w.current_task['uuid']))
                     else:
