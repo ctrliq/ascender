@@ -127,6 +127,9 @@
     dest: "{{ sources_dest }}/{{ compose_name }}"
     mode: '0600'
 
+- name: Move the database to PostgreSQL 18
+  include_tasks: upgrade_postgres.yml
+
 - name: Render Receptor Config(s) for Control Plane
   template:
     src: "receptor-awx.conf.j2"
