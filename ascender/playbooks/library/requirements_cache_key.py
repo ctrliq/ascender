@@ -48,6 +48,13 @@ reason:
   description: Why the requirements are not cacheable.
   returned: when not cacheable
   type: str
+mutable_reason:
+  description:
+    - Why a requirement can install different content while the requirements files and the
+      project revision stay the same, such as a git repository on a branch or a URL.
+    - Galaxy requirements are not counted; their releases are picked up by refreshing the project.
+  returned: when such a requirement exists
+  type: str
 """
 
 import hashlib
@@ -114,19 +121,72 @@ def non_galaxy_reason(entries, kind, project_path='.'):
     return None
 
 
-def requirements_reason(data, project_path='.'):
+# a full commit id names fixed content; a branch, tag or abbreviated id can be moved or resolved anew
+COMMIT_ID_RE = re.compile(r'^(?:[0-9a-f]{40}|[0-9a-f]{64})$', re.IGNORECASE)
+
+
+def mutable_entry_reason(entries, kind, project_path='.'):
+    """Return why an entry can install different content for the same requirements file, or None"""
+    if not isinstance(entries, list):
+        return None  # reported as not cacheable already
+    for raw in entries:
+        entry = {'name': raw} if isinstance(raw, str) else raw
+        if not isinstance(entry, dict):
+            continue
+        if 'include' in entry:
+            return f'{kind} requirements include {entry["include"]!r}, which is not inspected'
+        source = str(entry.get('src') or entry.get('name') or entry.get('role') or '').strip()
+        version = entry.get('version')
+        if version is None:  # the 'source,version' shorthand
+            source, _, version = source.partition(',')
+        from_scm = bool(entry.get('scm')) or entry.get('type') == 'git' or source.startswith('git+') or source.endswith('.git')
+        if kind == 'collection':
+            if _is_galaxy_collection(raw):
+                continue
+            if entry.get('type') in ('dir', 'subdirs', 'file') and not _looks_like_location(source):
+                continue  # inside the project, so part of its revision
+        elif _is_project_file(project_path, source) or not (from_scm or _looks_like_location(source)):
+            continue  # a project file or a Galaxy role
+        if from_scm and COMMIT_ID_RE.match(str(version).split(',')[0].strip()):
+            continue
+        return f'{kind} requirement {source!r} is not pinned to a commit'
+    return None
+
+
+def requirements_reason(data, project_path='.', check=non_galaxy_reason):
     if data is None:
         return None
     if isinstance(data, list):  # legacy role-only format
-        return non_galaxy_reason(data, 'role', project_path)
+        return check(data, 'role', project_path)
     if not isinstance(data, dict):
         return 'requirements file is not a list or mapping'
-    return non_galaxy_reason(data.get('roles'), 'role', project_path) or non_galaxy_reason(data.get('collections'), 'collection', project_path)
+    return check(data.get('roles'), 'role', project_path) or check(data.get('collections'), 'collection', project_path)
 
 
 def _file_digest(path):
     with open(path, 'rb') as f:
         return hashlib.sha256(f.read()).hexdigest()
+
+
+def compute_mutable(project_path, files, kinds=('role', 'collection')):
+    """Return why the project's requirements can install different content for the same files, or None"""
+    import yaml
+
+    def check(entries, kind, path):
+        return mutable_entry_reason(entries, kind, path) if kind in kinds else None  # a disabled kind is never installed
+
+    for relpath in files:
+        path = os.path.join(project_path, relpath)
+        if not os.path.isfile(path):
+            continue
+        try:
+            with open(path, 'rb') as f:
+                reason = requirements_reason(yaml.safe_load(f.read()), project_path, check=check)
+        except yaml.YAMLError:
+            continue  # ansible-galaxy reports it
+        if reason:
+            return f'{relpath}: {reason}'
+    return None
 
 
 def compute_key(project_path, files, salt=None, config_files=()):
@@ -159,6 +219,7 @@ def compute_key(project_path, files, salt=None, config_files=()):
 
 def main():
     from ansible.module_utils.basic import AnsibleModule
+    from ansible.module_utils.parsing.convert_bool import boolean
 
     module = AnsibleModule(
         argument_spec=dict(
@@ -175,6 +236,11 @@ def main():
     result = dict(changed=False, requirements_hash=requirements_hash, cacheable=cacheable)
     if reason:
         result['reason'] = reason
+    salt = module.params['salt'] if isinstance(module.params['salt'], dict) else {}
+    kinds = [kind for kind in ('role', 'collection') if boolean(salt.get(f'{kind}s_enabled', True), strict=False)]
+    mutable_reason = compute_mutable(module.params['project_path'], module.params['files'], kinds)
+    if mutable_reason:
+        result['mutable_reason'] = mutable_reason
     module.exit_json(**result)
 
 

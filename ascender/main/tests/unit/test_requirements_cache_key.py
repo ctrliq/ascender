@@ -145,3 +145,54 @@ def test_project_ansible_cfg_is_part_of_the_key(tmp_path):
 def test_ansible_cfg_alone_is_not_a_requirements_file(tmp_path):
     write(tmp_path, 'ansible.cfg', '[defaults]\n')
     assert key(tmp_path) == ('', False, 'no requirements files')
+
+
+SHA = '669c8f6ffc0d162a18c8448e0cda1e06363d3316'
+
+
+@pytest.mark.parametrize(
+    'relpath,content,mutable',
+    [
+        # a branch, tag or short id resolves anew on every install
+        ('collections/requirements.yml', 'collections:\n  - name: https://git.example.com/ns/coll.git\n    type: git\n    version: main\n', True),
+        ('collections/requirements.yml', 'collections:\n  - name: https://git.example.com/ns/coll.git\n    type: git\n    version: v1.2.0\n', True),
+        ('collections/requirements.yml', 'collections:\n  - name: https://git.example.com/ns/coll.git\n    type: git\n', True),
+        ('collections/requirements.yml', 'collections:\n  - name: https://example.com/coll-1.0.0.tar.gz\n    type: url\n', True),
+        ('collections/requirements.yml', f'collections:\n  - name: https://git.example.com/ns/coll.git\n    type: git\n    version: {SHA}\n', False),
+        # inside the project, so covered by its revision
+        ('collections/requirements.yml', 'collections:\n  - name: vendor/coll\n    type: dir\n', False),
+        # Galaxy content is picked up by a refresh, as before
+        ('collections/requirements.yml', 'collections:\n  - name: community.general\n', False),
+        ('collections/requirements.yml', 'collections:\n  - community.general:8.0.0\n', False),
+        # the 'source,version' shorthand
+        ('collections/requirements.yml', f'collections:\n  - git+https://git.example.com/ns/coll.git,{SHA}\n', False),
+        ('collections/requirements.yml', 'collections:\n  - git+https://git.example.com/ns/coll.git,main\n', True),
+        ('collections/requirements.yml', 'collections: not-a-list\n', False),
+        ('collections/requirements.yml', 'collections:\n  - name: https://example.com/coll-1.0.0.tar.gz\n    type: url\n    version: 1.0.0\n', True),
+        ('roles/requirements.yml', '- src: geerlingguy.nginx\n', False),
+        ('roles/requirements.yml', '- src: https://git.example.com/ns/role.git\n  scm: git\n  version: main\n', True),
+        ('roles/requirements.yml', '- src: https://git.example.com/ns/role.git\n  scm: git\n', True),
+        ('roles/requirements.yml', f'- name: https://git.example.com/ns/role.git\n  scm: git\n  version: {SHA}\n', False),
+        ('roles/requirements.yml', f'- src: https://git.example.com/ns/role.git\n  scm: git\n  version: {SHA}\n', False),
+        ('roles/requirements.yml', f'- git+https://git.example.com/ns/role.git,{SHA}\n', False),
+        ('roles/requirements.yml', '- git+https://git.example.com/ns/role.git,main\n', True),
+        ('roles/requirements.yml', '- src: git@git.example.com:ns/role.git\n', True),
+        # an included file is not read, so it may hold a git requirement on a branch
+        ('roles/requirements.yml', '- include: more.yml\n', True),
+    ],
+)
+def test_requirements_that_change_without_the_project(tmp_path, relpath, content, mutable):
+    write(tmp_path, relpath, content)
+    assert bool(requirements_cache_key.compute_mutable(str(tmp_path), FILES)) is mutable
+
+
+def test_mutable_ignores_missing_and_unparsable_files(tmp_path):
+    assert requirements_cache_key.compute_mutable(str(tmp_path), FILES) is None
+    write(tmp_path, 'requirements.yml', 'collections: [unclosed\n')
+    assert requirements_cache_key.compute_mutable(str(tmp_path), FILES) is None
+
+
+def test_mutable_ignores_a_kind_that_is_not_installed(tmp_path):
+    write(tmp_path, 'requirements.yml', 'collections:\n  - name: https://git.example.com/ns/coll.git\n    type: git\n')
+    assert requirements_cache_key.compute_mutable(str(tmp_path), FILES, kinds=('role',)) is None
+    assert requirements_cache_key.compute_mutable(str(tmp_path), FILES, kinds=('collection',))
