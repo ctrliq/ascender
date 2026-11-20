@@ -406,10 +406,17 @@ Microsoft Azure Key Vault
 When **Microsoft Azure Key Vault** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
 
 - **Vault URL (DNS Name)** (required): provide the URL used for communicating with MS Azure's key management system
-- **Client ID** (required): provide the identifier as obtained by the Azure Active Directory
-- **Client Secret** (required): provide the secret as obtained by the Azure Active Directory
-- **Tenant ID** (required): provide the unique identifier that is associated with an Azure Active Directory instance within an Azure subscription
-- **Cloud Environment**: select the applicable cloud environment to apply
+- **Client ID**: the application (client) ID of the identity to authenticate as. Required with a **Client Secret**. Without one, the client ID of the user-assigned managed identity or workload identity to use; leave it blank to use the default identity of the environment
+- **Client Secret**: the secret of an application registered in Microsoft Entra ID. Leave it blank to authenticate with Azure Workload Identity or Managed Identity instead
+- **Tenant ID**: the ID of the Microsoft Entra ID tenant the application belongs to. Required with a **Client Secret**
+- **Cloud Environment**: select the applicable cloud environment to apply. Used with a **Client Secret** only
+
+Without a **Client Secret**, Ascender authenticates as the Azure identity of the environment it runs in. Lookups run in the control plane, not in the job's execution environment, so the identity must be available to the Ascender task pods:
+
+- **Azure Workload Identity** (AKS): label the pods ``azure.workload.identity/use: "true"`` and annotate their service account with ``azure.workload.identity/client-id``. The tenant and authority host come from the environment the webhook injects. To use a different identity than the annotated one, give it a federated credential for the same service account and set its client ID in **Client ID**.
+- **Managed Identity** (Azure VMs and other Azure hosts): leave **Client ID** blank for the system-assigned identity, or set the client ID of a user-assigned identity.
+
+Either way, grant the identity read access to the secrets, for example the **Key Vault Secrets User** role.
 
 Below shows an example of a configured Microsoft Azure KMS credential.
 

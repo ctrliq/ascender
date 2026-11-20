@@ -55,6 +55,141 @@ def test_azure_authority_hosts_match_the_sdk():
     assert azure_kv.AUTHORITY_HOSTS['AzureUSGovernment'] == AzureAuthorityHosts.AZURE_GOVERNMENT
 
 
+AZURE_KV_URL = 'https://example.vault.azure.net'
+
+
+def test_azure_backend_client_secret_unchanged():
+    """A credential with Client ID, Client Secret and Tenant ID, as every
+    credential had to have before Managed Identity support, authenticates with
+    the client secret exactly as before."""
+    from ascender.main.credential_plugins import azure_kv
+
+    kwargs = {'tenant': 't', 'client': 'c', 'secret': 's', 'url': AZURE_KV_URL, 'secret_field': 'foo', 'secret_version': 'v1'}
+    with (
+        mock.patch('azure.identity.ClientSecretCredential') as csc,
+        mock.patch('azure.identity.ManagedIdentityCredential') as mic,
+        mock.patch('azure.keyvault.secrets.SecretClient') as sc,
+    ):
+        sc.return_value.get_secret.return_value.value = 'the-secret'
+        assert azure_kv.azure_keyvault_backend(**kwargs) == 'the-secret'
+    csc.assert_called_once_with(tenant_id='t', client_id='c', client_secret='s', authority='login.microsoftonline.com')
+    sc.assert_called_once_with(credential=csc.return_value, vault_url=AZURE_KV_URL)
+    sc.return_value.get_secret.assert_called_once_with(name='foo', version='v1')
+    mic.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    'missing, message',
+    [
+        (('tenant',), 'Tenant ID must be set'),
+        (('client',), 'Client ID must be set'),
+        (('client', 'tenant'), 'Client ID and Tenant ID must be set'),
+    ],
+)
+def test_azure_backend_client_secret_requires_client_and_tenant(missing, message):
+    from ascender.main.credential_plugins import azure_kv
+
+    kwargs = {'tenant': 't', 'client': 'c', 'secret': 's', 'url': AZURE_KV_URL, 'secret_field': 'foo'}
+    for field in missing:
+        kwargs[field] = ''
+    with mock.patch('azure.identity.ManagedIdentityCredential') as mic, pytest.raises(ValueError, match=message):
+        azure_kv.azure_keyvault_backend(**kwargs)
+    mic.assert_not_called()
+
+
+def test_azure_inputs_require_only_url_and_secret_field():
+    from ascender.main.credential_plugins import azure_kv
+
+    assert azure_kv.azure_keyvault_inputs['required'] == ['url', 'secret_field']
+
+
+@pytest.fixture
+def azure_workload_identity_env(tmp_path, monkeypatch):
+    """The environment the Azure Workload Identity webhook gives a pod."""
+    token_file = tmp_path / 'azure-identity-token'
+    token_file.write_text('fake-jwt')
+    for var in ('IDENTITY_ENDPOINT', 'IDENTITY_HEADER', 'IMDS_ENDPOINT', 'MSI_ENDPOINT', 'MSI_SECRET'):
+        monkeypatch.delenv(var, raising=False)
+    monkeypatch.setenv('AZURE_AUTHORITY_HOST', 'https://login.microsoftonline.com/')
+    monkeypatch.setenv('AZURE_TENANT_ID', 'env-tenant')
+    monkeypatch.setenv('AZURE_CLIENT_ID', 'env-client')
+    monkeypatch.setenv('AZURE_FEDERATED_TOKEN_FILE', str(token_file))
+    return token_file
+
+
+@pytest.mark.parametrize(
+    'client, expected_client_id',
+    [
+        ('', 'env-client'),  # no Client ID: the identity in AZURE_CLIENT_ID
+        ('kv-reader', 'kv-reader'),  # an explicit Client ID overrides AZURE_CLIENT_ID
+    ],
+)
+def test_azure_backend_workload_identity(azure_workload_identity_env, client, expected_client_id):
+    from ascender.main.credential_plugins import azure_kv
+
+    kwargs = {'client': client, 'secret': '', 'tenant': '', 'url': AZURE_KV_URL, 'secret_field': 'foo'}
+    # ManagedIdentityCredential is real: it has to pick Workload Identity from
+    # the environment, which is the behaviour under test
+    with mock.patch('azure.identity._credentials.workload_identity.WorkloadIdentityCredential') as wic, mock.patch('azure.keyvault.secrets.SecretClient') as sc:
+        sc.return_value.get_secret.return_value.value = 'the-secret'
+        assert azure_kv.azure_keyvault_backend(**kwargs) == 'the-secret'
+    wic.assert_called_once_with(tenant_id='env-tenant', client_id=expected_client_id, token_file_path=str(azure_workload_identity_env))
+    sc.return_value.get_secret.assert_called_once_with(name='foo', version='')
+
+
+def test_azure_backend_workload_identity_without_any_client_id(azure_workload_identity_env, monkeypatch):
+    from ascender.main.credential_plugins import azure_kv
+
+    monkeypatch.delenv('AZURE_CLIENT_ID')
+    with pytest.raises(RuntimeError, match='Workload Identity needs a Client ID'):
+        azure_kv.azure_keyvault_backend(url=AZURE_KV_URL, secret_field='foo')
+
+
+def _azure_backend_failing_with(error, **kwargs):
+    from ascender.main.credential_plugins import azure_kv
+
+    with mock.patch('azure.identity.ManagedIdentityCredential'), mock.patch('azure.keyvault.secrets.SecretClient') as sc:
+        sc.return_value.get_secret.side_effect = error
+        azure_kv.azure_keyvault_backend(url=AZURE_KV_URL, secret_field='foo', **kwargs)
+
+
+def test_azure_backend_managed_identity_unavailable():
+    from azure.identity import CredentialUnavailableError
+
+    with pytest.raises(RuntimeError, match='No Workload Identity or Managed Identity is available'):
+        _azure_backend_failing_with(CredentialUnavailableError('no identity'))
+
+
+def test_azure_backend_managed_identity_authentication_failure():
+    from azure.core.exceptions import ClientAuthenticationError
+
+    with pytest.raises(RuntimeError, match='Could not authenticate to Azure Key Vault as identity kv-reader: AADSTS700016'):
+        _azure_backend_failing_with(ClientAuthenticationError('AADSTS700016'), client='kv-reader')
+
+
+@pytest.mark.parametrize(
+    'client, identity',
+    [
+        ('kv-reader', 'identity kv-reader'),
+        ('', 'the default identity of the environment'),
+    ],
+)
+def test_azure_backend_managed_identity_access_denied(client, identity):
+    from azure.core.exceptions import HttpResponseError
+
+    error = HttpResponseError('Forbidden')
+    error.status_code = 403
+    with pytest.raises(RuntimeError, match=f'Azure Key Vault denied access to {identity}'):
+        _azure_backend_failing_with(error, client=client)
+
+
+def test_azure_backend_managed_identity_other_errors_pass_through():
+    from azure.core.exceptions import ResourceNotFoundError
+
+    with pytest.raises(ResourceNotFoundError):
+        _azure_backend_failing_with(ResourceNotFoundError('SecretNotFound'), client='kv-reader')
+
+
 AWS_SM_METADATA = {'region_name': 'us-west-2', 'secret_name': 'some/secret'}
 AWS_ACCESS_KEY, AWS_SECRET_KEY = 'AKIAIOSFODNN7EXAMPLE', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
 
