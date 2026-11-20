@@ -206,12 +206,18 @@ function App() {
     });
   }, [language, pseudolocalization]);
 
-  const redirectURL = window.sessionStorage.getItem(SESSION_REDIRECT_URL);
-  if (redirectURL) {
+  // Restore the page saved before the SSO round trip. React Router ignores
+  // navigate() during render, so this must run in an effect.
+  useEffect(() => {
+    const redirectURL = window.sessionStorage.getItem(SESSION_REDIRECT_URL);
+    if (!redirectURL) {
+      return;
+    }
     window.sessionStorage.removeItem(SESSION_REDIRECT_URL);
-    if (redirectURL !== '/' && redirectURL !== '/home')
+    if (redirectURL !== '/' && redirectURL !== '/home') {
       navigate(redirectURL, { replace: true });
-  }
+    }
+  }, [navigate]);
 
   if (isLoading) {
     return (
