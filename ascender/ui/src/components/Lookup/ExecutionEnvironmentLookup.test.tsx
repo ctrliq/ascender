@@ -63,7 +63,7 @@ describe('ExecutionEnvironmentLookup', () => {
       await screen.findByText('Execution Environment')
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+      screen.queryByRole('checkbox', { name: 'Prompt on Launch' })
     ).not.toBeInTheDocument();
   });
 
@@ -149,7 +149,7 @@ describe('ExecutionEnvironmentLookup', () => {
       </FormRoot>
     );
     expect(
-      await screen.findByRole('checkbox', { name: 'Prompt on launch' })
+      await screen.findByRole('checkbox', { name: 'Prompt on Launch' })
     ).toBeInTheDocument();
   });
 });

@@ -45,7 +45,7 @@ function LDAPEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options = {} } = useSettings();
-  const category = useMatch('/settings/ldap/:category/edit')?.params
+  const category = useMatch('/authentication/ldap/:category/edit')?.params
     ?.category as string;
   const ldapCategory =
     category === 'default' ? 'AUTH_LDAP_' : `AUTH_LDAP_${category}_`;
@@ -98,7 +98,7 @@ function LDAPEdit() {
     useCallback(
       async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
-        navigate(`/settings/ldap/${category}/details`);
+        navigate(`/authentication/ldap/${category}/details`);
       },
       [navigate, category]
     ),
@@ -147,7 +147,7 @@ function LDAPEdit() {
   };
 
   const handleCancel = () => {
-    navigate(`/settings/ldap/${category}/details`);
+    navigate(`/authentication/ldap/${category}/details`);
   };
 
   const initialValues = (fields: Record<string, SettingConfig>) =>

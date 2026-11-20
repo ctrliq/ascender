@@ -17,6 +17,38 @@ export default function LaunchedByDetail({
 }: LaunchedByDetailProps) {
   const { t } = useLingui();
 
+  /*
+   * A run nobody launched by hand, such as the project sync a job starts
+   * before it runs, has no user or schedule behind it; the API names what
+   * started it in launched_by instead, which reads better than an empty
+   * detail. The generated schema types that field as a string, but the
+   * serializer returns the resource's id, name and type.
+   */
+  const getLaunchingResource = (): { link?: string; value?: string } => {
+    // Only for the runs another run starts on its own behalf. A job a
+    // workflow ran keeps its detail hidden, as it always has.
+    const launchedBy = (job as { launched_by?: unknown }).launched_by;
+    if (
+      !['sync', 'dependency', 'scm'].includes(job.launch_type ?? '') ||
+      !launchedBy ||
+      typeof launchedBy !== 'object'
+    ) {
+      return {};
+    }
+    const { id, name, type } = launchedBy as {
+      id?: number;
+      name?: string;
+      type?: string;
+    };
+    const paths: Record<string, string> = {
+      user: `/users/${id}/details`,
+      project: `/projects/${id}/details`,
+      job_template: `/templates/job_template/${id}/details`,
+      workflow_job_template: `/templates/workflow_job_template/${id}/details`,
+    };
+    return { link: (type && paths[type]) || undefined, value: name };
+  };
+
   const getLaunchedByDetails = () => {
     const {
       created_by: createdBy,
@@ -26,7 +58,7 @@ export default function LaunchedByDetail({
     } = job.summary_fields ?? ({} as SummaryFields);
 
     if (!createdBy && !schedule) {
-      return {};
+      return getLaunchingResource();
     }
 
     let link;

@@ -11,7 +11,6 @@ import {
   ProgressSize,
   CodeBlock,
   CodeBlockCode,
-  Tooltip,
   Slider,
 } from '@patternfly/react-core';
 import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons';
@@ -37,6 +36,8 @@ import useRequest, {
   useDismissableError,
 } from 'hooks/useRequest';
 import './InstanceDetails.css';
+import Tooltip from 'components/Tooltip';
+import { DEFAULT_QUEUE_NAMES } from '../shared/queueNames';
 
 /**
  * How many forks an instance offers at the capacity it is set to, which is the
@@ -58,12 +59,18 @@ function computeForks(
 export interface InstanceDetailsProps {
   setBreadcrumb: SetBreadcrumb;
   instanceGroup: InstanceGroup;
+  /**
+   * The group a hybrid node may not leave, by the name the api's
+   * DEFAULT_CONTROL_PLANE_QUEUE_NAME setting gives it.
+   */
+  controlPlaneName?: string;
   [key: string]: unknown;
 }
 
 function InstanceDetails({
   setBreadcrumb,
   instanceGroup,
+  controlPlaneName = DEFAULT_QUEUE_NAMES.controlPlane,
 }: InstanceDetailsProps) {
   const { t } = useLingui();
   const config = useConfig();
@@ -84,15 +91,26 @@ function InstanceDetails({
     isLoading,
     error: contentError,
     request: fetchDetails,
-    result: { instance },
+    result: { instance, canAdminGroup },
   } = useRequest(
     useCallback(async () => {
-      const {
-        data: { results },
-      } = await InstanceGroupsAPI.readInstances(instanceGroup.id);
+      // Asked of this one instance rather than read off the group's first
+      // page, which left an instance further down reported as unassociated.
+      const [
+        {
+          data: { results },
+        },
+        { data: options },
+      ] = await Promise.all([
+        InstanceGroupsAPI.readInstances(instanceGroup.id, { id: instanceId }),
+        InstanceGroupsAPI.readInstanceOptions(instanceGroup.id),
+      ]);
       const isAssociated = results.some(
         ({ id: instId }) => instId === parseInt(instanceId, 10)
       );
+      // The api offers POST on the group's instances to an admin of the
+      // group, the same role it asks of taking an instance out of it.
+      const canAdmin = Boolean(options?.actions?.POST);
 
       if (isAssociated) {
         const { data: details } = await InstancesAPI.readDetail(instanceId);
@@ -109,13 +127,13 @@ function InstanceDetails({
             Number(details.capacity_adjustment)
           )
         );
-        return { instance: details };
+        return { instance: details, canAdminGroup: canAdmin };
       }
       throw new Error(
         `This instance is not associated with this instance group`
       );
     }, [instanceId, setBreadcrumb, instanceGroup]),
-    { instance: {}, isLoading: true }
+    { instance: {}, canAdminGroup: false, isLoading: true }
   );
   useEffect(() => {
     fetchDetails();
@@ -290,13 +308,13 @@ function InstanceDetails({
             value={
               instance.enabled ? (
                 <Progress
-                  title={t`Used capacity`}
+                  title={t`Used Capacity`}
                   value={Math.round(
                     100 - Number(instance.percent_capacity_remaining)
                   )}
                   measureLocation={ProgressMeasureLocation.top}
                   size={ProgressSize.sm}
-                  aria-label={t`Used capacity`}
+                  aria-label={t`Used Capacity`}
                 />
               ) : (
                 <span className="ascender-instance-details__unavailable">{t`Unavailable`}</span>
@@ -316,33 +334,39 @@ function InstanceDetails({
           )}
         </DetailList>
         <CardActionsRow>
-          {isExecutionNode && (
-            <Tooltip content={t`Run a health check on the instance`}>
+          {/* The api runs a health check on any execution node for a
+              superuser, managed or not: managed only stops deletion. Anyone
+              else is not offered it at all, as on the lists, rather than
+              shown a button that can never be pressed. */}
+          {isExecutionNode && config?.me?.is_superuser && (
+            <Tooltip content={t`Run Health Check`}>
               <Button
-                isDisabled={
-                  !config?.me?.is_superuser ||
-                  Boolean(instance.health_check_pending)
-                }
+                isDisabled={Boolean(instance.health_check_pending)}
                 variant="primary"
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
                 isLoading={Boolean(instance.health_check_pending)}
-                spinnerAriaLabel={t`Running health check`}
+                spinnerAriaLabel={t`Running Health Check`}
               >
                 {instance.health_check_pending
-                  ? t`Running health check`
-                  : t`Run health check`}
+                  ? t`Running Health Check`
+                  : t`Run Health Check`}
               </Button>
             </Tooltip>
           )}
-          {config?.me?.is_superuser && instance.node_type !== 'control' && (
+          {canAdminGroup && instance.node_type !== 'control' && (
             <DisassociateButton
-              verifyCannotDisassociate={instanceGroup.name === 'controlplane'}
+              verifyCannotDisassociate={false}
+              cannotDisassociateReason={(item) =>
+                instanceGroup.name === controlPlaneName &&
+                item.node_type === 'hybrid'
+                  ? t`Hybrid nodes cannot be disassociated from ${controlPlaneName}`
+                  : null
+              }
               key="disassociate"
               onDisassociate={disassociateInstance}
               itemsToDisassociate={[instance]}
-              isProtectedInstanceGroup={instanceGroup.name === 'controlplane'}
-              modalTitle={t`Disassociate instance from instance group?`}
+              modalTitle={t`Disassociate this instance from the instance group?`}
               modalNote={
                 instance.managed_by_policy ? (
                   <Trans>
@@ -371,9 +395,11 @@ function InstanceDetails({
             title={t`Error!`}
             variant="error"
           >
-            {updateInstanceError
-              ? t`Failed to update capacity adjustment.`
-              : t`Failed to disassociate one or more instances.`}
+            {Boolean(updateInstanceError) &&
+              t`Failed to update capacity adjustment.`}
+            {Boolean(disassociateError) &&
+              t`Failed to disassociate the instance.`}
+            {Boolean(healthCheckError) && t`Failed to run a health check.`}
             <ErrorDetail error={error} />
           </AlertModal>
         )}

@@ -1,5 +1,5 @@
 import type { OAuth2Token } from 'types/api';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -17,6 +17,8 @@ import { UsersAPI, TokensAPI } from 'api';
 import DataListToolbar from 'components/DataListToolbar';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import { useConfig } from 'contexts/Config';
+import { withDeleteCapability } from '../shared/canDeleteToken';
 import UserTokensListItem from './UserTokenListItem';
 
 /**
@@ -34,12 +36,18 @@ function UserTokenList() {
   const { t } = useLingui();
   const location = useLocation();
   const { id } = useParams() as { id: string };
+  const { me, adminOrgCount } = useConfig();
 
   const {
     error,
     isLoading,
     request: fetchTokens,
-    result: { tokens, itemCount, relatedSearchableKeys, searchableKeys },
+    result: {
+      tokens: readTokens,
+      itemCount,
+      relatedSearchableKeys,
+      searchableKeys,
+    },
   } = useCachedRequest(
     ['user-token-list', id, location.search],
     useCallback(async () => {
@@ -53,12 +61,12 @@ function UserTokenList() {
         UsersAPI.readTokens(id, params),
         UsersAPI.readTokenOptions(id),
       ]);
+      // Whether each may be deleted is worked out below, as the list renders.
       const modifiedResults: NamedToken[] = results.map((result) => ({
         ...result,
         summary_fields: {
           user: result.summary_fields.user,
           application: result.summary_fields.application,
-          user_capabilities: { delete: true },
         },
         name: result.summary_fields.application?.name as string | undefined,
       }));
@@ -72,6 +80,17 @@ function UserTokenList() {
       };
     }, [id, location.search]),
     { tokens: [], itemCount: 0, relatedSearchableKeys: [], searchableKeys: [] }
+  );
+
+  /*
+   * Worked out as the list renders rather than inside the read, which is
+   * cached by the list's address: a sign in as someone else, or a change in
+   * which organizations they administer, is answered at once.
+   */
+  const tokens = useMemo(
+    () =>
+      withDeleteCapability(readTokens, me, adminOrgCount as number | undefined),
+    [readTokens, me, adminOrgCount]
   );
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
@@ -101,9 +120,16 @@ function UserTokenList() {
     clearSelected();
   };
 
-  const canAdd = true;
+  /*
+   * A token is always made for the person asking for it, whoever's list they
+   * are on, so Add is offered only on the viewer's own tokens.
+   */
+  const canAdd = me?.id !== undefined && String(me.id) === String(id);
 
-  const modifiedSelected = selected.map((item) => {
+  // A ticked token as the list now has it, so the delete button weighs the
+  // capability of the current render rather than the one it was ticked under.
+  const modifiedSelected = selected.map((ticked) => {
+    const item = tokens.find((token) => token.id === ticked.id) ?? ticked;
     if (item.application === null) {
       return {
         ...item,
@@ -120,12 +146,12 @@ function UserTokenList() {
         hasContentLoading={isLoading || isDeleteLoading}
         items={tokens}
         itemCount={itemCount}
-        pluralizedItemName={t`Tokens`}
+        pluralizedItemName={t`User Tokens`}
         qsConfig={QS_CONFIG}
         clearSelected={clearSelected}
         toolbarSearchColumns={[
           {
-            name: t`Application name`,
+            name: t`Application Name`,
             key: 'application__name__icontains',
             isDefault: true,
           },
@@ -136,7 +162,7 @@ function UserTokenList() {
         ]}
         toolbarSortColumns={[
           {
-            name: t`Application name`,
+            name: t`Application Name`,
             key: 'application__name',
           },
           {
@@ -172,6 +198,7 @@ function UserTokenList() {
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      tooltip={t`Add Token`}
                       key="add"
                       linkTo={`${location.pathname}/add`}
                     />,
@@ -182,7 +209,7 @@ function UserTokenList() {
                 key="delete"
                 onDelete={handleDelete}
                 itemsToDelete={modifiedSelected}
-                pluralizedItemName={t`User tokens`}
+                pluralizedItemName={t`User Tokens`}
               />,
             ]}
           />
@@ -208,16 +235,11 @@ function UserTokenList() {
             rowIndex={index}
           />
         )}
-        emptyStateControls={
-          canAdd ? (
-            <ToolbarAddButton key="add" linkTo={`${location.pathname}/add`} />
-          ) : null
-        }
       />
       {Boolean(deletionError) && (
         <AlertModal
           isOpen={Boolean(deletionError)}
-          variant="danger"
+          variant="error"
           title={t`Error!`}
           onClose={clearDeletionError}
         >

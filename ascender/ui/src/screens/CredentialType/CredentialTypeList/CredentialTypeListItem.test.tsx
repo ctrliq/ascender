@@ -37,7 +37,7 @@ describe('<CredentialTypeListItem/>', () => {
   test('should render the proper data', () => {
     renderItem();
     expect(screen.getByText('Foo')).toBeInTheDocument();
-    expect(screen.getByLabelText('Edit credential type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit Credential Type')).toBeInTheDocument();
     expect(
       screen.getByRole('checkbox', { name: 'Select row 0' })
     ).not.toBeChecked();
@@ -45,7 +45,7 @@ describe('<CredentialTypeListItem/>', () => {
 
   test('edit button shown to users with edit capabilities', () => {
     renderItem({ isSelected: true });
-    expect(screen.getByLabelText('Edit credential type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit Credential Type')).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
@@ -57,7 +57,7 @@ describe('<CredentialTypeListItem/>', () => {
       isSelected: true,
     });
     expect(
-      screen.queryByLabelText('Edit credential type')
+      screen.queryByLabelText('Edit Credential Type')
     ).not.toBeInTheDocument();
   });
 });

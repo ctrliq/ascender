@@ -1,3 +1,4 @@
+import type { OptionsResponse } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -18,9 +19,14 @@ const inventoryWithOrg = {
   },
 };
 
-describe('<SmartInventoryForm />', () => {
+describe('<SmartInventoryForm options={formOptions} />', () => {
   const onSubmit = vi.fn();
   const onCancel = vi.fn();
+
+  /** What the screen reads and hands the form, in place of it reading. */
+  const formOptions = {
+    actions: { POST: true },
+  } as unknown as OptionsResponse;
 
   beforeEach(() => {
     // NOTE: the auto-mock shares prototype methods across API instances, so
@@ -48,7 +54,7 @@ describe('<SmartInventoryForm />', () => {
   // re-renders after InventoriesAPI.readOptions resolves with the POST
   // capability. Wait for the loaded state (Save enabled) before asserting.
   async function settleForm() {
-    await screen.findByText('Smart host filter');
+    await screen.findByText('Smart Host Filter');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'Save' })).not.toBeDisabled()
     );
@@ -56,7 +62,11 @@ describe('<SmartInventoryForm />', () => {
 
   test('should enable save button when user has POST capability', async () => {
     renderWithContexts(
-      <SmartInventoryForm onCancel={onCancel} onSubmit={onSubmit} />
+      <SmartInventoryForm
+        options={formOptions}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+      />
     );
 
     await settleForm();
@@ -65,14 +75,18 @@ describe('<SmartInventoryForm />', () => {
 
   test('should show expected form fields', async () => {
     renderWithContexts(
-      <SmartInventoryForm onCancel={onCancel} onSubmit={onSubmit} />
+      <SmartInventoryForm
+        options={formOptions}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+      />
     );
     await settleForm();
 
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(screen.getByText('Organization')).toBeInTheDocument();
-    expect(screen.getByText('Smart host filter')).toBeInTheDocument();
+    expect(screen.getByText('Smart Host Filter')).toBeInTheDocument();
     expect(screen.getByText('Instance Groups')).toBeInTheDocument();
     expect(screen.getByText('Variables')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
@@ -87,16 +101,29 @@ describe('<SmartInventoryForm />', () => {
   // query that button to read the enabled/disabled signal.
   test('should disable host filter field when organization has no value', async () => {
     const { container } = renderWithContexts(
-      <SmartInventoryForm onCancel={onCancel} onSubmit={onSubmit} />
+      <SmartInventoryForm
+        options={formOptions}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+      />
     );
     await settleForm();
 
     expect(container.querySelector('#host-filter')).toBeDisabled();
+    // Disabled or not, the field is a lookup like the others: a chip holder
+    // that fills the row, in the disabled form-control style, rather than an
+    // unfilled box collapsed to its borders.
+    const holder = container.querySelector(
+      '.ascender-host-filter-lookup__chip-holder'
+    );
+    expect(holder).toHaveClass('ascender-lookup__chip-holder', 'pf-m-disabled');
+    expect(holder?.parentElement).toHaveClass('pf-m-fill');
   });
 
   test('should enable host filter field when organization has a value', async () => {
     const { container } = renderWithContexts(
       <SmartInventoryForm
+        options={formOptions}
         inventory={inventoryWithOrg}
         onCancel={onCancel}
         onSubmit={onSubmit}
@@ -105,6 +132,9 @@ describe('<SmartInventoryForm />', () => {
     await settleForm();
 
     expect(container.querySelector('#host-filter')).not.toBeDisabled();
+    expect(
+      container.querySelector('.ascender-host-filter-lookup__chip-holder')
+    ).not.toHaveClass('pf-m-disabled');
   });
 
   test('should show error when form is saved without a host filter value', async () => {
@@ -112,6 +142,7 @@ describe('<SmartInventoryForm />', () => {
     // proceed to validation; host_filter starts blank so required() fails.
     const { user, container } = renderWithContexts(
       <SmartInventoryForm
+        options={formOptions}
         inventory={inventoryWithOrg}
         onCancel={onCancel}
         onSubmit={onSubmit}
@@ -143,10 +174,14 @@ describe('<SmartInventoryForm />', () => {
       ],
     });
     renderWithContexts(
-      <SmartInventoryForm onCancel={onCancel} onSubmit={onSubmit} />,
+      <SmartInventoryForm
+        options={formOptions}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+      />,
       { context: { router: { history } } }
     );
-    await screen.findByText('Smart host filter');
+    await screen.findByText('Smart Host Filter');
 
     expect(screen.getByText('foo')).toBeInTheDocument();
   });
@@ -159,6 +194,7 @@ describe('<SmartInventoryForm />', () => {
     });
     const { user, container } = renderWithContexts(
       <SmartInventoryForm
+        options={formOptions}
         inventory={inventoryWithOrg}
         onCancel={onCancel}
         onSubmit={onSubmit}
@@ -178,20 +214,6 @@ describe('<SmartInventoryForm />', () => {
     expect(submitted.name).toBe('new smart inventory');
   });
 
-  test('should throw content error when options request fails', async () => {
-    // readOptions is the shared mock; when it rejects the form short-circuits
-    // to ContentError before any lookup mounts, so the lookups never call it.
-    // A blanket reject (not ...Once) reliably fails the form's own request.
-    vi.mocked(InventoriesAPI.readOptions).mockRejectedValue(new Error());
-    renderWithContexts(
-      <SmartInventoryForm onCancel={onCancel} onSubmit={onSubmit} />
-    );
-
-    expect(
-      await screen.findByText('Something went wrong...')
-    ).toBeInTheDocument();
-  });
-
   test('should render FormSubmitError when submitError prop is passed', async () => {
     const error = {
       response: {
@@ -200,12 +222,13 @@ describe('<SmartInventoryForm />', () => {
     };
     renderWithContexts(
       <SmartInventoryForm
+        options={formOptions}
         submitError={error}
         onCancel={onCancel}
         onSubmit={onSubmit}
       />
     );
-    await screen.findByText('Smart host filter');
+    await screen.findByText('Smart Host Filter');
 
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });

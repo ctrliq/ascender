@@ -48,6 +48,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
     job_type,
     limit,
     playbook,
+    prevent_instance_group_fallback,
     related,
     scm_branch,
     skip_tags,
@@ -64,7 +65,8 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
     host_config_key ||
     allow_simultaneous ||
     use_fact_cache ||
-    webhook_service
+    webhook_service ||
+    prevent_instance_group_fallback
   ) {
     optionsList = (
       <Content component={ContentVariants.ul}>
@@ -78,14 +80,21 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
             {t`Provisioning Callbacks`}
           </Content>
         )}
+        {webhook_service && (
+          <Content component={ContentVariants.li}>{t`Enable Webhook`}</Content>
+        )}
         {allow_simultaneous && (
           <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
         )}
         {use_fact_cache && (
-          <Content component={ContentVariants.li}>{t`Fact Storage`}</Content>
+          <Content component={ContentVariants.li}>
+            {t`Enable Fact Storage`}
+          </Content>
         )}
-        {webhook_service && (
-          <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
+        {prevent_instance_group_fallback && (
+          <Content component={ContentVariants.li}>
+            {t`Prevent Instance Group Fallback`}
+          </Content>
         )}
       </Content>
     );
@@ -163,7 +172,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
       {typeof diff_mode === 'boolean' && (
         <Detail label={t`Show Changes`} value={diff_mode ? t`On` : t`Off`} />
       )}
-      <Detail label={t` Job Slicing`} value={job_slice_count} />
+      <Detail label={t`Job Slicing`} value={job_slice_count} />
       <Detail label={t`Host Config Key`} value={host_config_key} />
       {related?.callback && (
         <Detail
@@ -192,7 +201,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
           }
         />
       )}
-      {optionsList && <Detail label={t`Enabled Options`} value={optionsList} />}
+      {optionsList && <Detail label={t`Options`} value={optionsList} />}
       {summary_fields?.credentials && (
         <Detail
           fullWidth
@@ -292,7 +301,6 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
       {extra_vars && (
         <VariablesDetail
           label={t`Variables`}
-          rows={4}
           value={extra_vars}
           name="extra_vars"
           dataCy="prompt-jt-detail-extra-vars"

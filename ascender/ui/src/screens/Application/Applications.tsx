@@ -21,7 +21,7 @@ function Applications() {
   const [applicationModalSource, setApplicationModalSource] =
     useState<OAuth2Application | null>(null);
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    '/applications': t`Applications`,
+    '/applications': t`API Applications`,
     '/applications/add': t`Create New Application`,
   });
 
@@ -31,12 +31,12 @@ function Applications() {
         return;
       }
       setBreadcrumbConfig({
-        '/applications': t`Applications`,
+        '/applications': t`API Applications`,
         '/applications/add': t`Create New Application`,
         [`/applications/${application.id}`]: `${application.name}`,
-        [`/applications/${application.id}/edit`]: t`Edit Details`,
-        [`/applications/${application.id}/details`]: t`Details`,
-        [`/applications/${application.id}/tokens`]: t`Tokens`,
+        [`/applications/${application.id}/edit`]: t`Edit ${application.name}`,
+        [`/applications/${application.id}/details`]: `${application.name}`,
+        [`/applications/${application.id}/tokens`]: `${application.name}`,
       });
     },
     [t]
@@ -73,10 +73,10 @@ function Applications() {
       </Routes>
       {applicationModalSource && (
         <Modal
-          aria-label={t`Application information`}
+          aria-label={t`Application Information`}
           isOpen
           variant="medium"
-          title={t`Application information`}
+          title={t`Application Information`}
           onClose={() => setApplicationModalSource(null)}
         >
           {applicationModalSource.client_secret && (
@@ -104,7 +104,7 @@ function Applications() {
             )}
             {applicationModalSource.client_secret && (
               <Detail
-                label={t`Client secret`}
+                label={t`Client Secret`}
                 value={
                   <ClipboardCopy
                     isReadOnly

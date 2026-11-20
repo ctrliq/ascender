@@ -8,25 +8,30 @@ import ManagementJob from './ManagementJob';
 import ManagementJobList from './ManagementJobList';
 
 function ManagementJobs() {
-  const basePath = '/management_jobs';
+  const basePath = '/cleanup_jobs';
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
-    [basePath]: t`Management jobs`,
+    [basePath]: t`Cleanup Jobs`,
   });
 
   const buildBreadcrumbConfig = useCallback(
     ({ id, name }: BreadcrumbResource = {}, nested?: BreadcrumbResource) => {
       if (!id) return;
 
+      // Every tab is titled with the job's own name, as a project's or a
+      // template's are: the tab bar already says which tab is open, and a
+      // title reading "Details" left the page without a name at all.
       setBreadcrumbConfig({
-        [basePath]: t`Management job`,
-        [`${basePath}/${id}`]: name,
-        [`${basePath}/${id}/notifications`]: t`Notifications`,
-        [`${basePath}/${id}/schedules`]: t`Schedules`,
+        [basePath]: t`Cleanup Jobs`,
+        [`${basePath}/${id}`]: `${name}`,
+        [`${basePath}/${id}/details`]: `${name}`,
+        [`${basePath}/${id}/notifications`]: `${name}`,
+        [`${basePath}/${id}/runs`]: `${name}`,
+        [`${basePath}/${id}/schedules`]: `${name}`,
         [`${basePath}/${id}/schedules/add`]: t`Create New Schedule`,
         [`${basePath}/${id}/schedules/${nested?.id}`]: `${nested?.name}`,
-        [`${basePath}/${id}/schedules/${nested?.id}/details`]: t`Details`,
-        [`${basePath}/${id}/schedules/${nested?.id}/edit`]: t`Edit Details`,
+        [`${basePath}/${id}/schedules/${nested?.id}/details`]: `${nested?.name}`,
+        [`${basePath}/${id}/schedules/${nested?.id}/edit`]: t`Edit ${nested?.name}`,
       });
     },
     [t]

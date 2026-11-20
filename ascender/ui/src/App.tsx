@@ -24,7 +24,7 @@ import { ConfigProvider, useUserProfile } from 'contexts/Config';
 import { SessionProvider, useSession } from 'contexts/Session';
 import AppContainer from 'components/AppContainer';
 import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
+import { DelayedContentLoading } from 'components/ContentLoading';
 import NotFound from 'screens/NotFound';
 import Login from 'screens/Login';
 import { isAuthenticated } from 'util/auth';
@@ -64,27 +64,115 @@ const RenderAppContainer = () => {
   );
 };
 
+/*
+ * The addresses each screen answered to before the rail was renamed, and the
+ * one it answers to now. A job output link is the most shared address in the
+ * product, so the old shapes go on working: they land on the new address with
+ * whatever followed them, and the address bar then says the new one.
+ */
+const RENAMED_ROUTES: [string, string][] = [
+  ['/jobs', '/runs'],
+  ['/workflow_approvals', '/approvals'],
+  ['/notification_templates', '/notifications'],
+  ['/management_jobs', '/cleanup_jobs'],
+  // Its name for a while before the rail called these cleanup jobs.
+  ['/data_retention', '/cleanup_jobs'],
+  ['/topology_view', '/topology'],
+  // The container groups, which are a tab beside the instances rather than a
+  // list inside the instance groups.
+  ['/instance_groups/container_group', '/container_groups'],
+  // The settings pages, which the rail names on their own rather than under a
+  // settings heading, so their addresses no longer carry one either. The index
+  // they used to be listed on has gone with the heading: the rail is the list.
+  ['/settings/ui', '/appearance'],
+  ['/settings/miscellaneous_system', '/system'],
+  ['/settings/miscellaneous_authentication', '/authentication/session'],
+  ['/settings/jobs', '/job_settings'],
+  ['/settings/logging', '/logging'],
+  ['/settings/troubleshooting', '/troubleshooting'],
+  ['/settings/azure', '/authentication/azure'],
+  ['/settings/github', '/authentication/github'],
+  ['/settings/google_oauth2', '/authentication/google_oauth2'],
+  ['/settings/ldap', '/authentication/ldap'],
+  ['/settings/oidc', '/authentication/oidc'],
+  ['/settings/saml', '/authentication/saml'],
+  ['/settings', '/appearance'],
+];
+
+/*
+ * Settings pages for sign in methods that have been taken out, RADIUS and
+ * TACACS+. Nothing answers at their addresses any more, and passing the rest
+ * on as a rename does would land on a page with nothing of theirs. The
+ * authentication page is where a bookmark to either was headed, and it lists
+ * the methods that remain. Matched ahead of /settings because the router
+ * ranks the longer address first, not because of their order here.
+ */
+const REMOVED_ROUTES: [string, string][] = [
+  ['/settings/radius', '/authentication'],
+  ['/settings/tacacsplus', '/authentication'],
+];
+
+export interface RenamedRouteProps {
+  from: string;
+  to: string;
+}
+
+/** Sends an old address to its new one, keeping everything that followed it. */
+export function RenamedRoute({ from, to }: RenamedRouteProps) {
+  const { pathname, search, hash } = useLocation();
+  return (
+    <Navigate
+      replace
+      to={`${to}${pathname.slice(from.length)}${search}${hash}`}
+    />
+  );
+}
+
 export interface AuthorizedRoutesProps {
   routeConfig: AppRouteGroup[];
 }
 
-const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => (
-  <Suspense fallback={<ContentLoading />}>
+export const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => (
+  <Suspense fallback={<DelayedContentLoading />}>
     <Routes>
       {routeConfig
         .flatMap(({ routes }) => routes)
-        .map(({ path, screen: Screen }) => (
-          // /* so each screen's own nested <Routes> can match the rest
-          <Route
-            key={path}
-            path={`${path}/*`}
-            element={
-              <ProtectedRoute>
-                <Screen />
-              </ProtectedRoute>
-            }
-          />
-        ))
+        // An entry with no screen is a link in the rail to a page another
+        // route already mounts, the settings pages among them.
+        .filter(({ screen }) => Boolean(screen))
+        .map(({ path, screen }) => {
+          const Screen = screen as React.ComponentType;
+          return (
+            // /* so each screen's own nested <Routes> can match the rest
+            <Route
+              key={path}
+              path={`${path}/*`}
+              element={
+                <ProtectedRoute>
+                  <Screen />
+                </ProtectedRoute>
+              }
+            />
+          );
+        })
+        .concat(
+          RENAMED_ROUTES.map(([from, to]) => (
+            <Route
+              key={from}
+              path={`${from}/*`}
+              element={<RenamedRoute from={from} to={to} />}
+            />
+          ))
+        )
+        .concat(
+          REMOVED_ROUTES.map(([from, to]) => (
+            <Route
+              key={from}
+              path={`${from}/*`}
+              element={<Navigate replace to={to} />}
+            />
+          ))
+        )
         .concat(
           <Route
             key="metrics"
@@ -191,6 +279,10 @@ function App() {
   let language =
     searchParams.lang ||
     localStorage.getItem('preferred_language') ||
+    // The installation's default, mirrored by the Config context. It sits above
+    // the browser so an install can be set to one language for everyone, and
+    // below the account's own choice so it never overrides a person.
+    localStorage.getItem('default_language') ||
     getLanguageWithoutRegionCode(navigator) ||
     'en';
 

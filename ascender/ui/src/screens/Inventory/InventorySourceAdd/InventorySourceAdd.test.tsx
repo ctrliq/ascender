@@ -47,8 +47,27 @@ vi.mock('../shared/InventorySourceForm', () => ({
 }));
 
 describe('<InventorySourceAdd />', () => {
+  /*
+   * The page reads what the form draws with before it renders it, so that the
+   * whole page has one loading state rather than one inside the card.
+   */
+  beforeEach(() => {
+    vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: { source: { choices: [['scm', 'Project']] } } } },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('should show a content error when what the form draws with cannot be read', async () => {
+    vi.mocked(InventorySourcesAPI.readOptions).mockRejectedValue(new Error());
+    renderWithContexts(<InventorySourceAdd inventory={mockInventory} />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
   });
 
   test('initially renders successfully', async () => {

@@ -31,7 +31,7 @@ describe('<HostDetail />', () => {
 
     test('should show edit button for users with edit permission', () => {
       renderWithContexts(<HostDetail host={mockHost as unknown as Host} />);
-      const editButton = screen.getByRole('link', { name: 'edit' });
+      const editButton = screen.getByRole('link', { name: 'Edit' });
       expect(editButton).toHaveTextContent('Edit');
       expect(editButton).toHaveAttribute('href', '/hosts/2/edit');
     });
@@ -97,7 +97,7 @@ describe('<HostDetail />', () => {
     test('should hide edit button for users without edit permission', async () => {
       renderWithContexts(<HostDetail host={readOnlyHost as unknown as Host} />);
       expect(
-        screen.queryByRole('link', { name: 'edit' })
+        screen.queryByRole('link', { name: 'Edit' })
       ).not.toBeInTheDocument();
     });
   });

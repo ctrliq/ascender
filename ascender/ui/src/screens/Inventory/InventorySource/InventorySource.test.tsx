@@ -6,7 +6,12 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
-import { InventoriesAPI, OrganizationsAPI } from 'api';
+import {
+  InventoriesAPI,
+  InventorySourcesAPI,
+  OrganizationsAPI,
+  UnifiedJobsAPI,
+} from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockInventorySourceJson from '../shared/data.inventory_source.json';
@@ -15,6 +20,7 @@ import InventorySource from './InventorySource';
 vi.mock('../../../api/models/Inventories');
 vi.mock('../../../api/models/Organizations');
 vi.mock('../../../api/models/InventorySources');
+vi.mock('../../../api/models/UnifiedJobs');
 
 /** The fixture as the screen takes it, which is what the api sends. */
 const mockInventorySource =
@@ -65,15 +71,16 @@ describe('<InventorySource />', () => {
   test('should render expected tabs', async () => {
     renderInventorySource('/inventories/inventory/2/sources/123/details');
     await screen.findByRole('tab', { name: 'Details' });
-    const expectedTabs = [
+    // The same order as a template's or a project's tabs.
+    expect(
+      screen.getAllByRole('tab').map((tab) => tab.textContent?.trim())
+    ).toEqual([
       'Back to Sources',
       'Details',
-      'Schedules',
       'Notifications',
-    ];
-    expectedTabs.forEach((name) =>
-      expect(screen.getByRole('tab', { name })).toBeInTheDocument()
-    );
+      'Schedules',
+      'Runs',
+    ]);
   });
 
   test('should show content error when api throws error on initial render', async () => {
@@ -106,5 +113,48 @@ describe('<InventorySource />', () => {
     renderInventorySource('/inventories/inventory/2/sources/123/details');
     await screen.findByRole('tab', { name: 'Details' });
     expect(screen.queryByText('Notifications')).not.toBeInTheDocument();
+  });
+
+  describe('runs tab', () => {
+    beforeEach(() => {
+      vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
+        data: { count: 0, results: [] },
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
+      vi.mocked(UnifiedJobsAPI.readOptions).mockResolvedValue({
+        data: { actions: { GET: {} }, related_search_fields: [] },
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.readOptions>);
+      vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
+        data: { actions: { GET: {} } },
+      } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
+    });
+
+    test('offers a sync of this source to whoever may start one', async () => {
+      const { user } = renderInventorySource(
+        '/inventories/inventory/2/sources/123/runs'
+      );
+      const button = await screen.findByRole('button', { name: 'Run' });
+      // Sync Source, as the row and the details of a source say.
+      await user.hover(button);
+      expect(await screen.findByText('Sync Source')).toBeInTheDocument();
+    });
+
+    test('offers no run control, not the general menu, to whoever may not', async () => {
+      vi.mocked(InventoriesAPI.readSourceDetail).mockResolvedValue({
+        ...mockInventorySource,
+        summary_fields: {
+          ...mockInventorySource.summary_fields,
+          user_capabilities: {
+            ...mockInventorySource.summary_fields.user_capabilities,
+            start: false,
+          },
+        },
+      } as InventorySourceModel);
+      renderInventorySource('/inventories/inventory/2/sources/123/runs');
+      await waitFor(() => expect(UnifiedJobsAPI.read).toHaveBeenCalled());
+      await screen.findByRole('tab', { name: 'Runs' });
+      expect(
+        screen.queryByRole('button', { name: 'Run' })
+      ).not.toBeInTheDocument();
+    });
   });
 });

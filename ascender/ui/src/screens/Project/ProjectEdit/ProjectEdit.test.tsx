@@ -114,6 +114,13 @@ vi.mock('../shared/ProjectForm', async () => {
   };
 });
 
+/** What the screen reads and hands down, in place of the form reading it. */
+const formOptions = {
+  scmCredentialTypeId: 4,
+  cryptographyCredentialTypeId: 6,
+  scmTypeChoices: [['git', 'Git']] as [string, string][],
+};
+
 describe('<ProjectEdit />', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -123,7 +130,9 @@ describe('<ProjectEdit />', () => {
     vi.mocked(ProjectsAPI.update).mockResolvedValueOnce({
       data: { ...projectData },
     } as unknown as ResponseOf<typeof ProjectsAPI.update>);
-    const { user } = renderWithContexts(<ProjectEdit project={projectData} />);
+    const { user } = renderWithContexts(
+      <ProjectEdit project={projectData} formOptions={formOptions} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
@@ -141,7 +150,9 @@ describe('<ProjectEdit />', () => {
     vi.mocked(ProjectsAPI.update).mockImplementation(() =>
       Promise.reject(error)
     );
-    const { user } = renderWithContexts(<ProjectEdit project={projectData} />);
+    const { user } = renderWithContexts(
+      <ProjectEdit project={projectData} formOptions={formOptions} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
@@ -151,9 +162,12 @@ describe('<ProjectEdit />', () => {
 
   test('Cancel button should navigate to project details', async () => {
     const history = createMemoryHistory();
-    const { user } = renderWithContexts(<ProjectEdit project={projectData} />, {
-      context: { router: { history } },
-    });
+    const { user } = renderWithContexts(
+      <ProjectEdit project={projectData} formOptions={formOptions} />,
+      {
+        context: { router: { history } },
+      }
+    );
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 

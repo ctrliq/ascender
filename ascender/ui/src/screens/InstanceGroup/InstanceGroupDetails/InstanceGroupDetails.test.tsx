@@ -72,12 +72,12 @@ describe('<InstanceGroupDetails/>', () => {
     );
 
     assertDetail('Name', 'Foo');
-    assertDetail('Type', 'Instance group');
-    assertDetail('Policy instance minimum', '10');
-    assertDetail('Policy instance percentage', '50 %');
+    assertDetail('Type', 'Instance Group');
+    assertDetail('Policy Instance Minimum', '10');
+    assertDetail('Policy Instance Percentage', '50%');
     assertDetail(
-      'Used capacity',
-      `${100 - instanceGroup.percent_capacity_remaining} %`
+      'Used Capacity',
+      `${100 - instanceGroup.percent_capacity_remaining}%`
     );
   });
 

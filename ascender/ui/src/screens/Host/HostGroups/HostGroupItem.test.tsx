@@ -61,4 +61,43 @@ describe('<HostGroupItem />', () => {
       )
     ).not.toBeInTheDocument();
   });
+  /*
+   * A group of a constructed or federated inventory opens under that kind of
+   * inventory, where the app looks for it, not under a plain one.
+   */
+  test.each([
+    ['', '/inventories/inventory/7/groups/2/details'],
+    ['constructed', '/inventories/constructed_inventory/7/groups/2/details'],
+    ['federated', '/inventories/federated_inventory/7/groups/2/details'],
+  ])('links a group of a %s inventory by its kind', (kind, href) => {
+    renderItem({
+      ...mockGroup,
+      summary_fields: {
+        inventory: { id: 7, name: 'inv', kind },
+        user_capabilities: { edit: false },
+      },
+    } as unknown as Group);
+    expect(screen.getByRole('link', { name: 'foo' })).toHaveAttribute(
+      'href',
+      href
+    );
+  });
+
+  // The api refuses to edit a group a constructed or federated inventory
+  // builds from its sources, so the row offers no Edit even to an admin.
+  test.each(['constructed', 'federated'])(
+    'offers no Edit on a group of a %s inventory',
+    (kind) => {
+      renderItem({
+        ...mockGroup,
+        summary_fields: {
+          inventory: { id: 7, name: 'inv', kind },
+          user_capabilities: { edit: true },
+        },
+      } as unknown as Group);
+      expect(
+        screen.queryByRole('link', { name: 'Edit Group' })
+      ).not.toBeInTheDocument();
+    }
+  );
 });

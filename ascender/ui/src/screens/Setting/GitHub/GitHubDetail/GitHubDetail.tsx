@@ -2,12 +2,10 @@ import React, { useEffect, useCallback } from 'react';
 import { Link, Navigate, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { DetailList } from 'components/DetailList';
-import RoutedTabs from 'components/RoutedTabs';
 import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import useRequest from 'hooks/useRequest';
@@ -19,7 +17,7 @@ function GitHubDetail() {
   const { me } = useConfig();
   const { GET: options = {} } = useSettings();
 
-  const baseURL = '/settings/github';
+  const baseURL = '/authentication/github';
   const category = useMatch(`${baseURL}/:category/details`)?.params
     ?.category as string;
 
@@ -68,95 +66,49 @@ function GitHubDetail() {
     request();
   }, [request]);
 
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`GitHub Default`,
-      link: `${baseURL}/default/details`,
-      id: 0,
-    },
-    {
-      name: t`GitHub Organization`,
-      link: `${baseURL}/organization/details`,
-      id: 1,
-    },
-    {
-      name: t`GitHub Team`,
-      link: `${baseURL}/team/details`,
-      id: 2,
-    },
-    {
-      name: t`GitHub Enterprise`,
-      link: `${baseURL}/enterprise/details`,
-      id: 3,
-    },
-    {
-      name: t`GitHub Enterprise Organization`,
-      link: `${baseURL}/enterprise_organization/details`,
-      id: 4,
-    },
-    {
-      name: t`GitHub Enterprise Team`,
-      link: `${baseURL}/enterprise_team/details`,
-      id: 5,
-    },
-  ];
-
   if (!Object.keys(gitHubDetails).includes(category)) {
     return <Navigate to={`${baseURL}/default/details`} replace />;
   }
 
   return (
-    <>
-      <RoutedTabs tabsArray={tabsArray} />
-      <CardBody>
-        {isLoading && <ContentLoading />}
-        {!isLoading && Boolean(error) && <ContentError error={error} />}
-        {!isLoading && Object.values(gitHubDetails).every(Boolean) && (
-          <DetailList>
-            {Object.keys(
-              gitHubDetails[category as keyof typeof gitHubDetails]
-            ).map((key) => {
-              const record = options?.[key];
-              return (
-                <SettingDetail
-                  key={key}
-                  id={key}
-                  helpText={record?.help_text}
-                  label={record?.label}
-                  type={record?.type}
-                  unit={record?.unit}
-                  value={
-                    gitHubDetails[category as keyof typeof gitHubDetails][key]
-                  }
-                />
-              );
-            })}
-          </DetailList>
-        )}
-        {me?.is_superuser && (
-          <CardActionsRow>
-            <Button
-              ouiaId="github-detail-edit-button"
-              aria-label={t`Edit`}
-              component={Link}
-              to={`${baseURL}/${category}/edit`}
-            >
-              {t`Edit`}
-            </Button>
-          </CardActionsRow>
-        )}
-      </CardBody>
-    </>
+    <CardBody>
+      {isLoading && <ContentLoading />}
+      {!isLoading && Boolean(error) && <ContentError error={error} />}
+      {!isLoading && Object.values(gitHubDetails).every(Boolean) && (
+        <DetailList>
+          {Object.keys(
+            gitHubDetails[category as keyof typeof gitHubDetails]
+          ).map((key) => {
+            const record = options?.[key];
+            return (
+              <SettingDetail
+                key={key}
+                id={key}
+                helpText={record?.help_text}
+                label={record?.label}
+                type={record?.type}
+                unit={record?.unit}
+                value={
+                  gitHubDetails[category as keyof typeof gitHubDetails][key]
+                }
+              />
+            );
+          })}
+        </DetailList>
+      )}
+      {me?.is_superuser && (
+        <CardActionsRow>
+          <Button
+            ouiaId="github-detail-edit-button"
+            aria-label={t`Edit`}
+            component={Link}
+            to={`${baseURL}/${category}/edit`}
+          >
+            {t`Edit`}
+          </Button>
+        </CardActionsRow>
+      )}
+    </CardBody>
   );
 }
 

@@ -6,7 +6,6 @@ import type { Weekday } from 'rrule';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import type { FrequencyOptions, ScheduleFrequency } from '../shared/types';
-import './FrequencyDetails.css';
 
 const DAY_LABELS = {
   sunday: msg`Sunday`,
@@ -57,6 +56,7 @@ export interface FrequencyDetailsProps {
   options: FrequencyOptions;
   timezone?: string | null;
   isException?: boolean;
+  showFrequency?: boolean;
   [key: string]: unknown;
 }
 
@@ -66,6 +66,7 @@ export default function FrequencyDetails({
   options,
   timezone,
   isException,
+  showFrequency,
 }: FrequencyDetailsProps) {
   const { t, i18n } = useLingui();
   const getRunEveryLabel = () => {
@@ -92,16 +93,25 @@ export default function FrequencyDetails({
 
   return (
     <div>
-      <div className="ascender-frequency-details__label">{label}</div>
       <DetailList gutter="sm">
+        {/* Which frequency this block describes. With a single one it repeats
+            the Repeat Frequency detail above word for word, so it only earns
+            its place once a schedule carries more than one. */}
+        {showFrequency ? (
+          <Detail
+            label={t`Frequency`}
+            value={label}
+            dataCy={`${prefix}-frequency`}
+          />
+        ) : null}
         <Detail
-          label={isException ? t`Skip every` : t`Run every`}
+          label={isException ? t`Skip Every` : t`Run Every`}
           value={getRunEveryLabel()}
           dataCy={`${prefix}-run-every`}
         />
         {type === 'week' && options.daysOfWeek ? (
           <Detail
-            label={t`On days`}
+            label={t`On Days`}
             value={(options.daysOfWeek as Weekday[])
               .sort(sortWeekday)
               .map((d) =>
@@ -147,7 +157,7 @@ function RunOnDetail({
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
+          label={t`Run On`}
           value={t`Day ${options.runOnDayNumber}`}
           dataCy={`${prefix}-run-on-day`}
         />
@@ -158,7 +168,7 @@ function RunOnDetail({
     );
     return (
       <Detail
-        label={t`Run on`}
+        label={t`Run On`}
         value={
           options.runOnTheOccurrence === -1 ? (
             t`The last ${dayOfWeek}`
@@ -189,7 +199,7 @@ function RunOnDetail({
     if (options.runOn === 'day') {
       return (
         <Detail
-          label={t`Run on`}
+          label={t`Run On`}
           value={`${month} ${options.runOnDayMonth}`}
           dataCy={`${prefix}-run-on-day`}
         />
@@ -200,7 +210,7 @@ function RunOnDetail({
     );
     return (
       <Detail
-        label={t`Run on`}
+        label={t`Run On`}
         value={
           options.runOnTheOccurrence === -1 ? (
             t`The last ${weekday} of ${month}`

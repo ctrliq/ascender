@@ -132,7 +132,7 @@ export const relatedResourceDeleteRequests = {
     {
       request: () =>
         WorkflowJobTemplatesAPI.read({ inventory: selected?.id ?? null }),
-      label: msg`Workflow Job Templates`,
+      label: msg`Workflow Templates`,
     },
   ],
 
@@ -142,7 +142,7 @@ export const relatedResourceDeleteRequests = {
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: inventorySourceId ?? null,
         }),
-      label: msg`Workflow Job Template Nodes`,
+      label: msg`Workflow Template Nodes`,
     },
     {
       request: async () =>
@@ -169,7 +169,7 @@ export const relatedResourceDeleteRequests = {
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: selected?.id ?? null,
         }),
-      label: msg`Workflow Job Templates`,
+      label: msg`Workflow Template Nodes`,
     },
     {
       request: () =>
@@ -186,7 +186,7 @@ export const relatedResourceDeleteRequests = {
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: selected?.id ?? null,
         }),
-      label: msg`Workflow Job Template Nodes`,
+      label: msg`Workflow Template Nodes`,
     },
   ],
 
@@ -288,7 +288,7 @@ export const relatedResourceDeleteRequests = {
         );
         return { data: { count: total } };
       },
-      label: msg`Workflow Job Template Nodes`,
+      label: msg`Workflow Template Nodes`,
     },
   ],
   instanceGroup: (selected: DeletableEntity) => [

@@ -84,7 +84,7 @@ function sourceFieldExpects() {
 
 function gceFieldExpects() {
   expectCommonGroups();
-  expectGroup('Service account JSON file');
+  expectGroup('Service Account JSON File');
   expectGroup('Service Account Email Address');
   expectGroup('Project');
   expectGroup('RSA Private Key');

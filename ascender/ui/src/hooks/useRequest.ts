@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import type { QSConfig } from 'util/qs';
@@ -61,6 +61,13 @@ export default function useRequest<T, Args extends unknown[] = unknown[]>(
     (initialValue as { isLoading?: boolean } | undefined)?.isLoading || false
   );
   const isMounted = useIsMounted();
+  /*
+   * Which call the screen is showing. Two requests are in flight at once as
+   * soon as a list searches while it is typed, and the slower of them can
+   * answer last: a result is taken only where nothing has been asked for
+   * since, or the rows would fall back to an older search.
+   */
+  const latestCall = useRef(0);
 
   return {
     result,
@@ -68,20 +75,24 @@ export default function useRequest<T, Args extends unknown[] = unknown[]>(
     isLoading,
     request: useCallback(
       async (...args: Args) => {
+        latestCall.current += 1;
+        const thisCall = latestCall.current;
+        const isCurrent = () =>
+          isMounted.current && latestCall.current === thisCall;
         setIsLoading(true);
         try {
           const response = await makeRequest(...args);
-          if (isMounted.current) {
+          if (isCurrent()) {
             setResult(response);
             setError(null);
           }
         } catch (err) {
-          if (isMounted.current) {
+          if (isCurrent()) {
             setError(err);
             setResult(initialValue as T);
           }
         } finally {
-          if (isMounted.current) {
+          if (isCurrent()) {
             setIsLoading(false);
           }
         }

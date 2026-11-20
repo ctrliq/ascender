@@ -1,5 +1,6 @@
+import type { SummaryFieldRef } from 'types/api';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 
 import { TeamsAPI } from 'api';
@@ -10,6 +11,15 @@ import TeamForm from '../shared/TeamForm';
 function TeamAdd() {
   const [submitError, setSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
+  /*
+   * An organization's Teams tab sends its organization along, so the team is
+   * created in it without the reader picking it again, and Cancel goes back
+   * to that tab rather than to the list of every team.
+   */
+  const { state } = useLocation() as {
+    state?: { organization?: SummaryFieldRef } | null;
+  };
+  const organization = state?.organization ?? null;
 
   const handleSubmit = async (values: TeamFormValues) => {
     try {
@@ -27,7 +37,9 @@ function TeamAdd() {
   };
 
   const handleCancel = () => {
-    navigate('/teams');
+    navigate(
+      organization ? `/organizations/${organization.id}/teams` : '/teams'
+    );
   };
 
   return (
@@ -35,6 +47,9 @@ function TeamAdd() {
       <Card>
         <CardBody>
           <TeamForm
+            team={
+              organization ? { summary_fields: { organization } } : undefined
+            }
             handleSubmit={handleSubmit}
             handleCancel={handleCancel}
             submitError={submitError}

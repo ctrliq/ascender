@@ -133,14 +133,16 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
           {t`Provisioning Callbacks`}
         </Content>
       )}
+      {webhook_service && (
+        <Content component={ContentVariants.li}>{t`Enable Webhook`}</Content>
+      )}
       {allow_simultaneous && (
         <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
       )}
       {use_fact_cache && (
-        <Content component={ContentVariants.li}>{t`Fact Storage`}</Content>
-      )}
-      {webhook_service && (
-        <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
+        <Content component={ContentVariants.li}>
+          {t`Enable Fact Storage`}
+        </Content>
       )}
       {prevent_instance_group_fallback && (
         <Content component={ContentVariants.li}>
@@ -153,6 +155,16 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
     </Content>
   );
 
+  // The API's value is the lowercase key; the form offers it by its label,
+  // so the details read it the same way rather than as the raw key.
+  const jobTypeLabels: Record<string, string> = {
+    run: t`Run`,
+    check: t`Check`,
+  };
+  const jobTypeLabel = job_type
+    ? (jobTypeLabels[job_type] ?? job_type)
+    : job_type;
+
   const inventoryValue = (kind?: string, id?: number) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
 
@@ -161,7 +173,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
         <Link to={`/inventories/${inventorykind}/${id}/details`}>
           {summary_fields.inventory?.name}
         </Link>
-        <span> {t`(Prompt on launch)`} </span>
+        <span> {t`(Prompt on Launch)`} </span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${id}/details`}>
@@ -188,7 +200,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
         />
         <Detail
           label={t`Job Type`}
-          value={job_type}
+          value={jobTypeLabel}
           dataCy="jt-detail-job-type"
           helpText={helpText.jobType}
         />
@@ -365,9 +377,9 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
         {renderOptionsField && (
           <Detail
             fullWidth
-            label={t`Enabled Options`}
+            label={t`Options`}
             value={renderOptions}
-            dataCy="jt-detail-enabled-options"
+            dataCy="jt-detail-options"
             helpText={helpText.enabledOptions}
           />
         )}

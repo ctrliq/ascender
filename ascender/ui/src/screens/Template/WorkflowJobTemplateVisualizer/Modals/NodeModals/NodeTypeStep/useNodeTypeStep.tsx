@@ -40,7 +40,7 @@ export default function useNodeTypeStep(nodeToEdit: WorkflowNode | null) {
 
   return {
     step: getStep(
-      t`Node type`,
+      t`Node Type`,
       nodeTypeField,
       approvalNameField,
       nodeResourceField,

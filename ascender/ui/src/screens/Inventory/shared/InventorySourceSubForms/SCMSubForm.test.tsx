@@ -63,11 +63,11 @@ describe('<SCMSubForm />', () => {
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
     expect(screen.getByText('Credential')).toBeInTheDocument();
     expect(screen.getByText('Project')).toBeInTheDocument();
-    expect(screen.getByText('Inventory file')).toBeInTheDocument();
+    expect(screen.getByText('Inventory File')).toBeInTheDocument();
     expect(screen.getByText('Verbosity')).toBeInTheDocument();
-    expect(screen.getByText('Update options')).toBeInTheDocument();
-    expect(screen.getByText('Cache timeout (seconds)')).toBeInTheDocument();
-    expect(screen.getByText('Source variables')).toBeInTheDocument();
+    expect(screen.getByText('Update Options')).toBeInTheDocument();
+    expect(screen.getByText('Cache Timeout (Seconds)')).toBeInTheDocument();
+    expect(screen.getByText('Source Variables')).toBeInTheDocument();
   });
 
   test('should not fetch source path list without an initial project', async () => {

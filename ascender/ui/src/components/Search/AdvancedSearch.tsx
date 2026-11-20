@@ -7,7 +7,6 @@ import {
   Divider,
   InputGroup,
   TextInput,
-  Tooltip,
   InputGroupItem,
   Select,
   SelectOption,
@@ -29,6 +28,7 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import RelatedLookupTypeInput from './RelatedLookupTypeInput';
 import LookupTypeInput from './LookupTypeInput';
 import './AdvancedSearch.css';
+import Tooltip from '../Tooltip';
 
 export interface AdvancedSearchProps {
   onSearch?: (key: string, value: string) => void;
@@ -447,7 +447,7 @@ function AdvancedSearch({
           </div>
         </InputGroupItem>
       </InputGroup>
-      <Tooltip content={t`Advanced search documentation`} position="bottom">
+      <Tooltip content={t`Advanced Search Documentation`}>
         <Button
           icon={<QuestionCircleIcon />}
           ouiaId="search-docs-button"

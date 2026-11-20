@@ -65,7 +65,7 @@ describe('<ApplicationTokenListItem/>', () => {
     const row = screen.getByRole('row');
     const cells = within(row).getAllByRole('cell');
     const nameCell = cells.find(
-      (cell) => cell.getAttribute('data-label') === 'Name'
+      (cell) => cell.getAttribute('data-label') === 'Username'
     );
     const scopeCell = cells.find(
       (cell) => cell.getAttribute('data-label') === 'Scope'

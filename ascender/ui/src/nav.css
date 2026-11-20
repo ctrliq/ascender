@@ -1,0 +1,77 @@
+/*
+ * Opening and closing a group in the rail.
+ *
+ * PatternFly marks the list hidden, which switched a group open and shut in a
+ * single frame and left the three pixels the list keeps above its first item
+ * standing under the heading of every closed group.
+ *
+ * The list is kept in the page and its height is what opens and closes. A
+ * browser will not animate a height that ends in `auto`, and once an element
+ * carries the hidden attribute it stops animating one at all, so the height
+ * that moves is a ceiling: `--ascender-nav-group-height`, which the group sets
+ * from what its own items measure, along with the time it takes to travel
+ * that far. Equal to the list's own height, the ceiling
+ * is visible for the whole of both animations rather than spending part of
+ * them above the content.
+ *
+ * Said through the sidebar's id, which is what it takes to outweigh the themes
+ * and PatternFly's own transition on the same element.
+ */
+#page-sidebar .pf-v6-c-nav__subnav {
+  display: grid;
+  overflow: hidden;
+  max-height: var(--ascender-nav-group-height, 20rem);
+  /* Opening is the state being entered here, so this is the timing a group
+     opens with: a shade quicker than it closes, which is how it reads as
+     answering the click. */
+  transition:
+    max-height var(--ascender-nav-group-duration, 190ms) ease-out,
+    padding-block-start var(--ascender-nav-group-duration, 190ms) ease-out,
+    opacity 150ms ease-out;
+}
+
+#page-sidebar .pf-v6-c-nav__subnav[hidden] {
+  /* The attribute would take the list out of the page, and with it the
+     animation: it stays a grid and closes to nothing instead. A box is never
+     shorter than its own padding, so the padding goes too, or a closed group
+     would keep a strip of one under its heading. */
+  display: grid;
+  max-height: 0;
+  padding-block-start: 0;
+  opacity: 0;
+
+  /* And closing takes a quarter longer than opening, so a group folds away
+     rather than snapping shut. */
+  transition:
+    max-height calc(var(--ascender-nav-group-duration, 190ms) * 1.25) ease,
+    padding-block-start calc(var(--ascender-nav-group-duration, 190ms) * 1.25)
+      ease,
+    opacity 200ms ease;
+}
+
+/* For anyone who has asked their system for less movement. */
+@media (prefers-reduced-motion: reduce) {
+  #page-sidebar .pf-v6-c-nav__subnav {
+    transition: none;
+  }
+}
+
+/*
+ * PatternFly lines a row's contents up on the text's baseline, which leaves
+ * the caret of a group sitting a shade above the middle of the row it opens.
+ * It belongs in the middle of the row, and the label, whose line box is the
+ * height of the row's content, does not move for it.
+ */
+#page-sidebar .pf-v6-c-nav__link {
+  align-items: center;
+}
+
+/*
+ * The caret carries an align-self of its own, and a pixel and a half of lift
+ * with it, both of which read against a row whose text is centred rather than
+ * sat on a baseline.
+ */
+#page-sidebar .pf-v6-c-nav__toggle {
+  align-self: center;
+  transform: none;
+}

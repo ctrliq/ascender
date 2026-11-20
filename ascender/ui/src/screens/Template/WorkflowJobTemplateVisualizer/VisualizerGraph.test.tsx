@@ -241,4 +241,40 @@ describe('VisualizerGraph', () => {
       container.querySelector('#workflow-link-help-type')
     ).not.toBeInTheDocument();
   });
+
+  /*
+   * Svg has no z-index and paints in document order, so where each piece is
+   * drawn is the whole of what sits above what. Both halves of this have been
+   * wrong: drawn with its line, a link's menu came up under whichever node it
+   * hangs over; drawn after the nodes, the whole link went there and its line
+   * painted over them.
+   */
+  test('draws the lines under the nodes and the open menu over them', () => {
+    const { container } = renderGraph();
+    const drawn = () =>
+      [...(container.querySelector('#workflow-g') as Element).children].map(
+        (child) => child.id
+      );
+
+    const firstNode = drawn().findIndex((id) => id.startsWith('node-'));
+    const lines = drawn()
+      .map((id, index) => ({ id, index }))
+      .filter(({ id }) => /^link-\d+-\d+$/.test(id));
+    expect(lines.length).toBeGreaterThan(0);
+    lines.forEach(({ index }) => expect(index).toBeLessThan(firstNode));
+    expect(drawn().some((id) => id.endsWith('-menu'))).toBe(false);
+
+    fireEvent.mouseEnter(container.querySelector('g#link-2-3') as Element);
+
+    // The menu is drawn last of all, and it is only the menu: the line stays
+    // where it was, below the nodes.
+    const after = drawn();
+    expect(after[after.length - 1]).toBe('link-2-3-menu');
+    expect(after.indexOf('link-2-3')).toBeLessThan(
+      after.findIndex((id) => id.startsWith('node-'))
+    );
+    const menu = container.querySelector('g#link-2-3-menu') as Element;
+    expect(menu.querySelector(':scope > path')).toBeNull();
+    expect(menu.querySelector('[data-cy="link-edit"]')).toBeInTheDocument();
+  });
 });

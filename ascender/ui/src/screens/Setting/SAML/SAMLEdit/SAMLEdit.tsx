@@ -9,7 +9,7 @@ import { SettingsEditForm } from '../../shared';
 
 function SAMLEdit() {
   return (
-    <SettingsEditForm category="saml" detailUrl="/settings/saml/details">
+    <SettingsEditForm category="saml" detailUrl="/authentication/saml/details">
       {(saml) => (
         <>
           <InputField

@@ -77,13 +77,13 @@ const slicedJobs = [
 
 function renderAt(jobId: number, jobs = relatedJobs) {
   const history = createMemoryHistory({
-    initialEntries: [`/jobs/playbook/${jobId}/output`],
+    initialEntries: [`/runs/playbook/${jobId}/output`],
   });
   const ref = React.createRef<HTMLElement>();
   const utils = renderWithContexts(
     <Routes>
       <Route
-        path="/jobs/:typeSegment/:id/output"
+        path="/runs/:typeSegment/:id/output"
         element={
           <WorkflowOutputNavigation relatedJobs={jobs} parentRef={ref} />
         }
@@ -116,7 +116,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await waitFor(() => screen.getByText('second-node'));
     await user.click(screen.getByText('second-node'));
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/playbook/102/output')
+      expect(history.location.pathname).toBe('/runs/playbook/102/output')
     );
   });
 
@@ -125,7 +125,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByRole('button'));
     await user.click(screen.getByText('second-node'));
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/playbook/102/output')
+      expect(history.location.pathname).toBe('/runs/playbook/102/output')
     );
     // same component instance, now viewing job 102
     expect(screen.getByRole('button')).toHaveTextContent('2/3');
@@ -134,7 +134,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await waitFor(() => screen.getByText('Ansible'));
     await user.click(screen.getByText('Ansible'));
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/playbook/101/output')
+      expect(history.location.pathname).toBe('/runs/playbook/101/output')
     );
   });
 
@@ -144,7 +144,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await waitFor(() => screen.getByText('Red hat'));
     await user.click(screen.getByText('Red hat'));
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/project/103/output')
+      expect(history.location.pathname).toBe('/runs/project/103/output')
     );
   });
   test('leaves approval nodes and nodes that never ran out of the count', async () => {
@@ -202,7 +202,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await waitFor(() =>
       expect(screen.queryByText('Workflow Nodes')).not.toBeInTheDocument()
     );
-    expect(history.location.pathname).toBe('/jobs/playbook/102/output');
+    expect(history.location.pathname).toBe('/runs/playbook/102/output');
   });
   test('clears the status filter when the same status is picked again', async () => {
     const { user } = renderAt(101);
@@ -235,7 +235,7 @@ describe('<WorkflowOutputNavigation />', () => {
 
   test('does not build a url for a job type it has no route for', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/playbook/101/output'],
+      initialEntries: ['/runs/playbook/101/output'],
     });
     const ref = React.createRef<HTMLElement>();
     const oddJobs = [
@@ -257,7 +257,7 @@ describe('<WorkflowOutputNavigation />', () => {
     const { user } = renderWithContexts(
       <Routes>
         <Route
-          path="/jobs/:typeSegment/:id/output"
+          path="/runs/:typeSegment/:id/output"
           element={
             <WorkflowOutputNavigation
               relatedJobs={oddJobs as WorkflowJobNode[]}
@@ -270,8 +270,8 @@ describe('<WorkflowOutputNavigation />', () => {
     );
     await user.click(screen.getByRole('button'));
     await user.click(screen.getByText('mystery-node'));
-    // no route for that type, so it stays put rather than going to /jobs/undefined/199
-    expect(history.location.pathname).toBe('/jobs/playbook/101/output');
+    // no route for that type, so it stays put rather than going to /runs/undefined/199
+    expect(history.location.pathname).toBe('/runs/playbook/101/output');
   });
 
   test('labels nodes with a blank identifier by their position', async () => {
@@ -279,19 +279,17 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByRole('button'));
     // the entry for the job on screen reads the same as the toggle, so it
     // appears twice; the other slice appears once, in the menu
-    await waitFor(() =>
-      expect(screen.getAllByText('Workflow Job 1/2')).toHaveLength(2)
-    );
-    expect(screen.getByText('Workflow Job 2/2')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getAllByText('Job 1/2')).toHaveLength(2));
+    expect(screen.getByText('Job 2/2')).toBeInTheDocument();
   });
 
   test('navigates to a slice picked by its position', async () => {
     const { user, history } = renderAt(301, slicedJobs);
     await user.click(screen.getByRole('button'));
-    await waitFor(() => screen.getByText('Workflow Job 2/2'));
-    await user.click(screen.getByText('Workflow Job 2/2'));
+    await waitFor(() => screen.getByText('Job 2/2'));
+    await user.click(screen.getByText('Job 2/2'));
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/playbook/302/output')
+      expect(history.location.pathname).toBe('/runs/playbook/302/output')
     );
   });
 
@@ -301,10 +299,10 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByRole('option', { name: /Failed/ }));
     // only the failed slice survives, still wearing its original position
     await waitFor(() =>
-      expect(screen.getByText('Workflow Job 2/2')).toBeInTheDocument()
+      expect(screen.getByText('Job 2/2')).toBeInTheDocument()
     );
     expect(
-      screen.queryByRole('option', { name: 'Workflow Job 1/2' })
+      screen.queryByRole('option', { name: 'Job 1/2' })
     ).not.toBeInTheDocument();
   });
 });

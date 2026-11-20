@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI, InventoriesAPI } from 'api';
@@ -111,12 +111,27 @@ describe('<InventoryRelatedGroupList />', () => {
     );
   });
 
-  test('should render Run Commands Button', async () => {
+  test('offers Add for a new group and Associate for an existing one', async () => {
     renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
+    expect(screen.getByRole('link', { name: 'Add' })).toHaveAttribute(
+      'href',
+      '/inventories/inventory/2/groups/2/nested_groups/add'
+    );
     expect(
-      screen.getByRole('button', { name: 'Run Command' })
+      screen.getByRole('button', { name: 'Associate' })
     ).toBeInTheDocument();
+  });
+
+  test('should offer a run of each kind the list can start', async () => {
+    const { user } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /Inventory 0/ });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+
+    expect(
+      screen.getAllByRole('menuitem').map((item) => item.textContent)
+    ).toEqual(['Job', 'Workflow', 'Command']);
   });
 
   test('should check and uncheck the row item', async () => {
@@ -143,6 +158,45 @@ describe('<InventoryRelatedGroupList />', () => {
     rowCheckboxes.forEach((box) => expect(box).not.toBeChecked());
   });
 
+  /*
+   * A tick kept across a new search could sit on a group the search hides,
+   * and the toolbar's Disassociate would still reach it.
+   */
+  test('clears the ticks when the search changes', async () => {
+    const { user, history } = renderUnder(url);
+    await screen.findAllByRole('link', { name: /Inventory 0/ });
+    const checkbox = screen.getByRole('checkbox', { name: 'Select row 0' });
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+
+    act(() => history.replace(`${url}?group.name__icontains=x`));
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('checkbox', { name: 'Select row 0' })
+      ).not.toBeChecked()
+    );
+  });
+
+  test('steps back a page when every group on it is disassociated', async () => {
+    vi.mocked(GroupsAPI.disassociateChildGroup).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof GroupsAPI.disassociateChildGroup>
+    );
+    const { user, history } = renderUnder(`${url}?group.page=2`);
+    await screen.findAllByRole('link', { name: /Inventory 0/ });
+
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+    await user.click(screen.getByRole('button', { name: 'Disassociate' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(within(dialog).getByRole('button', { name: /Confirm/ }));
+
+    await waitFor(() =>
+      expect(history.location.search).not.toContain('group.page=2')
+    );
+    expect(GroupsAPI.disassociateChildGroup).toHaveBeenCalledTimes(3);
+    await settleTooltips();
+  });
+
   test('should show content error when api throws error on initial render', async () => {
     vi.mocked(InventoriesAPI.readGroupsOptions).mockRejectedValueOnce(
       new Error()
@@ -153,7 +207,7 @@ describe('<InventoryRelatedGroupList />', () => {
     ).toBeInTheDocument();
   });
 
-  test('should hide add dropdown button without POST permission', async () => {
+  test('should hide Add and Associate without POST permission', async () => {
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValueOnce({
       data: {
         actions: { GET: {} },
@@ -162,8 +216,9 @@ describe('<InventoryRelatedGroupList />', () => {
     } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
+    expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: 'Add' })
+      screen.queryByRole('button', { name: 'Associate' })
     ).not.toBeInTheDocument();
   });
 
@@ -176,10 +231,7 @@ describe('<InventoryRelatedGroupList />', () => {
     );
     const { user } = renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
-    await user.click(screen.getByRole('button', { name: 'Add' }));
-    await user.click(
-      await screen.findByRole('menuitem', { name: 'Add existing group' })
-    );
+    await user.click(screen.getByRole('button', { name: 'Associate' }));
     const dialog = await screen.findByRole('dialog');
     await waitFor(() =>
       expect(GroupsAPI.readPotentialGroups).toHaveBeenCalledWith('2', {
@@ -191,7 +243,7 @@ describe('<InventoryRelatedGroupList />', () => {
       })
     );
     await user.click(await within(dialog).findByText('foo'));
-    await user.click(within(dialog).getByRole('button', { name: 'Save' }));
+    await user.click(within(dialog).getByRole('button', { name: 'Associate' }));
     await waitFor(() =>
       expect(GroupsAPI.associateChildGroup).toHaveBeenCalledTimes(1)
     );
@@ -248,7 +300,10 @@ describe('<InventoryRelatedGroupList> for read-only inventories', () => {
       renderUnder(`/inventories/${inventoryType}/1/groups/2/nested_groups`);
       await screen.findAllByRole('link', { name: /Inventory 0/ });
       expect(
-        screen.queryByRole('button', { name: 'Add' })
+        screen.queryByRole('link', { name: 'Add' })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Associate' })
       ).not.toBeInTheDocument();
       expect(
         screen.queryByRole('button', { name: 'Disassociate' })

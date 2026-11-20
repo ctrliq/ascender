@@ -184,6 +184,40 @@ describe('ScheduleList', () => {
       setupMocks();
     });
 
+    /* The all schedules list hands in an add button of its own, which the
+       api has to allow as much as the built-in one. */
+    test('should show the add button it is handed where the api allows it', async () => {
+      renderList({
+        hideAddButton: true,
+        addButton: (
+          <button type="button" key="add">
+            Handed add
+          </button>
+        ),
+      });
+      expect(
+        await screen.findByRole('button', { name: 'Handed add' })
+      ).toBeInTheDocument();
+    });
+
+    test('should not show the add button it is handed where the api does not', async () => {
+      loadScheduleOptions = vi.fn().mockResolvedValue({
+        data: { actions: { GET: {} } },
+      });
+      renderList({
+        hideAddButton: true,
+        addButton: (
+          <button type="button" key="add">
+            Handed add
+          </button>
+        ),
+      });
+      await screen.findByRole('link', { name: 'Mock JT Schedule' });
+      expect(
+        screen.queryByRole('button', { name: 'Handed add' })
+      ).not.toBeInTheDocument();
+    });
+
     test('should hide add button when flag is passed', async () => {
       renderList({ hideAddButton: true });
       await screen.findByRole('link', { name: 'Mock JT Schedule' });

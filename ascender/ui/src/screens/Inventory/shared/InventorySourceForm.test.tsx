@@ -1,3 +1,4 @@
+import type { OptionsResponse } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -65,7 +66,11 @@ describe('<InventorySourceForm />', () => {
 
   test('should initially display primary form fields', async () => {
     renderWithContexts(
-      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
+      <InventorySourceForm
+        sourceOptions={readOptionsResult.data as unknown as OptionsResponse}
+        onCancel={() => {}}
+        onSubmit={() => {}}
+      />
     );
     // settle the readOptions loading state
     await screen.findByText('Source');
@@ -81,7 +86,11 @@ describe('<InventorySourceForm />', () => {
 
   test('should display subform when source dropdown has a value', async () => {
     const { user, container } = renderWithContexts(
-      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
+      <InventorySourceForm
+        sourceOptions={readOptionsResult.data as unknown as OptionsResponse}
+        onCancel={() => {}}
+        onSubmit={() => {}}
+      />
     );
     await screen.findByText('Source');
 
@@ -95,7 +104,11 @@ describe('<InventorySourceForm />', () => {
   test('should show field error when form is invalid', async () => {
     const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
-      <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
+      <InventorySourceForm
+        sourceOptions={readOptionsResult.data as unknown as OptionsResponse}
+        onCancel={() => {}}
+        onSubmit={onSubmit}
+      />
     );
     await screen.findByText('Source');
 
@@ -119,7 +132,11 @@ describe('<InventorySourceForm />', () => {
   test('should call onSubmit when Save button is clicked', async () => {
     const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
-      <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
+      <InventorySourceForm
+        sourceOptions={readOptionsResult.data as unknown as OptionsResponse}
+        onCancel={() => {}}
+        onSubmit={onSubmit}
+      />
     );
     await screen.findByText('Source');
 
@@ -137,25 +154,16 @@ describe('<InventorySourceForm />', () => {
   test('calls "onCancel" when Cancel button is clicked', async () => {
     const onCancel = vi.fn();
     const { user } = renderWithContexts(
-      <InventorySourceForm onCancel={onCancel} onSubmit={() => {}} />
+      <InventorySourceForm
+        sourceOptions={readOptionsResult.data as unknown as OptionsResponse}
+        onCancel={onCancel}
+        onSubmit={() => {}}
+      />
     );
     await screen.findByText('Source');
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(onCancel).toHaveBeenCalled();
-  });
-
-  test('should display ContentError on throw', async () => {
-    // Shadowed on the model for the same reason mockReadOptions is: the
-    // inherited readOptions is one mock shared by every model.
-    InventorySourcesAPI.readOptions = () => Promise.reject(new Error());
-    renderWithContexts(
-      <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
-    );
-
-    expect(
-      await screen.findByText('Something went wrong...')
-    ).toBeInTheDocument();
   });
 });

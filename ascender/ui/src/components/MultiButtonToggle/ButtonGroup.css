@@ -16,18 +16,31 @@
   border-bottom-left-radius: 0;
 }
 
+/* The selected side of the toggle takes the theme's primary colour rather than
+   a fixed green, which was the Ascender green in every theme including Classic,
+   where the buttons beside it are blue. Hover darkens whatever that colour is:
+   primary-color--200 is a lighter green in the Ascender themes and a darker
+   blue in Classic, so it cannot serve as the hover shade for both. */
 .ascender-button-group__group.ascender-button-group__group
   > .pf-v6-c-button.pf-m-primary:not(:disabled) {
-  background-color: #12a66f;
-  border-color: #12a66f;
+  background-color: var(--pf-v6-global--primary-color--100);
+  border-color: var(--pf-v6-global--primary-color--100);
   --pf-v6-c-button--Color: #fff;
   color: #fff;
 }
 
 .ascender-button-group__group.ascender-button-group__group
   > .pf-v6-c-button.pf-m-primary:not(:disabled):hover {
-  background-color: #0e8c5d;
-  border-color: #0e8c5d;
+  background-color: color-mix(
+    in srgb,
+    var(--pf-v6-global--primary-color--100) 85%,
+    black
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--pf-v6-global--primary-color--100) 85%,
+    black
+  );
 }
 
 .ascender-button-group__group.ascender-button-group__group
@@ -38,8 +51,20 @@
   color: var(--pf-v6-global--Color--200);
 }
 
-.ascender-button-group__group.ascender-button-group__group
+/* The themes give every secondary button a green hover with white text. This
+   toggle took the background back to a plain surface and left the colour alone,
+   so the label turned white on near white and could not be read. The unselected
+   side keeps the colour it has at rest: hovering it is a hint that it can be
+   clicked, not a state change.
+
+   Tripled class on purpose: the dark themes scope their button rules under
+   html.pf-v6-theme-dark[data-theme="..."], which carries one class more than
+   the doubled selector the rest of this file uses, so a pair loses there and
+   the toggle behaved differently in dark than in light. */
+.ascender-button-group__group.ascender-button-group__group.ascender-button-group__group
   > .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
   background-color: var(--pf-v6-global--BackgroundColor--200);
   border-color: var(--pf-v6-global--BorderColor--100);
+  --pf-v6-c-button--Color: var(--pf-v6-global--Color--200);
+  color: var(--pf-v6-global--Color--200);
 }

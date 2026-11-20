@@ -9,7 +9,7 @@ import JobOutputSearch from './JobOutputSearch';
 vi.mock('react-router', async () => ({
   ...(await vi.importActual<typeof import('react-router')>('react-router')),
   history: () => ({
-    location: '/jobs/playbook/1/output',
+    location: '/runs/playbook/1/output',
   }),
 }));
 
@@ -33,7 +33,7 @@ async function getColumnNames(user: UserEvent) {
 describe('JobOutputSearch', () => {
   test('should update url query params', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/playbook/1/output'],
+      initialEntries: ['/runs/playbook/1/output'],
     });
 
     const { user } = renderWithContexts(
@@ -68,7 +68,7 @@ describe('JobOutputSearch', () => {
 
   test('Should not have Event key in search drop down for system job', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/playbook/1/output'],
+      initialEntries: ['/runs/playbook/1/output'],
     });
 
     const { user } = renderWithContexts(
@@ -92,7 +92,7 @@ describe('JobOutputSearch', () => {
 
   test('Should not have Event key in search drop down for inventory update job', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/playbook/1/output'],
+      initialEntries: ['/runs/playbook/1/output'],
     });
 
     const { user } = renderWithContexts(

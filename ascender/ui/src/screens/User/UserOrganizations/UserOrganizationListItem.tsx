@@ -7,11 +7,18 @@ import { Tr, Td } from '@patternfly/react-table';
 
 export interface UserOrganizationListItemProps {
   organization: Organization;
+  isSelected: boolean;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
 export default function UserOrganizationListItem({
   organization,
+  isSelected,
+  onSelect,
+  rowIndex,
 }: UserOrganizationListItemProps) {
   const { t } = useLingui();
   const labelId = `organization-${organization.id}`;
@@ -20,6 +27,14 @@ export default function UserOrganizationListItem({
       id={`user-org-row-${organization.id}`}
       ouiaId={`user-org-row-${organization.id}`}
     >
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
       <Td id={labelId} dataLabel={t`Name`}>
         <Link to={`/organizations/${organization.id}/details`} id={labelId}>
           <b>{organization.name}</b>

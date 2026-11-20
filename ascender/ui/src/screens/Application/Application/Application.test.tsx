@@ -131,4 +131,24 @@ describe('<Application />', () => {
     ).toBeInTheDocument();
     expect(screen.queryByText('ApplicationDetails')).not.toBeInTheDocument();
   });
+
+  test('says an unknown sub-page is not found, with no tab active', async () => {
+    renderAt('/applications/1/bogus');
+    expect(
+      await screen.findByRole('link', { name: 'View Application Details' })
+    ).toHaveAttribute('href', '/applications/1/details');
+    const selected = screen
+      .getAllByRole('tab')
+      .filter((tab) => tab.getAttribute('aria-selected') === 'true');
+    expect(selected).toHaveLength(0);
+  });
+
+  test('does not say Not Found while the application is still loading', async () => {
+    vi.mocked(ApplicationsAPI.readDetail).mockReturnValue(
+      new Promise(() => {}) as ReturnType<typeof ApplicationsAPI.readDetail>
+    );
+    renderAt('/applications/1/details');
+    await waitFor(() => expect(ApplicationsAPI.readDetail).toHaveBeenCalled());
+    expect(screen.queryByText('Not Found')).not.toBeInTheDocument();
+  });
 });

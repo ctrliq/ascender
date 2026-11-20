@@ -67,6 +67,24 @@ describe('<ApplicationForm/>', () => {
     expect(screen.getByText('Organization')).toBeInTheDocument();
   });
 
+  test('empty selects prompt for a choice the way other forms do', async () => {
+    const { container } = renderForm();
+
+    await screen.findByText('Organization');
+    const authType = container.querySelector<HTMLSelectElement>('#authType');
+    const clientType =
+      container.querySelector<HTMLSelectElement>('#clientType');
+    expect(authType?.selectedOptions[0]).toHaveTextContent(
+      'Choose an authorization grant type'
+    );
+    expect(clientType?.selectedOptions[0]).toHaveTextContent(
+      'Choose a client type'
+    );
+    // The prompt is not a choice of its own.
+    expect(authType?.selectedOptions[0]).toBeDisabled();
+    expect(clientType?.selectedOptions[0]).toBeDisabled();
+  });
+
   test('should update field values', async () => {
     const { container, user } = renderForm();
     await screen.findByText('Organization');

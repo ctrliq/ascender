@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { HostsAPI } from 'api';
+import { HostsAPI, InventoriesAPI, RootAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
@@ -84,15 +84,24 @@ function getRow(name: string) {
 }
 
 // each host row has two checkbox-role controls: the row select and the
-// HostToggle switch (aria-label "Toggle host"); this returns the select one
+// HostToggle switch (aria-label "Toggle Host"); this returns the select one
 function getRowSelect(name: string) {
   return within(getRow(name)!)
     .getAllByRole('checkbox')
-    .find((box) => box.getAttribute('aria-label') !== 'Toggle host');
+    .find((box) => box.getAttribute('aria-label') !== 'Toggle Host');
 }
 
 describe('<HostList />', () => {
   beforeEach(() => {
+    /*
+     * Any run of a command reaches the brand name on its way through the
+     * wizard, and a mock that answers nothing throws once the test that
+     * opened it has finished, so every test here answers it.
+     */
+    vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
+      data: { BRAND_NAME: 'Ascender Automation' },
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
+
     vi.mocked(HostsAPI.read).mockResolvedValue({
       data: {
         count: mockHosts.length,
@@ -109,6 +118,15 @@ describe('<HostList />', () => {
         related_search_fields: ['first_key__search', 'ansible_facts'],
       },
     } as unknown as ResponseOf<typeof HostsAPI.readOptions>);
+
+    vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
+      data: {
+        actions: {
+          GET: { module_name: { choices: [['command', 'command']] } },
+          POST: {},
+        },
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
   });
 
   afterEach(() => {
@@ -126,6 +144,161 @@ describe('<HostList />', () => {
 
     expect(HostsAPI.read).toHaveBeenCalled();
     expect(screen.getAllByRole('link', { name: /^Host \d$/ })).toHaveLength(3);
+  });
+
+  /** The toolbar's run menu, and the kind of run picked from it. */
+  const runFromMenu = async (
+    user: { click: (el: Element) => Promise<void> },
+    kind: string
+  ) => {
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+    await user.click(await screen.findByRole('menuitem', { name: kind }));
+  };
+
+  /*
+   * A command is sent to one inventory's own endpoint, and this list is every
+   * inventory's hosts: with nothing ticked the wizard asks which inventory
+   * the command runs in, the way the runs list does.
+   */
+  test('should ask what a command runs on where nothing is ticked', async () => {
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await runFromMenu(user, 'Command');
+
+    expect(
+      await screen.findByRole('combobox', { name: 'Run On' })
+    ).toBeInTheDocument();
+  });
+
+  /* Ticked hosts name their inventory, so the form opens on them instead. */
+  test('should take the command straight to the hosts ticked', async () => {
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(getRowSelect('Host 1')!);
+    await waitFor(() =>
+      expect(InventoriesAPI.readAdHocOptions).toHaveBeenCalledWith(1)
+    );
+    await runFromMenu(user, 'Command');
+
+    expect(
+      screen.queryByRole('combobox', { name: 'Run On' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('should refuse a selection that spans two inventories', async () => {
+    vi.mocked(HostsAPI.read).mockResolvedValue({
+      data: {
+        count: 2,
+        results: [mockHosts[0], { ...mockHosts[1], inventory: 2 }],
+      },
+    } as unknown as ResponseOf<typeof HostsAPI.read>);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(getRowSelect('Host 1')!);
+    await waitFor(() =>
+      expect(InventoriesAPI.readAdHocOptions).toHaveBeenCalledWith(1)
+    );
+
+    // A second inventory leaves the selection naming neither of them, so the
+    // command asks which one it runs in rather than assuming.
+    await user.click(getRowSelect('Host 2')!);
+    await runFromMenu(user, 'Command');
+    expect(
+      await screen.findByRole('combobox', { name: 'Run On' })
+    ).toBeInTheDocument();
+  });
+
+  test('should run the command against the hosts selected', async () => {
+    vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
+      data: { id: 1, organization: 1 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
+    /*
+     * Every api model inherits read from the same base, so the auto mock gives
+     * them one function between them: what each caller gets back is keyed on
+     * what it asked for rather than on which model it called.
+     */
+    vi.mocked(HostsAPI.read).mockImplementation(
+      (params) =>
+        Promise.resolve(
+          (params as { namespace?: string })?.namespace === 'ssh'
+            ? { data: { count: 1, results: [{ id: 3 }] } }
+            : { data: { count: mockHosts.length, results: mockHosts } }
+        ) as ReturnType<typeof HostsAPI.read>
+    );
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(getRowSelect('Host 1')!);
+    await waitFor(() =>
+      expect(InventoriesAPI.readAdHocOptions).toHaveBeenCalledWith(1)
+    );
+    await runFromMenu(user, 'Command');
+
+    // The wizard opens on its details step, limited to what was selected. The
+    // step's name is in the nav and again on the step itself, hence the all.
+    expect((await screen.findAllByText('Details')).length).toBeGreaterThan(0);
+    await waitFor(() =>
+      expect(screen.getByRole('textbox', { name: 'Limit' })).toHaveValue(
+        'Host 1'
+      )
+    );
+  });
+
+  /*
+   * A template runs against its own inventory; the selection says which of its
+   * hosts to run on, so the pattern is taken as the modal opens rather than
+   * read later, when the list behind it may have been paged.
+   */
+  test('should run a template against the hosts selected', async () => {
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(getRowSelect('Host 1')!);
+    await user.click(getRowSelect('Host 2')!);
+    await runFromMenu(user, 'Job');
+
+    // The tooltip says the same words as the title, so the limit is what tells
+    // the two apart, and it is the thing under test anyway.
+    expect(await screen.findByText('Limit: Host 1,Host 2')).toBeInTheDocument();
+  });
+
+  /* Nothing ticked is the whole list, which the run says in one word. */
+  test('should run a template on every host when none are ticked', async () => {
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await runFromMenu(user, 'Job');
+
+    expect(await screen.findByText('Limit: all')).toBeInTheDocument();
+  });
+
+  /*
+   * One run happens in one inventory, so hosts from two are no limit at all:
+   * the wizard asks where to run as the runs list does, which is after the
+   * template, since what a template prompts for is what can be asked.
+   */
+  test('should ask what to run on where the ticks span inventories', async () => {
+    vi.mocked(HostsAPI.read).mockResolvedValue({
+      data: {
+        count: 2,
+        results: [mockHosts[0], { ...mockHosts[1], inventory: 2 }],
+      },
+    } as unknown as ResponseOf<typeof HostsAPI.read>);
+    const { user } = renderWithContexts(<HostList />);
+    await screen.findByRole('link', { name: 'Host 1' });
+
+    await user.click(getRowSelect('Host 1')!);
+    await user.click(getRowSelect('Host 2')!);
+    await runFromMenu(user, 'Job');
+
+    expect(
+      await screen.findByRole('button', { name: 'Template' })
+    ).toBeInTheDocument();
+    // No limit was taken from the ticks, so none is announced.
+    expect(screen.queryByText(/^Limit:/)).not.toBeInTheDocument();
   });
 
   test('should select and deselect a single item', async () => {
@@ -216,7 +389,7 @@ describe('<HostList />', () => {
 
     expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Smart Inventory' })
+      screen.getByRole('button', { name: 'Add Smart Inventory' })
     ).toBeInTheDocument();
   });
 
@@ -233,7 +406,7 @@ describe('<HostList />', () => {
 
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: 'Smart Inventory' })
+      screen.queryByRole('button', { name: 'Add Smart Inventory' })
     ).not.toBeInTheDocument();
   });
 
@@ -241,7 +414,7 @@ describe('<HostList />', () => {
     renderWithContexts(<HostList />);
     await screen.findByRole('link', { name: 'Host 1' });
     expect(
-      screen.getByRole('button', { name: 'Smart Inventory' })
+      screen.getByRole('button', { name: 'Add Smart Inventory' })
     ).toBeDisabled();
   });
 
@@ -256,7 +429,7 @@ describe('<HostList />', () => {
     });
     await screen.findByRole('link', { name: 'Host 1' });
     expect(
-      screen.getByRole('button', { name: 'Smart Inventory' })
+      screen.getByRole('button', { name: 'Add Smart Inventory' })
     ).toBeDisabled();
   });
 
@@ -270,7 +443,7 @@ describe('<HostList />', () => {
     await screen.findByRole('link', { name: 'Host 1' });
 
     const smartInventoryButton = screen.getByRole('button', {
-      name: 'Smart Inventory',
+      name: 'Add Smart Inventory',
     });
     expect(smartInventoryButton).not.toBeDisabled();
     await user.click(smartInventoryButton);

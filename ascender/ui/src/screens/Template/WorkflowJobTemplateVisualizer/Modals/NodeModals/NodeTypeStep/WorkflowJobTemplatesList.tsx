@@ -70,6 +70,7 @@ function WorkflowJobTemplatesList({
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Workflow Templates`}
       contentError={error}
       hasContentLoading={isLoading}
       itemCount={count}

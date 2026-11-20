@@ -64,6 +64,7 @@ function ProjectsList({
 
   return (
     <PaginatedTable
+      pluralizedItemName={t`Projects`}
       contentError={error}
       hasContentLoading={isLoading}
       itemCount={count}

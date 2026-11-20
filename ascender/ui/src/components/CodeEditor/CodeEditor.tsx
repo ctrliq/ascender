@@ -10,7 +10,9 @@ import {
   highlightActiveLineGutter,
   drawSelection,
   highlightSpecialChars,
+  ViewPlugin,
 } from '@codemirror/view';
+import type { ViewUpdate } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import {
   search,
@@ -26,29 +28,31 @@ import {
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { jinja2 } from '@codemirror/legacy-modes/mode/jinja2';
+import { css } from '@codemirror/legacy-modes/mode/css';
 
 import { useLingui } from '@lingui/react/macro';
 
 import debounce from 'util/debounce';
-import { editorTheme, editorHighlightStyle } from './theme';
+import {
+  editorTheme,
+  editorHighlightStyle,
+  LINE_HEIGHT,
+  PADDING_TOP,
+} from './theme';
+import { maxEditorRows } from './constants';
 import './CodeEditor.css';
 
-const LINE_HEIGHT = 24;
-// the scroll margins below: 4px above the first line and 4px below the last
-const PADDING = 8;
-// The ceiling on the auto height. An uncapped editor renders a line of DOM per
-// line of content, and a host's facts run to thousands, which costs seconds to
-// paint and lags every scroll after. Fifty rows is about what the 90vh this
-// replaced allowed, and it holds the render cost flat however long the value
-// is. The rest scrolls.
-const MAX_ROWS = 50;
+// What the scroller holds besides the rows themselves. Zero, so a height in
+// rows is exactly those rows: the first line starts at the top edge and the
+// last ends at the bottom one, which is the only way the two ends match.
+const PADDING = PADDING_TOP;
 
 /**
  * The languages the editor knows, named as the UI names them rather than as
  * the editor does: javascript is the JSON half of the variables toggle, and
  * is highlighted as JSON, which is what ace did with it too.
  */
-export type CodeEditorMode = 'javascript' | 'yaml' | 'jinja2' | 'json';
+export type CodeEditorMode = 'javascript' | 'yaml' | 'jinja2' | 'json' | 'css';
 
 /**
  * Editing, and the cues that only mean something while editing: a read-only
@@ -70,6 +74,9 @@ const languages: Record<CodeEditorMode, () => Extension> = {
   json,
   yaml,
   jinja2: () => StreamLanguage.define(jinja2),
+  // css comes from the legacy modes the jinja2 entry above already pulls in,
+  // so a custom theme is highlighted without a new language package.
+  css: () => StreamLanguage.define(css),
 };
 
 /**
@@ -114,6 +121,48 @@ export interface CodeEditorProps {
   className?: string;
 }
 
+/**
+ * Keeps the width of the gutter on the scroller, as a custom property, so the
+ * stylesheet can paint that colour down the whole box.
+ *
+ * The gutter itself cannot do it. CodeMirror sizes it to the document and
+ * writes that inline, which beats any rule, so a value shorter than the box
+ * leaves the column stopping with the text. Forcing the height over it reads
+ * correctly until the box scrolls, at which point the gutter is a short box
+ * pinned to the top of a long document and its numbers scroll away. A
+ * background has neither problem: it paints the padding box however tall the
+ * content is, takes no part in layout, and adds nothing to scrollable
+ * overflow. The real gutter paints over it in the same colour.
+ */
+const gutterBand = ViewPlugin.fromClass(
+  class {
+    constructor(view: EditorView) {
+      this.measure(view);
+    }
+
+    update(update: ViewUpdate) {
+      if (update.geometryChanged || update.docChanged) {
+        this.measure(update.view);
+      }
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    measure(view: EditorView) {
+      view.requestMeasure({
+        read: (v) =>
+          v.dom.querySelector('.cm-gutters')?.getBoundingClientRect().width ??
+          0,
+        write: (width: number, v) => {
+          v.scrollDOM.style.setProperty(
+            '--ascender-code-gutter-width',
+            `${Math.round(width)}px`
+          );
+        },
+      });
+    }
+  }
+);
+
 function CodeEditor({
   id,
   value = '',
@@ -125,7 +174,7 @@ function CodeEditor({
   hasErrors = false,
   rows = 6,
   minRows = 1,
-  maxRows = MAX_ROWS,
+  maxRows,
   className = '',
 }: CodeEditorProps) {
   const { t } = useLingui();
@@ -165,11 +214,16 @@ function CodeEditor({
   // minRows and never above maxRows, so a short value still reads as an editor
   // and a long one shows all of itself. A number of rows is a fixed height.
   const isAuto = rows === 'auto';
+  // A caller that named a cap gets it; everything else follows the setting.
+  const cap = maxRows ?? maxEditorRows();
   const heightTheme = useMemo(() => {
     if (!isAuto) {
       return EditorView.theme({
         '.cm-scroller': {
           height: `${(rows as number) * LINE_HEIGHT + PADDING}px`,
+          // Stated as well as the height so the gutter rule in CodeEditor.css
+          // has one property to inherit whichever way the box was sized.
+          minHeight: `${(rows as number) * LINE_HEIGHT + PADDING}px`,
           overflow: 'auto',
         },
       });
@@ -177,11 +231,11 @@ function CodeEditor({
     return EditorView.theme({
       '.cm-scroller': {
         minHeight: `${minRows * LINE_HEIGHT + PADDING}px`,
-        maxHeight: `${maxRows * LINE_HEIGHT + PADDING}px`,
+        maxHeight: `${cap * LINE_HEIGHT + PADDING}px`,
         overflow: 'auto',
       },
     });
-  }, [isAuto, rows, minRows, maxRows]);
+  }, [isAuto, rows, minRows, cap]);
 
   useEffect(() => {
     const parent = host.current;
@@ -194,6 +248,7 @@ function CodeEditor({
       selection: { anchor: openingAnchor(value, mode) },
       extensions: [
         lineNumbers(),
+        gutterBand,
         highlightSpecialChars(),
         history(),
         drawSelection(),

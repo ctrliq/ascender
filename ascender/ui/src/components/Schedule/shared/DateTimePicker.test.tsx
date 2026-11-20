@@ -39,7 +39,7 @@ function setup() {
       <DateTimePicker
         dateFieldName="startDate"
         timeFieldName="startTime"
-        label="Start date/time"
+        label="Start Date/Time"
       />
     </FormRoot>
   );
@@ -48,14 +48,23 @@ function setup() {
 describe('<DateTimePicker/>', () => {
   test('should render properly', () => {
     setup();
-    expect(screen.getByLabelText('Start date')).toHaveValue('2021-05-26');
-    expect(screen.getByLabelText('Start time')).toHaveValue('2:15 PM');
+    expect(screen.getByLabelText('Start Date')).toHaveValue('2021-05-26');
+    expect(screen.getByLabelText('Start Time')).toHaveValue('2:15 PM');
+  });
+
+  test('ties the label to the date input by an id that is not translated', () => {
+    const { container } = setup();
+    const dateInput = screen.getByLabelText('Start Date');
+    expect(dateInput).toHaveAttribute('id', 'schedule-startDate');
+    expect(
+      container.querySelector('label[for="schedule-startDate"]')
+    ).toHaveTextContent('Start Date/Time');
   });
 
   test('should update values properly', async () => {
     setup();
-    const dateInput = screen.getByLabelText('Start date');
-    const timeInput = screen.getByLabelText('Start time');
+    const dateInput = screen.getByLabelText('Start Date');
+    const timeInput = screen.getByLabelText('Start Time');
 
     // Drive PF DatePicker/TimePicker via change events (the same path their
     // onChange handlers fire on) rather than typing.

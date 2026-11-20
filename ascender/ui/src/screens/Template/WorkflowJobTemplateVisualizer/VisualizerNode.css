@@ -9,7 +9,9 @@
 
 .ascender-visualizer-node__convergence-label {
   font-size: 12px;
-  color: #ffffff;
+  /* The colour is set on the element, beside the fill it has to read against:
+     white on a status colour, and whatever a theme names where the resting
+     fill is too light for white. */
 }
 
 .ascender-visualizer-node__node-g--has-job {

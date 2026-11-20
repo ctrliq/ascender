@@ -3,3 +3,29 @@
 .ascender-card-body__tabbed {
   padding-block-start: var(--pf-v6-c-card--first-child--PaddingBlockStart);
 }
+
+/*
+ * A form that starts right under a tab bar. The themes hold every card body to
+ * four pixels at the top, which reads right where the body is the first thing
+ * in the card and wrong under a row of tabs: on the settings edit screens the
+ * first field sat on the bar. Said on the form rather than on the body, so the
+ * detail screens, whose rows carry their own padding, are left as they are.
+ * Fourteen, which is what a detail screen's own rows carry: with the four the
+ * body keeps, a form starts its first field on the same line a detail page
+ * starts its first label.
+ */
+.pf-v6-c-tabs + .pf-v6-c-card__body > .pf-v6-c-form {
+  margin-block-start: 14px;
+}
+
+/*
+ * A detail screen whose rows are the last thing in the card, because the user
+ * may neither edit nor delete and the actions row took itself away. The last
+ * row already keeps the fourteen pixels every detail row carries under itself,
+ * and the body's own twenty-four on top of that left the card hanging open
+ * below the text. Ten and those fourteen make the twenty-four the card keeps
+ * at its sides.
+ */
+.pf-v6-c-card__body:has(> .ascender-detail-list:last-child) {
+  padding-block-end: 10px;
+}

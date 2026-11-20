@@ -213,7 +213,7 @@ const FrequencyDetailSubform = ({
         name={`${prefix}.interval`}
         fieldId={`schedule-run-every-${id}`}
         isRequired
-        label={isException ? t`Skip every` : t`Run every`}
+        label={isException ? t`Skip Every` : t`Run Every`}
       >
         <div className="ascender-frequency-detail-subform__display-flex">
           <TextInput
@@ -246,7 +246,7 @@ const FrequencyDetailSubform = ({
           name={`${prefix}.daysOfWeek`}
           fieldId={`schedule-days-of-week-${id}`}
           isRequired
-          label={t`On days`}
+          label={t`On Days`}
         >
           <div className="ascender-frequency-detail-subform__display-flex">
             <Checkbox
@@ -372,7 +372,7 @@ const FrequencyDetailSubform = ({
             name={`${prefix}.runOn`}
             fieldId={`schedule-run-on-${id}`}
             isRequired
-            label={t`Run on`}
+            label={t`Run On`}
           >
             <Radio
               className="ascender-frequency-detail-subform__run-on-radio"
@@ -561,7 +561,7 @@ const FrequencyDetailSubform = ({
         <Radio
           id={`end-after-${id}`}
           name={`${prefix}.end`}
-          label={t`After number of occurrences`}
+          label={t`After Number of Occurrences`}
           value="after"
           isChecked={end.value === 'after'}
           onChange={(event: React.FormEvent<HTMLInputElement>) => {
@@ -573,7 +573,7 @@ const FrequencyDetailSubform = ({
         <Radio
           id={`end-on-date-${id}`}
           name={`${prefix}.end`}
-          label={t`On date`}
+          label={t`On Date`}
           value="onDate"
           isChecked={end.value === 'onDate'}
           onChange={(event: React.FormEvent<HTMLInputElement>) => {
@@ -605,7 +605,7 @@ const FrequencyDetailSubform = ({
         <DateTimePicker
           dateFieldName={`${prefix}.endDate`}
           timeFieldName={`${prefix}.endTime`}
-          label={t`End date/time`}
+          label={t`End Date/Time`}
         />
       )}
     </>

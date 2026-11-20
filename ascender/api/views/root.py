@@ -193,6 +193,21 @@ class ApiV2ConfigView(APIView):
             become_methods=PRIVILEGE_ESCALATION_METHODS,
         )
 
+        # The installation's UI defaults are meant for everyone who has not
+        # chosen otherwise, which is mostly the users who cannot read
+        # /api/v2/settings/ui/: that endpoint is for administrators and system
+        # auditors only. The custom theme travels with them because it is one
+        # of the choices DEFAULT_UI_THEME offers, and a default naming a
+        # stylesheet the browser never received would paint nothing. None of
+        # it is sensitive: all of it ends up in every user's browser anyway.
+        data.update(
+            default_ui_theme=settings.DEFAULT_UI_THEME,
+            default_ui_language=settings.DEFAULT_UI_LANGUAGE,
+            max_ui_editor_rows=settings.MAX_UI_EDITOR_ROWS,
+            custom_theme=settings.CUSTOM_THEME,
+            custom_theme_name=settings.CUSTOM_THEME_NAME,
+        )
+
         # If LDAP is enabled, user_ldap_fields will return a list of field
         # names that are managed by LDAP and should be read-only for users with
         # a non-empty ldap_dn attribute.

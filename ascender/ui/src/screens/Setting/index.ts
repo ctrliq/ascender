@@ -1,1 +1,16 @@
-export { default } from './Settings';
+export { default as Appearance } from './UI';
+export { default as Authentication } from './Authentication';
+export { default as AzureAD } from './AzureAD';
+export { default as GitHub } from './GitHub';
+export { default as GoogleOAuth2 } from './GoogleOAuth2';
+export { default as JobSettings } from './Jobs';
+export { default as LDAP } from './LDAP';
+export { default as Logging } from './Logging';
+export { default as OIDC } from './OIDC';
+export { default as SAML } from './SAML';
+export { default as SessionSettings } from './MiscAuthentication';
+export { default as PasswordSettings } from './Password';
+export { default as TokenSettings } from './Tokens';
+export { default as MappingSettings } from './Mapping';
+export { default as SystemSettings } from './MiscSystem';
+export { default as Troubleshooting } from './Troubleshooting';

@@ -1,0 +1,28 @@
+/* The reason a row cannot be scheduled, above the list it was picked from. */
+.ascender-add-schedule__alert {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}
+
+/* One field per row. The layout below is written for a page, where three
+   columns fit; a modal is narrower than the viewport the media query asks
+   about, so the third column hung off the side and the body scrolled
+   sideways. */
+.ascender-add-schedule .ascender-form-column-layout {
+  grid-template-columns: 1fr;
+}
+
+/* The form arrives in the card its own screen wraps it in, which inside a
+   modal is a box drawn inside a box. */
+.ascender-add-schedule .pf-v6-c-card {
+  background-color: transparent;
+  box-shadow: none;
+  border: 0;
+}
+
+.ascender-add-schedule .pf-v6-c-card::before {
+  border: 0;
+}
+
+.ascender-add-schedule .pf-v6-c-card__body {
+  padding: 0;
+}

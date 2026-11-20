@@ -51,7 +51,7 @@ function AdvancedInventoryHostListItem({
           <b>{name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Recent jobs`}>
+      <Td dataLabel={t`Activity`}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
       <Td dataLabel={t`Inventory`}>

@@ -29,7 +29,7 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
     switch (ujtType) {
       case 'job_template':
       case 'job':
-        nodeTypeLetter = 'JT';
+        nodeTypeLetter = 'J';
         break;
       case 'project':
       case 'project_update':
@@ -41,7 +41,7 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
         break;
       case 'system_job_template':
       case 'system_job':
-        nodeTypeLetter = 'M';
+        nodeTypeLetter = 'C';
         break;
       case 'workflow_job_template':
       case 'workflow_job':

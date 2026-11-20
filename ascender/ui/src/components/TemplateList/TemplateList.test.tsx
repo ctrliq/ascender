@@ -1,3 +1,4 @@
+import { createMemoryHistory } from 'history';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
@@ -255,5 +256,87 @@ describe('<TemplateList />', () => {
 
     await waitFor(() => expect(JobTemplatesAPI.copy).toHaveBeenCalled());
     expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled();
+  });
+  /*
+   * The tabs are the type filter. They are only offered where the list stands
+   * on its own: embedded in the dashboard it sits inside a tab already, and a
+   * second row of them under the first reads as a mistake.
+   */
+  test('should offer a tab for each kind, and none where it is embedded', async () => {
+    const { unmount } = renderWithContexts(<TemplateList hasTypeTabs />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
+    expect(screen.getAllByRole('tab').map((tab) => tab.textContent)).toEqual([
+      'All',
+      'Job Templates',
+      'Workflow Templates',
+    ]);
+
+    unmount();
+    renderWithContexts(<TemplateList />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
+    expect(screen.queryAllByRole('tab')).toHaveLength(0);
+  });
+
+  test('should narrow the list to one kind from its tab', async () => {
+    const { user, history } = renderWithContexts(<TemplateList hasTypeTabs />);
+    await screen.findByRole('link', { name: 'Job Template 1' });
+
+    await user.click(screen.getByRole('tab', { name: 'Workflow Templates' }));
+
+    // in the query string like every other filter, so the tab survives a
+    // reload and the back button walks back through it
+    await waitFor(() =>
+      expect(history.location.search).toContain(
+        'template.type=workflow_job_template'
+      )
+    );
+    await waitFor(() =>
+      expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'workflow_job_template' })
+      )
+    );
+  });
+
+  test('should drop a type search when a tab takes over the type', async () => {
+    const history = createMemoryHistory({
+      initialEntries: [
+        '/templates?template.type=job_template&template.or__type=workflow_job_template',
+      ],
+    });
+    const { user } = renderWithContexts(<TemplateList hasTypeTabs />, {
+      context: { router: { history } },
+    });
+    await screen.findByRole('link', { name: 'Job Template 1' });
+
+    await user.click(screen.getByRole('tab', { name: 'Job Templates' }));
+
+    await waitFor(() =>
+      expect(history.location.search).not.toContain('or__type')
+    );
+  });
+
+  /*
+   * The add button on a tab has one thing to add, so it goes straight there
+   * rather than opening a menu to ask which of the two.
+   */
+  test('should add straight to the kind its tab holds', async () => {
+    vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: {} } },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
+    vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: {} } },
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
+    const history = createMemoryHistory({
+      initialEntries: ['/templates?template.type=workflow_job_template'],
+    });
+    renderWithContexts(<TemplateList hasTypeTabs />, {
+      context: { router: { history } },
+    });
+    await screen.findByRole('link', { name: 'Job Template 1' });
+
+    expect(screen.getByRole('link', { name: /add/i })).toHaveAttribute(
+      'href',
+      '/templates/workflow_job_template/add/'
+    );
   });
 });

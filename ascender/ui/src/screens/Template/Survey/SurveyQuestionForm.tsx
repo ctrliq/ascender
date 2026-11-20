@@ -41,7 +41,7 @@ function AnswerTypeField() {
 
   return (
     <FormGroup
-      label={t`Answer type`}
+      label={t`Answer Type`}
       labelHelp={
         <Popover
           content={t`Choose an answer type or format you want as the prompt for the user.
@@ -217,7 +217,7 @@ function SurveyQuestionForm({
               id="question-variable"
               name="variable"
               type="text"
-              label={t`Answer variable name`}
+              label={t`Answer Variable Name`}
               validate={combine([noWhiteSpace(), required(null)])}
               isRequired
               tooltip={t`The suggested format for variable names is lowercase and
@@ -238,13 +238,13 @@ function SurveyQuestionForm({
                   id="question-min"
                   name="min"
                   type="number"
-                  label={t`Minimum length`}
+                  label={t`Minimum Length`}
                 />
                 <FormField
                   id="question-max"
                   name="max"
                   type="number"
-                  label={t`Maximum length`}
+                  label={t`Maximum Length`}
                 />
               </>
             )}
@@ -278,7 +278,7 @@ function SurveyQuestionForm({
                 min={formik.values.min}
                 max={formik.values.max}
                 type={formik.values.type === 'text' ? 'text' : 'number'}
-                label={t`Default answer`}
+                label={t`Default Answer`}
               />
             )}
             {formik.values.type === 'textarea' && (
@@ -286,14 +286,14 @@ function SurveyQuestionForm({
                 id="question-default"
                 name="default"
                 type="textarea"
-                label={t`Default answer`}
+                label={t`Default Answer`}
               />
             )}
             {formik.values.type === 'password' && (
               <PasswordField
                 id="question-default"
                 name="default"
-                label={t`Default answer`}
+                label={t`Default Answer`}
               />
             )}
             {['multiplechoice', 'multiselect'].includes(formik.values.type) && (

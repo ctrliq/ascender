@@ -13,12 +13,21 @@ import type { JobTemplateFormValues } from '../shared/JobTemplateForm';
 
 export interface JobTemplateEditProps {
   template: JobTemplate;
+  /**
+   * The template's instance groups, read by the screen above rather than by
+   * the form, so the page has one loading state rather than two.
+   */
+  instanceGroups?: SummaryFieldRef[];
   /** Re-reads the template after a save, which the detail screen shows. */
   reloadTemplate: () => void;
   [key: string]: unknown;
 }
 
-function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
+function JobTemplateEdit({
+  template,
+  instanceGroups,
+  reloadTemplate,
+}: JobTemplateEditProps) {
   const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -142,6 +151,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
     <CardBody>
       <JobTemplateForm
         template={template}
+        instanceGroups={instanceGroups}
         handleCancel={handleCancel}
         handleSubmit={handleSubmit}
         submitError={formSubmitError}

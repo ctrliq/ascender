@@ -13,9 +13,17 @@ const isEqual = (array1: SummaryFieldRef[], array2: SummaryFieldRef[]) =>
 
 export interface OrganizationEditProps {
   organization: Organization;
+  /**
+   * The organization's instance groups, read by the screen above rather than
+   * by the form, so the page has one loading state rather than two.
+   */
+  instanceGroups?: SummaryFieldRef[];
 }
 
-function OrganizationEdit({ organization }: OrganizationEditProps) {
+function OrganizationEdit({
+  organization,
+  instanceGroups,
+}: OrganizationEditProps) {
   const detailsUrl = `/organizations/${organization.id}/details`;
   const navigate = useNavigate();
   const [formError, setFormError] = useState<unknown>(null);
@@ -72,6 +80,7 @@ function OrganizationEdit({ organization }: OrganizationEditProps) {
     <CardBody>
       <OrganizationForm
         organization={organization}
+        instanceGroups={instanceGroups}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         submitError={formError}

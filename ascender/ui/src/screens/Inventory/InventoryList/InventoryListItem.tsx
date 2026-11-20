@@ -66,7 +66,10 @@ function InventoryListItem({
   const failedSources = inventory.inventory_sources_with_failures ?? 0;
   let syncStatus = 'disabled';
   if (inventory.isSourceSyncRunning) {
-    syncStatus = 'syncing';
+    /* A sync is a run, and it reads here as one: the same blue Running label
+       the runs list gives it, rather than a word of this screen's own that
+       the status colours know nothing about. */
+    syncStatus = 'running';
   } else if (inventory.has_inventory_sources) {
     syncStatus = failedSources > 0 ? 'error' : 'success';
   }
@@ -118,11 +121,11 @@ function InventoryListItem({
         {inventory.kind === '' &&
           (inventory.has_inventory_sources ? (
             <Link
-              to={`${getInventoryPath(
-                inventory
-              )}/jobs?job.or__inventoryupdate__inventory_source__inventory__id=${
-                inventory.id
-              }`}
+              // The Runs tab already ORs this inventory's jobs, commands, syncs
+              // and workflows together, so an or__ clause here would only
+              // join that group and change nothing. An AND on the type
+              // narrows it to the syncs, and shows up as the Type filter.
+              to={`${getInventoryPath(inventory)}/runs?job.type=inventory_update`}
             >
               <StatusLabel
                 status={syncStatus}

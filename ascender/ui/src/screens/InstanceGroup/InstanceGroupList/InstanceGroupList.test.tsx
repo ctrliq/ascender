@@ -163,4 +163,21 @@ describe('<InstanceGroupList />', () => {
       screen.queryByRole('button', { name: /Add/ })
     ).not.toBeInTheDocument();
   });
+
+  test('shows only the tabs a plain user can open', async () => {
+    renderWithContexts(<InstanceGroupList />, {
+      context: { config: { me: { is_superuser: false } } },
+    });
+    await screen.findByRole('link', { name: 'Foo' });
+
+    expect(
+      screen.getByRole('tab', { name: 'Container Groups' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'Instances' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'Topology' })
+    ).not.toBeInTheDocument();
+  });
 });

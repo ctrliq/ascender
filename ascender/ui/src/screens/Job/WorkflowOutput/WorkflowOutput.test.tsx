@@ -1,6 +1,6 @@
 import type { AnyJob } from 'types/api';
 import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { WorkflowJobsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -157,6 +157,35 @@ describe('WorkflowOutput', () => {
       container.querySelectorAll('g[id^="link-"]')
     ).filter((g) => !g.id.endsWith('-overlay'));
     expect(links).toHaveLength(5);
+  });
+
+  test('a refused delete is named for a workflow job', async () => {
+    vi.mocked(WorkflowJobsAPI.destroy).mockRejectedValue(
+      new Error('delete failed')
+    );
+    const { user } = renderWithContexts(
+      <WorkflowOutput
+        job={
+          {
+            ...job,
+            type: 'workflow_job',
+            summary_fields: { user_capabilities: { delete: true } },
+          } as unknown as AnyJob
+        }
+      />
+    );
+    await user.click(
+      document.querySelector(
+        '[data-ouia-component-id="workflow-output-delete-button"]'
+      )!
+    );
+    await user.click(
+      await screen.findByRole('button', { name: 'Confirm Delete' })
+    );
+    const dialog = await screen.findByRole('dialog', {
+      name: /Workflow Job Delete Error/,
+    });
+    expect(dialog).toHaveTextContent('Failed to delete workflow job.');
   });
 
   test('error shown to user when error thrown fetching workflow job nodes', async () => {

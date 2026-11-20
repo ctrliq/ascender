@@ -22,3 +22,28 @@
   margin-left: 1rem;
   font-size: var(--pf-v6-global--FontSize--md);
 }
+
+/* The theme menu marks its current entry with a tick before the name. PatternFly
+   draws that mark on the trailing edge for isSelected, which is kept for the
+   aria-selected it carries, so the trailing one is taken out of the flow here
+   rather than the attribute being dropped. */
+.ascender-theme-menu__no-tick {
+  display: inline-block;
+  width: 1em;
+}
+
+.ascender-theme-menu .pf-v6-c-menu__item-select-icon {
+  display: none;
+}
+
+/* The tick takes the theme's accent; the name stays body text. Colouring the
+   label as well puts the row that matters most below the contrast a label needs:
+   the Ascender green is 3.13:1 on white, under the 4.5:1 for text, while the
+   same green as an icon clears the 3:1 that graphics need. It is also what the
+   desktop menus this borrows from do, and what PatternFly does with its own
+   select icon. */
+.ascender-theme-menu
+  .pf-v6-c-menu__item.pf-m-selected
+  .pf-v6-c-menu__item-icon {
+  color: var(--pf-v6-global--primary-color--100);
+}

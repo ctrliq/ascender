@@ -10,7 +10,7 @@ function GoogleOAuth2Edit() {
   return (
     <SettingsEditForm
       category="google-oauth2"
-      detailUrl="/settings/google_oauth2/details"
+      detailUrl="/authentication/google_oauth2/details"
     >
       {(googleOAuth2) => (
         <>

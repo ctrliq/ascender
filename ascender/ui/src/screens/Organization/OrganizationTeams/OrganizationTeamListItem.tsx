@@ -11,16 +11,31 @@ import './OrganizationTeamListItem.css';
 export interface OrganizationTeamListItemProps {
   team: Team;
   detailUrl: string;
+  isSelected: boolean;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
 function OrganizationTeamListItem({
   team,
   detailUrl,
+  isSelected,
+  onSelect,
+  rowIndex,
 }: OrganizationTeamListItemProps) {
   const { t } = useLingui();
   return (
     <Tr id={`team-row-${team.id}`} ouiaId={`team-row-${team.id}`}>
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
       <Td dataLabel={t`Name`}>
         <Link to={`${detailUrl}/details`}>
           <b>{team.name}</b>

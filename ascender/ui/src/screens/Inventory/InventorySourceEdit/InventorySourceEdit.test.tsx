@@ -52,6 +52,9 @@ describe('<InventorySourceEdit />', () => {
     vi.mocked(InventorySourcesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
     } as unknown as ResponseOf<typeof InventorySourcesAPI.readInstanceGroups>);
+    vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
+      data: { actions: { GET: { source: { choices: [['scm', 'Project']] } } } },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -103,6 +106,31 @@ describe('<InventorySourceEdit />', () => {
       23,
       [{ id: 100 }],
       []
+    );
+  });
+
+  test('keeps the limit and timeout the form does not own', async () => {
+    vi.mocked(InventorySourcesAPI.replace).mockResolvedValue({
+      data: { id: 23 },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.replace>);
+    // The mock form submits mockInvSrc, which has neither field, the way the
+    // real form's values have neither.
+    const { user } = renderWithContexts(
+      <InventorySourceEdit
+        inventory={mockInventory}
+        source={{ ...mockInvSrc, limit: 'lim', timeout: 7 }}
+      />
+    );
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
+
+    await waitFor(() =>
+      expect(InventorySourcesAPI.replace).toHaveBeenCalledTimes(1)
+    );
+    expect(InventorySourcesAPI.replace).toHaveBeenCalledWith(
+      23,
+      expect.objectContaining({ limit: 'lim', timeout: 7, name: 'foo' })
     );
   });
 

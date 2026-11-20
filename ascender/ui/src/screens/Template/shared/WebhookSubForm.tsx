@@ -31,7 +31,8 @@ import {
   CredentialTypesAPI,
 } from 'api';
 import getProjectHelpText from '../../Project/shared/Project.helptext';
-import getHelpText from './WorkflowJobTemplate.helptext';
+import getJobTemplateHelpText from './JobTemplate.helptext';
+import getWorkflowHelpText from './WorkflowJobTemplate.helptext';
 
 export interface WebhookSubFormProps {
   /** Which resource the webhook belongs to: a project sets no credential. */
@@ -49,7 +50,13 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
   const isProject = templateType === 'project';
   // Kept apart as well as merged: only the template strings name a webhook
   // credential, and the branch that uses it is the one isProject rules out.
-  const templateHelpText = getHelpText();
+  // Each kind reads its own: the strings name the resource the webhook
+  // launches, and taking one set for both had a job template's form call it
+  // a workflow template.
+  const templateHelpText =
+    templateType === 'workflow_job_template'
+      ? getWorkflowHelpText()
+      : getJobTemplateHelpText();
   const helpText = isProject ? getProjectHelpText() : templateHelpText;
 
   const [webhookServiceField, webhookServiceMeta, webhookServiceHelpers] =
@@ -117,7 +124,7 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
     {
       value: '',
       key: '',
-      label: t`Choose a Webhook Service`,
+      label: t`Choose a webhook service`,
       isDisabled: true,
     },
     {
@@ -210,7 +217,7 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
             <InputGroupItem isFill>
               <TextInput
                 id="template-webhook_key"
-                aria-label={t`workflow job template webhook key`}
+                aria-label={t`template webhook key`}
                 value={webhookKeyField.value}
                 placeholder={t`Leave blank to generate a new webhook key on save`}
                 onChange={(_event, val) => webhookKeyHelpers.setValue(val)}

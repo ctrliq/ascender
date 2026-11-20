@@ -74,6 +74,34 @@ describe('<JobTemplateDetail />', () => {
     expect(await screen.findByText('Name')).toBeInTheDocument();
   });
 
+  test('names each option as its checkbox on the form does', async () => {
+    renderWithContexts(
+      <JobTemplateDetail
+        template={{
+          ...mockTemplate,
+          become_enabled: true,
+          host_config_key: 'key',
+          webhook_service: 'github',
+          allow_simultaneous: true,
+          use_fact_cache: true,
+        }}
+      />
+    );
+    const options = (await screen.findByText('Options'))
+      .nextElementSibling as HTMLElement;
+    expect(
+      within(options)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual([
+      'Privilege Escalation',
+      'Provisioning Callbacks',
+      'Enable Webhook',
+      'Concurrent Jobs',
+      'Enable Fact Storage',
+    ]);
+  });
+
   test('should have proper number of delete detail requests', async () => {
     const { user } = renderWithContexts(
       <JobTemplateDetail
@@ -120,6 +148,11 @@ describe('<JobTemplateDetail />', () => {
     (mockTemplate.summary_fields.credentials ?? []).forEach((credential) => {
       expect(screen.getByText(credential.name as string)).toBeInTheDocument();
     });
+  });
+
+  test('should show the job type by its label rather than its key', async () => {
+    await renderDefault();
+    assertDetail('Job Type', 'Run');
   });
 
   test('should render Source Control Branch', async () => {

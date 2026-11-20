@@ -1,5 +1,6 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import { FormRoot } from 'components/Form';
 import { CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
@@ -70,6 +71,58 @@ describe('CredentialLookup', () => {
       page: 1,
       page_size: 5,
     });
+  });
+
+  /*
+   * The project form holds two of these, the source control credential and
+   * the signature validation one. Each keeps its own paging and search under
+   * its field's name, so a search in one neither reaches the other's request
+   * nor sends it again, and each open button has an id of its own.
+   */
+  test('should keep two lookups on one form apart', async () => {
+    vi.mocked(CredentialsAPI.read).mockReset();
+    vi.mocked(CredentialsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
+    const history = createMemoryHistory({ initialEntries: ['/projects/add'] });
+    renderWithContexts(
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
+        <CredentialLookup
+          credentialTypeId={2}
+          label="Source Control Credential"
+          onChange={() => {}}
+        />
+        <CredentialLookup
+          credentialTypeId={9}
+          label="Signature Validation Credential"
+          fieldName="signature_validation_credential"
+          onChange={() => {}}
+        />
+      </FormRoot>,
+      { context: { router: { history } } }
+    );
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(2));
+    expect(document.getElementById('credential-open')).toBeInTheDocument();
+    expect(
+      document.getElementById('signature_validation_credential-open')
+    ).toBeInTheDocument();
+
+    act(() => history.push('/projects/add?credential.name__icontains=git'));
+
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(3));
+    expect(CredentialsAPI.read).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        credential_type: 2,
+        name__icontains: 'git',
+      })
+    );
+    // Give a stray request from the other lookup the chance to show itself.
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+    });
+    expect(CredentialsAPI.read).toHaveBeenCalledTimes(3);
   });
 
   test('should display label', async () => {

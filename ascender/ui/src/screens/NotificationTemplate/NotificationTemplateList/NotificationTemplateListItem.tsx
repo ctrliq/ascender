@@ -13,7 +13,7 @@ import CopyButton from 'components/CopyButton';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { NOTIFICATION_TYPES } from '../constants';
+import { getNotificationTypeLabel } from '../constants';
 
 const NUM_RETRIES = 25;
 const RETRY_TIMEOUT = 5000;
@@ -42,7 +42,7 @@ function NotificationTemplateListItem({
   onSelect,
   rowIndex,
 }: NotificationTemplateListItemProps) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const recentNotifications = template.summary_fields?.recent_notifications;
   const latestStatus = recentNotifications
     ? recentNotifications[0]?.status
@@ -133,11 +133,9 @@ function NotificationTemplateListItem({
           {status && <StatusLabel status={status} />}
         </Td>
         <Td dataLabel={t`Type`}>
-          {NOTIFICATION_TYPES[
-            template.notification_type as keyof typeof NOTIFICATION_TYPES
-          ] || template.notification_type}
+          {getNotificationTypeLabel(template.notification_type, i18n)}
         </Td>
-        <Td dataLabel={t`Oragnization`}>
+        <Td dataLabel={t`Organization`}>
           <Link
             to={`/organizations/${template.summary_fields.organization?.id}/details`}
           >
@@ -145,7 +143,12 @@ function NotificationTemplateListItem({
           </Link>
         </Td>
         <ActionsTd dataLabel={t`Actions`}>
-          <ActionItem visible tooltip={t`Test notification`}>
+          {/* The details page offers Test only to those who may edit the
+              template, and the api refuses it to anyone else. */}
+          <ActionItem
+            visible={template.summary_fields.user_capabilities?.edit}
+            tooltip={t`Test Notification`}
+          >
             <Button
               icon={<BellIcon />}
               ouiaId={`notification-test-button-${template.id}`}
@@ -157,7 +160,7 @@ function NotificationTemplateListItem({
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities?.edit}
-            tooltip={t`Edit`}
+            tooltip={t`Edit Notification Template`}
           >
             <Button
               icon={<PencilAltIcon />}
@@ -165,7 +168,7 @@ function NotificationTemplateListItem({
               aria-label={t`Edit Notification Template`}
               variant="plain"
               component={Link}
-              to={`/notification_templates/${template.id}/edit`}
+              to={`/notifications/${template.id}/edit`}
             />
           </ActionItem>
           <ActionItem
@@ -178,7 +181,7 @@ function NotificationTemplateListItem({
               isCopyDisabled={isCopyDisabled}
               onCopyStart={handleCopyStart}
               onCopyFinish={handleCopyFinish}
-              errorMessage={t`Failed to copy template.`}
+              errorMessage={t`Failed to copy notification template.`}
             />
           </ActionItem>
         </ActionsTd>

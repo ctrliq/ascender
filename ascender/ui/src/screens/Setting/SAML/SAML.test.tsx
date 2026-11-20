@@ -46,7 +46,7 @@ describe('<SAML />', () => {
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route path="/settings/saml/*" element={<SAML />} />
+          <Route path="/authentication/saml/*" element={<SAML />} />
         </Routes>
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -54,21 +54,21 @@ describe('<SAML />', () => {
   }
 
   test('should render SAML details', async () => {
-    renderSAML(['/settings/saml/details']);
+    renderSAML(['/authentication/saml/details']);
     expect(
       await screen.findByText('SAML Service Provider Entity ID')
     ).toBeInTheDocument();
   });
 
   test('should render SAML edit', async () => {
-    renderSAML(['/settings/saml/edit']);
+    renderSAML(['/authentication/saml/edit']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderSAML(['/settings/saml/foo']);
+    renderSAML(['/authentication/saml/foo']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)

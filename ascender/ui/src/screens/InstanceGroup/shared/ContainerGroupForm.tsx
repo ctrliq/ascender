@@ -92,7 +92,7 @@ function ContainerGroupFormFields({
       )}
       <FormField
         id="instance-group-max-concurrent-jobs"
-        label={t`Max concurrent jobs`}
+        label={t`Max Concurrent Jobs`}
         name="max_concurrent_jobs"
         type="number"
         min="0"
@@ -101,7 +101,7 @@ function ContainerGroupFormFields({
       />
       <FormField
         id="instance-group-max-forks"
-        label={t`Max forks`}
+        label={t`Max Forks`}
         name="max_forks"
         type="number"
         min="0"
@@ -113,8 +113,8 @@ function ContainerGroupFormFields({
         <FormCheckboxLayout>
           <CheckboxField
             name="override"
-            aria-label={t`Customize pod specification`}
-            label={t`Customize pod specification`}
+            aria-label={t`Override Pod Spec`}
+            label={t`Override Pod Spec`}
             id="container-groups-override-pod-specification"
           />
         </FormCheckboxLayout>
@@ -127,7 +127,9 @@ function ContainerGroupFormFields({
               tooltip={t`Field for passing a custom Kubernetes or OpenShift Pod specification.`}
               id="custom-pod-spec"
               name="pod_spec_override"
-              label={t`Custom pod spec`}
+              // The name the details page shows it under, so the field reads
+              // the same on both sides of the Edit button.
+              label={t`Pod Spec Override`}
             />
           </FormFullWidthLayout>
         </SubFormLayout>

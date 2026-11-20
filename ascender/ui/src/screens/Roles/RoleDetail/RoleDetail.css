@@ -1,0 +1,5 @@
+/* A detail row already carries 14px under itself, so the body adds little of
+   its own: the card was closing 38px below the last value. */
+.ascender-role-detail__body {
+  padding-block-end: 8px;
+}

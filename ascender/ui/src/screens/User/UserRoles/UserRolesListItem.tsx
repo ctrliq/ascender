@@ -10,6 +10,10 @@ export interface UserRolesListItemProps {
   detailUrl?: string | null;
   /** Takes the role off the user, which the list confirms before it does. */
   onSelect: (role: Role) => void;
+  /** Whether the row is ticked for the toolbar's Delete, and the tick. */
+  isSelected?: boolean;
+  onSelectRow?: () => void;
+  rowIndex?: number;
   [key: string]: unknown;
 }
 
@@ -17,13 +21,26 @@ function UserRolesListItem({
   role,
   detailUrl,
   onSelect,
+  isSelected = false,
+  onSelectRow,
+  rowIndex,
 }: UserRolesListItemProps) {
   const { t } = useLingui();
   const labelId = `userRole-${role.id}`;
 
   return (
     <Tr id={`user-role-row-${role.id}`} ouiaId={`user-role-row-${role.id}`}>
-      <Td id={labelId} dataLabel={t`Name`}>
+      <Td
+        select={{
+          rowIndex: rowIndex ?? 0,
+          isSelected: Boolean(isSelected),
+          onSelect: () => onSelectRow?.(),
+          // Only a role the api lets this viewer take off can be ticked.
+          isDisabled: !role.summary_fields.user_capabilities?.unattach,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <Td id={labelId} dataLabel={t`Resource Name`}>
         {role.summary_fields.resource_name ? (
           <Link to={`${detailUrl}`} id={labelId}>
             <b>{role.summary_fields.resource_name}</b>
@@ -43,6 +60,7 @@ function UserRolesListItem({
             variant="outline"
             key={role.name}
             aria-label={role.name}
+            closeBtnAriaLabel={t`Disassociate ${role.name}`}
             {...(role.summary_fields.user_capabilities?.unattach
               ? { onClose: () => onSelect(role) }
               : {})}

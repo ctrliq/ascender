@@ -67,7 +67,7 @@ function AssociateModal({
 
   // Set default values for header and title after i18n is available
   header = header || t`Items`;
-  title = title || t`Select Items`;
+  title = title || t`Associate Items`;
 
   const {
     request: fetchItems,
@@ -136,13 +136,13 @@ function AssociateModal({
       actions={[
         <Button
           ouiaId="associate-modal-save"
-          aria-label={t`Save`}
+          aria-label={t`Associate`}
           key="select"
           variant="primary"
           onClick={handleSave}
           isDisabled={selected.length === 0}
         >
-          {t`Save`}
+          {t`Associate`}
         </Button>,
         <Button
           ouiaId="associate-modal-cancel"

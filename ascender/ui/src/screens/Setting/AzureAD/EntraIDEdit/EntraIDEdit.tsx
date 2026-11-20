@@ -11,7 +11,7 @@ function EntraIDEdit() {
   return (
     <SettingsEditForm
       category="entra-id"
-      detailUrl="/settings/azure/entra/details"
+      detailUrl="/authentication/azure/entra/details"
     >
       {(entra) => (
         <>
