@@ -246,7 +246,8 @@ function ConstructedInventoryDetail({
           />
         )}
         {(inventory.prevent_instance_group_fallback ||
-          inventory.allow_jobs_while_syncing) && (
+          inventory.allow_jobs_while_syncing ||
+          inventory.allow_jobs_while_ad_hoc) && (
           <Detail
             fullWidth
             label={t`Enabled Options`}
@@ -268,6 +269,15 @@ function ConstructedInventoryDetail({
                     <Popover
                       header={t`Allow Jobs While Syncing`}
                       content={helpText.allowJobsWhileSyncing}
+                    />
+                  </Content>
+                )}
+                {inventory.allow_jobs_while_ad_hoc && (
+                  <Content component={ContentVariants.li}>
+                    {t`Allow Jobs While Ad Hoc Commands Run`}
+                    <Popover
+                      header={t`Allow Jobs While Ad Hoc Commands Run`}
+                      content={helpText.allowJobsWhileAdHoc}
                     />
                   </Content>
                 )}

@@ -144,6 +144,21 @@ describe('<InventoryForm />', () => {
     );
   });
 
+  test('should submit allow_jobs_while_ad_hoc from its checkbox', async () => {
+    const { user, container, onSubmit } = await renderForm();
+
+    const checkbox = container.querySelector('#option-allow-jobs-while-ad-hoc');
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox!);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ allow_jobs_while_ad_hoc: true })
+      )
+    );
+  });
+
   test('should call onCancel when Cancel button is clicked', async () => {
     const { user, onCancel } = await renderForm();
 

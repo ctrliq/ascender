@@ -6946,6 +6946,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -6981,6 +6986,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -7371,6 +7381,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     FederatedInventoryRequest: {
       name: string | null;
@@ -7393,6 +7408,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     Group: {
       readonly id: number;
@@ -7891,6 +7911,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     InventoryRequest: {
       name: string | null;
@@ -7936,6 +7961,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     InventorySource: {
       readonly id: number;
@@ -10522,6 +10552,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
       /** @description The source_vars for the related auto-created inventory source, special to constructed inventory. */
       source_vars?: string;
       /** @description The cache timeout for the related auto-created inventory source, special to constructed inventory */
@@ -10623,6 +10658,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     PatchedGroupRequest: {
       name?: string | null;
@@ -10795,6 +10835,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands against this inventory. By default they wait for it to finish. Syncs are not affected.
+       * @default false
+       */
+      allow_jobs_while_ad_hoc: boolean | null;
     };
     PatchedInventorySourceRequest: {
       name?: string | null;

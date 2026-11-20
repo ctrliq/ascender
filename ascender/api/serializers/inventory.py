@@ -62,6 +62,7 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'prevent_instance_group_fallback',
             'allow_deletes_while_in_use',
             'allow_jobs_while_syncing',
+            'allow_jobs_while_ad_hoc',
         )
         extra_kwargs = {
             # required/default must be explicit since DRF 3.16: nullable FKs now

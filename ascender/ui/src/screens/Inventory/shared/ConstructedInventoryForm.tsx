@@ -183,6 +183,12 @@ function ConstructedInventoryFormFields({
               label={t`Allow Jobs While Syncing`}
               tooltip={helpText.allowJobsWhileSyncing}
             />
+            <CheckboxField
+              id="option-allow-jobs-while-ad-hoc"
+              name="allow_jobs_while_ad_hoc"
+              label={t`Allow Jobs While Ad Hoc Commands Run`}
+              tooltip={helpText.allowJobsWhileAdHoc}
+            />
           </FormCheckboxLayout>
         </FormGroup>
         <VariablesField
@@ -211,6 +217,7 @@ export interface ConstructedInventoryFormValues {
   verbosity: number;
   source_vars: string;
   allow_jobs_while_syncing: boolean;
+  allow_jobs_while_ad_hoc: boolean;
 }
 
 export interface ConstructedInventoryFormProps {
@@ -249,6 +256,8 @@ function ConstructedInventoryForm({
       '---\nplugin: constructed\nstrict: true',
     allow_jobs_while_syncing:
       constructedInventory?.allow_jobs_while_syncing || false,
+    allow_jobs_while_ad_hoc:
+      constructedInventory?.allow_jobs_while_ad_hoc || false,
   };
 
   return (

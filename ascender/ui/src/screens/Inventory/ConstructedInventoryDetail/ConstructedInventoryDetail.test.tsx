@@ -60,6 +60,7 @@ const mockInventory = {
   pending_deletion: false,
   prevent_instance_group_fallback: true,
   allow_jobs_while_syncing: true,
+  allow_jobs_while_ad_hoc: true,
   update_cache_timeout: 0,
   limit: '',
   verbosity: 1,
@@ -184,6 +185,9 @@ describe('<ConstructedInventoryDetail />', () => {
     expect(screen.getByText('Type')).toBeInTheDocument();
     expect(screen.getByText('Constructed Inventory')).toBeInTheDocument();
     expect(screen.getByText('Allow Jobs While Syncing')).toBeInTheDocument();
+    expect(
+      screen.getByText('Allow Jobs While Ad Hoc Commands Run')
+    ).toBeInTheDocument();
   });
 
   test('should render action buttons', async () => {

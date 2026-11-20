@@ -125,6 +125,24 @@ describe('<InventoryDetail />', () => {
     expect(screen.getByText('Allow Jobs While Syncing')).toBeInTheDocument();
   });
 
+  test('should list allow jobs while ad hoc among the enabled options', async () => {
+    vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
+      data: { results: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
+
+    renderWithContexts(
+      <InventoryDetail
+        inventory={{ ...mockInventory, allow_jobs_while_ad_hoc: true }}
+      />
+    );
+
+    await screen.findByText('Inv no hosts');
+    expect(screen.getByText('Enabled Options')).toBeInTheDocument();
+    expect(
+      screen.getByText('Allow Jobs While Ad Hoc Commands Run')
+    ).toBeInTheDocument();
+  });
+
   test('should load instance groups', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: {
