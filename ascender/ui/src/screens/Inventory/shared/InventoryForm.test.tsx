@@ -144,6 +144,23 @@ describe('<InventoryForm />', () => {
     );
   });
 
+  test('should submit variables_from_sources_only from its checkbox', async () => {
+    const { user, container, onSubmit } = await renderForm();
+
+    const checkbox = container.querySelector(
+      '#option-variables-from-sources-only'
+    );
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox!);
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ variables_from_sources_only: true })
+      )
+    );
+  });
+
   test('should call onCancel when Cancel button is clicked', async () => {
     const { user, onCancel } = await renderForm();
 

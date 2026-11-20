@@ -117,6 +117,12 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
               label={t`Allow Jobs While Syncing`}
               tooltip={helpText.allowJobsWhileSyncing}
             />
+            <CheckboxField
+              id="option-variables-from-sources-only"
+              name="variables_from_sources_only"
+              label={t`Variables From Sources Only`}
+              tooltip={helpText.variablesFromSourcesOnly}
+            />
           </FormCheckboxLayout>
         </FormGroup>
         <VariablesField
@@ -141,6 +147,7 @@ export interface InventoryFormValues {
   prevent_instance_group_fallback: boolean;
   allow_deletes_while_in_use: boolean;
   allow_jobs_while_syncing: boolean;
+  variables_from_sources_only: boolean;
 }
 
 export interface InventoryFormProps {
@@ -175,6 +182,7 @@ function InventoryForm({
       inventory.prevent_instance_group_fallback || false,
     allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
     allow_jobs_while_syncing: inventory.allow_jobs_while_syncing || false,
+    variables_from_sources_only: inventory.variables_from_sources_only || false,
   };
   return (
     <FormRoot
