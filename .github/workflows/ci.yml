@@ -8,6 +8,11 @@ env:
   COMPOSE_TAG: ${{ github.base_ref || 'main' }}
 on:
   pull_request:
+  # The README badge shows these runs: without them it shows whichever pull
+  # request finished last.
+  push:
+    branches:
+      - main
 jobs:
   common-tests:
     name: ${{ matrix.tests.name }}
