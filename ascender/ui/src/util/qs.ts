@@ -57,7 +57,10 @@ export function parseQueryString(
   queryString: string | null | undefined
 ): QSParams {
   if (!queryString) {
-    return config.defaultParams || {};
+    // A copy, not the config's object: callers add request-only parameters
+    // such as summary_fields or id__in, and a shared default object would keep
+    // those values for every later request.
+    return { ...(config.defaultParams || {}) };
   }
   const params = stringToObject(config, queryString);
   return addDefaultsToObject(config, params);

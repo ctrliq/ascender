@@ -210,9 +210,11 @@ class ActivityStreamSerializer(BaseSerializer):
                     item[field] = fval
             summary_fields[related_type].append(item)
 
-    def get_summary_fields(self, obj):
+    def get_summary_fields(self, obj, requested=None):
         summary_fields = OrderedDict()
         for fk, related_fields in self._local_summarizable_fk_fields(obj):
+            if requested is not None and fk not in requested:
+                continue
             try:
                 if not hasattr(obj, fk):
                     continue
@@ -229,11 +231,12 @@ class ActivityStreamSerializer(BaseSerializer):
                         summary_fields[fk].append(thisItemDict)
             except ObjectDoesNotExist:
                 pass
-        if obj.actor is not None:
-            summary_fields['actor'] = dict(id=obj.actor.id, username=obj.actor.username, first_name=obj.actor.first_name, last_name=obj.actor.last_name)
-        elif obj.deleted_actor:
-            summary_fields['actor'] = obj.deleted_actor.copy()
-            summary_fields['actor']['id'] = None
-        if obj.setting:
+        if requested is None or 'actor' in requested:
+            if obj.actor is not None:
+                summary_fields['actor'] = dict(id=obj.actor.id, username=obj.actor.username, first_name=obj.actor.first_name, last_name=obj.actor.last_name)
+            elif obj.deleted_actor:
+                summary_fields['actor'] = obj.deleted_actor.copy()
+                summary_fields['actor']['id'] = None
+        if obj.setting and (requested is None or 'setting' in requested):
             summary_fields['setting'] = [obj.setting]
         return summary_fields

@@ -102,3 +102,21 @@ describe('getScheduleUrl', () => {
     );
   });
 });
+
+describe('getScheduleUrl with a narrowed summary', () => {
+  test('falls back to the top-level unified job template id', () => {
+    const systemJob = {
+      type: 'system_job',
+      unified_job_template: 9,
+      summary_fields: {
+        schedule: {
+          name: 'mock schedule',
+          id: 10,
+        },
+      },
+    };
+    expect(getScheduleUrl(systemJob as unknown as Job | UnifiedJob)).toEqual(
+      '/management_jobs/9/schedules/10/details'
+    );
+  });
+});

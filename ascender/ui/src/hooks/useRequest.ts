@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { parseQueryString, updateQueryString } from 'util/qs';
 import type { QSConfig } from 'util/qs';
@@ -16,12 +16,25 @@ import useIsMounted from './useIsMounted';
  * The hook also accepts an optional second parameter which is a default
  * value to set as result before the first time the request is made.
  */
+/** Options for the shared request hook. */
+export interface UseRequestOptions {
+  /**
+   * Discard a response that a newer request has already superseded.
+   *
+   * Lists use this so an older page read cannot overwrite a newer one, while
+   * the summary hooks do not need the extra bookkeeping.
+   */
+  latestOnly?: boolean;
+}
+
 /** What every caller of useRequest destructures. */
 export interface UseRequest<T, Args extends unknown[]> {
   result: T;
   error: unknown;
   isLoading: boolean;
   request: (...args: Args) => Promise<void>;
+  /** Like request, but keeps the current result and never shows a spinner. */
+  requestSilently: (...args: Args) => Promise<void>;
   setValue: React.Dispatch<React.SetStateAction<T>>;
 }
 
@@ -46,14 +59,16 @@ export type InitialResult<T> = T extends readonly unknown[]
 // that. Without one it starts undefined and callers have to say so.
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
-  initialValue: [T] extends [void] ? unknown : InitialResult<T>
+  initialValue: [T] extends [void] ? unknown : InitialResult<T>,
+  options?: UseRequestOptions
 ): UseRequest<T, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>
 ): UseRequest<T | undefined, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
-  initialValue?: InitialResult<T>
+  initialValue?: InitialResult<T>,
+  options: UseRequestOptions = {}
 ): UseRequest<T | undefined, Args> {
   const [result, setResult] = useState<T | undefined>(initialValue as T);
   const [error, setError] = useState<unknown>(null);
@@ -61,34 +76,51 @@ export default function useRequest<T, Args extends unknown[] = unknown[]>(
     (initialValue as { isLoading?: boolean } | undefined)?.isLoading || false
   );
   const isMounted = useIsMounted();
+  const latestOnly = options.latestOnly ?? false;
+  const requestSequence = useRef(0);
+
+  const run = useCallback(
+    async (silent: boolean, ...args: Args) => {
+      const requestId = ++requestSequence.current;
+      if (!silent) setIsLoading(true);
+      try {
+        const response = await makeRequest(...args);
+        if (
+          isMounted.current &&
+          (!latestOnly || requestId === requestSequence.current)
+        ) {
+          setResult(response);
+          setError(null);
+        }
+      } catch (err) {
+        if (
+          isMounted.current &&
+          (!latestOnly || requestId === requestSequence.current)
+        ) {
+          if (!silent) {
+            setError(err);
+            setResult(initialValue as T);
+          }
+        }
+      } finally {
+        if (
+          isMounted.current &&
+          (!latestOnly || requestId === requestSequence.current)
+        ) {
+          setIsLoading(false);
+        }
+      }
+    },
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    [makeRequest, latestOnly]
+  );
 
   return {
     result,
     error,
     isLoading,
-    request: useCallback(
-      async (...args: Args) => {
-        setIsLoading(true);
-        try {
-          const response = await makeRequest(...args);
-          if (isMounted.current) {
-            setResult(response);
-            setError(null);
-          }
-        } catch (err) {
-          if (isMounted.current) {
-            setError(err);
-            setResult(initialValue as T);
-          }
-        } finally {
-          if (isMounted.current) {
-            setIsLoading(false);
-          }
-        }
-      },
-      /* eslint-disable-next-line react-hooks/exhaustive-deps */
-      [makeRequest]
-    ),
+    request: useCallback((...args: Args) => run(false, ...args), [run]),
+    requestSilently: useCallback((...args: Args) => run(true, ...args), [run]),
     setValue: setResult,
   };
 }

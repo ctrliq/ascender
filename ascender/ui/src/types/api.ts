@@ -216,6 +216,24 @@ export type AnyUnifiedJobTemplate = Omit<
  * job has. The rest are named here, optional, because which of them a row has
  * depends on its `type`.
  */
+export interface StackTemplate {
+  id: number;
+  name?: string;
+  project?: { id: number; name: string };
+  organization?: { id: number; name: string };
+}
+
+export interface JobStack {
+  count: number;
+  status_counts: Partial<Record<JobStatus, number>>;
+  template: StackTemplate;
+}
+
+export interface JobStatusGroup {
+  status: JobStatus;
+  count: number;
+}
+
 export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
   /** Jobs: whether this is the parent of a set of job slices. */
   is_sliced_job?: boolean | null;
@@ -232,6 +250,10 @@ export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
   organization?: number | null;
   credential?: number | null;
   canceled_on?: string | null;
+  /** Present on a row that represents a stack of active jobs for one template. */
+  stack?: JobStack | null;
+  /** Present on a row that represents all active jobs for one status. */
+  status_group?: JobStatusGroup | null;
 };
 
 /**

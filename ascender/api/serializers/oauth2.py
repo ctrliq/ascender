@@ -182,7 +182,8 @@ class OAuth2ApplicationSerializer(BaseSerializer):
                 token_count = obj.oauth2accesstoken_set.count()
         return {'count': token_count, 'results': token_list}
 
-    def get_summary_fields(self, obj):
-        ret = super(OAuth2ApplicationSerializer, self).get_summary_fields(obj)
-        ret['tokens'] = self._summary_field_tokens(obj)
+    def get_summary_fields(self, obj, requested=None):
+        ret = super(OAuth2ApplicationSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is None or 'tokens' in requested:
+            ret['tokens'] = self._summary_field_tokens(obj)
         return ret

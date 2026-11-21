@@ -10,14 +10,27 @@ const result: { current: ReturnType<typeof useSelected> } = {
 };
 const latest = () => result.current;
 
-const TestHook = ({ list }: { list?: Selectable[] }) => {
-  result.current = useSelected(list);
+const TestHook = ({
+  list,
+  defaultSelected,
+  prune,
+}: {
+  list?: Selectable[];
+  defaultSelected?: Selectable[];
+  prune?: boolean;
+}) => {
+  result.current = useSelected(list, defaultSelected, prune);
   return null;
 };
 
-const testHook = (list?: Selectable[]) => {
-  render(<TestHook list={list} />);
-};
+const testHook = (
+  list?: Selectable[],
+  defaultSelected?: Selectable[],
+  prune?: boolean
+) =>
+  render(
+    <TestHook list={list} defaultSelected={defaultSelected} prune={prune} />
+  );
 
 describe('useSelected hook', () => {
   test('should return expected initial values', () => {
@@ -26,6 +39,29 @@ describe('useSelected hook', () => {
     expect(latest().isAllSelected).toEqual(false);
     expect(latest().handleSelect).toBeInstanceOf(Function);
     expect(latest().setSelected).toBeInstanceOf(Function);
+  });
+
+  test('prune keeps selection and re-points it at the refreshed rows', () => {
+    const running = { id: '1', status: 'running' };
+    const successful = { id: '1', status: 'successful' };
+    const dropped = { id: '2', status: 'running' };
+    const view = testHook([running, dropped], [running, dropped], true);
+
+    expect(latest().selected).toEqual([running, dropped]);
+
+    view.rerender(
+      <TestHook
+        list={[successful]}
+        defaultSelected={[running, dropped]}
+        prune
+      />
+    );
+
+    expect(latest().selected).toEqual([successful]);
+    expect(latest().selected[0]).toBe(successful);
+    expect((latest().selected[0] as typeof successful).status).toBe(
+      'successful'
+    );
   });
 
   test('handleSelect should update and filter selected items', () => {

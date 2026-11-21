@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -98,6 +98,14 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
   useEffect(() => {
     loadTemplateAndRoles();
   }, [loadTemplateAndRoles, location.pathname]);
+
+  const jobListParams = useMemo(
+    () =>
+      template?.id
+        ? { workflow_job__workflow_job_template: template.id }
+        : undefined,
+    [template]
+  );
 
   const loadScheduleOptions = useCallback(
     () => WorkflowJobTemplatesAPI.readScheduleOptions(templateId),
@@ -266,13 +274,7 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
           {template?.id && (
             <Route
               path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    workflow_job__workflow_job_template: template.id,
-                  }}
-                />
-              }
+              element={<JobList defaultParams={jobListParams} />}
             />
           )}
           {template && (

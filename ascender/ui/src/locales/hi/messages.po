@@ -175,7 +175,7 @@ msgstr "{forks, plural, one {# फ़ोर्क} other {# फ़ोर्क}}
 #: routeConfig.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:112
 #: screens/ActivityStream/ActivityStream.tsx:185
-#: screens/Dashboard/Dashboard.tsx:89
+#: screens/Dashboard/Dashboard.tsx:91
 #: screens/Project/ProjectList/ProjectList.tsx:181
 #: screens/Project/ProjectList/ProjectList.tsx:249
 #: screens/Project/Projects.tsx:14
@@ -263,7 +263,7 @@ msgstr "पिछला स्क्रॉल करें"
 msgid "Failed to copy project."
 msgstr "प्रोजेक्ट कॉपी करने में विफल।"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Hide description"
 msgstr "विवरण छिपाएं"
@@ -344,8 +344,10 @@ msgstr "लागू करने के लिए भूमिकाएं च�
 msgid "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."
 msgstr "चेकआउट करने के लिए ब्रांच। ब्रांच के अलावा, आप टैग, कमिट हैश और मनमाने refs दर्ज कर सकते हैं। कुछ कमिट हैश और refs तब तक उपलब्ध नहीं हो सकते जब तक आप एक कस्टम refspec भी प्रदान न करें।"
 
-#: components/JobList/JobList.tsx:266
-#: components/JobList/JobListItem.tsx:130
+#: components/JobList/JobList.tsx:475
+#: components/JobList/JobListItem.tsx:172
+#: components/JobList/JobListItem.tsx:488
+#: components/JobList/JobListItem.tsx:609
 #: components/Lookup/ProjectLookup.tsx:159
 #: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
@@ -419,12 +421,12 @@ msgstr "नीति प्रकार"
 msgid "This field must not exceed {0} characters"
 msgstr "इस फ़ील्ड में {0} से अधिक वर्ण नहीं होने चाहिए"
 
-#: components/StatusLabel/StatusLabel.tsx:62
+#: components/StatusLabel/StatusLabel.tsx:65
 msgid "Timed out"
 msgstr "समय समाप्त"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 msgid "Select {0}"
 msgstr "{0} चुनें"
 
@@ -589,6 +591,10 @@ msgstr "जॉब आउटपुट की प्रतीक्षा हो �
 msgid "Container group"
 msgstr "कंटेनर समूह"
 
+#: components/JobList/GroupBySelect.tsx:107
+#~ msgid "Clear the template filter to change grouping."
+#~ msgstr ""
+
 #. placeholder {0}: cannotCancelNotRunning.length
 #: components/JobList/JobListCancelButton.tsx:81
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
@@ -722,6 +728,10 @@ msgstr "JSON:"
 msgid "Views"
 msgstr "दृश्य"
 
+#: components/JobList/StackCancelButton.tsx:130
+msgid "{count, plural, one {This action will cancel # job of:} other {This action will cancel # jobs of:}}"
+msgstr ""
+
 #: routeConfig.tsx:85
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
@@ -746,8 +756,10 @@ msgstr "नोड जोड़ें"
 msgid "JSON tab"
 msgstr "JSON टैब"
 
-#: components/JobList/JobList.tsx:267
-#: components/JobList/JobListItem.tsx:134
+#: components/JobList/JobList.tsx:476
+#: components/JobList/JobListItem.tsx:176
+#: components/JobList/JobListItem.tsx:492
+#: components/JobList/JobListItem.tsx:610
 msgid "Start Time"
 msgstr "प्रारंभ समय"
 
@@ -788,7 +800,7 @@ msgstr "विविध सिस्टम"
 msgid "Choose a Source Control Type"
 msgstr "एक सोर्स कंट्रोल प्रकार चुनें"
 
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:157
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:162
 msgid "View Inventory Host Details"
 msgstr "इन्वेंटरी होस्ट विवरण देखें"
 
@@ -885,7 +897,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:238
+#: components/Lookup/Lookup.tsx:271
 msgid "Lookup modal"
 msgstr "लुकअप मोडल"
 
@@ -939,13 +951,13 @@ msgstr "गंतव्य SMS नंबर"
 msgid "Source control branch"
 msgstr "सोर्स कंट्रोल ब्रांच"
 
-#: screens/Dashboard/Dashboard.tsx:103
+#: screens/Dashboard/Dashboard.tsx:105
 #: screens/Job/JobOutput/HostEventModal.tsx:146
 msgid "Tabs"
 msgstr "टैब"
 
-#: screens/Template/Template.tsx:287
-#: screens/Template/WorkflowJobTemplate.tsx:299
+#: screens/Template/Template.tsx:290
+#: screens/Template/WorkflowJobTemplate.tsx:301
 msgid "View Template Details"
 msgstr "टेम्पलेट विवरण देखें"
 
@@ -1050,8 +1062,8 @@ msgstr "वर्ष"
 msgid "Reload output"
 msgstr "आउटपुट पुनः लोड करें"
 
-#: screens/Host/Host.tsx:104
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:114
+#: screens/Host/Host.tsx:109
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:119
 msgid "Host not found."
 msgstr "होस्ट नहीं मिला।"
 
@@ -1084,7 +1096,7 @@ msgstr "अपडेट करने से पहले स्थानीय �
 msgid "Setting category"
 msgstr "सेटिंग श्रेणी"
 
-#: screens/Credential/Credential.tsx:81
+#: screens/Credential/Credential.tsx:83
 msgid "Back to Credentials"
 msgstr "क्रेडेंशियल्स पर वापस"
 
@@ -1170,7 +1182,7 @@ msgstr "त्रुटि:"
 msgid "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 msgstr "नियंत्रित करता है कि यह इंस्टेंस नीति द्वारा प्रबंधित है या नहीं। यदि सक्षम है, तो इंस्टेंस नीति नियमों के आधार पर इंस्टेंस समूहों में स्वचालित असाइनमेंट और अनअसाइनमेंट के लिए उपलब्ध होगा।"
 
-#: components/JobList/JobList.tsx:257
+#: components/JobList/JobList.tsx:466
 #: screens/Job/JobDetail/JobDetail.tsx:255
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
@@ -1273,8 +1285,8 @@ msgstr "वह प्रोजेक्ट जिससे यह इन्व�
 msgid "Select Items from List"
 msgstr "सूची से आइटम चुनें"
 
-#: components/JobList/JobList.tsx:223
-#: components/JobList/JobListItem.tsx:73
+#: components/JobList/JobList.tsx:432
+#: components/JobList/useJobTypeLabels.ts:10
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:42
 #: components/Workflow/WorkflowLegend.tsx:38
 #: screens/Job/JobDetail/JobDetail.tsx:70
@@ -1384,23 +1396,23 @@ msgstr "यह वर्कफ़्लो जॉब टेम्पलेट �
 #: routeConfig.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:187
-#: screens/Dashboard/Dashboard.tsx:67
+#: screens/Dashboard/Dashboard.tsx:69
 #: screens/Host/HostList/HostList.tsx:144
 #: screens/Host/HostList/HostList.tsx:191
 #: screens/Host/Hosts.tsx:17
 #: screens/Host/Hosts.tsx:27
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:86
-#: screens/Inventory/ConstructedInventory.tsx:77
-#: screens/Inventory/FederatedInventory.tsx:77
+#: screens/Inventory/ConstructedInventory.tsx:90
+#: screens/Inventory/FederatedInventory.tsx:89
 #: screens/Inventory/Inventories.tsx:106
 #: screens/Inventory/Inventories.tsx:120
-#: screens/Inventory/Inventory.tsx:78
+#: screens/Inventory/Inventory.tsx:91
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:87
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:197
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:284
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:112
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
-#: screens/Inventory/SmartInventory.tsx:77
+#: screens/Inventory/SmartInventory.tsx:90
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:110
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
@@ -1417,7 +1429,7 @@ msgstr "आवृत्ति अपेक्षित मान से मे�
 msgid "E-mail"
 msgstr "ई-मेल"
 
-#: components/JobList/JobList.tsx:219
+#: components/JobList/JobList.tsx:428
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:172
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
@@ -1559,7 +1571,7 @@ msgstr "कम दिखाएं"
 msgid "Revision"
 msgstr "रिवीज़न"
 
-#: components/JobList/JobList.tsx:338
+#: components/JobList/JobList.tsx:559
 msgid "Failed to delete one or more jobs."
 msgstr "एक या अधिक जॉब्स हटाने में विफल।"
 
@@ -1624,7 +1636,7 @@ msgstr "मिनट"
 msgid "Copied"
 msgstr "कॉपी किया गया"
 
-#: components/JobList/JobList.tsx:349
+#: components/JobList/JobList.tsx:570
 msgid "Failed to cancel one or more jobs."
 msgstr "एक या अधिक जॉब्स रद्द करने में विफल।"
 
@@ -1653,9 +1665,11 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/AssociateModal/AssociateModal.tsx:175
 #: components/AssociateModal/AssociateModal.tsx:190
 #: components/HostForm/HostForm.tsx:139
-#: components/JobList/JobList.tsx:206
-#: components/JobList/JobList.tsx:264
-#: components/JobList/JobListItem.tsx:119
+#: components/JobList/JobList.tsx:415
+#: components/JobList/JobList.tsx:473
+#: components/JobList/JobListItem.tsx:161
+#: components/JobList/JobListItem.tsx:471
+#: components/JobList/JobListItem.tsx:599
 #: components/LabelLists/LabelListItem.tsx:27
 #: components/LabelLists/LabelLists.tsx:59
 #: components/LabelLists/LabelLists.tsx:67
@@ -1683,8 +1697,8 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/Lookup/InventoryLookup.tsx:201
 #: components/Lookup/InventoryLookup.tsx:249
 #: components/Lookup/InventoryLookup.tsx:264
-#: components/Lookup/JobTemplateLookup.tsx:122
-#: components/Lookup/JobTemplateLookup.tsx:132
+#: components/Lookup/JobTemplateLookup.tsx:131
+#: components/Lookup/JobTemplateLookup.tsx:141
 #: components/Lookup/MultiCredentialsLookup.tsx:221
 #: components/Lookup/MultiCredentialsLookup.tsx:236
 #: components/Lookup/OrganizationLookup.tsx:151
@@ -1913,8 +1927,8 @@ msgstr "विवरण।"
 #~ msgid "Subscription manifest"
 #~ msgstr "सदस्यता मैनिफ़ेस्ट"
 
-#: components/JobList/JobList.tsx:243
-#: components/StatusLabel/StatusLabel.tsx:56
+#: components/JobList/JobList.tsx:452
+#: components/StatusLabel/StatusLabel.tsx:59
 #: components/Workflow/WorkflowNodeHelp.tsx:101
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:93
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:211
@@ -1949,13 +1963,15 @@ msgstr "स्रोत वेरिएबल्स"
 msgid "Add Question"
 msgstr "प्रश्न जोड़ें"
 
-#: components/StatusLabel/StatusLabel.tsx:50
+#: components/StatusLabel/StatusLabel.tsx:53
 msgid "Approved"
 msgstr "अनुमोदित"
 
-#: components/DataListToolbar/DataListToolbar.tsx:212
-#: components/JobList/JobList.tsx:269
-#: components/JobList/JobListItem.tsx:138
+#: components/DataListToolbar/DataListToolbar.tsx:230
+#: components/JobList/JobList.tsx:478
+#: components/JobList/JobListItem.tsx:180
+#: components/JobList/JobListItem.tsx:494
+#: components/JobList/JobListItem.tsx:612
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:216
 #: components/Schedule/ScheduleList/ScheduleList.tsx:210
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:137
@@ -2024,8 +2040,8 @@ msgid "Event summary not available"
 msgstr "इवेंट सारांश उपलब्ध नहीं"
 
 #: routeConfig.tsx:60
-#: screens/Dashboard/Dashboard.tsx:28
-#: screens/Dashboard/Dashboard.tsx:60
+#: screens/Dashboard/Dashboard.tsx:30
+#: screens/Dashboard/Dashboard.tsx:62
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
 
@@ -2047,7 +2063,7 @@ msgstr "कुंजी"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:350
+#: screens/Login/Login.tsx:363
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2159,10 +2175,11 @@ msgstr "अन्य संकेत"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "स्थिति का मूल्यांकन करने से पहले मूल नोड परिणाम आवश्यक है।"
 
-#: components/JobList/JobListItem.tsx:248
-#: components/Lookup/JobTemplateLookup.tsx:103
-#: components/Lookup/JobTemplateLookup.tsx:108
-#: components/Lookup/JobTemplateLookup.tsx:138
+#: components/JobList/JobListItem.tsx:290
+#: components/JobList/JobListItem.tsx:515
+#: components/Lookup/JobTemplateLookup.tsx:111
+#: components/Lookup/JobTemplateLookup.tsx:116
+#: components/Lookup/JobTemplateLookup.tsx:147
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2194,6 +2211,11 @@ msgstr "GIT स्रोत नियंत्रण के लिए उदा�
 #: screens/CredentialType/shared/CredentialTypeForm.tsx:39
 msgid "Input configuration"
 msgstr "इनपुट कॉन्फ़िगरेशन"
+
+#: components/JobList/StackCancelButton.tsx:104
+#: components/JobList/StackCancelButton.tsx:105
+msgid "Cancel active jobs?"
+msgstr ""
 
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:160
 msgid "Delete smart inventory"
@@ -2228,7 +2250,7 @@ msgstr "फ़ील्ड दिए गए नियमित एक्सप�
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {यह क्रेडेंशियल प्रकार वर्तमान में कुछ क्रेडेंशियल्स द्वारा उपयोग किया जा रहा है और इसे हटाया नहीं जा सकता।} other {क्रेडेंशियल्स द्वारा उपयोग किए जा रहे क्रेडेंशियल प्रकार हटाए नहीं जा सकते। क्या आप फिर भी हटाना चाहते हैं?}}"
 
-#: screens/Login/Login.tsx:348
+#: screens/Login/Login.tsx:361
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2239,7 +2261,7 @@ msgstr "पासवर्ड"
 #~ msgid "Allow simultaneous runs of this workflow job template."
 #~ msgstr "इस वर्कफ़्लो जॉब टेम्पलेट के समवर्ती रन की अनुमति दें।"
 
-#: screens/Inventory/FederatedInventory.tsx:213
+#: screens/Inventory/FederatedInventory.tsx:217
 msgid "View Federated Inventory Details"
 msgstr "फ़ेडरेटेड इन्वेंटरी विवरण देखें"
 
@@ -2281,8 +2303,8 @@ msgstr "{0, plural, one {यह इन्वेंट्री वर्तम�
 msgid "Select Labels"
 msgstr "लेबल चुनें"
 
-#: screens/Template/Template.tsx:189
-#: screens/Template/WorkflowJobTemplate.tsx:188
+#: screens/Template/Template.tsx:194
+#: screens/Template/WorkflowJobTemplate.tsx:196
 msgid "View all Templates."
 msgstr "सभी टेम्पलेट देखें।"
 
@@ -2307,7 +2329,7 @@ msgstr "इस पर पुनः लॉन्च करें"
 msgid "This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:"
 msgstr "यह क्रिया निम्न इंस्टेंस को हटा देगी और आपको किसी भी इंस्टेंस के लिए इंस्टॉल बंडल पुनः चलाने की आवश्यकता हो सकती है जो पहले जुड़ा हुआ था:"
 
-#: components/DataListToolbar/DataListToolbar.tsx:142
+#: components/DataListToolbar/DataListToolbar.tsx:148
 msgid "Is not expanded"
 msgstr "विस्तृत नहीं है"
 
@@ -2341,7 +2363,7 @@ msgstr "क्रेडेंशियल प्रकार"
 msgid "pages"
 msgstr "पृष्ठ"
 
-#: components/StatusLabel/StatusLabel.tsx:61
+#: components/StatusLabel/StatusLabel.tsx:64
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:29
 msgid "Skipped"
 msgstr "छोड़ा गया"
@@ -2463,7 +2485,7 @@ msgid "Management job launch error"
 msgstr "प्रबंधन जॉब लॉन्च त्रुटि"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:183
+#: components/Lookup/Lookup.tsx:209
 msgid "Search"
 msgstr "खोजें"
 
@@ -2491,7 +2513,7 @@ msgstr "contains का केस-असंवेदनशील संस्क
 msgid "Add federated inventory"
 msgstr "फ़ेडरेटेड इन्वेंटरी जोड़ें"
 
-#: screens/Host/Host.tsx:145
+#: screens/Host/Host.tsx:150
 msgid "View Host Details"
 msgstr "होस्ट विवरण देखें"
 
@@ -2538,7 +2560,7 @@ msgstr "{0} (हटाया गया)"
 msgid "The inventory that this host belongs to."
 msgstr "वह इन्वेंटरी जिससे यह होस्ट संबंधित है।"
 
-#: screens/Login/Login.tsx:333
+#: screens/Login/Login.tsx:346
 msgid "Log In"
 msgstr "लॉग इन करें"
 
@@ -2594,7 +2616,7 @@ msgstr "उपयोगकर्ता विवरण"
 msgid "Delete Execution Environment"
 msgstr "निष्पादन वातावरण हटाएं"
 
-#: components/JobList/JobListItem.tsx:372
+#: components/JobList/JobListItem.tsx:414
 #: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "Job Slice"
 msgstr "जॉब स्लाइस"
@@ -2685,7 +2707,7 @@ msgstr "ज़ूम इन करें"
 #: routeConfig.tsx:173
 #: screens/ActivityStream/ActivityStream.tsx:120
 #: screens/ActivityStream/ActivityStream.tsx:207
-#: screens/InstanceGroup/InstanceGroup.tsx:81
+#: screens/InstanceGroup/InstanceGroup.tsx:86
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:198
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:81
 #: screens/InstanceGroup/InstanceGroups.tsx:37
@@ -2731,6 +2753,7 @@ msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not 
 msgstr ""
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -2762,6 +2785,10 @@ msgstr "एक या अधिक होस्ट्स को अलग कर
 #: screens/Project/ProjectList/ProjectListItem.tsx:68
 msgid "JOB ID:"
 msgstr "जॉब ID:"
+
+#: components/JobList/StackCancelButton.tsx:115
+msgid "Cancel {count} jobs"
+msgstr ""
 
 #: routeConfig.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
@@ -2957,7 +2984,7 @@ msgstr "सक्षम मान"
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "प्रति पंक्ति एक एनोटेशन टैग का उपयोग करें, बिना अल्पविराम के।"
 
-#: components/StatusLabel/StatusLabel.tsx:58
+#: components/StatusLabel/StatusLabel.tsx:61
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:41
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:121
 msgid "Unreachable"
@@ -3034,21 +3061,21 @@ msgstr "घटनाएं"
 msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
 msgstr "{0, plural, one {कृपया एक मान्य फ़ोन नंबर दर्ज करें।} other {कृपया मान्य फ़ोन नंबर दर्ज करें।}}"
 
-#: screens/Host/Host.tsx:71
+#: screens/Host/Host.tsx:76
 #: screens/Host/HostFacts/HostFacts.tsx:33
 #: screens/Host/Hosts.tsx:32
 #: screens/Inventory/Inventories.tsx:112
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:91
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:96
 #: screens/Inventory/InventoryHostFacts/InventoryHostFacts.tsx:33
 msgid "Facts"
 msgstr "फ़ैक्ट्स"
 
-#: screens/Login/Login.tsx:357
+#: screens/Login/Login.tsx:370
 msgid "or"
 msgstr "या"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:270
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3081,7 +3108,7 @@ msgstr "वर्कफ़्लो जॉब विवरण"
 #~ msgid "Azure AD settings"
 #~ msgstr "Azure AD सेटिंग्स"
 
-#: components/JobList/JobListItem.tsx:377
+#: components/JobList/JobListItem.tsx:419
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:446
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
@@ -3131,7 +3158,7 @@ msgstr "शेड्यूल विवरण"
 #~ msgid "Close subscription modal"
 #~ msgstr "सदस्यता मोडल बंद करें"
 
-#: components/DataListToolbar/DataListToolbar.tsx:140
+#: components/DataListToolbar/DataListToolbar.tsx:146
 msgid "Is expanded"
 msgstr "विस्तृत है"
 
@@ -3228,7 +3255,7 @@ msgstr "वेरिएबल नामों के लिए सुझाय�
 msgid "This job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह जॉब टेम्पलेट वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
-#: screens/Credential/Credential.tsx:120
+#: screens/Credential/Credential.tsx:122
 msgid "View all Credentials."
 msgstr "सभी क्रेडेंशियल देखें।"
 
@@ -3354,10 +3381,10 @@ msgstr "इंस्टेंस नाम"
 msgid "Name of an artifact produced by the parent node via set_stats. The link is only followed when the parent job matches the chosen outcome and the condition is true. A missing key never matches."
 msgstr "मूल नोड द्वारा set_stats के माध्यम से उत्पादित आर्टिफ़ैक्ट का नाम। लिंक का अनुसरण केवल तभी किया जाता है जब मूल जॉब चुने गए परिणाम से मेल खाती है और स्थिति सत्य होती है। अनुपस्थित कुंजी कभी मेल नहीं खाती।"
 
-#: screens/Inventory/ConstructedInventory.tsx:109
-#: screens/Inventory/FederatedInventory.tsx:105
-#: screens/Inventory/Inventory.tsx:110
-#: screens/Inventory/SmartInventory.tsx:108
+#: screens/Inventory/ConstructedInventory.tsx:122
+#: screens/Inventory/FederatedInventory.tsx:117
+#: screens/Inventory/Inventory.tsx:123
+#: screens/Inventory/SmartInventory.tsx:121
 msgid "View all Inventories."
 msgstr "सभी इन्वेंटरी देखें।"
 
@@ -3373,7 +3400,7 @@ msgstr "होस्ट विवरण मोडल"
 msgid "Delete Notification"
 msgstr "सूचना हटाएं"
 
-#: components/StatusLabel/StatusLabel.tsx:68
+#: components/StatusLabel/StatusLabel.tsx:71
 #: screens/TopologyView/Legend.tsx:126
 msgid "Ready"
 msgstr "तैयार"
@@ -3445,7 +3472,7 @@ msgid "Delete"
 msgstr "हटाएं"
 
 #: components/NotificationList/NotificationListItem.tsx:131
-#: components/StatusLabel/StatusLabel.tsx:66
+#: components/StatusLabel/StatusLabel.tsx:69
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:33
 msgid "Changed"
 msgstr "बदला गया"
@@ -3522,7 +3549,7 @@ msgstr "क्रम संपादित करें"
 msgid "Minimum"
 msgstr "न्यूनतम"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:96
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:97
 msgid "Refresh Token Expiration"
 msgstr "रिफ़्रेश टोकन समाप्ति"
 
@@ -3558,7 +3585,7 @@ msgstr "होस्ट्स चुनें"
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
-#: components/JobList/JobList.tsx:253
+#: components/JobList/JobList.tsx:462
 #: components/Lookup/ApplicationLookup.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:216
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:437
@@ -3632,7 +3659,7 @@ msgstr "नोड {nodeName} हटाएं"
 msgid "Sun"
 msgstr "रवि"
 
-#: screens/Dashboard/Dashboard.tsx:109
+#: screens/Dashboard/Dashboard.tsx:111
 msgid "Job status graph tab"
 msgstr "जॉब स्थिति ग्राफ़ टैब"
 
@@ -3702,9 +3729,9 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:155
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
-#: components/LaunchPrompt/LaunchPrompt.tsx:181
+#: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:260
+#: components/Lookup/Lookup.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -3743,7 +3770,7 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 msgid "Cancel"
 msgstr "रद्द करें"
 
-#: screens/Inventory/Inventory.tsx:109
+#: screens/Inventory/Inventory.tsx:122
 msgid "Inventory not found."
 msgstr "इन्वेंटरी नहीं मिली।"
 
@@ -3835,6 +3862,11 @@ msgstr "जॉब स्लाइसिंग"
 #: screens/Project/ProjectList/ProjectListItem.tsx:95
 msgid "Successfully copied to clipboard!"
 msgstr "सफलतापूर्वक क्लिपबोर्ड पर कॉपी किया गया!"
+
+#: components/JobList/GroupBySelect.tsx:33
+#: components/JobList/GroupBySelect.tsx:40
+msgid "No grouping"
+msgstr ""
 
 #: screens/Template/shared/WebhookSubForm.tsx:120
 msgid "Choose a Webhook Service"
@@ -3938,7 +3970,7 @@ msgstr "प्रोजेक्ट चेकआउट परिणाम"
 msgid "October"
 msgstr "अक्टूबर"
 
-#: components/StatusLabel/StatusLabel.tsx:64
+#: components/StatusLabel/StatusLabel.tsx:67
 #: screens/TopologyView/Legend.tsx:251
 msgid "Disabled"
 msgstr "अक्षम"
@@ -3947,7 +3979,8 @@ msgstr "अक्षम"
 msgid "Default Execution Environment"
 msgstr "डिफ़ॉल्ट निष्पादन वातावरण"
 
-#: components/JobList/JobListItem.tsx:296
+#: components/JobList/JobListItem.tsx:338
+#: components/JobList/JobListItem.tsx:534
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -4117,7 +4150,7 @@ msgstr "समस्या निवारण सेटिंग्स देख
 msgid "Edit Source"
 msgstr "स्रोत संपादित करें"
 
-#: components/JobList/JobListItem.tsx:74
+#: components/JobList/useJobTypeLabels.ts:11
 #: screens/Job/JobDetail/JobDetail.tsx:71
 msgid "Playbook Check"
 msgstr "प्लेबुक जांच"
@@ -4135,7 +4168,7 @@ msgstr "नोड विवरण देखें"
 msgid "Custom pod spec"
 msgstr "कस्टम पॉड स्पेक"
 
-#: screens/Host/Host.tsx:105
+#: screens/Host/Host.tsx:110
 msgid "View all Hosts."
 msgstr "सभी होस्ट्स देखें।"
 
@@ -4200,8 +4233,8 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:122
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:126
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:128
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4237,7 +4270,7 @@ msgstr "वर्कफ़्लो जॉब टेम्पलेट"
 msgid "Sets the role that this instance will play within mesh topology. Default is \"execution.\""
 msgstr "वह भूमिका सेट करता है जो यह इंस्टेंस मेश टोपोलॉजी के भीतर निभाएगा। डिफ़ॉल्ट \"execution\" है।"
 
-#: components/StatusLabel/StatusLabel.tsx:69
+#: components/StatusLabel/StatusLabel.tsx:72
 #: screens/TopologyView/Legend.tsx:142
 msgid "Installed"
 msgstr "इंस्टॉल किया गया"
@@ -4265,6 +4298,10 @@ msgstr "इंस्टेंस समूह फ़ॉलबैक रोके
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:148
 msgid "Failed to delete application."
 msgstr "एप्लिकेशन हटाने में विफल।"
+
+#: components/JobList/StackCancelButton.tsx:161
+msgid "Failed to cancel the stack."
+msgstr ""
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkDeleteModal.tsx:58
 msgid "Removing this link will orphan the rest of the branch and cause it to be executed immediately on launch."
@@ -4303,11 +4340,11 @@ msgstr "हटाया गया"
 msgid "You do not have permission to remove instances: {itemsUnableToremove}"
 msgstr "आपके पास इंस्टेंस हटाने की अनुमति नहीं है: {itemsUnableToremove}"
 
-#: screens/Dashboard/Dashboard.tsx:129
+#: screens/Dashboard/Dashboard.tsx:131
 msgid "Recent Templates list tab"
 msgstr "हाल के टेम्पलेट सूची टैब"
 
-#: screens/Inventory/ConstructedInventory.tsx:108
+#: screens/Inventory/ConstructedInventory.tsx:121
 msgid "Constructed Inventory not found."
 msgstr "निर्मित इन्वेंटरी नहीं मिली।"
 
@@ -4409,9 +4446,9 @@ msgstr "उपयोगकर्ता टोकन बनाएं"
 #~ "                 आपके द्वारा उपयोग किए गए क्रेडेंशियल्स नवीनीकरण या विस्तारित सदस्यताएं\n"
 #~ "                 प्राप्त करने में भविष्य के उपयोग के लिए संग्रहीत किए जाएंगे।"
 
-#: screens/InstanceGroup/ContainerGroup.tsx:93
+#: screens/InstanceGroup/ContainerGroup.tsx:98
 #: screens/InstanceGroup/ContainerGroup.tsx:137
-#: screens/InstanceGroup/InstanceGroup.tsx:101
+#: screens/InstanceGroup/InstanceGroup.tsx:106
 #: screens/InstanceGroup/InstanceGroup.tsx:156
 msgid "View all instance groups"
 msgstr "सभी इंस्टेंस समूह देखें"
@@ -4458,7 +4495,7 @@ msgstr "स्वचालन"
 msgid "Select items from list"
 msgstr "सूची से आइटम चुनें"
 
-#: screens/Dashboard/Dashboard.tsx:111
+#: screens/Dashboard/Dashboard.tsx:113
 msgid "Job status"
 msgstr "जॉब स्थिति"
 
@@ -4509,7 +4546,7 @@ msgstr "ज़ूम आउट करें"
 msgid "Choose a module"
 msgstr "एक मॉड्यूल चुनें"
 
-#: screens/Inventory/SmartInventory.tsx:107
+#: screens/Inventory/SmartInventory.tsx:120
 msgid "Smart Inventory not found."
 msgstr "स्मार्ट इन्वेंटरी नहीं मिली।"
 
@@ -4590,7 +4627,7 @@ msgstr "पीयर हटाएं?"
 msgid "Search text input"
 msgstr "खोज टेक्स्ट इनपुट"
 
-#: components/Lookup/Lookup.tsx:100
+#: components/Lookup/Lookup.tsx:118
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "वह मान नहीं मिला। कृपया एक मान्य मान दर्ज करें या चुनें।"
 
@@ -4623,10 +4660,10 @@ msgstr "संगठन विवरण देखें"
 #: components/DeleteButton/DeleteButton.tsx:76
 #: components/HostToggle/HostToggle.tsx:88
 #: components/InstanceToggle/InstanceToggle.tsx:82
-#: components/JobList/JobList.tsx:335
-#: components/JobList/JobList.tsx:346
+#: components/JobList/JobList.tsx:556
+#: components/JobList/JobList.tsx:567
 #: components/LaunchButton/LaunchButton.tsx:305
-#: components/LaunchPrompt/LaunchPrompt.tsx:118
+#: components/LaunchPrompt/LaunchPrompt.tsx:119
 #: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:268
@@ -4723,7 +4760,7 @@ msgstr "होस्ट अगम्य"
 msgid "Replace"
 msgstr "बदलें"
 
-#: components/DataListToolbar/DataListToolbar.tsx:148
+#: components/DataListToolbar/DataListToolbar.tsx:154
 msgid "Expand all rows"
 msgstr "सभी पंक्तियां विस्तृत करें"
 
@@ -4848,7 +4885,7 @@ msgstr "द्वारा आरंभ किया गया"
 msgid "Delete this node"
 msgstr "इस नोड को हटाएं"
 
-#: components/JobList/JobListItem.tsx:270
+#: components/JobList/JobListItem.tsx:312
 #: screens/Job/JobDetail/JobDetail.tsx:294
 msgid "Source Workflow Job"
 msgstr "स्रोत वर्कफ़्लो जॉब"
@@ -4915,8 +4952,8 @@ msgstr "पुनः लॉन्च रोकें"
 msgid "View SAML settings"
 msgstr "SAML सेटिंग्स देखें"
 
-#: components/JobList/JobList.tsx:245
-#: components/StatusLabel/StatusLabel.tsx:65
+#: components/JobList/JobList.tsx:454
+#: components/StatusLabel/StatusLabel.tsx:68
 #: components/Workflow/WorkflowNodeHelp.tsx:107
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:250
 msgid "Canceled"
@@ -4965,9 +5002,9 @@ msgstr "वर्कफ़्लो अनुमोदित संदेश"
 #: screens/Project/Project.tsx:126
 #: screens/Project/Projects.tsx:33
 #: screens/Schedule/AllSchedules.tsx:26
-#: screens/Template/Template.tsx:161
+#: screens/Template/Template.tsx:166
 #: screens/Template/Templates.tsx:56
-#: screens/Template/WorkflowJobTemplate.tsx:142
+#: screens/Template/WorkflowJobTemplate.tsx:150
 msgid "Schedules"
 msgstr "शेड्यूल"
 
@@ -5008,8 +5045,8 @@ msgstr "निष्पादन वातावरण"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "लॉन्च पर जॉब प्रकार के लिए संकेत दें।"
 
-#: components/JobList/JobListItem.tsx:236
-#: components/JobList/JobListItem.tsx:244
+#: components/JobList/JobListItem.tsx:278
+#: components/JobList/JobListItem.tsx:286
 msgid "Schedule"
 msgstr "शेड्यूल"
 
@@ -5218,9 +5255,9 @@ msgstr "दिन"
 msgid "Collapse"
 msgstr "संक्षिप्त करें"
 
-#: components/JobList/JobListItem.tsx:341
+#: components/JobList/JobListItem.tsx:383
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:257
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5261,7 +5298,7 @@ msgstr "स्थिति चुनें"
 msgid "Month"
 msgstr "माह"
 
-#: components/JobList/JobListItem.tsx:317
+#: components/JobList/JobListItem.tsx:359
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5419,7 +5456,7 @@ msgstr "{interval, plural, one {# दिन} other {# दिन}}"
 msgid "Update settings pertaining to Jobs within {brandName}"
 msgstr "{brandName} के भीतर जॉब्स से संबंधित सेटिंग्स अपडेट करें"
 
-#: components/StatusLabel/StatusLabel.tsx:70
+#: components/StatusLabel/StatusLabel.tsx:73
 #: screens/TopologyView/Legend.tsx:159
 msgid "Provisioning"
 msgstr "प्रोविज़निंग"
@@ -5464,8 +5501,8 @@ msgstr "एप्लिकेशन संपादित करें"
 msgid "Use TLS"
 msgstr "TLS का उपयोग करें"
 
-#: components/JobList/JobList.tsx:226
-#: components/JobList/JobListItem.tsx:76
+#: components/JobList/JobList.tsx:435
+#: components/JobList/useJobTypeLabels.ts:13
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:45
 #: components/Workflow/WorkflowLegend.tsx:46
 #: components/Workflow/WorkflowNodeHelp.tsx:61
@@ -5570,7 +5607,7 @@ msgstr "आवृत्ति विवरण"
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:47
 #: components/AdHocCommands/useAdHocExecutionEnvironmentStep.tsx:26
 #: components/AdHocCommands/useAdHocInstanceGroupsStep.tsx:27
-#: components/LaunchPrompt/LaunchPrompt.tsx:182
+#: components/LaunchPrompt/LaunchPrompt.tsx:183
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
@@ -5578,7 +5615,7 @@ msgid "Next"
 msgstr "अगला"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:263
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5671,7 +5708,7 @@ msgstr "अंतिम स्वचालन"
 msgid "Node Type"
 msgstr "नोड प्रकार"
 
-#: screens/Credential/Credential.tsx:171
+#: screens/Credential/Credential.tsx:173
 msgid "View Credential Details"
 msgstr "क्रेडेंशियल विवरण देखें"
 
@@ -5685,9 +5722,9 @@ msgstr "क्रेडेंशियल विवरण देखें"
 #: screens/Organization/Organizations.tsx:35
 #: screens/Project/Project.tsx:120
 #: screens/Project/Projects.tsx:31
-#: screens/Template/Template.tsx:154
+#: screens/Template/Template.tsx:159
 #: screens/Template/Templates.tsx:51
-#: screens/Template/WorkflowJobTemplate.tsx:135
+#: screens/Template/WorkflowJobTemplate.tsx:143
 msgid "Notifications"
 msgstr "सूचनाएं"
 
@@ -5713,9 +5750,9 @@ msgstr "सिस्टम"
 msgid "Row select"
 msgstr "पंक्ति चयन"
 
-#: screens/Inventory/Inventory.tsx:242
+#: screens/Inventory/Inventory.tsx:249
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:173
-#: screens/Inventory/SmartInventory.tsx:209
+#: screens/Inventory/SmartInventory.tsx:212
 msgid "View Inventory Details"
 msgstr "इन्वेंटरी विवरण देखें"
 
@@ -5735,13 +5772,17 @@ msgstr "पिछले दो सप्ताह"
 
 #: components/AddRole/AddResourceRole.tsx:300
 #: components/AdHocCommands/AdHocCommandsWizard.tsx:68
-#: components/LaunchPrompt/LaunchPrompt.tsx:180
+#: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:97
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
 msgstr "वापस"
+
+#: components/JobList/StackCancelButton.tsx:38
+msgid "Template {templateId}"
+msgstr ""
 
 #: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
@@ -5858,7 +5899,7 @@ msgstr "वर्कफ़्लो के लिए एक ब्रांच �
 msgid "Management job not found."
 msgstr "प्रबंधन जॉब नहीं मिली।"
 
-#: components/JobList/JobList.tsx:238
+#: components/JobList/JobList.tsx:447
 #: components/Workflow/WorkflowNodeHelp.tsx:86
 msgid "New"
 msgstr "नया"
@@ -5915,8 +5956,8 @@ msgstr "सक्षम विकल्प"
 msgid "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks."
 msgstr "प्रोजेक्ट आधार पथ में पाई गई निर्देशिकाओं की सूची में से चुनें। आधार पथ और प्लेबुक निर्देशिका मिलकर प्लेबुक का पता लगाने के लिए उपयोग किया जाने वाला पूर्ण पथ प्रदान करते हैं।"
 
-#: screens/Template/Template.tsx:172
-#: screens/Template/WorkflowJobTemplate.tsx:157
+#: screens/Template/Template.tsx:177
+#: screens/Template/WorkflowJobTemplate.tsx:165
 msgid "View Survey"
 msgstr "सर्वेक्षण देखें"
 
@@ -6098,9 +6139,9 @@ msgid "This credential is currently being used by other resources. Are you sure 
 msgstr "यह क्रेडेंशियल वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
 #: components/LaunchPrompt/steps/useSurveyStep.tsx:45
-#: screens/Template/Template.tsx:172
+#: screens/Template/Template.tsx:177
 #: screens/Template/Templates.tsx:53
-#: screens/Template/WorkflowJobTemplate.tsx:157
+#: screens/Template/WorkflowJobTemplate.tsx:165
 msgid "Survey"
 msgstr "सर्वेक्षण"
 
@@ -6195,7 +6236,7 @@ msgstr "भरोसा करने योग्य जारीकर्ता
 msgid "here."
 msgstr "यहां।"
 
-#: components/StatusLabel/StatusLabel.tsx:72
+#: components/StatusLabel/StatusLabel.tsx:75
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:302
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:105
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:53
@@ -6217,7 +6258,7 @@ msgstr "प्ले प्रारंभ हुआ"
 msgid "Output tab"
 msgstr "आउटपुट टैब"
 
-#: components/StatusLabel/StatusLabel.tsx:51
+#: components/StatusLabel/StatusLabel.tsx:54
 msgid "Denied"
 msgstr "अस्वीकृत"
 
@@ -6289,7 +6330,7 @@ msgstr "टीम हटाएं"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "इस जॉब टेम्पलेट को लॉन्च करते समय उपयोग किया जाने वाला निष्पादन वातावरण। हल किए गए निष्पादन वातावरण को इस जॉब टेम्पलेट को स्पष्ट रूप से एक अलग वातावरण असाइन करके ओवरराइड किया जा सकता है।"
 
-#: components/JobList/JobList.tsx:215
+#: components/JobList/JobList.tsx:424
 msgid "Label Name"
 msgstr "लेबल नाम"
 
@@ -6379,13 +6420,13 @@ msgstr "अपने {brandName} एप्लिकेशन के लिए �
 msgid "Thursday"
 msgstr "गुरुवार"
 
-#: screens/Credential/Credential.tsx:100
+#: screens/Credential/Credential.tsx:102
 #: screens/Credential/Credentials.tsx:33
-#: screens/Inventory/ConstructedInventory.tsx:85
-#: screens/Inventory/FederatedInventory.tsx:81
+#: screens/Inventory/ConstructedInventory.tsx:98
+#: screens/Inventory/FederatedInventory.tsx:93
 #: screens/Inventory/Inventories.tsx:103
-#: screens/Inventory/Inventory.tsx:86
-#: screens/Inventory/SmartInventory.tsx:84
+#: screens/Inventory/Inventory.tsx:99
+#: screens/Inventory/SmartInventory.tsx:97
 #: screens/Project/Project.tsx:113
 #: screens/Project/Projects.tsx:32
 #: util/getRelatedResourceDeleteDetails.ts:85
@@ -6464,10 +6505,10 @@ msgstr "केवल रूट समूह दिखाएं"
 msgid "Toggle instance"
 msgstr "इंस्टेंस टॉगल करें"
 
-#: screens/Inventory/ConstructedInventory.tsx:69
-#: screens/Inventory/FederatedInventory.tsx:69
-#: screens/Inventory/Inventory.tsx:68
-#: screens/Inventory/SmartInventory.tsx:69
+#: screens/Inventory/ConstructedInventory.tsx:82
+#: screens/Inventory/FederatedInventory.tsx:81
+#: screens/Inventory/Inventory.tsx:81
+#: screens/Inventory/SmartInventory.tsx:82
 msgid "Back to Inventories"
 msgstr "इन्वेंटरी पर वापस"
 
@@ -6534,7 +6575,7 @@ msgstr "हेल्थ चेक केवल निष्पादन नो�
 
 #: components/TemplateList/TemplateListItem.tsx:175
 #: components/TemplateList/TemplateListItem.tsx:182
-#: screens/Template/WorkflowJobTemplate.tsx:149
+#: screens/Template/WorkflowJobTemplate.tsx:157
 msgid "Visualizer"
 msgstr "विज़ुअलाइज़र"
 
@@ -6546,7 +6587,7 @@ msgstr "इस रन में कोई विफल नोड नहीं �
 msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
 msgstr "प्रोविज़निंग कॉलबैक: प्रोविज़निंग कॉलबैक URL के निर्माण को सक्षम करता है। URL का उपयोग करके, एक होस्ट Ascender से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है।"
 
-#: components/JobList/JobListItem.tsx:162
+#: components/JobList/JobListItem.tsx:204
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:184
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:188
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
@@ -6645,6 +6686,10 @@ msgstr "{update_cache_timeout, plural, one {# सेकंड} other {# से�
 msgid "Webhook Credentials"
 msgstr "वेबहुक क्रेडेंशियल"
 
+#: components/JobList/GroupBySelect.tsx:106
+#~ msgid "Clear the status filter to change grouping."
+#~ msgstr ""
+
 #: components/Search/Search.tsx:322
 msgid "Yes"
 msgstr "हां"
@@ -6729,8 +6774,8 @@ msgstr "अपेक्षित मान"
 msgid "Create New Credential"
 msgstr "नया क्रेडेंशियल बनाएं"
 
-#: screens/Template/Template.tsx:188
-#: screens/Template/WorkflowJobTemplate.tsx:187
+#: screens/Template/Template.tsx:193
+#: screens/Template/WorkflowJobTemplate.tsx:195
 msgid "Template not found."
 msgstr "टेम्पलेट नहीं मिला।"
 
@@ -6820,10 +6865,18 @@ msgstr "प्रोविज़निंग कॉलबैक"
 msgid "Minimum number of instances that will be automatically assigned to this group when new instances come online."
 msgstr "नए इंस्टेंस ऑनलाइन आने पर इस समूह को स्वचालित रूप से असाइन किए जाने वाले इंस्टेंसों की न्यूनतम संख्या।"
 
+#: components/JobList/StackCancelButton.tsx:111
+msgid "Confirm cancel stack"
+msgstr ""
+
 #. placeholder {0}: resource.name
-#: components/LaunchPrompt/LaunchPrompt.tsx:152
+#: components/LaunchPrompt/LaunchPrompt.tsx:153
 msgid "Launch | {0}"
 msgstr "लॉन्च करें | {0}"
+
+#: components/JobList/GroupBySelect.tsx:35
+msgid "Group by template"
+msgstr ""
 
 #: components/NotificationList/NotificationListItem.tsx:110
 msgid "Toggle notification success"
@@ -6857,22 +6910,22 @@ msgstr "{label} के लिए अधिक जानकारी"
 
 #: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
-#: screens/Credential/Credential.tsx:90
+#: screens/Credential/Credential.tsx:92
 #: screens/Credential/Credentials.tsx:32
-#: screens/Inventory/ConstructedInventory.tsx:76
-#: screens/Inventory/FederatedInventory.tsx:76
+#: screens/Inventory/ConstructedInventory.tsx:89
+#: screens/Inventory/FederatedInventory.tsx:88
 #: screens/Inventory/Inventories.tsx:100
-#: screens/Inventory/Inventory.tsx:76
-#: screens/Inventory/SmartInventory.tsx:76
+#: screens/Inventory/Inventory.tsx:89
+#: screens/Inventory/SmartInventory.tsx:89
 #: screens/Organization/Organization.tsx:135
 #: screens/Organization/Organizations.tsx:33
 #: screens/Project/Project.tsx:111
 #: screens/Project/Projects.tsx:30
 #: screens/Team/Team.tsx:68
 #: screens/Team/Teams.tsx:33
-#: screens/Template/Template.tsx:149
+#: screens/Template/Template.tsx:154
 #: screens/Template/Templates.tsx:50
-#: screens/Template/WorkflowJobTemplate.tsx:130
+#: screens/Template/WorkflowJobTemplate.tsx:138
 msgid "Access"
 msgstr "पहुंच"
 
@@ -6923,7 +6976,7 @@ msgstr "स्मार्ट इन्वेंटरी"
 msgid "Slack"
 msgstr "Slack"
 
-#: screens/InstanceGroup/InstanceGroup.tsx:99
+#: screens/InstanceGroup/InstanceGroup.tsx:104
 msgid "Instance group not found."
 msgstr "इंस्टेंस समूह नहीं मिला।"
 
@@ -6931,7 +6984,7 @@ msgstr "इंस्टेंस समूह नहीं मिला।"
 msgid "cancel remove"
 msgstr "हटाना रद्द करें"
 
-#: screens/InstanceGroup/ContainerGroup.tsx:91
+#: screens/InstanceGroup/ContainerGroup.tsx:96
 msgid "Container group not found."
 msgstr "कंटेनर समूह नहीं मिला।"
 
@@ -6962,9 +7015,9 @@ msgstr "विफलता"
 msgid "Failed to cancel Constructed Inventory Source Sync"
 msgstr "निर्मित इन्वेंटरी स्रोत सिंक रद्द करने में विफल"
 
-#: screens/Host/Host.tsx:58
+#: screens/Host/Host.tsx:63
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.tsx:66
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:79
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:84
 msgid "Back to Hosts"
 msgstr "होस्ट्स पर वापस"
 
@@ -7002,7 +7055,7 @@ msgstr "कृपया ऊपर दिए गए फ़िल्टर का 
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "क्या आप वाकई लॉगिन रीडायरेक्ट ओवरराइड URL संपादित करना चाहते हैं? ऐसा करने से स्थानीय प्रमाणीकरण भी अक्षम होने के बाद उपयोगकर्ताओं की सिस्टम में लॉग इन करने की क्षमता प्रभावित हो सकती है।"
 
-#: screens/Credential/Credential.tsx:119
+#: screens/Credential/Credential.tsx:121
 msgid "Credential not found."
 msgstr "क्रेडेंशियल नहीं मिला।"
 
@@ -7140,7 +7193,7 @@ msgstr "अनुसरण करें"
 msgid "Modified By (Username)"
 msgstr "द्वारा संशोधित (उपयोगकर्ता नाम)"
 
-#: screens/InstanceGroup/ContainerGroup.tsx:66
+#: screens/InstanceGroup/ContainerGroup.tsx:71
 msgid "Back to instance groups"
 msgstr "इंस्टेंस समूहों पर वापस"
 
@@ -7205,7 +7258,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "एक प्लेबुक निर्देशिका चुनें"
 
-#: components/JobList/JobListItem.tsx:258
+#: components/JobList/JobListItem.tsx:300
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7292,7 +7345,7 @@ msgstr "आर्टिफ़ैक्ट की तुलना करने �
 msgid "Failed to delete one or more groups."
 msgstr "एक या अधिक समूह हटाने में विफल।"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:211
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:212
 msgid "Confirm Disable Local Authorization"
 msgstr "स्थानीय प्राधिकरण अक्षम करने की पुष्टि करें"
 
@@ -7327,6 +7380,10 @@ msgstr "इस फ़ील्ड में एक संख्या होन�
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:345
 msgid "All"
 msgstr "सभी"
+
+#: components/JobList/StackCancelButton.tsx:92
+msgid "Cancel stack"
+msgstr ""
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
@@ -7400,8 +7457,10 @@ msgstr "एक प्रोविज़निंग\n"
 "                              से संपर्क कर सकता है और इस जॉब टेम्पलेट का उपयोग करके एक\n"
 "                              कॉन्फ़िगरेशन अपडेट का अनुरोध कर सकता है"
 
-#: components/JobList/JobList.tsx:268
-#: components/JobList/JobListItem.tsx:135
+#: components/JobList/JobList.tsx:477
+#: components/JobList/JobListItem.tsx:177
+#: components/JobList/JobListItem.tsx:493
+#: components/JobList/JobListItem.tsx:611
 msgid "Finish Time"
 msgstr "समाप्ति समय"
 
@@ -7993,8 +8052,8 @@ msgstr "टोकन जानकारी"
 msgid "Never Updated"
 msgstr "कभी अपडेट नहीं किया गया"
 
-#: components/JobList/JobList.tsx:242
-#: components/StatusLabel/StatusLabel.tsx:54
+#: components/JobList/JobList.tsx:451
+#: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:98
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:94
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:218
@@ -8023,24 +8082,28 @@ msgstr "समाप्ति तिथि/समय"
 msgid "Credential to authenticate with Kubernetes or OpenShift"
 msgstr "Kubernetes या OpenShift के साथ प्रमाणित करने के लिए क्रेडेंशियल"
 
-#: screens/Inventory/FederatedInventory.tsx:104
+#: screens/Inventory/FederatedInventory.tsx:116
 msgid "Federated Inventory not found."
 msgstr "फ़ेडरेटेड इन्वेंटरी नहीं मिली।"
 
-#: components/JobList/JobList.tsx:224
-#: components/JobList/JobListItem.tsx:74
+#: components/JobList/JobList.tsx:433
+#: components/JobList/useJobTypeLabels.ts:11
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:43
 #: screens/Job/JobDetail/JobDetail.tsx:71
 msgid "Playbook Run"
 msgstr "प्लेबुक रन"
 
-#: screens/InstanceGroup/InstanceGroup.tsx:68
+#: screens/InstanceGroup/InstanceGroup.tsx:73
 msgid "Back to Instance Groups"
 msgstr "इंस्टेंस समूहों पर वापस"
 
 #: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:198
 msgid "Enable HTTPS certificate verification"
 msgstr "HTTPS प्रमाणपत्र सत्यापन सक्षम करें"
+
+#: components/JobList/JobListItem.tsx:584
+msgid "Waiting jobs"
+msgstr ""
 
 #: components/Search/RelatedLookupTypeInput.tsx:50
 msgid "Exact search on id field."
@@ -8071,7 +8134,7 @@ msgstr "हॉप"
 msgid "Debug"
 msgstr "डिबग"
 
-#: components/DataListToolbar/DataListToolbar.tsx:131
+#: components/DataListToolbar/DataListToolbar.tsx:137
 #: screens/Job/JobOutput/JobOutputSearch.tsx:155
 msgid "Clear all filters"
 msgstr "सभी फ़िल्टर साफ़ करें"
@@ -8088,7 +8151,7 @@ msgstr "{0, plural, one {यह इंस्टेंस वर्तमान �
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:84
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:86
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8168,8 +8231,8 @@ msgstr "व्यक्तिगत एक्सेस टोकन"
 msgid "Relaunch from first node"
 msgstr "पहले नोड से पुनः लॉन्च करें"
 
-#: screens/Template/Template.tsx:142
-#: screens/Template/WorkflowJobTemplate.tsx:123
+#: screens/Template/Template.tsx:147
+#: screens/Template/WorkflowJobTemplate.tsx:131
 msgid "Back to Templates"
 msgstr "टेम्पलेट पर वापस"
 
@@ -8249,7 +8312,7 @@ msgstr "Ansible फ़ैक्ट्स के लिए इन्वेंट�
 "            `gather_facts: true` हो। वास्तविक\n"
 "            फ़ैक्ट्स सिस्टम-से-सिस्टम भिन्न होंगे।"
 
-#: components/JobList/JobListItem.tsx:377
+#: components/JobList/JobListItem.tsx:419
 #: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Job Slice Parent"
 msgstr "जॉब स्लाइस मूल"
@@ -8313,7 +8376,7 @@ msgstr "Rocket.Chat"
 msgid "Frequency Exception Details"
 msgstr "आवृत्ति अपवाद विवरण"
 
-#: components/StatusLabel/StatusLabel.tsx:74
+#: components/StatusLabel/StatusLabel.tsx:77
 msgid "Deprovisioning fail"
 msgstr "डीप्रोविज़निंग विफल"
 
@@ -8372,7 +8435,7 @@ msgstr "इन्वेंटरी फ़ाइल"
 msgid "Refresh for revision"
 msgstr "रिवीज़न के लिए रीफ़्रेश करें"
 
-#: screens/Dashboard/Dashboard.tsx:95
+#: screens/Dashboard/Dashboard.tsx:97
 msgid "Project sync failures"
 msgstr "प्रोजेक्ट सिंक विफलताएं"
 
@@ -8384,7 +8447,7 @@ msgstr "प्रोजेक्ट सिंक विफलताएं"
 msgid "Run on"
 msgstr "इस पर चलाएं"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:157
+#: components/LaunchPrompt/LaunchPrompt.tsx:158
 #: components/Schedule/shared/SchedulePromptableFields.tsx:129
 msgid "Show description"
 msgstr "विवरण दिखाएं"
@@ -8575,6 +8638,10 @@ msgstr "नया एप्लिकेशन बनाएं"
 msgid "Plays"
 msgstr "प्ले"
 
+#: components/JobList/JobListItem.tsx:583
+msgid "New jobs"
+msgstr ""
+
 #: screens/ActivityStream/ActivityStream.tsx:242
 msgid "Initiated by (username)"
 msgstr "द्वारा आरंभ किया गया (उपयोगकर्ता नाम)"
@@ -8713,8 +8780,8 @@ msgstr "उदाहरणों में शामिल हैं:"
 msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
 msgstr "इस स्रोत द्वारा पिछले सिंक में जोड़े गए इन्वेंटरी वेरिएबल तब हटा दिए जाते हैं जब स्रोत उन्हें प्रदान करना बंद कर देता है, जब तक कि उन्हें तब से संपादित न किया गया हो या इस इन्वेंटरी का कोई अन्य स्रोत अभी भी उन्हें प्रदान न करता हो।"
 
-#: components/JobList/JobList.tsx:222
-#: components/JobList/JobListItem.tsx:72
+#: components/JobList/JobList.tsx:431
+#: components/JobList/useJobTypeLabels.ts:9
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
 #: screens/Job/JobDetail/JobDetail.tsx:69
 msgid "Source Control Update"
@@ -8747,7 +8814,7 @@ msgstr "क्षमता"
 msgid "Provisioning Callback details"
 msgstr "प्रोविज़निंग कॉलबैक विवरण"
 
-#: screens/Dashboard/Dashboard.tsx:119
+#: screens/Dashboard/Dashboard.tsx:121
 msgid "Recent Jobs"
 msgstr "हाल की जॉब्स"
 
@@ -8865,9 +8932,11 @@ msgstr "वर्कफ़्लो लंबित संदेश मुख्
 msgid "Answer variable name"
 msgstr "उत्तर वेरिएबल नाम"
 
-#: components/JobList/JobListItem.tsx:114
+#: components/JobList/JobListItem.tsx:156
+#: components/JobList/JobListItem.tsx:467
+#: components/JobList/JobListItem.tsx:597
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:251
+#: components/Lookup/Lookup.tsx:284
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "चुनें"
@@ -8906,8 +8975,8 @@ msgstr "IRC निक"
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "हर बार जब इस इन्वेंटरी का उपयोग करके कोई जॉब चलती है, तो जॉब कार्य निष्पादित करने से पहले चयनित स्रोत से इन्वेंटरी रीफ़्रेश करें।"
 
-#: components/JobList/JobList.tsx:241
-#: components/StatusLabel/StatusLabel.tsx:59
+#: components/JobList/JobList.tsx:450
+#: components/StatusLabel/StatusLabel.tsx:62
 #: components/TemplateList/TemplateListItem.tsx:117
 #: components/Workflow/WorkflowNodeHelp.tsx:95
 msgid "Running"
@@ -9048,7 +9117,7 @@ msgstr "विविध प्रमाणीकरण"
 msgid "Download bundle"
 msgstr "बंडल डाउनलोड करें"
 
-#: components/LaunchPrompt/LaunchPrompt.tsx:175
+#: components/LaunchPrompt/LaunchPrompt.tsx:176
 #: components/Schedule/shared/SchedulePromptableFields.tsx:147
 msgid "Content Loading"
 msgstr "सामग्री लोड हो रही है"
@@ -9057,7 +9126,7 @@ msgstr "सामग्री लोड हो रही है"
 #: routeConfig.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:113
 #: screens/ActivityStream/ActivityStream.tsx:186
-#: screens/Dashboard/Dashboard.tsx:78
+#: screens/Dashboard/Dashboard.tsx:80
 #: screens/Inventory/Inventories.tsx:55
 #: screens/Inventory/InventoryList/InventoryList.tsx:190
 #: screens/Inventory/InventoryList/InventoryList.tsx:255
@@ -9097,9 +9166,11 @@ msgstr "प्रारंभ"
 msgid "Resources"
 msgstr "संसाधन"
 
-#: components/JobList/JobList.tsx:211
-#: components/JobList/JobList.tsx:263
-#: components/JobList/JobListItem.tsx:116
+#: components/JobList/JobList.tsx:420
+#: components/JobList/JobList.tsx:472
+#: components/JobList/JobListItem.tsx:158
+#: components/JobList/JobListItem.tsx:468
+#: components/JobList/JobListItem.tsx:598
 #: components/Lookup/HostFilterLookup.tsx:122
 #: screens/Team/TeamRoles/TeamRolesList.tsx:161
 msgid "ID"
@@ -9222,7 +9293,7 @@ msgid "View all execution environments"
 msgstr "सभी निष्पादन वातावरण देखें"
 
 #: screens/Inventory/Inventories.tsx:125
-#: screens/Inventory/Inventory.tsx:79
+#: screens/Inventory/Inventory.tsx:92
 msgid "Sources"
 msgstr "स्रोत"
 
@@ -9234,7 +9305,7 @@ msgstr "टेक्स्ट क्षेत्र"
 msgid "Unknown Status"
 msgstr "अज्ञात स्थिति"
 
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:115
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:120
 msgid "View all Inventory Hosts."
 msgstr "सभी इन्वेंटरी होस्ट्स देखें।"
 
@@ -9243,8 +9314,8 @@ msgstr "सभी इन्वेंटरी होस्ट्स देखे
 msgid "Not configured"
 msgstr "कॉन्फ़िगर नहीं किया गया"
 
-#: components/JobList/JobList.tsx:227
-#: components/JobList/JobListItem.tsx:77
+#: components/JobList/JobList.tsx:436
+#: components/JobList/useJobTypeLabels.ts:14
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:46
 #: screens/Job/JobDetail/JobDetail.tsx:74
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:268
@@ -9338,8 +9409,8 @@ msgstr "दस्तावेज़ीकरण।"
 msgid "Credential Name"
 msgstr "क्रेडेंशियल नाम"
 
-#: components/JobList/JobList.tsx:225
-#: components/JobList/JobListItem.tsx:75
+#: components/JobList/JobList.tsx:434
+#: components/JobList/useJobTypeLabels.ts:12
 #: screens/Job/JobOutput/HostEventModal.tsx:177
 msgid "Command"
 msgstr "कमांड"
@@ -9348,8 +9419,8 @@ msgstr "कमांड"
 msgid "Access token"
 msgstr "एक्सेस टोकन"
 
-#: components/JobList/JobList.tsx:244
-#: components/StatusLabel/StatusLabel.tsx:57
+#: components/JobList/JobList.tsx:453
+#: components/StatusLabel/StatusLabel.tsx:60
 #: components/Workflow/WorkflowNodeHelp.tsx:104
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:142
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:202
@@ -9380,7 +9451,7 @@ msgstr "एक जॉब पहले ही लॉन्च की जा च�
 msgid "Host Async OK"
 msgstr "होस्ट एसिंक ठीक"
 
-#: screens/Dashboard/Dashboard.tsx:131
+#: screens/Dashboard/Dashboard.tsx:133
 msgid "Recent Templates"
 msgstr "हाल के टेम्पलेट"
 
@@ -9494,7 +9565,7 @@ msgstr "जेनेरिक OIDC सेटिंग्स"
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "उपयोग में रहते हुए हटाने की अनुमति दें: यदि सक्षम है, तो इस इन्वेंटरी पर जॉब चलते समय इससे होस्ट हटाए जा सकते हैं।"
 
-#: components/DataListToolbar/DataListToolbar.tsx:123
+#: components/DataListToolbar/DataListToolbar.tsx:129
 #: screens/Job/JobOutput/JobOutputSearch.tsx:146
 msgid "Advanced"
 msgstr "उन्नत"
@@ -9764,32 +9835,32 @@ msgstr "बाहरी सीक्रेट प्रबंधन सिस्
 #~ msgid "Insights Credential"
 #~ msgstr "Insights क्रेडेंशियल"
 
-#: components/JobList/JobList.tsx:202
-#: components/JobList/JobList.tsx:294
+#: components/JobList/JobList.tsx:411
+#: components/JobList/JobList.tsx:508
 #: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
 #: screens/Dashboard/shared/LineChart.tsx:118
-#: screens/Host/Host.tsx:81
+#: screens/Host/Host.tsx:86
 #: screens/Host/Hosts.tsx:34
-#: screens/InstanceGroup/ContainerGroup.tsx:78
-#: screens/InstanceGroup/InstanceGroup.tsx:86
+#: screens/InstanceGroup/ContainerGroup.tsx:83
+#: screens/InstanceGroup/InstanceGroup.tsx:91
 #: screens/InstanceGroup/InstanceGroups.tsx:40
 #: screens/InstanceGroup/InstanceGroups.tsx:45
-#: screens/Inventory/ConstructedInventory.tsx:80
-#: screens/Inventory/FederatedInventory.tsx:79
+#: screens/Inventory/ConstructedInventory.tsx:93
+#: screens/Inventory/FederatedInventory.tsx:91
 #: screens/Inventory/Inventories.tsx:101
 #: screens/Inventory/Inventories.tsx:111
-#: screens/Inventory/Inventory.tsx:81
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:101
-#: screens/Inventory/SmartInventory.tsx:79
+#: screens/Inventory/Inventory.tsx:94
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:106
+#: screens/Inventory/SmartInventory.tsx:92
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
 #: screens/Setting/Settings.tsx:83
-#: screens/Template/Template.tsx:168
+#: screens/Template/Template.tsx:173
 #: screens/Template/Templates.tsx:52
-#: screens/Template/WorkflowJobTemplate.tsx:153
+#: screens/Template/WorkflowJobTemplate.tsx:161
 msgid "Jobs"
 msgstr "जॉब्स"
 
@@ -9806,11 +9877,15 @@ msgstr "क्रेडेंशियल कॉपी करें"
 msgid "Token"
 msgstr "टोकन"
 
+#: components/JobList/JobListItem.tsx:585
+msgid "Pending jobs"
+msgstr ""
+
 #: components/Schedule/ScheduleDetail/FrequencyDetails.tsx:35
 msgid "weekday"
 msgstr "कार्यदिवस"
 
-#: components/StatusLabel/StatusLabel.tsx:71
+#: components/StatusLabel/StatusLabel.tsx:74
 #: screens/TopologyView/Legend.tsx:176
 msgid "Deprovisioning"
 msgstr "डीप्रोविज़निंग"
@@ -9864,7 +9939,7 @@ msgstr "निजी कुंजी पासफ़्रेज़"
 msgid "Start"
 msgstr "प्रारंभ"
 
-#: screens/Inventory/ConstructedInventory.tsx:219
+#: screens/Inventory/ConstructedInventory.tsx:222
 msgid "View Constructed Inventory Details"
 msgstr "निर्मित इन्वेंटरी विवरण देखें"
 
@@ -9912,6 +9987,10 @@ msgstr "सेटिंग्स"
 #: components/SelectedList/DraggableSelectedList.tsx:158
 msgid "Dragging started for {name}. Use the arrow keys to move it."
 msgstr "{name} के लिए ड्रैग शुरू हुआ। इसे ले जाने के लिए ऐरो कुंजियों का उपयोग करें।"
+
+#: components/JobList/GroupBySelect.tsx:34
+msgid "Group by status"
+msgstr ""
 
 #: screens/CredentialType/CredentialType.tsx:62
 msgid "Back to credential types"
@@ -9964,7 +10043,9 @@ msgstr "सभी वर्कफ़्लो अनुमोदन देखे
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "जब चेक नहीं किया जाता है, तो एक मर्ज किया जाएगा, स्थानीय वेरिएबल्स को बाहरी स्रोत पर पाए गए वेरिएबल्स के साथ संयोजित किया जाएगा।"
 
-#: components/JobList/JobListItem.tsx:147
+#: components/JobList/JobListItem.tsx:189
+#: components/JobList/StackCancelButton.tsx:158
+#: components/JobList/StackCancelButton.tsx:159
 #: screens/Job/JobDetail/JobDetail.tsx:666
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
@@ -9981,9 +10062,11 @@ msgstr "www.json.org"
 msgid "Inventory sources with failures"
 msgstr "विफलताओं वाले इन्वेंटरी स्रोत"
 
-#: components/JobList/JobList.tsx:235
-#: components/JobList/JobList.tsx:265
-#: components/JobList/JobListItem.tsx:126
+#: components/JobList/JobList.tsx:444
+#: components/JobList/JobList.tsx:474
+#: components/JobList/JobListItem.tsx:168
+#: components/JobList/JobListItem.tsx:478
+#: components/JobList/JobListItem.tsx:606
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:221
 #: screens/InstanceGroup/Instances/InstanceList.tsx:333
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:143
@@ -10018,8 +10101,8 @@ msgstr "क्या आप वाकई हटाना चाहते है�
 msgid "Failed to retrieve full node resource object."
 msgstr "पूर्ण नोड संसाधन ऑब्जेक्ट प्राप्त करने में विफल।"
 
-#: components/JobList/JobList.tsx:239
-#: components/StatusLabel/StatusLabel.tsx:60
+#: components/JobList/JobList.tsx:448
+#: components/StatusLabel/StatusLabel.tsx:63
 #: components/Workflow/WorkflowNodeHelp.tsx:89
 msgid "Pending"
 msgstr "लंबित"
@@ -10028,6 +10111,7 @@ msgstr "लंबित"
 msgid "Toggle Tools"
 msgstr "टूल टॉगल करें"
 
+#: components/JobList/JobListItem.tsx:544
 #: components/LabelLists/LabelListItem.tsx:32
 #: components/LabelLists/LabelLists.tsx:61
 #: components/LabelLists/LabelLists.tsx:68
@@ -10079,7 +10163,7 @@ msgstr "टूल टॉगल करें"
 msgid "Organization"
 msgstr "संगठन"
 
-#: screens/Login/Login.tsx:311
+#: screens/Login/Login.tsx:315
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "आपका सत्र समाप्त हो गया है। जहां आपने छोड़ा था वहां से जारी रखने के लिए कृपया लॉग इन करें।"
 
@@ -10093,7 +10177,7 @@ msgstr "द्वारा बनाया गया (उपयोगकर्�
 #~ msgid "Subscriptions consumed"
 #~ msgstr "उपभोग की गई सदस्यताएं"
 
-#: screens/Dashboard/Dashboard.tsx:84
+#: screens/Dashboard/Dashboard.tsx:86
 msgid "Inventory sync failures"
 msgstr "इन्वेंटरी सिंक विफलताएं"
 
@@ -10142,7 +10226,7 @@ msgstr "Azure AD Tenant से साइन इन करें"
 msgid "Case-insensitive version of endswith."
 msgstr "endswith का केस-असंवेदनशील संस्करण।"
 
-#: components/Lookup/Lookup.tsx:258
+#: components/Lookup/Lookup.tsx:291
 msgid "Cancel lookup"
 msgstr "लुकअप रद्द करें"
 
@@ -10151,31 +10235,31 @@ msgstr "लुकअप रद्द करें"
 #: components/Schedule/Schedule.tsx:93
 #: screens/Application/Application/Application.tsx:85
 #: screens/Application/Applications.tsx:38
-#: screens/Credential/Credential.tsx:88
+#: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:31
 #: screens/CredentialType/CredentialType.tsx:70
 #: screens/CredentialType/CredentialTypes.tsx:29
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:72
 #: screens/ExecutionEnvironment/ExecutionEnvironments.tsx:28
-#: screens/Host/Host.tsx:66
+#: screens/Host/Host.tsx:71
 #: screens/Host/Hosts.tsx:31
-#: screens/InstanceGroup/ContainerGroup.tsx:73
+#: screens/InstanceGroup/ContainerGroup.tsx:78
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:193
-#: screens/InstanceGroup/InstanceGroup.tsx:76
+#: screens/InstanceGroup/InstanceGroup.tsx:81
 #: screens/InstanceGroup/InstanceGroups.tsx:36
 #: screens/InstanceGroup/InstanceGroups.tsx:44
 #: screens/Instances/Instance.tsx:41
 #: screens/Instances/Instances.tsx:29
 #: screens/Inventory/AdvancedInventoryHost/AdvancedInventoryHost.tsx:73
-#: screens/Inventory/ConstructedInventory.tsx:75
-#: screens/Inventory/FederatedInventory.tsx:75
+#: screens/Inventory/ConstructedInventory.tsx:88
+#: screens/Inventory/FederatedInventory.tsx:87
 #: screens/Inventory/Inventories.tsx:102
 #: screens/Inventory/Inventories.tsx:128
-#: screens/Inventory/Inventory.tsx:75
+#: screens/Inventory/Inventory.tsx:88
 #: screens/Inventory/InventoryGroup/InventoryGroup.tsx:77
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:86
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:91
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
-#: screens/Inventory/SmartInventory.tsx:75
+#: screens/Inventory/SmartInventory.tsx:88
 #: screens/Job/Job.tsx:145
 #: screens/Job/JobOutput/HostEventModal.tsx:155
 #: screens/Job/Jobs.tsx:52
@@ -10190,7 +10274,7 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:91
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:93
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10226,9 +10310,9 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:73
 #: screens/Team/Team.tsx:67
 #: screens/Team/Teams.tsx:31
-#: screens/Template/Template.tsx:148
+#: screens/Template/Template.tsx:153
 #: screens/Template/Templates.tsx:48
-#: screens/Template/WorkflowJobTemplate.tsx:129
+#: screens/Template/WorkflowJobTemplate.tsx:137
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:149
 #: screens/TopologyView/Tooltip.tsx:158
 #: screens/TopologyView/Tooltip.tsx:191
@@ -10249,8 +10333,8 @@ msgstr "पांचवां"
 msgid "Execution environment is missing or deleted."
 msgstr "निष्पादन वातावरण अनुपस्थित या हटा दिया गया है।"
 
-#: components/JobList/JobList.tsx:240
-#: components/StatusLabel/StatusLabel.tsx:63
+#: components/JobList/JobList.tsx:449
+#: components/StatusLabel/StatusLabel.tsx:66
 #: components/Workflow/WorkflowNodeHelp.tsx:92
 msgid "Waiting"
 msgstr "प्रतीक्षा हो रही है"
@@ -10376,7 +10460,7 @@ msgstr "वेबहुक"
 msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
 msgstr "{0, plural, one {अंतिम विलोपन संसाधित होने तक इन्वेंट्री लंबित स्थिति में रहेगी।} other {अंतिम विलोपन संसाधित होने तक इन्वेंट्रीज़ लंबित स्थिति में रहेंगी।}}"
 
-#: components/JobList/JobListItem.tsx:160
+#: components/JobList/JobListItem.tsx:202
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 msgid "Relaunch using host parameters"
 msgstr "होस्ट पैरामीटर का उपयोग करके पुनः लॉन्च करें"
@@ -10651,6 +10735,8 @@ msgstr "अनुपस्थित"
 #: components/JobCancelButton/JobCancelButton.tsx:117
 #: components/JobList/JobListCancelButton.tsx:169
 #: components/JobList/JobListCancelButton.tsx:172
+#: components/JobList/StackCancelButton.tsx:121
+#: components/JobList/StackCancelButton.tsx:125
 #: screens/Job/JobOutput/JobOutput.tsx:1188
 #: screens/Job/JobOutput/JobOutput.tsx:1191
 msgid "Return"
@@ -10738,6 +10824,10 @@ msgstr "इससे कम तुलना।"
 #~ msgid "Hosts automated"
 #~ msgstr "स्वचालित होस्ट्स"
 
+#: components/JobList/StackCancelButton.tsx:150
+msgid "{skipped} jobs could not be canceled because you do not have permission."
+msgstr ""
+
 #: screens/Project/shared/Project.helptext.tsx:97
 msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
 msgstr "इस प्रोजेक्ट का उपयोग करने वाले जॉब टेम्पलेट में स्रोत नियंत्रण ब्रांच या रिविज़न बदलने की अनुमति दें।"
@@ -10758,7 +10848,7 @@ msgstr "इंस्टेंस प्राप्त करने में �
 msgid "Use browser default"
 msgstr "ब्राउज़र डिफ़ॉल्ट का उपयोग करें"
 
-#: components/JobList/JobList.tsx:231
+#: components/JobList/JobList.tsx:440
 msgid "Launched By (Username)"
 msgstr "द्वारा लॉन्च किया गया (उपयोगकर्ता नाम)"
 
@@ -10796,7 +10886,7 @@ msgstr "लिंक हटाने की पुष्टि करें"
 msgid "This field must be at least {0} characters"
 msgstr "इस फ़ील्ड में कम से कम {0} वर्ण होने चाहिए"
 
-#: components/JobList/JobListItem.tsx:224
+#: components/JobList/JobListItem.tsx:266
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10818,8 +10908,8 @@ msgstr "इन्वेंटरी ID"
 msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully."
 msgstr ""
 
-#: components/DataListToolbar/DataListToolbar.tsx:158
-#: components/DataListToolbar/DataListToolbar.tsx:162
+#: components/DataListToolbar/DataListToolbar.tsx:164
+#: components/DataListToolbar/DataListToolbar.tsx:168
 #: screens/Template/Survey/SurveyToolbar.tsx:61
 msgid "Select all"
 msgstr "सभी चुनें"
@@ -11020,7 +11110,7 @@ msgid "Choose a job type"
 msgstr "एक जॉब प्रकार चुनें"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:148
+#: components/JobList/JobListItem.tsx:190
 #: screens/Job/JobDetail/JobDetail.tsx:667
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:169
@@ -11160,7 +11250,7 @@ msgid "The page you requested could not be found."
 msgstr "आपके द्वारा अनुरोधित पृष्ठ नहीं मिला।"
 
 #. placeholder {0}: cannotDeleteItems.length
-#: components/JobList/JobList.tsx:300
+#: components/JobList/JobList.tsx:514
 msgid "{0, plural, one {The selected job cannot be deleted due to insufficient permission or a running job status} other {The selected jobs cannot be deleted due to insufficient permissions or a running job status}}"
 msgstr "{0, plural, one {अपर्याप्त अनुमति या चल रही जॉब स्थिति के कारण चयनित जॉब हटाई नहीं जा सकती} other {अपर्याप्त अनुमतियों या चल रही जॉब स्थिति के कारण चयनित जॉब्स हटाई नहीं जा सकतीं}}"
 
@@ -11263,6 +11353,11 @@ msgstr "नाम"
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:406
 msgid "Select roles to apply"
 msgstr "लागू करने के लिए भूमिकाएं चुनें"
+
+#: components/JobList/StackCancelButton.tsx:147
+#: components/JobList/StackCancelButton.tsx:148
+msgid "Some jobs were not canceled"
+msgstr ""
 
 #: screens/Host/HostList/HostList.tsx:232
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:206
@@ -11496,7 +11591,7 @@ msgstr "सफलतापूर्वक अस्वीकृत"
 msgid "Not configured for inventory sync."
 msgstr "इन्वेंटरी सिंक के लिए कॉन्फ़िगर नहीं किया गया।"
 
-#: components/Lookup/JobTemplateLookup.tsx:124
+#: components/Lookup/JobTemplateLookup.tsx:133
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:201
 #: components/TemplateList/TemplateList.tsx:234
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:96
@@ -11554,7 +11649,7 @@ msgid "Team not found."
 msgstr "टीम नहीं मिली।"
 
 #: components/LaunchButton/ReLaunchDropDown.tsx:64
-#: screens/Dashboard/Dashboard.tsx:73
+#: screens/Dashboard/Dashboard.tsx:75
 msgid "Failed hosts"
 msgstr "विफल होस्ट्स"
 
@@ -11582,7 +11677,7 @@ msgstr "इस स्थान को बदलने के लिए {brandNam
 msgid "{intervalValue, plural, one {minute} other {minutes}}"
 msgstr "{intervalValue, plural, one {मिनट} other {मिनट}}"
 
-#: components/StatusLabel/StatusLabel.tsx:53
+#: components/StatusLabel/StatusLabel.tsx:56
 msgid "Healthy"
 msgstr "स्वस्थ"
 
@@ -11688,7 +11783,7 @@ msgstr "प्रेषक ई-मेल"
 #~ msgstr "Red Hat Ansible Automation Platform में आपका स्वागत है!\n"
 #~ "              अपनी सदस्यता सक्रिय करने के लिए कृपया नीचे दिए गए चरण पूरे करें।"
 
-#: components/StatusLabel/StatusLabel.tsx:73
+#: components/StatusLabel/StatusLabel.tsx:76
 msgid "Provisioning fail"
 msgstr "प्रोविज़निंग विफल"
 
@@ -11704,7 +11799,7 @@ msgstr "किसी इन्वेंटरी सिंक को वर्�
 #~ msgid "Automation controller version"
 #~ msgstr "Automation controller संस्करण"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:91
 msgid "Access Token Expiration"
 msgstr "एक्सेस टोकन समाप्ति"
 
@@ -11756,13 +11851,13 @@ msgstr "वर्कफ़्लो रद्द करें"
 msgid "The container image to be used for execution."
 msgstr "निष्पादन के लिए उपयोग की जाने वाली कंटेनर छवि।"
 
-#: components/JobList/JobList.tsx:201
+#: components/JobList/JobList.tsx:410
 msgid "Please run a job to populate this list."
 msgstr "इस सूची को भरने के लिए कृपया एक जॉब चलाएं।"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
-#: components/JobList/JobList.tsx:249
+#: components/JobList/JobList.tsx:458
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
@@ -11808,7 +11903,7 @@ msgstr "यह प्रोजेक्ट वर्तमान में अ�
 msgid "Associate"
 msgstr "संबद्ध करें"
 
-#: components/JobList/JobListItem.tsx:203
+#: components/JobList/JobListItem.tsx:245
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:195
 #: components/LaunchButton/WorkflowRelaunchForceSuccessModal.tsx:141
@@ -11858,7 +11953,7 @@ msgstr "रद्द किया गया नोड, नए वेरिएब
 #~ msgid "Insights system ID"
 #~ msgstr "Insights सिस्टम ID"
 
-#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
+#: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:104
 msgid "Authorization Code Expiration"
 msgstr "प्राधिकरण कोड समाप्ति"
 
@@ -12027,7 +12122,7 @@ msgstr "जून"
 msgid "Launch"
 msgstr "लॉन्च करें"
 
-#: components/JobList/JobListItem.tsx:365
+#: components/JobList/JobListItem.tsx:407
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "स्पष्टीकरण"
@@ -12048,7 +12143,7 @@ msgstr "कृपया एक इन्वेंटरी चुनें य�
 msgid "Survey preview modal"
 msgstr "सर्वेक्षण पूर्वावलोकन मोडल"
 
-#: components/StatusLabel/StatusLabel.tsx:55
+#: components/StatusLabel/StatusLabel.tsx:58
 #: components/Workflow/WorkflowNodeHelp.tsx:113
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:73
 #: screens/Job/JobOutput/shared/HostStatusBar.tsx:25
@@ -12081,15 +12176,15 @@ msgstr "निष्पादन वातावरण को वैश्वि
 msgid "Failed to associate."
 msgstr "संबद्ध करने में विफल।"
 
-#: screens/Host/Host.tsx:76
+#: screens/Host/Host.tsx:81
 #: screens/Host/HostGroups/HostGroupsList.tsx:234
 #: screens/Host/Hosts.tsx:33
-#: screens/Inventory/ConstructedInventory.tsx:78
-#: screens/Inventory/FederatedInventory.tsx:78
+#: screens/Inventory/ConstructedInventory.tsx:91
+#: screens/Inventory/FederatedInventory.tsx:90
 #: screens/Inventory/Inventories.tsx:113
 #: screens/Inventory/Inventories.tsx:115
-#: screens/Inventory/Inventory.tsx:77
-#: screens/Inventory/InventoryHost/InventoryHost.tsx:96
+#: screens/Inventory/Inventory.tsx:90
+#: screens/Inventory/InventoryHost/InventoryHost.tsx:101
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:245
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:147
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:265
@@ -12107,7 +12202,7 @@ msgid "Error message body"
 msgstr "त्रुटि संदेश मुख्य भाग"
 
 #. placeholder {0}: job.name
-#: components/JobList/JobListItem.tsx:149
+#: components/JobList/JobListItem.tsx:191
 #: screens/Job/JobDetail/JobDetail.tsx:668
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:175
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:170
@@ -12142,7 +12237,7 @@ msgstr "होस्ट हटाने में विफल।"
 #: components/Lookup/CredentialLookup.tsx:225
 #: components/Lookup/InventoryLookup.tsx:191
 #: components/Lookup/InventoryLookup.tsx:254
-#: components/Lookup/JobTemplateLookup.tsx:128
+#: components/Lookup/JobTemplateLookup.tsx:137
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177
@@ -12250,6 +12345,7 @@ msgid "One room per line, as a room ID (!abcdef:example.org) or\n"
 "      belongs to must already be a member of every room."
 msgstr "प्रति पंक्ति एक रूम, रूम ID (!abcdef:example.org) या रूम एलियास (#automation:example.org) के रूप में। जिस उपयोगकर्ता का एक्सेस टोकन है, वह पहले से ही हर रूम का सदस्य होना चाहिए।"
 
+#: components/JobList/JobListItem.tsx:586
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:79
 msgid "Running jobs"
 msgstr "चल रही जॉब्स"
@@ -12272,7 +12368,7 @@ msgid "Toggle notification start"
 msgstr "सूचना प्रारंभ टॉगल करें"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:280
+#: components/JobList/JobListItem.tsx:322
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -12350,7 +12446,7 @@ msgstr "Microsoft Entra ID"
 msgid "Delete survey question"
 msgstr "सर्वेक्षण प्रश्न हटाएं"
 
-#: screens/Dashboard/Dashboard.tsx:117
+#: screens/Dashboard/Dashboard.tsx:119
 msgid "Recent Jobs list tab"
 msgstr "हाल की जॉब्स सूची टैब"
 
@@ -12377,6 +12473,6 @@ msgid "Send the message body as HTML (org.matrix.custom.html)\n"
 msgstr "संदेश की बॉडी को सादे-टेक्स्ट संदेश के साथ HTML (org.matrix.custom.html) के रूप में भेजें, ताकि जॉब लिंक क्लिक करने योग्य हो। जो क्लाइंट HTML रेंडर नहीं कर सकते, वे सादे टेक्स्ट पर वापस आ जाते हैं।"
 
 #: components/NotificationList/NotificationListItem.tsx:103
-#: components/StatusLabel/StatusLabel.tsx:52
+#: components/StatusLabel/StatusLabel.tsx:55
 msgid "Success"
 msgstr "सफलता"

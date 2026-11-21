@@ -8,7 +8,7 @@ import {
 } from 'api';
 import type { JobStatus, JobType } from '../types/api';
 
-const RUNNING_STATUSES: readonly JobStatus[] = [
+export const ACTIVE_JOB_STATUSES: readonly JobStatus[] = [
   'new',
   'pending',
   'waiting',
@@ -16,7 +16,7 @@ const RUNNING_STATUSES: readonly JobStatus[] = [
 ];
 
 export function isJobRunning(status: JobStatus | string | undefined): boolean {
-  return RUNNING_STATUSES.includes(status as JobStatus);
+  return ACTIVE_JOB_STATUSES.includes(status as JobStatus);
 }
 
 /**

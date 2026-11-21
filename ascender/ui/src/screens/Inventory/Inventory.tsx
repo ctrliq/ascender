@@ -3,7 +3,7 @@ import type {
   Inventory as InventoryModel,
   SetBreadcrumb,
 } from 'types/api';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -43,6 +43,19 @@ function Inventory({ setBreadcrumb }: InventoryProps) {
   const location = useLocation();
   const { id } = useParams() as { id: string };
   const inventoryBaseUrl = `/inventories/inventory/${id}`;
+
+  const jobListParams = useMemo(
+    () =>
+      inventory
+        ? {
+            or__job__inventory: inventory.id,
+            or__adhoccommand__inventory: inventory.id,
+            or__inventoryupdate__inventory_source__inventory: inventory.id,
+            or__workflowjob__inventory: inventory.id,
+          }
+        : undefined,
+    [inventory]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -208,13 +221,7 @@ function Inventory({ setBreadcrumb }: InventoryProps) {
               path="jobs"
               element={
                 <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__inventoryupdate__inventory_source__inventory:
-                      inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
+                  defaultParams={jobListParams}
                   additionalRelatedSearchableKeys={[
                     'inventoryupdate__inventory_source__inventory',
                   ]}

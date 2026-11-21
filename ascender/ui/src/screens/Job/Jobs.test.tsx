@@ -13,7 +13,12 @@ vi.mock('components/JobList', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: () => ReactLib.createElement('div', null, 'JobList'),
+    default: ({ showGroupingSelector }: { showGroupingSelector?: boolean }) =>
+      ReactLib.createElement(
+        'div',
+        null,
+        showGroupingSelector ? 'JobList grouped' : 'JobList'
+      ),
   };
 });
 vi.mock('./Job', async () => {
@@ -45,9 +50,19 @@ function renderAt(path: string) {
 }
 
 describe('<Jobs />', () => {
-  test('renders the list at /jobs', async () => {
+  test('renders the list at /jobs with the group toggle', async () => {
     renderAt('/jobs');
-    expect(await screen.findByText('JobList')).toBeInTheDocument();
+    expect(await screen.findByText('JobList grouped')).toBeInTheDocument();
+  });
+
+  test('renders the stacked list at /jobs?group_by=template', async () => {
+    renderAt('/jobs?group_by=template');
+    expect(await screen.findByText('JobList grouped')).toBeInTheDocument();
+  });
+
+  test('renders the grouped template-filtered jobs list', async () => {
+    renderAt('/jobs?group_by=template&job.unified_job_template=12');
+    expect(await screen.findByText('JobList grouped')).toBeInTheDocument();
   });
 
   test('renders the typed detail subtree at /jobs/:typeSegment/:id', async () => {

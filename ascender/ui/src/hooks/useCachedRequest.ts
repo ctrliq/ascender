@@ -87,6 +87,9 @@ export default function useCachedRequest<T>(
     // a list keeps its rows on screen while it refreshes rather than blanking.
     isLoading: query.isPending,
     request,
+    // Cached refetches already leave the current data in place, so the silent
+    // path is the same read without the spinner distinction useRequest has.
+    requestSilently: request,
     setValue,
   };
 }

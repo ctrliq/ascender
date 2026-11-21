@@ -35,6 +35,8 @@ const colors = {
 export interface StatusLabelProps {
   /** The job status, which keys the colour and label maps below. */
   status?: string;
+  /** Optional count shown after the status label, e.g. "Running 3". */
+  count?: number;
   tooltipContent?: React.ReactNode;
   children?: React.ReactNode;
   [key: string]: unknown;
@@ -42,6 +44,7 @@ export interface StatusLabelProps {
 
 export default function StatusLabel({
   status,
+  count,
   tooltipContent = '',
   children,
 }: StatusLabelProps) {
@@ -85,7 +88,12 @@ export default function StatusLabel({
       icon={Icon ? <Icon /> : null}
       className="ascender-status-label"
     >
-      {children || label}
+      {children || (
+        <>
+          {label}
+          {typeof count === 'number' && count > 0 ? ` ${count}` : null}
+        </>
+      )}
     </Label>
   );
 
