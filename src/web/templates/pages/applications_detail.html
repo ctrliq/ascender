@@ -1,0 +1,178 @@
+{{define "content"}}
+{{$a := .Data.app}}
+{{$id := str $a.id}}
+{{$sf := $a.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "o_auth2_application,o_auth2_access_token" "crumbs" (list (dict "href" "/applications" "title" (t "Applications")) (dict "href" (printf "/applications/%s" $id) "title" (str $a.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/applications" "label" "Back to applications") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					<div>
+						<dt class="ascender-detail-name" data-cy="app-detail-name-label" id="app-detail-name">
+							{{t "Name"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="app-detail-name-value">
+							{{$a.name}}
+						</dd>
+					</div>
+					{{if has $a.description}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="app-detail-description-label" id="app-detail-description">
+								{{t "Description"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="app-detail-description-value">
+								{{$a.description}}
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="app-detail-organization-label" id="app-detail-organization">
+							{{t "Organization"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="app-detail-organization-value">
+							<a href="/organizations/{{str (dig $sf "organization" "id")}}/details">
+								{{dig $sf "organization" "name"}}
+							</a>
+						</dd>
+					</div>
+					{{if has .Data.grantLabel}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="app-detail-authorization-grant-type-label" id="app-detail-authorization-grant-type">
+								{{t "Authorization grant type"}}
+								{{template "help_button" (t "The Grant type the user must use to acquire tokens for this application")}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="app-detail-authorization-grant-type-value">
+								{{.Data.grantLabel}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has $a.client_id}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="app-detail-client-id-label" id="app-detail-client-id">
+								{{t "Client ID"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="app-detail-client-id-value">
+								{{$a.client_id}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has $a.redirect_uris}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="app-detail-redirect-uris-label" id="app-detail-redirect-uris">
+								{{t "Redirect URIs"}}
+								{{template "help_button" (t "Allowed URIs list, space separated")}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="app-detail-redirect-uris-value">
+								{{$a.redirect_uris}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has .Data.clientLabel}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="app-detail-client-type-label" id="app-detail-client-type">
+								{{t "Client type"}}
+								{{template "help_button" (t "Set to Public or Confidential depending on how secure the client device is.")}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="app-detail-client-type-value">
+								{{.Data.clientLabel}}
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Created"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{dt $a.created}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Last Modified"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{dt $a.modified}}
+						</dd>
+					</div>
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="/applications/{{$id}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{template "delete_button" (dict "name" (str $a.name) "title" (t "Delete application") "api" (printf "/api/v2/applications/%s/" $id) "redirect" "/applications" "error" (t "Failed to delete application."))}}
+					{{end}}
+				</div>
+			</div>
+		{{else}}
+			{{template "search_toolbar" (dict "page" . "id" "applications-list" "searchKeys" .Data.searchKeys "ns" "applications" "kind" "Token" "api" "/api/v2/tokens/" "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Tokens")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $i, $t := .Data.results}}
+								{{$tid := str $t.id}}
+								<tr class="pf-v6-c-table__tr" id="token-row-{{$tid}}" data-row data-id="{{$tid}}" data-name="{{dig $t "summary_fields" "user" "username"}}">
+									<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+										<div class="pf-v6-c-check pf-m-standalone">
+											<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row>
+										</div>
+									</td>
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+										<a href="/applications/{{$id}}/tokens/{{$tid}}/details">
+											<b>{{dig $t "summary_fields" "user" "username"}}</b>
+										</a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Scope"}}" class="pf-v6-c-table__td">
+										{{titleCase (str $t.scope)}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Expires"}}" class="pf-v6-c-table__td">
+										{{dt $t.expires}}
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Tokens")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Tokens")))}}
+				{{end}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{with .Data.created}}
+	{{template "created_modal_open" (dict "title" (t "Application information") "alert" (cond (has .client_secret) (t "This is the only time the client secret will be shown.") "") "alertClass" "ascender-applications__application-alert")}}
+	<div>
+		<dt class="ascender-detail-name">{{t "Name"}}</dt>
+		<dd class="ascender-detail-value">{{.name}}</dd>
+	</div>
+	{{if has .client_id}}
+		<div>
+			<dt class="ascender-detail-name">{{t "Client ID"}}</dt>
+			<dd class="ascender-detail-value">
+				{{template "clipboard_expansion" (dict "id" "client-id" "value" (str .client_id))}}
+			</dd>
+		</div>
+	{{end}}
+	{{if has .client_secret}}
+		<div>
+			<dt class="ascender-detail-name">{{t "Client secret"}}</dt>
+			<dd class="ascender-detail-value">
+				{{template "clipboard_expansion" (dict "id" "client-secret" "value" (str .client_secret))}}
+			</dd>
+		</div>
+	{{end}}
+	{{template "created_modal_close"}}
+	<span hidden data-replace-url="/applications/{{$id}}/details"></span>
+{{end}}
+{{end}}

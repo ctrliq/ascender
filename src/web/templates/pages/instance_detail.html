@@ -1,0 +1,285 @@
+{{define "content"}}
+{{$i := .Data.instance}}
+{{$id := str $i.id}}
+{{$g := .Data.group}}
+{{$hop := eq (str $i.node_type) "hop"}}
+{{$exec := eq (str $i.node_type) "execution"}}
+{{if $g}}
+	{{$gid := str $g.id}}
+	{{template "screen_header" (dict "title" .Title "stream" "instance" "crumbs" (list (dict "href" "/instance_groups" "title" (t "Instance Groups")) (dict "href" (printf "/instance_groups/%s" $gid) "title" (str $g.name)) (dict "href" (printf "/instance_groups/%s/instances" $gid) "title" (t "Instances")) (dict "href" (printf "/instance_groups/%s/instances/%s" $gid $id) "title" (str $i.hostname))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "instance" "crumbs" (list (dict "href" "/instances" "title" (t "Instances")) (dict "href" (printf "/instances/%s" $id) "title" (str $i.hostname))))}}
+{{end}}
+{{if not $g}}{{template "health_check_alert"}}{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{if $g}}
+			{{$gid := str $g.id}}
+			{{template "routed_tabs" (dict "current" "details" "back" (dict "href" (printf "/instance_groups/%s/instances" $gid) "label" "Back to Instances") "tabs" (list (dict "key" "details" "href" (printf "/instance_groups/%s/instances/%s/details" $gid $id) "label" "Details")))}}
+			{{template "health_check_alert"}}
+		{{else}}
+			{{template "routed_tabs" (dict "current" "details" "back" (dict "href" "/instances" "label" "Back to Instances") "tabs" .Data.tabs)}}
+		{{end}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<dl class="ascender-detail-list" gutter="sm">
+				<div>
+					<dt class="ascender-detail-name" data-cy="instance-detail-name-label" id="instance-detail-name">
+						{{t "Host Name"}}
+					</dt>
+					<dd class="ascender-detail-value" data-cy="instance-detail-name-value">
+						{{$i.hostname}}
+					</dd>
+				</div>
+				{{if $g}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Status"}}</dt>
+						<dd class="ascender-detail-value">
+							{{if $i.node_state}}
+								{{template "status_label" (str $i.node_state)}}
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Policy Type"}}</dt>
+						<dd class="ascender-detail-value">
+							{{if $i.managed_by_policy}}{{t "Auto"}}{{else}}{{t "Manual"}}{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Running Jobs"}}</dt>
+						<dd class="ascender-detail-value">{{str $i.jobs_running}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Total Jobs"}}</dt>
+						<dd class="ascender-detail-value">{{str $i.jobs_total}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">
+							{{t "Last Health Check"}}
+							{{template "health_check_help"}}
+						</dt>
+						<dd class="ascender-detail-value">{{template "health_check_time" $i}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Node Type"}}</dt>
+						<dd class="ascender-detail-value">{{$i.node_type}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Capacity Adjustment"}}</dt>
+						<dd class="ascender-detail-value">
+							{{template "capacity_slider" (dict "i" $i "forks" .Data.forks "disabled" (or (not .Data.superuser) (not $i.enabled)) "cls" "ascender-instance-details")}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Used Capacity"}}</dt>
+						<dd class="ascender-detail-value">
+							{{if $i.enabled}}
+								{{template "used_capacity" (dict "pct" (usedPct $i.percent_capacity_remaining) "id" "detail" "aria" true)}}
+							{{else}}
+								<span class="ascender-instance-details__unavailable">
+									{{t "Unavailable"}}
+								</span>
+							{{end}}
+						</dd>
+					</div>
+				{{else}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="status-label" id="status">
+							{{t "Status"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="status-value">
+							{{if $i.node_state}}
+								{{template "status_label" (str $i.node_state)}}
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Node Type"}}</dt>
+						<dd class="ascender-detail-value">{{$i.node_type}}</dd>
+					</div>
+					{{if has $i.ip_address}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Host"}}</dt>
+							<dd class="ascender-detail-value">{{$i.ip_address}}</dd>
+						</div>
+					{{end}}
+					{{if $i.listener_port}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Listener Port"}}</dt>
+							<dd class="ascender-detail-value">{{str $i.listener_port}}</dd>
+						</div>
+					{{end}}
+					{{if and (not $i.managed) $.UC.User.IsSuperuser (dig $i "related" "install_bundle")}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Install Bundle"}}</dt>
+							<dd class="ascender-detail-value">
+								<div style="display: contents;">
+									<a class="pf-v6-c-button pf-m-secondary pf-m-small" data-tooltip="{{t "Click to download bundle"}}" data-tooltip-pos="top" href="{{dig $i "related" "install_bundle"}}" target="_blank" data-cy="install-bundle-download-button" rel="noopener noreferrer" aria-disabled="false">
+										<span class="pf-v6-c-button__icon">
+											{{icon "download"}}
+										</span>
+									</a>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{if or $exec $hop}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Peers from control nodes"}}</dt>
+							<dd class="ascender-detail-value">
+								{{if $i.peers_from_control_nodes}}
+									{{t "On"}}
+								{{else}}
+									{{t "Off"}}
+								{{end}}
+							</dd>
+						</div>
+					{{end}}
+					{{if not $hop}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Policy Type"}}</dt>
+							<dd class="ascender-detail-value">
+								{{if $i.managed_by_policy}}{{t "Auto"}}{{else}}{{t "Manual"}}{{end}}
+							</dd>
+						</div>
+						<div>
+							<dt class="ascender-detail-name">{{t "Running Jobs"}}</dt>
+							<dd class="ascender-detail-value">{{str $i.jobs_running}}</dd>
+						</div>
+						<div>
+							<dt class="ascender-detail-name">{{t "Total Jobs"}}</dt>
+							<dd class="ascender-detail-value">{{str $i.jobs_total}}</dd>
+						</div>
+						{{if .Data.groups}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="instance-groups-label" id="instance-groups">
+									{{t "Instance Groups"}}
+									{{template "help_button" (t "The Instance Groups to which this instance belongs.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="instance-groups-value">
+									<div class="pf-v6-c-label-group">
+										<div class="pf-v6-c-label-group__main">
+											<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
+												{{range .Data.groups}}
+													<li class="pf-v6-c-label-group__list-item">
+														<span class="pf-v6-c-label pf-m-blue pf-m-filled">
+															<a class="pf-v6-c-label__content" href="/instance_groups/{{if .is_container_group}}container_group/{{end}}{{str .id}}/details">
+																<span class="pf-v6-c-label__text">
+																	{{.name}}
+																</span>
+															</a>
+														</span>
+													</li>
+												{{end}}
+											</ul>
+										</div>
+									</div>
+								</dd>
+							</div>
+						{{end}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="last-health-check-label" id="last-health-check">
+								{{t "Last Health Check"}}
+								{{template "health_check_help"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="last-health-check-value">
+								{{template "health_check_time" $i}}
+							</dd>
+						</div>
+						<div>
+							<dt class="ascender-detail-name" data-cy="capacity-adjustment-label" id="capacity-adjustment">
+								{{t "Capacity Adjustment"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="capacity-adjustment-value">
+								{{template "capacity_slider" (dict "i" $i "forks" .Data.forks "disabled" (or (not .Data.superuser) (not $i.enabled) (not $i.managed)) "cls" "ascender-instance-detail")}}
+							</dd>
+						</div>
+						<div>
+							<dt class="ascender-detail-name" data-cy="used-capacity-label" id="used-capacity">
+								{{t "Used Capacity"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="used-capacity-value">
+								{{if $i.enabled}}
+									{{template "used_capacity" (dict "pct" (usedPct $i.percent_capacity_remaining) "id" "detail" "aria" true)}}
+								{{else}}
+									<span class="ascender-instance-detail__unavailable">
+										{{t "Unavailable"}}
+									</span>
+								{{end}}
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+				{{if .Data.healthErrors}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail-name--full-width"{{if not $g}} data-cy="errors-label" id="errors"{{end}}>
+							{{t "Errors"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail-value--full-width"{{if not $g}} data-cy="errors-value"{{end}}>
+							<div class="pf-v6-c-code-block">
+								<div class="pf-v6-c-code-block__content">
+									<pre class="pf-v6-c-code-block__pre"><code class="pf-v6-c-code-block__code">{{.Data.healthErrors}}</code></pre>
+								</div>
+							</div>
+						</dd>
+					</div>
+				{{end}}
+			</dl>
+			<div class="ascender-card-actions-row__wrapper">
+				{{if .Data.k8sEdit}}
+					<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="/instances/{{$id}}/edit">
+						<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+					</a>
+				{{end}}
+				{{if .Data.removable}}
+					<div style="display: contents;">
+						<div>
+							<button class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-instance-remove="{{$id}}" data-name="{{$i.hostname}}">
+								<span class="pf-v6-c-button__text">{{t "Remove"}}</span>
+							</button>
+						</div>
+					</div>
+				{{end}}
+				{{if $exec}}
+					<div style="display: contents;">
+						<button data-tooltip="{{t "Run a health check on the instance"}}" data-tooltip-pos="top" class="pf-v6-c-button pf-m-primary pf-m-progress{{if $i.health_check_pending}} pf-m-in-progress{{end}}" type="button"{{if or (not .Data.superuser) $i.health_check_pending (and (not $g) $i.managed)}} disabled{{end}} data-health-check="{{$id}}">
+							{{if $i.health_check_pending}}
+								<span class="pf-v6-c-button__progress">
+									<svg class="pf-v6-c-spinner" role="progressbar" viewBox="0 0 100 100" aria-valuetext="Loading..." aria-label="{{t "Running health check"}}" style="--pf-v6-c-spinner--diameter: 1em;">
+										<circle class="pf-v6-c-spinner__path" cx="50" cy="50" r="45" fill="none">
+										</circle>
+									</svg>
+								</span>
+							{{end}}
+							<span class="pf-v6-c-button__text">
+								{{if $i.health_check_pending}}
+									{{t "Running health check"}}
+								{{else}}
+									{{t "Run health check"}}
+								{{end}}
+							</span>
+						</button>
+					</div>
+				{{end}}
+				{{if and $g .Data.superuser (ne (str $i.node_type) "control")}}
+					<div style="display: contents;">
+						<div>
+							<button aria-label="{{t "Disassociate"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-disassociate-instance="{{$id}}" data-name="{{$i.hostname}}" data-api="/api/v2/instance_groups/{{str $g.id}}/instances/" data-redirect="/instance_groups/{{str $g.id}}/instances"{{if eq (str $g.name) "controlplane"}} data-protected{{end}}{{if $i.managed_by_policy}} data-policy-note{{end}}>
+								<span class="pf-v6-c-button__text">{{t "Disassociate"}}</span>
+							</button>
+							{{if $i.managed_by_policy}}
+								<template data-policy-note-html>
+									{{tHTML "<0>Note: This instance may be re-associated with this instance group if it is managed by <1>policy rules.</1></0>" "0" (safe "<b>") "1" (safe `<a href="/docs/admin-guide/container-instance-groups/#instance-group-policies" target="_blank" rel="noopener noreferrer">`)}}
+								</template>
+							{{end}}
+						</div>
+					</div>
+				{{end}}
+				{{if or $g (not $hop)}}
+					{{template "instance_toggle" (dict "i" $i "superuser" .Data.superuser "cy" "")}}
+				{{end}}
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

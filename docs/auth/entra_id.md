@@ -5,22 +5,28 @@ Same product, same tenants and app registrations, new name. Ascender has a
 login of its own for it, under **Settings > Microsoft Entra ID (Azure AD) >
 Microsoft Entra ID**, and all its settings start with `SOCIAL_AUTH_ENTRA_ID_`.
 
-The two older Azure AD logins are still there, now marked as legacy, so nothing
-breaks for anyone who uses them. They talk to the v1 endpoints and can only map
-users to organizations and teams by username or email. The Entra ID login is
-the one to pick for a new setup:
+The two older Azure AD logins are still there, as the **Azure AD Default
+(legacy)** and **Azure AD Tenant (legacy)** tabs, so nothing breaks for anyone
+who uses them. They talk to the v1 endpoints and can only map users to
+organizations and teams by username or email. The Entra ID login is the one to
+pick for a new setup:
 
 * it uses the v2.0 endpoints, and only ever of the one tenant you give it
 * it knows a user by their object ID (`oid`), which never changes and is never
   handed to someone else, instead of a name that can be
 * it can map users from their groups, their app roles or any other claim, the
   same way generic OIDC does (see [oidc.md](oidc.md))
-* it can read the groups from Microsoft Graph, with no limit on how many
+* it can read the groups from Microsoft Graph, without the 200 group limit of
+  the token
 * it has a login rule, superuser and auditor flags, can strip the domain off
   usernames and can log the user out of Microsoft too
 * it works in the sovereign clouds and in External ID tenants
 * the client secret is optional with Azure Workload Identity, like the legacy
   logins
+
+The backend (`entra-id`) is in `src/internal/sso/social.go`, and what happens
+after the token is checked (accounts, maps, flags, taking over legacy
+accounts) in `src/internal/api/sso_social.go`.
 
 ## Registering the application
 
@@ -44,11 +50,20 @@ Then fill in:
 | `SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST` | the sign in host of the cloud the tenant lives in, `login.microsoftonline.com` by default |
 
 The login shows up on the login page once the client ID, the tenant and either
-the secret or a Workload Identity token are there.
+the secret or a Workload Identity token are there. When the secret is
+blank, Ascender reads a token from the file named by
+`OAUTH2_FEDERATED_TOKEN_FILE`, or else `AZURE_FEDERATED_TOKEN_FILE` (which
+the Azure Workload Identity webhook sets), in the environment of
+`ascender-web`, and sends it as a client assertion instead.
 
 `common`, `organizations` and `consumers` are not accepted as the tenant. With
 any of them a token from any directory in the world would pass, and this login is
-meant for the users of your tenant.
+meant for the users of your tenant. When the tenant is given as an ID, the
+token's `tid` must also be that ID.
+
+The redirect URI Ascender sends is built from the address the browser used, as
+for generic OIDC (see [Connecting to the provider](oidc.md#connecting-to-the-provider)),
+so behind a proxy it needs the original `Host` and `X-Forwarded-Proto: https`.
 
 ### Authority host
 
@@ -59,7 +74,8 @@ meant for the users of your tenant.
 | Azure operated by 21Vianet (China) | `login.partner.microsoftonline.cn` |
 | External ID (customer) tenant | `<subdomain>.ciamlogin.com` |
 
-Only the host goes there, no `https://` and no path.
+Only the host goes there, no `https://` and no path. The legacy logins always
+use `login.microsoftonline.com`.
 
 ## Usernames and emails
 
@@ -84,14 +100,15 @@ account by email. Entra does not verify the `email` claim: anyone who can edit a
 user's mail attribute can put any address there, and a UPN, with the address
 that goes with it, is often given to someone else once its owner leaves.
 Linking by it would let that person into whichever Ascender account has the
-address, a local superuser included. The only accounts an Entra ID login takes
-over are those of the legacy Azure AD logins, and only when they belong to the
-same person (see [Moving from the Azure AD logins](#moving-from-the-azure-ad-logins)).
+address. The only accounts an Entra ID login takes over are those of the legacy
+Azure AD logins, and only when they belong to the same person (see
+[Moving from the Azure AD logins](#moving-from-the-azure-ad-logins)).
 
 For the same reason, `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS` skips the email
 part of its check for Entra ID and only refuses a first login whose desired
-username is already taken. Several existing accounts sharing the incoming email
-address do not block a login that would otherwise create a new account.
+username is already taken (ignoring case). Several existing accounts sharing
+the incoming email address do not block a login that would otherwise create a
+new account.
 
 ## Groups and app roles
 
@@ -119,10 +136,10 @@ configuration > Add groups claim*. A few things to know:
 The other way around both problems is to not take the groups from the token at
 all. Turn on `SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH` and, at every login,
 Ascender asks Microsoft Graph for the user's groups
-(`/me/transitiveMemberOf`, every page of it) with the access token of that
-login. What you get:
+(`/v1.0/me/transitiveMemberOf/microsoft.graph.group`, every page of it, up to
+50 pages of 999) with the access token of that login. What you get:
 
-* no limit on how many groups
+* no 200 group limit
 * nested groups too, since the membership is transitive
 * no groups claim to set up in the token configuration
 
@@ -144,18 +161,20 @@ What it needs:
   get past.
 * Ascender has to reach Graph. The host comes from the authority host
   (`graph.microsoft.com`, `graph.microsoft.us` or
-  `microsoftgraph.chinacloudapi.cn`); set `SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST` for
-  any other, such as `dod-graph.microsoft.us`.
+  `microsoftgraph.chinacloudapi.cn`, and `graph.microsoft.com` for any other);
+  set `SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST` for a different one, such as
+  `dod-graph.microsoft.us`.
 
 Asking only for groups is what Graph calls an advanced query, which it answers
 from an index that can be a few minutes behind. Someone just added to a group
 may need a few minutes before a new login picks it up.
 
-If Graph cannot be asked at login, because it is down, the consent is missing
-or it answers something odd, the user's groups are treated as unknown, the same
-as with an overflowing token: the login rule refuses them and maps and flags on
-groups leave their roles alone. The token's own groups are not used as a fallback,
-since they may be only part of the list. The reason is in the log.
+If Graph cannot be asked at login, because it is down, the consent is missing,
+it answers something odd or the user is in more than 50 pages of groups, the
+user's groups are treated as unknown, the same as with an overflowing token:
+the login rule refuses them and maps and flags on groups leave their roles
+alone. The token's own groups are not used as a fallback, since they may be
+only part of the list. The reason is in the log (logger `ascender.sso.entra`).
 
 `SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM` picks which claim the `groups` part of a rule
 looks at. Any other claim, `roles` included, can still be matched as an
@@ -177,7 +196,9 @@ These work exactly as for generic OIDC, see [oidc.md](oidc.md):
 name Ascender accounts by exact, case-sensitive username, and are only honored
 while `RESTRICT_USER_IDENTITY_TO_SUPERUSERS` is on; with it off, they are
 ignored with a warning because an organization administrator could otherwise
-rename or create an account to take a listed name.
+rename or create an account to take a listed name (see
+[oidc.md](oidc.md#linking-to-existing-accounts)). Trigger rules on claims are
+the stronger choice.
 
 For example, with app roles:
 
@@ -192,10 +213,10 @@ For example, with app roles:
 }
 ```
 
-One difference with generic OIDC: when the Entra ID maps are not set, the shared
-`SOCIAL_AUTH_ORGANIZATION_MAP` and `SOCIAL_AUTH_TEAM_MAP` do not apply either.
-Generic OIDC only falls back to them so configurations written before it had maps
-of its own keep working, and Entra ID has no such history.
+As with generic OIDC, when an Entra ID map is not set, the shared
+`SOCIAL_AUTH_ORGANIZATION_MAP` or `SOCIAL_AUTH_TEAM_MAP` applies instead. Set
+the Entra ID map, even to `{}`, to keep the shared one from applying to Entra
+ID logins.
 
 ## Logging out of Microsoft
 
@@ -204,7 +225,25 @@ the user's Microsoft session, which logs them out of every other application
 that uses it. Entra only sends the browser back to
 `SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL` (the base URL of Ascender unless
 set) if that address is one of the redirect URIs of the app registration. A
-session that times out for inactivity is only ended in Ascender.
+session that times out for inactivity is only ended in Ascender. The details,
+including what API clients get from `POST /api/logout/`, are the same as for
+[generic OIDC](oidc.md#logging-out-of-the-provider).
+
+## The legacy Azure AD logins
+
+**Azure AD Default (legacy)** (`azuread-oauth2`, settings
+`SOCIAL_AUTH_AZUREAD_OAUTH2_*`) signs in through the `common` endpoint, so it
+accepts a user of any directory, and knows a user by their UPN. **Azure AD
+Tenant (legacy)** (`azuread-tenant-oauth2`, settings
+`SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_*`) signs in through the tenant in
+`SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID` and knows a user by the token's
+`sub`. Both take a client ID and secret (or Workload
+Identity, as above), an organization map and a team map with usernames, emails
+and regular expressions, and nothing else: no trigger rules, login rule or
+flags. When their maps are not set, the shared `SOCIAL_AUTH_ORGANIZATION_MAP`
+and `SOCIAL_AUTH_TEAM_MAP` apply. Unlike Entra ID, they link a first login to an
+existing account by email, under the rules described in
+[oidc.md](oidc.md#linking-to-existing-accounts).
 
 ## Moving from the Azure AD logins
 
@@ -216,11 +255,15 @@ run next to an Azure AD one while you move over:
 2. Fill in the Entra ID settings and move the maps over, now with rules on groups
    or roles where you need them.
 3. Log in with the new button. An Azure AD account is taken over by the first
-   Entra ID login of the same person, which Ascender knows by the object ID and
-   tenant in the ID token it kept from that account's last Azure AD login, so a
-   reused UPN or address never gets someone else's account.
+   Entra ID login of the same person. Ascender finds the candidates by the
+   UPN or email (the Azure AD identity's UPN or the account's email matching
+   the new token's `upn`, `preferred_username` or `email`), and takes one over
+   only if the ID token it kept from that account's last Azure AD login has the
+   same object ID and tenant, so a reused UPN or address never gets someone
+   else's account. It takes none over when more than one account passes that test, or
+   when the account already has an Entra ID identity.
 4. Once everyone is on it, clear the client ID of the Azure AD login so its
-   button goes away.
+   button goes away. Sessions that login started end then too.
 
 Anyone who cannot be matched that way gets a new account on their first Entra
 ID login: local accounts, Azure AD accounts with no ID token kept, or ones whose

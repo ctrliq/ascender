@@ -1,0 +1,136 @@
+{
+    "name": "Job Host Summary Detail",
+    "description": "# Retrieve a Job Host Summary:\n\nMake GET request to this resource to retrieve a single job host summary\nrecord containing the following fields:\n\n* `id`: Database ID for this job host summary. (integer)\n* `type`: Data type for this job host summary. (choice)\n* `url`: URL for this job host summary. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this job host summary was created. (datetime)\n* `modified`: Timestamp when this job host summary was last modified. (datetime)\n* `job`:  (id)\n* `host`:  (id)\n* `constructed_host`: Only for jobs run against constructed inventories, this links to the host inside the constructed inventory. (id)\n* `host_name`:  (string)\n* `changed`:  (integer)\n* `dark`:  (integer)\n* `failures`:  (integer)\n* `ok`:  (integer)\n* `processed`:  (integer)\n* `skipped`:  (integer)\n* `failed`:  (boolean)\n* `ignored`:  (integer)\n* `rescued`:  (integer)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this job host summary.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this job host summary.",
+                "choices": [
+                    ["job_host_summary", "Job Host Summary"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this job host summary.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this job host summary was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this job host summary was last modified.",
+                "filterable": true
+            },
+            "job": {
+                "type": "id",
+                "label": "Job",
+                "filterable": true
+            },
+            "host": {
+                "type": "id",
+                "label": "Host",
+                "filterable": true
+            },
+            "constructed_host": {
+                "type": "id",
+                "label": "Constructed host",
+                "help_text": "Only for jobs run against constructed inventories, this links to the host inside the constructed inventory.",
+                "filterable": true
+            },
+            "host_name": {
+                "type": "string",
+                "label": "Host name",
+                "filterable": true
+            },
+            "changed": {
+                "type": "integer",
+                "label": "Changed",
+                "min_value": 0,
+                "filterable": true
+            },
+            "dark": {
+                "type": "integer",
+                "label": "Dark",
+                "min_value": 0,
+                "filterable": true
+            },
+            "failures": {
+                "type": "integer",
+                "label": "Failures",
+                "min_value": 0,
+                "filterable": true
+            },
+            "ok": {
+                "type": "integer",
+                "label": "Ok",
+                "min_value": 0,
+                "filterable": true
+            },
+            "processed": {
+                "type": "integer",
+                "label": "Processed",
+                "min_value": 0,
+                "filterable": true
+            },
+            "skipped": {
+                "type": "integer",
+                "label": "Skipped",
+                "min_value": 0,
+                "filterable": true
+            },
+            "failed": {
+                "type": "boolean",
+                "label": "Failed",
+                "filterable": true
+            },
+            "ignored": {
+                "type": "integer",
+                "label": "Ignored",
+                "min_value": 0,
+                "filterable": true
+            },
+            "rescued": {
+                "type": "integer",
+                "label": "Rescued",
+                "min_value": 0,
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "job_host_summary"
+    ]
+}

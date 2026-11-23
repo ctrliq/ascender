@@ -1,0 +1,261 @@
+{
+    "name": "Inventory Detail",
+    "description": "# Retrieve an Inventory:\n\nMake GET request to this resource to retrieve a single inventory\nrecord containing the following fields:\n\n* `id`: Database ID for this inventory. (integer)\n* `type`: Data type for this inventory. (choice)\n* `url`: URL for this inventory. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this inventory was created. (datetime)\n* `modified`: Timestamp when this inventory was last modified. (datetime)\n* `name`: Name of this inventory. (string)\n* `description`: Optional description of this inventory. (string)\n* `organization`: Organization containing this inventory. (id)\n* `kind`: Kind of inventory being represented. (choice)\n    - `\"\"`: Hosts have a direct link to this inventory.\n    - `smart`: Hosts for inventory generated using the host_filter property.\n    - `constructed`: Parse list of source inventories with the constructed inventory plugin.\n    - `federated`: Route jobs to source inventory instance groups automatically.\n* `host_filter`: Filter that will be applied to the hosts of this inventory. (string)\n* `variables`: Inventory variables in JSON or YAML format. (json)\n* `has_active_failures`: This field is deprecated and will be removed in a future release. Flag indicating whether any hosts in this inventory have failed. (boolean)\n* `total_hosts`: This field is deprecated and will be removed in a future release. Total number of hosts in this inventory. (integer)\n* `hosts_with_active_failures`: This field is deprecated and will be removed in a future release. Number of hosts in this inventory with active failures. (integer)\n* `total_groups`: This field is deprecated and will be removed in a future release. Total number of groups in this inventory. (integer)\n* `has_inventory_sources`: This field is deprecated and will be removed in a future release. Flag indicating whether this inventory has any external inventory sources. (boolean)\n* `total_inventory_sources`: Total number of external inventory sources configured within this inventory. (integer)\n* `inventory_sources_with_failures`: Number of external inventory sources in this inventory with failures. (integer)\n* `pending_deletion`: Flag indicating the inventory is being deleted. (boolean)\n* `prevent_instance_group_fallback`: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.If this setting is enabled and you provided an empty list, the global instance groups will be applied. (boolean)\n* `allow_deletes_while_in_use`: If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish. (boolean)\n* `allow_jobs_while_syncing`: If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully. (boolean)\n\n\n\n\n\n# Update an Inventory:\n\nMake a PUT or PATCH request to this resource to update this\ninventory.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `name`: Name of this inventory. (string, required)\n* `description`: Optional description of this inventory. (string, default=`\"\"`)\n* `organization`: Organization containing this inventory. (id, required)\n* `kind`: Kind of inventory being represented. (choice)\n    - `\"\"`: Hosts have a direct link to this inventory. (default)\n    - `smart`: Hosts for inventory generated using the host_filter property.\n    - `constructed`: Parse list of source inventories with the constructed inventory plugin.\n    - `federated`: Route jobs to source inventory instance groups automatically.\n* `host_filter`: Filter that will be applied to the hosts of this inventory. (string, default=`\"\"`)\n* `variables`: Inventory variables in JSON or YAML format. (json, default=``)\n\n\n\n\n\n\n\n\n* `prevent_instance_group_fallback`: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.If this setting is enabled and you provided an empty list, the global instance groups will be applied. (boolean, default=`False`)\n* `allow_deletes_while_in_use`: If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish. (boolean, default=`False`)\n* `allow_jobs_while_syncing`: If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully. (boolean, default=`False`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete an Inventory:\n\nMake a DELETE request to this resource to delete this inventory.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this inventory.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this inventory.",
+                "filterable": true,
+                "default": ""
+            },
+            "organization": {
+                "type": "id",
+                "required": true,
+                "label": "Organization",
+                "help_text": "Organization containing this inventory.",
+                "filterable": true
+            },
+            "kind": {
+                "type": "choice",
+                "required": false,
+                "label": "Kind",
+                "help_text": "Kind of inventory being represented.",
+                "filterable": true,
+                "default": "",
+                "choices": [
+                    ["", "Hosts have a direct link to this inventory."],
+                    ["smart", "Hosts for inventory generated using the host_filter property."],
+                    ["constructed", "Parse list of source inventories with the constructed inventory plugin."],
+                    ["federated", "Route jobs to source inventory instance groups automatically."]
+                ]
+            },
+            "host_filter": {
+                "type": "string",
+                "required": false,
+                "label": "Host filter",
+                "help_text": "Filter that will be applied to the hosts of this inventory.",
+                "filterable": true,
+                "default": null
+            },
+            "variables": {
+                "type": "json",
+                "required": false,
+                "label": "Variables",
+                "help_text": "Inventory variables in JSON or YAML format.",
+                "filterable": true,
+                "default": ""
+            },
+            "prevent_instance_group_fallback": {
+                "type": "boolean",
+                "required": false,
+                "label": "Prevent instance group fallback",
+                "help_text": "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.If this setting is enabled and you provided an empty list, the global instance groups will be applied.",
+                "filterable": true,
+                "default": false
+            },
+            "allow_deletes_while_in_use": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow deletes while in use",
+                "help_text": "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish.",
+                "filterable": true,
+                "default": false
+            },
+            "allow_jobs_while_syncing": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow jobs while syncing",
+                "help_text": "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.",
+                "filterable": true,
+                "default": false
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this inventory.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this inventory.",
+                "choices": [
+                    ["inventory", "Inventory"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this inventory.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this inventory was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this inventory was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this inventory.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this inventory.",
+                "filterable": true
+            },
+            "organization": {
+                "type": "id",
+                "label": "Organization",
+                "help_text": "Organization containing this inventory.",
+                "filterable": true
+            },
+            "kind": {
+                "type": "choice",
+                "label": "Kind",
+                "help_text": "Kind of inventory being represented.",
+                "filterable": true,
+                "choices": [
+                    ["", "Hosts have a direct link to this inventory."],
+                    ["smart", "Hosts for inventory generated using the host_filter property."],
+                    ["constructed", "Parse list of source inventories with the constructed inventory plugin."],
+                    ["federated", "Route jobs to source inventory instance groups automatically."]
+                ]
+            },
+            "host_filter": {
+                "type": "string",
+                "label": "Host filter",
+                "help_text": "Filter that will be applied to the hosts of this inventory.",
+                "filterable": true
+            },
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Inventory variables in JSON or YAML format.",
+                "filterable": true
+            },
+            "has_active_failures": {
+                "type": "boolean",
+                "label": "Has active failures",
+                "help_text": "This field is deprecated and will be removed in a future release. Flag indicating whether any hosts in this inventory have failed.",
+                "filterable": true
+            },
+            "total_hosts": {
+                "type": "integer",
+                "label": "Total hosts",
+                "help_text": "This field is deprecated and will be removed in a future release. Total number of hosts in this inventory.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "hosts_with_active_failures": {
+                "type": "integer",
+                "label": "Hosts with active failures",
+                "help_text": "This field is deprecated and will be removed in a future release. Number of hosts in this inventory with active failures.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "total_groups": {
+                "type": "integer",
+                "label": "Total groups",
+                "help_text": "This field is deprecated and will be removed in a future release. Total number of groups in this inventory.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "has_inventory_sources": {
+                "type": "boolean",
+                "label": "Has inventory sources",
+                "help_text": "This field is deprecated and will be removed in a future release. Flag indicating whether this inventory has any external inventory sources.",
+                "filterable": true
+            },
+            "total_inventory_sources": {
+                "type": "integer",
+                "label": "Total inventory sources",
+                "help_text": "Total number of external inventory sources configured within this inventory.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "inventory_sources_with_failures": {
+                "type": "integer",
+                "label": "Inventory sources with failures",
+                "help_text": "Number of external inventory sources in this inventory with failures.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "pending_deletion": {
+                "type": "boolean",
+                "label": "Pending deletion",
+                "help_text": "Flag indicating the inventory is being deleted.",
+                "filterable": true
+            },
+            "prevent_instance_group_fallback": {
+                "type": "boolean",
+                "label": "Prevent instance group fallback",
+                "help_text": "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.If this setting is enabled and you provided an empty list, the global instance groups will be applied.",
+                "filterable": true
+            },
+            "allow_deletes_while_in_use": {
+                "type": "boolean",
+                "label": "Allow deletes while in use",
+                "help_text": "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish.",
+                "filterable": true
+            },
+            "allow_jobs_while_syncing": {
+                "type": "boolean",
+                "label": "Allow jobs while syncing",
+                "help_text": "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "inventory"
+    ],
+    "object_roles": [
+        "admin_role",
+        "update_role",
+        "adhoc_role",
+        "use_role",
+        "read_role"
+    ]
+}

@@ -1,42 +1,52 @@
 ## Ascender Capacity Determination and Job Impact
 
-The Ascender capacity system determines how many jobs can run on an Instance given the amount of resources
-available to the Instance and the size of the jobs that are running (referred to hereafter as `Impact`).
-The algorithm used to determine this is based entirely on two things:
+The Ascender capacity system determines how many jobs can run on an instance given the resources
+available to the instance and the size of the jobs that are running (their `impact`). An instance's
+capacity is computed from two things:
 
-* How much memory is available to the system (`mem_capacity`)
-* How much CPU is available to the system (`cpu_capacity`)
+* how much memory the instance has (`mem_capacity`)
+* how many CPUs the instance has (`cpu_capacity`)
 
-Capacity also impacts Instance Groups. Since Groups are composed of Instances, likewise Instances can be
-assigned to multiple Groups. This means that impact to one Instance can potentially affect the overall capacity of
-other Groups.
+Capacity also affects instance groups. Groups are made of instances, and an instance can belong to
+several groups, so work on one instance reduces the remaining capacity of every group it belongs to.
 
-Instance Groups (not Instances themselves) can be assigned to be used by Jobs at various levels (see [Tower Clustering/HA Overview](github.com/ctrliq/ascender/blob/main/docs/clustering.md)).
-When the Task Manager is preparing its graph to determine which Group a Job will run on, it will commit the capacity of
-an Instance Group to a Job that hasn't or isn't ready to start yet (see [Task Manager Overview](github.com/ctrliq/ascender/blob/main/docs/task_manager_system.md)).
+Jobs are assigned to instance groups, not to instances (see [Clustering](./clustering.md)). When
+`ascender-task` claims a task it places it right away: it picks the first of the task's preferred
+instance groups with room, and an instance in that group
+(`src/internal/tasks/capacity.go`). A task that does not fit stays `pending`; after 30 seconds its
+explanation reads "This job is not ready to start because there is not enough available capacity."
 
-Finally, if only one Instance is available (especially in smaller configurations) for a Job to run, the Task Manager will allow that
-Job to run on the Instance even if it would push the Instance over capacity. We do this as a way to guarantee that jobs
-themselves won't get clogged as a result of an under-provisioned system.
+An instance that is running nothing takes a task even when the task's impact is larger than the
+instance's capacity, choosing the idle instance with the largest capacity. This keeps an
+under-provisioned system from blocking jobs that would never fit.
 
-These concepts mean that, in general, Capacity and Impact is not a zero-sum system relative to Jobs and Instances/Instance Groups.
+So capacity and impact are not a zero-sum system relative to jobs and instances or instance groups.
 
 
 ### Resource Determination For Capacity Algorithm
 
-The capacity algorithms are defined in order to determine how many `forks` a system is capable of running at the same time. This controls how
-many systems Ansible itself will communicate with simultaneously. Increasing the number of forks a Ascender system is running will, in general,
-allow jobs to run faster by performing more work in parallel. The tradeoff is that this will increase the load on the system which could cause work
-to slow down overall.
+The capacity algorithms determine how many `forks` an instance can run at the same time. Forks are
+how many hosts Ansible itself works on simultaneously. More forks generally make jobs faster by doing
+more work in parallel, at the cost of more load on the instance, which can slow work down overall.
 
-Ascender can operate in two modes when determining capacity. `mem_capacity` (the default) will allow you to overcommit CPU resources while protecting the system
-from running out of memory. If most of your work is not CPU-bound, then selecting this mode will maximize the number of forks.
+The resources come from health checks (`src/internal/models/instance_health.go`):
+
+* A control or hybrid node checks itself on every heartbeat: the number of CPUs the Go runtime reports
+  (`runtime.NumCPU`) and the `MemTotal` of `/proc/meminfo`. The environment variables
+  `SYSTEM_TASK_ABS_CPU` (for example `4` or `1500m`) and `SYSTEM_TASK_ABS_MEM` (for example `8Gi` or
+  `4096M`) override them, for a node whose container is limited to less than its host has.
+* An execution node is checked over the receptor mesh with `ansible-runner worker --worker-info`,
+  which reports its CPUs and memory.
+* Hop nodes have no capacity.
+
+Capacity is recomputed every time health data is saved. A disabled instance, or one whose health
+check failed, has a capacity of 0.
 
 
 #### Memory Relative Capacity
-`mem_capacity` is calculated relative to the amount of memory needed per-fork. Taking into account the overhead for Ascender's internal components, this comes out
-to be about `100MB` per fork. When considering the amount of memory available to Ansible jobs the capacity algorithm will reserve 2GB of memory to account
-for the presence of other Ascender services. The algorithm itself looks like this:
+
+`mem_capacity` is the memory available to jobs divided by the memory a fork needs, about `100MB`. The
+algorithm reserves 2GB for the other services on the instance:
 
     (mem - 2048) / mem_per_fork
 
@@ -44,96 +54,118 @@ As an example:
 
     (4096 - 2048) / 100 == ~20
 
-So a system with 4GB of memory would be capable of running 20 forks. The value `mem_per_fork` can be controlled by setting the Ascender settings value
-(or environment variable) `SYSTEM_TASK_FORKS_MEM` which defaults to `100`.
+So an instance with 4GB of memory can run 20 forks. When `IS_K8S` is set nothing is reserved, on any
+instance, because the Ascender services run in containers of their own:
+
+    mem / mem_per_fork
+
+`mem_per_fork` is the environment variable `SYSTEM_TASK_FORKS_MEM` (in megabytes), default `100`.
 
 
 #### CPU-Relative Capacity
 
-Often times Ansible workloads can be fairly CPU-bound. In these cases, sometimes reducing the simultaneous workload allows more tasks to run faster and reduces
-the average time-to-completion of those jobs.
+Ansible workloads are often CPU-bound. Then running fewer tasks at once can make each of them finish
+sooner.
 
-Just as the Ascender `mem_capacity` algorithm uses the amount of memory needed per-fork, the `cpu_capacity` algorithm looks at the amount of CPU resources is needed
-per fork. The baseline value for this is `4` forks per core. The algorithm itself looks like this:
+The `cpu_capacity` algorithm uses a number of forks per CPU, `4` by default:
 
     cpus * fork_per_cpu
 
-For example, in a 4-core system:
+For example, on a 4-CPU system:
 
     4 * 4 == 16
 
-The value `fork_per_cpu` can be controlled by setting the Ascender settings value (or environment variable) `SYSTEM_TASK_FORKS_CPU`, which defaults to `4`.
+`fork_per_cpu` is the environment variable `SYSTEM_TASK_FORKS_CPU`, default `4`.
+
+Both capacities are at least 1.
+
+> **Note:** `SYSTEM_TASK_FORKS_MEM`, `SYSTEM_TASK_FORKS_CPU`, `SYSTEM_TASK_ABS_CPU` and
+> `SYSTEM_TASK_ABS_MEM` are read from the environment of the `ascender-task` process that saves the
+> health data, which for an execution node is the control node that checked it. They are not
+> settings stored in the database or the settings file.
+
 
 ### Job Impacts Relative To Capacity
 
-When selecting the capacity, it's important to understand how each job type affects it.
+To choose a capacity, it helps to know how each kind of job uses it.
 
-It's helpful to understand what `forks` mean to Ansible: http://docs.ansible.com/ansible/latest/intro_configuration.html#forks
+It's helpful to understand what `forks` mean to Ansible: https://docs.ansible.com/ansible/latest/reference_appendices/config.html#default-forks
 
-The default forks value for ansible is `5`. However, if Ascender knows that you're running against fewer systems than that, then the actual concurrency value
-will be lower.
+The default forks value for Ansible is `5`. When Ascender knows that a job runs against fewer hosts
+than that, the concurrency counted is the number of hosts.
 
-When a job is made to run, Ascender will add `1` to the number of forks selected to compensate for the Ansible parent process. So if you are running a playbook against `5`
-systems with a `forks` value of `5`, then the actual `forks` value from the perspective of Job Impact will be 6.
+Ascender adds `1` to the forks to account for the Ansible parent process. So a playbook run against
+`5` hosts with `forks` of `5` has an impact of 6.
 
 #### Impact of Job Types in Ascender
-Jobs have two types of impact. Task "execution" impact and task "control" impact.
 
-For instances that are the "controller_node" for a task,
-the impact is set by settings.Ascender_CONTROL_NODE_TASK_IMPACT and it is the same no matter what type of job.
+Tasks have two kinds of impact: "execution" impact on the instance that runs them, and "control"
+impact on the instance that controls them.
 
-For instances that are the "execution_node" for a task, the impact is calculated as following:
+The control impact is `1` for every kind of task. It is fixed in the code; the old
+`ASCENDER_CONTROL_NODE_TASK_IMPACT` setting has no equivalent.
 
-Jobs and Ad-hoc jobs follow the above model, `forks + 1`.
+The execution impact (`task_impact` on the unified job) is set when the job is created:
 
-Other job types have a fixed execution impact:
+* Jobs and ad hoc commands: `min(hosts, forks) + 1`, where `forks` is `5` when it is 0 and `hosts` is
+  the inventory's host count (the slice's hosts for a sliced job, `2` for a provisioning callback;
+  when the host count is unknown, a job counts `forks` hosts and an ad hoc command 5).
+* Inventory updates: 1
+* Project updates: 1 for a `check` update, 0 for a `run` sync (the sync of a job's own checkout,
+  whose job holds the capacity)
+* System jobs: 5
 
-* Inventory Updates: 1
-* Project Updates: 1
-* System Jobs: 5
+Project updates and system jobs run on the controller in the control plane group, so the controller
+needs room for the control impact plus the execution impact. A job or inventory update on a hybrid
+node that also controls it uses both impacts on that node.
 
-For jobs that execute on the same node as they are controlled by, both settings.ASCENDER_CONTROL_NODE_TASK_IMPACT and the job task execution impact apply.
+Examples, with the control impact of 1:
 
-Examples:
-Given settings.ASCENDER_CONTROL_NODE_TASK_IMPACT is 1:
-  - Project updates (where the execution_node is always the same as the controller_node), have a total impact of 2.
-  - Container group jobs (where the execution node is not a member of the cluster) only control impact applies, and the controller node has a total task impact of 1.
-  - A job executing on a "hybrid" node where both control and execution will occur on the same node has the task impact of (1 overhead for ansible main process) + (min(forks,hosts)) + (1 control node task impact). Meaning a Job running on a hybrid node with forks set to 1 would have a total task impact of 3.
+* A `check` project update has a total impact of 2 on its controller.
+* A system job has a total impact of 6 on its controller.
+* A job in a container group: only the control impact applies, and its controller has a task impact
+  of 1. The job counts against the container group's `max_forks` and `max_concurrent_jobs`.
+* A job on a hybrid node, which both controls and executes it, has (1 for the Ansible parent
+  process) + min(forks, hosts) + (1 control impact). A job with forks set to 1 has a total impact of
+  3.
 
-### Selecting the Right settings.ASCENDER_CONTROL_NODE_TASK_IMPACT
-
-This setting allows you to determine how much impact controlling jobs has. This
-can be helpful if you notice symptoms of your control plane exceeding desired
-CPU or memory usage, as it effectively throttles how many jobs can be run
-concurrently by your control plane. This is usually a concern with container
-groups, which at this time effectively have infinite capacity, so it is easy to
-end up with too many jobs running concurrently, overwhelming the control plane
-pods with events and control processes.
-
-If you want more throttling behavior, increase the setting.
-If you want less throttling behavior, lower the setting.
+Each `ascender-task` controls only the tasks it claims itself, so the control impact always falls on
+the node of the process that claimed the task, and it needs room there.
 
 ### Selecting the Right Capacity
 
-Selecting between a memory-focused capacity algorithm and a CPU-focused capacity for your Ascender use means you'll be selecting between a minimum
-and maximum value. In the above examples, the CPU capacity would allow a maximum of 16 forks while the Memory capacity would allow 20. For some systems,
-the disparity between these can be large and oftentimes you may want to have a balance between these two.
+Choosing between the memory and CPU algorithms means choosing between a minimum and a maximum. In
+the examples above, the CPU capacity allows at most 16 forks and the memory capacity 20. The two can
+differ a lot, and a balance between them is often what you want.
 
-An Instance field, `capacity_adjustment`, allows you to select how much of one or the other you want to consider. It is represented as a value between `0.0`
-and `1.0`.  If set to a value of `1.0`, then the largest value will be used. In the above example, that would be Memory capacity, so a value of `20` forks would
-be selected. If set to a value of `0.0` then the smallest value will be used. A value of `0.5` would be a 50/50 balance between the two algorithms which would
-be `18`:
+The instance field `capacity_adjustment` (default `1.00`) selects how much of each to use.
+At `1.0` the larger value is used: the memory capacity of 20 forks in the example. At `0.0` the
+smaller one is used. At `0.5` the capacity is halfway between them, `18`:
 
     16 + (20 - 16) * 0.5 == 18
 
+The result is rounded down. Values above `1.00` are accepted and go past the larger value.
+
 ### Max forks and Max Concurrent jobs on Instance Groups and Container Groups
 
-By default, only Instances have capacity and we only track capacity consumed per instance. With the max_forks and max_concurrent_jobs fields now available on Instance Groups, we additionally can limit how many jobs or forks are allowed to be concurrently consumed across an entire Instance Group or Container Group.
+Instances have capacity, and the consumed capacity is tracked per instance. The `max_forks` and
+`max_concurrent_jobs` fields of an instance group additionally limit how many forks (the sum of the
+running tasks' impacts) and how many jobs may run across the whole group at once. 0 means no limit.
 
-This is especially useful for Container Groups where previously, there was no limit to how many jobs we would submit to a Container Group, which made it impossible to "overflow" job loads from one Container Group to another container group, which may be on a different Kubernetes cluster or namespace.
+This is most useful for container groups, which otherwise have no limit on how many jobs are sent to
+them. With a limit, jobs overflow from one container group to the next of their preferred groups,
+which may be in another Kubernetes cluster or namespace.
 
-One way to calculate what max_concurrent_jobs is desirable to set on a Container Group is to consider the pod_spec for that container group. In the pod_spec we indicate the resource requests and limits for the automation job pod. If you pod_spec indicates that a pod with 100MB of memory will be provisioned, and you know your Kubernetes cluster has 1 worker node with 8GB of RAM, you know that the maximum number of jobs that you would ideally start would be around 81 jobs, calculated by taking  (8GB memory on node * 1024 MB) // 100 MB memory/job pod which with floor division comes out to 81.
+One way to choose `max_concurrent_jobs` for a container group is from its pod spec, which sets the
+resource requests and limits of a job pod. If the pod spec requests 100MB of memory and the cluster
+has one worker node with 8GB of RAM, at most about 81 jobs should start at once:
+(8GB * 1024 MB) // 100 MB per job pod, with floor division, is 81.
 
-Alternatively, instead of considering the number of job pods and the resources requested, we can consider the memory consumption of the forks in the jobs. We normally consider that 100MB of memory will be used by each fork of ansible. Therefore we also know that our 8 GB worker node should also only run 81 forks of ansible at a time -- which depending on the forks and inventory settings of the job templates, could be consumed by anywhere from 1 job to 81 jobs. So we can also set max_forks = 81. This way, either 39 jobs with 1 fork can run (task impact is always forks + 1), or 2 jobs with forks set to 39 can run.
+Alternatively, consider the memory the forks use. With 100MB per fork of Ansible, the 8GB worker node
+should run only 81 forks at a time, which, depending on the forks and inventories of the job
+templates, could be one job or 81 of them. So set `max_forks` to 81. Then either 40 jobs with 1 fork
+can run (the impact of a job is forks + 1), or 2 jobs with forks set to 39.
 
-While this feature is most useful for Container Groups where there is no other way to limit job execution, this feature is available for use on any instance group. This can be useful if for other business reasons you want to set a InstanceGroup wide limit on concurrent jobs. For example, if you have a job template that you only want 10 copies of running at a time -- you could create a dedicated instance group for that job template and set max_concurrent_jobs to 10.
+The fields work on any instance group, not only container groups. They can enforce a limit for other
+reasons: for a job template that should run at most 10 copies at a time, give it a dedicated instance
+group with `max_concurrent_jobs` set to 10.

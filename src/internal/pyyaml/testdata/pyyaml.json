@@ -1,0 +1,658 @@
+{
+ "pyyaml": "6.0.3",
+ "cases": [
+  {
+   "src": "a: yes",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: Yes",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: YES",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: no",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: No",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: NO",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: on",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: On",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: ON",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: off",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: Off",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: OFF",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: true",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: True",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: TRUE",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: false",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: False",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: FALSE",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: y",
+   "json": "{\"a\":\"y\"}"
+  },
+  {
+   "src": "a: n",
+   "json": "{\"a\":\"n\"}"
+  },
+  {
+   "src": "a: Y",
+   "json": "{\"a\":\"Y\"}"
+  },
+  {
+   "src": "a: N",
+   "json": "{\"a\":\"N\"}"
+  },
+  {
+   "src": "a: yEs",
+   "json": "{\"a\":\"yEs\"}"
+  },
+  {
+   "src": "a: tRUE",
+   "json": "{\"a\":\"tRUE\"}"
+  },
+  {
+   "src": "a: \"no\"",
+   "json": "{\"a\":\"no\"}"
+  },
+  {
+   "src": "a: 'yes'",
+   "json": "{\"a\":\"yes\"}"
+  },
+  {
+   "src": "a: !!str no",
+   "json": "{\"a\":\"no\"}"
+  },
+  {
+   "src": "a: !!bool \"yes\"",
+   "json": "{\"a\":true}"
+  },
+  {
+   "src": "a: !!bool off",
+   "json": "{\"a\":false}"
+  },
+  {
+   "src": "a: ~",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a: null",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a: Null",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a: NULL",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a:",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a: nULL",
+   "json": "{\"a\":\"nULL\"}"
+  },
+  {
+   "src": "a: !!null \"\"",
+   "json": "{\"a\":null}"
+  },
+  {
+   "src": "a: \"\"",
+   "json": "{\"a\":\"\"}"
+  },
+  {
+   "src": "a: 0",
+   "json": "{\"a\":0}"
+  },
+  {
+   "src": "a: -0",
+   "json": "{\"a\":0}"
+  },
+  {
+   "src": "a: +5",
+   "json": "{\"a\":5}"
+  },
+  {
+   "src": "a: 012",
+   "json": "{\"a\":10}"
+  },
+  {
+   "src": "a: 08",
+   "json": "{\"a\":\"08\"}"
+  },
+  {
+   "src": "a: 0b101",
+   "json": "{\"a\":5}"
+  },
+  {
+   "src": "a: -0b1_01",
+   "json": "{\"a\":-5}"
+  },
+  {
+   "src": "a: 0x1F",
+   "json": "{\"a\":31}"
+  },
+  {
+   "src": "a: 0x1f_ff",
+   "json": "{\"a\":8191}"
+  },
+  {
+   "src": "a: 1_000",
+   "json": "{\"a\":1000}"
+  },
+  {
+   "src": "a: 1:20",
+   "json": "{\"a\":80}"
+  },
+  {
+   "src": "a: -1:20:30",
+   "json": "{\"a\":-4830}"
+  },
+  {
+   "src": "a: 190:20:30",
+   "json": "{\"a\":685230}"
+  },
+  {
+   "src": "a: 12345678901234567890123",
+   "json": "{\"a\":12345678901234567890123}"
+  },
+  {
+   "src": "a: 0o12",
+   "json": "{\"a\":\"0o12\"}"
+  },
+  {
+   "src": "a: 1__0",
+   "json": "{\"a\":10}"
+  },
+  {
+   "src": "a: !!int \"42\"",
+   "json": "{\"a\":42}"
+  },
+  {
+   "src": "a: !!int 0x10",
+   "json": "{\"a\":16}"
+  },
+  {
+   "src": "a: 1.5",
+   "json": "{\"a\":1.5}"
+  },
+  {
+   "src": "a: 1.",
+   "json": "{\"a\":1.0}"
+  },
+  {
+   "src": "a: .5",
+   "json": "{\"a\":0.5}"
+  },
+  {
+   "src": "a: -.5",
+   "json": "{\"a\":\"-.5\"}"
+  },
+  {
+   "src": "a: 1.0",
+   "json": "{\"a\":1.0}"
+  },
+  {
+   "src": "a: 1.50",
+   "json": "{\"a\":1.5}"
+  },
+  {
+   "src": "a: 1e3",
+   "json": "{\"a\":\"1e3\"}"
+  },
+  {
+   "src": "a: 1.0e3",
+   "json": "{\"a\":\"1.0e3\"}"
+  },
+  {
+   "src": "a: 1.0e+3",
+   "json": "{\"a\":1000.0}"
+  },
+  {
+   "src": "a: 1.0E-3",
+   "json": "{\"a\":0.001}"
+  },
+  {
+   "src": "a: 6.8523015e+5",
+   "json": "{\"a\":685230.15}"
+  },
+  {
+   "src": "a: 685.230_15e+03",
+   "json": "{\"a\":685230.15}"
+  },
+  {
+   "src": "a: 190:20:30.15",
+   "json": "{\"a\":685230.15}"
+  },
+  {
+   "src": "a: .inf",
+   "json": "{\"a\":Infinity}"
+  },
+  {
+   "src": "a: -.Inf",
+   "json": "{\"a\":-Infinity}"
+  },
+  {
+   "src": "a: .NAN",
+   "json": "{\"a\":NaN}"
+  },
+  {
+   "src": "a: 1e+16",
+   "json": "{\"a\":\"1e+16\"}"
+  },
+  {
+   "src": "a: 12345678901234567.0",
+   "json": "{\"a\":1.2345678901234568e+16}"
+  },
+  {
+   "src": "a: 0.0001",
+   "json": "{\"a\":0.0001}"
+  },
+  {
+   "src": "a: 0.00001",
+   "json": "{\"a\":1e-05}"
+  },
+  {
+   "src": "a: 123456789.123456789",
+   "json": "{\"a\":123456789.12345679}"
+  },
+  {
+   "src": "a: 1_0.5",
+   "json": "{\"a\":10.5}"
+  },
+  {
+   "src": "a: !!float 3",
+   "json": "{\"a\":3.0}"
+  },
+  {
+   "src": "a: !!float \"2.5\"",
+   "json": "{\"a\":2.5}"
+  },
+  {
+   "src": "a: 1.2.3",
+   "json": "{\"a\":\"1.2.3\"}"
+  },
+  {
+   "src": "a: 0x",
+   "json": "{\"a\":\"0x\"}"
+  },
+  {
+   "src": "a: 1:",
+   "error": "yaml"
+  },
+  {
+   "src": "a: 08:30",
+   "json": "{\"a\":\"08:30\"}"
+  },
+  {
+   "src": "a: 12:60",
+   "json": "{\"a\":\"12:60\"}"
+  },
+  {
+   "src": "a: 2001-12-14x",
+   "json": "{\"a\":\"2001-12-14x\"}"
+  },
+  {
+   "src": "a: +inf",
+   "json": "{\"a\":\"+inf\"}"
+  },
+  {
+   "src": "a: .Inf.",
+   "json": "{\"a\":\".Inf.\"}"
+  },
+  {
+   "src": "a: =",
+   "error": "yaml"
+  },
+  {
+   "src": "a: <<",
+   "error": "yaml"
+  },
+  {
+   "src": "a: \"<<\"",
+   "json": "{\"a\":\"<<\"}"
+  },
+  {
+   "src": "a: hello world",
+   "json": "{\"a\":\"hello world\"}"
+  },
+  {
+   "src": "a: \"multi\\nline\"",
+   "json": "{\"a\":\"multi\\nline\"}"
+  },
+  {
+   "src": "a: |\n  block\n  text\n",
+   "json": "{\"a\":\"block\\ntext\\n\"}"
+  },
+  {
+   "src": "a: >\n  folded\n  text\n",
+   "json": "{\"a\":\"folded text\\n\"}"
+  },
+  {
+   "src": "a: !!str",
+   "json": "{\"a\":\"\"}"
+  },
+  {
+   "src": "a: ! 12",
+   "json": "{\"a\":12}"
+  },
+  {
+   "src": "a: 2001-12-14",
+   "error": "json",
+   "msg": "Object of type date is not JSON serializable"
+  },
+  {
+   "src": "a: 2001-12-14t21:59:43.10-05:00",
+   "error": "json",
+   "msg": "Object of type datetime is not JSON serializable"
+  },
+  {
+   "src": "a: 2001-12-14 21:59:43.10 -5",
+   "error": "json",
+   "msg": "Object of type datetime is not JSON serializable"
+  },
+  {
+   "src": "a: 2001-1-4 1:59:43",
+   "error": "json",
+   "msg": "Object of type datetime is not JSON serializable"
+  },
+  {
+   "src": "a: \"2001-12-14\"",
+   "json": "{\"a\":\"2001-12-14\"}"
+  },
+  {
+   "src": "",
+   "json": "null"
+  },
+  {
+   "src": "---",
+   "json": "null"
+  },
+  {
+   "src": "--- \n",
+   "json": "null"
+  },
+  {
+   "src": "...",
+   "error": "yaml"
+  },
+  {
+   "src": "# only a comment",
+   "json": "null"
+  },
+  {
+   "src": "a: 1\n---\nb: 2",
+   "error": "yaml"
+  },
+  {
+   "src": "a: 1\n---\n",
+   "error": "yaml"
+  },
+  {
+   "src": "---\na: 1\n...\n",
+   "json": "{\"a\":1}"
+  },
+  {
+   "src": "--- a\n--- b",
+   "error": "yaml"
+  },
+  {
+   "src": "just a string",
+   "json": "\"just a string\""
+  },
+  {
+   "src": "[1, 2]",
+   "json": "[1,2]"
+  },
+  {
+   "src": "- a\n- b",
+   "json": "[\"a\",\"b\"]"
+  },
+  {
+   "src": "42",
+   "json": "42"
+  },
+  {
+   "src": "{}",
+   "json": "{}"
+  },
+  {
+   "src": "a: 1\n...",
+   "json": "{\"a\":1}"
+  },
+  {
+   "src": "80: http",
+   "json": "{\"80\":\"http\"}"
+  },
+  {
+   "src": "1: a\ntrue: b\n1.0: c",
+   "json": "{\"1\":\"c\"}"
+  },
+  {
+   "src": "null: x",
+   "json": "{\"null\":\"x\"}"
+  },
+  {
+   "src": "~: x",
+   "json": "{\"null\":\"x\"}"
+  },
+  {
+   "src": "1.5: x",
+   "json": "{\"1.5\":\"x\"}"
+  },
+  {
+   "src": "true: x\nfalse: y",
+   "json": "{\"true\":\"x\",\"false\":\"y\"}"
+  },
+  {
+   "src": ".inf: x",
+   "json": "{\"Infinity\":\"x\"}"
+  },
+  {
+   "src": "? [1, 2]\n: x",
+   "error": "yaml"
+  },
+  {
+   "src": "? {a: 1}\n: x",
+   "error": "yaml"
+  },
+  {
+   "src": "\"1\": a\n1: b",
+   "json": "{\"1\":\"a\",\"1\":\"b\"}"
+  },
+  {
+   "src": "0x10: a\n16: b",
+   "json": "{\"16\":\"b\"}"
+  },
+  {
+   "src": "2001-12-14: x",
+   "error": "json",
+   "msg": "keys must be str, int, float, bool or None, not datetime.date"
+  },
+  {
+   "src": "yes: no",
+   "json": "{\"true\":false}"
+  },
+  {
+   "src": "on: off",
+   "json": "{\"true\":false}"
+  },
+  {
+   "src": "\"yes\": y",
+   "json": "{\"yes\":\"y\"}"
+  },
+  {
+   "src": "a: 1\na: 2",
+   "json": "{\"a\":2}"
+  },
+  {
+   "src": "a: 1\nb: 2\na: 3",
+   "json": "{\"a\":3,\"b\":2}"
+  },
+  {
+   "src": "base: &b {x: 1, y: 2}\nc:\n  <<: *b\n  y: 3",
+   "json": "{\"base\":{\"x\":1,\"y\":2},\"c\":{\"x\":1,\"y\":3}}"
+  },
+  {
+   "src": "b1: &b1 {x: 1}\nb2: &b2 {x: 2, z: 2}\nc:\n  <<: [*b1, *b2]\n  w: 0",
+   "json": "{\"b1\":{\"x\":1},\"b2\":{\"x\":2,\"z\":2},\"c\":{\"x\":1,\"z\":2,\"w\":0}}"
+  },
+  {
+   "src": "c:\n  <<: {a: 1}\n  <<: {a: 2, b: 2}",
+   "json": "{\"c\":{\"a\":2,\"b\":2}}"
+  },
+  {
+   "src": "c:\n  <<: 5",
+   "error": "yaml"
+  },
+  {
+   "src": "c:\n  <<: [5]",
+   "error": "yaml"
+  },
+  {
+   "src": "a: &x [1, 2]\nb: *x",
+   "json": "{\"a\":[1,2],\"b\":[1,2]}"
+  },
+  {
+   "src": "c: {<<: {a: 1}, a: 0}",
+   "json": "{\"c\":{\"a\":0}}"
+  },
+  {
+   "src": "x: &x\n  y: *x",
+   "error": "json",
+   "msg": "Circular reference detected"
+  },
+  {
+   "src": "x: &x\n  - *x",
+   "error": "json",
+   "msg": "Circular reference detected"
+  },
+  {
+   "src": "c:\n  \"<<\": {a: 1}",
+   "json": "{\"c\":{\"<<\":{\"a\":1}}}"
+  },
+  {
+   "src": "a: !!binary aGVsbG8=",
+   "error": "json",
+   "msg": "Object of type bytes is not JSON serializable"
+  },
+  {
+   "src": "a: !!set {x, y}",
+   "error": "json",
+   "msg": "Object of type set is not JSON serializable"
+  },
+  {
+   "src": "a: !!omap [{x: 1}, {y: 2}]",
+   "json": "{\"a\":[[\"x\",1],[\"y\",2]]}"
+  },
+  {
+   "src": "a: !!pairs [{x: 1}, {x: 2}]",
+   "json": "{\"a\":[[\"x\",1],[\"x\",2]]}"
+  },
+  {
+   "src": "a: !custom 1",
+   "error": "yaml"
+  },
+  {
+   "src": "a: !!python/object:os.system x",
+   "error": "yaml"
+  },
+  {
+   "src": "a: !!map {b: 1}",
+   "json": "{\"a\":{\"b\":1}}"
+  },
+  {
+   "src": "a: !!seq [1]",
+   "json": "{\"a\":[1]}"
+  },
+  {
+   "src": "a: [1, [2, {b: c}]]",
+   "json": "{\"a\":[1,[2,{\"b\":\"c\"}]]}"
+  },
+  {
+   "src": "a: {b: {c: {d: [true, no]}}}",
+   "json": "{\"a\":{\"b\":{\"c\":{\"d\":[true,false]}}}}"
+  },
+  {
+   "src": "feature: no\nretries: 3\nratio: 0.5\nname: web\nports: [80, 443]\nenv: {DEBUG: off}",
+   "json": "{\"feature\":false,\"retries\":3,\"ratio\":0.5,\"name\":\"web\",\"ports\":[80,443],\"env\":{\"DEBUG\":false}}"
+  },
+  {
+   "src": "---\nansible_become: yes\nansible_port: 022\nversion: 1.10\ntag: \"1.10\"\n",
+   "json": "{\"ansible_become\":true,\"ansible_port\":18,\"version\":1.1,\"tag\":\"1.10\"}"
+  },
+  {
+   "src": "a: [1, 2",
+   "error": "yaml"
+  },
+  {
+   "src": "a: b: c",
+   "error": "yaml"
+  },
+  {
+   "src": "\ta: 1",
+   "error": "yaml"
+  },
+  {
+   "src": "a: \"unterminated",
+   "error": "yaml"
+  },
+  {
+   "src": "- a\nb: c",
+   "error": "yaml"
+  },
+  {
+   "src": "a: *missing",
+   "error": "yaml"
+  }
+ ]
+}

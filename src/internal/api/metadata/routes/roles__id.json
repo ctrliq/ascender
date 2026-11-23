@@ -1,0 +1,62 @@
+{
+    "name": "Role Detail",
+    "description": "# Retrieve a Role:\n\nMake GET request to this resource to retrieve a single role\nrecord containing the following fields:\n\n* `id`: Database ID for this role. (integer)\n* `type`: Data type for this role. (choice)\n* `url`: URL for this role. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `name`: Name of this role. (field)\n* `description`: Optional description of this role. (field)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this role.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this role.",
+                "choices": [
+                    ["role", "Role"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this role.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "name": {
+                "type": "field",
+                "label": "Name",
+                "help_text": "Name of this role.",
+                "filterable": false
+            },
+            "description": {
+                "type": "field",
+                "label": "Description",
+                "help_text": "Optional description of this role.",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "role"
+    ]
+}

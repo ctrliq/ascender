@@ -2,122 +2,196 @@
 
 Workflows are structured compositions of Ascender job resources. The only job of a workflow is to trigger other jobs in specific orders to achieve certain goals, such as tracking the full set of jobs that were part of a release process as a single unit.
 
-A workflow has an associated tree-graph that is composed of multiple nodes. Each node in the tree has one associated template (job template, inventory update, project update, approval template, or workflow job template) along with related resources that, if defined, will override the associated job template resources (*i.e.*, credential, inventory, etc.) if the job template associated with the node is selected to run.
+A workflow has a graph of nodes. Each node has one template (a job template, a project, an inventory source, an approval template or another workflow job template) and may carry launch-time values (credentials, inventory, variables and so on) that are applied to the job it runs, as far as that template accepts them.
+
+The API is in `src/internal/api`: workflow job templates and their launch and copy in `workflow_templates.go`, workflow jobs in `workflow.go`, nodes and their links in `workflow_nodes.go`, approvals in `workflow_approvals.go`, relaunch in `workflow_relaunch.go`, and the creation of a node's job in `workflow_spawn.go`. Workflow jobs are run by the workflow manager of `ascender-task` (`src/internal/tasks/workflow.go`, approvals and nested workflows in `src/internal/tasks/workflow_approvals.go`; see [Task Manager System Overview](./task_manager_system.md#workflow-manager)).
 
 
 ## Usage Manual
 
 ### Workflow Create-Read-Update-Delete (CRUD)
 
-Like other job resources, workflow jobs are created from workflow job templates. The API exposes common fields similar to job templates, including labels, schedules, notification templates, extra variables and survey specifications. Other than that, in the API, the related workflow graph nodes can be accessed via the related `workflow_nodes` field.
+Like other job resources, workflow jobs are created from workflow job templates (`/api/v2/workflow_job_templates/`). The API exposes fields similar to job templates, including labels, schedules, notification templates (`notification_templates_started`, `_success`, `_error` and `_approvals`), extra variables and survey specifications. The template's nodes are listed and created at `related.workflow_nodes` (`/api/v2/workflow_job_templates/N/workflow_nodes/`), and the workflow jobs it launched at `/api/v2/workflow_job_templates/N/workflow_jobs/`.
 
-The CRUD operations against a workflow job template and its corresponding workflow jobs are almost identical to those of normal job templates and related jobs.
+### Permissions
 
-By default, organization administrators have full control over all workflow job templates under the same organization, and they share these abilities with users who have the `workflow_admin_role` in that organization. Permissions can be further delegated to other users via the workflow job template roles.
+Organization administrators have full control over the workflow job templates of their organization, and share it with the users who have the organization's `workflow_admin_role`. A workflow job template's own roles delegate the rest:
+
+* `admin_role` lets a user change and delete the template and its nodes;
+* `execute_role` lets a user launch it;
+* `approval_role` lets a user approve or deny its approval nodes (see [Workflow Approval Nodes](#workflow-approval-nodes));
+* `read_role` lets a user see it, its nodes, its workflow jobs and their approvals.
+
+Adding or changing a node takes admin on the workflow job template and the right to start the node's template (execute on a job template or workflow job template, update on a project, update on an inventory source's inventory, execute on the workflow job template for an approval node), and use of a prompted inventory. A node can be deleted with admin on the workflow job template alone.
+
+A workflow job can be seen by those who can see its template (its workflow job template, or the job template of a sliced job). The workflow job of a bulk job launch (see [Bulk API](./bulk_api.md)) has no template: it can be seen by the user who launched it and by the direct admins of its organization, and it is in the `/api/v2/workflow_jobs/` list of those admins only (the list does not show the user who launched it, nor organization auditors; the `/api/v2/unified_jobs/` list shows organization admins and auditors every job of the organization). A workflow job can be canceled by a superuser, by the user who launched it (seeing it is not needed), by an admin of its workflow job template, or by one who may delete it; canceling a job that is no longer running is refused (`403`, a `405` for a superuser). It can be deleted by a superuser or a workflow admin (`workflow_admin_role`) of its workflow job template's organization, so a sliced or bulk job only by a superuser. Relaunching it takes execute on its workflow job template, or on the job template of a sliced job; a bulk job only a superuser can relaunch (see [Workflow Copy and Relaunch](#workflow-copy-and-relaunch)). The `start` capability of a workflow job without a workflow job template is a superuser's alone. Workflow job nodes are read-only: they go away with their workflow job.
 
 
 ### Workflow Nodes
 
-Workflow Nodes are containers of workflow-spawned job resources and function as nodes of workflow decision trees. Like that of the workflow itself, the two types of workflow nodes are workflow job template nodes and workflow job nodes.
+Workflow nodes are the containers of the jobs a workflow spawns. Workflow job template nodes (`/api/v2/workflow_job_template_nodes/`) make up the template's graph; when the template is launched, each is copied to a workflow job node (`/api/v2/workflow_job_nodes/`) of the new workflow job.
 
-Workflow job template nodes are listed and created under the `/workflow_job_templates/\d+/workflow_nodes/` endpoint to be associated with the underlying workflow job template, or directly under endpoint `/workflow_job_template_nodes/`. The most important fields of a workflow job template node are `success_nodes`, `failure_nodes`, `always_nodes`, `unified_job_template` and `workflow_job_template`. The first three are lists of workflow job template nodes that, in union, forms the set of all of its child nodes; specifically, `success_nodes` are triggered when the parent node job succeeds, `failure_nodes` are triggered when the parent node job fails, and `always_nodes` are triggered regardless of whether the parent job succeeds or fails. The latter two fields reference the job template resource it contains and workflow job template it belongs to.
+A template node is created under `/api/v2/workflow_job_templates/N/workflow_nodes/`, or under `/api/v2/workflow_job_template_nodes/` with its `workflow_job_template`. Its main fields are:
+
+* `unified_job_template`: what the node runs. A job template runs a job, a project a project update, an inventory source an inventory update, a workflow job template a nested workflow job (see [Workflows as Workflow Nodes](#workflows-as-workflow-nodes)), an approval template an approval (see [Workflow Approval Nodes](#workflow-approval-nodes)), and a system job template (a superuser's choice) a system job. A system job template asks for nothing, so a system job spawned by a node gets neither the node's prompts nor the workflow's: it runs with the template's job type and no extra variables.
+* `success_nodes`, `failure_nodes`, `always_nodes`: the children run when the node's job succeeds, when it fails, and in either case.
+* `condition_nodes` and `condition_edges`: children reached through a conditional link (see [Conditional Links](#conditional-links)).
+* `all_parents_must_converge`: see [Convergence](#convergence).
+* `max_retries`: see [Automatic Node Retries](#automatic-node-retries).
+* `identifier`: see below.
+* the launch-time values: `inventory`, `execution_environment`, `scm_branch`, `job_type`, `job_tags`, `skip_tags`, `limit`, `diff_mode`, `verbosity`, `forks`, `job_slice_count`, `timeout` and `extra_data`, and the sub-lists `credentials`, `labels` and `instance_groups` (see [Workflow Launch Configuration](#workflow-launch-configuration)).
+
+A workflow job node has the same fields, plus `job` (the job it spawned), `do_not_run` (the node was found unable to run), `retry_attempts` and `retried_jobs`, and the relaunch fields `prior_run_succeeded`, `prior_run_elapsed`, `forced_success`, `forced_success_reason`, `forced_success_by` and `forced_success_job` (see [Workflow Copy and Relaunch](#workflow-copy-and-relaunch)).
 
 Workflow nodes also have an `identifier` field, which enables clients to do idempotent CRUD actions.
 This can function the same as the `name` field for other resources, in that the client can set its value as needed.
-Unlike `name`, if the client does not provide the `identifier` field, the server will assign a random UUID4 value.
-Any workflow job nodes spawned from that node will share the `identifier` value, so that clients
+Unlike `name`, if the client does not provide the `identifier` field, the server assigns a random UUID4 value.
+It must be unique within a workflow job template (`The fields identifier, workflow_job_template must make a unique set.`) and may not be blank.
+Any workflow job nodes spawned from that node share the `identifier` value, so that clients
 can track which job nodes correspond to which template nodes.
+
+A node whose template is deleted keeps its place in the graph with a null `unified_job_template`; see [Workflow Run Details](#workflow-run-details) for what such a node does in a run.
 
 
 #### Workflow Launch Configuration
 
-Workflow job templates can contain launch configuration items. So far, these only include:
+A workflow job template can prompt for these values at launch:
 
- - `extra_vars`
- - `inventory`
- - `limit`
- - `scm_branch`
+ - `extra_vars` (`ask_variables_on_launch`, or the variables of an enabled survey)
+ - `inventory` (`ask_inventory_on_launch`)
+ - `limit` (`ask_limit_on_launch`)
+ - `scm_branch` (`ask_scm_branch_on_launch`)
+ - `job_tags` (`ask_tags_on_launch`)
+ - `skip_tags` (`ask_skip_tags_on_launch`)
+ - `labels` (`ask_labels_on_launch`)
 
-The `extra_vars` field may have specifications via
-a survey, in the same way that job templates work.
+When a workflow job template is launched (`POST /api/v2/workflow_job_templates/N/launch/`), a workflow job is created with the values given for the fields the template prompts for. Unlike a job template launch, a value for a field the template does not prompt for is refused (`Field is not configured to prompt on launch.`, or ``Variables <names> are not allowed on launch. Check the Prompt on Launch setting on the Workflow Job Template to include Extra Variables.`` for variables) rather than ignored. `GET` on the launch endpoint also lists `node_templates_missing` (nodes without a template) and `node_prompts_rejected` (nodes whose saved values their template no longer accepts).
 
-Workflow nodes may also contain the launch-time configuration for the job it will spawn.
-As such, they share all the properties common to all saved launch configurations.
+Workflow nodes may also contain the launch-time configuration for the job they spawn.
+As such, they share all the properties common to all saved launch configurations
+(see [Launch-time Configurations / Prompting](./prompting.md)). A node's values are checked against its template when the node is saved: a value the template does not prompt for is refused with `Field is not configured to prompt on launch.`, while a missing answer to a required survey question is allowed, since the workflow may provide it at launch. A node without a template keeps none of these values.
 
-When a workflow job template is launched, a workflow job is created. If the workflow
-job template is set to prompt for a value, then the user may provide this on launch,
-and the workflow job will assume the user-provided value.
+When the workflow spawns a node's job, the node's values and the workflow job's are combined, the workflow job's taking precedence, and then pass the prompting rules of the node's template: a value for a field the template does not prompt for (such as an inventory when `ask_inventory_on_launch` is false) is left out, and the template's own value is used. Two exceptions apply to job template nodes:
 
-A workflow job node is created for each WFJT node and all fields from the WFJT node are copied. Note that workflow job nodes contain all fields that a workflow job template node contains plus an additional field, `job`, which is a reference to the to-be-spawned job resource.
+* the workflow job's extra variables (and survey password answers) are passed to the job whatever the job template's prompting and survey rules;
+* the credentials of the node and of the workflow job are combined one per credential type, the workflow job's replacing the node's.
 
-If the workflow job and the node both specify the same prompt, then the workflow job
-takes precedence and its value will be used. In either case, if the job template
-the node references does not have the related prompting field set to `true`
-(such as `ask_inventory_on_launch`), then the prompt will be ignored, and the
-job template default, if it exists, will be used instead.
+The workflow job's labels are not passed on to the jobs it spawns: a job template node's job gets the node's labels (when the job template asks for labels), never the workflow's. Values a node's template rejects at spawn time are logged, and the job is created without them.
 
-See the document on saved launch configurations for how these are processed
-when the job is launched, and the API validation involved in building
-the launch configurations on workflow nodes.
+Changing a node re-checks its prompts against its template only as far as the request goes, as a schedule's do (see [Schedules](./schedules.md)): a request that sets `unified_job_template` checks the whole saved configuration, one that sends prompt fields (or `extra_data`) checks those, and one that sends neither (a new `identifier`, `max_retries`) checks nothing. A node never needs the required survey answers, which the workflow can provide at launch.
+
+See [Launch-time Configurations / Prompting](./prompting.md) for the API validation involved in building the launch configurations on workflow nodes.
 
 
 #### Workflows as Workflow Nodes
 
-A workflow can be added as a node in another workflow. The child workflow is the associated
-`unified_job_template` that the node references when that node is added to the parent workflow.
-When the parent workflow dispatches that node, then the child workflow will begin running, and
-the parent will resume execution of that branch when the child workflow finishes.
-Branching into success / failed pathways is decided based on the status of the child workflow.
+A workflow can be added as a node in another workflow. The child workflow is the
+`unified_job_template` of the node.
+When the parent workflow reaches that node, the child workflow job is created and runs, and
+the parent resumes that branch when the child workflow finishes.
+Branching into success and failure paths is decided by the status of the child workflow job.
 
-In the event that spawning the workflow would result in recursion, the child workflow
-will be marked as failed with a message explaining that recursion was detected.
-This is to prevent saturation of the task system with an infinite chain of workflows.
+A child workflow job is refused when its workflow job template is already among the workflow job templates of the workflow jobs above it: it is created as `failed` with the explanation "Workflow Job spawned from workflow could not start because it would result in recursion (spawn order, most recent first: `<name-id>`, ...)", listing the templates from the one refused upward. This prevents an infinite chain of workflows.
 
 
 #### Workflow Approval Nodes
 
-The workflow approval node feature enables users to add steps in a workflow in between nodes within workflows so that a user (as long as they have approval permissions, explained in further detail below) can give the "yes" or "no" to continue on to the next step in the workflow.
+An approval node pauses a branch of the workflow until people with approval permission approve or deny it.
 
-**RBAC Setup for Workflow Approval Nodes**
+An approval node is made with `POST /api/v2/workflow_job_template_nodes/N/create_approval_template/`, which creates a workflow approval template (`/api/v2/workflow_approval_templates/N/`) and makes it the node's template. Its fields are:
 
-A user can _create_ a workflow approval if they are:
+* `name` (required) and `description`;
+* `timeout`: seconds before the approval expires, `0` (the default) for never;
+* `on_timeout`: `deny` (the default) or `approve`, what happens when it expires;
+* `required_approvals`: how many distinct users must approve, `1` by default;
+* `context_template`: a Jinja2 template shown to the approvers (see below).
+
+When the workflow reaches the node, a workflow approval (`/api/v2/workflow_approvals/N/`) is created as `pending`, and the workflow's `approvals` notification templates are sent. It is decided by votes:
+
+```
+POST /api/v2/workflow_approvals/N/approve/ {"comment": "..."}
+POST /api/v2/workflow_approvals/N/deny/ {"comment": "..."}
+```
+
+The comment is optional. A single denial fails the approval; it succeeds once `required_approvals` distinct users have approved, and stays `pending` until then. A user votes once (`You have already voted on this workflow step.`), and an approval that is no longer pending takes no vote (`This workflow step has already been approved or denied.`); both are `400` answers with an `error` key. The votes are listed under `/api/v2/workflow_approvals/N/votes/` and `/api/v2/workflow_approval_votes/`.
+
+An approval with a timeout expires at its creation time plus `timeout` seconds (`expires`). The workflow manager settles expired approvals on each pass: approved with the explanation "The approval node `<name>` (`<id>`) was automatically approved after `<timeout>` seconds." when `on_timeout` is `approve`, otherwise failed with "The approval node `<name>` (`<id>`) has expired after `<timeout>` seconds.", and `timed_out` set.
+
+The `context_template` is rendered when the approval is created, with the ancestor artifacts of the node as its variables (see [Artifacts](#artifacts)), and the result is stored on the approval as `context_message`. It is rendered in a sandbox in a child process (`internal/jinjarun`), with a time limit of 10 seconds and the output cut at 65536 characters; a template that fails to render leaves `context_message` empty and is logged.
+
+**RBAC for Workflow Approval Nodes**
+
+A user can _create_ an approval node if they are:
 - a Superuser
 - an Org Admin of the organization connected to the workflow
 - a Workflow Admin in the organization connected to the workflow
 - assigned as admins to a particular workflow
 
-A user can _approve_ a workflow when they are:
+A user can _approve_ or _deny_ when they are:
 - a Superuser
 - a Workflow Admin
 - an Organization Admin
-- any user who has explicitly been assigned the "approver" role
+- any user who has explicitly been assigned the "approver" role (`approval_role`), on the workflow job template or its organization
+
+Anyone else gets `403` with "User does not have permission to approve or deny this workflow."
 
 A user can _view_ approvals if they:
 - have Read access to the associated Workflow Job Template
 
-**Other Workflow Approval Node Features**
-
-A timeout (in minutes and seconds) can be set for each approval node. These fields default to `0` for no expiration.
-
 
 ### DAG Formation and Restrictions
 
-The directed acyclic graph (DAG) structure of a workflow is enforced by associating workflow job template nodes via endpoints `/workflow_job_template_nodes/\d+/*_nodes/`, where `*` has options `success`, `failure` and `always`. There is one restriction that is enforced when setting up new connections and that is the cycle restriction, since it's a DAG.
+Nodes are linked through `/api/v2/workflow_job_template_nodes/N/<kind>/`, where `<kind>` is `success_nodes`, `failure_nodes`, `always_nodes` or `condition_nodes`:
+
+```
+POST /api/v2/workflow_job_template_nodes/N/success_nodes/ {"id": M}
+POST /api/v2/workflow_job_template_nodes/N/success_nodes/ {"id": M, "disassociate": true}
+```
+
+A `POST` without an `id` creates a new node in the same workflow job template and links it in one step. The graph must stay a directed acyclic graph, and the links are refused (`400`, with the message under `Error`):
+
+* a link from a node to itself, or one that closes a cycle: `Cycle detected.`;
+* a link to a node the parent already links to with another kind of link: `Relationship not allowed.`
+
+A node of another workflow job template cannot be linked (`403`).
+
+#### Conditional Links
+
+A conditional link fires only when the parent finished with the outcome named in `trigger` and an artifact of the parent has the expected value:
+
+```
+POST /api/v2/workflow_job_template_nodes/N/condition_nodes/ {"id": M, "trigger": "success", "artifact_key": "ascender_stats_changed", "operator": "eq", "expected_value": true}
+```
+
+* `trigger`: `success` (the default), `failure` or `always`.
+* `artifact_key`: required (`A non-empty artifact_key is required for a conditional link.`).
+* `operator`: `eq` (the default) or `ne`.
+* `expected_value`: stored as text; a JSON value given here is stored as JSON. It is read as JSON when it parses as JSON and compared with the artifact value (a boolean never equals a number), and otherwise compared with the artifact value written as text.
+
+The artifacts are those the parent passes on to its children (see [Artifacts](#artifacts)). A missing artifact never matches, whatever the operator. Posting a link that exists again updates its condition. A node's links are listed under `condition_edges`, each with the child's `id`, `trigger`, `artifact_key`, `operator` and `expected_value`. For a failed parent, a conditional link counts as an error handling path only when it fires.
+
+#### Convergence
+
+A node with several parents runs, by default, as soon as one parent's link to it fires and every parent that may still run has finished ("any" convergence). With `all_parents_must_converge` set, it runs only when the links from all its parents fire; if one parent does not run, or finishes with an outcome whose link does not lead to the node, the node is marked do not run.
 
 
 ### Workflow Run Details
 
-A typical workflow run starts by either POSTing to endpoint `/workflow_job_templates/\d+/launch/`, or being triggered automatically by related schedule. At the very first, the workflow job template creates a workflow job, and all related workflow job template nodes create workflow job nodes. Right after that, all root nodes are populated with corresponding job resources and start running. If nothing goes wrong, each decision tree will follow its own route to completion. The entire workflow finishes running when all of its decision trees complete.
+A workflow run starts with a `POST` to `/api/v2/workflow_job_templates/N/launch/`, or from one of the template's schedules. The workflow job is created with a workflow job node for each template node, and then started by the workflow manager, which runs the root nodes (the nodes without parents) and, on each pass, the nodes whose parents finished. Each branch follows its own route to completion, and the workflow job finishes when every node has either run or been marked do not run.
 
-As stated, workflow job templates can be created with populated `extra_vars`. These `extra_vars` are combined with the `extra_vars` of any job template launched by the workflow with higher variable precedence, meaning they will overwrite job template variables with the same name. Note that before the `extra_vars` set is applied as runtime job extra variables, it might be expanded and over-written by the cumulative job artifacts of ancestor nodes. The meaning of 'cumulative' here is children overwriting parent. For example, if a node has a parent node and a grandparent node, and both ancestors generate job artifacts, then the job artifacts of grandparent node is overwritten by that of parent node to form the set of cumulative job artifacts of the current node.
+A workflow job template that does not allow simultaneous runs (`allow_simultaneous`, off by default) keeps a new workflow job `pending` while another job of the template is waiting or running. The jobs a workflow spawns are subject to their own templates' rules: a job template that does not allow simultaneous runs makes its jobs wait for each other, so enabling `allow_simultaneous` on a workflow helps only as far as the jobs it spawns can run side by side.
 
-Job resources spawned by workflow jobs are necessary for workflows to run correctly. Therefore, the deletion of spawned job resources is blocked while the underlying workflow job is executing.
+Workflow job templates can have `extra_vars`. They are combined with the `extra_vars` of any job template launched by the workflow with higher precedence, overwriting variables of the same name, and are passed on to nested workflows as their launch variables. The job of a node also receives the cumulative artifacts of its ancestor nodes as extra variables (see [Artifacts](#artifacts)); they overwrite the node's and the job template's variables, and the workflow's own extra variables overwrite them in turn.
 
-Other than success and failure, a workflow spawned job resource can also end with status 'error' and 'canceled'. When a workflow spawned job resource errors or is canceled, it is treated the same as failure. If the unified job template of the node is null (which could be a result of deleting the unified job template or copying a workflow when the user lacks necessary permissions to use the resource), then the node will be treated as 'failed' and the failure paths will continue to execute.
+The jobs a workflow spawns cannot be deleted while it is running (`403`, `Cannot delete job resource when associated workflow job is running.`): jobs, project updates, inventory updates, nested workflow jobs and approvals alike, both the job a node points at and the attempts a node has retried. The other delete checks apply to every kind of job: a running one cannot be deleted (`Cannot delete running job resource.`), except one in status `new`, and one that finished less than a minute ago without all of its events saved is refused with `400` (`{"error": "Job has not finished processing events."}`).
 
-A workflow job itself can also be canceled. In this case all of its spawned job resources will be canceled (if cancellation is allowed) and its following paths stop executing.
+Other than success and failure, a spawned job can also end with status `error` or `canceled`; both count as failure. A node whose template is null (the template was deleted, or a workflow was copied by a user who lacks access to it) counts as failed, and its failure and always paths run.
 
-Like job templates, workflow job templates can be associated with notification templates and notifications work exactly the same as that of job templates. One distinction is the notification message body. Workflow jobs send a notification body that contains not only the status of itself, but also status of all its spawned jobs. A typical notification body looks like this:
+A workflow job itself can also be canceled. Its nodes that have not run are marked do not run, the jobs of its nodes are canceled, and the workflow job finishes as `canceled` once they have all ended.
+
+A workflow job fails when a node failed without an error handling path, that is without a failure link, an always link or a conditional link that fires for it; its explanation is then "No error handling paths found, marking workflow as failed". Otherwise it succeeds.
+
+Like job templates, workflow job templates can be associated with notification templates and notifications work the same way as for job templates. One distinction is the notification message body. Workflow jobs send a notification body that contains not only the status of itself, but also the status of all its spawned jobs:
 
 ```
 Workflow job summary:
@@ -128,46 +202,57 @@ Workflow job summary:
 ...
 ```
 
-Workflow jobs support simultaneous job runs just like that of ordinary jobs. It is controlled by the `allow_simultaneous` field of underlying workflow job template. By default, simultaneous workflow job runs are disabled and users should be prudent in enabling this functionality, since the performance boost of simultaneous workflow runs will only manifest when a large portion of jobs contained by a workflow allow simultaneous runs. Otherwise, it is expected to have some long-running workflow jobs since its spawned jobs can be in pending state for a long time.
-
-A workflow job is marked as failed if a job spawned by a workflow job fails, without a failure handler. A failure handler is a `failure` or `always` link in the workflow job template. A job that is canceled is, effectively, considered a failure for the purposes of determining if a job nodes is failed.
-
 
 ### Automatic Node Retries
 
-Workflow nodes can retry their job automatically when it fails, which is useful when jobs run against flaky infrastructure. The retry count is the `max_retries` field of the workflow job template node, settable through the API or the node form in the workflow visualizer. It defaults to `0` (no retries, the previous behavior) and is capped at 100 since there is no delay between attempts.
+Workflow nodes can retry their job automatically when it fails, which is useful when jobs run against flaky infrastructure. The retry count is the `max_retries` field of the workflow job template node. It defaults to `0` (no retries) and is capped at 100, since there is no delay between attempts.
 
-Each node keeps its own independent retry budget. `max_retries: 2` means the node may run up to 3 times in total: the original attempt plus 2 retries. When a workflow job is launched the value is copied from each template node to its workflow job node, so changing the template mid run does not affect running workflows. Since the budget belongs to the node, a nested workflow node retries the inner workflow as a whole when it fails; nodes inside the nested workflow retry only if its own template says so, and slices of a sliced job template are not retried individually.
+Each node keeps its own retry budget. `max_retries: 2` means the node may run up to 3 times in total: the original attempt plus 2 retries. When a workflow job is launched the value is copied from each template node to its workflow job node, so changing the template mid run does not affect running workflows. Since the budget belongs to the node, a nested workflow node retries the inner workflow as a whole when it fails; nodes inside the nested workflow retry only if their own template says so, and the slices of a sliced job template are not retried individually.
 
-While a node has retries left, a failed or errored job does not send the workflow down the node's failure paths. Instead the scheduler treats the node as if its job were still running: children stay undecided, convergence nodes keep waiting, and the workflow does not complete. On the next scheduler cycle a new job is spawned for the node with the same launch configuration, the node's read only `retry_attempts` counter is incremented, and the node's `job` field points at the newest attempt. Superseded attempts are recorded in the node's read only `retried_jobs` list, keep their link to the workflow, and cannot be deleted while it is still running. Only when the retries are exhausted does the node count as failed and its failure and always paths run, evaluated against the last attempt.
+While a node has retries left, a `failed` or `error` job does not send the workflow down the node's failure paths. Instead the workflow manager treats the node as if its job were still running: children stay undecided, convergence nodes keep waiting, and the workflow does not complete. On the next pass a new job is spawned for the node with the same launch configuration, the node's read-only `retry_attempts` counter is incremented, and the node's `job` points at the newest attempt. Superseded attempts are listed in the node's read-only `retried_jobs` and keep their link to the workflow. Only when the retries are exhausted does the node count as failed and its failure and always paths run, evaluated against the last attempt.
 
-Some failures are never retried: canceled jobs (cancellation is an explicit user action), workflow approval nodes (approvals are human decisions), jobs whose template was deleted mid run, and jobs that could not start at all for structural reasons such as a missing project or inventory, where retrying cannot change the outcome and the budget is exhausted immediately. Automatic retries happen within a single workflow run and complement relaunching a workflow from its failed nodes, which is a manual action taken afterwards; relaunched workflows start their nodes with fresh retry counters. There is no delay between attempts; a backoff interval between retries may be considered in the future.
+Some failures are never retried: canceled jobs (cancellation is an explicit user action), approval nodes (approvals are human decisions), nodes whose template was deleted mid run, and jobs that could not start at all, where retrying cannot change the outcome and the budget is exhausted at once. A job of a job template cannot start when it lacks a project or inventory ("Job spawned from workflow could not start because it was missing a related resource such as project or inventory") or needs credential passwords the workflow launch did not provide ("Job spawned from workflow could not start because it was not in the right state or required manual credentials"); a nested workflow cannot start when it would recurse. Automatic retries happen within a single workflow run and complement relaunching a workflow from its failed nodes, which is a manual action taken afterwards; relaunched workflows start their nodes with fresh retry counters.
 
 
 ### Workflow Copy and Relaunch
 
-Other than the normal way of creating workflow job templates, it is also possible to copy existing workflow job templates. The resulting new workflow job template will be mostly identical to the original, except for the `name` field which will be appended in a way to indicate that it's a copy.
+Workflow job templates can be copied with a `POST` to `/api/v2/workflow_job_templates/N/copy/` with the new `name`, which is required and must differ from the original's (`The original object is already named <name>, a copy from it cannot have the same name.`). `GET` on the same endpoint tells whether the user can copy it (`can_copy`), and whether the copy keeps everything (`can_copy_without_user_input`, with what would be left out under `templates_unable_to_copy`, `credentials_unable_to_copy` and `inventories_unable_to_copy`).
 
-Workflow job templates can be copied by POSTing to endpoint `/workflow_job_templates/\d+/copy/`. After the copy finishes, the resulting new workflow job template will have identical fields including description, `extra_vars`, and survey-related fields (`survey_spec` and `survey_enabled`). More importantly, the workflow job template nodes of the original workflow job template, as well as the topology they bear, will be copied. Note that there are RBAC restrictions on copying workflow job template nodes. A workflow job template is allowed to be copied if the user has permission to add an equivalent workflow job template. If the user performing the copy does not have access to a node's related resources (job template, inventory, or credential), those related fields will be null in the copy's version of the node. Schedules and notification templates of the original workflow job template will not be copied nor shared, and the name of the created workflow job template is the original name plus a special-formatted suffix to indicate its copy origin as well as the copy time, such as `'copy_from_name@10:30:00 am'`.
+Copying takes the right to create the template in its organization (superuser or the organization's `workflow_admin_role`). The copy has the original's fields, including description, `extra_vars`, the survey (`survey_spec` and `survey_enabled`) and labels, and the original's nodes with the links between them; approval nodes get their own copy of the approval template. Of a node's resources, a template the user cannot start, an inventory the user cannot use and credentials the user cannot use are left out of the copy (the node keeps a null template). Schedules, notification templates and the webhook key are not copied, and the user becomes the copy's admin.
 
-Workflow jobs cannot be copied directly; instead, a workflow job is implicitly copied when it needs to relaunch. Relaunching an existing workflow job is done by POSTing to endpoint `/workflow_jobs/\d+/relaunch/`. What happens next is the original workflow job's prompts are re-applied to its workflow job template to create a new workflow job. Finally, the full-fledged new workflow job is triggered to run, thus fulfilling the purpose of relaunch. Survey password-type answers should also be redacted in the relaunched version of the workflow job.
+Workflow jobs cannot be copied directly; a workflow job is copied when it is relaunched with a `POST` to `/api/v2/workflow_jobs/N/relaunch/`. A workflow job whose template still exists is rebuilt from the template as it is now, with the values the original was launched with; one whose template is gone is copied with its nodes. Survey password answers stay encrypted in the relaunched workflow job. Relaunching takes execute on the template, and is refused with `403` when the original was launched with values the template no longer prompts for ("Job was launched with prompts no longer accepted."), with values the user cannot use ("Job was launched with prompts you lack access to."), with survey passwords given by another user ("Job was launched with secret prompts provided by another user."), or without a saved launch configuration ("Workflow Job was launched with unknown prompts.").
+
+#### Relaunch from Failed Nodes
+
+`{"nodes": "failed"}` relaunches only what failed: the nodes whose job succeeded in the original run (or were already carried forward from an earlier relaunch) are carried forward with `prior_run_succeeded` set, their elapsed time in `prior_run_elapsed` and their artifacts kept for their children, and only the failed nodes and what follows them run again. When the workflow job template still exists, the new run's nodes are matched to the original's by `identifier`. It is refused when no node failed (`This workflow job has no failed nodes to relaunch from.`, or `Cannot relaunch from failed nodes: this workflow failed because a node has no job template, which relaunching cannot recover.`).
+
+Two more options apply to a relaunch from failed nodes only:
+
+* `extra_vars` overwrites variables of the run, when the workflow job template had `allow_overwrite_flow_vars_on_relaunch` set when the original was launched (`This workflow job does not allow overwriting variables on relaunch. Enable allow_overwrite_flow_vars_on_relaunch on its workflow job template; runs started after that carry the setting.`). Survey answers are validated as on launch, and a survey password answer sent back as `$encrypted$` keeps its stored value. Without `"nodes": "failed"` it is refused with `Variables can only be overwritten when relaunching from failed nodes.`
+* `force_success_nodes`, a list of failed workflow job node ids, with a required `force_success_reason`, carries those nodes forward as though they had succeeded, when the workflow job template has `allow_force_node_success_on_relaunch` set now. The forced nodes record `forced_success`, the reason, the user and the job that failed. An approval node cannot be forced, nor a node that did not fail, nor one whose identifier the template no longer has.
+
+The errors of a relaunch are `400` answers with the message under `detail`, except the survey errors of `extra_vars`, which are the body itself (`{"variables_needed_to_start": [...]}`). An `extra_vars` that is neither a mapping nor a string (`null`, a list, a number) is refused with `Cannot parse as JSON (error: the JSON object must be str, bytes or bytearray, not <type>) or YAML (error: '<type>' object has no attribute 'read').`; a non-superuser may not send encrypted values. A sliced workflow job (see [Job Slicing](./job_slicing.md)) cannot be relaunched from failed nodes, nor after its slice count has changed.
 
 
 ### Artifacts
 
-Support for artifacts starts in Ansible and is carried through in Ascender. The `set_stats` module is invoked by users, in a playbook, to register facts. Facts are passed in via the `data:` argument. Note that the default `set_stats` parameters are the correct ones to work with Ascender (*i.e.*, `per_host: no`). Now that facts are registered, we will describe how facts are used. In Ansible, registered facts are "returned" to the callback plugin(s) via the `playbook_on_stats` event. Ansible users can configure whether or not they want the facts displayed through the global `show_custom_stats` configuration. Note that the `show_custom_stats` does not affect the artifact feature of Ascender. This only controls the displaying of `set_stats` fact data in Ansible output (also the output in Ansible playbooks that get run in Ascender). Ascender uses a custom callback plugin that gathers the fact data set via `set_stats` in the `playbook_on_stats` handler and "ships" it back to Ascender, saves it in the database, and makes it available on the job endpoint via the variable `artifacts`. The semantics and usage of `artifacts` throughout a workflow is described elsewhere in this document.
+Support for artifacts starts in Ansible and is carried through in Ascender. The `set_stats` module is invoked by users, in a playbook, to register facts. Facts are passed in via the `data:` argument. The default `set_stats` parameters are the correct ones to work with Ascender (*i.e.*, `per_host: no`). Ansible returns the registered facts to the callback plugin in the `playbook_on_stats` event. Ansible users can configure whether they want the facts displayed through the global `show_custom_stats` configuration; it only controls the display of `set_stats` data in the playbook output and does not affect Ascender's artifacts. Ascender's callback plugin passes the `set_stats` data back with the stats event, and it is saved on the job and shown in its `artifacts` field.
+
+In a workflow, the artifacts flow downstream. The artifacts a finished node passes on are its own ancestor artifacts with its job's artifacts on top, and a node's ancestor artifacts are those its parents pass on, merged (for keys several parents set, the parent processed last wins, except for the `ascender_stats_*` keys, see below). When a node's job is spawned, the ancestor artifacts are saved on the node (`ancestor_artifacts`) and become extra variables of a job template's or nested workflow's job, overwriting the job template's and the node's own values of the same name. The cumulative effect is that children overwrite parents: if a node has a parent and a grandparent that both set the same key, the parent's value is the one the node gets. When a job's artifacts contain `_ansible_no_log`, the ancestor artifacts are treated as survey passwords in the spawned job and hidden in its displayed variables.
+
+Only jobs of job templates have artifacts of their own. A nested workflow job or a sliced job template's workflow job passes on the artifacts of the jobs of its nodes that finished `successful` or `failed`, merged in the order they finished (by `finished`, then id; the `ascender_stats_*` keys merge as below), a nested workflow inside it contributing its own merged artifacts in turn. These are what its node's children receive on top of the artifacts that reached that node, what conditional links after it compare, what an approval after it renders, and what a relaunch from failed nodes carries forward. Other jobs (project updates, inventory updates, approvals, system jobs) pass on nothing of their own.
 
 #### Automatic Job Stats Artifacts
 
-In addition to `set_stats` data, Ascender automatically derives a set of `ascender_stats_*` artifact keys from the final playbook stats of every playbook job (that is, jobs launched from a job template; project updates, inventory syncs and ad hoc commands do not produce them), without requiring anything in the playbook:
+In addition to `set_stats` data, Ascender derives a set of `ascender_stats_*` artifact keys from the final playbook stats of every playbook job (jobs launched from a job template; project updates, inventory syncs and ad hoc commands do not produce them), without requiring anything in the playbook (`statsArtifacts` in `src/internal/tasks/job_events.go`):
 
 * `ascender_stats_changed` / `ascender_stats_failed`: booleans, true when any host reported a change or a failure (including unreachable hosts).
 * `ascender_stats_changed_hosts` / `ascender_stats_non_changed_hosts` / `ascender_stats_failed_hosts` / `ascender_stats_non_failed_hosts`: sorted lists of host names.
 * `ascender_stats_hosts_truncated`: true when the play involved more hosts than `ASCENDER_AUTO_STATS_MAX_HOSTS` (default 100), in which case the four host name lists are omitted to keep artifacts small; the boolean flags are always present.
 
-These keys behave exactly like `set_stats` artifacts: they propagate to descendant workflow nodes as extra variables and can be used by conditional workflow connectors (e.g. only run a node when `ascender_stats_changed` equals `true`). Keys registered by the playbook through `set_stats` always win over the automatic ones on name collision. The feature is controlled by the `ASCENDER_AUTO_STATS_ENABLED` setting (default enabled) and both settings can be overridden per job or per workflow with extra variables of the same name (workflow extra variables apply to every job the workflow spawns).
+These keys behave like `set_stats` artifacts: they propagate to descendant workflow nodes as extra variables and can be used by conditional links (for example, only run a node when `ascender_stats_changed` equals `true`). Keys registered by the playbook through `set_stats` win over the automatic ones on name collision. The feature is controlled by the `ASCENDER_AUTO_STATS_ENABLED` setting (default enabled), and both settings can be overridden per job or per workflow with extra variables of the same name (workflow extra variables apply to every job the workflow spawns).
 
-When artifacts of several sibling jobs are aggregated (the slices of a sliced job template, the nodes inside a nested workflow, or several parent nodes converging into one child), the `ascender_stats_*` keys are merged rather than overwritten: the booleans are OR-ed and the host name lists are unioned, so a host that changed or failed in any of the aggregated jobs keeps that state. If any of the aggregated jobs had its host lists truncated, the merged lists are omitted as well. All other artifact keys keep the usual last-writer-wins behavior.
+When the artifacts of several parent nodes converge into one child, the `ascender_stats_*` keys are merged rather than overwritten: the booleans are OR-ed and the host name lists are unioned, so a host that changed or failed in any parent's job keeps that state. If any of the merged artifacts had their host lists truncated, the merged lists are omitted as well. All other artifact keys keep the usual last-writer-wins behavior.
 
 
 ### Workflow Run Example
@@ -195,51 +280,4 @@ To best understand the nuances of workflow run logic, we will look at an example
     Node 7 and 8 are selected to run and their job results are both `'successful'`.
 </p>
 
-The resulting state of the workflow job run above would be `'successful'`. Although individual nodes fail, the overall workflow job status is `'successful'` because all individual node failures have error handling paths (`'failed_nodes'` or `'always_nodes'`).
-
-
-## Test Coverage
-
-### CRUD-related
-
-* Verify that CRUD operations on all workflow resources are working properly. Note that workflow job nodes cannot be created or deleted independently, but verifications are needed to ensure that when a workflow job is deleted, all its related workflow job nodes are also deleted.
-* Verify the RBAC property of workflow resources. In specific:
-  * Workflow job templates can only be accessible by superusers ---- system admin, admin of the same organization and system auditor and auditor of the same organization with read permission only.
-  * Workflow job read and delete permissions follow from its associated workflow job template.
-  * Workflow job relaunch permission consists of the union of execute permission to its associated workflow job template, and the permission to re-create all the nodes inside of the workflow job.
-  * Workflow job template nodes rely on their permission rules for both their associated workflow job template and unified job template for creating and editing.
-  * Workflow job template nodes can be deleted with admin permission to their workflow job template (even lacking permission to the node's job template).
-  * Workflow job nodes are viewable if its workflow job is viewable.
-  * No CRUD actions are possible on workflow job nodes by any user, and they may only be deleted by deleting their workflow job.
-  * Workflow jobs can be deleted by superusers and org admins of the organization of its associated workflow job template, and no one else.
-* Verify that workflow job template nodes can be created under, or (dis)associated with workflow job templates.
-* Verify that the permitted types of job template types can be associated with a workflow job template node. Currently the permitted types are *job templates, inventory sources, projects, and workflow job templates*.
-* Verify that workflow job template nodes under the same workflow job template can be associated to form a parent-child relationship of decision trees. In specific, one node takes another as its child node by POSTing another node's ID to one of the three endpoints: `/success_nodes/`, `/failure_nodes/` and `/always_nodes/`.
-* Verify that workflow job template nodes are not allowed to have invalid association. Any attempt that causes invalidity will trigger 400-level response (*i.e.*, cycles).
-* Verify that a workflow job template can be successfully copied, and that the created workflow job template does not miss any field that should be copied or intentionally modified.
-* Verify that if a user has no access to any of the related resources of a workflow job template node, that node will not be copied and will have `null` as placeholder.
-* Verify that `artifacts` is populated when `set_stats` is used in Ansible >= v2.2.1.0-0.3.rc3.
-
-
-### Task-related
-
-* Verify that workflow jobs can be launched by POSTing to endpoint `/workflow_job_templates/\d/launch/`.
-* Verify that schedules can be successfully (dis)associated with a workflow job template, and workflow jobs can be triggered by the schedule of associated workflow job template at specified time point.
-* Verify that extra variables work for workflow job templates as described. In specific, verify the role of workflow job extra variables as a set of global runtime variables over all its spawned jobs.
-* Verify that extra variables of a workflow job node are correctly overwritten in order by the cumulative job artifacts of ancestors, and the overwrite policy of cumulative job artifacts is correct (artifacts of parent overwrite artifacts of grandparent).
-* Verify that during a workflow job run, all of its decision trees follow their correct paths of execution. Unwarranted behaviors include the child node executing before its parent and wrong path being selected (*failure nodes* are executed when parent node *succeeds* and so on).
-* Verify that a subtree of execution will never start if its root node runs into internal error (*not ends with failure*).
-* Verify that a subtree of execution will never start if its root node is successfully canceled.
-* Verify that cancelling a workflow job that is cancellable will consequently cancel any of its cancellable spawned jobs and thus interrupts the whole workflow execution.
-* Verify that during a workflow job run, deleting its spawned jobs are prohibited.
-* Verify that at the beginning of each spawned job run, its prompted fields will be populated by the wrapping workflow job node with corrected values. For example, related `credentials` of the workflow job node go to `credentials` of spawned job.
-* Verify that notification templates can be successfully (dis)associated with a workflow job template. Later, when its spawned workflow jobs finishes running, verify that the correct type of notifications will be sent according to the job status.
-* Verify that a workflow job can be successfully relaunched.
-
-
-## Test Notes
-
-* Please apply non-trivial topology when testing a workflow run. A non-trivial topology for a workflow job template should include:
-  * Multiple decision trees.
-  * Relatively large height in each decision tree.
-  * All three types of relationships (`success`, `failure` and `always`).
+The resulting state of the workflow job run above would be `'successful'`. Although individual nodes fail, the overall workflow job status is `'successful'` because all individual node failures have error handling paths (`failure_nodes` or `always_nodes`).

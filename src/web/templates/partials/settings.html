@@ -1,0 +1,250 @@
+{{define "setting_detail"}}
+{{/* *settingDetail: SettingDetail */}}
+{{if .Code}}
+	<div class="ascender-code-detail">
+		<div class="ascender-code-detail__label" data-cy="{{.Key}}-label">
+			<label for="{{.Key}}-editor" id="{{.Key}}-editor-label">{{.Label}}</label>
+			{{if .Help}}
+				<div style="display: contents;">
+					<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="{{.Help}}" data-popover-header="{{.Label}}">
+						{{icon "help"}}
+					</button>
+				</div>
+			{{end}}
+		</div>
+		<div class="ascender-code-detail__editor" data-cy="{{.Key}}-value">
+			<div class="ascender-code-editor__focus-wrapper" tabindex="-1">
+				<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="{{.Key}}-editor" data-rows="4" data-mode="javascript">
+					<textarea hidden data-code-editor-value>{{.Value}}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+{{else}}
+	<div>
+		<dt class="ascender-detail-name" data-cy="{{.Key}}-label" id="{{.Key}}">
+			{{.Label}}
+			{{if .Help}}
+				<div style="display: contents;">
+					<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="{{.Help}}" data-popover-header="{{.Label}}">
+						{{icon "help"}}
+					</button>
+				</div>
+			{{end}}
+		</dt>
+		<dd class="ascender-detail-value{{if .Muted}} ascender-detail-value--muted{{end}}" data-cy="{{.Key}}-value">
+			{{if .Image}}
+				<img src="{{safeURL .Image}}" alt="{{.Label}}" height="40" width="40">
+			{{else}}
+				{{.Value}}
+			{{end}}
+		</dd>
+	</div>
+{{end}}
+{{end}}
+{{define "setting_error"}}
+{{if .ShowError}}
+	<div class="pf-v6-c-form__helper-text" aria-live="polite" data-setting-error>
+		<div class="pf-v6-c-helper-text">
+			<div class="pf-v6-c-helper-text__item pf-m-error">
+				<span class="pf-v6-c-helper-text__item-icon">{{icon "exclamation-circle"}}</span>
+				<span class="pf-v6-c-helper-text__item-text">
+					{{.Errors}}
+					<span class="pf-v6-screen-reader">: error status;</span>
+				</span>
+			</div>
+		</div>
+	</div>
+{{end}}
+{{end}}
+{{define "setting_status"}}
+{{if .InvalidControl}}
+	<span class="pf-v6-c-form-control__utilities">
+		<span class="pf-v6-c-form-control__icon pf-m-status">{{icon "exclamation-circle"}}</span>
+	</span>
+{{end}}
+{{end}}
+{{define "setting_field"}}
+{{/* *settingField: one SettingGroup of an edit form */}}
+{{if eq .Kind "full"}}
+	<div class="ascender-form-full-width-layout">
+		{{range .Children}}{{template "setting_field" .}}{{end}}
+	</div>
+{{else}}
+	{{$wide := or (eq .Kind "object") (eq .Kind "file")}}
+	{{if $wide}}<div class="ascender-form-full-width-layout">{{end}}
+	<div class="pf-v6-c-form__group ascender-shared-fields__form-group" id="{{.Key}}-field" data-setting="{{.Key}}" data-kind="{{.Kind}}"{{if .Type}} data-type="{{.Type}}"{{end}} data-default="{{.Default}}" data-initial="{{.Initial}}" data-current="{{.Current}}" data-help="{{.Help}}"{{if .Cond}} data-cond="{{.Cond}}" data-cond-values="{{.CondValues}}"{{end}}{{if .RequiredWhenEnabled}} data-required-when-enabled{{end}}{{if .Confirm}} data-confirm-on{{end}}{{if .Hidden}} hidden{{end}}>
+		<div class="pf-v6-c-form__group-label">
+			<label class="pf-v6-c-form__label" for="{{.Key}}">
+				<span class="pf-v6-c-form__label-text">{{.Label}}</span>
+				{{if .Required}}
+					<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+				{{end}}
+			</label>
+			&nbsp;&nbsp;
+			<span class="pf-v6-c-form__group-label-help">
+				{{if or .Help .Note}}
+					<div style="display: contents;">
+						<button aria-label="{{t "More information for {label}" "label" .Label}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="" data-popover-html="{{.HelpHTML}}">
+							{{icon "help"}}
+						</button>
+					</div>
+				{{end}}
+				<div style="display: contents;">
+					<div class="ascender-revert-button__wrapper">
+						<button aria-label="{{t .Revert}}" class="pf-v6-c-button pf-m-link pf-m-inline pf-m-small"{{if .RevertDisabled}} disabled=""{{end}} type="button" data-revert>
+							<span class="pf-v6-c-button__text">{{t .Revert}}</span>
+						</button>
+					</div>
+				</div>
+			</span>
+		</div>
+		<div class="pf-v6-c-form__group-control">
+			{{- if eq .Kind "boolean"}}
+				<label class="pf-v6-c-switch" for="{{.Key}}">
+					<input id="{{.Key}}" name="{{.Key}}" class="pf-v6-c-switch__input" role="switch" aria-label="{{if .Aria}}{{.Aria}}{{else}}{{.Label}}{{end}}" type="checkbox"{{if .Checked}} checked=""{{end}}{{if .Disabled}} disabled=""{{end}} data-control>
+					<span class="pf-v6-c-switch__toggle"></span>
+					<span class="pf-v6-c-switch__label" aria-hidden="true">{{t "On"}}</span>
+				</label>
+			{{- else if eq .Kind "choice"}}
+				<span class="pf-v6-c-form-control">
+					<select id="{{.Key}}" name="{{.Key}}" aria-label="{{t "Select Input"}}" aria-invalid="false" data-control>
+						{{range .Choices}}
+							<option value="{{.Value}}"{{if .Selected}} selected{{end}}>
+								{{.Label}}
+							</option>
+						{{end}}
+					</select>
+					<span class="pf-v6-c-form-control__utilities">
+						<span class="pf-v6-c-form-control__toggle-icon">
+							{{icon "pf-caret-down"}}
+						</span>
+					</span>
+				</span>
+			{{- else if eq .Kind "encrypted"}}
+				<div class="pf-v6-c-input-group">
+					<div class="pf-v6-c-input-group__item pf-m-fill">
+						<div style="display: contents;">
+							<button aria-label="{{t "Toggle Password"}}" class="pf-v6-c-button pf-m-control" type="button" data-tooltip="{{t "Show"}}" data-tooltip-pos="top" data-setting-toggle-password>
+								<span class="pf-v6-c-button__text">
+									<span data-icon-show>{{icon "eye-slash"}}</span>
+									<span data-icon-hide hidden>{{icon "eye"}}</span>
+								</span>
+							</button>
+						</div>
+						<span class="pf-v6-c-form-control{{if .InvalidControl}} pf-m-error{{end}}">
+							<input autocomplete="new-password" id="{{.Key}}" aria-invalid="{{if .InvalidControl}}true{{else}}false{{end}}"{{if .Encrypted}} placeholder="{{t "ENCRYPTED"}}"{{end}}{{if .Required}} required=""{{end}} type="password" value="{{.Value}}" name="{{.Key}}" data-control>
+							{{template "setting_status" .}}
+						</span>
+					</div>
+				</div>
+			{{- else if eq .Kind "object"}}
+				<div class="ascender-code-editor__focus-wrapper" tabindex="0" data-editor-focus>
+					<div data-cy="code-editor" class="ascender-code-editor__wrapper pf-v6-c-form-control" data-code-editor data-editor-id="{{.Key}}" data-rows="{{.Rows}}" data-mode="javascript">
+						<textarea hidden name="{{.Key}}" data-code-editor-value data-control>{{.Value}}</textarea>
+					</div>
+				</div>
+				<div class="pf-v6-c-form__helper-text keyboard-help-text" aria-live="polite">
+					{{t "Press Enter to edit. Press ESC to stop editing."}}
+				</div>
+			{{- else if eq .Kind "textarea"}}
+				<span class="pf-v6-c-form-control pf-m-textarea pf-m-resize-vertical{{if .InvalidControl}} pf-m-error{{end}}">
+					<textarea id="{{.Key}}" name="{{.Key}}" aria-invalid="{{if .InvalidControl}}true{{else}}false{{end}}"{{if .Required}} required=""{{end}}{{if .Placeholder}} placeholder="{{.Placeholder}}"{{end}} data-control>{{.Value}}</textarea>
+					{{template "setting_status" .}}
+				</span>
+			{{- else if eq .Kind "file"}}
+				<div class="pf-v6-c-file-upload" role="presentation" data-setting-upload{{if eq .Type "dataURL"}} data-as-image{{end}}>
+					<div class="pf-v6-c-file-upload__file-select">
+						<div class="pf-v6-c-input-group">
+							<div class="pf-v6-c-input-group__item pf-m-fill">
+								<span class="pf-v6-c-form-control pf-m-readonly">
+									<input id="{{.Key}}-filename" name="{{.Key}}-filename" aria-label="{{t "Drag a file here or browse to upload"}}" aria-invalid="false" readonly="" placeholder="{{t "Drag a file here or browse to upload"}}" type="text" value="" data-file-name>
+								</span>
+							</div>
+							{{if .Fetch}}
+								<div class="pf-v6-c-input-group__item">
+									<button id="{{.Key}}-fetch-button" class="pf-v6-c-button pf-m-control" type="button" data-cert-fetch="{{.Fetch}}">
+										<span class="pf-v6-c-button__text">
+											{{t "Fetch from server"}}
+										</span>
+									</button>
+								</div>
+							{{end}}
+							<div class="pf-v6-c-input-group__item">
+								<button id="{{.Key}}-browse-button" class="pf-v6-c-button pf-m-control" type="button" data-file-browse>
+									<span class="pf-v6-c-button__text">{{t "Browse…"}}</span>
+								</button>
+							</div>
+							<div class="pf-v6-c-input-group__item">
+								<button class="pf-v6-c-button pf-m-control"{{if not .Value}} disabled=""{{end}} type="button" data-file-clear>
+									<span class="pf-v6-c-button__text">{{t "Clear"}}</span>
+								</button>
+							</div>
+						</div>
+					</div>
+					{{if eq .Type "dataURL"}}
+						<div class="ascender-shared-fields__file-upload-icon-wrapper" data-file-preview>
+							{{if .Value}}
+								<img src="{{safeURL .Value}}" alt="" height="200px" width="200px">
+							{{else}}
+								{{icon "file-upload"}}
+							{{end}}
+						</div>
+						<input type="hidden" name="{{.Key}}" value="{{.Value}}" data-control>
+					{{else}}
+						<div class="pf-v6-c-file-upload__file-details">
+							<span class="pf-v6-c-form-control pf-m-textarea pf-m-resize-vertical{{if .InvalidControl}} pf-m-error{{end}}">
+								<textarea aria-invalid="{{if .InvalidControl}}true{{else}}false{{end}}" id="{{.Key}}" name="{{.Key}}" aria-label="File upload" placeholder="" data-control>{{.Value}}</textarea>
+								{{template "setting_status" .}}
+							</span>
+						</div>
+					{{end}}
+					<input tabindex="-1" hidden type="file" data-file-input{{if eq .Type "dataURL"}} accept="image/*"{{end}}>
+				</div>
+				{{if .Fetch}}
+					<div class="ascender-cert-fetch" aria-live="polite" data-cert-fetch-result hidden>
+					</div>
+				{{end}}
+			{{- else if eq .Kind "ee"}}
+				<div class="pf-v6-c-input-group" data-lookup data-resource="execution_environments" data-title="{{t "Execution Environment"}}">
+					<div class="pf-v6-c-input-group__item">
+						<button id="{{.Key}}-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open>
+							<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+						</button>
+					</div>
+					<div class="pf-v6-c-input-group__item pf-m-fill">
+						<span class="pf-v6-c-form-control">
+							<input id="{{.Key}}" aria-invalid="false" type="text" value="{{.EEName}}" readonly data-lookup-name>
+						</span>
+					</div>
+					<input type="hidden" name="{{.Key}}" value="{{.EEID}}" data-lookup-id data-control>
+					<input type="hidden" name="{{.Key}}_name" value="{{.EEName}}" data-lookup-hidden-name>
+				</div>
+			{{- else if eq .Kind "inputalert"}}
+				<div class="ascender-shared-fields__selected">
+					{{if .Disabled}}
+						<div style="display: contents;">
+							<button class="pf-v6-c-button pf-m-control" type="button" data-input-alert>
+								<span class="pf-v6-c-button__text">
+									{{iconClassed "exclamation-circle" "ascender-shared-fields__exclamation-circle-icon"}}
+								</span>
+							</button>
+						</div>
+					{{end}}
+					<span class="pf-v6-c-form-control{{if .Disabled}} pf-m-disabled{{end}}{{if .InvalidControl}} pf-m-error{{end}}">
+						<input id="{{.Key}}" name="{{.Key}}" aria-invalid="{{if .InvalidControl}}true{{else}}false{{end}}" type="text" value="{{.Value}}"{{if .Placeholder}} placeholder="{{.Placeholder}}"{{end}}{{if .Disabled}} disabled=""{{end}} data-control>
+						{{template "setting_status" .}}
+					</span>
+				</div>
+			{{- else}}
+				<span class="pf-v6-c-form-control{{if .InvalidControl}} pf-m-error{{end}}">
+					<input id="{{.Key}}" name="{{.Key}}" aria-invalid="{{if .InvalidControl}}true{{else}}false{{end}}"{{if .Required}} required=""{{end}} type="{{if .Type}}{{.Type}}{{else}}text{{end}}" value="{{.Value}}"{{if .Placeholder}} placeholder="{{.Placeholder}}"{{end}} data-control>
+					{{template "setting_status" .}}
+				</span>
+			{{- end}}
+			{{template "setting_error" .}}
+		</div>
+	</div>
+	{{if $wide}}</div>{{end}}
+{{end}}
+{{end}}

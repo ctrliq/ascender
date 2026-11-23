@@ -1,0 +1,647 @@
+{
+    "files": [
+        {
+            "path": "site.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "play.yaml",
+            "parts": [
+                ["---\n- name: x\n  hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "noplay.yml",
+            "parts": [
+                ["---\n- name: x\n  tasks: []\n", 1]
+            ]
+        },
+        {
+            "path": "import.yml",
+            "parts": [
+                ["- import_playbook: site.yml\n", 1]
+            ]
+        },
+        {
+            "path": "builtin_import.yml",
+            "parts": [
+                ["- ansible.builtin.import_playbook: site.yml\n", 1]
+            ]
+        },
+        {
+            "path": "include.yml",
+            "parts": [
+                ["- include: site.yml\n", 1]
+            ]
+        },
+        {
+            "path": "builtin_include.yml",
+            "parts": [
+                ["- ansible.builtin.include: site.yml\n", 1]
+            ]
+        },
+        {
+            "path": "include_tasks.yml",
+            "parts": [
+                ["- include_tasks: x.yml\n", 1]
+            ]
+        },
+        {
+            "path": "import_tasks.yml",
+            "parts": [
+                ["- ansible.builtin.import_tasks: x.yml\n", 1]
+            ]
+        },
+        {
+            "path": "hostsx.yml",
+            "parts": [
+                ["hostsx: 1\n", 1]
+            ]
+        },
+        {
+            "path": "hosts_space.yml",
+            "parts": [
+                ["- hosts : all\n", 1]
+            ]
+        },
+        {
+            "path": "nodash.yml",
+            "parts": [
+                ["hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "dashnospace.yml",
+            "parts": [
+                ["-hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "twodash.yml",
+            "parts": [
+                ["- - hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "nocolonspace.yml",
+            "parts": [
+                ["- hosts:all\n", 1]
+            ]
+        },
+        {
+            "path": "colon_eof.yml",
+            "parts": [
+                ["hosts:", 1]
+            ]
+        },
+        {
+            "path": "tabs.yml",
+            "parts": [
+                ["\t-\thosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "upper_key.yml",
+            "parts": [
+                ["- HOSTS: all\n", 1]
+            ]
+        },
+        {
+            "path": "comment.yml",
+            "parts": [
+                ["# - hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "quoted.yml",
+            "parts": [
+                ["- \"hosts\": all\n", 1]
+            ]
+        },
+        {
+            "path": "nbsp.yml",
+            "parts": [
+                ["Â - hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "ideographic.yml",
+            "parts": [
+                ["ã-âhosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "nel.yml",
+            "parts": [
+                ["Â- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "vt.yml",
+            "parts": [
+                ["\u000b- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "ff.yml",
+            "parts": [
+                ["\f- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "fs.yml",
+            "parts": [
+                ["\u001c- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "ls.yml",
+            "parts": [
+                ["â¨- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "zwsp.yml",
+            "parts": [
+                ["â- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "nul.yml",
+            "parts": [
+                ["\u0000- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "bom.yml",
+            "parts": [
+                ["ï»¿- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "bom2.yml",
+            "parts": [
+                ["ï»¿---\n- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "badutf8.yml",
+            "parts": [
+                ["ÿ- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "badmid.yml",
+            "parts": [
+                ["- Ãhosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "latin1.yml",
+            "parts": [
+                [" - hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "truncated.yml",
+            "parts": [
+                ["- hosâts: all\n", 1]
+            ]
+        },
+        {
+            "path": "crlf.yml",
+            "parts": [
+                ["---\r\n- hosts: all\r\n", 1]
+            ]
+        },
+        {
+            "path": "cr.yml",
+            "parts": [
+                ["---\r- hosts: all", 1]
+            ]
+        },
+        {
+            "path": "crbad.yml",
+            "parts": [
+                ["---\rÿ\n- hosts: all", 1]
+            ]
+        },
+        {
+            "path": "vault.yml",
+            "parts": [
+                ["$ANSIBLE_VAULT;1.1;AES256\n6162\n", 1]
+            ]
+        },
+        {
+            "path": "vault_eof.yml",
+            "parts": [
+                ["$ANSIBLE_VAULT;", 1]
+            ]
+        },
+        {
+            "path": "vault_line2.yml",
+            "parts": [
+                ["---\n$ANSIBLE_VAULT;1.1;AES256\n", 1]
+            ]
+        },
+        {
+            "path": "vault_lead.yml",
+            "parts": [
+                [" $ANSIBLE_VAULT;1.1;AES256\n", 1]
+            ]
+        },
+        {
+            "path": "vault_nosemi.yml",
+            "parts": [
+                ["$ANSIBLE_VAULT\n", 1]
+            ]
+        },
+        {
+            "path": "vault_bom.yml",
+            "parts": [
+                ["ï»¿$ANSIBLE_VAULT;1.1\n", 1]
+            ]
+        },
+        {
+            "path": "vault_cr.yml",
+            "parts": [
+                ["$ANSIBLE_\rVAULT;\n", 1]
+            ]
+        },
+        {
+            "path": "deep.yml",
+            "parts": [
+                ["x: 1\n", 20000],
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "longline.yml",
+            "parts": [
+                ["a", 200000],
+                ["\n- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "longlead.yml",
+            "parts": [
+                [" ", 2000],
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "empty.yml",
+            "parts": [
+                ["", 1]
+            ]
+        },
+        {
+            "path": "Upper.YML",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "mixed.Yaml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "play.json",
+            "parts": [
+                ["[{\"hosts\": \"all\"}]\n", 1]
+            ]
+        },
+        {
+            "path": "noext",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": ".hidden.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": ".yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "..yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "a.yml.bak",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "a.",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "roles/r/site.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "tasks/main.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "a/tasks/x.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "group_vars/all.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "host_vars/h.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": ".git/x.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": ".hidden/sub/x.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "handlers/h.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "vars/v.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "defaults/d.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "meta/main.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "inventories/i.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "inventory/i2.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "collections/c.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "files/f.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "templates/t.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "library/l.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "plugins/p.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "filter_plugins/fp.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "node_modules/n.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "rolesx/rx.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "sub/dir/deep_play.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "B/b_play.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "b/a_play.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "Zed.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        },
+        {
+            "path": "real/linked_target.yml",
+            "parts": [
+                ["- hosts: all\n", 1]
+            ]
+        }
+    ],
+    "links": [
+        {
+            "path": "linkdir",
+            "target": "real"
+        },
+        {
+            "path": "linkfile.yml",
+            "target": "site.yml"
+        },
+        {
+            "path": "broken.yml",
+            "target": "nowhere"
+        },
+        {
+            "path": "linkdir_tasks",
+            "target": "tasks"
+        },
+        {
+            "path": "sub/up",
+            "target": "../real"
+        }
+    ],
+    "dirs": [
+        "emptydir"
+    ],
+    "playbooks": [
+        ".hidden.yml",
+        "b/a_play.yml",
+        "B/b_play.yml",
+        "badmid.yml",
+        "badutf8.yml",
+        "bom2.yml",
+        "builtin_import.yml",
+        "builtin_include.yml",
+        "collections/c.yml",
+        "colon_eof.yml",
+        "cr.yml",
+        "crbad.yml",
+        "crlf.yml",
+        "dashnospace.yml",
+        "deep.yml",
+        "defaults/d.yml",
+        "ff.yml",
+        "files/f.yml",
+        "filter_plugins/fp.yml",
+        "fs.yml",
+        "handlers/h.yml",
+        "ideographic.yml",
+        "import.yml",
+        "include.yml",
+        "inventories/i.yml",
+        "inventory/i2.yml",
+        "latin1.yml",
+        "library/l.yml",
+        "linkfile.yml",
+        "longlead.yml",
+        "longline.yml",
+        "ls.yml",
+        "meta/main.yml",
+        "nbsp.yml",
+        "nel.yml",
+        "nocolonspace.yml",
+        "nodash.yml",
+        "node_modules/n.yml",
+        "play.yaml",
+        "plugins/p.yml",
+        "real/linked_target.yml",
+        "rolesx/rx.yml",
+        "site.yml",
+        "sub/dir/deep_play.yml",
+        "tabs.yml",
+        "templates/t.yml",
+        "truncated.yml",
+        "vars/v.yml",
+        "vault.yml",
+        "vault_eof.yml",
+        "vt.yml",
+        "Zed.yml"
+    ],
+    "playbooks_follow_links": [
+        ".hidden.yml",
+        "b/a_play.yml",
+        "B/b_play.yml",
+        "badmid.yml",
+        "badutf8.yml",
+        "bom2.yml",
+        "builtin_import.yml",
+        "builtin_include.yml",
+        "collections/c.yml",
+        "colon_eof.yml",
+        "cr.yml",
+        "crbad.yml",
+        "crlf.yml",
+        "dashnospace.yml",
+        "deep.yml",
+        "defaults/d.yml",
+        "ff.yml",
+        "files/f.yml",
+        "filter_plugins/fp.yml",
+        "fs.yml",
+        "handlers/h.yml",
+        "ideographic.yml",
+        "import.yml",
+        "include.yml",
+        "inventories/i.yml",
+        "inventory/i2.yml",
+        "latin1.yml",
+        "library/l.yml",
+        "linkdir/linked_target.yml",
+        "linkdir_tasks/main.yml",
+        "linkfile.yml",
+        "longlead.yml",
+        "longline.yml",
+        "ls.yml",
+        "meta/main.yml",
+        "nbsp.yml",
+        "nel.yml",
+        "nocolonspace.yml",
+        "nodash.yml",
+        "node_modules/n.yml",
+        "play.yaml",
+        "plugins/p.yml",
+        "real/linked_target.yml",
+        "rolesx/rx.yml",
+        "site.yml",
+        "sub/dir/deep_play.yml",
+        "sub/up/linked_target.yml",
+        "tabs.yml",
+        "templates/t.yml",
+        "truncated.yml",
+        "vars/v.yml",
+        "vault.yml",
+        "vault_eof.yml",
+        "vt.yml",
+        "Zed.yml"
+    ]
+}

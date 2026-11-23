@@ -1,0 +1,314 @@
+{{define "content"}}
+<section class="pf-v6-c-page__main-section">
+	<div style="display: flex; justify-content: space-between; align-items: center;">
+		<div style="min-height: 31px;">
+			<h2 data-cy="screen-title" class="pf-v6-c-title pf-m-2xl">{{t "Topology View"}}</h2>
+		</div>
+		<div>
+			{{range (list (dict "label" (t "Refresh") "icon" "redo-alt" "act" "refresh") (dict "label" (t "Zoom in") "icon" "search-plus" "act" "zoom-in") (dict "label" (t "Zoom out") "icon" "search-minus" "act" "zoom-out") (dict "label" (t "Fit to screen") "icon" "expand-arrows-alt" "act" "zoom-fit") (dict "label" (t "Reset zoom") "icon" "expand" "act" "zoom-reset"))}}
+				<div style="display: contents;">
+					<button aria-label="{{.label}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{.label}}" data-tooltip-pos="top" disabled data-topology="{{.act}}">
+						<span class="pf-v6-c-button__icon">{{icon .icon}}</span>
+					</button>
+				</div>
+			{{end}}
+			<div style="display: contents;">
+				<label class="pf-v6-c-switch" for="legend-toggle-switch" data-tooltip="{{t "Toggle legend"}}" data-tooltip-pos="top">
+					<input id="legend-toggle-switch" class="pf-v6-c-switch__input" role="switch" aria-labelledby="legend-toggle-switch-label" type="checkbox" checked data-legend-toggle>
+					<span class="pf-v6-c-switch__toggle"></span>
+					<span class="pf-v6-c-switch__label" id="legend-toggle-switch-label" aria-hidden="true">
+						{{t "Legend"}}
+					</span>
+				</label>
+			</div>
+		</div>
+	</div>
+</section>
+{{if .Data.error}}
+	<section class="pf-v6-c-page__main-section">
+		<div id="" class="pf-v6-c-card">
+			<div class="pf-v6-c-card__body">{{template "content_error" .Data.status}}</div>
+		</div>
+	</section>
+{{else}}
+	<section class="pf-v6-c-page__main-section pf-m-fill" style="display: flex; flex-direction: column;">
+		<div id="" class="pf-v6-c-card" style="flex: 1 1 0%; display: flex; flex-direction: column;">
+			<div class="pf-v6-c-card__body" style="flex: 1 1 0%;">
+				<div id="chart" style="position: relative; height: 100%;" data-topology-chart>
+					{{template "topology_legend"}}
+					<div class="ascender-tooltip__wrapper tooltip" data-cy="tooltip" data-topology-tooltip>
+						{{template "topology_tooltip_empty"}}
+					</div>
+					<div class="pf-v6-c-empty-state ascender-topology-content-loading__empty-state ascender-mesh-graph__loader simulation-loader" data-cy="ascender-mesh-graph__loader simulation-loader" data-topology-loader>
+						<div class="pf-v6-c-empty-state__content">
+							<div class="pf-v6-c-empty-state__header"></div>
+							{{iconClassed "topology" "ascender-topology-content-loading__topology-icon"}}
+							<div class="pf-v6-c-progress pf-m-inside pf-m-lg pf-m-singleline" id="pf-progress-topology" style="margin: 20px;">
+								<div class="pf-v6-c-progress__status" aria-hidden="true"></div>
+								<div role="progressbar" class="pf-v6-c-progress__bar" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100" aria-label="{{t "content-loading-in-progress"}}">
+									<div class="pf-v6-c-progress__indicator" style="width: 0%;">
+										<span class="pf-v6-c-progress__measure">0%</span>
+									</div>
+								</div>
+							</div>
+							<div data-pf-content="true" class="pf-v6-c-content" style="margin: 20px;">
+								<small data-pf-content="true" class="pf-v6-c-content--small" style="font-weight: bold; color: var(--pf-t--global--text--color--100);">
+									{{t "Please wait until the topology view is populated..."}}
+								</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script type="application/json" id="topology-data">{{.Data.mesh}}</script>
+{{end}}
+{{end}}
+{{define "topology_tooltip_empty"}}
+<div data-pf-content="true" class="pf-v6-c-content">
+	<small data-pf-content="true" class="pf-v6-c-content--small ascender-tooltip__text" style="font-weight: bold; color: var(--pf-t--global--text--color--100); margin-top: 0px;">
+		{{t "Details"}}
+	</small>
+	<div class="pf-v6-c-divider" role="separator"></div>
+	<small data-pf-content="true" class="pf-v6-c-content--small ascender-tooltip__text">
+		{{t "Click on a node icon to display the details."}}
+	</small>
+</div>
+{{end}}
+{{define "topology_legend"}}
+{{$check := "fill: white; margin-left: 2px; margin-top: 3px;"}}
+{{$other := "fill: white; margin-left: 3px; margin-top: 3px;"}}
+<div class="ascender-legend__wrapper legend" data-cy="legend" data-topology-legend>
+	<div data-pf-content="true" class="pf-v6-c-content">
+		<small data-pf-content="true" class="pf-v6-c-content--small ascender-legend__text" style="font-weight: bold; color: var(--pf-t--global--text--color--100); margin-top: 0px;">
+			{{t "Legend"}}
+		</small>
+		<div class="pf-v6-c-divider" role="separator"></div>
+		<small data-pf-content="true" class="pf-v6-c-content--small ascender-legend__text">
+			{{t "Node types"}}
+		</small>
+	</div>
+	<dl class="pf-v6-c-description-list pf-m-horizontal pf-m-fluid ascender-legend__description-list">
+		{{range (list (list "C" "Control node") (list "Ex" "Execution node") (list "Hy" "Hybrid node") (list "h" "Hop node"))}}
+			<div class="pf-v6-c-description-list__group ascender-legend__description-list-group">
+				<dt class="pf-v6-c-description-list__term">
+					<span class="pf-v6-c-description-list__text">
+						<button class="pf-v6-c-button pf-m-primary pf-m-small ascender-legend__button" type="button">
+							<span class="pf-v6-c-button__text">{{index . 0}}</span>
+						</button>
+					</span>
+				</dt>
+				<dd class="pf-v6-c-description-list__description ascender-legend__description-list-description">
+					<div class="pf-v6-c-description-list__text">{{t (index . 1)}}</div>
+				</dd>
+			</div>
+		{{end}}
+	</dl>
+	<div data-pf-content="true" class="pf-v6-c-content">
+		<small data-pf-content="true" class="pf-v6-c-content--small ascender-legend__text">
+			{{t "Node state types"}}
+		</small>
+	</div>
+	<dl class="pf-v6-c-description-list pf-m-horizontal pf-m-fluid ascender-legend__description-list">
+		{{range (list (list "check" "rgb(62, 134, 53)" "Ready" $check) (list "outlined-clock" "rgb(0, 102, 204)" "Installed" $other) (list "plus" "rgb(106, 110, 115)" "Provisioning" $other) (list "minus" "rgb(106, 110, 115)" "Deprovisioning" $other) (list "exclamation" "rgb(201, 25, 11)" "Error" $other))}}
+			<div class="pf-v6-c-description-list__group ascender-legend__description-list-group">
+				<dt class="pf-v6-c-description-list__term">
+					<span class="pf-v6-c-description-list__text">
+						<button class="pf-v6-c-button pf-m-primary pf-m-small ascender-legend__button" type="button" style="{{safeCSS (printf "background-color: %s;" (index . 1))}}">
+							<span class="pf-v6-c-button__icon">
+								{{iconStyled (index . 0) (index . 3)}}
+							</span>
+						</button>
+					</span>
+				</dt>
+				<dd class="pf-v6-c-description-list__description ascender-legend__description-list-description">
+					<div class="pf-v6-c-description-list__text">{{t (index . 2)}}</div>
+				</dd>
+			</div>
+		{{end}}
+		{{range (list (list "" "Enabled") (list " stroke-dasharray=\"5\"" "Disabled"))}}
+			<div class="pf-v6-c-description-list__group ascender-legend__description-list-group">
+				<dt class="pf-v6-c-description-list__term">
+					<span class="pf-v6-c-description-list__text">
+						<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+							<circle r="9" cx="10" cy="10" fill="transparent"{{safeAttr (index . 0)}} stroke-width="1px" style="stroke: var(--pf-t--global--border--color--default);">
+							</circle>
+							<text x="10" y="10" text-anchor="middle" dominant-baseline="central" font-size="11px" font-family="inherit" font-weight="400" style="fill: var(--pf-t--global--text--color--100);">
+								C
+							</text>
+						</svg>
+					</span>
+				</dt>
+				<dd class="pf-v6-c-description-list__description ascender-legend__description-list-description">
+					<div class="pf-v6-c-description-list__text">{{t (index . 1)}}</div>
+				</dd>
+			</div>
+		{{end}}
+	</dl>
+	<div data-pf-content="true" class="pf-v6-c-content">
+		<small data-pf-content="true" class="pf-v6-c-content--small ascender-legend__text">
+			{{t "Link state types"}}
+		</small>
+	</div>
+	<dl class="pf-v6-c-description-list pf-m-horizontal pf-m-fluid ascender-legend__description-list">
+		{{range (list (list "#6A6E73" "" "Established") (list "#3E8635" " stroke-dasharray=\"6\"" "Adding") (list "#C9190B" " stroke-dasharray=\"6\"" "Removing"))}}
+			<div class="pf-v6-c-description-list__group ascender-legend__description-list-group">
+				<dt class="pf-v6-c-description-list__term">
+					<span class="pf-v6-c-description-list__text">
+						<svg width="20" height="15" xmlns="http://www.w3.org/2000/svg">
+							<line x1="0" y1="9" x2="20" y2="9" stroke="{{index . 0}}" stroke-width="4"{{safeAttr (index . 1)}}>
+							</line>
+						</svg>
+					</span>
+				</dt>
+				<dd class="pf-v6-c-description-list__description ascender-legend__description-list-description">
+					<div class="pf-v6-c-description-list__text">{{t (index . 2)}}</div>
+				</dd>
+			</div>
+		{{end}}
+	</dl>
+</div>
+{{end}}
+{{define "topology_tooltip"}}
+{{$i := .Data.instance}}
+{{$hop := eq (str $i.node_type) "hop"}}
+<div data-pf-content="true" class="pf-v6-c-content">
+	<small data-pf-content="true" class="pf-v6-c-content--small ascender-tooltip__text" style="font-weight: bold; color: var(--pf-t--global--text--color--100);">
+		{{t "Details"}}
+	</small>
+	<div class="pf-v6-c-divider" role="separator"></div>
+</div>
+<dl class="pf-v6-c-description-list ascender-tooltip__description-list" data-instance-id="{{str $i.id}}" data-enabled="{{if $i.enabled}}true{{else}}false{{end}}">
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dd class="pf-v6-c-description-list__description">
+			<div class="pf-v6-c-description-list__text">
+				<button class="pf-v6-c-button pf-m-primary ascender-tooltip__button" type="button">
+					<span class="pf-v6-c-button__text">{{nodeSymbol (str $i.node_type)}}</span>
+				</button> <button data-cy="redirect-to-details-button" class="pf-v6-c-button pf-m-link pf-m-inline" type="button" data-href="/instances/{{str $i.id}}/details">
+					<span class="pf-v6-c-button__text">{{$i.hostname}}</span>
+				</button>
+			</div>
+		</dd>
+	</div>
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dt class="pf-v6-c-description-list__term">
+			<span class="pf-v6-c-description-list__text">{{t "Instance status"}}</span>
+		</dt>
+		<dd class="pf-v6-c-description-list__description" data-cy="node-state">
+			<div class="pf-v6-c-description-list__text">
+				{{if $i.node_state}}{{template "status_label" (str $i.node_state)}}{{end}}
+			</div>
+		</dd>
+	</div>
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dt class="pf-v6-c-description-list__term">
+			<span class="pf-v6-c-description-list__text">{{t "Instance type"}}</span>
+		</dt>
+		<dd class="pf-v6-c-description-list__description" data-cy="node-type">
+			<div class="pf-v6-c-description-list__text">{{$i.node_type}}</div>
+		</dd>
+	</div>
+	{{with and $.Data.superuser (dig $i "related" "install_bundle")}}
+		<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+			<dt class="pf-v6-c-description-list__term">
+				<span class="pf-v6-c-description-list__text">{{t "Download bundle"}}</span>
+			</dt>
+			<dd class="pf-v6-c-description-list__description">
+				<div class="pf-v6-c-description-list__text">
+					<a data-cy="install-bundle-download-button" aria-label="{{t "Download Bundle"}}" class="pf-v6-c-button pf-m-secondary pf-m-small" href="{{.}}" target="_blank" rel="noopener noreferrer" aria-disabled="false">
+						<span class="pf-v6-c-button__icon">{{icon "download"}}</span>
+					</a>
+				</div>
+			</dd>
+		</div>
+	{{end}}
+	{{if has $i.ip_address}}
+		<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+			<dt class="pf-v6-c-description-list__term">
+				<span class="pf-v6-c-description-list__text">{{t "IP address"}}</span>
+			</dt>
+			<dd class="pf-v6-c-description-list__description">
+				<div class="pf-v6-c-description-list__text">{{$i.ip_address}}</div>
+			</dd>
+		</div>
+	{{end}}
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dt class="pf-v6-c-description-list__term">
+			<span class="pf-v6-c-description-list__text">{{t "Instance groups"}}</span>
+		</dt>
+		<dd class="pf-v6-c-description-list__description" data-cy="instance-groups">
+			<div class="pf-v6-c-description-list__text">
+				{{range .Data.groups}}
+					<span class="pf-v6-c-label pf-m-blue pf-m-filled">
+						<a class="pf-v6-c-label__content" href="/instance_groups/{{if .is_container_group}}container_group/{{end}}{{str .id}}/details">
+							<span class="pf-v6-c-label__text">{{.name}}</span>
+						</a>
+					</span> {{end}}
+			</div>
+		</dd>
+	</div>
+	{{if not $hop}}
+		<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+			<dt class="pf-v6-c-description-list__term">
+				<span class="pf-v6-c-description-list__text">{{t "Forks"}}</span>
+			</dt>
+			<dd class="pf-v6-c-description-list__description">
+				<div class="pf-v6-c-description-list__text">
+					{{template "capacity_slider" (dict "i" $i "forks" .Data.forks "disabled" (or (not .Data.superuser) (not $i.enabled)) "cls" "ascender-tooltip")}}
+				</div>
+			</dd>
+		</div>
+		<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+			<dt class="pf-v6-c-description-list__term">
+				<span class="pf-v6-c-description-list__text">{{t "Capacity"}}</span>
+			</dt>
+			<dd class="pf-v6-c-description-list__description" data-cy="used-capacity">
+				<div class="pf-v6-c-description-list__text">
+					{{if $i.enabled}}
+						{{$pct := usedPct $i.percent_capacity_remaining}}
+						<div class="pf-v6-c-progress pf-m-sm pf-m-singleline" id="pf-progress-tooltip">
+							<div class="pf-v6-c-progress__status" aria-hidden="true">
+								<span class="pf-v6-c-progress__measure">{{$pct}}%</span>
+							</div>
+							<div role="progressbar" class="pf-v6-c-progress__bar" aria-valuemin="0" aria-valuenow="{{$pct}}" aria-valuemax="100">
+								<div class="pf-v6-c-progress__indicator" style="width: {{$pct}}%;">
+									<span class="pf-v6-c-progress__measure"></span>
+								</div>
+							</div>
+						</div>
+					{{else}}
+						{{/* usedCapacity took t as a parameter, which rendered nothing here (nor the progress title) */}}
+						<span class="ascender-tooltip__unavailable"></span>
+					{{end}}
+				</div>
+			</dd>
+		</div>
+		<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+			<dd class="pf-v6-c-description-list__description">
+				<div class="pf-v6-c-description-list__text">
+					{{template "instance_toggle" (dict "i" $i "superuser" .Data.superuser)}}
+				</div>
+			</dd>
+		</div>
+	{{end}}
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dt class="pf-v6-c-description-list__term">
+			<span class="pf-v6-c-description-list__text">{{t "Last modified"}}</span>
+		</dt>
+		<dd class="pf-v6-c-description-list__description" data-cy="last-modified">
+			<div class="pf-v6-c-description-list__text">{{dt $i.modified}}</div>
+		</dd>
+	</div>
+	<div class="pf-v6-c-description-list__group ascender-tooltip__description-list-group">
+		<dt class="pf-v6-c-description-list__term">
+			<span class="pf-v6-c-description-list__text">{{t "Last seen"}}</span>
+		</dt>
+		<dd class="pf-v6-c-description-list__description" data-cy="last-seen">
+			<div class="pf-v6-c-description-list__text">
+				{{if $i.last_seen}}{{dt $i.last_seen}}{{else}}not found{{end}}
+			</div>
+		</dd>
+	</div>
+</dl>
+{{end}}

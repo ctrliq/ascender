@@ -1,0 +1,122 @@
+# Development stack: PostgreSQL, the web server and the task process.
+#
+#   docker compose -f deploy/docker-compose.yml up --build
+#
+# SECRET_KEY_FILE must hold the same SECRET_KEY the database's data was
+# encrypted with, or encrypted credentials and settings cannot be read. The
+# Makefile sets it, and ASCENDER_DB_PASSWORD, from .secrets/ when that
+# directory has them, and ADMIN_PASSWORD_FILE (optional: the admin
+# account's password) from .secrets/ADMIN_PASSWORD. An empty database is
+# given the schema, and the admin account, at the first start (see
+# deploy/README.md, "The database schema").
+services:
+  postgres:
+    image: quay.io/sclorg/postgresql-18-c9s:latest@sha256:1732d0a342e2790afc100e1fe741704e5c4413dfba9a3ab3b571c26b8cb0da6f
+    container_name: ascender_postgres
+    environment:
+      POSTGRESQL_DATABASE: ${ASCENDER_DB_NAME:-ascender}
+      POSTGRESQL_USER: ${ASCENDER_DB_USER:-ascender}
+      POSTGRESQL_PASSWORD: ${ASCENDER_DB_PASSWORD:?set ASCENDER_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/pgsql/data
+    # For processes run on the host (make run-web, run-task, migrate).
+    ports:
+      - "127.0.0.1:${ASCENDER_DB_LOCAL_PORT:-5442}:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-p", "5432"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+    container_name: ascender_web
+    environment:
+      ASCENDER_DB_HOST: postgres
+      ASCENDER_DB_PORT: "5432"
+      ASCENDER_DB_NAME: ${ASCENDER_DB_NAME:-ascender}
+      ASCENDER_DB_USER: ${ASCENDER_DB_USER:-ascender}
+      ASCENDER_DB_PASSWORD: ${ASCENDER_DB_PASSWORD:?set ASCENDER_DB_PASSWORD}
+      ASCENDER_DB_SSLMODE: disable
+      ASCENDER_SECRET_KEY_FILE: /etc/ascender/SECRET_KEY
+      ASCENDER_ADMIN_PASSWORD_FILE: /etc/ascender/ADMIN_PASSWORD
+      ASCENDER_LISTEN: ":8070"
+      # Cookies are shared between ports of one host: beside the old
+      # application, set its own cookie names in .env (see .env.example).
+      # Unset, they are the old application's names.
+      ASCENDER_SESSION_COOKIE_NAME: ${ASCENDER_SESSION_COOKIE_NAME:-}
+      ASCENDER_CSRF_COOKIE_NAME: ${ASCENDER_CSRF_COOKIE_NAME:-}
+      ASCENDER_LOGGED_IN_COOKIE_NAME: ${ASCENDER_LOGGED_IN_COOKIE_NAME:-}
+      ASCENDER_PROJECTS_ROOT: /var/lib/ascender/projects/
+      ASCENDER_CLUSTER_HOST_ID: ascender-web
+      ASCENDER_MODE: ${ASCENDER_MODE:-production}
+    volumes:
+      - ${SECRET_KEY_FILE:?set SECRET_KEY_FILE}:/etc/ascender/SECRET_KEY:ro
+      # Without one, an empty file: no password.
+      - ${ADMIN_PASSWORD_FILE:-/dev/null}:/etc/ascender/ADMIN_PASSWORD:ro
+      # The external log queue's spool (LOG_AGGREGATOR_MAX_DISK_USAGE_PATH),
+      # kept across container recreation.
+      - log_spool_web:/var/lib/ascender
+      - ${ASCENDER_PROJECTS_DIR:-/var/lib/ascender/projects}:/var/lib/ascender/projects
+    # Plain HTTP, so only this host by default; set ASCENDER_WEB_BIND (in
+    # .env) to 0.0.0.0 to answer other hosts, behind TLS in production.
+    ports:
+      - "${ASCENDER_WEB_BIND:-127.0.0.1}:${ASCENDER_WEB_PORT:-8070}:8070"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+  task:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.task
+    container_name: ascender_task
+    # On a stop the task process detaches from, re-queues or stops its jobs
+    # (ASCENDER_SHUTDOWN_TIMEOUT, 30 seconds); give it that long before
+    # docker kills it.
+    stop_grace_period: 45s
+    # Execution environments run in the container's own rootless podman,
+    # which needs privileges for its nested containers (user namespace
+    # mappings, fuse-overlayfs, slirp4netns), as the old task container had.
+    privileged: true
+    environment:
+      ASCENDER_DB_HOST: postgres
+      ASCENDER_DB_PORT: "5432"
+      ASCENDER_DB_NAME: ${ASCENDER_DB_NAME:-ascender}
+      ASCENDER_DB_USER: ${ASCENDER_DB_USER:-ascender}
+      ASCENDER_DB_PASSWORD: ${ASCENDER_DB_PASSWORD:?set ASCENDER_DB_PASSWORD}
+      ASCENDER_DB_SSLMODE: disable
+      ASCENDER_SECRET_KEY_FILE: /etc/ascender/SECRET_KEY
+      ASCENDER_ADMIN_PASSWORD_FILE: /etc/ascender/ADMIN_PASSWORD
+      ASCENDER_PROJECTS_ROOT: /var/lib/ascender/projects/
+      ASCENDER_JOBOUTPUT_ROOT: /var/lib/ascender/job_status/
+      ASCENDER_CLUSTER_HOST_ID: ascender-task
+      # Playbooks run in execution environment images through the
+      # container's podman. A job's private data directory lives under
+      # ASCENDER_ISOLATION_BASE_PATH (a setting); the job_private mount
+      # below keeps it on the host at /var/lib/ascender/job_private.
+      ASCENDER_CONTAINER_RUNTIME: podman
+    volumes:
+      - ${SECRET_KEY_FILE:?set SECRET_KEY_FILE}:/etc/ascender/SECRET_KEY:ro
+      # Without one, an empty file: no password.
+      - ${ADMIN_PASSWORD_FILE:-/dev/null}:/etc/ascender/ADMIN_PASSWORD:ro
+      - log_spool_task:/var/lib/ascender
+      - ${ASCENDER_PROJECTS_DIR:-/var/lib/ascender/projects}:/var/lib/ascender/projects
+      - job_status:/var/lib/ascender/job_status
+      - ${ASCENDER_JOB_PRIVATE_DIR:-/var/lib/ascender/job_private}:/var/lib/ascender/job_private
+      # Pulled execution environment images, kept across container
+      # recreation so a rebuild doesn't pull them again.
+      - podman_storage:/var/lib/ascender/.local/share/containers
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  job_status:
+  podman_storage:
+  log_spool_web:
+  log_spool_task:

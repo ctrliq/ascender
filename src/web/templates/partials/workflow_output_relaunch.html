@@ -1,0 +1,88 @@
+{{define "workflow_relaunch_dropdown"}}
+{{/* .job .id: WorkflowReLaunchDropDown for a workflow job that failed, errored or was canceled. workflow-visualizer.js opens the variables and force-success modals; templates.js relaunches from the first or the failed node. */}}
+{{$j := .job}}
+{{$jid := str $j.id}}
+{{$api := printf "/api/v2/workflow_jobs/%s/relaunch/" $jid}}
+{{$canceled := eq (str $j.status) "canceled"}}
+{{$wt := dig $j "summary_fields" "workflow_job_template"}}
+{{$force := false}}
+{{if $wt}}
+	{{$force = has (dig $wt "allow_force_node_success_on_relaunch")}}
+{{else}}
+	{{$force = has $j.allow_force_node_success_on_relaunch}}
+{{end}}
+<span class="ascender-dropdown" data-dropdown data-workflow-relaunch="{{$jid}}">
+	<button class="pf-v6-c-menu-toggle pf-m-plain" type="button" aria-label="{{t "relaunch workflow"}}" aria-expanded="false" id="{{.id}}" data-tooltip="{{t "Relaunch Job"}}" data-tooltip-pos="top" data-dropdown-toggle>
+		<span class="pf-v6-c-menu-toggle__text">{{icon "rocket"}}</span>
+	</button>
+	<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+		<div class="pf-v6-c-menu__content">
+			<ul class="pf-v6-c-menu__list" role="menu">
+				<li class="pf-v6-c-menu__list-item pf-m-aria-disabled" role="none">
+					<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-disabled="true" aria-label="{{t "Relaunch from:"}}" tabindex="-1">
+						<span class="pf-v6-c-menu__item-main">
+							<span class="pf-v6-c-menu__item-text">{{t "Relaunch from:"}}</span>
+						</span>
+					</button>
+				</li>
+				<li class="pf-v6-c-divider" role="separator"></li>
+				<li class="pf-v6-c-menu__list-item" role="none">
+					<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{t "Relaunch from first node"}}" data-relaunch="{{$api}}" data-relaunch-seg="workflow">
+						<span class="pf-v6-c-menu__item-main">
+							<span class="pf-v6-c-menu__item-text">{{t "First node"}}</span>
+						</span>
+					</button>
+				</li>
+				<li class="pf-v6-c-menu__list-item" role="none">
+					<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{if $canceled}}{{t "Relaunch from canceled node"}}{{else}}{{t "Relaunch from failed node"}}{{end}}" data-relaunch="{{$api}}" data-relaunch-seg="workflow" data-relaunch-body="{&quot;nodes&quot;:&quot;failed&quot;}">
+						<span class="pf-v6-c-menu__item-main">
+							<span class="pf-v6-c-menu__item-text">
+								{{if $canceled}}
+									{{t "Canceled node"}}
+								{{else}}
+									{{t "Failed node"}}
+								{{end}}
+							</span>
+						</span>
+					</button>
+				</li>
+				{{if has $j.allow_overwrite_flow_vars_on_relaunch}}
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{if $canceled}}{{t "Relaunch from canceled node with new variables"}}{{else}}{{t "Relaunch from failed node with new variables"}}{{end}}" data-wf-relaunch-vars="{{if $canceled}}canceled{{else}}failed{{end}}">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">
+									{{if $canceled}}
+										{{t "Canceled node, new variables"}}
+									{{else}}
+										{{t "Failed node, new variables"}}
+									{{end}}
+								</span>
+							</span>
+						</button>
+					</li>
+				{{end}}
+				{{if $force}}
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{if $canceled}}{{t "Relaunch forcing canceled nodes as successful"}}{{else}}{{t "Relaunch forcing failed nodes as successful"}}{{end}}" data-wf-relaunch-force="{{if $canceled}}canceled{{else}}failed{{end}}">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">
+									{{if $canceled}}
+										{{t "Canceled node, forced as successful"}}
+									{{else}}
+										{{t "Failed node, forced as successful"}}
+									{{end}}
+								</span>
+							</span>
+						</button>
+					</li>
+				{{end}}
+			</ul>
+		</div>
+	</div>
+</span>
+{{end}}
+{{define "workflow_visualizer_icons"}}
+{{/* the icons workflow-visualizer.js draws with */}}
+<script nonce="{{.Nonce}}">window.ASCENDER_WF_ICONS = {"times": {{icon "times"}}, "exclamation-circle": {{icon "exclamation-circle"}}, "times-circle": {{icon "times-circle"}}, "exclamation-triangle": {{icon "exclamation-triangle"}}, "question-circle": {{icon "help"}}, "caret-down": {{icon "caret-down"}}, "pause": {{icon "pause"}}, "plus": {{icon "plus"}}, "pencil-alt": {{icon "pencil-alt"}}, "trash-alt": {{icon "trash-alt"}}, "info": {{icon "info"}}, "link": {{icon "link"}}, "desktop": {{icon "desktop"}}, "minus": {{icon "minus"}}, "caret-left": {{icon "caret-left"}}, "caret-up": {{icon "caret-up"}}, "caret-right": {{icon "caret-right"}}, "home": {{icon "home"}}, "search": {{icon "search"}}, "angle-left": {{icon "angle-left"}}, "angle-right": {{icon "angle-right"}}, "angle-double-left": {{icon "pf-angle-double-left"}}, "angle-double-right": {{icon "angle-double-right"}}, "long-arrow-alt-up": {{icon "long-arrow-alt-up"}}, "outlined-question-circle": {{icon "outlined-question-circle"}},
+"status": {"successful": {{statusIcon "successful"}}, "ok": {{statusIcon "ok"}}, "failed": {{statusIcon "failed"}}, "error": {{statusIcon "error"}}, "canceled": {{statusIcon "canceled"}}, "running": {{statusIcon "running"}}, "waiting": {{statusIcon "waiting"}}, "new": {{statusIcon "new"}}}};</script>
+{{end}}

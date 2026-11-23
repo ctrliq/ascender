@@ -1,0 +1,15 @@
+{
+    "name": "Webhook Key",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {}
+    }
+}

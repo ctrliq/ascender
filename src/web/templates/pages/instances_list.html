@@ -1,0 +1,47 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Instances") "stream" "instance")}}
+{{template "health_check_alert"}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "instance-list" "searchKeys" .Data.searchKeys "ns" "instance" "kind" "Instance" "expandAll" true "noDelete" true "addHref" (cond .Data.canAdd "/instances/add" "") "actionsBefore" .Data.removeButton "filters" .Data.filters "healthCheck" (dict "pending" .Data.pending "disabled" (not .Data.superuser)))}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Instances")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "hostname" "label" (t "Name") "id" "instance-table-sort-hostname" "help" (t "Health checks can only be run on execution nodes."))}}
+							{{template "sort_th" (dict "page" . "key" "errors" "label" (t "Status") "id" "instance-table-sort-errors")}}
+							{{template "sort_th" (dict "page" . "key" "node_type" "label" (t "Node Type") "id" "instance-table-sort-node_type")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Capacity Adjustment"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Used Capacity"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{template "instance_rows" (dict "page" . "href" "/instances/" "cls" "ascender-instance-list-item" "group" false)}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Instances")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Instances")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

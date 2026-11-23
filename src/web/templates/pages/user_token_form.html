@@ -1,0 +1,95 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$u := .Data.user}}
+{{$id := str $u.id}}
+{{template "screen_header" (dict "title" (t "Create user token") "stream" "user" "crumbs" (list (dict "href" "/users" "title" (t "Users")) (dict "href" (printf "/users/%s" $id) "title" (str $u.username)) (dict "href" (printf "/users/%s/tokens" $id) "title" (t "Tokens"))))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					<div class="pf-v6-c-form__group" name="application">
+						<div class="pf-v6-c-form__group-control">
+							<div class="pf-v6-c-form__group" data-lookup data-resource="applications" data-title="{{t "Select {0}" "0" (t "Application")}}">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="application">
+										<span class="pf-v6-c-form__label-text">
+											<span>
+												{{t "Application"}}
+												{{template "help_button" (t "The application that this token belongs to, or leave this field empty to create a Personal Access Token.")}}
+											</span>
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-input-group">
+										<div class="pf-v6-c-input-group__item">
+											<button id="application-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open>
+												<span class="pf-v6-c-button__icon">
+													{{icon "search"}}
+												</span>
+											</button>
+										</div>
+										<div class="pf-v6-c-input-group__item pf-m-fill">
+											<span class="pf-v6-c-form-control{{if index $e "application"}} pf-m-error{{end}}">
+												<input id="application" aria-invalid="{{if index $e "application"}}true{{else}}false{{end}}" type="text" value="{{$v.application.name}}" readonly data-lookup-name>
+											</span>
+										</div>
+									</div>
+									<input type="hidden" name="application" value="{{$v.application.id}}" data-lookup-id>
+									<input type="hidden" name="application_name" value="{{$v.application.name}}" data-lookup-hidden-name>
+									{{template "field_error" (index $e "application")}}
+								</div>
+							</div>
+						</div>
+					</div>
+					{{template "form_field" (dict "id" "token-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					<div class="pf-v6-c-form__group" name="scope">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="token-scope">
+								<span class="pf-v6-c-form__label-text">{{t "Scope"}}</span>
+								<span class="pf-v6-c-form__label-required" aria-hidden="true">
+									&nbsp;*
+								</span>
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button" (t "Scope for the token's access")}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "scope"}} pf-m-error{{end}}">
+								<select id="token-scope" name="scope" aria-label="{{t "Select Input"}}" aria-invalid="{{if index $e "scope"}}true{{else}}false{{end}}" data-required data-required-message="{{t "Please enter a value."}}" data-error-text-only>
+									<option class="" value=""></option>
+									<option class="" value="read"{{if eq (str $v.scope) "read"}} selected{{end}}>
+										{{t "Read"}}
+									</option>
+									<option class="" value="write"{{if eq (str $v.scope) "write"}} selected{{end}}>
+										{{t "Write"}}
+									</option>
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									{{if index $e "scope"}}
+										<span class="pf-v6-c-form-control__icon pf-m-status">
+											{{icon "exclamation-circle"}}
+										</span>
+									{{end}}
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{template "field_error" (index $e "scope")}}
+						</div>
+					</div>
+					{{template "form_errors" $e}}
+					{{template "form_actions" (printf "/users/%s/tokens" $id)}}
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

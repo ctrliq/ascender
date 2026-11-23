@@ -1,0 +1,26 @@
+{
+    "name": "Execution Environment Copy",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "name": {
+                "type": "string",
+                "label": "Name"
+            }
+        },
+        "POST": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name"
+            }
+        }
+    }
+}

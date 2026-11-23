@@ -3,19 +3,73 @@ This product includes software originally developed by
 All original code is copyright by their respective authors
 and are LICENSED under the Apache 2.0 License (see /LICENSE)
 
-In addition to various code files (all marked via proper headers)
-the following data files have been modified by Ctrl IQ, Inc
-and the modifications are Copyright 2023 by Ctrl IQ, Inc All rights reserved
-Any and all changes are being distributed under the original License
-Apache 2.0 License (see /LICENSE)
+This Go implementation of Ascender is Copyright 2026 Ctrl IQ, Inc. and is
+distributed under the Apache 2.0 License (see /LICENSE). It reimplements
+Ascender, Ctrl IQ, Inc.'s fork of AWX, and carries the following material
+derived from AWX and Ascender, distributed under the same license:
 
-Data Files modified by Ctrl IQ, Inc
-  /MANIFEST.in
-  /ui/package-lock.json
-  /ui/package.json
-  /ui/public/static/media/default.strings.json
+  - API metadata, help text and messages captured from the AWX/Ascender
+    REST API (src/internal/api/metadata, src/internal/api/locale,
+    src/internal/settings/registry.json)
+  - translation catalogs taken from the AWX/Ascender UI and API
+    (src/internal/i18n/locales)
+  - the PostgreSQL schema produced by the AWX/Ascender migrations
+    (src/internal/db/baseline)
+  - UI templates and styles reproducing the AWX/Ascender user interface
+    (src/web/templates, src/web/static/css)
+  - the browsable API's static files, Copyright (c) 2016 Ansible, Inc.
+    (src/web/static/api)
+  - Ansible playbooks used for project updates
+    (src/internal/tasks/playbooks)
 
-Templates modified by Ctrl IQ, Inc
-  /awx/templates/error.html
-  /awx/templates/rest_framework/api.html
-  /awx/ui/public/index.html
+Ported code
+
+The following packages are Go translations of Python libraries the old
+application used. Each is distributed under its original license; the texts
+are in /licenses.
+
+  src/internal/jinja      Jinja2 and MarkupSafe (BSD-3-Clause), Pallets
+                          licenses/jinja2.txt, licenses/MarkupSafe.txt
+  src/internal/pyre,      CPython's re module and str formatting rules
+  src/internal/pystr      (Python Software Foundation License)
+                          licenses/cpython.txt
+  src/internal/pyyaml     PyYAML's safe_load (MIT)
+                          licenses/PyYAML.txt
+  src/internal/rrule      python-dateutil's rrule (Apache-2.0 / BSD-3-Clause)
+                          licenses/python-dateutil.txt
+  src/internal/sso        python3-saml's SAML handling (MIT)
+                          licenses/python3-saml.txt
+  src/internal/tasks      the parts of ansible-runner the task system
+                          used (Apache-2.0)
+                          licenses/ansible-runner.txt
+
+Files from Django REST framework and django-oauth-toolkit
+
+The browsable API's templates reproduce Django REST framework's, and these
+static files are copied from the two packages (BSD-3-Clause):
+
+  src/web/static/rest_framework/css/default.css,
+  src/web/static/rest_framework/js/{ajax-form,csrf,default,load-ajax-form}.js
+                          licenses/djangorestframework.txt
+  src/web/static/oauth2_provider/css/oauth2_provider.css
+                          licenses/django-oauth-toolkit.txt
+
+Bundled third-party components
+
+  Go modules linked into the binaries          licenses/go/
+  PatternFly 6 CSS (MIT)                       licenses/ui/patternfly-patternfly.txt
+  CodeMirror 6 and Lezer, bundled in
+    src/web/static/js/codemirror.js (MIT)      licenses/ui/codemirror-*, lezer-*,
+                                               style-mod, w3c-keyname, crelt,
+                                               find-cluster-break
+  d3 7.9.0 and d3 v1 modules (ISC)             licenses/ui/d3*.txt
+  dagre and graphlib (MIT)                     licenses/ui/dagrejs-*.txt
+  Bootstrap 3.4.1 and Glyphicons Halflings,
+    normalize.css (MIT)                        licenses/ui/bootstrap.txt
+  jQuery 3.8.0 (MIT)                           licenses/ui/jquery.txt
+  google-code-prettify (Apache-2.0)            licenses/ui/prettify.txt
+  Swagger UI 5.34.1 (Apache-2.0)               licenses/ui/swagger-ui.txt
+  ReDoc 2.5.4 (MIT)                            licenses/ui/redoc.txt
+  Inter font (SIL OFL 1.1)                     licenses/fonts/Inter.txt
+  Roboto and Montserrat fonts (SIL OFL 1.1)    licenses/fonts/Roboto.txt,
+                                               licenses/fonts/Montserrat.txt

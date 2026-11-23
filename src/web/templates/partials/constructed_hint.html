@@ -1,0 +1,407 @@
+{{define "constructed_hint"}}
+{{/* ConstructedInventoryHint, collapsed */}}
+<div class="pf-v6-c-alert pf-m-inline pf-m-expandable pf-m-info" data-expandable-alert>
+	<div class="pf-v6-c-alert__toggle">
+		<button aria-expanded="false" aria-label="Info alert details" data-expandable-alert-toggle class="pf-v6-c-button pf-m-plain" type="button">
+			<span class="pf-v6-c-button__icon">
+				<span class="pf-v6-c-alert__toggle-icon">
+					<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" role="img" width="1em" height="1em">
+						<path d="M18.71 5.29a.996.996 0 0 0-1.41 0l-7.29 7.29-7.3-7.29a.987.987 0 0 0-1.41-.02.987.987 0 0 0-.02 1.41l.02.02 7.65 7.65c.29.29.68.44 1.06.44s.77-.15 1.06-.44l7.65-7.65a.996.996 0 0 0 0-1.41Z">
+						</path>
+					</svg>
+				</span>
+			</span>
+		</button>
+	</div>
+	<div class="pf-v6-c-alert__icon">
+		<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+			<path d="M16 1C7.729 1 1 7.729 1 16s6.729 15 15 15 15-6.729 15-15S24.271 1 16 1Zm1.5 22a1.5 1.5 0 1 1-3 0v-5.157l-.188.04a1.5 1.5 0 0 1-.625-2.934l1.956-.416c.112-.024.223-.032.333-.03l.024-.002a1.5 1.5 0 0 1 1.5 1.5v7Zm-.08-12.58c-.38.37-.89.58-1.42.58a1.998 1.998 0 0 1-1.851-2.76c.051-.13.11-.24.19-.35.07-.11.15-.21.25-.3.74-.75 2.08-.75 2.83 0 .09.09.17.19.24.3.08.11.14.22.189.35.05.12.09.24.11.37.03.13.04.26.04.39 0 .53-.21 1.04-.58 1.42Z">
+			</path>
+		</svg>
+	</div>
+	<h4 class="pf-v6-c-alert__title">
+		<span class="pf-v6-screen-reader">Info alert:</span>
+		{{t "How to use constructed inventory plugin"}}
+	</h4>
+	<div class="pf-v6-c-alert__description" hidden data-expandable-alert-body>
+		<span>
+			{{t "This table gives a few useful parameters of the constructed inventory plugin. For the full list of parameters"}}  <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html">
+				{{t "view the constructed inventory plugin docs here."}}
+			</a>
+		</span>
+		<br>
+		<br>
+		<table aria-label="{{t "Constructed inventory parameters table"}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+			<thead class="pf-v6-c-table__thead">
+				<tr class="pf-v6-c-table__tr">
+					<th tabindex="0" scope="col" class="pf-v6-c-table__th">{{t "Parameter"}}</th>
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th">{{t "Description"}}</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+				<tr class="pf-v6-c-table__tr">
+					<td tabindex="-1" data-label="{{t "name"}}" class="pf-v6-c-table__td">
+						<code>plugin</code>
+						<p style="color: var(--pf-t--global--color--brand--default);">
+							{{t "string"}}
+						</p>
+						<p style="color: var(--pf-t--global--color--status--danger--default);">
+							{{t "required"}}
+						</p>
+					</td>
+					<td tabindex="-1" data-label="{{t "description"}}" class="pf-v6-c-table__td">
+						{{t "Token that ensures this is a source file for the ‘constructed’ plugin."}}
+					</td>
+				</tr>
+				<tr class="pf-v6-c-table__tr">
+					<td tabindex="-1" data-label="{{t "name"}}" class="pf-v6-c-table__td">
+						<code>strict</code>
+						<p style="color: var(--pf-t--global--color--brand--default);">
+							{{t "boolean"}}
+						</p>
+					</td>
+					<td tabindex="-1" data-label="{{t "description"}}" class="pf-v6-c-table__td">
+						{{t "If yes make invalid entries a fatal error, otherwise skip and continue."}} <br>
+						{{t "If users need feedback about the correctness of their constructed groups, it is highly recommended to use strict: true in the plugin configuration."}}
+					</td>
+				</tr>
+				<tr class="pf-v6-c-table__tr">
+					<td tabindex="-1" data-label="{{t "name"}}" class="pf-v6-c-table__td">
+						<code>groups</code>
+						<p style="color: var(--pf-t--global--color--brand--default);">
+							{{t "dictionary"}}
+						</p>
+					</td>
+					<td tabindex="-1" data-label="{{t "description"}}" class="pf-v6-c-table__td">
+						{{t "Add hosts to group based on Jinja2 conditionals."}}
+					</td>
+				</tr>
+				<tr class="pf-v6-c-table__tr">
+					<td tabindex="-1" data-label="{{t "name"}}" class="pf-v6-c-table__td">
+						<code>compose</code>
+						<p style="color: var(--pf-t--global--color--brand--default);">
+							{{t "dictionary"}}
+						</p>
+					</td>
+					<td tabindex="-1" data-label="{{t "description"}}" class="pf-v6-c-table__td">
+						{{t "Create vars from jinja2 expressions. This can be useful if the constructed groups you define do not contain the expected hosts. This can be used to add hostvars from expressions so that you know what the resultant values of those expressions are."}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+		<br>
+		<div class="pf-v6-c-panel">
+			<div class="pf-v6-c-card__body">
+				<div class="pf-v6-c-form">
+					<b>{{t "Constructed inventory examples"}}</b>
+					<div class="pf-v6-c-form__field-group" role="group" data-field-group-expandable aria-labelledby="intersection-example">
+						<div class="pf-v6-c-form__field-group-toggle">
+							<div class="pf-v6-c-form__field-group-toggle-button">
+								<button aria-expanded="false" data-field-group-toggle aria-labelledby="intersection-example form-field-group-toggle-1" id="form-field-group-toggle-1" class="pf-v6-c-button pf-m-plain" type="button">
+									<span class="pf-v6-c-button__icon">
+										<span class="pf-v6-c-form__field-group-toggle-icon">
+											<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" role="img" width="1em" height="1em">
+												<path d="M18.71 5.29a.996.996 0 0 0-1.41 0l-7.29 7.29-7.3-7.29a.987.987 0 0 0-1.41-.02.987.987 0 0 0-.02 1.41l.02.02 7.65 7.65c.29.29.68.44 1.06.44s.77-.15 1.06-.44l7.65-7.65a.996.996 0 0 0 0-1.41Z">
+												</path>
+											</svg>
+										</span>
+									</span>
+								</button>
+							</div>
+						</div>
+						<div class="pf-v6-c-form__field-group-header">
+							<div class="pf-v6-c-form__field-group-header-main">
+								<div class="pf-v6-c-form__field-group-header-title">
+									<div class="pf-v6-c-form__field-group-header-title-text" id="intersection-example">
+										{{t "Construct 2 groups, limit to intersection"}}
+									</div>
+								</div>
+								<div class="pf-v6-c-form__field-group-header-description">
+									{{t "This constructed inventory input creates a group for both of the categories and uses the limit (host pattern) to only return hosts that are in the intersection of those two groups."}}
+								</div>
+							</div>
+							<div class="pf-v6-c-form__field-group-header-actions"></div>
+						</div>
+						<div class="pf-v6-c-form__field-group-body" hidden>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="intersection-example-limit">
+										<span class="pf-v6-c-form__label-text">{{t "Limit"}}</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-clipboard-copy">
+										<div class="pf-v6-c-clipboard-copy__group">
+											<span class="pf-v6-c-form-control pf-m-readonly">
+												<input id="text-input-2" aria-label="Copyable input" aria-invalid="false" readonly="" type="text" value="is_shutdown:&amp;product_dev">
+											</span>
+											<button id="copy-button-2" aria-label="{{t "Copy"}}" data-tooltip="{{t "Copy"}}" data-tooltip-pos="top" data-copy-input class="pf-v6-c-button pf-m-control" type="button">
+												<span class="pf-v6-c-button__icon">
+													<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+														<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+														</path>
+													</svg>
+												</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="intersection-example-source-vars">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Source vars"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-code-block">
+										<div class="pf-v6-c-code-block__header">
+											<div class="pf-v6-c-code-block__actions">
+												<div class="pf-v6-c-code-block__actions-item">
+													<button id="intersection-example-source-vars" aria-label="{{t "Copy to clipboard"}}" data-tooltip="{{t "Copy to clipboard"}}" data-tooltip-pos="top" data-copy-code class="pf-v6-c-button pf-m-plain" type="button">
+														<span class="pf-v6-c-button__icon">
+															<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+																<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+																</path>
+															</svg>
+														</span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="pf-v6-c-code-block__content">
+											<pre class="pf-v6-c-code-block__pre" id="intersection-example-source-vars"><code class="pf-v6-c-code-block__code">plugin: constructed
+strict: true
+groups:
+  shutdown_in_product_dev: state | default("running") == "shutdown" and account_alias == "product_dev"</code></pre>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pf-v6-c-form__field-group" role="group" data-field-group-expandable aria-labelledby="nested-groups-example">
+						<div class="pf-v6-c-form__field-group-toggle">
+							<div class="pf-v6-c-form__field-group-toggle-button">
+								<button aria-expanded="false" data-field-group-toggle aria-labelledby="nested-groups-example form-field-group-toggle-3" id="form-field-group-toggle-3" class="pf-v6-c-button pf-m-plain" type="button">
+									<span class="pf-v6-c-button__icon">
+										<span class="pf-v6-c-form__field-group-toggle-icon">
+											<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" role="img" width="1em" height="1em">
+												<path d="M18.71 5.29a.996.996 0 0 0-1.41 0l-7.29 7.29-7.3-7.29a.987.987 0 0 0-1.41-.02.987.987 0 0 0-.02 1.41l.02.02 7.65 7.65c.29.29.68.44 1.06.44s.77-.15 1.06-.44l7.65-7.65a.996.996 0 0 0 0-1.41Z">
+												</path>
+											</svg>
+										</span>
+									</span>
+								</button>
+							</div>
+						</div>
+						<div class="pf-v6-c-form__field-group-header">
+							<div class="pf-v6-c-form__field-group-header-main">
+								<div class="pf-v6-c-form__field-group-header-title">
+									<div class="pf-v6-c-form__field-group-header-title-text" id="nested-groups-example">
+										{{t "Filter on nested group name"}}
+									</div>
+								</div>
+								<div class="pf-v6-c-form__field-group-header-description">
+									{{t "This constructed inventory input creates a group for both of the categories and uses the limit (host pattern) to only return hosts that are in the intersection of those two groups."}}
+								</div>
+							</div>
+							<div class="pf-v6-c-form__field-group-header-actions"></div>
+						</div>
+						<div class="pf-v6-c-form__field-group-body" hidden>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-control">
+									<p>{{t "Nested groups inventory definition:"}}</p>
+									<div class="pf-v6-c-code-block">
+										<div class="pf-v6-c-code-block__content">
+											<pre class="pf-v6-c-code-block__pre" id="nested-groups-example-inventory"><code class="pf-v6-c-code-block__code">all:
+  children:
+    groupA:
+      children:
+        groupB:
+          hosts:
+            host1: {}
+      vars:
+        filter_var: filter_val
+    ungrouped:
+      hosts:
+        host2: {}</code></pre>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="nested-groups-example-limit">
+										<span class="pf-v6-c-form__label-text">{{t "Limit"}}</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-clipboard-copy">
+										<div class="pf-v6-c-clipboard-copy__group">
+											<span class="pf-v6-c-form-control pf-m-readonly">
+												<input id="text-input-4" aria-label="Copyable input" aria-invalid="false" readonly="" type="text" value="groupA">
+											</span>
+											<button id="copy-button-4" aria-label="{{t "Copy"}}" data-tooltip="{{t "Copy"}}" data-tooltip-pos="top" data-copy-input class="pf-v6-c-button pf-m-control" type="button">
+												<span class="pf-v6-c-button__icon">
+													<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+														<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+														</path>
+													</svg>
+												</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="nested-groups-example-source-vars">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Source vars"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-code-block">
+										<div class="pf-v6-c-code-block__header">
+											<div class="pf-v6-c-code-block__actions">
+												<div class="pf-v6-c-code-block__actions-item">
+													<button id="nested-groups-example-source-vars" aria-label="{{t "Copy to clipboard"}}" data-tooltip="{{t "Copy to clipboard"}}" data-tooltip-pos="top" data-copy-code class="pf-v6-c-button pf-m-plain" type="button">
+														<span class="pf-v6-c-button__icon">
+															<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+																<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+																</path>
+															</svg>
+														</span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="pf-v6-c-code-block__content">
+											<pre class="pf-v6-c-code-block__pre" id="nested-groups-example-source-vars"><code class="pf-v6-c-code-block__code">plugin: constructed</code></pre>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pf-v6-c-form__field-group" role="group" data-field-group-expandable aria-labelledby="processor-example">
+						<div class="pf-v6-c-form__field-group-toggle">
+							<div class="pf-v6-c-form__field-group-toggle-button">
+								<button aria-expanded="false" data-field-group-toggle aria-labelledby="processor-example form-field-group-toggle-5" id="form-field-group-toggle-5" class="pf-v6-c-button pf-m-plain" type="button">
+									<span class="pf-v6-c-button__icon">
+										<span class="pf-v6-c-form__field-group-toggle-icon">
+											<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" role="img" width="1em" height="1em">
+												<path d="M18.71 5.29a.996.996 0 0 0-1.41 0l-7.29 7.29-7.3-7.29a.987.987 0 0 0-1.41-.02.987.987 0 0 0-.02 1.41l.02.02 7.65 7.65c.29.29.68.44 1.06.44s.77-.15 1.06-.44l7.65-7.65a.996.996 0 0 0 0-1.41Z">
+												</path>
+											</svg>
+										</span>
+									</span>
+								</button>
+							</div>
+						</div>
+						<div class="pf-v6-c-form__field-group-header">
+							<div class="pf-v6-c-form__field-group-header-main">
+								<div class="pf-v6-c-form__field-group-header-title">
+									<div class="pf-v6-c-form__field-group-header-title-text" id="processor-example">
+										{{t "Hosts by processor type"}}
+									</div>
+								</div>
+								<div class="pf-v6-c-form__field-group-header-description">
+									{{t "It is hard to give a specification for the inventory for Ansible facts, because to populate the system facts you need to run a playbook against the inventory that has `gather_facts: true`. The actual facts will differ system-to-system."}}
+								</div>
+							</div>
+							<div class="pf-v6-c-form__field-group-header-actions"></div>
+						</div>
+						<div class="pf-v6-c-form__field-group-body" hidden>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="processor-example-limit">
+										<span class="pf-v6-c-form__label-text">{{t "Limit"}}</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-clipboard-copy">
+										<div class="pf-v6-c-clipboard-copy__group">
+											<span class="pf-v6-c-form-control pf-m-readonly">
+												<input id="text-input-6" aria-label="Copyable input" aria-invalid="false" readonly="" type="text" value="intel_hosts">
+											</span>
+											<button id="copy-button-6" aria-label="{{t "Copy"}}" data-tooltip="{{t "Copy"}}" data-tooltip-pos="top" data-copy-input class="pf-v6-c-button pf-m-control" type="button">
+												<span class="pf-v6-c-button__icon">
+													<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+														<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+														</path>
+													</svg>
+												</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="processor-example-source-vars">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Source vars"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="pf-v6-c-code-block">
+										<div class="pf-v6-c-code-block__header">
+											<div class="pf-v6-c-code-block__actions">
+												<div class="pf-v6-c-code-block__actions-item">
+													<button id="processor-example-source-vars" aria-label="{{t "Copy to clipboard"}}" data-tooltip="{{t "Copy to clipboard"}}" data-tooltip-pos="top" data-copy-code class="pf-v6-c-button pf-m-plain" type="button">
+														<span class="pf-v6-c-button__icon">
+															<svg class="pf-v6-svg" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true" role="img" width="1em" height="1em">
+																<path d="M28 7v22.607c0 .768-.622 1.393-1.387 1.393H10a1 1 0 1 1 0-2h16V7a1 1 0 1 1 2 0Zm-5.25 17.5v-22c0-.689-.561-1.25-1.25-1.25h-8.375v7.364c0 .833-.678 1.511-1.512 1.511H4.25V24.5c0 .689.561 1.25 1.25 1.25h16c.689 0 1.25-.561 1.25-1.25ZM10.875 1.275a.738.738 0 0 0-.405.195l-6 6a.738.738 0 0 0-.195.405h6.6v-6.6Z">
+																</path>
+															</svg>
+														</span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="pf-v6-c-code-block__content">
+											<pre class="pf-v6-c-code-block__pre" id="processor-example-source-vars"><code class="pf-v6-c-code-block__code">plugin: constructed
+strict: true
+groups:
+  intel_hosts: "'GenuineIntel' in ansible_processor"</code></pre>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pf-v6-c-alert__action-group">
+		<a href="/docs/user-guide/inventories/#constructed-inventories" target="_blank" rel="noopener noreferrer" class="pf-v6-c-button pf-m-link pf-m-inline">
+			<span class="pf-v6-c-button__text">
+				{{t "View constructed inventory documentation here"}} <svg class="pf-v6-svg" fill="currentColor" aria-hidden="true" role="img" width="1em" height="1em">
+					<svg viewBox="0 0 512 512" class="pf-v6-icon-default">
+						<path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z">
+						</path>
+					</svg>
+					<svg viewBox="0 0 32 32" class="pf-v6-icon-rh-ui">
+						<path d="M28.5 2h-25C2.673 2 2 2.673 2 3.5v25c0 .827.673 1.5 1.5 1.5h25c.827 0 1.5-.673 1.5-1.5v-25c0-.827-.673-1.5-1.5-1.5Zm-3.375 17a1.125 1.125 0 0 1-2.25 0v-8.284L11.796 21.795a1.122 1.122 0 0 1-1.592 0 1.127 1.127 0 0 1 0-1.591l11.08-11.08H13a1.125 1.125 0 0 1 0-2.25h10.5c.896 0 1.625.729 1.625 1.625v10.5Z">
+						</path>
+					</svg>
+				</svg>
+			</span>
+		</a>
+	</div>
+</div>
+{{end}}

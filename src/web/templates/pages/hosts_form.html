@@ -1,0 +1,41 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$h := .Data.host}}
+{{$inv := .Data.inventory}}
+{{$hb := .Data.hostBase}}
+{{if $inv}}
+	{{if $h}}
+		{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" (str $inv._base)) "title" (str $inv.name)) (dict "href" (printf "%s/hosts" (str $inv._base)) "title" (t "Hosts")) (dict "href" (printf "%s/details" $hb) "title" (str $h.name))))}}
+	{{else}}
+		{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" (str $inv._base)) "title" (str $inv.name)) (dict "href" (printf "%s/hosts" (str $inv._base)) "title" (t "Hosts"))))}}
+	{{end}}
+{{else}}
+	{{if $h}}
+		{{template "screen_header" (dict "title" .Title "stream" "host" "crumbs" (list (dict "href" "/hosts" "title" (t "Hosts")) (dict "href" (printf "%s/details" $hb) "title" (str $h.name))))}}
+	{{else}}
+		{{template "screen_header" (dict "title" .Title "stream" "host" "crumbs" (list (dict "href" "/hosts" "title" (t "Hosts"))))}}
+	{{end}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "host-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "host-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{if and .Data.standalone (not $h)}}
+						{{template "lookup_field" (dict "id" "inventory-lookup" "name" "inventory" "label" (t "Inventory") "value" $v.inventory "required" true "resource" "inventories" "filter" "kind=" "title" (t "Select {0}" "0" (t "Inventory")) "errors" (index $e "inventory"))}}
+					{{end}}
+					<div class="ascender-form-full-width-layout">
+						{{template "variables_field" (dict "id" "host-variables" "name" "variables" "label" (t "Variables") "value" $v.variables "errors" (index $e "variables"))}}
+					</div>
+					{{template "form_actions" (cond (has $h) (printf "%s/details" $hb) (cond (has $inv) (printf "%s/hosts" (str $inv._base)) "/hosts"))}}
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

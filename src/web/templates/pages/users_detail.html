@@ -1,0 +1,264 @@
+{{define "content"}}
+{{$u := .Data.user}}
+{{$id := str $u.id}}
+{{$caps := dig $u "summary_fields" "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "user" "crumbs" (list (dict "href" "/users" "title" (t "Users")) (dict "href" (printf "/users/%s/details" $id) "title" (str $u.username))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/users" "label" "Back to Users") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					{{if has $u.first_name}}
+						<div>
+							<dt class="ascender-detail-name">{{t "First Name"}}</dt>
+							<dd class="ascender-detail-value">{{$u.first_name}}</dd>
+						</div>
+					{{end}}
+					{{if has $u.last_name}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Last Name"}}</dt>
+							<dd class="ascender-detail-value">{{$u.last_name}}</dd>
+						</div>
+					{{end}}
+					{{if has $u.email}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Email"}}</dt>
+							<dd class="ascender-detail-value">{{$u.email}}</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="user-detail-username-label" id="user-detail-username">
+							{{t "Username"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="user-detail-username-value">
+							{{$u.username}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "User Type"}}</dt>
+						<dd class="ascender-detail-value">{{t .Data.userType}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Preferred Language"}}</dt>
+						<dd class="ascender-detail-value">{{.Data.language}}</dd>
+					</div>
+					{{if .Data.isMe}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Preferred Theme"}}</dt>
+							<dd class="ascender-detail-value" data-preferred-theme-name>
+								{{.Data.themeName}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has $u.ldap_dn}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Type"}}</dt>
+							<dd class="ascender-detail-value">
+								<span aria-label="{{t "login type"}}" class="pf-v6-c-label">
+									<span class="pf-v6-c-label__content">
+										<span class="pf-v6-c-label__text">{{t "LDAP"}}</span>
+									</span>
+								</span>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $u.last_login}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Last Login"}}</dt>
+							<dd class="ascender-detail-value">{{dt $u.last_login}}</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Created"}}</dt>
+						<dd class="ascender-detail-value">{{dt $u.created}}</dd>
+					</div>
+					{{if has $u.modified}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Last Modified"}}</dt>
+							<dd class="ascender-detail-value">{{dt $u.modified}}</dd>
+						</div>
+					{{end}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="/users/{{$id}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="User" data-delete-title="{{t "Delete User"}}" data-api="/api/v2/users/{{$id}}/" data-name="{{$u.username}}" data-redirect="/users">
+							<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+						</button>
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "organizations"}}
+			{{template "search_toolbar" (dict "page" . "id" "user-organizations" "searchKeys" .Data.searchKeys "ns" "organizations" "noSelect" true "noDelete" true "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Organizations")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "organizations-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Description"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range .Data.results}}
+								<tr class="pf-v6-c-table__tr" id="user-org-row-{{str .id}}">
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+										<a href="/organizations/{{str .id}}/details">
+											<b>{{.name}}</b>
+										</a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Description"}}" class="pf-v6-c-table__td">
+										{{.description}}
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Organizations")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Organizations")))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "teams"}}
+			{{template "search_toolbar" (dict "page" . "id" "user-teams" "searchKeys" .Data.searchKeys "ns" "teams" "noDelete" true "addLabel" (t "Associate") "addAttr" (pick .Data.canAssociate (attr (printf `data-user-teams-associate data-user-id="%s"` $id)) "") "actionsAfter" (pick .Data.canAssociate (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button aria-label="%s" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-user-teams-disassociate data-user-id="%s"><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "Disassociate")) $id (esc (t "Disassociate")))) "") "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Teams")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "teams-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Organization"}}
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Description"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $i, $t := .Data.results}}
+								{{$tid := str $t.id}}
+								<tr class="pf-v6-c-table__tr" id="user-team-row-{{$tid}}" data-row data-id="{{$tid}}" data-name="{{$t.name}}" data-roles="{{json (dig $t "summary_fields" "object_roles")}}">
+									<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__check">
+										<div class="pf-v6-c-check pf-m-standalone">
+											<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row>
+										</div>
+									</td>
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+										<a href="/teams/{{$tid}}/details"><b>{{$t.name}}</b></a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Organization"}}" class="pf-v6-c-table__td">
+										{{with dig $t "summary_fields" "organization"}}
+											<a href="/organizations/{{str .id}}/details">
+												<b>{{.name}}</b>
+											</a>
+										{{end}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Description"}}" class="pf-v6-c-table__td">
+										{{$t.description}}
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Teams")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Teams")))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "roles"}}
+			{{if userIsSysAdmin .Data.results}}
+				<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+					{{template "empty_state" (dict "title" (t "System Administrator") "body" (t "System administrators have unrestricted access to all resources."))}}
+				</div>
+			{{else}}
+				{{template "search_toolbar" (dict "page" . "id" "user-roles" "searchKeys" .Data.searchKeys "ns" "roles" "noSelect" true "noDelete" true "addAttr" (pick .Data.canAddRoles (attr (printf `data-roles-add data-kind="user" data-owner="%s"` $id)) "") "filters" .Data.filters)}}
+				{{if .Data.results}}
+					{{template "role_rows" (dict "page" . "kind" "user" "owner" $id)}}
+				{{else}}
+					{{if .Data.filters}}
+						{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+					{{else}}
+						{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "User Roles")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "User Roles")))}}
+					{{end}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "tokens"}}
+			{{template "search_toolbar" (dict "page" . "id" "user-list" "searchKeys" .Data.searchKeys "ns" "user" "addHref" (printf "/users/%s/tokens/add" $id) "kind" "User token" "api" "/api/v2/tokens/" "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Tokens")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{template "sort_th" (dict "page" . "key" "application__name" "label" (t "Application Name") "id" "user-table-sort-application__name")}}
+								{{template "sort_th" (dict "page" . "key" "description" "label" (t "Description") "id" "user-table-sort-description")}}
+								{{template "sort_th" (dict "page" . "key" "scope" "label" (t "Scope") "id" "user-table-sort-scope")}}
+								{{template "sort_th" (dict "page" . "key" "expires" "label" (t "Expires") "id" "user-table-sort-expires")}}
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $i, $t := .Data.results}}
+								{{$tid := str $t.id}}
+								{{$app := dig $t "summary_fields" "application" "name"}}
+								<tr class="pf-v6-c-table__tr" id="token-row-{{$tid}}" data-row data-id="{{$tid}}" data-name="{{if $t.application}}{{$app}}{{else}}{{t "Personal Access Token"}}{{end}}">
+									<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check" id="token-{{$tid}}">
+										<div class="pf-v6-c-check pf-m-standalone">
+											<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row>
+										</div>
+									</td>
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" id="token-name-{{$tid}}">
+										<a href="/users/{{$id}}/tokens/{{$tid}}/details">
+											{{if dig $t "summary_fields" "application"}}
+												{{$app}}
+											{{else}}
+												{{t "Personal access token"}}
+											{{end}}
+										</a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Description"}}" class="pf-v6-c-table__td" id="token-description-{{$tid}}">
+										{{titleCase (str $t.description)}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Scope"}}" class="pf-v6-c-table__td" id="token-scope-{{$tid}}">
+										{{titleCase (str $t.scope)}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Expires"}}" class="pf-v6-c-table__td" id="token-expires-{{$tid}}">
+										{{dt $t.expires}}
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Tokens")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Tokens")))}}
+				{{end}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

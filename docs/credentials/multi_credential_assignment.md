@@ -1,227 +1,208 @@
-Multi-Credential Assignment
-===========================
+# Multi-Credential Assignment
 
-Ascender has added support for assigning zero or more credentials to Job Templates and Inventory Updates via a singular, unified interface.
+A job template has a list of zero or more credentials, and the jobs it
+launches run with them. The list is managed through one endpoint, and the same
+rules apply to the credentials given at launch time and to those saved on
+schedules and workflow nodes.
 
-Background
-----------
+The endpoints are in `src/internal/api/job_template_relations.go`
+(attaching), `src/internal/api/job_launch.go` (launch time) and
+`src/internal/api/inventory_source_write.go` (inventory sources); the rule that
+decides which credentials conflict, and the passwords a credential prompts
+for, are `UniqueHash` and `PasswordsNeeded` in
+`src/internal/models/job_template.go`.
 
-Prior to Ascender (Tower 3.2), Job Templates had a certain set of requirements surrounding their relation to Credentials:
+## Assigning credentials to a job template
 
-* All Job Templates (and Jobs) were required to have exactly *one* Machine/SSH
-  or Vault credential (or one of both).
-* All Job Templates (and Jobs) could have zero or more "extra" Credentials.
-* These extra Credentials represented "Cloud" and "Network" credentials that
-* Could be used to provide authentication to external services via environment
-* Variables (*e.g.*, `AWS_ACCESS_KEY_ID`).
-
-This model required a variety of disjoint interfaces for specifying Credentials on a Job Template.  For example, to modify assignment of Machine/SSH and Vault credentials, you would change the Credential key itself:
-
-`PATCH /api/v2/job_templates/N/ {'credential': X, 'vault_credential': Y}`
-
-Modifying `extra_credentials` was accomplished on a separate API endpoint via association/disassociation actions:
-
-```
-POST /api/v2/job_templates/N/extra_credentials {'associate': true, 'id': Z}
-POST /api/v2/job_templates/N/extra_credentials {'disassociate': true, 'id': Z}
-```
-
-This model lacked the ability associate multiple Vault credentials with a playbook run, a use case supported by Ansible core from Ansible 2.4 onwards.
-
-This model also was a stumbling block for certain playbook execution workflows.
-For example, some users wanted to run playbooks with `connection:local` that
-only interacted with some cloud service via a cloud Credential.  In this
-scenario, users often generated a "dummy" Machine/SSH Credential to attach to
-the Job Template simply to satisfy the requirement on the model.
-
-
-Important Changes
------------------
-
-Job Templates now have a single interface for Credential assignment:
-
-`GET /api/v2/job_templates/N/credentials/`
-
-Users can associate and disassociate credentials using `POST` requests to this
-interface, similar to the behavior in the now-deprecated `extra_credentials`
+`GET /api/v2/job_templates/N/credentials/` lists a template's credentials.
+Credentials are attached and detached with `POST` requests to the same
 endpoint:
 
 ```
-POST /api/v2/job_templates/N/credentials/ {'associate': true, 'id': X'}
-POST /api/v2/job_templates/N/credentials/ {'disassociate': true, 'id': Y'}
+POST /api/v2/job_templates/N/credentials/ {"associate": true, "id": X}
+POST /api/v2/job_templates/N/credentials/ {"disassociate": true, "id": Y}
 ```
 
-Under this model, a Job Template is considered valid even when it has _zero_ Credentials assigned to it.
+Attaching takes admin on the template and use on the credential. A template
+is valid with no credentials at all, for instance for a playbook that only
+talks to a cloud service with `connection: local`.
 
-Launch Time Considerations
---------------------------
+Attaching a credential the template already has is refused like a second one
+of its type (`Cannot assign multiple <type name> credentials.`, `400`), as
+with the old application, which compared the credential with every attached
+one, itself included. Detaching a credential the template does not have
+answers `204`.
 
-Prior to this change, Job Templates had a configurable attribute,
-`ask_credential_on_launch`.  This value was used at launch time to determine
-which missing credential values were necessary for launch - this was primarily
-used as a mechanism for users to specify an SSH (or Vault) credential to satisfy
-the minimum Credential requirement.
+Each attach and detach is recorded in the activity stream, as the old
+application recorded changes to `JobTemplate.credentials`: an `associate` or
+`disassociate` entry with `object1` `job_template`, `object2` `credential`
+and the relationship
+`ascender.main.models.unified_jobs.UnifiedJobTemplate_credentials`, linked to
+both. A detach is recorded even when the credential was not attached.
 
-Under the new unified Credential list model, this attribute still exists, but it
-is no longer bound to a notion of "requiring" a Credential.  Now when
-`ask_credential_on_launch` is `True`, it signifies that users may (if they
-wish) specify a list of credentials at launch time to override those defined on
-the Job Template:
-
-`POST /api/v2/job_templates/N/launch/ {'credentials': [A, B, C]}`
-
-If `ask_credential_on_launch` is `False`, it signifies that custom `credentials`
-provided in the payload to `POST /api/v2/job_templates/N/launch/` will be
-ignored.
-
-Under this model, the only purpose for `ask_credential_on_launch` is to signal
-that API clients should prompt the user for (optional) changes at launch time.
-
-Backwards Compatibility Concerns
---------------------------------
-Requests to update `JobTemplate.credential` and `JobTemplate.vault_credential`
-will no longer work. Example request format:
-
-`PATCH /api/v2/job_templates/N/ {'credential': X, 'vault_credential': Y}`
-
-This request will have no effect because support for using these
-fields has been removed.
-
-The relationship `extra_credentials` is deprecated but still supported for now.
-Clients should favor the `credentials` relationship instead.
-
-`GET` requests to `/api/v2/job_templates/N/` and `/api/v2/jobs/N/`
-will include this via `related_fields`:
+A `POST` without an `id` creates the credential and attaches it in one step:
 
 ```
-{
-    "related": {
-        ...
-        "credentials": "/api/v2/job_templates/5/credentials/",
-        "extra_credentials": "/api/v2/job_templates/5/extra_credentials/",
-    }
-}
+POST /api/v2/job_templates/N/credentials/ {"name": "...", "credential_type": T, "organization": O, "inputs": {...}}
 ```
 
-...and `summary_fields`, which is not included in list views:
+The body is that of `POST /api/v2/credentials/`, with the same validation and
+the same permission (admin or credential admin of the organization; only a
+superuser can leave the organization out, and `user` and `team` are not
+taken here). Once created, the credential is attached under the rules above:
+the answer is `201 Created` with the credential, as `POST
+/api/v2/credentials/` gives it, and its `Location`. A credential the template
+cannot take (a second one of its type, or a kind it does not run with) is
+deleted again and the answer is the `400` an attach would give. The activity
+stream has the credential's `create` entry, then the `associate` entry of
+the attach (or, for a credential deleted again, its `delete` entry). A user who
+may create the credential but not attach it (no admin on the template) gets
+`403` and keeps the credential, unattached, as with the old application.
+
+A template can have credentials of the kinds `ssh` (Machine), `vault`,
+`cloud`, `net` (Network) and `kubernetes`, at most one of each credential
+type. Anything else is refused:
+
+* a second credential of a type the template already has: `Cannot assign
+  multiple <type name> credentials.`;
+* a credential of another kind (Source Control, Container Registry, and so
+  on): ``Cannot assign a Credential of kind `<kind>`.``
+
+Vault credentials are the exception to "one of each type", see
+[Multiple Vault credentials](#multiple-vault-credentials) below.
+
+A template's detail and list responses link the list under
+`related.credentials`, and show it under `summary_fields.credentials`, each
+entry with its `id`, `name`, `description`, `kind` and `cloud`.
+
+## Credentials at launch time
+
+When `ask_credential_on_launch` is true, a launch can give the credentials to
+run with:
 
 ```
-{
-    "summary_fields": {
-        "credentials": [
-            {
-                "description": "",
-                "credential_type_id": 5,
-                "id": 2,
-                "kind": "aws",
-                "name": "some-aws"
-            },
-            {
-                "description": "",
-                "credential_type_id": 10,
-                "id": 4,
-                "kind": "gce",
-                "name": "some-gce"
-            }
-        ],
-        "extra_credentials": [
-            {
-                "description": "",
-                "credential_type_id": 5,
-                "id": 2,
-                "kind": "aws",
-                "name": "some-aws"
-            },
-            {
-                "description": "",
-                "credential_type_id": 10,
-                "id": 4,
-                "kind": "gce",
-                "name": "some-gce"
-            }
-        ],
-    }
-}
+POST /api/v2/job_templates/N/launch/ {"credentials": [A, B, C]}
 ```
 
-The only difference between `credentials` and `extra_credentials` is that the
-latter is filtered to only show "cloud" type credentials, whereas the former
-can be used to manage all types of related credentials.
+A credential in the list replaces the template's credential of the same type
+(the same type and vault ID, for vault credentials), and is added when the
+template has none of that type. The template's other credentials have to be in
+the list too: leaving one out without giving another of its type is refused
+(`Removing <type name> credential at launch time without replacement is not
+supported. Provided list lacked credential(s): <names>.`). The rules above
+apply to the list itself (one per type, the allowed kinds), and the user needs
+use on each credential that is not already on the template.
 
-The `/api/v2/job_templates/N/launch/` endpoint no longer provides
-backwards compatible support for specifying credentials at launch time
-via the `credential` or `vault_credential` fields.
-The launch endpoint can still accept a list under the `extra_credentials` key,
-but this is deprecated in favor `credentials`.
+When `ask_credential_on_launch` is false, credentials given at launch that the
+template does not have are ignored, and the launch response lists them under
+`ignored_fields`.
 
+`GET /api/v2/job_templates/N/launch/` lists the template's credentials under
+`defaults.credentials`, each with its `id`, `name`, `credential_type` and
+`passwords_needed` (and `vault_id` for vault credentials).
 
-Specifying Multiple Vault Credentials
--------------------------------------
-One interesting use case supported by the new "zero or more credentials" model
-is the ability to assign multiple Vault credentials to a Job Template run.
+Schedules and workflow job template nodes keep prompted credentials of their
+own (`/api/v2/schedules/N/credentials/`,
+`/api/v2/workflow_job_template_nodes/N/credentials/`). They take a credential
+only when their job template asks for credentials (`Related template is not
+configured to accept credentials on launch.`), one per type (`This launch
+configuration already provides a <type name> credential.`, also the answer
+for one the configuration has already), not one the template already has,
+and never one that asks for a password at launch (`Credential that requires
+user input on launch cannot be used in saved launch configuration.`), since
+nobody is there to type it. A workflow node with no template takes none
+(`Cannot assign credential when related template is null.`). Attaching and
+detaching record `associate` and `disassociate` entries in the activity
+stream, as for a job template, with `object1` `schedule` or
+`workflow_job_template_node` and the relationship
+`ascender.main.models.schedules.Schedule_credentials` or
+`ascender.main.models.workflow.WorkflowJobTemplateNode_credentials`. A
+schedule made from a job (`POST /api/v2/jobs/N/create_schedule/`) records an
+`associate` entry for each credential, label and instance group it takes from
+the job, after its `create` entry.
 
-This specific use case covers Ansible's support for multiple Vault passwords for
-a playbook run (since Ansible 2.4):
-http://docs.ansible.com/ansible/latest/vault.html#vault-ids-and-multiple-vault-passwords
+## Passwords asked at launch
 
-Vault credentials in Ascender now have an optional field, `vault_id`, which is
-analogous to the `--vault-id` argument to `ansible-playbook`.  To run
-a playbook which makes use of multiple Vault passwords:
-
-1.  Make a Vault credential in Ascender for each Vault password; specify the Vault
-    ID as a field on the credential and input the password (which will be
-    encrypted and stored).
-2.  Assign multiple Vault credentials to the job template via the new
-    `credentials` endpoint:
-
-    ```
-    POST /api/v2/job_templates/N/credentials/
-
-    {
-        'associate': true,
-        'id': X
-    }
-    ```
-3.  Launch the Job Template, and `ansible-playbook` will be invoked with
-    multiple `--vault-id` arguments.
-
-Prompted Vault Credentials
---------------------------
-Vault credentials can have passwords that are marked as "Prompt on launch".
-When this is the case, the launch endpoint of any related Job Templates will
-communicate necessary Vault passwords via the `passwords_needed_to_start` key:
+A Machine credential can leave its password, privilege escalation password or
+private key passphrase to be given at launch (the value `ASK`), and a Vault
+credential its vault password. The launch endpoint lists what it needs under
+`passwords_needed_to_start`, and the launch provides them under
+`credential_passwords`:
 
 ```
 GET /api/v2/job_templates/N/launch/
 {
-    'passwords_needed_to_start': [
-        'vault_password.X',
-        'vault_password.Y',
-    ]
+    "passwords_needed_to_start": [
+        "ssh_password",
+        "vault_password.dev",
+        "vault_password.prod"
+    ],
+    ...
 }
-```
 
-...where `X` and `Y` are primary keys of the associated Vault credentials.
-
-```
 POST /api/v2/job_templates/N/launch/
 {
-    'credential_passwords': {
-        'vault_password.X': 'first-vault-password'
-        'vault_password.Y': 'second-vault-password'
+    "credential_passwords": {
+        "ssh_password": "...",
+        "vault_password.dev": "first-vault-password",
+        "vault_password.prod": "second-vault-password"
     }
 }
 ```
 
-Inventory Source Credentials
-----------------------------
+The names are `ssh_password`, `become_password`, `ssh_key_unlock`, and
+`vault_password`, or `vault_password.<vault id>` for a vault credential with a
+vault ID. A launch that lacks one is refused, with the missing names under
+`passwords_needed_to_start`. The same names are accepted at the top level of
+the launch body. Relaunching a job asks for the passwords its credentials need
+in the same way (`POST /api/v2/jobs/N/relaunch/`).
 
-Inventory sources and inventory updates that they spawn also use the same
-relationship. The new endpoints for this are:
- - `/api/v2/inventory_sources/N/credentials/` and
- - `/api/v2/inventory_updates/N/credentials/`
+## Multiple Vault credentials
 
-Most cloud sources will continue to adhere to the constraint that they
-must have a single credential that corresponds to their cloud type.
-However, this relationship allows users to associate multiple vault
-credentials of different IDs to inventory sources.
+Ansible can decrypt content encrypted with several vault passwords in one run,
+each identified by a vault ID
+(https://docs.ansible.com/ansible/latest/vault_guide/vault_managing_passwords.html).
+A Vault credential has an optional `vault_id` field, which is what
+`--vault-id` is for `ansible-playbook`; it cannot contain `@`.
+
+Vault credentials conflict only when they have the same vault ID, so a
+template can have one Vault credential without a vault ID and one for each
+vault ID (a second one with the same ID is refused as `Cannot assign multiple
+Vault (id=<vault id>) credentials.`). To run a playbook that uses several vault
+passwords:
+
+1. Create a Vault credential for each password, with its vault ID and the
+   password.
+2. Attach them all to the job template:
+
+   ```
+   POST /api/v2/job_templates/N/credentials/ {"associate": true, "id": X}
+   ```
+
+3. Launch the template: `ansible-playbook` is given one `--vault-id` for each.
+
+A vault ID can come from a secret store (see
+[Credential Plugins](credential_plugins.md)). Such a vault ID is looked up
+each time credentials are compared, when one is attached to a template,
+schedule or workflow node, at launch, and when a workflow node's credentials
+are combined with the workflow's, and the looked-up value is what counts, as
+if it were stored. A lookup that fails there leaves the credential
+conflicting with no other one (the old application answered `500`); the job
+that uses it then fails on the same lookup. A vault ID cannot come from a
+lookup that logs in as the job (see
+[Credential Plugins](credential_plugins.md#logging-in-as-the-job)), since it
+is needed before any job runs.
+
+## Inventory source credentials
+
+Inventory sources and the inventory updates they launch have a credentials
+list too, `/api/v2/inventory_sources/N/credentials/` (attach and detach) and
+`/api/v2/inventory_updates/N/credentials/` (read only), but an inventory
+source takes a single credential: attaching a second one, or the one it has
+again, is refused with `Source already has credential assigned.`. As in the
+old application, attaching and detaching an inventory source's credential
+write no activity stream entry. A cloud source needs a credential
+of its cloud's type (`Cloud-based inventory sources (such as <source>) require
+credentials for the matching cloud service.`). A sourced-from-project
+inventory source cannot take a Vault credential, and a custom one cannot take
+a Machine, Source Control or Vault credential.

@@ -1,0 +1,67 @@
+# Entries the internal/sso LDAP tests expect, for a throwaway
+# osixia/openldap:1.5.0 with LDAP_DOMAIN=zz.test (docs/ARCHITECTURE.md):
+#   ldapadd -x -H ldap://127.0.0.1:13389 -D cn=admin,dc=zz,dc=test -w zzAdminPw1 -f zz-seed.ldif
+# zzalice: zz-admins, zz-ascender-users. zzbob: zz-auditors,
+# zz-ascender-users. zzcarol: zz-nested (inside zz-ascender-users), zz-denied.
+
+dn: ou=people,dc=zz,dc=test
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=zz,dc=test
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=zzalice,ou=people,dc=zz,dc=test
+objectClass: inetOrgPerson
+uid: zzalice
+cn: Alice Zz
+givenName: Alice
+sn: Zz
+mail: zzalice@zz.test
+userPassword: AlicePass1
+
+dn: uid=zzbob,ou=people,dc=zz,dc=test
+objectClass: inetOrgPerson
+uid: zzbob
+cn: Bob Zz
+givenName: Bob
+sn: Zz
+mail: zzbob@zz.test
+userPassword: BobPass1
+
+dn: uid=zzcarol,ou=people,dc=zz,dc=test
+objectClass: inetOrgPerson
+uid: zzcarol
+cn: Carol Zz
+givenName: Carol
+sn: Zz
+mail: zzcarol@zz.test
+userPassword: CarolPass1
+
+dn: cn=zz-admins,ou=groups,dc=zz,dc=test
+objectClass: groupOfNames
+cn: zz-admins
+member: uid=zzalice,ou=people,dc=zz,dc=test
+
+dn: cn=zz-auditors,ou=groups,dc=zz,dc=test
+objectClass: groupOfNames
+cn: zz-auditors
+member: uid=zzbob,ou=people,dc=zz,dc=test
+
+dn: cn=zz-nested,ou=groups,dc=zz,dc=test
+objectClass: groupOfNames
+cn: zz-nested
+member: uid=zzcarol,ou=people,dc=zz,dc=test
+
+dn: cn=zz-ascender-users,ou=groups,dc=zz,dc=test
+objectClass: groupOfNames
+cn: zz-ascender-users
+member: uid=zzalice,ou=people,dc=zz,dc=test
+member: uid=zzbob,ou=people,dc=zz,dc=test
+member: cn=zz-nested,ou=groups,dc=zz,dc=test
+
+dn: cn=zz-denied,ou=groups,dc=zz,dc=test
+objectClass: groupOfNames
+cn: zz-denied
+member: uid=zzcarol,ou=people,dc=zz,dc=test

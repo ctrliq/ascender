@@ -1,11 +1,16 @@
 ---
-name: Bug Report
-description: "🐞 Create a report to help us improve"
+name: Bug report
+description: "🐞 Report a bug in Ascender"
+labels:
+  - bug
 body:
   - type: markdown
     attributes:
       value: |
-        Bug Report issues are for **concrete, actionable bugs** only.
+        Bug reports are for **concrete, reproducible bugs** in Ascender only.
+        Questions go to [Discussions](https://github.com/ctrliq/ascender/discussions),
+        and security vulnerabilities to security@ciq.com, never to a public issue
+        (see [SECURITY.md](https://github.com/ctrliq/ascender/blob/main/SECURITY.md)).
 
   - type: checkboxes
     id: terms
@@ -20,16 +25,16 @@ body:
   - type: textarea
     id: summary
     attributes:
-      label: Bug Summary
+      label: Bug summary
       description: Briefly describe the problem.
     validations:
-      required: false
+      required: true
 
   - type: input
-    id: awx-version
+    id: ascender-version
     attributes:
       label: Ascender version
-      description: What version of Ascender are you running?
+      description: The version the UI's About box shows (the question mark menu at the top of the page), or `GET /api/v2/ping/` returns.
     validations:
       required: true
 
@@ -37,29 +42,33 @@ body:
     id: components
     attributes:
       label: Select the relevant components
+      description: >-
+        Problems with the installer, the operator or the Ansible collection belong in
+        [ascender-install](https://github.com/ctrliq/ascender-install/issues),
+        [ascender-operator](https://github.com/ctrliq/ascender-operator/issues) or
+        [ascender-collection](https://github.com/ctrliq/ascender-collection/issues).
       options:
         - label: UI
-        - label: UI (tech preview)
         - label: API
+        - label: Jobs and the task runner
         - label: Docs
-        - label: Collection
-        - label: CLI
         - label: Other
 
   - type: dropdown
-    id: awx-install-method
+    id: install-method
     attributes:
       label: Installation method
       description: How did you install Ascender?
       multiple: false
       options:
-        - kubernetes
-        - minikube
-        - openshift
-        - minishift
-        - docker development environment
-        - Ascender Installation Sctipt
-        - N/A
+        - Ascender installer, K3s
+        - Ascender installer, RKE2
+        - Ascender installer, EKS, GKE or AKS
+        - Ascender installer, OpenShift, DKP or TKGI
+        - Ascender installer, offline
+        - Ascender operator on my own cluster
+        - Docker Compose (deploy/)
+        - Other
     validations:
       required: true
 
@@ -68,8 +77,8 @@ body:
     attributes:
       label: Modifications
       description: >-
-       Have you modified the installation, deployment topology, or container images in any way? If yes, please
-       explain in the "additional information" field at the bottom of the form.
+        Have you modified the installation, deployment topology or container images in any way? If yes,
+        explain in "Additional information" at the bottom of the form.
       multiple: false
       options:
         - "no"
@@ -78,10 +87,10 @@ body:
       required: true
 
   - type: input
-    id: ansible-version
+    id: execution-environment
     attributes:
-      label: Ansible version
-      description: What version of Ansible are you running?
+      label: Execution environment
+      description: For job problems, the execution environment image the job ran in.
     validations:
       required: false
 
@@ -89,7 +98,7 @@ body:
     id: operating-system
     attributes:
       label: Operating system
-      description: What operating system are you using?
+      description: The operating system of the hosts Ascender runs on.
     validations:
       required: false
 
@@ -97,23 +106,22 @@ body:
     id: browsers
     attributes:
       label: Web browser
-      description: Which browsers are affected?
+      description: For UI problems, which browsers are affected?
       multiple: true
       options:
         - Firefox
         - Chrome
         - Safari
         - Edge
-    validations:
-      required: false
 
   - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps to reproduce
       description: >-
-        Starting from a new installation of the system, describe exactly how a developer or quality engineer can reproduce the bug
-        on infrastructure that isn't yours. Include any and all resources created, input values, test users, roles assigned, playbooks used, etc.
+        Starting from a new installation, describe exactly how a developer can reproduce the bug on
+        infrastructure that isn't yours. Include the resources created, input values, users, roles
+        assigned, playbooks used and so on.
     validations:
       required: true
 
@@ -121,7 +129,7 @@ body:
     id: expected-results
     attributes:
       label: Expected results
-      description: What did you expect to happpen when running the steps above?
+      description: What did you expect to happen when running the steps above?
     validations:
       required: true
 
@@ -137,6 +145,8 @@ body:
     id: additional-information
     attributes:
       label: Additional information
-      description: Include any relevant log output, links to sosreport, database dumps, screenshots, or other information.
+      description: >-
+        Relevant log output (from the ascender-web and ascender-task containers), screenshots or anything
+        else that helps. Remove passwords, tokens and other secrets first.
     validations:
       required: false

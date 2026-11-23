@@ -1,0 +1,417 @@
+{{define "mode_toggle"}}
+{{/* .json */}}
+<button aria-label="{{t "YAML"}}" class="pf-v6-c-button {{if .json}}pf-m-secondary{{else}}pf-m-primary{{end}} ascender-multi-button-toggle__small-button toggle-button-yaml" type="button" data-editor-mode="yaml">
+	<span class="pf-v6-c-button__text">{{t "YAML"}}</span>
+</button>
+<button aria-label="{{t "JSON"}}" class="pf-v6-c-button {{if .json}}pf-m-primary{{else}}pf-m-secondary{{end}} ascender-multi-button-toggle__small-button toggle-button-javascript" type="button" data-editor-mode="javascript">
+	<span class="pf-v6-c-button__text">{{t "JSON"}}</span>
+</button>
+{{end}}
+{{define "variables_field"}}
+{{/* .id .name .label .value .help .required .errors .rows .source */}}
+{{$json := and (not .source) (isJSON .value)}}
+<div>
+	<div class="pf-v6-c-form__group" data-editor-group>
+		<div class="ascender-variables-field__header" data-cy="{{.id}}-label">
+			<div class="pf-v6-l-split pf-m-gutter">
+				<div class="pf-v6-l-split__item">
+					<label for="{{.id}}" class="pf-v6-c-form__label" id="{{.id}}-label">
+						<span class="pf-v6-c-form__label-text">{{.label}}</span>
+						{{if .required}}
+							<span class="pf-v6-c-form__label-required" aria-hidden="true"> * </span>
+						{{end}}
+					</label>
+					{{if .help}}{{template "help_button" .help}}{{end}}
+				</div>
+				<div class="pf-v6-l-split__item">
+					<div class="ascender-button-group__group">
+						{{template "mode_toggle" (dict "json" $json)}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ascender-code-editor__focus-wrapper" tabindex="0" data-editor-focus>
+			<div data-cy="code-editor" class="ascender-code-editor__wrapper pf-v6-c-form-control{{if .errors}} ascender-code-editor__wrapper--has-errors{{end}}" data-code-editor data-editor-id="{{.id}}" data-rows="{{if .rows}}{{.rows}}{{else}}auto{{end}}" data-min-rows="4" data-mode="{{if $json}}javascript{{else}}yaml{{end}}"{{if .source}} data-source="{{.source}}"{{end}}>
+				<textarea hidden name="{{.name}}" data-code-editor-value>{{.value}}</textarea>
+			</div>
+		</div>
+		<div class="pf-v6-c-form__helper-text keyboard-help-text" aria-live="polite">
+			{{t "Press Enter to edit. Press ESC to stop editing."}}
+		</div>
+		{{if .errors}}
+			<div class="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+				{{range .errors}}<p>{{.}}</p>{{end}}
+			</div>
+		{{end}}
+	</div>
+</div>
+{{end}}
+{{define "variables_detail"}}
+{{/* .cy .label .value .help .rows .source */}}
+{{$json := and (not .source) (isJSON .value)}}
+<div class="ascender-variables-detail__wrapper" data-editor-group>
+	<div class="ascender-variables-detail__label" data-cy="{{.cy}}-label" id="{{.cy}}">
+		<div class="pf-v6-l-split pf-m-gutter">
+			<div class="pf-v6-l-split__item pf-m-fill">
+				<div class="pf-v6-l-split pf-m-gutter" style="align-items: baseline;">
+					<div class="pf-v6-l-split__item">
+						<label class="pf-v6-c-form__label" for="{{.cy}}-preview" id="{{.cy}}-preview-label">
+							<span class="pf-v6-c-form__label-text" style="font-weight: var(--pf-t--global--font--weight--heading--bold);">
+								{{.label}}
+							</span>
+							{{if .help}}{{template "help_button" .help}}{{end}}
+							{{if .helpHTML}}{{template "help_button_html" .helpHTML}}{{end}}
+						</label>
+					</div>
+					<div class="pf-v6-l-split__item">
+						<div class="ascender-button-group__group">
+							{{template "mode_toggle" (dict "json" $json)}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ascender-variables-detail__editor-wrapper" data-cy="{{.cy}}-value">
+		<div class="ascender-code-editor__focus-wrapper" tabindex="-1">
+			<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="{{.cy}}-preview" data-rows="{{if .rows}}{{.rows}}{{else}}4{{end}}" data-mode="{{if $json}}javascript{{else}}yaml{{end}}"{{if .source}} data-source="{{.source}}"{{end}}>
+				<textarea hidden data-code-editor-value>{{.value}}</textarea>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "sparkline"}}
+{{/* list of recent jobs */}}
+<div class="ascender-sparkline__wrapper">
+	{{range .}}
+		<div style="display: contents;">
+			<a class="ascender-sparkline__link" aria-label="{{t "View job {0}" "0" (str .id)}}" href="/jobs/{{jobSegment (str .type)}}/{{str .id}}" data-tooltip data-tooltip-pos="top">
+				{{statusIcon (str .status)}}
+				<template data-tooltip-content>
+					<div>{{t "JOB ID:"}} {{str .id}}</div>
+					<div>{{t "STATUS:"}} {{upper (str .status)}}</div>
+					{{if has .finished}}<div>{{t "FINISHED:"}} {{dt .finished}}</div>{{end}}
+				</template>
+			</a>
+		</div>
+	{{end}}
+</div>
+{{end}}
+{{define "host_toggle"}}
+{{/* .host .class */}}
+<div style="display: contents;">
+	<label class="pf-v6-c-switch{{if .class}} {{.class}}{{end}}" for="host-{{str .host.id}}-toggle" data-tooltip="{{t "Indicates if a host is available and should be included in running jobs.  For hosts that are part of an external inventory, this may be reset by the inventory sync process."}}" data-tooltip-pos="top">
+		<input id="host-{{str .host.id}}-toggle" class="pf-v6-c-switch__input" role="switch" aria-label="{{t "Toggle host"}}" type="checkbox"{{if .host.enabled}} checked{{end}}{{if not (dig .host "summary_fields" "user_capabilities" "edit")}} disabled{{end}} data-host-toggle="{{str .host.id}}">
+		<span class="pf-v6-c-switch__toggle"></span>
+		<span class="pf-v6-c-switch__label" aria-hidden="true">{{t "On"}}</span>
+	</label>
+</div>
+{{end}}
+{{define "label_group"}}
+{{/* .items .max .total .aria .color .more */}}
+<div class="pf-v6-c-label-group">
+	<div class="pf-v6-c-label-group__main">
+		<ul class="pf-v6-c-label-group__list" aria-label="{{if .aria}}{{.aria}}{{else}}Label group category{{end}}" role="list">
+			{{range $i, $l := .items}}
+				{{if lt $i $.max}}
+					<li class="pf-v6-c-label-group__list-item">
+						<span class="pf-v6-c-label {{if $.color}}pf-m-{{$.color}} pf-m-filled{{else}}pf-m-outline{{end}}">
+							{{if $l._href}}
+								<a class="pf-v6-c-label__content" href="{{$l._href}}">
+									<span class="pf-v6-c-label__text">{{$l.name}}</span>
+								</a>
+							{{else}}
+								<span class="pf-v6-c-label__content">
+									<span class="pf-v6-c-label__text">{{$l.name}}</span>
+								</span>
+							{{end}}
+						</span>
+					</li>
+				{{end}}
+			{{end}}
+			{{if gt .total .max}}
+				<li class="pf-v6-c-label-group__list-item">
+					<button class="pf-v6-c-label pf-m-overflow" type="button"{{if .more}} data-label-more="{{.more}}"{{end}}>
+						<span class="pf-v6-c-label__content">
+							<span class="pf-v6-c-label__text">
+								{{t "{0} more" "0" (sub .total .max)}}
+							</span>
+						</span>
+					</button>
+				</li>
+			{{end}}
+		</ul>
+	</div>
+</div>
+{{end}}
+{{define "multi_lookup"}}
+{{/* .id .name .label .values .required .help .errors .resource .title .filter .draggable .description */}}
+<div class="pf-v6-c-form__group" data-lookup data-multi data-resource="{{.resource}}" data-title="{{.title}}"{{if .filter}} data-filter="{{.filter}}"{{end}} data-name="{{.name}}"{{if .draggable}} data-draggable{{end}}{{if .description}} data-description="{{.description}}"{{end}}>
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			{{if .required}}
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			{{end}}
+		</label>
+		&nbsp;&nbsp;
+		{{if .help}}
+			<span class="pf-v6-c-form__group-label-help">{{template "help_button" .help}}</span>
+		{{end}}
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<div class="pf-v6-c-input-group">
+			<div class="pf-v6-c-input-group__item">
+				<button id="{{.id}}-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open>
+					<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+				</button>
+			</div>
+			<div class="pf-v6-c-input-group__item pf-m-fill">
+				<div class="ascender-lookup__chip-holder pf-v6-c-form-control{{if .errors}} pf-m-error{{end}}" data-lookup-chips-holder>
+					<div>
+						{{if .values}}
+							<div class="pf-v6-c-label-group">
+								<div class="pf-v6-c-label-group__main">
+									<ul class="pf-v6-c-label-group__list" role="list">
+										{{range .values}}
+											<li class="pf-v6-c-label-group__list-item" data-chip="{{str .id}}">
+												<span class="pf-v6-c-label pf-m-outline">
+													<span class="pf-v6-c-label__content">
+														<span class="pf-v6-c-label__text">
+															{{.name}}
+														</span>
+													</span>
+													<span class="pf-v6-c-label__actions">
+														<button class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" aria-label="{{t "Remove"}}" data-chip-remove>
+															<span class="pf-v6-c-button__icon">
+																{{icon "pf-close"}}
+															</span>
+														</button>
+													</span>
+												</span>
+											</li>
+										{{end}}
+									</ul>
+								</div>
+							</div>
+						{{end}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-lookup-values>
+			{{range .values}}
+				<input type="hidden" name="{{$.name}}" value="{{str .id}}" data-ref-id data-ref-name="{{.name}}">
+				<input type="hidden" name="{{$.name}}_name" value="{{.name}}">
+			{{end}}
+		</div>
+		{{if .errors}}
+			<div class="pf-v6-c-form__helper-text" aria-live="polite">
+				<div class="pf-v6-c-helper-text">
+					<div class="pf-v6-c-helper-text__item pf-m-error">
+						<span class="pf-v6-c-helper-text__item-icon">
+							{{icon "exclamation-circle"}}
+						</span>
+						<span class="pf-v6-c-helper-text__item-text">{{join .errors " "}}</span>
+					</div>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+{{end}}
+{{define "host_row"}}
+{{/* .host .i .detail .edit .readonly .related (bool) .inventory (bool) .cols .descriptionFirst (a group's hosts: description before activity, a bare sparkline) */}}
+{{$h := .host}}
+{{$id := str $h.id}}
+{{$caps := dig $h "summary_fields" "user_capabilities"}}
+<tr class="pf-v6-c-table__tr" id="host-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$h.name}}">
+	<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check" data-cy="check-action-{{$id}}">
+		<div class="pf-v6-c-check pf-m-standalone">
+			<input id="select-{{.i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{.i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+		</div>
+	</td>
+	<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+		<a href="{{.detail}}"><b>{{$h.name}}</b></a>
+	</td>
+	{{if .descriptionFirst}}
+		<td tabindex="-1" data-label="{{t "Description"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="host-description-{{$id}}">
+			{{$h.description}}
+		</td>
+	{{end}}
+	{{if .descriptionFirst}}
+		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td">
+			{{with dig $h "summary_fields" "recent_jobs"}}
+				{{if .}}{{template "sparkline" .}}{{end}}
+			{{end}}
+		</td>
+	{{else}}
+		<td tabindex="-1" class="pf-v6-c-table__td">
+			{{with dig $h "summary_fields" "recent_jobs"}}
+				{{if .}}{{template "sparkline" .}}{{else}}{{t "No job data available"}}{{end}}
+			{{else}}
+				{{t "No job data available"}}
+			{{end}}
+		</td>
+	{{end}}
+	{{if not .descriptionFirst}}
+		<td tabindex="-1" data-label="{{t "Description"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="host-description-{{$id}}">
+			{{$h.description}}
+		</td>
+	{{end}}
+	{{if .related}}
+		<td tabindex="-1" data-label="{{t "Related Groups"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="host-related-groups-{{$id}}">
+			<div>
+				{{with dig $h "summary_fields" "groups"}}
+					{{if .results}}
+						{{template "label_group" (dict "items" .results "max" 4 "total" (num .count) "aria" (t "Related Groups") "more" (printf "/api/v2/hosts/%s/all_groups/?page_size=200" $id))}}
+					{{end}}
+				{{end}}
+			</div>
+		</td>
+	{{end}}
+	{{if .inventory}}
+		<td tabindex="-1" data-label="{{t "Inventory"}}" class="pf-v6-c-table__td ascender-td-break-word__td">
+			{{with dig $h "summary_fields" "inventory"}}
+				<a href="/inventories/inventory/{{str .id}}/details">{{.name}}</a>
+			{{end}}
+		</td>
+	{{end}}
+	<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" aria-label="{{t "Actions"}}" style="--pf-v6-c-table--cell--Width: 80px;">
+		<div class="ascender-actions-td__grid">
+			{{template "host_toggle" (dict "host" $h)}}
+			{{if not .readonly}}
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{if dig $caps "edit"}}
+								<a aria-label="{{t "Edit host"}}" class="pf-v6-c-button pf-m-plain" href="{{.edit}}" data-tooltip="{{t "Edit host"}}" data-tooltip-pos="top">
+									<span class="pf-v6-c-button__icon">{{icon "pencil-alt"}}</span>
+								</a>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			{{end}}
+		</div>
+	</td>
+</tr>
+{{end}}
+{{define "group_row"}}
+{{/* .group .i .detail .edit .readonly */}}
+{{$g := .group}}
+{{$id := str $g.id}}
+{{$caps := dig $g "summary_fields" "user_capabilities"}}
+<tr class="pf-v6-c-table__tr" id="group-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$g.name}}">
+	<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__check" data-cy="check-action-{{$id}}">
+		<div class="pf-v6-c-check pf-m-standalone">
+			<input id="select-{{.i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{.i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+		</div>
+	</td>
+	<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" id="check-action-{{$id}}">
+		<a id="check-action-{{$id}}" href="{{.detail}}"><b>{{$g.name}}</b></a>
+	</td>
+	{{if not .readonly}}
+		<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+			<div class="ascender-actions-td__grid">
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{if dig $caps "edit"}}
+								<a aria-label="{{t "Edit Group"}}" class="pf-v6-c-button pf-m-plain" href="{{.edit}}" data-tooltip="{{t "Edit group"}}" data-tooltip-pos="top">
+									<span class="pf-v6-c-button__icon">{{icon "pencil-alt"}}</span>
+								</a>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+	{{end}}
+</tr>
+{{end}}
+{{define "run_command_button"}}
+{{/* .inventory .modules (JSON) .hasItems */}}
+<div class="pf-v6-c-toolbar__item">
+	<div style="display: contents;">
+		<button aria-label="{{t "Run Command"}}" class="pf-v6-c-button pf-m-secondary"{{if not .hasItems}} disabled{{end}} type="button" data-run-command="{{.inventory}}" data-modules="{{.modules}}" data-tooltip="{{t "Run ad hoc command"}}" data-tooltip-pos="top">
+			<span class="pf-v6-c-button__text">{{t "Run Command"}}</span>
+		</button>
+	</div>
+</div>
+{{end}}
+{{define "label_select"}}
+{{/* .id .name .label .values .help .resource */}}
+<div class="pf-v6-c-form__group">
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+		</label>
+		&nbsp;&nbsp;
+		<span class="pf-v6-c-form__group-label-help">
+			{{if .help}}{{template "help_button" .help}}{{end}}
+		</span>
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<div class="ascender-label-select" data-label-select data-name="{{.name}}" data-resource="{{if .resource}}{{.resource}}{{else}}labels{{end}}">
+			<div class="pf-v6-c-menu-toggle pf-m-typeahead" data-label-toggle>
+				<div class="pf-v6-c-text-input-group pf-m-plain">
+					<div class="pf-v6-c-text-input-group__main" autocomplete="off">
+						<div class="pf-v6-c-label-group" data-label-chips{{if not .values}} hidden{{end}}>
+							<div class="pf-v6-c-label-group__main">
+								<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
+									{{range .values}}
+										<li class="pf-v6-c-label-group__list-item" data-chip data-chip-id="{{str .id}}" data-chip-name="{{.name}}">
+											<span class="pf-v6-c-label pf-m-filled">
+												<span class="pf-v6-c-label__content">
+													<span class="pf-v6-c-label__text">
+														{{.name}}
+													</span>
+												</span>
+												<span class="pf-v6-c-label__actions">
+													<button class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" aria-label="Close {{.name}}" data-chip-remove>
+														<span class="pf-v6-c-button__icon">
+															{{icon "pf-close"}}
+														</span>
+													</button>
+												</span>
+											</span>
+										</li>
+									{{end}}
+								</ul>
+							</div>
+						</div>
+						<span class="pf-v6-c-text-input-group__text">
+							<input class="pf-v6-c-text-input-group__text-input" id="{{.id}}" aria-label="{{t "Select {0}" "0" .label}}" placeholder="" type="text" value="" autocomplete="off" data-label-input>
+						</span>
+					</div>
+					<div class="pf-v6-c-text-input-group__utilities" data-label-clear-wrap{{if not .values}} hidden{{end}}>
+						<button class="pf-v6-c-button pf-m-plain" type="button" aria-label="{{t "Clear"}}" data-label-clear>
+							<span class="pf-v6-c-button__icon">{{icon "times"}}</span>
+						</button>
+					</div>
+				</div>
+				<button type="button" class="pf-v6-c-menu-toggle__button" aria-expanded="false" aria-label="Menu toggle" tabindex="-1" data-label-caret>
+					<span class="pf-v6-c-menu-toggle__controls">
+						<span class="pf-v6-c-menu-toggle__toggle-icon">
+							{{icon "pf-caret-down"}}
+						</span>
+					</span>
+				</button>
+			</div>
+			<div class="pf-v6-c-menu ascender-dropdown__menu ascender-label-select__menu" hidden data-label-menu>
+				<div class="pf-v6-c-menu__content">
+					<ul class="pf-v6-c-menu__list" role="listbox" data-label-options></ul>
+				</div>
+			</div>
+			<div data-label-values>
+				{{range .values}}
+					<input type="hidden" name="{{$.name}}" value="{{str .id}}" data-ref-id data-ref-name="{{.name}}">
+					<input type="hidden" name="{{$.name}}_name" value="{{.name}}">
+				{{end}}
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}

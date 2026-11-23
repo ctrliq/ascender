@@ -1,0 +1,24 @@
+{
+    "name": "Project Update Cancel",
+    "description": "# Cancel Project Update\n\nMake a GET request to this resource to determine if the project update can be\ncanceled.  The response will include the following field:\n\n* `can_cancel`: Indicates whether this update can be canceled (boolean,\n  read-only)\n\nMake a POST request to this resource to cancel a pending or running project\nupdate.  The response status code will be 202 if successful, or 405 if the\nupdate cannot be canceled.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {
+            "can_cancel": {
+                "type": "boolean",
+                "label": "Can cancel",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "project_update"
+    ]
+}

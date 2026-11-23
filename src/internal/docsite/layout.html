@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" class="pf-v6-theme-dark" data-theme="default">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{if .Page.Path}}{{.Page.Title}} | {{end}}Ascender Documentation</title>
+{{with .Page.Description}}<meta name="description" content="{{.}}">
+{{end}}<link rel="icon" href="{{call .StaticURL "media/favicon.ico"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/patternfly.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/patternfly-addons.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/theme-default.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/theme-dark.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/theme-light.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/theme-awx.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/ascender-components.css"}}">
+<link rel="stylesheet" href="{{call .StaticURL "css/docsite.css"}}">
+<script src="{{call .StaticURL "js/docsite.js"}}"></script>
+</head>
+<body>
+<div class="pf-v6-c-page" id="page">
+<a class="pf-v6-c-skip-to-content pf-v6-c-button pf-m-primary" href="#docs-main">Skip to content</a>
+<header class="pf-v6-c-masthead pf-m-display-inline">
+	<div class="pf-v6-c-masthead__main">
+		<span class="pf-v6-c-masthead__toggle">
+			<button aria-expanded="true" id="nav-toggle" aria-controls="page-sidebar" aria-label="Navigation" class="pf-v6-c-button pf-m-plain pf-m-hamburger" type="button">
+				<span class="pf-v6-c-button__icon">
+					<svg viewBox="0 0 10 10" class="pf-v6-c-button--hamburger-icon pf-v6-svg" width="1em" height="1em"><path class="pf-v6-c-button--hamburger-icon--top" d="M1,1 L9,1"></path><path class="pf-v6-c-button--hamburger-icon--middle" d="M1,5 L9,5"></path><path class="pf-v6-c-button--hamburger-icon--arrow" d="M1,5 L1,5 L1,5"></path><path class="pf-v6-c-button--hamburger-icon--bottom" d="M9,9 L1,9"></path></svg>
+				</span>
+			</button>
+		</span>
+		<a class="pf-v6-c-masthead__brand ascender-app-container__styled-masthead-brand docs-brand" href="{{.Home}}">
+			<img class="ascender-brand-logo__img" alt="Ascender" src="{{call .StaticURL "media/Ascender_logo.svg"}}">
+			<span class="docs-brand__text">Documentation</span>
+		</a>
+	</div>
+	<div class="pf-v6-c-masthead__content">
+		<div class="docs-masthead-tools">
+			{{with .Opts.App}}<a class="pf-v6-c-button pf-m-link" href="{{.}}"><span class="pf-v6-c-button__text">Back to Ascender</span></a>{{end}}
+			<label class="docs-theme">
+				<span class="docs-theme__icon" title="Theme">{{icon "palette"}}</span>
+				<select id="docs-theme" aria-label="Theme">
+					<option value="default">Default</option>
+					<option value="dark">Dark</option>
+					<option value="light">Light</option>
+					<option value="awx">Classic</option>
+				</select>
+			</label>
+		</div>
+	</div>
+</header>
+<div id="page-sidebar" class="pf-v6-c-page__sidebar">
+	<div class="pf-v6-c-page__sidebar-main">
+		<div class="pf-v6-c-page__sidebar-body">
+			<nav class="pf-v6-c-nav" aria-label="Documentation">
+				<ul class="pf-v6-c-nav__list" role="list">
+					<li class="pf-v6-c-nav__item"><a class="pf-v6-c-nav__link{{if not .Page.Path}} pf-m-current{{end}}" href="{{.Home}}"{{if not .Page.Path}} aria-current="page"{{end}}>Home</a></li>
+					{{template "navitems" (dict "Items" .Nav "URL" .URL)}}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<div class="pf-v6-c-page__main-container">
+	<main class="pf-v6-c-page__main" id="docs-main" tabindex="-1">
+		{{if .Page.Path}}
+		<section class="pf-v6-c-page__main-breadcrumb">
+			<div class="pf-v6-c-page__main-body">
+				<nav class="pf-v6-c-breadcrumb" aria-label="Breadcrumb">
+					<ol class="pf-v6-c-breadcrumb__list" role="list">
+						{{range $i, $c := .Crumbs}}<li class="pf-v6-c-breadcrumb__item">{{if $i}}<span class="pf-v6-c-breadcrumb__item-divider">{{icon "angle-right"}}</span>{{end}}<a class="pf-v6-c-breadcrumb__link" href="{{call $.URL $c}}">{{if $c.Path}}{{$c.Title}}{{else}}Home{{end}}</a></li>{{end}}
+						<li class="pf-v6-c-breadcrumb__item"><span class="pf-v6-c-breadcrumb__item-divider">{{icon "angle-right"}}</span><a class="pf-v6-c-breadcrumb__link pf-m-current" aria-current="page">{{.Page.Title}}</a></li>
+					</ol>
+				</nav>
+			</div>
+		</section>
+		{{end}}
+		<section class="pf-v6-c-page__main-section">
+			<div class="pf-v6-c-page__main-body docs-body">
+				<article class="docs-article">
+					<h1 class="pf-v6-c-title pf-m-2xl">{{.Page.Title}}</h1>
+					{{with .Page.Description}}<p class="docs-lead">{{.}}</p>{{end}}
+					<div class="pf-v6-c-content docs-content">
+{{.Page.Body}}
+					</div>
+					{{if or .Prev .Next}}
+					<nav class="docs-pager" aria-label="Previous and next page">
+						{{with .Prev}}<a class="docs-pager__link docs-pager__link--prev" href="{{call $.URL .}}"><span class="docs-pager__label">Previous</span><span class="docs-pager__title">{{if .Path}}{{.Title}}{{else}}Home{{end}}</span></a>{{end}}
+						{{with .Next}}<a class="docs-pager__link docs-pager__link--next" href="{{call $.URL .}}"><span class="docs-pager__label">Next</span><span class="docs-pager__title">{{.Title}}</span></a>{{end}}
+					</nav>
+					{{end}}
+				</article>
+				{{if gt (len .Page.TOC) 1}}
+				<aside class="docs-toc" aria-label="On this page">
+					<p class="docs-toc__title">On this page</p>
+					<ul class="docs-toc__list">
+						{{range .Page.TOC}}<li><a href="#{{.ID}}">{{.Text}}</a></li>{{end}}
+					</ul>
+				</aside>
+				{{end}}
+			</div>
+		</section>
+	</main>
+</div>
+</div>
+</body>
+</html>
+{{define "navitems"}}{{$url := .URL}}{{range .Items}}
+{{if .Children}}
+<li class="pf-v6-c-nav__item pf-m-expandable{{if .Open}} pf-m-expanded pf-m-current{{end}}">
+	<button class="pf-v6-c-nav__link" type="button" aria-expanded="{{.Open}}" data-nav-toggle>
+		<span class="pf-v6-c-nav__link-text">{{.Page.Title}}</span>
+		<span class="pf-v6-c-nav__toggle"><span class="pf-v6-c-nav__toggle-icon">{{icon "pf-angle-down"}}</span></span>
+	</button>
+	<section class="pf-v6-c-nav__subnav"{{if not .Open}} hidden{{end}}>
+		<ul class="pf-v6-c-nav__list" role="list">
+			<li class="pf-v6-c-nav__item"><a class="pf-v6-c-nav__link{{if .Self}} pf-m-current{{end}}" href="{{call $url .Page}}"{{if .Self}} aria-current="page"{{end}}>Overview</a></li>
+			{{template "navitems" (dict "Items" .Children "URL" $url)}}
+		</ul>
+	</section>
+</li>
+{{else}}
+<li class="pf-v6-c-nav__item"><a class="pf-v6-c-nav__link{{if .Self}} pf-m-current{{end}}" href="{{call $url .Page}}"{{if .Self}} aria-current="page"{{end}}>{{.Page.Title}}</a></li>
+{{end}}
+{{end}}{{end}}

@@ -1,0 +1,434 @@
+{
+    "name": "Organization Workflow Job Templates List",
+    "description": "# List Workflow Job Templates for an Organization:\n\nMake a GET request to this resource to retrieve a list of\nworkflow job templates associated with the selected\norganization.\n\nThe resulting data structure contains:\n\n    {\n        \"count\": 99,\n        \"next\": null,\n        \"previous\": null,\n        \"results\": [\n            ...\n        ]\n    }\n\nThe `count` field indicates the total number of workflow job templates\nfound for the given query.  The `next` and `previous` fields provides links to\nadditional results if there are more than will fit on a single page.  The\n`results` list contains zero or more workflow job template records.  \n\n## Results\n\nEach workflow job template data structure includes the following fields:\n\n* `id`: Database ID for this workflow job template. (integer)\n* `type`: Data type for this workflow job template. (choice)\n* `url`: URL for this workflow job template. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this workflow job template was created. (datetime)\n* `modified`: Timestamp when this workflow job template was last modified. (datetime)\n* `name`: Name of this workflow job template. (string)\n* `description`: Optional description of this workflow job template. (string)\n* `last_job_run`:  (datetime)\n* `last_job_failed`:  (boolean)\n* `next_job_run`:  (datetime)\n* `status`:  (choice)\n    - `new`: New\n    - `pending`: Pending\n    - `waiting`: Waiting\n    - `running`: Running\n    - `successful`: Successful\n    - `failed`: Failed\n    - `error`: Error\n    - `canceled`: Canceled\n    - `never updated`: Never Updated\n    - `ok`: OK\n    - `missing`: Missing\n    - `none`: No External Source\n    - `updating`: Updating\n* `extra_vars`:  (json)\n* `organization`: The organization used to determine access to this template. (id)\n* `survey_enabled`:  (boolean)\n* `allow_simultaneous`:  (boolean)\n* `allow_overwrite_flow_vars_on_relaunch`: Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run. (boolean)\n* `allow_force_node_success_on_relaunch`: Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why. (boolean)\n* `ask_variables_on_launch`:  (boolean)\n* `inventory`: Inventory applied as a prompt, assuming job template prompts for inventory (id)\n* `limit`:  (string)\n* `scm_branch`:  (string)\n* `ask_inventory_on_launch`:  (boolean)\n* `ask_scm_branch_on_launch`:  (boolean)\n* `ask_limit_on_launch`:  (boolean)\n* `webhook_service`: Service that webhook requests will be accepted from (choice)\n    - `\"\"`: ---------\n    - `github`: GitHub\n    - `gitlab`: GitLab\n    - `bitbucket_dc`: BitBucket DataCenter\n* `webhook_credential`: Personal Access Token for posting back the status to the service API (id)\n\n* `ask_labels_on_launch`:  (boolean)\n* `ask_skip_tags_on_launch`:  (boolean)\n* `ask_tags_on_launch`:  (boolean)\n* `skip_tags`:  (string)\n* `job_tags`:  (string)\n\n\n\n## Sorting\n\nTo specify that workflow job templates are returned in a particular\norder, use the `order_by` query string parameter on the GET request.\n\n    ?order_by=name\n\nPrefix the field name with a dash `-` to sort in reverse:\n\n    ?order_by=-name\n\nMultiple sorting fields may be specified by separating the field names with a\ncomma `,`:\n\n    ?order_by=name,some_other_field\n\n## Pagination\n\nUse the `page_size` query string parameter to change the number of results\nreturned for each request.  Use the `page` query string parameter to retrieve\na particular page of results.\n\n    ?page_size=100&page=2\n\nThe `previous` and `next` links returned with the results will set these query\nstring parameters automatically.\n\n## Searching\n\nUse the `search` query string parameter to perform a case-insensitive search\nwithin all designated text fields of a model.\n\n    ?search=findme\n\n(_Added in Ansible Tower 3.1.0_) Search across related fields:\n\n    ?related__search=findme\n\nNote: If you want to provide more than one search term, multiple\nsearch fields with the same key, like `?related__search=foo&related__search=bar`,\nwill be ORed together. Terms separated by commas, like `?related__search=foo,bar`\nwill be ANDed together.\n\n## Filtering\n\nAny additional query string parameters may be used to filter the list of\nresults returned to those matching a given value.  Only fields and relations\nthat exist in the database may be used for filtering.  Any special characters\nin the specified value should be url-encoded. For example:\n\n    ?field=value%20xyz\n\nFields may also span relations, only for fields and relationships defined in\nthe database:\n\n    ?other__field=value\n\nTo exclude results matching certain criteria, prefix the field parameter with\n`not__`:\n\n    ?not__field=value\n\nBy default, all query string filters are AND'ed together, so\nonly the results matching *all* filters will be returned.  To combine results\nmatching *any* one of multiple criteria, prefix each query string parameter\nwith `or__`:\n\n    ?or__field=value&or__field=othervalue\n    ?or__not__field=value&or__field=othervalue\n\n(_Added in Ansible Tower 1.4.5_) The default AND filtering applies all filters\nsimultaneously to each related object being filtered across database\nrelationships.  The chain filter instead applies filters separately for each\nrelated object. To use, prefix the query string parameter with `chain__`:\n\n    ?chain__related__field=value&chain__related__field2=othervalue\n    ?chain__not__related__field=value&chain__related__field2=othervalue\n\nIf the first query above were written as\n`?related__field=value&related__field2=othervalue`, it would return only the\nprimary objects where the *same* related object satisfied both conditions.  As\nwritten using the chain filter, it would return the intersection of primary\nobjects matching each condition.\n\nField lookups may also be used for more advanced queries, by appending the\nlookup to the field name:\n\n    ?field__lookup=value\n\nThe following field lookups are supported:\n\n* `exact`: Exact match (default lookup if not specified).\n* `iexact`: Case-insensitive version of `exact`.\n* `contains`: Field contains value.\n* `icontains`: Case-insensitive version of `contains`.\n* `startswith`: Field starts with value.\n* `istartswith`: Case-insensitive version of `startswith`.\n* `endswith`: Field ends with value.\n* `iendswith`: Case-insensitive version of `endswith`.\n* `regex`: Field matches the given regular expression.\n* `iregex`: Case-insensitive version of `regex`.\n* `gt`: Greater than comparison.\n* `gte`: Greater than or equal to comparison.\n* `lt`: Less than comparison.\n* `lte`: Less than or equal to comparison.\n* `isnull`: Check whether the given field or related object is null; expects a\n  boolean value.\n* `in`: Check whether the given field's value is present in the list provided;\n  expects a list of items.\n\nBoolean values may be specified as `True` or `1` for true, `False` or `0` for\nfalse (both case-insensitive).\n\nNull values may be specified as `None` or `Null` (both case-insensitive),\nthough it is preferred to use the `isnull` lookup to explicitly check for null\nvalues.\n\nLists (for the `in` lookup) may be specified as a comma-separated list of\nvalues.\n\n(_Added in Ansible Tower 3.1.0_) Filtering based on the requesting user's\nlevel of access by query string parameter.\n\n* `role_level`: Level of role to filter on, such as `admin_role`\n\n\n\n\n# Create a Workflow Job Template for an Organization:\n\nMake a POST request to this resource with the following workflow job template\nfields to create a new workflow job template associated with this\norganization.\n\n\n\n\n\n\n\n\n\n* `name`: Name of this workflow job template. (string, required)\n* `description`: Optional description of this workflow job template. (string, default=`\"\"`)\n\n\n\n\n* `extra_vars`:  (json, default=``)\n\n* `survey_enabled`:  (boolean, default=`False`)\n* `allow_simultaneous`:  (boolean, default=`False`)\n* `allow_overwrite_flow_vars_on_relaunch`: Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run. (boolean, default=`False`)\n* `allow_force_node_success_on_relaunch`: Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why. (boolean, default=`False`)\n* `ask_variables_on_launch`:  (boolean, default=`False`)\n* `inventory`: Inventory applied as a prompt, assuming job template prompts for inventory (id, default=``)\n* `limit`:  (string, default=`\"\"`)\n* `scm_branch`:  (string, default=`\"\"`)\n* `ask_inventory_on_launch`:  (boolean, default=`False`)\n* `ask_scm_branch_on_launch`:  (boolean, default=`False`)\n* `ask_limit_on_launch`:  (boolean, default=`False`)\n* `webhook_service`: Service that webhook requests will be accepted from (choice)\n    - `\"\"`: ---------\n    - `github`: GitHub\n    - `gitlab`: GitLab\n    - `bitbucket_dc`: BitBucket DataCenter\n* `webhook_credential`: Personal Access Token for posting back the status to the service API (id, default=``)\n* `webhook_key`: Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set. (string, default=`\"\"`)\n* `ask_labels_on_launch`:  (boolean, default=`False`)\n* `ask_skip_tags_on_launch`:  (boolean, default=`False`)\n* `ask_tags_on_launch`:  (boolean, default=`False`)\n* `skip_tags`:  (string, default=`\"\"`)\n* `job_tags`:  (string, default=`\"\"`)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this workflow job template.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this workflow job template.",
+                "filterable": true,
+                "choices": [
+                    ["workflow_job_template", "Workflow Template"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this workflow job template.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this workflow job template was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this workflow job template was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this workflow job template.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this workflow job template.",
+                "filterable": true
+            },
+            "last_job_run": {
+                "type": "datetime",
+                "label": "Last job run",
+                "filterable": true
+            },
+            "last_job_failed": {
+                "type": "boolean",
+                "label": "Last job failed",
+                "filterable": true
+            },
+            "next_job_run": {
+                "type": "datetime",
+                "label": "Next job run",
+                "filterable": true
+            },
+            "status": {
+                "type": "choice",
+                "label": "Status",
+                "filterable": true,
+                "choices": [
+                    ["new", "New"],
+                    ["pending", "Pending"],
+                    ["waiting", "Waiting"],
+                    ["running", "Running"],
+                    ["successful", "Successful"],
+                    ["failed", "Failed"],
+                    ["error", "Error"],
+                    ["canceled", "Canceled"],
+                    ["never updated", "Never Updated"],
+                    ["ok", "OK"],
+                    ["missing", "Missing"],
+                    ["none", "No External Source"],
+                    ["updating", "Updating"]
+                ]
+            },
+            "extra_vars": {
+                "type": "json",
+                "label": "Extra vars",
+                "filterable": true
+            },
+            "organization": {
+                "type": "id",
+                "label": "Organization",
+                "help_text": "The organization used to determine access to this template.",
+                "filterable": true
+            },
+            "survey_enabled": {
+                "type": "boolean",
+                "label": "Survey enabled",
+                "filterable": true
+            },
+            "allow_simultaneous": {
+                "type": "boolean",
+                "label": "Allow simultaneous",
+                "filterable": true
+            },
+            "allow_overwrite_flow_vars_on_relaunch": {
+                "type": "boolean",
+                "label": "Allow overwrite flow vars on relaunch",
+                "help_text": "Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.",
+                "filterable": true
+            },
+            "allow_force_node_success_on_relaunch": {
+                "type": "boolean",
+                "label": "Allow force node success on relaunch",
+                "help_text": "Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.",
+                "filterable": true
+            },
+            "ask_variables_on_launch": {
+                "type": "boolean",
+                "label": "Ask variables on launch",
+                "filterable": true
+            },
+            "inventory": {
+                "type": "id",
+                "label": "Inventory",
+                "help_text": "Inventory applied as a prompt, assuming job template prompts for inventory",
+                "filterable": true
+            },
+            "limit": {
+                "type": "string",
+                "label": "Limit",
+                "filterable": false
+            },
+            "scm_branch": {
+                "type": "string",
+                "label": "Scm branch",
+                "filterable": false
+            },
+            "ask_inventory_on_launch": {
+                "type": "boolean",
+                "label": "Ask inventory on launch",
+                "filterable": true
+            },
+            "ask_scm_branch_on_launch": {
+                "type": "boolean",
+                "label": "Ask scm branch on launch",
+                "filterable": true
+            },
+            "ask_limit_on_launch": {
+                "type": "boolean",
+                "label": "Ask limit on launch",
+                "filterable": true
+            },
+            "webhook_service": {
+                "type": "choice",
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["github", "GitHub"],
+                    ["gitlab", "GitLab"],
+                    ["bitbucket_dc", "BitBucket DataCenter"]
+                ]
+            },
+            "webhook_credential": {
+                "type": "id",
+                "label": "Webhook credential",
+                "help_text": "Personal Access Token for posting back the status to the service API",
+                "filterable": true
+            },
+            "ask_labels_on_launch": {
+                "type": "boolean",
+                "label": "Ask labels on launch",
+                "filterable": true
+            },
+            "ask_skip_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask skip tags on launch",
+                "filterable": true
+            },
+            "ask_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask tags on launch",
+                "filterable": true
+            },
+            "skip_tags": {
+                "type": "string",
+                "label": "Skip tags",
+                "filterable": false
+            },
+            "job_tags": {
+                "type": "string",
+                "label": "Job tags",
+                "filterable": false
+            }
+        },
+        "POST": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this workflow job template.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this workflow job template.",
+                "filterable": true,
+                "default": ""
+            },
+            "extra_vars": {
+                "type": "json",
+                "required": false,
+                "label": "Extra vars",
+                "filterable": true,
+                "default": ""
+            },
+            "organization": {
+                "type": "id",
+                "required": false,
+                "label": "Organization",
+                "help_text": "The organization used to determine access to this template.",
+                "filterable": true
+            },
+            "survey_enabled": {
+                "type": "boolean",
+                "required": false,
+                "label": "Survey enabled",
+                "filterable": true,
+                "default": false
+            },
+            "allow_simultaneous": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow simultaneous",
+                "filterable": true,
+                "default": false
+            },
+            "allow_overwrite_flow_vars_on_relaunch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow overwrite flow vars on relaunch",
+                "help_text": "Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.",
+                "filterable": true,
+                "default": false
+            },
+            "allow_force_node_success_on_relaunch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow force node success on relaunch",
+                "help_text": "Allow a relaunch from failed nodes to carry chosen failed nodes forward as though they had succeeded, so the workflow continues down their success paths. Each forced node records who forced it and why.",
+                "filterable": true,
+                "default": false
+            },
+            "ask_variables_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask variables on launch",
+                "filterable": true,
+                "default": false
+            },
+            "inventory": {
+                "type": "id",
+                "required": false,
+                "label": "Inventory",
+                "help_text": "Inventory applied as a prompt, assuming job template prompts for inventory",
+                "filterable": true
+            },
+            "limit": {
+                "type": "string",
+                "required": false,
+                "label": "Limit",
+                "filterable": false,
+                "default": null
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "Scm branch",
+                "max_length": 1024,
+                "filterable": false,
+                "default": null
+            },
+            "ask_inventory_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask inventory on launch",
+                "filterable": true,
+                "default": false
+            },
+            "ask_scm_branch_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask scm branch on launch",
+                "filterable": true,
+                "default": false
+            },
+            "ask_limit_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask limit on launch",
+                "filterable": true,
+                "default": false
+            },
+            "webhook_service": {
+                "type": "choice",
+                "required": false,
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["github", "GitHub"],
+                    ["gitlab", "GitLab"],
+                    ["bitbucket_dc", "BitBucket DataCenter"]
+                ]
+            },
+            "webhook_credential": {
+                "type": "id",
+                "required": false,
+                "label": "Webhook credential",
+                "help_text": "Personal Access Token for posting back the status to the service API",
+                "filterable": true
+            },
+            "webhook_key": {
+                "type": "string",
+                "required": false,
+                "label": "Webhook key",
+                "help_text": "Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.",
+                "max_length": 64,
+                "filterable": true,
+                "write_only": true
+            },
+            "ask_labels_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask labels on launch",
+                "filterable": true,
+                "default": false
+            },
+            "ask_skip_tags_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask skip tags on launch",
+                "filterable": true,
+                "default": false
+            },
+            "ask_tags_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Ask tags on launch",
+                "filterable": true,
+                "default": false
+            },
+            "skip_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Skip tags",
+                "filterable": false,
+                "default": null
+            },
+            "job_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Job tags",
+                "filterable": false,
+                "default": null
+            }
+        }
+    },
+    "types": [
+        "workflow_job_template"
+    ],
+    "search_fields": [
+        "description",
+        "name"
+    ],
+    "related_search_fields": [
+        "notification_templates_approvals__search",
+        "inventory__search",
+        "created_by__search",
+        "workflow_jobs__search",
+        "unifiedjob_unified_jobs__search",
+        "schedules__search",
+        "workflowjobnodes__search",
+        "credentials__search",
+        "modified_by__search",
+        "notification_templates_error__search",
+        "labels__search",
+        "next_schedule__search",
+        "workflow_job_template_nodes__search",
+        "unifiedjobtemplate_ptr__search",
+        "execution_environment__search",
+        "last_job__search",
+        "webhook_credential__search",
+        "instance_groups__search",
+        "organization__search",
+        "notification_templates_started__search",
+        "current_job__search",
+        "workflowjobtemplatenodes__search",
+        "notification_templates_success__search"
+    ],
+    "object_roles": [
+        "admin_role",
+        "execute_role",
+        "read_role",
+        "approval_role"
+    ],
+    "max_page_size": 200
+}

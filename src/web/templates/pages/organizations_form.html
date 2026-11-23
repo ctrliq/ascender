@@ -1,0 +1,32 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$o := .Data.organization}}
+{{if $o}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "organization" "crumbs" (list (dict "href" "/organizations" "title" (t "Organizations")) (dict "href" (printf "/organizations/%s/details" (str $o.id)) "title" (str $o.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New Organization") "stream" "organization" "crumbs" (list (dict "href" "/organizations" "title" (t "Organizations"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{if .Data.loadError}}
+			<div class="pf-v6-c-card__body">{{template "content_error" .Data.loadError}}</div>
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+					<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+					<div class="ascender-form-column-layout">
+						{{template "form_errors" $e}}
+						{{template "form_field" (dict "id" "org-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+						{{template "form_field" (dict "id" "org-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+						{{template "multi_lookup" (dict "draggable" true "description" (t "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag.") "id" "org-instance-groups" "name" "instance_groups" "label" (t "Instance Groups") "values" $v.instance_groups "help" (t "Select the Instance Groups for this Organization to run on.") "resource" "instance_groups" "title" (t "Select {0}" "0" (t "Instance Groups")) "errors" (index $e "instance_groups"))}}
+						{{template "lookup_field" (dict "id" "execution-environments" "name" "default_environment" "label" (t "Execution Environment") "value" $v.default_environment "resource" "execution_environments" "title" (t "Select {0}" "0" (t "Default Execution Environment")) "help" (t "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.") "errors" (index $e "default_environment"))}}
+						{{template "multi_lookup" (dict "draggable" true "description" (t "Note: The order of these credentials sets precedence for the sync and lookup of the content. Select more than one to enable drag.") "id" "credential" "name" "galaxy_credentials" "label" (t "Galaxy Credentials") "values" $v.galaxy_credentials "resource" "credentials" "filter" "credential_type__namespace=galaxy_api_token" "title" (t "Select {0}" "0" (t "Galaxy Credentials")) "errors" (index $e "galaxy_credentials"))}}
+						{{template "form_actions" (cond (has $o) (printf "/organizations/%s/details" (str $o.id)) "/organizations")}}
+					</div>
+				</form>
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

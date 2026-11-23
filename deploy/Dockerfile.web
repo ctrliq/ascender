@@ -1,0 +1,60 @@
+# Build the web binary with the UI assets embedded, then ship it on Rocky
+# Linux's ubi-micro image. The binary is static and needs nothing from the
+# image but CA certificates (outbound TLS: LDAP, OIDC, SAML, webhooks,
+# external logging) and time zones (schedules); templates and the
+# authentication maps' regular expressions are handled by the binary itself
+# (internal/jinja, internal/pyre), so there is no Python. The task image is
+# built from the same source by Dockerfile.task.
+#
+# The binary is cross-compiled on the build host's platform, so a
+# multi-platform build runs only the root filesystem's package installs
+# under emulation.
+FROM --platform=$BUILDPLATFORM public.ecr.aws/docker/library/golang:1.27-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS build
+ARG TARGETOS TARGETARCH
+WORKDIR /src
+COPY src/go.mod src/go.sum ./
+RUN go mod download
+COPY src/ .
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/ascender-web ./cmd/ascender-web
+
+# ubi-micro has no package manager, but keeps its rpm database: dnf in a
+# full Rocky image installs into a copy of its root the CA certificates and
+# the updates published since the image was built, and adds the ascender
+# user. The external log queue spools in /var/lib/ascender
+# (LOG_AGGREGATOR_MAX_DISK_USAGE_PATH); refused records go to
+# /var/log/ascender/rsyslog.err.
+FROM quay.io/rockylinux/rockylinux:9-ubi-micro@sha256:9d483f0d6b73d0e85e2a90d5a9e81e81602a49bb2ba069e8930d1a8a3ce3dc57 AS micro
+FROM quay.io/rockylinux/rockylinux:9@sha256:bb5755f96bec05ff26165e779ec843d7167544be9e50770508f307019a6d05c4 AS rootfs
+COPY --from=micro / /rootfs
+RUN dnf -y --installroot=/rootfs --releasever=9 --setopt=install_weak_deps=0 --nodocs install ca-certificates \
+    && dnf -y --installroot=/rootfs --releasever=9 --setopt=install_weak_deps=0 --nodocs update \
+    && dnf -y --installroot=/rootfs clean all \
+    && rm -rf /rootfs/var/cache/dnf /rootfs/var/log/dnf* /rootfs/var/log/hawkey.log \
+    && useradd --root /rootfs --uid 1000 --gid 0 --no-create-home ascender \
+    && mkdir -p /rootfs/var/lib/ascender /rootfs/var/log/ascender \
+    && chown -R 1000:0 /rootfs/var/lib/ascender /rootfs/var/log/ascender
+
+FROM scratch
+# Base images are pinned by digest (tag kept for reading); Dependabot
+# moves both.
+# Ownership metadata for image inventories: who owns the image and where
+# its source lives.
+LABEL owner="ctrliq" repo="https://github.com/ctrliq/ascender"
+COPY --from=rootfs /rootfs /
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# The licenses of what the image ships: this project's, and those of the
+# Go modules compiled into the binary and the assets embedded in it.
+COPY LICENSE NOTICE.txt /usr/share/licenses/ascender/
+COPY licenses/ /usr/share/licenses/ascender/licenses/
+COPY --from=build /out/ascender-web /usr/bin/ascender-web
+# The documentation site (docs/docsite), served under /docs/: its pages
+# and images, which the binary renders when it starts.
+COPY docs/docsite /usr/share/ascender/docs
+ENV ASCENDER_DOCS_DIR=/usr/share/ascender/docs
+# Reported by /api/v2/ping/ and /api/v2/config/; the image workflows set it
+# (a release's tag, or the date and commit for a development image).
+ARG ASCENDER_VERSION=26.0.0-go.dev
+ENV ASCENDER_VERSION=$ASCENDER_VERSION
+EXPOSE 8070
+USER 1000
+ENTRYPOINT ["/usr/bin/ascender-web"]

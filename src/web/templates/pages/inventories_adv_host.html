@@ -1,0 +1,69 @@
+{{define "content"}}
+{{/* AdvancedInventoryHost: a host under a smart, constructed or federated inventory; Details is its only tab */}}
+{{$h := .Data.host}}
+{{$inv := .Data.inventory}}
+{{$ib := str $inv._base}}
+{{$hb := .Data.hostBase}}
+{{$seg := .Data.segment}}
+{{if $h}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/hosts" $ib) "title" (t "Hosts")) (dict "href" (printf "%s/details" $hb) "title" (str $h.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" "" "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/hosts" $ib) "title" (t "Hosts"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{if not $h}}
+			{{template "content_error_message" (printf "How did you get here? Host not found for Inventory ID: %s" (str $inv.id))}}
+		{{else}}
+			{{template "routed_tabs" (dict "current" .Data.hostTab "back" (dict "href" (printf "%s/hosts" $ib) "label" "Back to Hosts") "tabs" (list (dict "key" "details" "href" (printf "%s/details" $hb) "label" "Details")))}}
+		{{end}}
+		{{if not $h}}
+		{{else if eq .Data.hostTab "details"}}
+			{{$hi := dig $h "summary_fields" "inventory"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list" gutter="sm">
+					<div>
+						<dt class="ascender-detail-name">{{t "Name"}}</dt>
+						<dd class="ascender-detail-value">{{$h.name}}</dd>
+					</div>
+					{{with dig $h "summary_fields" "recent_jobs"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Activity"}}</dt>
+								<dd class="ascender-detail-value">{{template "sparkline" .}}</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if has $h.description}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Description"}}</dt>
+							<dd class="ascender-detail-value">{{$h.description}}</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Inventory"}}</dt>
+						<dd class="ascender-detail-value">
+							{{if $hi}}
+								<a href="/inventories/{{if eq (str $hi.kind) ""}}inventory{{else}}{{$seg}}{{end}}/{{str $hi.id}}/details">
+									{{$hi.name}}
+								</a>
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Enabled"}}</dt>
+						<dd class="ascender-detail-value">
+							{{if $h.enabled}}{{t "On"}}{{else}}{{t "Off"}}{{end}}
+						</dd>
+					</div>
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $h.created "user" (dig $h "summary_fields" "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last modified") "date" $h.modified "user" (dig $h "summary_fields" "modified_by"))}}
+					{{template "variables_detail" (dict "cy" "smart-inventory-host-detail-variables" "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
+				</dl>
+			</div>
+		{{else}}
+			{{template "in_page_not_found" (dict "href" (printf "%s/details" $hb) "text" (cond (eq $seg "smart_inventory") (t "View smart inventory host details") (t "View constructed inventory host details")))}}
+		{{end}}
+	</div>
+</section>
+{{end}}

@@ -1,0 +1,54 @@
+[
+ {
+  "in": "fatal: could not read from https://alice:s3cret@github.com/org/repo.git: denied",
+  "want": "fatal: could not read from https://$encrypted$:$encrypted$@github.com/org/repo.git: denied"
+ },
+ {
+  "in": "cmd: git clone 'https://bob:tok@gitlab.example.com/x.git' /var/lib/awx/projects/_8__x",
+  "want": "cmd: git clone 'https://$encrypted$:$encrypted$@gitlab.example.com/x.git' /var/lib/awx/projects/_8__x"
+ },
+ {
+  "in": "ssh://git@github.com/org/repo.git",
+  "want": "ssh://$encrypted$@github.com/org/repo.git"
+ },
+ {
+  "in": "git@github.com:org/repo.git and http://plain.example.com/path",
+  "want": "git@github.com:org/repo.git and http://plain.example.com/path"
+ },
+ {
+  "in": "http://user:pass that weird case",
+  "want": "http://$encrypted$:$encrypted$ that weird case"
+ },
+ {
+  "in": "http://a:b:c@host/",
+  "want": "http://$encrypted$:$encrypted$@host/"
+ },
+ {
+  "in": "http://[::1]:8080/x and http://[bad/x",
+  "want": "$encrypted$ and $encrypted$"
+ },
+ {
+  "in": "{\"repo\": \"https://u:$encrypted$@h/x\", \"x\": 1}",
+  "want": "{\"repo\": \"https://$encrypted$:$encrypted$@h/x\", \"x\": 1}"
+ },
+ {
+  "in": "no uris here at all",
+  "want": "no uris here at all"
+ },
+ {
+  "in": "https://tok@github.com/x https://u2:p2@h2/y",
+  "want": "https://$encrypted$@github.com/x https://$encrypted$:$encrypted$@h2/y"
+ },
+ {
+  "in": "café://u:p@h/ ünïcode:p",
+  "want": "café://u:p@h/ ünïcode:p"
+ },
+ {
+  "in": "http://@host:80/",
+  "want": "http://$encrypted$:$encrypted$/"
+ },
+ {
+  "in": "x",
+  "want": "x"
+ }
+]

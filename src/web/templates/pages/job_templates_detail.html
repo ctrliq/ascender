@@ -1,0 +1,236 @@
+{{define "content"}}
+{{$jt := .Data.jt}}
+{{$id := str $jt.id}}
+{{$sf := $jt.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{$base := printf "/templates/job_template/%s" $id}}
+{{template "screen_header" (dict "title" .Title "stream" "job_template,workflow_job_template,workflow_job_template_node" "crumbs" (list (dict "href" "/templates" "title" (t "Templates")) (dict "href" $base "title" (str $jt.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/templates" "label" "Back to Templates") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list" gutter="sm">
+					{{template "detail" (dict "label" (t "Name") "value" (str $jt.name) "cy" "jt-detail-name")}}
+					{{if has $jt.description}}
+						{{template "detail" (dict "label" (t "Description") "value" (str $jt.description) "cy" "jt-detail-description")}}
+					{{end}}
+					{{template "detail" (dict "label" (t "Job Type") "value" (str $jt.job_type) "cy" "jt-detail-job-type" "help" (t "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."))}}
+					{{with dig $sf "organization"}}
+						{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))) "cy" "jt-detail-organization")}}
+					{{else}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Organization"}}</dt>
+							<dd class="ascender-detail-value ascender-detail-value--deleted">
+								{{t "Deleted"}}
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "inventory"}}
+						{{template "detail" (dict "label" (t "Inventory") "value" (safe (printf `<a href="/inventories/%s/%s/details">%s</a>%s` (cond (eq (str .kind) "smart") "smart_inventory" "inventory") (str .id) (esc .name) (cond $jt.ask_inventory_on_launch (printf "<span> %s </span>" (esc (t "(Prompt on launch)"))) ""))) "cy" "jt-detail-inventory" "help" (t "Select the inventory containing the hosts you want this job to manage."))}}
+					{{else}}
+						{{if not $jt.ask_inventory_on_launch}}
+							<div>
+								<dt class="ascender-detail-name" data-cy="jt-detail-inventory-label">
+									{{t "Inventory"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--deleted" data-cy="jt-detail-inventory-value">
+									{{t "Deleted"}}
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{with dig $sf "project"}}
+						{{template "detail" (dict "label" (t "Project") "value" (safe (printf `<a href="/projects/%s/details">%s</a>` (str .id) (esc .name))) "cy" "jt-detail-project" "help" (t "Select the project containing the playbook you want this job to execute."))}}
+					{{else}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Project"}}</dt>
+							<dd class="ascender-detail-value ascender-detail-value--deleted">
+								{{t "Deleted"}}
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "resolved_environment"}}
+						{{template "detail" (dict "label" (t "Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "cy" "jt-detail-execution-environment" "help" (t "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."))}}
+					{{end}}
+					{{if has $jt.scm_branch}}
+						{{template "detail" (dict "label" (t "Source Control Branch") "value" (str $jt.scm_branch) "cy" "jt-detail-scm-branch")}}
+					{{end}}
+					{{template "detail" (dict "label" (t "Playbook") "value" (str $jt.playbook) "cy" "jt-detail-playbook" "help" (t "Select the playbook to be executed by this job."))}}
+					{{template "detail" (dict "label" (t "Forks") "value" (str $jt.forks) "cy" "jt-detail-forks" "help" (printf "%s ansible.cfg. %s" (t "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to") (t "Refer to the Ansible documentation for details about the configuration file.")))}}
+					{{if has $jt.limit}}
+						{{template "detail" (dict "label" (t "Limit") "value" (str $jt.limit) "cy" "jt-detail-limit" "help" (t "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."))}}
+					{{end}}
+					{{template "detail" (dict "label" (t "Verbosity") "value" .Data.verbosity "cy" "jt-detail-verbosity" "help" (t "Control the level of output ansible will produce as the playbook executes."))}}
+					{{template "detail" (dict "label" (t "Timeout") "value" (str $jt.timeout) "cy" "jt-detail-timeout" "help" (t "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."))}}
+					{{template "detail" (dict "label" (t "Show Changes") "value" (cond $jt.diff_mode (t "On") (t "Off")) "cy" "jt-detail-show-changes" "help" (t "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."))}}
+					{{template "detail" (dict "label" (t "Job Slicing") "value" (str $jt.job_slice_count) "cy" "jt-detail-job-slice-count" "help" (t "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."))}}
+					{{if has $jt.job_slice_pinned_hosts}}
+						{{template "detail" (dict "label" (t "Job Slice Pinned Hosts") "value" (str $jt.job_slice_pinned_hosts) "cy" "jt-detail-job-slice-pinned-hosts" "help" (t "Hosts that run in every slice of a sliced job, as a comma-separated list of host names."))}}
+					{{end}}
+					{{if has $jt.host_config_key}}
+						{{template "detail" (dict "label" (t "Host Config Key") "value" (str $jt.host_config_key) "cy" "jt-detail-host-config-key")}}
+						{{template "detail" (dict "label" (t "Provisioning Callback URL") "value" (printf "%s/api/v2/job_templates/%s/callback/" .Data.origin $id) "cy" "jt-detail-provisioning-callback-url" "help" (t "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template." "brandName" "Ascender"))}}
+					{{end}}
+					{{if has $jt.webhook_service}}
+						{{template "detail" (dict "label" (t "Webhook Service") "value" (cond (eq (str $jt.webhook_service) "github") (t "GitHub") (t "GitLab")) "cy" "jt-detail-webhook-service" "help" (t "Select a webhook service."))}}
+					{{end}}
+					{{if has $jt.related.webhook_receiver}}
+						{{template "detail" (dict "label" (t "Webhook URL") "value" (printf "%s%s" .Data.origin (str $jt.related.webhook_receiver)) "cy" "jt-detail-webhook-url" "help" (t "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."))}}
+					{{end}}
+					{{with dig $sf "webhook_credential"}}
+						{{template "detail" (dict "label" (t "Webhook Credential") "value" (safe (printf `<a href="/credentials/%s/details"><span class="pf-v6-c-label"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text">%s</span></span></span></a>` (str .id) (esc .name))) "cy" "jt-detail-webhook-credential" "help" (t "Optionally select the credential to use to send status updates back to the webhook service."))}}
+					{{end}}
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $jt.created "user" (dig $sf "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $jt.modified "user" (dig $sf "modified_by"))}}
+					{{if .Data.options}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-enabled-options-label" id="jt-detail-enabled-options">
+								{{t "Enabled Options"}}
+								{{template "help_button" (printf "%s %s %s %s %s" (t "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed.") (t "Fact storage: If enabled, this job template will gather facts and store them in the host's fact cache.") (t "Privilege escalation: If enabled, run this playbook as an administrator.") (t "Provisioning callbacks: Enables creation of a provisioning callback URL.") (t "Webhooks: Enables launching jobs from webhook services."))}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-enabled-options-value">
+								<ul data-pf-content="true" class="pf-v6-c-content--ul">
+									{{range .Data.options}}
+										<li data-pf-content="true" class="pf-v6-c-content--li">
+											{{.}}
+										</li>
+									{{end}}
+								</ul>
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "credentials"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-credentials-label" id="jt-detail-credentials">
+									{{t "Credentials"}}
+									{{template "help_button" (t "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-credentials-value">
+									<div>{{template "credential_chips" (credLinks .)}}</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{with dig $sf "labels"}}
+						{{if .results}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-labels-label" id="jt-detail-labels">
+									{{t "Labels"}}
+									{{template "help_button" (t "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-labels-value">
+									<div>
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if .Data.instance_groups}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-instance-groups-label">
+								{{t "Instance Groups"}}
+								{{template "help_button" (t "Select the Instance Groups for this Job Template to run on.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-instance-groups-value">
+								{{template "label_group" (dict "items" (igLinks .Data.instance_groups) "max" 5 "total" (len .Data.instance_groups) "color" "blue")}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has $jt.job_tags}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-job-tags-label">
+								{{t "Job Tags"}}
+								{{template "help_button" (t "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-job-tags-value">
+								<div class="pf-v6-c-label-group">
+									<div class="pf-v6-c-label-group__main">
+										<ul class="pf-v6-c-label-group__list" role="list">
+											{{range split (str $jt.job_tags) ","}}
+												<li class="pf-v6-c-label-group__list-item">
+													<span class="pf-v6-c-label pf-m-outline">
+														<span class="pf-v6-c-label__content">
+															<span class="pf-v6-c-label__text">
+																{{.}}
+															</span>
+														</span>
+													</span>
+												</li>
+											{{end}}
+										</ul>
+									</div>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $jt.skip_tags}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-skip-tags-label">
+								{{t "Skip Tags"}}
+								{{template "help_button" (t "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-skip-tags-value">
+								<div class="pf-v6-c-label-group">
+									<div class="pf-v6-c-label-group__main">
+										<ul class="pf-v6-c-label-group__list" role="list">
+											{{range split (str $jt.skip_tags) ","}}
+												<li class="pf-v6-c-label-group__list-item">
+													<span class="pf-v6-c-label pf-m-outline">
+														<span class="pf-v6-c-label__content">
+															<span class="pf-v6-c-label__text">
+																{{.}}
+															</span>
+														</span>
+													</span>
+												</li>
+											{{end}}
+										</ul>
+									</div>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{template "variables_detail" (dict "cy" (printf "jt-detail-%s" $id) "label" (t "Variables") "value" (str $jt.extra_vars) "rows" 4 "help" (t "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."))}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$base}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "start"}}
+						<button class="pf-v6-c-button pf-m-secondary" type="button" data-launch="/api/v2/job_templates/{{$id}}/" data-launch-type="job_template" data-launch-name="{{$jt.name}}">
+							<span class="pf-v6-c-button__text">{{t "Launch"}}</span>
+						</button>
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{template "delete_button" (dict "name" (str $jt.name) "title" (t "Delete Job Template") "api" (printf "/api/v2/job_templates/%v/" $id) "redirect" "/templates" "error" (t "Failed to delete job template.") "usageKind" "template" "usageId" $id "usageMessage" (t "This job template is currently being used by other resources. Are you sure you want to delete it?"))}}
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "jobs"}}
+			{{template "search_toolbar" (dict "page" . "id" "job-list" "searchKeys" .Data.searchKeys "ns" "job" "kind" "Job" "api" "/api/v2/jobs/" "expandAll" true "filters" .Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button id="jobs-list-cancel-button" aria-labelledby="jobs-list-cancel-button" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-cancel-selected><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}" "numJobsToCancel" 0)))))}}
+			{{if .Data.results}}
+				{{template "jobs_table" (dict "page" . "showType" false "aria" (t "{pluralizedItemName} List" "pluralizedItemName" (t "Jobs")))}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Jobs")) "body" (t "Please run a job to populate this list."))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "survey"}}
+			{{template "survey_tab" (dict "page" . "t" $jt "base" $base "api" (printf "/api/v2/job_templates/%s/" $id))}}
+		{{else if eq .Data.tab "schedules"}}
+			{{template "schedule_list" (dict "page" .)}}
+		{{else if eq .Data.tab "notifications"}}
+			{{template "notification_list" (dict "page" . "kinds" (list "started" "success" "error" "changed"))}}
+		{{else}}
+			{{template "access_tab" .}}
+		{{end}}
+	</div>
+</section>
+{{end}}

@@ -1,0 +1,57 @@
+{{define "clipboard_expansion"}}
+{{/* .id .value: ClipboardCopy, read-only expansion variant */}}
+<div class="pf-v6-c-clipboard-copy" data-clipboard-expansion>
+	<div class="pf-v6-c-clipboard-copy__group">
+		<button aria-expanded="false" id="toggle-{{.id}}" aria-label="Show content" class="pf-v6-c-button pf-m-control" type="button" data-clipboard-toggle>
+			<span class="pf-v6-c-button__icon">
+				<div class="pf-v6-c-clipboard-copy__toggle-icon">{{icon "pf-angle-down"}}</div>
+			</span>
+		</button>
+		<span class="pf-v6-c-form-control pf-m-readonly">
+			<input id="text-input-{{.id}}" aria-label="Copyable input" aria-invalid="false" readonly type="text" value="{{.value}}">
+		</span>
+		<button id="copy-button-{{.id}}" aria-label="{{t "Copy to clipboard"}}" data-tooltip="{{t "Copy to clipboard"}}" data-tooltip-pos="top" data-copy-input class="pf-v6-c-button pf-m-control" type="button">
+			<span class="pf-v6-c-button__icon">{{icon "pf-copy"}}</span>
+		</button>
+	</div>
+	<div class="pf-v6-c-clipboard-copy__expandable-content" id="content-{{.id}}" hidden>
+		{{.value}}
+	</div>
+</div>
+{{end}}
+{{define "info_alert"}}
+{{/* .class .title: an inline info Alert */}}
+<div class="pf-v6-c-alert pf-m-inline pf-m-info {{.class}}">
+	<div class="pf-v6-c-alert__icon">{{icon "pf-info-circle"}}</div>
+	<h4 class="pf-v6-c-alert__title">
+		<span class="pf-v6-screen-reader">Info alert:</span>
+		{{.title}}
+	</h4>
+</div>
+{{end}}
+{{define "created_modal_open"}}
+{{/* .title .alert .alertClass: the one-time secret modal, open on load; the page adds the details and created_modal_close */}}
+<div class="pf-v6-c-backdrop" data-modal data-open-on-load>
+<div class="pf-v6-l-bullseye">
+<div role="dialog" aria-label="{{.title}}" aria-labelledby="created-modal-title" aria-modal="true" class="pf-v6-c-modal-box pf-m-md">
+<div class="pf-v6-c-modal-box__close">
+	<button aria-label="{{t "Close"}}" class="pf-v6-c-button pf-m-plain" type="button" data-close-modal>
+		<span class="pf-v6-c-button__icon">{{icon "pf-close"}}</span>
+	</button>
+</div>
+<header class="pf-v6-c-modal-box__header">
+	<h1 id="created-modal-title" class="pf-v6-c-modal-box__title">
+		<span class="pf-v6-c-modal-box__title-text">{{.title}}</span>
+	</h1>
+</header>
+<div class="pf-v6-c-modal-box__body">
+{{if .alert}}{{template "info_alert" (dict "class" .alertClass "title" .alert)}}{{end}}
+<dl class="ascender-detail-list ascender-detail-list--stacked">
+{{end}}
+{{define "created_modal_close"}}</dl></div></div></div></div>{{end}}
+{{define "delete_button"}}
+{{/* .name .title .api .redirect .error .disabled .usageKind .usageId .usageMessage: DeleteButton, which confirmed with an AlertModal and, given deleteDetailsRequests (usageKind, a key of app.js's DELETE_USAGE, and usageId), listed what still used the object under usageMessage */}}
+<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-button data-name="{{.name}}" data-title="{{.title}}" data-api="{{.api}}" data-redirect="{{.redirect}}"{{if .error}} data-error="{{.error}}"{{end}}{{if .usageKind}} data-usage-kind="{{.usageKind}}" data-usage-id="{{.usageId}}" data-usage-one="{{.usageMessage}}"{{end}}{{if .disabled}} disabled{{end}}>
+	<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+</button>
+{{end}}

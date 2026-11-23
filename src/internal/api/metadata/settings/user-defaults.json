@@ -1,0 +1,14 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {}
+    }
+}

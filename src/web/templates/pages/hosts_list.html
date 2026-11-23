@@ -1,0 +1,44 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Hosts") "stream" "host")}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "host-list" "searchKeys" .Data.searchKeys "ns" "host" "addHref" "/hosts/add" "kind" "Host" "api" "/api/v2/hosts/" "filters" .Data.filters "actionsAfter" .Data.smartInventoryButton)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Hosts")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "host-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Activity"}}
+							</th>
+							{{template "sort_th" (dict "page" . "key" "description" "label" (t "Description") "id" "host-table-sort-description")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Inventory"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $h := .Data.results}}
+							{{template "host_row" (dict "host" $h "i" $i "detail" (printf "/hosts/%s/details" (str $h.id)) "edit" (printf "/hosts/%s/edit" (str $h.id)) "inventory" true)}}
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Hosts")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Hosts")) "addHref" "/hosts/add")}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

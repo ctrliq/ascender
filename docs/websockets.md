@@ -1,201 +1,310 @@
 # Websockets
 
-Ascender uses websockets to update the UI in realtime as events happen within the
-task backend. As jobs progress through their lifecycles, events are emitted by
-the task system and send to the UI which renders this information in some useful
-way for end users to see.
+Ascender pushes live updates to the browser over a websocket: job status
+changes, job events (the lines of job output), schedule and inventory changes,
+and the notice that a session was ended because the user went over their
+session limit. This document describes how a message gets from the process
+that produces it to every client subscribed to it, and the protocol a client
+speaks. It is an architectural overview, not a code walkthrough; the
+implementation is in `src/internal/api/websocket.go`.
 
-In this document, we do not intend to provide a code walkthrough, but an
-architectural overview of how the infrastructure works. We start with a summary
-of things worked historically, and then focus primarily on how things work now.
+## Overview
 
-Since the [web/task split](https://github.com/ansible/awx/pull/13423) landed,
-the websockets infrastructure needed to be reworked. As we will see below, the
-system makes use of
-[django-channels](https://channels.readthedocs.io/en/stable/) which in turn
-makes use of Valkey. As we wanted to have separate deployments for the web (API)
-component and the task backend component, we needed to no longer depend on a
-shared Valkey between these pieces.
-
-When a message gets sent, it lands in Valkey (which is used as a pub/sub server
-backend for django-channels), and django-channels acts on it and forwards it on
-to clients. (There is a concept of "groups" of clients that we will cover
-later.)
-
-Note that django-channels processes messages in Daphne, an ASGI server. This is
-in contrast to WSGI which we currently use for the rest of Ascender. That is *only*
-websockets endpoints are served with Daphne, and everything else is served with
-uWSGI. **_Everything_ goes through nginx, and from there, based on URL path,
-gets routed to uWSGI or Daphne, as required.**
-
-The notable modules for this component are:
-
-* `ascender/main/consumers.py` - the django-channels "consumers" where websocket
-  clients are actually handled (think of these like views, but specific to
-  websockets).
-
-  * This is also where `emit_channel_notification` is defined, which is what the
-    task system calls to actually send out notifications. This sends a message
-    to the local Valkey instance where wsrelay (discussed below) will pick it
-    up and relay it out to the web nodes.
-
-* `ascender/main/wsrelay.py` (formerly `ascender/main/wsbroadcast.py`) - an asyncio
-  websockets _client_ that connects to the "relay" (fka. "broadcast")
-  endpoint. This is a daemon. It formerly ran in each web container, but now
-  runs in each task container instead.
-
-* `ascender/main/management/commands/run_ws_heartbeat.py` - discussed below, used to
-  send a heartbeat payload to pg_notify every few seconds, so that all task
-  pods running `wsrelay.py` (above) know about each web pod.
-
-## Before the web/task split
-
-<img src="img/websockets-old.png">
-
-Consider a Kubernetes deployment of Ascender. Before the web task split, each pod had
-a web container, a task container, and a valkey container (and possibly others,
-not relevant here). A daemon existed called `wsbroadcast` which lived in the web
-container and ran once within each pod. When a websocket message was emitted
-(from some task system daemon, for example), the message would get sent to a
-django-channels "group" which would store it in the pod-local Valkey before
-django-channels acted on it. It would also get sent to a special "broadcast"
-group.
-
-The `wsbroadcast` daemon acted as a full websocket client and connected to a
-special internal endpoint (no end-user clients connected to this
-endpoint). Importantly, **it connected to this endpoint on all pods (nods)
-except for the one it was running on**. Immediately after connecting, it got
-added to the "broadcast" group on each pod and would thus receive a copy of each
-message being sent from each node.
-
-It would then "re-send" this message to its local clients by storing it in its
-own pod-local Valkey for django-channels to process it.
-
-## Current Implementation
-
-<img src="img/websockets-new.png">
-
-In the post web/task split world, web and task containers live in entirely
-independent pods, each with their own Valkey. The former `wsbroadcast` has been
-renamed to `wsrelay`, and we have moved to a kind of "fan-out" architecture.
-
-Messages (only) originate from the task system (container). The `wsrelay` daemon
-initiates a websocket connection to each web pod on its "relay" endpoint (which
-corresponds to the `RelayConsumer` class). As a task progresses and events are
-emitted, websocket messages get sent to Valkey (via django-channels) and
-`wsrelay` running in the same pod picks them up. It then takes each message and
-passes it along to every web pod, via the websocket connection it already has
-open.
-
-There is actually a bit more going on here, and the interested reader is invited
-to read through the `EventConsumer` class and `wsrelay` code for the full
-deep-dive. But, briefly, a few pieces not covered above:
-
-### Only Relaying Messages When Necessary
-
-The `RelayConsumer` class can communicate to and from the `wsrelay`
-client. Because of this, we are able to inform `wsrelay` when there is a client
-actively listening for websocket updates. Then, `wsrelay` can keep note of that
-(and which web pod they are coming from), and only send messages to web pods
-which have active clients on them. This prevents us from sending lots of
-messages to web pods which immediately discard them due to having no clients
-that care about them.
-
-### The Heartbeet
-
-There is also a "ws_heartbeat" system, that goes along with
-the above. Remember that `wsrelay` lives in each task pod, and there could be an
-arbitrary number of web and task pods (independent of each other). Because of
-this, `wsrelay` (on all task pods) needs to know which web pods are up and need
-to be connected to (on their "relay" endpoints). To accomplish this, we use
-pg_notify, since web and task pods are all able to connect to the database and
-we are safely able to use it as a central communication point.
-
-In each web container, there is a process, `run_ws_heartbeat.py` which will send
-out a heartbeat payload to pg_notify, every
-`settings.BROADCAST_WEBSOCKET_BEACON_FROM_WEB_RATE_SECONDS` seconds. This is
-done in a broadcast fashion to a specific pg_notify channel, and each `wsrelay`
-instance (running in each task pod) is concurrently listening to pg_notify for
-these messages. When `wsrelay` sees this heartbeat packet, it checks to see if
-the web node is known already. If not, it creates a connection to it, and adds
-it to its list of nodes to relay websocket messages to.
-
-It can also handle web nodes going offline. If `run_ws_heartbeat.py` detects
-SIGTERM or SIGINT, it will send an "offline" heartbeat packet, and `wsrelay`
-will work to *remove* the web node from its list of active connections.
-
-This also gracefully handles the situation where there is a network blip, or a
-web pod *unexpectedly* goes offline. Eventually the connection to the node will
-time out and `wsrelay` will remove the pod from its list. The next time it sees
-a heartbeat from the node, it will reconnect as normal. Similarly, this handles
-new web pods scaling up at random.
-
-### The Relay Endpoint and Security
-
-The relay endpoint, the endpoint that `wsrelay` connects to as a client, is
-protected so that only `wsrelay` can connect to it. This is important, as
-otherwise anyone could connect to the endpoint and see information (such as
-playbook output) that they might not otherwise have necessary permissions to
-see.
-
-Authentication is accomplished via a shared secret that is generated and set at
-playbook install time. The shared secret is used to derive a payload that is
-exchanged via the http(s) header `secret`. The shared secret payload consists of
-a `secret` field, containing the shared secret, and a `nonce` which is used to
-mitigate replay attack windows.
-
-Note that the nonce timestamp is considered valid if it is within 300 second
-threshold. This is to allow for machine clock skews.
-
-```python
-{
-    "secret": settings.BROADCAST_WEBSOCKET_SECRET,
-    "nonce": time.now()
-}
+```
+ascender-task  (job status, job events, jobs-summary, scheduler pass)
+      |
+      |  SELECT pg_notify('ascender_websocket', ...)
+      v
+  PostgreSQL  ----- NOTIFY ----->  ascender-web replica 1:  LISTEN -> subscribers' sockets
+      ^                       \--> ascender-web replica 2:  LISTEN -> subscribers' sockets
+      |                        \-> ...
+      |  SELECT pg_notify('ascender_websocket', ...)
+      |
+ascender-web   (API writes: launches, cancels, schedule saves, inventory deletes, logins)
 ```
 
-The payload is encrypted using HMAC-SHA256 with
-`settings.BROADCAST_WEBSOCKET_SECRET` as the key. The final payload that is
-sent, including the http header, is of the form:
+PostgreSQL is the only channel between processes. Both `ascender-web` and
+`ascender-task` publish with `pg_notify` on the channel `ascender_websocket`.
+Every `ascender-web` process keeps one database connection listening on that
+channel (`Server.ListenWebsocket`, started from `src/cmd/ascender-web/main.go`)
+and hands each notification to the sockets connected to it that subscribe to
+the notification's group. `ascender-task` publishes but never listens, and
+holds no client sockets.
 
-`secret: nonce_plaintext:HMAC_SHA256({"secret": settings.BROADCAST_WEBSOCKET_SECRET, "nonce": nonce_plaintext})`
+There is no relay daemon, no web-node heartbeat and no shared secret between
+nodes. Because every web process receives every notification from the
+database, a client gets the same messages whichever replica its socket
+landed on, and web and task replicas can be added or removed without either
+side knowing about the other.
 
-Upon receiving the payload, `RelayConsumer` decrypts the `secret` header using
-the known shared secret and ensures the secret value of the decrypted payload
-matches the known shared secret, `settings.BROADCAST_WEBSOCKET_SECRET`. If it
-does not match, the connection is closed. If it does match, the nonce is
-compared to the current time. If the nonce is off by more than 300 seconds, the
-connection is closed. If both tests pass, the connection is accepted.
+The websocket is served by `ascender-web` itself, on the same port and by the
+same HTTP server as the API and the UI.
+
+## Publishing
+
+Code that has something to announce calls one of the `Emit*` methods on
+`api.Server` (`src/internal/api/websocket.go`); `ascender-task` holds its own
+`api.Server` for this. Each method builds the message, and `publishNotice`
+sends it with `pg_notify`. The notification payload is a small JSON envelope:
+
+- `{"g": "<group>", "t": "<message text>"}` for a message whose text is
+  complete, such as a status change;
+- `{"g": "job_events-42", "e": {"table": "main_jobevent", "id": 123, "job_created": "..."}}`
+  for a job event, which travels as a reference to its row (see below).
+
+Running `LISTEN ascender_websocket;` in `psql` shows the traffic.
+
+| Group | Published by | When |
+| --- | --- | --- |
+| `jobs-status_changed` | both | A unified job's status changes: `pending` when it is launched (web) or re-queued by the monitor (task), `waiting`, `running` and the finished status (task), `canceled` on a cancel through the API (web). |
+| `workflow_events-<workflow job id>` | both | The same status message for a job a workflow spawned, sent to its workflow job's group. |
+| `job_events-<id>`, `ad_hoc_command_events-<id>`, `project_update_events-<id>`, `inventory_update_events-<id>`, `system_job_events-<id>` | task | Each job event once it is stored. |
+| `jobs-summary` | task | A job's events are all stored; carries `final_counter`. |
+| `schedules-changed` | both | A schedule is saved through the API, or the scheduler pass in `ascender-task` changes its next run. |
+| `inventories-status_changed` | web | An inventory is marked `pending_deletion`, and again when it is `deleted`. |
+| `control-limit_reached_<user id>` | web | A login ended the user's oldest sessions because of `SESSIONS_PER_USER`. |
+
+A `metrics` group also travels on the channel; it carries subsystem metrics
+from `ascender-task` to the web processes and is never delivered to a client
+(see [Subsystem Metrics](subsystem_metrics.md)).
+
+### Job events travel by reference
+
+A job event can be far larger than the 8000-byte limit PostgreSQL puts on a
+`NOTIFY` payload, so `EmitEventDetail` publishes only the event's table, id
+and `job_created`. A web process that has at least one socket subscribed to
+the event's group reads the row back (`eventPayload`) and sends the full
+message to those sockets; a web process with no such subscriber does not
+query the database at all.
+
+When the `UI_LIVE_UPDATES_ENABLED` setting is off, only the events the UI
+needs to draw a summary are published: `playbook_on_play_start`,
+`playbook_on_task_start` and `playbook_on_stats`.
+
+### Event rate limit
+
+The `MAX_WEBSOCKET_EVENT_RATE` setting (Settings > Jobs, default 30) caps how
+many event messages a job sends a second, as the old callback did
+(`wsThrottle` in `src/internal/tasks/ws_throttle.go`). Every kind of job is
+limited: playbook jobs, ad hoc commands, project updates, inventory updates
+(the runner's lines and the import log alike) and system jobs. The limit
+applies to the websocket message only: every event is still stored and
+appears in the job's output and the events API, which the output page reads
+for the lines it has not shown.
+
+Each run keeps the times of its last `MAX_WEBSOCKET_EVENT_RATE` messages,
+reading the setting once when the run starts; a resumed read of a run starts
+a fresh window. The decision is made when the event arrives from the
+runner, not when it is stored:
+
+- The run's first event is sent, whatever it is.
+- `playbook_on_play_start`, `playbook_on_task_start` and
+  `playbook_on_stats` are always sent, and count toward the rate.
+- An event with no output (empty `stdout` and `start_line` equal to
+  `end_line`) is never sent.
+- Any other event is sent when fewer than `MAX_WEBSOCKET_EVENT_RATE`
+  messages have gone out yet, when the oldest of the last
+  `MAX_WEBSOCKET_EVENT_RATE` went out more than a second ago, or when the
+  last went out more than 1/`MAX_WEBSOCKET_EVENT_RATE` seconds ago.
+- An event held back is not sent later; nothing replaces it.
+
+`0` turns the limit off: every event is sent, events with no output
+included. A replayed event that a resumed read finds stored already is
+neither sent nor counted. `UI_LIVE_UPDATES_ENABLED` applies after the rate
+limit, so with it off only the summary events above go out, and those the
+limit let through. The `callback_receiver_events_broadcast` metric leaves
+out the events the limit held back.
+
+### Delivery guarantees
+
+Delivery is best effort, as it was in the old implementation:
+
+- A message whose envelope exceeds 7900 bytes is dropped and a warning is
+  logged. Only messages with complete text can reach that size; job events
+  never do.
+- If a web process loses its listening connection it acquires a new one
+  (retrying every five seconds while the database is unreachable).
+  Notifications sent in the meantime are not replayed to its clients.
+- A job event whose row cannot be read back is skipped.
+
+Failures to publish are logged under the `broadcast_websocket` logger
+(`ascender.analytics.broadcast_websocket`), which `LOG_AGGREGATOR_LOGGERS` can
+send to an external log aggregator.
+
+`LISTEN` needs a session-level database connection, so each `ascender-web`
+holds one pool connection for as long as it runs. A connection pooler in
+transaction mode between Ascender and PostgreSQL breaks it.
 
 ## Protocol
 
-You can connect to the Ascender channels implementation using any standard websocket
-library by pointing it to `/websocket/`. You must provide a valid Auth Token in
-the request URL. This will drop you into the `EventConsumer`.
+### Connecting
 
-Once you've connected, you are not subscribed to any event groups. You subscribe
-by sending a JSON payload that looks like the following:
+Open a websocket to `/websocket/` (`/api/websocket/` is the same endpoint).
+A plain HTTP request to either path gets a 404.
+
+The upgrade request is authenticated the way the API authenticates any
+request:
+
+- the session cookie (`ASCENDER_SESSION_COOKIE_NAME`, default
+  `ascender_sessionid`), as a browser sends it;
+- `Authorization: Bearer <token>` with an OAuth2 token;
+- `Authorization: Basic ...` when `AUTH_BASIC_ENABLED` is on.
+
+A token in the URL is not accepted.
+
+A session-authenticated upgrade sent from a page on another site is treated
+as unauthenticated: a browser attaches the session cookie to a cross-site
+websocket. The request is cross-site when `Sec-Fetch-Site` says so or the
+`Origin` host differs from the `Host`, unless the origin is listed in the
+`CSRF_TRUSTED_ORIGINS` setting or the `ASCENDER_CSRF_TRUSTED_ORIGINS`
+environment variable. Token and basic authentication are not origin-checked.
+
+An authenticated connection is accepted and the server sends:
 
 ```json
-"groups": {
+{"accept": true, "user": 1}
+```
+
+A connection with no recognised user is accepted, sent `{"close": true}`, and
+closed with code 1000. Credentials the API rejects outright, such as the token
+of an inactive user, get the API's error response instead of an upgrade.
+
+The user is checked once, when the socket opens. Logging out or losing access
+later does not close an open socket.
+
+### Subscribing
+
+Once connected, a client is not subscribed to anything. It subscribes by
+sending a JSON object with an `xrftoken` and a `groups` object:
+
+```json
+{
+  "xrftoken": "<value of the CSRF cookie>",
+  "groups": {
     "jobs": ["status_changed", "summary"],
     "schedules": ["changed"],
+    "inventories": ["status_changed"],
+    "job_events": [42],
+    "workflow_events": [17],
     "ad_hoc_command_events": [ids...],
-    "job_events": [ids...],
-    "workflow_events": [ids...],
     "project_update_events": [ids...],
     "inventory_update_events": [ids...],
     "system_job_events": [ids...],
-    "control": ["limit_reached_<user_id>"],
+    "control": ["limit_reached_<user_id>"]
+  }
 }
 ```
 
-These map to the event group and event type that the user is interested
-in. Sending in a new groups dictionary will clear all previously-subscribed
-groups before subscribing to the newly requested ones. This is intentional, and
-makes the single page navigation much easier since users only need to care about
-current subscriptions.
+`xrftoken` must equal the CSRF cookie (`ASCENDER_CSRF_COOKIE_NAME`, default
+`csrftoken`) that came with the upgrade request. Every message is checked; on
+a mismatch, or when the upgrade carried no CSRF cookie, the server answers
+`{"error": "access denied to channel"}` and ignores the message. A
+token-authenticated client must therefore send a CSRF cookie with the upgrade
+too, and echo its value.
 
-Note that, as mentioned above, `wsrelay` will only relay messages to a web pod
-if there is a user actively listening for a message of whatever type is being
-sent.
+Each key of `groups` and each item of its list form one group name,
+`<key>-<item>`: `"jobs": ["status_changed"]` subscribes to
+`jobs-status_changed`, and `"job_events": [42]` to `job_events-42`.
+
+Sending a new `groups` object replaces the previous subscription: groups not
+named again are left and new ones joined. This is intentional, and suits a
+single-page UI, which only needs to name what the current page wants. The
+server replies with the result:
+
+```json
+{"groups_current": ["jobs-status_changed", "job_events-42"], "groups_left": [], "groups_joined": ["job_events-42"]}
+```
+
+A message with an `xrftoken` but no `groups` key is accepted and does nothing.
+
+### Access checks
+
+The event groups are checked per id when subscribing:
+
+| Group | Each id must be |
+| --- | --- |
+| `job_events` | a job |
+| `workflow_events` | a workflow job |
+| `ad_hoc_command_events` | an ad hoc command |
+| `project_update_events` | a project update |
+| `inventory_update_events` | an inventory update |
+| `system_job_events` | a system job |
+
+and the user must be able to see it, which is the same check as the job
+appearing in the user's `/api/v2/unified_jobs/` list. An id that fails is
+skipped with `{"error": "access denied to channel <group> for resource id <id>"}`,
+and the rest of the subscription goes ahead. Any other group name ending in
+`_events` is refused the same way.
+
+The other groups (`jobs`, `schedules`, `inventories`, `control`) are not
+checked. A group name nothing publishes to is accepted and never receives
+anything.
+
+### Errors that close the socket
+
+| Close code | Cause |
+| --- | --- |
+| 1008 | The user already holds 64 open sockets on this web process (the client gets `{"close": true}` first). |
+| 1009 | A client message larger than 1 MiB. |
+| 1002 | A protocol error: an unknown opcode, or a control frame that is fragmented or longer than 125 bytes. |
+| 1011 | A text message that is not a JSON object, a `groups` value that is not an object, or an event id that is not an integer. |
+
+A `groups` entry whose value is not a list is answered with
+`{"error": "access denied to channel"}` and the whole message is ignored.
+Binary messages are ignored.
+
+### Keepalive and slow clients
+
+The server pings every 30 seconds; browsers answer automatically. A
+connection from which nothing (data, pong or ping) arrives for 75 seconds is
+closed. A client that stops reading is disconnected once more than 8 MiB, or
+512 messages, are waiting to be written to it.
+
+### Messages
+
+Every message carries `group_name`, the part of the group before the first
+`-`, which tells a client subscribed to several groups which one it came
+from.
+
+`jobs-status_changed`, and the same message on `workflow_events-<id>`:
+
+```json
+{"unified_job_id": 42, "status": "running", "instance_group_name": "default", "type": "job", "group_name": "jobs", "unified_job_template_id": 7}
+```
+
+`instance_group_name` is present only for `running`, and `finished` only for
+`successful`, `failed` and `canceled`. A job spawned by a workflow adds
+`workflow_job_id` and `workflow_node_id`. On `workflow_events-<id>` the
+`group_name` is `workflow_events` and `workflow_job_template_id` is the
+spawned job's own template.
+
+`jobs-summary`: `{"group_name": "jobs", "unified_job_id": 42, "final_counter": 118}`.
+
+`schedules-changed`: `{"id": 3, "group_name": "schedules"}`.
+
+`inventories-status_changed`: `{"group_name": "inventories", "inventory_id": 5, "status": "deleted"}`.
+
+`control-limit_reached_<user id>`: `{"group_name": "control", "reason": "limit_reached"}`.
+
+Job events carry `id`, the job's id under `job`, `ad_hoc_command`,
+`project_update`, `inventory_update` or `system_job`, `created`, `modified`,
+`group_name`, `url` (set for job and ad hoc command events, empty otherwise),
+`stdout`, `counter`, `uuid`, `parent_uuid`, `start_line`, `end_line`, `event`,
+`event_data`, `failed`, `changed`, `event_level`, `play`, `role` and `task`,
+with the same values the old implementation sent.
+
+## Differences from the old implementation
+
+The client protocol, the replies and the message bodies are the same. A
+client or operator may notice the following:
+
+- Relay: Django Channels, Daphne, the per-pod Valkey, `wsrelay`, the
+  `/websocket/relay/` endpoint and the web heartbeat are gone, replaced by
+  PostgreSQL `NOTIFY`. The `BROADCAST_WEBSOCKET_*` settings are not read.
+- A session-authenticated connection from another origin gets no user.
+- A user can hold at most 64 sockets per web process.
+- The server pings idle connections and closes ones that stop answering.
+- The Ascender UI opens a websocket only on the output page of a running
+  job (not of a workflow job), where it subscribes to the job's events and
+  to `jobs-status_changed` and `jobs-summary`. No other page uses the
+  websocket.

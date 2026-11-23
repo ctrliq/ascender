@@ -1,0 +1,43 @@
+{
+    "name": "Inventory Variable Data",
+    "description": "# Retrieve Inventory Variable Data:\n\nMake a GET request to this resource to retrieve all variables defined for a\ninventory.\n\n\n\n# Update Inventory Variable Data:\n\nMake a PUT or PATCH request to this resource to update variables defined for a\ninventory.",
+    "renders": [
+        "application/json",
+        "text/html",
+        "application/yaml"
+    ],
+    "parses": [
+        "application/json",
+        "application/yaml"
+    ],
+    "actions": {
+        "GET": {
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Inventory variables in JSON or YAML format.",
+                "filterable": true
+            }
+        },
+        "PUT": {
+            "variables": {
+                "type": "json",
+                "required": false,
+                "label": "Variables",
+                "help_text": "Inventory variables in JSON or YAML format.",
+                "filterable": true,
+                "default": ""
+            }
+        }
+    },
+    "types": [
+        "inventory"
+    ],
+    "object_roles": [
+        "admin_role",
+        "update_role",
+        "adhoc_role",
+        "use_role",
+        "read_role"
+    ]
+}

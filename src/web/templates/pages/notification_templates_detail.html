@@ -1,0 +1,135 @@
+{{define "content"}}
+{{if .Data.notFound}}
+	{{template "screen_header" (dict "title" (t "Notification Templates") "stream" "notification_template")}}
+	<section class="pf-v6-c-page__main-section">
+		<div id="" class="pf-v6-c-card">{{template "content_error" 404}}</div>
+	</section>
+{{else}}
+	{{$n := .Data.nt}}
+	{{$id := str $n.id}}
+	{{$sf := $n.summary_fields}}
+	{{$caps := dig $sf "user_capabilities"}}
+	{{template "screen_header" (dict "title" (t "Details") "stream" "notification_template" "crumbs" (list (dict "href" "/notification_templates" "title" (t "Notification Templates")) (dict "href" (printf "/notification_templates/%s" $id) "title" (str $n.name))))}}
+	<section class="pf-v6-c-page__main-section">
+		<div id="" class="pf-v6-c-card">
+			{{template "routed_tabs" (dict "current" "details" "back" (dict "href" "/notification_templates" "label" "Back to Notifications") "tabs" (list (dict "key" "details" "href" (printf "/notification_templates/%s/details" $id) "label" "Details")))}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed" data-nt-detail data-id="{{$id}}">
+				<dl class="ascender-detail-list" gutter="sm">
+					{{template "detail" (dict "label" (t "Name") "value" (str $n.name) "cy" "nt-detail-name")}}
+					{{if has $n.description}}
+						{{template "detail" (dict "label" (t "Description") "value" (str $n.description) "cy" "nt-detail-description")}}
+					{{end}}
+					{{if .Data.status}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Status"}}</dt>
+							<dd class="ascender-detail-value" data-nt-status>
+								{{template "status_label" .Data.status}}
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "organization"}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Organization"}}</dt>
+							<dd class="ascender-detail-value">
+								<a href="/organizations/{{str .id}}/details">{{.name}}</a>
+							</dd>
+						</div>
+					{{else}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Organization"}}</dt>
+							<dd class="ascender-detail-value">{{t "Deleted"}}</dd>
+						</div>
+					{{end}}
+					{{template "detail" (dict "label" (t "Notification Type") "value" .Data.typeLabel "cy" "nt-detail-type")}}
+					{{range .Data.rows}}
+						{{if .IsArray}}
+							<div style="grid-column: 1 / -1;">
+								<dt class="ascender-detail-name"{{if .Cy}} data-cy="{{.Cy}}-label"{{end}}>
+									{{.Label}}
+									{{template "nt_help" .}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--array"{{if .Cy}} data-cy="{{.Cy}}-value"{{end}}>
+									{{range .Array}}<div>{{.}}</div>{{end}}
+								</dd>
+							</div>
+						{{- else if .IsCode}}
+							<div class="ascender-code-detail">
+								<div class="ascender-code-detail__label" data-cy="{{.Cy}}-label">
+									<label for="{{.Cy}}-editor" id="{{.Cy}}-editor-label">
+										{{.Label}}
+									</label>
+									{{template "nt_help" .}}
+								</div>
+								<div class="ascender-code-detail__editor" data-cy="{{.Cy}}-value">
+									<div class="ascender-code-editor__focus-wrapper" tabindex="-1">
+										<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="{{.Cy}}-editor" data-rows="6" data-mode="json">
+											<textarea hidden data-code-editor-value>{{.Code}}</textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						{{- else}}
+							<div>
+								<dt class="ascender-detail-name"{{if .Cy}} data-cy="{{.Cy}}-label" id="{{.Cy}}"{{end}}>
+									{{.Label}}
+									{{template "nt_help" .}}
+								</dt>
+								<dd class="ascender-detail-value"{{if .Cy}} data-cy="{{.Cy}}-value"{{end}}>
+									{{if .HTML}}{{.HTML}}{{else}}{{.Value}}{{end}}
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $n.created "user" (dig $sf "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $n.modified "user" (dig $sf "modified_by"))}}
+					{{range .Data.messages}}
+						<div class="ascender-code-detail">
+							<div class="ascender-code-detail__label">
+								<label for="code-editor">{{.Label}}</label>
+							</div>
+							<div class="ascender-code-detail__editor">
+								<div class="ascender-code-editor__focus-wrapper" tabindex="-1">
+									<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="code-editor" data-rows="{{.Rows}}" data-mode="jinja2">
+										<textarea hidden data-code-editor-value>{{.Value}}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					{{end}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="/notification_templates/{{$id}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+						<button class="pf-v6-c-button pf-m-secondary" type="button" data-nt-test="{{$id}}"{{if or (eq (str .Data.status) "running") (eq (str .Data.status) "pending")}} disabled=""{{end}}>
+							<span class="pf-v6-c-button__text">{{t "Test"}}</span>
+						</button>
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{template "delete_button" (dict "name" (str $n.name) "title" (t "Delete Notification") "api" (printf "/api/v2/notification_templates/%s/" $id) "redirect" "/notification_templates" "error" (t "Failed to delete notification."))}}
+					{{end}}
+				</div>
+			</div>
+			{{template "nt_status_templates"}}
+		</div>
+	</section>
+{{end}}
+{{end}}
+{{define "nt_help"}}
+{{if .Help}}
+	{{if hasPrefix .Help "html:"}}
+		<div style="display: contents;">
+			<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="" data-popover-header="{{.Label}}" data-popover-html="{{trimPrefix .Help "html:"}}">
+				{{icon "help"}}
+			</button>
+		</div>
+	{{else}}
+		<div style="display: contents;">
+			<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="{{.Help}}" data-popover-header="{{.Label}}">
+				{{icon "help"}}
+			</button>
+		</div>
+	{{end}}
+{{end}}
+{{end}}

@@ -1,0 +1,20 @@
+{
+    "name": "Job Template Callback",
+    "description": "The job template callback allows for ephemeral hosts to launch a new job.\n\nConfigure a host to POST to this resource, passing the `host_config_key`\nparameter, to start a new job limited to only the requesting host.  In the\nexamples below, replace the `N` parameter with the `id` of the job template\nand the `HOST_CONFIG_KEY` with the `host_config_key` associated with the\njob template.\n\nFor example, using curl:\n\n    curl -H \"Content-Type: application/json\" -d '{\"host_config_key\": \"HOST_CONFIG_KEY\"}'  http://server/api/v2/job_templates/N/callback/\n\nOr using wget:\n\n    wget -O /dev/null --post-data='{\"host_config_key\": \"HOST_CONFIG_KEY\"}' --header=Content-Type:application/json http://server/api/v2/job_templates/N/callback/\n\nYou may also pass `extra_vars` to the callback:\n\n    curl -H \"Content-Type: application/json\" -d '{\"host_config_key\": \"HOST_CONFIG_KEY\", \"extra_vars\": {\"key\": \"value\"}}'  http://server/api/v2/job_templates/N/callback/\n    \nThe response will return status 202 if the request is valid, 403 for an\ninvalid host config key, or 400 if the host cannot be determined from the\naddress making the request.\n\n_(New in Ansible Tower 2.0.0)_  If the associated inventory has the\n`update_on_launch` flag set and if the `update_cache_timeout` has expired, the\ncallback will perform an inventory sync to find a matching host.\n\nA GET request may be used to verify that the correct host will be selected.\nThis request must authenticate as a valid user with permission to edit the\njob template.  For example:\n\n    curl http://user:password@server/api/v2/job_templates/N/callback/\n\nThe response will include the host config key as well as the host name(s)\nthat would match the request:\n\n    {\n        \"host_config_key\": \"HOST_CONFIG_KEY\",\n        \"matching_hosts\": [\"hostname\"]\n    }",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded"
+    ],
+    "actions": {
+        "GET": {}
+    },
+    "object_roles": [
+        "admin_role",
+        "execute_role",
+        "read_role"
+    ]
+}

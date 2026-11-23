@@ -1,0 +1,68 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `BULK_JOB_MAX_LAUNCH`: Max jobs to allow bulk jobs to launch (integer)\n* `BULK_HOST_MAX_CREATE`: Max number of hosts to allow to be created in a single bulk action (integer)\n* `BULK_HOST_MAX_DELETE`: Max number of hosts to allow to be deleted in a single bulk action (integer)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `BULK_JOB_MAX_LAUNCH`: Max jobs to allow bulk jobs to launch (integer, default=`100`)\n* `BULK_HOST_MAX_CREATE`: Max number of hosts to allow to be created in a single bulk action (integer, default=`100`)\n* `BULK_HOST_MAX_DELETE`: Max number of hosts to allow to be deleted in a single bulk action (integer, default=`250`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "BULK_JOB_MAX_LAUNCH": {
+                "type": "integer",
+                "required": false,
+                "label": "Max jobs to allow bulk jobs to launch",
+                "help_text": "Max jobs to allow bulk jobs to launch",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "default": 100
+            },
+            "BULK_HOST_MAX_CREATE": {
+                "type": "integer",
+                "required": false,
+                "label": "Max number of hosts to allow to be created in a single bulk action",
+                "help_text": "Max number of hosts to allow to be created in a single bulk action",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "default": 100
+            },
+            "BULK_HOST_MAX_DELETE": {
+                "type": "integer",
+                "required": false,
+                "label": "Max number of hosts to allow to be deleted in a single bulk action",
+                "help_text": "Max number of hosts to allow to be deleted in a single bulk action",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "default": 250
+            }
+        },
+        "GET": {
+            "BULK_JOB_MAX_LAUNCH": {
+                "type": "integer",
+                "label": "Max jobs to allow bulk jobs to launch",
+                "help_text": "Max jobs to allow bulk jobs to launch",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "defined_in_file": false
+            },
+            "BULK_HOST_MAX_CREATE": {
+                "type": "integer",
+                "label": "Max number of hosts to allow to be created in a single bulk action",
+                "help_text": "Max number of hosts to allow to be created in a single bulk action",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "defined_in_file": false
+            },
+            "BULK_HOST_MAX_DELETE": {
+                "type": "integer",
+                "label": "Max number of hosts to allow to be deleted in a single bulk action",
+                "help_text": "Max number of hosts to allow to be deleted in a single bulk action",
+                "category": "Bulk Actions",
+                "category_slug": "bulk",
+                "defined_in_file": false
+            }
+        }
+    }
+}

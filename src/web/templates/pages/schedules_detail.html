@@ -1,0 +1,178 @@
+{{define "content"}}
+{{$o := .Data.owner}}
+{{$s := .Data.schedule}}
+{{$id := str $s.id}}
+{{$sf := $s.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{$base := .Data.sbase}}
+{{$v := .Data.values}}
+{{template "screen_header" (dict "title" (t "Details") "stream" $o.Stream "crumbs" .Data.crumbs)}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "details" "back" (dict "href" (printf "%s/schedules" $o.Base) "label" "Back to Schedules") "tabs" (list (dict "key" "details" "href" (printf "%s/details" $base) "label" "Details")))}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			{{template "schedule_toggle" (dict "id" $id "enabled" (eq $s.enabled true) "disabled" .Data.toggleDisabled "class" "ascender-schedule-detail__padding-bottom-40")}}
+			<dl class="ascender-detail-list" gutter="sm">
+				{{template "detail" (dict "label" (t "Name") "value" (str $s.name) "cy" "schedule-name")}}
+				{{if has $s.description}}
+					{{template "detail" (dict "label" (t "Description") "value" (str $s.description) "cy" "schedule-description")}}
+				{{end}}
+				{{if .Data.firstRun}}
+					{{template "detail" (dict "label" (t "First Run") "value" .Data.firstRun "cy" "schedule-first-run")}}
+				{{end}}
+				{{if .Data.nextRun}}
+					{{template "detail" (dict "label" (t "Next Run") "value" .Data.nextRun "cy" "schedule-next-run")}}
+				{{end}}
+				{{if .Data.lastRun}}
+					{{template "detail" (dict "label" (t "Last Run") "value" .Data.lastRun)}}
+				{{end}}
+				{{template "detail" (dict "label" (t "Local Time Zone") "value" (str $s.timezone) "help" (t "Refer to the Ascender documentation for more information.") "cy" "schedule-timezone")}}
+				{{template "detail" (dict "label" (t "Repeat Frequency") "value" .Data.repeat "cy" "schedule-repeat-frequency")}}
+				{{template "detail" (dict "label" (t "Exception Frequency") "value" .Data.exceptionRepeat "cy" "schedule-exception-frequency")}}
+			</dl>
+			{{if .Data.frequencyDetails}}
+				<div class="ascender-schedule-detail__frequency-details-container">
+					<div ouia-component-id="schedule-frequency-details">
+						<p><strong>{{t "Frequency Details"}}</strong></p>
+						{{template "schedule_frequency_details" .Data.frequencyDetails}}
+					</div>
+				</div>
+			{{end}}
+			{{if .Data.exceptionDetails}}
+				<div class="ascender-schedule-detail__frequency-details-container">
+					<div ouia-component-id="schedule-exception-details">
+						<p class="ascender-schedule-detail__border-top-0">
+							<strong>{{t "Frequency Exception Details"}}</strong>
+						</p>
+						{{template "schedule_frequency_details" .Data.exceptionDetails}}
+					</div>
+				</div>
+			{{end}}
+			<dl class="ascender-detail-list" gutter="sm">
+				{{if $o.DaysToKeep}}
+					{{if .Data.daysToKeep}}
+						{{template "detail" (dict "label" (t "Days of Data to Keep") "value" .Data.daysToKeep "cy" "schedule-days-to-keep")}}
+					{{end}}
+				{{end}}
+				{{if .Data.occurrencesLocal}}
+					<dt class="ascender-detail-name ascender-detail-name--full-width ascender-schedule-occurrences__grid-column-1-1" component="dt">
+						<div class="pf-v6-l-split pf-m-gutter">
+							<div class="pf-v6-l-split__item">
+								<div class="ascender-schedule-occurrences__label">
+									<span>{{t "Occurrences"}}</span>
+									<span>{{t "(Limited to first 10)"}}</span>
+								</div>
+							</div>
+							<div class="pf-v6-l-split__item">
+								<div class="ascender-button-group__group" data-occurrence-toggle>
+									<button aria-label="{{t "Local"}}" class="pf-v6-c-button pf-m-primary ascender-multi-button-toggle__small-button toggle-button-local" type="button" data-occurrence-mode="local">
+										<span class="pf-v6-c-button__text">{{t "Local"}}</span>
+									</button>
+									<button aria-label="{{t "UTC"}}" class="pf-v6-c-button pf-m-secondary ascender-multi-button-toggle__small-button toggle-button-utc" type="button" data-occurrence-mode="utc">
+										<span class="pf-v6-c-button__text">{{t "UTC"}}</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</dt>
+					<dd class="ascender-detail-value ascender-detail-value--full-width ascender-schedule-occurrences__grid-column-margin-top" component="dd">
+						<div data-occurrences="local">
+							{{range .Data.occurrencesLocal}}<div>{{.}}</div>{{end}}
+						</div>
+						<div data-occurrences="utc" hidden>
+							{{range .Data.occurrencesUTC}}<div>{{.}}</div>{{end}}
+						</div>
+					</dd>
+				{{end}}
+				{{template "user_date_detail" (dict "label" (t "Created") "date" $s.created "user" (dig $sf "created_by"))}}
+				{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $s.modified "user" (dig $sf "modified_by"))}}
+			</dl>
+			{{if .Data.prompts}}
+				<h2 class="pf-v6-c-title pf-m-md ascender-schedule-detail__prompt-title">
+					{{t "Prompted Values"}}
+				</h2>
+				<hr class="pf-v6-c-divider ascender-schedule-detail__prompt-divider">
+				<dl class="ascender-detail-list ascender-schedule-detail__prompt-detail-list">
+					{{range .Data.prompts}}
+						{{if .Variables}}
+							{{template "variables_detail" (dict "cy" "schedule-detail-variables" "label" (t "Variables") "value" .Variables "rows" 4)}}
+						{{else if .Chips}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width"{{if .Cy}} data-cy="{{.Cy}}-label"{{end}}>
+									{{.Label}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width"{{if .Cy}} data-cy="{{.Cy}}-value"{{end}}>
+									<div class="pf-v6-c-label-group">
+										<div class="pf-v6-c-label-group__main">
+											<ul class="pf-v6-c-label-group__list" role="list">
+												{{range .Chips}}
+													<li class="pf-v6-c-label-group__list-item">
+														<span class="pf-v6-c-label pf-m-outline">
+															<span class="pf-v6-c-label__content">
+																{{if .href}}
+																	<a class="pf-v6-c-label__text" href="{{.href}}">
+																		{{if .kind}}
+																			<strong>
+																				{{$k := credKindLabel .}}
+																				{{if credKindIsMessage $k}}
+																					{{t $k}}
+																				{{else}}
+																					{{$k}}
+																				{{end}}
+																				: </strong>
+																		{{end}}
+																		{{.name}}
+																	</a>
+																{{else}}
+																	<span class="pf-v6-c-label__text">
+																		{{.name}}
+																	</span>
+																{{end}}
+															</span>
+														</span>
+													</li>
+												{{end}}
+											</ul>
+										</div>
+									</div>
+								</dd>
+							</div>
+						{{else if .Link}}
+							{{template "detail" (dict "label" .Label "value" (safe (printf `<a href="%s">%s</a>` .Link (html .Value))) "cy" .Cy)}}
+						{{else}}
+							{{template "detail" (dict "label" .Label "value" .Value "cy" .Cy)}}
+						{{end}}
+					{{end}}
+				</dl>
+			{{end}}
+			{{if $v.Unsupported}}
+				<div class="ascender-unsupported-r-rule-alert__wrapper">
+					<div class="pf-v6-c-alert pf-m-danger pf-m-inline" aria-label="Danger Alert">
+						<div class="pf-v6-c-alert__icon">{{icon "exclamation-circle"}}</div>
+						<p class="pf-v6-c-alert__title">
+							<span class="pf-v6-u-screen-reader">Danger alert:</span>
+							{{t "This schedule uses complex rules that are not supported in the UI. Please use the API to manage this schedule."}}
+						</p>
+					</div>
+					<p class="ascender-unsupported-r-rule-alert__rules-title">
+						{{t "Schedule Rules"}}:
+					</p>
+					<pre style="font-family: var(--pf-t--global--font--family--mono);">{{.Data.rules}}</pre>
+				</div>
+			{{end}}
+			<div class="ascender-card-actions-row__wrapper">
+				{{if dig $caps "edit"}}
+					<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$base}}/edit">
+						<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+					</a>
+				{{end}}
+				{{if dig $caps "delete"}}
+					<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="Schedule" data-api="/api/v2/schedules/{{$id}}/" data-name="{{$s.name}}" data-redirect="{{$o.Base}}/schedules">
+						<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+					</button>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

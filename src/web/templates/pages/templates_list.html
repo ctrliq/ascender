@@ -1,0 +1,4 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Templates") "stream" "job_template,workflow_job_template,workflow_job_template_node")}}
+<section class="pf-v6-c-page__main-section">{{template "templates_list_card" .}}</section>
+{{end}}

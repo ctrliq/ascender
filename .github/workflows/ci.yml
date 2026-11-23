@@ -1,227 +1,183 @@
 ---
-# Modifications Copyright (c) 2026 Ctrl IQ, Inc.
+# Pull request checks. Each job runs what a developer runs locally (make
+# help lists the targets), so a failure here reproduces with the same
+# command.
 name: CI
-env:
-  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
-  CI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  DEV_DOCKER_OWNER: ${{ github.repository_owner }}
-  COMPOSE_TAG: ${{ github.base_ref || 'main' }}
+
 on:
   pull_request:
-  # The README badge shows these runs: without them it shows whichever pull
-  # request finished last.
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push to a pull request supersedes the run for the previous one.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  common-tests:
-    name: ${{ matrix.tests.name }}
+  check:
+    name: fmt, tidy, build, vet
     runs-on: ubuntu-latest
-    timeout-minutes: 60
-    permissions:
-      packages: read
-      contents: read
-    # The API suite runs on PostgreSQL, which is what Ascender is deployed
-    # against; it used to run on SQLite, which left the partitioned event
-    # tables, the COPY that assembles job stdout and every query-count
-    # assertion untested. The service is shared by the whole matrix, which
-    # costs nothing for the jobs that do not open a connection.
-    #
-    # The credentials have to match the fallback in ascender/settings/defaults.py:
-    # the suite itself is told where to connect through ASCENDER_TEST_DATABASE_*
-    # below, but the ascender-manage checks that make test runs afterwards load
-    # the development settings, and the throwaway container has no settings
-    # files for those to read, so they connect with the fallback.
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5  # v7.1.0
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: gofmt
+        run: make fmt-check
+
+      - name: go mod tidy
+        run: make tidy-check
+
+      # The images ship licenses/go, one license per module linked into the
+      # binaries; a dependency change must regenerate it (make licenses).
+      - name: Go module licenses
+        run: make licenses-check
+
+      - name: Build
+        run: make build
+
+      - name: go vet
+        run: make vet
+
+      - name: Documentation site links
+        run: make docsite-check
+
+  lint:
+    name: staticcheck, deadcode
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5  # v7.1.0
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Lint
+        run: make lint
+
+  test:
+    name: go test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # The database-backed tests run against an empty database the web
+    # binary gives the schema (the baseline and the Go migrations), the
+    # PostgreSQL the compose file runs. They connect as the admin role:
+    # the tests that need a database of their own (the multi-replica claim
+    # tests, the API scratch tests) create and drop one, and skip without
+    # CREATEDB.
     services:
       postgres:
-        image: postgres:15
+        image: quay.io/sclorg/postgresql-18-c9s:latest@sha256:1732d0a342e2790afc100e1fe741704e5c4413dfba9a3ab3b571c26b8cb0da6f
         env:
-          POSTGRES_USER: ascender
-          POSTGRES_PASSWORD: ascenderpass
-          POSTGRES_DB: ascender
+          POSTGRESQL_USER: ascender
+          POSTGRESQL_PASSWORD: ci
+          POSTGRESQL_DATABASE: ascender
+          POSTGRESQL_ADMIN_PASSWORD: ci
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
+          --health-cmd "pg_isready -q"
+          --health-interval 5s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 20
+    env:
+      ASCENDER_TEST_DATABASE_URL: postgres://postgres:ci@localhost:5432/ascender?sslmode=disable
+      ASCENDER_SCRATCH_DATABASE_URL: postgres://postgres:ci@localhost:5432/postgres?sslmode=disable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5  # v7.1.0
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Load the schema
+        working-directory: src
+        env:
+          ASCENDER_DATABASE_URL: ${{ env.ASCENDER_TEST_DATABASE_URL }}
+          ASCENDER_SECRET_KEY: ci-only-secret-key
+        run: go run ./cmd/ascender-web migrate
+
+      # The tests that need the LDAP rig (ASCENDER_TEST_LDAP_URI) skip
+      # without it.
+      - name: Test
+        run: make test GOTESTFLAGS='-race -count=1'
+
+  vulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Informational until the toolchain moves past GO-2026-6859 (Go
+    # 1.27.4); then drop continue-on-error so a reachable advisory fails.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5  # v7.1.0
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: govulncheck
+        run: make vulncheck
+
+  images:
+    name: image ascender-${{ matrix.component }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        tests:
-          - name: api-test
-            command: /start_tests.sh
-          - name: api-migrations
-            command: /start_tests.sh test_migrations
-          - name: api-lint
-            command: /var/lib/ascender/venv/ascender/bin/tox -e linters
-          # Advisory while the diagnostics that are already in the tree are worked
-          # through: the job reports them, it does not fail the pull request.
-          - name: api-type-check
-            command: /var/lib/ascender/venv/ascender/bin/tox -e typecheck
-            advisory: true
-          # Audits what the image installed rather than resolving requirements.txt
-          # again, so it sees the versions that ship. Advisory until the backlog
-          # it reports is clear.
-          # Blocking, unlike the advisory run above: it covers only the packages
-          # that already report nothing, so it fails when one of them regresses.
-          - name: api-type-check-strict
-            command: /var/lib/ascender/venv/ascender/bin/tox -e typecheck-strict
-          - name: api-dependency-audit
-            command: /bin/bash -c "/var/lib/ascender/venv/ascender/bin/pip install --quiet pip-audit && /var/lib/ascender/venv/ascender/bin/pip-audit --progress-spinner=off"
-            advisory: true
-          # The UI's API types are generated from the serializers and committed.
-          # This regenerates them and fails if the committed copy has drifted,
-          # which is what happens when a serializer changes and nobody reruns
-          # make ui-api-types.
-          - name: ui-api-types-drift
-            command: /bin/bash -c "make ui-api-types && git diff --exit-code ascender/ui/src/types/api.generated.ts"
-          - name: ui-lint
-            command: make ui-lint
-          - name: ui-type-check
-            command: make ui-type-check
-          - name: ui-test-screens
-            command: make ui-test-screens
-          - name: ui-test-general
-            command: make ui-test-general
+        component: [web, task]
     steps:
-      - name: Checkout ascender
+      - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      - name: Build ascender_devel image for running checks
-        uses: ./.github/actions/ascender_devel_image
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
 
-      - name: Run check ${{ matrix.tests.name }}
-        continue-on-error: ${{ matrix.tests.advisory || false }}
-        # Host networking so the throwaway container reaches the service that
-        # the runner published on localhost.
+      # Builds without pushing, from the cache devel_images.yml writes on
+      # main, so a broken Dockerfile shows up before the merge.
+      - name: Build ascender-${{ matrix.component }}
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
+        with:
+          context: .
+          file: deploy/Dockerfile.${{ matrix.component }}
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: ascender-${{ matrix.component }}:ci
+          cache-from: type=gha,scope=ascender-devel-${{ matrix.component }}
+
+      - name: Smoke test the image
         env:
-          DOCKER_RUNNER_OPTS: >-
-            --network host
-            -e ASCENDER_TEST_DATABASE_HOST=127.0.0.1
-            -e ASCENDER_TEST_DATABASE_PORT=5432
-            -e ASCENDER_TEST_DATABASE_NAME=ascender
-            -e ASCENDER_TEST_DATABASE_USER=ascender
-            -e ASCENDER_TEST_DATABASE_PASSWORD=ascenderpass
-        run: AWX_DOCKER_CMD='${{ matrix.tests.command }}' make docker-runner
-
-  dev-env:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    permissions:
-      packages: read
-      contents: read
-    steps:
-      - name: Checkout ascender
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-
-      - name: Start the development environment
-        uses: ./.github/actions/run_ascender_devel
-        with:
-          build-ui: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install the ctrliq.ascender collection for the smoke test
-        run: ansible-galaxy collection install ctrliq.ascender
-
-      - name: Run smoke test
-        run: ansible-playbook tools/docker-compose/ansible/smoke-test.yml -v
-
-      - name: Get logs from the development environment on failure
-        if: failure()
-        run: docker logs tools_ascender_1 || true
-
-  e2e:
-    name: ui-e2e
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    permissions:
-      packages: read
-      contents: read
-    steps:
-      - name: Checkout ascender
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-
-      # build-ui, unlike the dev-env job, because these tests drive the built UI
-      # the way a user meets it rather than a development server
-      - name: Start the development environment with the UI built
-        uses: ./.github/actions/run_ascender_devel
-        with:
-          build-ui: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # The UI is built after the web process is already serving, and Django
-      # caches the index template that names the bundle. Without this the tests
-      # run against whatever was in the image, not against this pull request.
-      - name: Serve the UI that was just built
+          COMPONENT: ${{ matrix.component }}
         run: |
-          docker exec tools_ascender_1 \
-            supervisorctl -c /etc/supervisord.conf restart ascender-processes:uvicorn
-          SECONDS=0
-          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' -k https://localhost:8043/api/v2/ping/)" != "200" ]]; do
-            if [[ $SECONDS -gt 180 ]]; then echo "the API did not come back after the restart"; exit 1; fi
-            sleep 5
-          done
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: '22'
-
-      - name: Install the end-to-end dependencies
-        working-directory: ascender/ui/e2e
-        run: npm ci --ignore-scripts
-
-      - name: Install the browser
-        working-directory: ascender/ui/e2e
-        run: npx playwright install --with-deps chromium
-
-      # run_ascender_devel sets the admin password to this
-      - name: Run the end-to-end tests
-        working-directory: ascender/ui/e2e
-        env:
-          ASCENDER_URL: https://localhost:8043
-          ASCENDER_USERNAME: admin
-          ASCENDER_PASSWORD: password
-        run: npm test
-
-      - name: Upload the report on failure
-        if: failure()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
-        with:
-          name: playwright-report
-          path: |
-            ascender/ui/e2e/playwright-report
-            ascender/ui/e2e/test-results
-          retention-days: 7
-          if-no-files-found: ignore
-
-      - name: Get logs from the development environment on failure
-        if: failure()
-        run: docker logs tools_ascender_1 || true
-
-  ui-dependency-audit:
-    name: ui-dependency-audit
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout ascender
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: '22'
-
-      # --omit=dev because a vulnerability in a build-time package does not ship
-      # to anyone, and the noise would bury what does. Advisory for now, like the
-      # Python audit above.
-      - name: Audit the UI dependencies
-        continue-on-error: true
-        working-directory: ascender/ui
-        run: npm audit --omit=dev
+          docker run --rm --entrypoint test "ascender-$COMPONENT:ci" -x "/usr/bin/ascender-$COMPONENT"
+          # Templates render in a child process of the binary itself.
+          out="$(echo '{"template": "{{ x | upper }}", "vars": {"x": "ok"}}' |
+            docker run --rm -i --entrypoint "/usr/bin/ascender-$COMPONENT" "ascender-$COMPONENT:ci" __jinja-run context)"
+          test "$out" = '{"ok":"OK"}' || { echo "template render: $out"; exit 1; }
+          if [ "$COMPONENT" = web ]; then
+            docker run --rm --entrypoint test "ascender-web:ci" -f /usr/share/ascender/docs/index.md
+          fi
+          if [ "$COMPONENT" = task ]; then
+            docker run --rm --entrypoint sh "ascender-task:ci" -c 'podman --version && ! command -v git'
+          fi

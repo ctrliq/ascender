@@ -1,0 +1,1058 @@
+{{define "screen_header"}}
+<section class="pf-v6-c-page__main-section">
+	<div style="display: flex; justify-content: space-between; align-items: center;">
+		<div>
+			{{if .crumbs}}
+				<nav aria-label="Breadcrumb" class="pf-v6-c-breadcrumb">
+					<ol class="pf-v6-c-breadcrumb__list" role="list">
+						{{range $i, $c := .crumbs}}
+							<li class="pf-v6-c-breadcrumb__item">
+								{{if $i}}
+									<span class="pf-v6-c-breadcrumb__item-divider">
+										{{icon "pf-caret-right"}}
+									</span>
+								{{end}}
+								<a href="{{$c.href}}">{{$c.title}}</a>
+							</li>
+						{{end}}
+					</ol>
+				</nav>
+			{{end}}
+			<div style="min-height: 31px;">
+				<h2 data-cy="screen-title" class="pf-v6-c-title pf-m-2xl">{{.title}}</h2>
+			</div>
+		</div>
+		{{if .stream}}
+			<div>
+				<div style="display: contents;">
+					<a aria-label="{{t "View activity stream"}}" class="pf-v6-c-button pf-m-plain" href="/activity_stream{{if ne .stream "*"}}?type={{.stream}}{{end}}" data-tooltip="{{t "View activity stream"}}" data-tooltip-pos="top" data-ouia-component-id="activity-stream-button">
+						<span class="pf-v6-c-button__icon">{{icon "history"}}</span>
+					</a>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}
+{{define "about_modal"}}
+{{/* PatternFly's AboutModal: a large ModalBox round the about box, as About drew it */}}
+{{$brand := aboutBrand}}
+<div class="pf-v6-c-backdrop" id="about-modal" hidden data-modal>
+	<div class="pf-v6-l-bullseye">
+		<div role="dialog" aria-label="{{t "About"}}" aria-labelledby="about-modal-title" aria-modal="true" class="pf-v6-c-modal-box pf-m-lg">
+			<div class="pf-v6-c-about-modal-box">
+				<div class="pf-v6-c-about-modal-box__brand">
+					<img class="pf-v6-c-about-modal-box__brand-image" alt="{{t "Brand Image"}}" src="/static/media/Ascender_logo.svg">
+				</div>
+				<div class="pf-v6-c-about-modal-box__close">
+					<button aria-label="Close Dialog" class="pf-v6-c-button pf-m-plain" type="button" data-close-modal>
+						<span class="pf-v6-c-button__icon">{{icon "pf-close"}}</span>
+					</button>
+				</div>
+				<div class="pf-v6-c-about-modal-box__header">
+					<h1 id="about-modal-title" class="pf-v6-c-title pf-m-4xl">{{$brand}}</h1>
+				</div>
+				<div class="pf-v6-c-about-modal-box__content">
+					<div class="pf-v6-c-about-modal-box__body">
+						<div class="pf-v6-c-content">
+							<pre>{{aboutText $brand .Version}}</pre>
+							<div style="margin-top: 16px;">
+								{{t "Copyright"}} {{thisYear}} {{t "Ctrl IQ, Inc."}}
+								<br>
+								{{t "Copyright"}} {{thisYear}} {{t "Red Hat, Inc."}}
+							</div>
+						</div>
+					</div>
+					<p class="pf-v6-c-about-modal-box__strapline"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "session_modal"}}
+<div class="pf-v6-c-backdrop" id="session-modal" hidden data-modal data-no-dismiss>
+	<div class="pf-v6-l-bullseye">
+		<div class="pf-v6-c-modal-box pf-m-warning pf-m-sm" role="dialog" aria-modal="true" aria-labelledby="session-modal-title">
+			<header class="pf-v6-c-modal-box__header">
+				<h1 class="pf-v6-c-modal-box__title" id="session-modal-title">
+					<span class="pf-v6-c-modal-box__title-icon">
+						{{icon "exclamation-triangle"}}
+					</span>
+					<span class="pf-v6-c-modal-box__title-text">
+						{{t "Your session is about to expire"}}
+					</span>
+				</h1>
+			</header>
+			<div class="pf-v6-c-modal-box__body" id="session-countdown">
+				{{t "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}" "sessionCountdown" 10}}
+			</div>
+			<footer class="pf-v6-c-modal-box__footer">
+				<button class="pf-v6-c-button pf-m-primary" type="button" data-session-continue>
+					<span class="pf-v6-c-button__text">{{t "Continue"}}</span>
+				</button>
+				<button class="pf-v6-c-button pf-m-secondary" type="button" data-logout>
+					<span class="pf-v6-c-button__text">{{t "Logout"}}</span>
+				</button>
+			</footer>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "search_toolbar"}}
+{{/* The search keys' names are English messages, translated here. .page, .searchKeys, .ns, .addHref, .deleteLabel, .selectAll, .expandAll, .filters, .runCommand (Run Command data); the delete warning (ToolbarDeleteButton's deleteDetailsRequests): .usageKind (a key of app.js's DELETE_USAGE), .usageMessage (a plural message for the selected count) or .usageOne and .usageOther, .usageWarning (a plural message shown whatever is selected), .usageBlocks (an object in use cannot be deleted) */}}
+<div class="pf-v6-c-toolbar" id="{{.id}}-toolbar">
+	<div class="pf-v6-c-toolbar__content ascender-data-list-toolbar__content">
+		<div class="pf-v6-c-toolbar__content-section">
+			{{if .expandAll}}
+				<div class="pf-v6-c-toolbar__group">
+					<div class="pf-v6-c-toolbar__item">
+						<button aria-label="{{t "Expand all rows"}}" class="pf-v6-c-button pf-m-plain" type="button" data-expand-all>
+							<span class="pf-v6-c-button__icon">{{icon "angle-right"}}</span>
+						</button>
+					</div>
+				</div>
+			{{end}}
+			{{if not .noSelect}}
+				<div class="pf-v6-c-toolbar__group">
+					<div class="pf-v6-c-toolbar__item" style="align-self: center;">
+						<div style="display: contents;">
+							<div class="pf-v6-c-check pf-m-standalone">
+								<input id="select-all" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Select all"}}" type="checkbox" data-select-all>
+							</div>
+						</div>
+					</div>
+				</div>
+			{{end}}
+			<div class="pf-v6-c-toolbar__group pf-m-toggle-group pf-m-show">
+				<div class="pf-v6-c-toolbar__toggle">
+					<button aria-haspopup="false" aria-label="Show Filters" class="pf-v6-c-button pf-m-plain" type="button">
+						<span class="pf-v6-c-button__icon">{{icon "filter"}}</span>
+					</button>
+				</div>
+				<div class="pf-v6-c-toolbar__item">{{template "search_form" .}}</div>
+			</div>
+			<div class="pf-v6-c-toolbar__group" data-toolbar-actions>
+				{{if .addMenu}}
+					<div class="pf-v6-c-toolbar__item">
+						<div style="display: contents;">
+							<div class="ascender-dropdown ascender-add-dropdown" data-dropdown>
+								<button class="pf-v6-c-menu-toggle pf-m-primary" type="button" aria-expanded="false" data-dropdown-toggle data-tooltip="{{t "Add"}}" data-tooltip-pos="top">
+									<span class="pf-v6-c-menu-toggle__text">{{t "Add"}}</span>
+									<span class="pf-v6-c-menu-toggle__controls">
+										<span class="pf-v6-c-menu-toggle__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</button>
+								<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+									<div class="pf-v6-c-menu__content">
+										<ul role="menu" class="pf-v6-c-menu__list">
+											{{range .addMenu}}
+												<li class="pf-v6-c-menu__list-item" role="none">
+													{{if .associate}}
+														<button class="pf-v6-c-menu__item" role="menuitem" type="button" aria-label="{{.label}}" data-associate data-resource="{{.resource}}"{{if .filter}} data-filter="{{.filter}}"{{end}} data-title="{{.title}}" data-api="{{.api}}">
+															<span class="pf-v6-c-menu__item-main">
+																<span class="pf-v6-c-menu__item-text">
+																	{{.label}}
+																</span>
+															</span>
+														</button>
+													{{else}}
+														<a class="pf-v6-c-menu__item" role="menuitem" href="{{.href}}" aria-label="{{.label}}">
+															<span class="pf-v6-c-menu__item-main">
+																<span class="pf-v6-c-menu__item-text">
+																	{{.label}}
+																</span>
+															</span>
+														</a>
+													{{end}}
+												</li>
+											{{end}}
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{{else if .addHref}}
+					<div class="pf-v6-c-toolbar__item">
+						<div style="display: contents;">
+							<a class="pf-v6-c-button pf-m-primary" href="{{.addHref}}" data-tooltip="{{t "Add"}}" data-tooltip-pos="top">
+								<span class="pf-v6-c-button__text">{{t "Add"}}</span>
+							</a>
+						</div>
+					</div>
+				{{else if .addAttr}}
+					<div class="pf-v6-c-toolbar__item">
+						<div style="display: contents;">
+							<button aria-label="{{if .addLabel}}{{.addLabel}}{{else}}{{t "Add"}}{{end}}" class="pf-v6-c-button pf-m-primary" type="button" {{.addAttr}} data-tooltip="{{if .addLabel}}{{.addLabel}}{{else}}{{t "Add"}}{{end}}" data-tooltip-pos="top">
+								<span class="pf-v6-c-button__text">
+									{{if .addLabel}}{{.addLabel}}{{else}}{{t "Add"}}{{end}}
+								</span>
+							</button>
+						</div>
+					</div>
+				{{end}}
+				{{if .actionsBefore}}{{.actionsBefore}}{{end}}
+				{{if .runCommand}}{{template "run_command_button" .runCommand}}{{end}}
+				{{if .disassociate}}
+					<div class="pf-v6-c-toolbar__item">
+						<div style="display: contents;">
+							<div>
+								<button aria-label="{{t "Disassociate"}}" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-disassociate-selected data-api="{{.disassociate}}" data-kind="{{.kind}}">
+									<span class="pf-v6-c-button__text">{{t "Disassociate"}}</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				{{else if not .noDelete}}
+					<div class="pf-v6-c-toolbar__item">
+						<div style="display: contents;">
+							<div data-tooltip="{{t "Select a row to delete"}}" data-tooltip-pos="top">
+								{{$nouns := .page.DeleteNouns .kind (or .deletePlural "")}}
+								<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary{{if not .deleteNoProgress}} pf-m-progress{{end}}" disabled type="button" data-delete-selected data-delete-kind="{{.kind}}" data-delete-noun="{{index $nouns 0}}" data-delete-nouns="{{index $nouns 1}}"{{if .deletePlural}} data-delete-plural="{{.deletePlural}}"{{end}}{{if .groupDelete}} data-group-delete="{{.groupDelete}}" data-delete-denied="You do not have permission to delete the following Groups:"{{end}}{{if .usageKind}} data-usage-kind="{{.usageKind}}"{{end}}{{if .usageMessage}} data-usage-message="{{.usageMessage}}"{{end}}{{if .usageOne}} data-usage-one="{{.usageOne}}" data-usage-other="{{.usageOther}}"{{end}}{{if .usageWarning}} data-usage-warning="{{.usageWarning}}"{{end}}{{if .usageBlocks}} data-usage-blocks{{end}} data-api="{{.api}}">
+									<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				{{end}}
+				{{if .actionsAfter}}{{.actionsAfter}}{{end}}
+				{{if .healthCheck}}{{template "health_check_button" .healthCheck}}{{end}}
+			</div>
+			{{with .page.Data.pagination}}
+				{{if gt .Count 0}}
+					<div class="pf-v6-c-toolbar__item pf-m-pagination" style="align-self: center;" data-toolbar-pagination>
+						{{template "pagination_top" $}}
+					</div>
+				{{end}}
+			{{end}}
+		</div>
+	</div>
+	{{template "search_chips" .}}
+</div>
+{{end}}
+{{define "pagination_top"}}
+{{with .page.Data.pagination}}
+	<div class="pf-v6-c-pagination" id="options-menu-top-pagination" style="--pf-v6-c-pagination__nav-page-select--c-form-control--width-chars: {{.WidthChars}};">
+		<div class="pf-v6-c-pagination__total-items">
+			<b>{{.First}} - {{.Last}}</b> {{t "of"}} <b>{{.Count}}</b> {{t "items"}}
+		</div>
+		<div class="pf-v6-c-pagination__page-menu">
+			<div class="ascender-dropdown" data-dropdown>
+				<button class="pf-v6-c-menu-toggle pf-m-plain pf-m-text" type="button" aria-label="{{t "Select"}}" aria-expanded="false" id="options-menu-top-toggle" data-dropdown-toggle>
+					<span class="pf-v6-c-menu-toggle__text">
+						<b>{{.First}} - {{.Last}}</b> {{t "of"}} <b>{{.Count}}</b> </span>
+					<span class="pf-v6-c-menu-toggle__controls">
+						<span class="pf-v6-c-menu-toggle__toggle-icon">
+							{{icon "pf-caret-down"}}
+						</span>
+					</span>
+				</button>
+				{{template "page_size_menu" $}}
+			</div>
+		</div>
+		<nav class="pf-v6-c-pagination__nav" aria-label="{{t "Pagination"}}">
+			<div class="pf-v6-c-pagination__nav-control">
+				{{if gt .Page 1}}
+					<a data-action="previous" aria-label="{{t "Go to previous page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" (printf "%d" (sub .Page 1))}}">
+						<span class="pf-v6-c-button__icon">{{icon "angle-left"}}</span>
+					</a>
+				{{else}}
+					<button data-action="previous" aria-label="{{t "Go to previous page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "angle-left"}}</span>
+					</button>
+				{{end}}
+			</div>
+			<div class="pf-v6-c-pagination__nav-control">
+				{{if lt .Page .Pages}}
+					<a data-action="next" aria-label="{{t "Go to next page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" (printf "%d" (add .Page 1))}}">
+						<span class="pf-v6-c-button__icon">{{icon "angle-right"}}</span>
+					</a>
+				{{else}}
+					<button data-action="next" aria-label="{{t "Go to next page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "angle-right"}}</span>
+					</button>
+				{{end}}
+			</div>
+		</nav>
+	</div>
+{{end}}
+{{end}}
+{{define "page_size_menu"}}
+<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+	<div class="pf-v6-c-menu__content">
+		<ul class="pf-v6-c-menu__list" role="menu">
+			{{range list 5 10 20 50}}
+				<li class="pf-v6-c-menu__list-item" role="none">
+					<a class="pf-v6-c-menu__item{{if eq . $.page.Data.pagination.PageSize}} pf-m-selected{{end}}" role="menuitem" href="{{$.page.Path}}{{queryset $.page.Query "page" "" "page_size" (printf "%d" .)}}">
+						<span class="pf-v6-c-menu__item-main">
+							<span class="pf-v6-c-menu__item-text">{{.}} {{t "per page"}}</span>
+							{{if eq . $.page.Data.pagination.PageSize}}
+								<span class="pf-v6-c-menu__item-select-icon">{{icon "check"}}</span>
+							{{end}}
+						</span>
+					</a>
+				</li>
+			{{end}}
+		</ul>
+	</div>
+</div>
+{{end}}
+{{define "pagination_bottom"}}
+{{with .page.Data.pagination}}
+	<div class="pf-v6-c-pagination pf-m-bottom" id="pagination-bottom" style="--pf-v6-c-pagination__nav-page-select--c-form-control--width-chars: {{.WidthChars}};">
+		<div class="pf-v6-c-pagination__total-items">
+			<b>{{.First}} - {{.Last}}</b> {{t "of"}} <b>{{.Count}}</b> {{t "items"}}
+		</div>
+		<div class="pf-v6-c-pagination__page-menu">
+			<div class="ascender-dropdown ascender-dropdown--up" data-dropdown>
+				<button class="pf-v6-c-menu-toggle pf-m-plain pf-m-text" type="button" aria-label="{{t "Items per page"}}" aria-expanded="false" data-dropdown-toggle>
+					<span class="pf-v6-c-menu-toggle__text">
+						<b>{{.First}} - {{.Last}}</b> {{t "of"}} <b>{{.Count}}</b> {{t "items"}}
+					</span>
+					<span class="pf-v6-c-menu-toggle__controls">
+						<span class="pf-v6-c-menu-toggle__toggle-icon">
+							{{icon "pf-caret-down"}}
+						</span>
+					</span>
+				</button>
+				{{template "page_size_menu" $}}
+			</div>
+		</div>
+		<nav class="pf-v6-c-pagination__nav" aria-label="{{t "Pagination"}}">
+			<div class="pf-v6-c-pagination__nav-control pf-m-first">
+				{{if gt .Page 1}}
+					<a data-action="first" aria-label="{{t "Go to first page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" "1"}}">
+						<span class="pf-v6-c-button__icon">{{icon "pf-angle-double-left"}}</span>
+					</a>
+				{{else}}
+					<button data-action="first" aria-label="{{t "Go to first page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "pf-angle-double-left"}}</span>
+					</button>
+				{{end}}
+			</div>
+			<div class="pf-v6-c-pagination__nav-control pf-m-prev">
+				{{if gt .Page 1}}
+					<a data-action="previous" aria-label="{{t "Go to previous page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" (printf "%d" (sub .Page 1))}}">
+						<span class="pf-v6-c-button__icon">{{icon "angle-left"}}</span>
+					</a>
+				{{else}}
+					<button data-action="previous" aria-label="{{t "Go to previous page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "angle-left"}}</span>
+					</button>
+				{{end}}
+			</div>
+			<div class="pf-v6-c-pagination__nav-page-select">
+				<span class="pf-v6-c-form-control{{if le .Pages 1}} pf-m-disabled{{end}}">
+					<input aria-label="{{t "Current page"}}" type="number" min="1" max="{{.Pages}}" value="{{.Page}}" aria-invalid="false"{{if le .Pages 1}} disabled{{end}} data-page-input>
+				</span>
+				<span aria-hidden="true">
+					{{t "of"}} {{.Pages}} {{if eq .Pages 1}}{{t "page"}}{{else}}{{t "pages"}}{{end}}
+				</span>
+			</div>
+			<div class="pf-v6-c-pagination__nav-control pf-m-next">
+				{{if lt .Page .Pages}}
+					<a data-action="next" aria-label="{{t "Go to next page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" (printf "%d" (add .Page 1))}}">
+						<span class="pf-v6-c-button__icon">{{icon "angle-right"}}</span>
+					</a>
+				{{else}}
+					<button data-action="next" aria-label="{{t "Go to next page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "angle-right"}}</span>
+					</button>
+				{{end}}
+			</div>
+			<div class="pf-v6-c-pagination__nav-control pf-m-last">
+				{{if lt .Page .Pages}}
+					<a data-action="last" aria-label="{{t "Go to last page"}}" class="pf-v6-c-button pf-m-plain" href="{{$.page.Path}}{{query $.page.Query "page" (printf "%d" .Pages)}}">
+						<span class="pf-v6-c-button__icon">{{icon "angle-double-right"}}</span>
+					</a>
+				{{else}}
+					<button data-action="last" aria-label="{{t "Go to last page"}}" class="pf-v6-c-button pf-m-plain" disabled type="button">
+						<span class="pf-v6-c-button__icon">{{icon "angle-double-right"}}</span>
+					</button>
+				{{end}}
+			</div>
+		</nav>
+	</div>
+{{end}}
+{{end}}
+{{define "sort_th"}}
+{{/* .page .key .label .id .help (HeaderCell tooltip: the column help button) */}}
+{{$cur := .page.Data.order_by}}
+{{$asc := eq $cur .key}}
+{{$desc := eq $cur (printf "-%s" .key)}}
+<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th pf-v6-c-table__sort{{if or $asc $desc}} pf-m-selected{{end}}{{if .help}} pf-m-help{{end}}"{{if $asc}} aria-sort="ascending"{{else if $desc}} aria-sort="descending"{{end}} id="{{.id}}">
+	{{if .help}}<div class="pf-v6-c-table__column-help">{{end}}
+	<a href="{{.page.Path}}{{query .page.Query "order_by" (printf "%s%s" (cond $asc "-" "") .key)}}" class="pf-v6-c-table__button">
+		<div class="pf-v6-c-table__button-content">
+			<span class="pf-v6-c-table__text">{{.label}}</span>
+			<span class="pf-v6-c-table__sort-indicator">
+				{{if $desc}}
+					{{icon "long-arrow-alt-down"}}
+				{{else if $asc}}
+					{{icon "long-arrow-alt-up"}}
+				{{else}}
+					{{icon "arrows-alt-v"}}
+				{{end}}
+			</span>
+		</div>
+	</a>
+	{{if .help}}
+		<span class="pf-v6-c-table__column-help-action">
+			<div style="display: contents;">
+				<button aria-label="More info" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-popover="{{.help}}">
+					<span class="pf-v6-c-button__icon">{{icon "help"}}</span>
+				</button>
+			</div>
+		</span>
+		</div>
+	{{end}}
+</th>
+{{end}}
+{{define "status_label"}}
+{{$l := statusLabel .}}
+<span class="pf-v6-c-label{{if ne $l.color "grey"}} pf-m-{{$l.color}}{{end}} pf-m-filled ascender-status-label">
+	<span class="pf-v6-c-label__content">
+		{{if $l.icon}}<span class="pf-v6-c-label__icon">{{statusIconSVG . $l.icon}}</span>{{end}}
+		<span class="pf-v6-c-label__text">{{t $l.text}}</span>
+	</span>
+</span>
+{{end}}
+{{define "status_label_text"}}
+{{/* .status .text (html): a status label with its own text */}}
+{{$l := statusLabel .status}}
+<span class="pf-v6-c-label{{if ne $l.color "grey"}} pf-m-{{$l.color}}{{end}} pf-m-filled ascender-status-label">
+	<span class="pf-v6-c-label__content">
+		{{if $l.icon}}
+			<span class="pf-v6-c-label__icon">{{statusIconSVG .status $l.icon}}</span>
+		{{end}}
+		<span class="pf-v6-c-label__text">{{.text}}</span>
+	</span>
+</span>
+{{end}}
+{{define "help_button"}}
+<div style="display: contents;">
+	<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="{{.}}">
+		{{icon "help"}}
+	</button>
+</div>
+{{end}}
+{{define "help_button_html"}}
+<div style="display: contents;">
+	<button aria-label="{{t "More information"}}" aria-haspopup="true" class="ascender-popover__button pf-v6-c-form__group-label-help" type="button" data-popover="" data-popover-html="{{.}}">
+		{{icon "help"}}
+	</button>
+</div>
+{{end}}
+{{define "detail"}}
+{{/* .label .value(html) .help .helpHTML .fullWidth .cy */}}
+<div>
+	<dt class="ascender-detail-name{{if .fullWidth}} ascender-detail-name--full-width{{end}}"{{if .cy}} data-cy="{{.cy}}-label"{{end}}>
+		{{.label}}
+		{{if .help}}{{template "help_button" .help}}{{end}}
+		{{if .helpHTML}}{{template "help_button_html" .helpHTML}}{{end}}
+	</dt>
+	<dd class="ascender-detail-value{{if .fullWidth}} ascender-detail-value--full-width{{end}}"{{if .cy}} data-cy="{{.cy}}-value"{{end}}>
+		{{.value}}
+	</dd>
+</div>
+{{end}}
+{{define "user_date_detail"}}
+{{/* .label .date .user (summary map) */}}
+<div>
+	<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label">
+		{{.label}}
+	</dt>
+	<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+		{{if .user}}
+			{{tHTML "{dateStr} by <0>{username}</0>" "dateStr" (dt .date) "username" .user.username "0" (safe (printf `<a href="/users/%s/details">` (esc (str .user.id))))}}
+		{{else}}
+			{{dt .date}}
+		{{end}}
+	</dd>
+</div>
+{{end}}
+{{define "form_field"}}
+{{/* .id .name .label .value .required .help .errors .type .placeholder .disabled */}}
+<div class="pf-v6-c-form__group" data-cy="{{.id}}-form-group">
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			{{if .required}}
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			{{end}}
+		</label>
+		&nbsp;&nbsp;
+		<span class="pf-v6-c-form__group-label-help">
+			{{if .help}}{{template "help_button" .help}}{{end}}
+		</span>
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<span class="pf-v6-c-form-control{{if .errors}} pf-m-error{{end}}{{if .disabled}} pf-m-disabled{{end}}">
+			<input id="{{.id}}" aria-invalid="{{if .errors}}true{{else}}false{{end}}"{{if .required}} required{{end}} type="{{if .type}}{{.type}}{{else}}text{{end}}" value="{{.value}}" name="{{.name}}"{{if .placeholder}} placeholder="{{.placeholder}}"{{end}}{{if .min}} min="{{.min}}"{{end}}{{if .max}} max="{{.max}}"{{end}}{{if .step}} step="{{.step}}"{{end}}{{if .disabled}} disabled{{end}}>
+			{{if .errors}}
+				<span class="pf-v6-c-form-control__utilities">
+					<span class="pf-v6-c-form-control__icon pf-m-status">
+						{{icon "exclamation-circle"}}
+					</span>
+				</span>
+			{{end}}
+		</span>
+		{{if .errors}}
+			<div class="pf-v6-c-form__helper-text" aria-live="polite">
+				<div class="pf-v6-c-helper-text">
+					<div class="pf-v6-c-helper-text__item pf-m-error">
+						<span class="pf-v6-c-helper-text__item-icon">
+							{{icon "exclamation-circle"}}
+						</span>
+						<span class="pf-v6-c-helper-text__item-text">{{join .errors " "}}</span>
+					</div>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+{{end}}
+{{define "lookup_field"}}
+{{/* .id .name .label .value(map id,name) .required .help .errors .resource .title .disabled .filter */}}
+<div class="pf-v6-c-form__group" data-lookup data-resource="{{.resource}}" data-title="{{.title}}"{{if .filter}} data-filter="{{.filter}}"{{end}}{{if .displayKey}} data-display-key="{{.displayKey}}"{{end}}>
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			{{if .required}}
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			{{end}}
+		</label>
+		&nbsp;&nbsp;
+		{{if .help}}
+			<span class="pf-v6-c-form__group-label-help">{{template "help_button" .help}}</span>
+		{{end}}
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<div class="pf-v6-c-input-group">
+			<div class="pf-v6-c-input-group__item">
+				<button id="{{.id}}-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open{{if .disabled}} disabled{{end}}>
+					<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+				</button>
+			</div>
+			<div class="pf-v6-c-input-group__item pf-m-fill">
+				<span class="pf-v6-c-form-control{{if .errors}} pf-m-error{{end}}{{if .disabled}} pf-m-disabled{{end}}">
+					<input id="{{.id}}" aria-invalid="{{if .errors}}true{{else}}false{{end}}" type="text" value="{{.value.name}}" readonly data-lookup-name{{if .required}} data-required{{end}}{{if .disabled}} disabled{{end}}>
+				</span>
+			</div>
+		</div>
+		<input type="hidden" name="{{.name}}" value="{{.value.id}}" data-lookup-id>
+		<input type="hidden" name="{{.name}}_name" value="{{.value.name}}" data-lookup-hidden-name>
+		{{if .errors}}
+			<div class="pf-v6-c-form__helper-text" aria-live="polite">
+				<div class="pf-v6-c-helper-text">
+					<div class="pf-v6-c-helper-text__item pf-m-error">
+						<span class="pf-v6-c-helper-text__item-icon">
+							{{icon "exclamation-circle"}}
+						</span>
+						<span class="pf-v6-c-helper-text__item-text">{{join .errors " "}}</span>
+					</div>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+{{end}}
+{{define "checkbox"}}
+{{/* .id .name .label .checked .help .dataID */}}
+<div class="pf-v6-c-check">
+	<input class="pf-v6-c-check__input" type="checkbox" id="{{.id}}"{{if .dataID}} data-id="{{.dataID}}"{{end}} name="{{.name}}" aria-label="{{.label}}"{{if .checked}} checked{{end}}>
+	<label class="pf-v6-c-check__label" for="{{.id}}"{{if .dataID}} data-for="{{.dataID}}"{{end}}>
+		<span>{{.label}}{{if .help}}&nbsp;{{template "help_button" .help}}{{end}}</span>
+	</label>
+</div>
+{{end}}
+{{define "form_errors"}}
+{{if index . "__all__"}}
+	<div class="pf-v6-c-alert pf-m-danger pf-m-inline" style="grid-column: 1 / -1;">
+		<div class="pf-v6-c-alert__icon">{{icon "exclamation-circle"}}</div>
+		<p class="pf-v6-c-alert__title">
+			<span class="pf-v6-u-screen-reader">Danger alert:</span>
+			{{join (index . "__all__") " "}}
+		</p>
+	</div>
+{{end}}
+{{end}}
+{{define "form_actions"}}
+<div class="ascender-form-full-width-layout">
+	<div class="pf-v6-c-form__group pf-m-action">
+		<div class="pf-v6-c-form__group-control">
+			<div class="pf-v6-c-form__actions">
+				<button aria-label="{{t "Save"}}" class="pf-v6-c-button pf-m-primary" type="submit">
+					<span class="pf-v6-c-button__text">{{t "Save"}}</span>
+				</button>
+				<a aria-label="{{t "Cancel"}}" class="pf-v6-c-button pf-m-link" href="{{.}}">
+					<span class="pf-v6-c-button__text">{{t "Cancel"}}</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "routed_tabs"}}
+{{/* .tabs (list of dict href,label), .current, .back (dict href,label). The labels are English messages, translated here. With no tab current, RoutedTabs fell back to the first tab whose link starts the path: the back tab. */}}
+{{$found := false}}
+{{range .tabs}}{{if eq .key $.current}}{{$found = true}}{{end}}{{end}}
+<div class="pf-v6-c-tabs pf-m-animate-current ascender-routed-tabs__tabs">
+	<ul class="pf-v6-c-tabs__list" role="tablist">
+		<li class="pf-v6-c-tabs__item{{if not $found}} pf-m-current{{end}}" role="presentation">
+			<a class="pf-v6-c-tabs__link" href="{{.back.href}}" role="tab" aria-selected="{{if $found}}false{{else}}true{{end}}">
+				<span class="pf-v6-c-tabs__item-text">{{icon "caret-left"}}{{t .back.label}}</span>
+			</a>
+		</li>
+		{{range .tabs}}
+			<li class="pf-v6-c-tabs__item{{if eq .key $.current}} pf-m-current{{end}}" role="presentation">
+				<a class="pf-v6-c-tabs__link" href="{{.href}}" role="tab" aria-selected="{{if eq .key $.current}}true{{else}}false{{end}}" aria-label="{{t .label}}">
+					<span class="pf-v6-c-tabs__item-text">{{t .label}}</span>
+				</a>
+			</li>
+		{{end}}
+	</ul>
+	{{template "tabs_scroll_buttons"}}
+</div>
+{{end}}
+{{define "empty_state"}}
+{{/* .title .body .addHref */}}
+<div class="pf-v6-c-empty-state">
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">{{icon "cubes"}}</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h4 class="pf-v6-c-empty-state__title-text">{{.title}}</h4>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">{{.body}}</div>
+		{{if .addHref}}
+			<div class="pf-v6-c-empty-state__footer">
+				<div class="pf-v6-c-empty-state__actions">
+					<a class="pf-v6-c-button pf-m-primary" href="{{.addHref}}">
+						<span class="pf-v6-c-button__text">{{t "Add"}}</span>
+					</a>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+{{end}}
+{{define "notification_list"}}
+{{/* .page .kinds (list of started/success/error/changed/approvals) */}}
+{{$p := .page}}
+{{$kinds := .kinds}}
+{{template "search_toolbar" (dict "page" $p "id" "notification-list" "searchKeys" $p.Data.searchKeys "ns" "notification" "filters" $p.Data.filters "noSelect" true "noDelete" true)}}
+{{if $p.Data.results}}
+	<div class="ascender-paginated-table__overflow-auto">
+		<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Notifications")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+			<thead class="pf-v6-c-table__thead">
+				<tr class="pf-v6-c-table__tr">
+					{{template "sort_th" (dict "page" $p "key" "name" "label" (t "Name") "id" "notification-table-sort-name")}}
+					{{template "sort_th" (dict "page" $p "key" "notification_type" "label" (t "Type") "id" "notification-table-sort-notification_type")}}
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+						{{t "Options"}}
+					</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+				{{range $p.Data.results}}
+					{{$nid := str .id}}
+					<tr class="pf-v6-c-table__tr" id="notification-row-{{$nid}}">
+						<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" id="notification-{{$nid}}">
+							<a href="/notification_templates/{{$nid}}/details"><b>{{.name}}</b></a>
+						</td>
+						<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+							{{index $p.Data.typeLabels (str .notification_type)}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Options"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 200px;">
+							<div class="ascender-actions-td__grid">
+								{{range $k := $kinds}}
+									<div>
+										<label class="pf-v6-c-switch" for="notification-{{$nid}}-{{$k}}-toggle">
+											<input id="notification-{{$nid}}-{{$k}}-toggle" class="pf-v6-c-switch__input" role="switch" aria-label="{{t (printf "Toggle notification %s" (index $p.Data.toggleLabels $k))}}" type="checkbox"{{if index (index $p.Data $k) $nid}} checked{{end}}{{if not $p.Data.canToggle}} disabled{{end}} data-notification-toggle="{{$p.Data.notifyApi}}notification_templates_{{$k}}/" data-notification-id="{{$nid}}">
+											<span class="pf-v6-c-switch__toggle"></span>
+											<span class="pf-v6-c-switch__label" aria-hidden="true">
+												{{index $p.Data.switchLabels $k}}
+											</span>
+										</label>
+									</div>
+								{{end}}
+							</div>
+						</td>
+					</tr>
+				{{end}}
+			</tbody>
+		</table>
+	</div>
+	{{template "pagination_bottom" (dict "page" $p)}}
+{{else}}
+	{{if $p.Data.filters}}
+		{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+	{{else}}
+		{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Notifications")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Notifications")))}}
+	{{end}}
+{{end}}
+{{end}}
+{{define "field_error"}}
+{{if .}}
+	<div class="pf-v6-c-form__helper-text" aria-live="polite">
+		<div class="pf-v6-c-helper-text">
+			<div class="pf-v6-c-helper-text__item pf-m-error">
+				<span class="pf-v6-c-helper-text__item-icon">{{icon "exclamation-circle"}}</span>
+				<span class="pf-v6-c-helper-text__item-text">{{join . " "}}</span>
+			</div>
+		</div>
+	</div>
+{{end}}
+{{end}}
+{{define "blank_error"}}
+{{/* the required-field message a form shows before any submit (JobTemplateForm's playbook) */}}
+<div class="pf-v6-c-form__helper-text ascender-client-error">
+	<div class="pf-v6-c-helper-text">
+		<div class="pf-v6-c-helper-text__item pf-m-error">
+			<span class="pf-v6-c-helper-text__item-icon">{{icon "exclamation-circle"}}</span>
+			<span class="pf-v6-c-helper-text__item-text">
+				{{t "This field must not be blank"}}
+				<span class="pf-v6-screen-reader">: error status;</span>
+			</span>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "content_error_message"}}
+{{/* . = message: ContentError for a thrown Error (not an HTTP response), its Details showing the message */}}
+<div class="pf-v6-c-empty-state">
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">{{icon "exclamation-triangle"}}</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h3 class="pf-v6-c-empty-state__title-text">{{t "Something went wrong..."}}</h3>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">
+			{{t "There was an error loading this content. Please reload the page."}} <a href="/home">
+				{{t "Back to Dashboard."}}
+			</a>
+		</div>
+		<div class="pf-v6-c-empty-state__footer">
+			<div class="pf-v6-c-expandable-section ascender-error-detail__expandable" data-error-detail>
+				<div class="pf-v6-c-expandable-section__toggle">
+					<button aria-expanded="false" aria-controls="content-error-detail" class="pf-v6-c-button pf-m-link" type="button" data-error-detail-toggle>
+						<span class="pf-v6-c-button__icon pf-m-start">
+							<span class="pf-v6-c-expandable-section__toggle-icon">
+								{{icon "pf-angle-down"}}
+							</span>
+						</span>
+						<span class="pf-v6-c-button__text">{{t "Details"}}</span>
+					</button>
+				</div>
+				<div class="pf-v6-c-expandable-section__content" hidden id="content-error-detail" role="region">
+					<div class="pf-v6-c-card ascender-error-detail__card">
+						<div class="pf-v6-c-card__body ascender-error-detail__card-body">
+							<strong>Error: {{.}}</strong>
+						</div>
+						<div class="pf-v6-c-card__body ascender-error-detail__card-body" style="font-family: var(--pf-t--global--font--family--mono);">
+							Error: {{.}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "content_error"}}
+{{/* . = HTTP status: ContentError ("Not Found" for a 404) */}}
+<div class="pf-v6-c-empty-state">
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">{{icon "exclamation-triangle"}}</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h3 class="pf-v6-c-empty-state__title-text">
+					{{if eq (str .) "404"}}
+						{{t "Not Found"}}
+					{{else}}
+						{{t "Something went wrong..."}}
+					{{end}}
+				</h3>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">
+			{{if eq (str .) "404"}}
+				{{t "The page you requested could not be found."}}
+			{{else}}
+				{{t "There was an error loading this content. Please reload the page."}}
+			{{end}} <a href="/home">{{t "Back to Dashboard."}}</a>
+		</div>
+		<div class="pf-v6-c-empty-state__footer"></div>
+	</div>
+</div>
+{{end}}
+{{define "tabs_scroll_buttons"}}
+{{/* Tabs' scroll buttons, which app.js puts in place when the tabs overflow */}}
+<template data-tabs-scroll>
+	<div class="pf-v6-c-tabs__scroll-button">
+		<button aria-hidden="true" aria-label="Scroll back" class="pf-v6-c-button pf-m-plain" disabled="" type="button" data-tabs-back>
+			<span class="pf-v6-c-button__icon">{{icon "pf-caret-left"}}</span>
+		</button>
+	</div>
+	<div class="pf-v6-c-tabs__scroll-button">
+		<button aria-hidden="false" aria-label="Scroll forward" class="pf-v6-c-button pf-m-plain" type="button" data-tabs-forward>
+			<span class="pf-v6-c-button__icon">{{icon "pf-caret-right"}}</span>
+		</button>
+	</div>
+</template>
+{{end}}
+{{define "nt_status_templates"}}
+{{/* the status labels the notification test buttons switch between */}}
+<template data-nt-label="running">{{template "status_label" "running"}}</template>
+<template data-nt-label="successful">{{template "status_label" "successful"}}</template>
+<template data-nt-label="failed">{{template "status_label" "failed"}}</template>
+<template data-nt-label="error">{{template "status_label" "error"}}</template>
+<template data-nt-label="pending">{{template "status_label" "pending"}}</template>
+{{end}}
+{{define "in_page_not_found"}}
+{{/* .href .text: ContentError isNotFound inside a screen, with its way back */}}
+<div class="pf-v6-c-empty-state">
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">{{icon "exclamation-triangle"}}</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h3 class="pf-v6-c-empty-state__title-text">{{t "Not Found"}}</h3>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">
+			{{t "The page you requested could not be found."}} <a href="{{.href}}">{{.text}}</a>
+		</div>
+		<div class="pf-v6-c-empty-state__footer"></div>
+	</div>
+</div>
+{{end}}
+{{define "search_form"}}
+{{/* Search: the key select and the input for the chosen key (text, a date with its operator, or a key's options as checkboxes). The search_toolbar arguments: .page .searchKeys .ns .singleKey .noAdvanced .optionsApi, and .disabled (JobOutputSearch while the job runs) */}}
+<form class="pf-v6-c-toolbar__group pf-m-filter-group" method="get" action="{{.page.Path}}" data-search-form data-ns="{{.ns}}"{{with or .optionsApi .page.Data.listAPI}} data-options-api="{{.}}"{{end}}>
+	{{range $k, $v := .page.Query}}
+		{{if or (eq $k "order_by") (eq $k "page_size")}}
+			<input type="hidden" name="{{$k}}" value="{{index $v 0}}">
+		{{end}}
+	{{end}}
+	{{if and .singleKey .noAdvanced}}
+		<div class="pf-v6-c-toolbar__item">
+			<div class="ascender-search__no-option-dropdown">{{t (index .searchKeys 0).name}}</div>
+		</div>
+	{{else}}
+		<div class="pf-v6-c-toolbar__item">
+			<div class="ascender-dropdown" data-dropdown>
+				<button class="pf-v6-c-menu-toggle" type="button" aria-label="{{t "Simple key select"}}" aria-expanded="false"{{if .disabled}} disabled{{end}} data-dropdown-toggle>
+					<span class="pf-v6-c-menu-toggle__text" data-search-key-label>
+						{{t (index .searchKeys 0).name}}
+					</span>
+					<span class="pf-v6-c-menu-toggle__controls">
+						<span class="pf-v6-c-menu-toggle__toggle-icon">
+							{{icon "pf-caret-down"}}
+						</span>
+					</span>
+				</button>
+				<div class="pf-v6-c-menu ascender-dropdown__menu" hidden data-dropdown-menu>
+					<div class="pf-v6-c-menu__content">
+						<ul class="pf-v6-c-menu__list" role="menu">
+							{{range .searchKeys}}
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-search-key="{{.key}}"{{if .date}} data-search-date{{end}}>
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">{{t .name}}</span>
+										</span>
+									</button>
+								</li>
+							{{end}}
+							{{if not .noAdvanced}}
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-search-key="advanced">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "Advanced"}}
+											</span>
+										</span>
+									</button>
+								</li>
+							{{end}}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	{{end}}
+	<div class="pf-v6-c-toolbar__item">
+		<div class="pf-v6-c-input-group">
+			<div class="pf-v6-c-input-group__item pf-m-fill">
+				<span class="pf-v6-c-form-control{{if .disabled}} pf-m-disabled{{end}}">
+					<input data-cy="search-text-input" aria-label="{{t "Search text input"}}" aria-invalid="false" type="search" value="" name="{{(index .searchKeys 0).key}}"{{if .disabled}} disabled{{end}} data-search-input>
+				</span>
+			</div>
+			<div class="pf-v6-c-input-group__item">
+				<div class="ascender-search__submit-button-wrapper ascender-search__submit-button-wrapper--disabled" data-search-submit-wrapper>
+					<button aria-label="{{t "Search submit button"}}" class="pf-v6-c-button pf-m-control" disabled type="submit" data-search-submit>
+						<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		{{$dates := false}}
+		{{range .searchKeys}}{{if .date}}{{$dates = true}}{{end}}{{end}}
+		{{if $dates}}
+			<div class="pf-v6-c-input-group ascender-search__date-input-group" hidden data-search-date-group>
+				<div class="ascender-dropdown" data-dropdown>
+					<button class="pf-v6-c-menu-toggle" type="button" aria-label="{{t "Date operator select"}}" aria-expanded="false" data-dropdown-toggle>
+						<span class="pf-v6-c-menu-toggle__text" data-date-operator-label>
+							{{t "On or after"}}
+						</span>
+						<span class="pf-v6-c-menu-toggle__controls">
+							<span class="pf-v6-c-menu-toggle__toggle-icon">
+								{{icon "pf-caret-down"}}
+							</span>
+						</span>
+					</button>
+					<div class="pf-v6-c-menu ascender-dropdown__menu dateOperatorSelect" hidden data-dropdown-menu>
+						<div class="pf-v6-c-menu__content">
+							<ul class="pf-v6-c-menu__list" role="listbox">
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="option" data-date-operator="gte">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "On or after"}}
+											</span>
+										</span>
+									</button>
+								</li>
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="option" data-date-operator="lt">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "Before"}}
+											</span>
+										</span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<span class="pf-v6-c-form-control">
+					<input data-cy="date-search-input" type="date" aria-label="{{t "Date search input"}}" aria-invalid="false" value="" data-search-date-input>
+				</span>
+				<div class="ascender-search__submit-button-wrapper ascender-search__submit-button-wrapper--disabled" data-date-submit-wrapper>
+					<button aria-label="{{t "Search submit button"}}" class="pf-v6-c-button pf-m-control" disabled type="submit" data-date-submit>
+						<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+					</button>
+				</div>
+			</div>
+		{{end}}
+		{{range .searchKeys}}
+			{{if .options}}
+				{{$key := .key}}
+				<div class="ascender-dropdown" hidden data-dropdown data-search-options="{{.key}}">
+					<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" data-dropdown-toggle>
+						<span class="pf-v6-c-menu-toggle__text">
+							{{t "Filter By {name}" "name" (t .name)}}
+						</span>
+						<span class="pf-v6-c-menu-toggle__controls">
+							<span class="pf-v6-c-menu-toggle__toggle-icon">
+								{{icon "pf-caret-down"}}
+							</span>
+						</span>
+					</button>
+					<div class="pf-v6-c-menu ascender-dropdown__menu" aria-label="{{t .name}}" hidden data-dropdown-menu>
+						<div class="pf-v6-c-menu__content">
+							<ul class="pf-v6-c-menu__list" role="listbox">
+								{{range searchOptions .options}}
+									<li class="pf-v6-c-menu__list-item" role="none">
+										<label class="pf-v6-c-menu__item" id="select-option-{{index . 0}}">
+											<span class="pf-v6-c-menu__item-main">
+												<span class="pf-v6-c-menu__item-check">
+													<span class="pf-v6-c-check pf-m-standalone">
+														<input class="pf-v6-c-check__input" type="checkbox" value="{{index . 0}}"{{if queryHas $.page.Query $.ns $key (index . 0)}} checked{{end}} data-search-option>
+													</span>
+												</span>
+												<span class="pf-v6-c-menu__item-text">
+													{{t (index . 1)}}
+												</span>
+											</span>
+										</label>
+									</li>
+								{{end}}
+							</ul>
+						</div>
+					</div>
+				</div>
+			{{end}}
+		{{end}}
+	</div>
+</form>
+{{end}}
+{{define "search_chips"}}
+{{/* The search chips of a toolbar (.page .filters .searchKeys), or its empty chip row */}}
+{{if .filters}}
+	<div class="pf-v6-c-toolbar__content">
+		<div class="pf-v6-c-toolbar__group">
+			{{range $gi, $g := chipGroups .filters .searchKeys}}
+				<div class="pf-v6-c-toolbar__item pf-m-label-group pf-m-label-group">
+					<div class="pf-v6-c-label-group pf-m-category">
+						<div class="pf-v6-c-label-group__main">
+							<div style="display: contents;">
+								<span tabindex="0" class="pf-v6-c-label-group__label">
+									<span aria-hidden="true" id="chip-group-{{$gi}}">
+										{{if $g.Name}}
+											{{t $g.Name}} ({{$g.Key}})
+										{{else}}
+											{{$g.Label}}
+										{{end}}
+									</span>
+								</span>
+							</div>
+							<ul class="pf-v6-c-label-group__list" aria-labelledby="chip-group-{{$gi}}" role="list">
+								{{range $g.Chips}}
+									<li class="pf-v6-c-label-group__list-item">
+										<span class="pf-v6-c-label pf-m-filled">
+											<span class="pf-v6-c-label__content">
+												<span class="pf-v6-c-label__text">
+													{{if .Display}}
+														{{t .Display}}
+													{{else}}
+														{{.Value}}
+													{{end}}
+												</span>
+											</span>
+											<span class="pf-v6-c-label__actions">
+												<button aria-label="Close {{.Value}}" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-href="{{$.page.Path}}{{.RemoveQuery}}">
+													<span class="pf-v6-c-button__icon">
+														{{icon "pf-close"}}
+													</span>
+												</button>
+											</span>
+										</span>
+									</li>
+								{{end}}
+							</ul>
+						</div>
+					</div>
+				</div>
+			{{end}}
+		</div>
+		<div class="pf-v6-c-toolbar__group pf-m-action-group-inline">
+			<div class="pf-v6-c-toolbar__item">
+				<button class="pf-v6-c-button pf-m-link pf-m-inline" type="button" data-href="{{.page.Path}}">
+					<span class="pf-v6-c-button__text">{{t "Clear all filters"}}</span>
+				</button>
+			</div>
+		</div>
+	</div>
+{{else}}
+	<div class="pf-v6-c-toolbar__content pf-m-hidden" hidden>
+		<div class="pf-v6-c-toolbar__group"></div>
+	</div>
+{{end}}
+{{end}}

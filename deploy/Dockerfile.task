@@ -1,0 +1,58 @@
+# The task container needs a container runtime: playbooks, project updates
+# included, run inside execution environment images. It runs them with its
+# own rootless podman, as the old application's task container did, so it
+# needs no socket or daemon from the host; the compose file runs it
+# privileged for the nested containers. It has no git: project checkouts are
+# written from the projects' own content, so git runs only inside execution
+# environments, never on this host. It starts from Rocky Linux's minimal
+# image (microdnf, no Python), the distribution the old image used, and
+# everything comes from Rocky's own repositories. The binary is
+# cross-compiled on the build host's platform, as in Dockerfile.web.
+FROM --platform=$BUILDPLATFORM public.ecr.aws/docker/library/golang:1.27-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS build
+ARG TARGETOS TARGETARCH
+WORKDIR /src
+COPY src/go.mod src/go.sum ./
+RUN go mod download
+COPY src/ .
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/ascender-task ./cmd/ascender-task
+
+FROM quay.io/rockylinux/rockylinux:9-minimal@sha256:96aef88435673089451d3ca68780d3f68936f19a03b15b685bff54e55b6ef3a5
+# Base images are pinned by digest (tag kept for reading); Dependabot
+# moves both.
+# Ownership metadata for image inventories: who owns the image and where
+# its source lives.
+LABEL owner="ctrliq" repo="https://github.com/ctrliq/ascender"
+# slirp4netns: DEFAULT_CONTAINER_RUN_OPTIONS defaults to
+# --network slirp4netns:enable_ipv6=true. rpm --setcaps puts back the file
+# capabilities of newuidmap and newgidmap, which image layers drop and
+# rootless podman needs to map the user's subordinate ids (only the
+# capabilities: --restore would also chown every file of shadow-utils, and
+# fail loudly on the docs and translations the minimal image leaves out).
+RUN microdnf -y install podman crun fuse-overlayfs slirp4netns \
+    && rpm --setcaps shadow-utils \
+    && microdnf -y update \
+    && microdnf -y clean all
+# Nested containers share this container's namespaces and skip cgroups (see
+# containers.conf), and image layers are stacked with fuse-overlayfs, since
+# overlay on overlay is not allowed.
+COPY deploy/podman/containers.conf /etc/containers/containers.conf
+RUN sed -i -e 's|^#mount_program|mount_program|' -e 's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|' /etc/containers/storage.conf \
+    && mkdir -p /etc/containers/registries.conf.d \
+    && echo 'unqualified-search-registries = []' > /etc/containers/registries.conf.d/force-fully-qualified-images.conf
+# Rootless podman looks its user up by name for the subordinate id ranges
+# and keeps images under its home directory (a volume in the compose file).
+RUN useradd --uid 1000 --gid 0 --home-dir /var/lib/ascender --no-create-home --shell /sbin/nologin ascender \
+    && echo 'ascender:100000:65536' > /etc/subuid \
+    && echo 'ascender:100000:65536' > /etc/subgid
+# The licenses of what the image ships: this project's, and those of the
+# Go modules compiled into the binary and the assets embedded in it.
+COPY LICENSE NOTICE.txt /usr/share/licenses/ascender/
+COPY licenses/ /usr/share/licenses/ascender/licenses/
+COPY --from=build /out/ascender-task /usr/bin/ascender-task
+# Logged at startup; set by the image workflows as in Dockerfile.web.
+ARG ASCENDER_VERSION=26.0.0-go.dev
+ENV ASCENDER_VERSION=$ASCENDER_VERSION
+RUN mkdir -p /var/lib/ascender/projects /var/lib/ascender/job_status /var/lib/ascender/job_private /var/lib/ascender/.local/share/containers /var/log/ascender \
+    && chown -R 1000:0 /var/lib/ascender /var/log/ascender
+USER 1000
+ENTRYPOINT ["/usr/bin/ascender-task"]

@@ -1,0 +1,149 @@
+{{define "content"}}
+{{$i := .Data.instance}}
+{{$id := str $i.id}}
+{{template "screen_header" (dict "title" .Title "stream" "instance" "crumbs" (list (dict "href" "/instances" "title" (t "Instances")) (dict "href" (printf "/instances/%s/details" $id) "title" (str $i.hostname))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/instances" "label" "Back to Instances") "tabs" .Data.tabs)}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			{{template "search_toolbar" (dict "page" . "id" "peer-list" "searchKeys" .Data.searchKeys "ns" "peer" "kind" "Peer" "filters" .Data.filters "noDelete" true "selectAll" true "expandAll" .Data.peers "actionsBefore" .Data.actions)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{.Data.listLabel}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								{{if .Data.peers}}
+									<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+										<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+									</th>
+								{{end}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{if .Data.peers}}
+									{{template "sort_th" (dict "page" . "key" "hostname" "label" (t "Instance Name") "id" "peer-table-sort-hostname" "help" (t "Cannot run health check on hop nodes."))}}
+								{{end}}
+								{{template "sort_th" (dict "page" . "key" "address" "label" (t "Address") "id" "peer-table-sort-address")}}
+								{{template "sort_th" (dict "page" . "key" "port" "label" (t "Port") "id" "peer-table-sort-port")}}
+								{{if .Data.peers}}
+									{{template "sort_th" (dict "page" . "key" "node_type" "label" (t "Node Type") "id" "peer-table-sort-node_type")}}
+								{{else}}
+									{{template "sort_th" (dict "page" . "key" "protocol" "label" (t "Protocol") "id" "peer-table-sort-protocol")}}
+								{{end}}
+								{{template "sort_th" (dict "page" . "key" "canonical" "label" (t "Canonical") "id" "peer-table-sort-canonical")}}
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $n, $a := .Data.results}}
+								{{$hop := eq (str $a.node_type) "hop"}}
+								<tr class="pf-v6-c-table__tr" id="{{if $.Data.peers}}peerInstance{{else}}peerListenerAddress{{end}}-row-{{str $a.id}}" data-row="{{str $a.id}}" data-name="{{$a.address}}">
+									{{if $.Data.peers}}
+										{{if $hop}}
+											<td tabindex="-1" class="pf-v6-c-table__td"></td>
+										{{else}}
+											<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__toggle">
+												<button aria-expanded="false" aria-labelledby="simple-node{{$n}} expand-toggle{{$n}}" id="expand-toggle{{$n}}" aria-label="{{t "Details"}}" class="pf-v6-c-button pf-m-plain pf-m-small" type="button" data-expand-row>
+													<span class="pf-v6-c-button__icon">
+														<div class="pf-v6-c-table__toggle-icon">
+															{{icon "angle-down"}}
+														</div>
+													</span>
+												</button>
+											</td>
+										{{end}}
+									{{end}}
+									<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+										<div class="pf-v6-c-check pf-m-standalone">
+											<input id="select-{{$n}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$n}}" type="checkbox" data-select-row="{{str $a.id}}">
+										</div>
+									</td>
+									{{if $.Data.peers}}
+										<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+											<a href="/instances/{{str $a.instance}}/details">
+												<b>{{$a.hostname}}</b>
+											</a>
+										</td>
+									{{end}}
+									<td tabindex="-1" data-label="{{t "Address"}}" class="pf-v6-c-table__td" id="check-action-{{str $a.id}}">
+										{{$a.address}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Port"}}" class="pf-v6-c-table__td" id="check-action-{{str $a.id}}">
+										{{str $a.port}}
+									</td>
+									{{if $.Data.peers}}
+										<td tabindex="-1" data-label="{{t "Node Type"}}" class="pf-v6-c-table__td" id="check-action-{{str $a.id}}">
+											{{$a.node_type}}
+										</td>
+									{{else}}
+										<td tabindex="-1" data-label="{{t "Protocol"}}" class="pf-v6-c-table__td" id="check-action-{{str $a.id}}">
+											{{$a.protocol}}
+										</td>
+									{{end}}
+									<td tabindex="-1" data-label="{{t "Canonical"}}" class="pf-v6-c-table__td" id="check-action-{{str $a.id}}">
+										{{if $a.canonical}}true{{else}}false{{end}}
+									</td>
+								</tr>
+								{{if and $.Data.peers (not $hop)}}
+									<tr class="pf-v6-c-table__tr pf-v6-c-table__expandable-row" hidden data-expanded-row>
+										<td tabindex="-1" class="pf-v6-c-table__td" colspan="2">
+										</td>
+										<td tabindex="-1" class="pf-v6-c-table__td" colspan="7">
+											<div class="pf-v6-c-table__expandable-row-content">
+												<dl class="ascender-detail-list">
+													<div>
+														<dt class="ascender-detail-name">
+															{{t "Running Jobs"}}
+														</dt>
+														<dd class="ascender-detail-value">
+															{{str $a.jobs_running}}
+														</dd>
+													</div>
+													<div>
+														<dt class="ascender-detail-name">
+															{{t "Total Jobs"}}
+														</dt>
+														<dd class="ascender-detail-value">
+															{{str $a.jobs_total}}
+														</dd>
+													</div>
+													<div>
+														<dt class="ascender-detail-name">
+															{{t "Policy Type"}}
+														</dt>
+														<dd class="ascender-detail-value">
+															{{if $a.managed_by_policy}}
+																{{t "Auto"}}
+															{{else}}
+																{{t "Manual"}}
+															{{end}}
+														</dd>
+													</div>
+													<div>
+														<dt class="ascender-detail-name">
+															{{t "Last Health Check"}}
+														</dt>
+														<dd class="ascender-detail-value">
+															{{template "health_check_time" $a}}
+														</dd>
+													</div>
+												</dl>
+											</div>
+										</td>
+									</tr>
+								{{end}}
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" .Data.emptyName) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" .Data.emptyName))}}
+				{{end}}
+			{{end}}
+		</div>
+	</div>
+</section>
+{{end}}

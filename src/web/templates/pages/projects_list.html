@@ -1,0 +1,175 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Projects") "stream" "project")}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "project-list" "searchKeys" .Data.searchKeys "ns" "project" "addHref" "/projects/add" "kind" "Project" "api" "/api/v2/projects/" "usageKind" "project" "usageMessage" "{0, plural, one {This project is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these projects could impact other resources that rely on them. Are you sure you want to delete anyway?}}" "expandAll" true "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Projects")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "project-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Status"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Type"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Revision"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $p := .Data.results}}
+							{{$id := str $p.id}}
+							{{$caps := dig $p "summary_fields" "user_capabilities"}}
+							<tr class="pf-v6-c-table__tr" id="{{$id}}" data-row data-id="{{$id}}" data-name="{{$p.name}}">
+								<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__toggle">
+									<button aria-expanded="false" aria-labelledby="simple-node{{$i}} expand-toggle{{$i}}" id="expand-toggle{{$i}}" aria-label="{{t "Details"}}" class="pf-v6-c-button pf-m-plain pf-m-small" type="button" data-expand-row>
+										<span class="pf-v6-c-button__icon">
+											<div class="pf-v6-c-table__toggle-icon">
+												{{icon "pf-angle-down"}}
+											</div>
+										</span>
+									</button>
+								</td>
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+									<span>
+										<a href="/projects/{{$id}}/details"><b>{{$p.name}}</b></a>
+									</span>
+								</td>
+								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+									{{if has $p.status}}
+										<div style="display: contents;">
+											{{with or (dig $p "summary_fields" "current_job") (dig $p "summary_fields" "last_job")}}
+												<a href="/jobs/project/{{str (dig . "id")}}">
+													{{template "status_label" (str (dig . "status"))}}
+												</a>
+											{{else}}
+												{{template "status_label" (str $p.status)}}
+											{{end}}
+										</div>
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+									{{if has $p.scm_type}}
+										{{scmLabel (str $p.scm_type)}}
+									{{else}}
+										{{t "Manual"}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Revision"}}" class="pf-v6-c-table__td">
+									{{if has $p.scm_revision}}
+										<div class="pf-v6-c-clipboard-copy pf-m-inline" data-cy="project-copy-revision-{{$id}}">
+											<span class="pf-v6-c-clipboard-copy__text" id="text-input-{{$id}}">
+												{{slice (str $p.scm_revision) 0 7}}
+											</span>
+											<span class="pf-v6-c-clipboard-copy__actions">
+												<span class="pf-v6-c-clipboard-copy__actions-item">
+													<button id="copy-button-{{$id}}" aria-label="{{t "Copy full revision to clipboard."}}" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-copy="{{$p.scm_revision}}" data-tooltip="{{t "Copy full revision to clipboard."}}" data-tooltip-pos="top">
+														<span class="pf-v6-c-button__icon">
+															{{icon "pf-copy"}}
+														</span>
+													</button>
+												</span>
+											</span>
+										</div>
+									{{else if has $p.scm_type}}
+										<span class="ascender-muted" aria-label="{{t "The project must be synced before a revision is available."}}">
+											{{t "Sync for revision"}}
+										</span>
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 120px;">
+									<div class="ascender-actions-td__grid">
+										<div>
+											<div style="display: contents;">
+												<div>
+													{{if dig $caps "start"}}
+														<button aria-label="{{t "Sync Project"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Sync Project"}}" data-tooltip-pos="top" data-project-sync="{{$id}}">
+															<span class="pf-v6-c-button__text">
+																{{icon "sync-alt"}}
+															</span>
+														</button>
+													{{end}}
+												</div>
+											</div>
+										</div>
+										<div>
+											<div style="display: contents;">
+												<div>
+													{{if dig $caps "edit"}}
+														<a aria-label="{{t "Edit Project"}}" class="pf-v6-c-button pf-m-plain" href="/projects/{{$id}}/edit" data-tooltip="{{t "Edit Project"}}" data-tooltip-pos="top">
+															<span class="pf-v6-c-button__icon">
+																{{icon "pencil-alt"}}
+															</span>
+														</a>
+													{{end}}
+												</div>
+											</div>
+										</div>
+										<div>
+											<div style="display: contents;">
+												<div>
+													{{if dig $caps "copy"}}
+														<button aria-label="{{t "Copy"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Copy Project"}}" data-tooltip-pos="top" data-copy-resource="/api/v2/projects/{{$id}}/copy/" data-copy-name="{{$p.name}}" data-copy-error="{{t "Failed to copy project."}}">
+															<span class="pf-v6-c-button__icon">
+																{{icon "copy"}}
+															</span>
+														</button>
+													{{end}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr class="pf-v6-c-table__tr pf-v6-c-table__expandable-row" hidden id="expanded-project-row-{{$id}}" data-expanded-row>
+								<td tabindex="-1" class="pf-v6-c-table__td" colspan="2"></td>
+								<td tabindex="-1" class="pf-v6-c-table__td" colspan="5">
+									<div class="pf-v6-c-table__expandable-row-content">
+										<dl class="ascender-detail-list">
+											{{if has $p.description}}
+												{{template "detail" (dict "label" (t "Description") "value" (str $p.description) "cy" (printf "project-%s-description" $id))}}
+											{{end}}
+											{{with dig $p "summary_fields" "organization"}}
+												{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))) "cy" (printf "project-%s-organization" $id))}}
+											{{end}}
+											{{template "detail" (dict "label" (t "Last modified") "value" (dt $p.modified) "cy" (printf "project-%s-last-modified" $id))}}
+											{{if has $p.last_job_run}}
+												{{template "detail" (dict "label" (t "Last used") "value" (dt $p.last_job_run) "cy" (printf "project-%s-last-used" $id))}}
+											{{end}}
+										</dl>
+									</div>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Projects")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Projects")) "addHref" "/projects/add")}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

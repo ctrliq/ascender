@@ -1,0 +1,123 @@
+{{define "content"}}
+{{$g := .Data.group}}
+{{$gid := str $g.id}}
+{{$inv := .Data.inventory}}
+{{$ib := str $inv._base}}
+{{$gb := .Data.groupBase}}
+{{$caps := dig $g "summary_fields" "user_capabilities"}}
+{{$ro := .Data.readonly}}
+{{if .Data.groupMissing}}
+	{{template "screen_header" (dict "title" "" "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/groups" $ib) "title" (t "Groups"))))}}
+	<section class="pf-v6-c-page__main-section">
+		<div class="pf-v6-c-card">
+			{{template "in_page_not_found" (dict "href" (printf "%s/groups" $ib) "text" (t "View Inventory Groups"))}}
+		</div>
+	</section>
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/groups" $ib) "title" (t "Groups")) (dict "href" (printf "%s/details" $gb) "title" (str $g.name))))}}
+	<section class="pf-v6-c-page__main-section">
+		<div class="pf-v6-c-card">
+			{{template "routed_tabs" (dict "current" .Data.groupTab "back" (dict "href" (printf "%s/groups" $ib) "label" "Back to Groups") "tabs" (list (dict "key" "details" "href" (printf "%s/details" $gb) "label" "Details") (dict "key" "nested_groups" "href" (printf "%s/nested_groups" $gb) "label" "Related Groups") (dict "key" "nested_hosts" "href" (printf "%s/nested_hosts" $gb) "label" "Hosts")))}}
+			{{if eq .Data.groupTab "details"}}
+				<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+					<dl class="ascender-detail-list" gutter="sm">
+						{{template "detail" (dict "label" (t "Name") "value" (str $g.name) "cy" "inventory-group-detail-name")}}
+						{{if has $g.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $g.description))}}
+						{{end}}
+						{{template "variables_detail" (dict "cy" "inventory-group-detail-variables" "label" (t "Variables") "value" (str $g.variables) "rows" 4)}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $g.created "user" (dig $g "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $g.modified "user" (dig $g "summary_fields" "modified_by"))}}
+					</dl>
+					{{if not $ro}}
+						<div class="ascender-card-actions-row__wrapper">
+							{{if dig $caps "edit"}}
+								<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$gb}}/edit">
+									<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+								</a>
+							{{end}}
+							{{if dig $caps "delete"}}
+								<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-delete-one data-delete-kind="Group" data-api="/api/v2/groups/{{$gid}}/" data-id="{{$gid}}" data-group-delete="{{str $g.inventory}}" data-name="{{$g.name}}" data-redirect="{{$ib}}/groups">
+									<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+								</button>
+							{{end}}
+						</div>
+					{{end}}
+				</div>
+			{{else if eq .Data.groupTab "nested_groups"}}
+				{{template "search_toolbar" (dict "page" . "id" "nested-groups-list" "searchKeys" .Data.searchKeys "ns" "group" "kind" "Group" "noDelete" $ro "disassociate" (cond $ro "" (printf "/api/v2/groups/%s/children/" $gid)) "filters" .Data.filters "addMenu" (pick $ro nil (list (dict "associate" true "resource" (printf "groups/%s/potential_children" $gid) "api" (printf "/api/v2/groups/%s/children/" $gid) "title" (t "Select Groups") "label" (t "Add existing group")) (dict "href" (printf "%s/groups/add?parent=%s" $ib $gid) "label" (t "Add new group")))) "runCommand" .Data.adHoc)}}
+				{{if .Data.results}}
+					<div class="ascender-paginated-table__overflow-auto">
+						<table aria-label="{{t "Related Groups"}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+							<thead class="pf-v6-c-table__thead">
+								<tr class="pf-v6-c-table__tr">
+									<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+										<span class="pf-v6-u-screen-reader">
+											{{t "Row select"}}
+										</span>
+									</th>
+									{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "group-table-sort-name")}}
+									{{if not $ro}}
+										<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+											{{t "Actions"}}
+										</th>
+									{{end}}
+								</tr>
+							</thead>
+							<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+								{{range $i, $c := .Data.results}}
+									{{template "group_row" (dict "group" $c "i" $i "detail" (printf "%s/groups/%s/details" $ib (str $c.id)) "edit" (printf "%s/groups/%s/edit" $ib (str $c.id)) "readonly" $ro)}}
+								{{end}}
+							</tbody>
+						</table>
+					</div>
+					{{template "pagination_bottom" (dict "page" .)}}
+				{{else}}
+					{{if .Data.filters}}
+						{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+					{{else}}
+						{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Related Groups")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Related Groups")))}}
+					{{end}}
+				{{end}}
+			{{else}}
+				{{template "search_toolbar" (dict "page" . "id" "group-hosts-list" "searchKeys" .Data.searchKeys "ns" "host" "kind" "Host" "noDelete" $ro "disassociate" (cond $ro "" (printf "/api/v2/groups/%s/hosts/" $gid)) "filters" .Data.filters "addMenu" (pick $ro nil (list (dict "associate" true "resource" (printf "inventories/%s/hosts" (str $inv.id)) "filter" (printf "not__groups__id=%s" $gid) "api" (printf "/api/v2/groups/%s/hosts/" $gid) "title" (t "Select Hosts") "label" (t "Add existing host")) (dict "href" (printf "%s/hosts/add?group=%s" $ib $gid) "label" (t "Add new host")))) "runCommand" .Data.adHoc)}}
+				{{if .Data.results}}
+					<div class="ascender-paginated-table__overflow-auto">
+						<table aria-label="{{t "Group Hosts"}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+							<thead class="pf-v6-c-table__thead">
+								<tr class="pf-v6-c-table__tr">
+									<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+										<span class="pf-v6-u-screen-reader">
+											{{t "Row select"}}
+										</span>
+									</th>
+									{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "host-table-sort-name")}}
+									{{template "sort_th" (dict "page" . "key" "description" "label" (t "Description") "id" "host-table-sort-description")}}
+									<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+										{{t "Activity"}}
+									</th>
+									<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+										{{t "Actions"}}
+									</th>
+								</tr>
+							</thead>
+							<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+								{{range $i, $h := .Data.results}}
+									{{template "host_row" (dict "host" $h "i" $i "detail" (printf "%s/hosts/%s/details" $ib (str $h.id)) "edit" (printf "%s/hosts/%s/edit" $ib (str $h.id)) "readonly" $ro "descriptionFirst" true)}}
+								{{end}}
+							</tbody>
+						</table>
+					</div>
+					{{template "pagination_bottom" (dict "page" .)}}
+				{{else}}
+					{{if .Data.filters}}
+						{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+					{{else}}
+						{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Hosts")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Hosts")))}}
+					{{end}}
+				{{end}}
+			{{end}}
+		</div>
+	</section>
+{{end}}
+{{end}}

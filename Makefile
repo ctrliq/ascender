@@ -1,720 +1,320 @@
-# Modifications Copyright (c) 2023 Ctrl IQ, Inc.
-
-PYTHON := $(notdir $(shell for i in python3.14 python3; do command -v $$i; done|sed 1q))
-SHELL := bash
-DOCKER_COMPOSE ?= docker compose
-OFFICIAL ?= no
-NODE ?= node
-NPM_BIN ?= npm
-KIND_BIN ?= $(shell which kind)
-CHROMIUM_BIN=/tmp/chrome-linux/chrome
-GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
-MANAGEMENT_COMMAND ?= ascender-manage
-VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py 2> /dev/null)
-
-# NOTE: This defaults the container image version to the branch that's active
-COMPOSE_TAG ?= $(GIT_BRANCH)
-MAIN_NODE_TYPE ?= hybrid
-
-EDITABLE_DEPENDENCIES ?= false
-
-VENV_BASE ?= /var/lib/ascender/venv
-
-DEV_DOCKER_OWNER ?= ctrliq
-# Docker will only accept lowercase, so github names like Paul need to be paul
-DEV_DOCKER_OWNER_LOWER = $(shell echo $(DEV_DOCKER_OWNER) | tr A-Z a-z)
-DEV_DOCKER_TAG_BASE ?= ghcr.io/$(DEV_DOCKER_OWNER_LOWER)
-DEVEL_IMAGE_NAME ?= $(DEV_DOCKER_TAG_BASE)/ascender_devel:$(COMPOSE_TAG)
-
-#RECEPTOR_IMAGE ?= quay.io/ansible/receptor:v1.5.7
-RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
-
-# Python packages to install only from source (not from binary wheels)
-# Comma separated list
-SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
-# These should be upgraded in the Ascender and Ansible venv before attempting
-# to install the actual requirements
-VENV_BOOTSTRAP ?= pip==26.2.2 setuptools==84.1.0 setuptools_scm[toml]==10.2.3 wheel==0.48.0
-
-NAME ?= ascender
-
-# TAR build parameters
-SDIST_TAR_NAME=$(NAME)-$(VERSION)
-
-SDIST_COMMAND ?= sdist
-SDIST_TAR_FILE ?= $(SDIST_TAR_NAME).tar.gz
-
-I18N_FLAG_FILE = .i18n_built
-
-## PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
-PLATFORMS ?= linux/amd64,linux/arm64  # linux/ppc64le,linux/s390x
-
-.PHONY: ascender-link clean clean-tmp clean-venv requirements requirements_dev \
-	develop refresh adduser migrate dbchange \
-	receiver test test_unit test_coverage coverage_html \
-	sdist \
-	ui-release ui-devel \
-	VERSION PYTHON_VERSION docker-compose-sources \
-	.git/hooks/pre-commit
-
-clean-tmp:
-	rm -rf tmp/
-
-clean-venv:
-	rm -rf venv/
-
-clean-dist:
-	rm -rf dist
-
-clean-schema:
-	rm -rf swagger.json
-	rm -rf schema.json
-	rm -rf reference-schema.json
-
-clean-languages:
-	rm -f $(I18N_FLAG_FILE)
-	find ./ascender/locale/ -type f -regex '.*\.mo$$' -delete
-
-## Remove temporary build files, compiled Python files.
-clean: clean-ui clean-api clean-dist
-	rm -rf ascender/public
-	rm -rf ascender/lib/site-packages
-	rm -rf ascender/job_status
-	rm -rf ascender/job_output
-	rm -rf reports
-	rm -rf tmp
-	rm -rf $(I18N_FLAG_FILE)
-	mkdir tmp
-
-clean-api:
-	rm -rf build $(NAME)-$(VERSION) *.egg-info
-	rm -rf .tox
-	find . -type f -regex ".*\.py[co]$$" -delete
-	find . -depth -type d -name "__pycache__" -delete
-	rm -rf requirements/vendor
-	rm -rf ascender/projects
-
-## convenience target to assert environment variables are defined
-guard-%:
-	@if [ "$${$*}" = "" ]; then \
-	    echo "The required environment variable '$*' is not set"; \
-	    exit 1; \
-	fi
-
-virtualenv: virtualenv_ascender
-
-# flit is needed for offline install of certain packages, specifically ptyprocess
-# it is needed for setup, but not always recognized as a setup dependency
-# similar to pip, setuptools, and wheel, these are all needed here as a bootstrapping issues
-virtualenv_ascender:
-	if [ "$(VENV_BASE)" ]; then \
-		if [ ! -d "$(VENV_BASE)" ]; then \
-			mkdir $(VENV_BASE); \
-		fi; \
-		if [ ! -e "$(VENV_BASE)/ascender" ] && [ -d "$(VENV_BASE)/awx" ] && [ ! -L "$(VENV_BASE)/awx" ]; then \
-			echo "Moving $(VENV_BASE)/awx to $(VENV_BASE)/ascender, and linking the old name to it."; \
-			mv $(VENV_BASE)/awx $(VENV_BASE)/ascender; \
-		fi; \
-		if [ ! -d "$(VENV_BASE)/ascender" ]; then \
-			$(PYTHON) -m venv $(VENV_BASE)/ascender; \
-			$(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) $(VENV_BOOTSTRAP); \
-		fi; \
-		if [ ! -e "$(VENV_BASE)/awx" ] || [ -L "$(VENV_BASE)/awx" ]; then \
-			ln -sfn ascender $(VENV_BASE)/awx; \
-		fi; \
-	fi
-
-## Install third-party requirements needed for Ascender's environment.
-# this does not use system site packages intentionally
-requirements_ascender: virtualenv_ascender
-	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \
-	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
-	else \
-	    cat requirements/requirements.txt requirements/requirements_git.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) --no-binary $(SRC_ONLY_PKGS) -r /dev/stdin ; \
-	fi
-	$(VENV_BASE)/ascender/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
-
-requirements_ascender_dev:
-	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install -r requirements/requirements_dev.txt
-
-requirements: requirements_ascender
-
-requirements_dev: requirements_ascender requirements_ascender_dev
-
-requirements_test: requirements
-
-## "Install" the ascender package in development mode.
-develop:
-	@if [ "$(VIRTUAL_ENV)" ]; then \
-	    pip uninstall -y awx; \
-	    $(PYTHON) setup.py develop; \
-	else \
-	    pip uninstall -y awx; \
-	    $(PYTHON) setup.py develop; \
-	fi
-
-## Refresh development environment after pulling new code.
-refresh: clean requirements_dev develop migrate
-
-## Create Django superuser.
-adduser:
-	$(MANAGEMENT_COMMAND) createsuperuser
-
-## Create database tables and apply any new migrations.
-migrate:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(MANAGEMENT_COMMAND) migrate --noinput
-
-## Run after making changes to the models to create a new migration.
-dbchange:
-	$(MANAGEMENT_COMMAND) makemigrations
-
-supervisor:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	supervisord --pidfile=/tmp/supervisor_pid -n -c /etc/supervisord.conf
-
-collectstatic:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py collectstatic --clear --noinput > /dev/null 2>&1
-
-# uwsgi ran five worker processes, so the ASGI server starts with the same.
-UVICORN_WORKERS ?= 5
-
-## Run the ASGI server that answers both the API and the websockets.
-# AWX_MOUNT_PATH is the ingress prefix the stack serves under, and --root-path is
-# what uwsgi's mount did with it: tell the application which prefix nginx has
-# already matched, so a reverse URL carries it and a request below it resolves.
+# Ascender (Go rewrite). Run `make help` for the targets.
 #
-# uvicorn builds the request path as root_path + path, so the prefix must not
-# end in a slash: "/" or "/awx/" would turn /api/ into //api/ and 404 every
-# request. The trailing slash is stripped, which also makes the compose
-# default of "/" mean what uwsgi's mount made it mean: no prefix at all.
-uvicorn: collectstatic
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	root_path="$${AWX_MOUNT_PATH%/}"; \
-	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
-		$${root_path:+--root-path "$$root_path"} ascender.asgi:channel_layer
+# The Go module lives in src/; binaries are written to bin/. The docker
+# targets drive deploy/docker-compose.yml, which needs ASCENDER_DB_PASSWORD
+# and SECRET_KEY_FILE. Both come from .secrets/ when it has them
+# (.secrets/ASCENDER_DB_PASSWORD, .secrets/SECRET_KEY); the environment or
+# the command line overrides either. A new checkout has both generated
+# (scripts/init-secrets.sh). An optional .secrets/ADMIN_PASSWORD
+# (ADMIN_PASSWORD_FILE) is the admin account's password.
 
-ascender-autoreload:
-	@/ascender_devel/tools/docker-compose/ascender-autoreload /ascender_devel/ascender
-
-## Run to start the background task dispatcher for development.
-dispatcher:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_dispatcher
-
-## Run to start the zeromq callback receiver
-receiver:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_callback_receiver
-
-nginx:
-	nginx -g "daemon off;"
-
-## Start a Jupyter notebook server in the dev environment (requires a manual
-## `pip install notebook`; run `import django; django.setup()` in the first cell).
-jupyter:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	DJANGO_SETTINGS_MODULE=ascender.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
-
-## Start the rsyslog configurer process in background in development environment.
-run-rsyslog-configurer:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_rsyslog_configurer
-
-## Start cache_clear process in background in development environment.
-run-cache-clear:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_cache_clear
-
-## Start the wsrelay process in background in development environment.
-run-wsrelay:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_wsrelay
-
-## Start the heartbeat process in background in development environment.
-run-ws-heartbeat:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) manage.py run_ws_heartbeat
-
-reports:
-	mkdir -p $@
-
-## Format the Python source in place. Set RUFF_FORMAT_ARGS=--check to report instead.
-format: reports
-	@command -v ruff >/dev/null 2>&1 || { echo "could not find ruff on your PATH, you may need to \`pip install ruff\`, or set AWX_IGNORE_RUFF=1" && exit 1; }
-	@(set -o pipefail && ruff format $(RUFF_FORMAT_ARGS) ascender | tee reports/format.report)
-
-## Legacy alias for format, so `make black` keeps working in existing habits and scripts.
-black: format
-
-## Lint the Python source against the rules selected in pyproject.toml.
-lint:
-	@command -v ruff >/dev/null 2>&1 || { echo "could not find ruff on your PATH, you may need to \`pip install ruff\`" && exit 1; }
-	ruff check ascender
-
-../../.git/hooks/pre-commit:
-	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
-	@echo "    ./pre-commit.sh;" >> .git/hooks/pre-commit
-	@echo "fi" >> .git/hooks/pre-commit
-	@chmod +x .git/hooks/pre-commit
-
-genschema: ascender-link reports
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file schema.json
-
-genschema-yaml: ascender-link reports
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(MANAGEMENT_COMMAND) spectacular --format openapi --file schema.yaml
-check: format
-
-api-lint:
-	RUFF_FORMAT_ARGS="--check" $(MAKE) format
-	$(MAKE) lint
-	yamllint -s .
-
-## Regenerate the UI's API types from the serializers themselves.
-## Run this after any change to a serializer, and commit the result.
-##
-## openapi-typescript is deliberately not a devDependency: it is a generator
-## rather than part of the build, its committed output is what everything else
-## consumes, and its peer range wants TypeScript 5 where this project is on 6.
-## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: ascender-link ascender/ui/node_modules
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file ascender/ui/.schema.json
-	$(NPM_BIN) --prefix ascender/ui run generate-api-types
-	rm -f ascender/ui/.schema.json
-
-## Run egg_info_dev to generate ascender.egg-info for development.
-ascender-link:
-	[ -d "/ascender_devel/ascender.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
-
-TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests
-PYTEST_ARGS ?= -n auto --dist=loadfile
-## Run all API unit tests.
-test:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
-	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	ascender-manage check_settings
-
-## Run all API unit tests without parallel execution (safer but slower).
-test-serial:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
-	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	ascender-manage check_settings
-
-## Run tests with limited parallel workers (safer than auto).
-test-safe:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
-	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	ascender-manage check_settings
-
-test_migrations:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider --migrations -m migration_test $(PYTEST_ARGS) $(TEST_DIRS)
-
-## Runs AWX_DOCKER_CMD inside a new docker container.
-# Extra docker flags for the throwaway container. CI sets this to reach the
-# PostgreSQL service the suite now needs, e.g.
-#   DOCKER_RUNNER_OPTS='--network host -e AWX_TEST_DATABASE_HOST=127.0.0.1'
-DOCKER_RUNNER_OPTS ?=
-
-docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
-
-test_unit:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	py.test ascender/main/tests/unit ascender/conf/tests/unit ascender/sso/tests/unit
-
-## Run all API unit tests with coverage enabled.
-test_coverage:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	py.test --create-db --cov=ascender --cov-report=xml --junitxml=./reports/junit.xml $(TEST_DIRS)
-
-## Output test coverage as HTML (into htmlcov directory).
-coverage_html:
-	coverage html
-
-## Run API unit tests across multiple Python/Django versions with Tox.
-test_tox:
-	tox -v
-
-
-DATA_GEN_PRESET = ""
-## Make fake data
-bulk_data:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
-	fi; \
-	$(PYTHON) tools/data_generators/rbac_dummy_data_generator.py --preset=$(DATA_GEN_PRESET)
-
-
-# UI TASKS
-# --------------------------------------
-
-UI_BUILD_FLAG_FILE = ascender/ui/.ui-built
-
-clean-ui:
-	rm -rf node_modules
-	rm -rf ascender/ui/node_modules
-	rm -rf ascender/ui/build
-	rm -rf ascender/ui/src/locales/_build
-	rm -rf $(UI_BUILD_FLAG_FILE)
-        # the collectstatic command doesn't like it if this dir doesn't exist.
-	mkdir -p ascender/ui/build/static
-
-ascender/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix ascender/ui --loglevel warn --force ci --ignore-scripts
-
-$(UI_BUILD_FLAG_FILE):
-	$(MAKE) ascender/ui/node_modules
-	$(PYTHON) tools/scripts/compilemessages.py
-	$(NPM_BIN) --prefix ascender/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix ascender/ui --loglevel warn run build
-	touch $@
-
-ui-release: $(UI_BUILD_FLAG_FILE)
-
-ui-devel: ascender/ui/node_modules
-	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
-	@if [ -d "/var/lib/ascender" ] ; then \
-		mkdir -p /var/lib/ascender/public/static/css; \
-		mkdir -p /var/lib/ascender/public/static/js; \
-		mkdir -p /var/lib/ascender/public/static/media; \
-		cp -r ascender/ui/build/static/css/* /var/lib/ascender/public/static/css; \
-		cp -r ascender/ui/build/static/js/* /var/lib/ascender/public/static/js; \
-		cp -r ascender/ui/build/static/media/* /var/lib/ascender/public/static/media; \
-	fi
-
-## Start the Vite dev server on port 3001, proxying the API to TARGET.
-ui-devel-test: ascender/ui/node_modules
-	$(NPM_BIN) --prefix ascender/ui --loglevel warn run start
-
-ui-lint: ascender/ui/node_modules
-	$(NPM_BIN) run --prefix ascender/ui lint
-	$(NPM_BIN) run --prefix ascender/ui prettier-check
-	$(NPM_BIN) run --prefix ascender/ui check-strings
-
-ui-type-check: ascender/ui/node_modules
-	$(NPM_BIN) run --prefix ascender/ui type-check
-
-ui-test: ascender/ui/node_modules
-	$(NPM_BIN) run --prefix ascender/ui test
-
-ui-test-screens: ascender/ui/node_modules
-	$(NPM_BIN) run --prefix ascender/ui pretest
-	$(NPM_BIN) run --prefix ascender/ui test-screens
-
-ui-test-general: ascender/ui/node_modules
-	$(NPM_BIN) run --prefix ascender/ui pretest
-	$(NPM_BIN) run --prefix ascender/ui/ test-general
-
-HEADLESS ?= no
-ifeq ($(HEADLESS), yes)
-dist/$(SDIST_TAR_FILE):
-else
-dist/$(SDIST_TAR_FILE): $(UI_BUILD_FLAG_FILE)
+SRC      := src
+BIN      := $(CURDIR)/bin
+COMMANDS := ascender-web ascender-task
+# The Go `make init` installed in /usr/local/go, which a login puts first on
+# the PATH (/etc/profile.d/ascender-golang.sh): first here too, before then.
+ifneq ($(wildcard /etc/profile.d/ascender-golang.sh),)
+ifeq ($(findstring :/usr/local/go/bin:,:$(PATH):),)
+export PATH := /usr/local/go/bin:$(PATH)
 endif
-	$(PYTHON) -m build -s
-	ln -sf $(SDIST_TAR_FILE) dist/ascender.tar.gz
-# ascender-install pip installs dist/awx.tar.gz by that path from its own
-# repository, so the old name stays beside the new one until it moves.
-	ln -sf $(SDIST_TAR_FILE) dist/awx.tar.gz
+endif
+# podman compose when it works, else docker compose (COMPOSE_CMD overrides).
+# Only the targets that run compose fail when neither is found.
+# podman compose announces the external provider it runs on every call.
+PODMAN_COMPOSE_WARNING_LOGS ?= false
+export PODMAN_COMPOSE_WARNING_LOGS
+ifeq ($(origin COMPOSE_CMD),undefined)
+COMPOSE_CMD := $(shell if podman compose version >/dev/null 2>&1; then echo podman compose; elif docker compose version >/dev/null 2>&1; then echo docker compose; fi)
+endif
+COMPOSE   = $(if $(strip $(COMPOSE_CMD)),$(COMPOSE_CMD),$(error neither podman compose nor docker compose found)) -f deploy/docker-compose.yml
+# Compose checks the file's required variables on every command; commands
+# that start nothing get a placeholder password.
+COMPOSE_ANY = ASCENDER_DB_PASSWORD="$${ASCENDER_DB_PASSWORD:-unused}" $(COMPOSE)
 
-sdist: dist/$(SDIST_TAR_FILE)
-	echo $(HEADLESS)
-	@echo "#############################################"
-	@echo "Artifacts:"
-	@echo dist/$(SDIST_TAR_FILE)
-	@echo "#############################################"
-
-# This directory is bind-mounted inside of the development container and
-# needs to be pre-created for permissions to be set correctly. Otherwise,
-# Docker will create this directory as root.
-ascender/projects:
-	@mkdir -p $@
-
-COMPOSE_UP_OPTS ?=
-COMPOSE_OPTS ?=
-CONTROL_PLANE_NODE_COUNT ?= 1
-EXECUTION_NODE_COUNT ?= 0
-MINIKUBE_CONTAINER_GROUP ?= false
-MINIKUBE_SETUP ?= false # if false, run minikube separately
-EXTRA_SOURCES_ANSIBLE_OPTS ?=
-
-ifneq ($(ADMIN_PASSWORD),)
-	EXTRA_SOURCES_ANSIBLE_OPTS := -e admin_password=$(ADMIN_PASSWORD) $(EXTRA_SOURCES_ANSIBLE_OPTS)
+# Per-machine settings (ASCENDER_MODE, ports, cookie names, host
+# directories) go in .env at the repository root, as plain KEY=value lines
+# (git- and docker-ignored; .env.example lists them). They reach make, the
+# processes run-web and run-task start, and docker compose. A variable set
+# on the command line or in the environment wins over the file. Secrets
+# stay in .secrets/ (below), not in .env.
+ENV_FILE ?= $(CURDIR)/.env
+ifneq ($(wildcard $(ENV_FILE)),)
+ENV_VARS := $(shell sed -n 's/^[[:space:]]*\([A-Za-z_][A-Za-z0-9_]*\)=.*/\1/p' '$(ENV_FILE)')
+$(foreach v,$(ENV_VARS),$(if $(filter environment command,$(firstword $(origin $(v)))),,$(eval $(v) := $(shell sed -n 's/^[[:space:]]*$(v)=//p' '$(ENV_FILE)' | tail -n 1))))
+ifneq ($(strip $(ENV_VARS)),)
+export $(ENV_VARS)
+endif
 endif
 
-docker-compose-sources: .git/hooks/pre-commit
-	@if [ $(MINIKUBE_CONTAINER_GROUP) = true ]; then\
-	    ansible-playbook -i tools/docker-compose/inventory -e minikube_setup=$(MINIKUBE_SETUP) tools/docker-compose-minikube/deploy.yml; \
-	fi;
+# Local secrets, used when present (never committed; .dockerignore keeps
+# them out of image builds).
+SECRETS_DIR            ?= $(CURDIR)/.secrets
+# A new checkout gets its secrets generated (scripts/init-secrets.sh) by the
+# first target that needs them, when neither is configured anywhere: done
+# here, before they are read, rather than in a prerequisite, which would
+# run after.
+SECRETS_GOALS := start restart images run-web run-task migrate perf-seed
+ifneq ($(filter $(SECRETS_GOALS),$(MAKECMDGOALS)),)
+ifeq ($(origin SECRET_KEY_FILE)$(strip $(ASCENDER_DB_PASSWORD)),undefined)
+$(shell sh '$(CURDIR)/scripts/init-secrets.sh' '$(SECRETS_DIR)' '$(firstword $(COMPOSE_CMD))')
+endif
+endif
+SECRET_KEY_FILE        ?= $(wildcard $(SECRETS_DIR)/SECRET_KEY)
+ADMIN_PASSWORD_FILE    ?= $(wildcard $(SECRETS_DIR)/ADMIN_PASSWORD)
+ifeq ($(strip $(ASCENDER_DB_PASSWORD)),)
+ifneq ($(wildcard $(SECRETS_DIR)/ASCENDER_DB_PASSWORD),)
+ASCENDER_DB_PASSWORD   := $(shell tr -d '\r\n' < '$(SECRETS_DIR)/ASCENDER_DB_PASSWORD')
+endif
+endif
+export ASCENDER_DB_PASSWORD
 
-	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml \
-	    -e ascender_image=$(DEV_DOCKER_TAG_BASE)/ascender_devel \
-	    -e ascender_image_tag=$(COMPOSE_TAG) \
-	    -e receptor_image=$(RECEPTOR_IMAGE) \
-	    -e control_plane_node_count=$(CONTROL_PLANE_NODE_COUNT) \
-	    -e execution_node_count=$(EXECUTION_NODE_COUNT) \
-	    -e minikube_container_group=$(MINIKUBE_CONTAINER_GROUP) \
-		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
-	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
+# Local development defaults (see deploy/README.md); override on the
+# command line or in the environment.
+ASCENDER_DB_NAME       ?= ascender
+ASCENDER_DB_USER       ?= ascender
+# The compose file's postgres container publishes its port here.
+ASCENDER_DB_LOCAL_PORT ?= 5442
+# The processes run on the host reach the compose database through these;
+# the binaries assemble (and escape) the URL themselves, and the password
+# stays in the exported environment, never on a command line or in make's
+# output. An ASCENDER_DATABASE_URL in the environment takes precedence.
+DB_ENV = ASCENDER_DB_HOST=localhost ASCENDER_DB_PORT='$(ASCENDER_DB_LOCAL_PORT)' ASCENDER_DB_NAME='$(ASCENDER_DB_NAME)' ASCENDER_DB_USER='$(ASCENDER_DB_USER)' ASCENDER_DB_SSLMODE=disable
+ASCENDER_LISTEN        ?= :8070
+ASCENDER_PROJECTS_ROOT ?= /var/lib/ascender/projects
+ASCENDER_JOBOUTPUT_ROOT ?= /var/lib/ascender/job_status
+ASCENDER_CONTAINER_RUNTIME ?= docker
+# Host directories the task container bind-mounts (project checkouts,
+# shared with the web container, and job private data). The container runs
+# as uid 1000, so they must be its; `start` and `restart` create them so, and
+# give back anything in them another user wrote (a task process once run as
+# root). docker would otherwise create a missing one as root.
+ASCENDER_PROJECTS_DIR    ?= /var/lib/ascender/projects
+ASCENDER_JOB_PRIVATE_DIR ?= /var/lib/ascender/job_private
+TASK_UID                 ?= 1000
+export ASCENDER_PROJECTS_DIR ASCENDER_JOB_PRIVATE_DIR
+export SECRET_KEY_FILE ADMIN_PASSWORD_FILE
 
-docker-compose: ascender/projects docker-compose-sources
-	$(MAKE) docker-compose-up
+SERVICES ?=
 
-docker-compose-up:
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) up $(COMPOSE_UP_OPTS) --remove-orphans
+.DEFAULT_GOAL := help
 
-docker-compose-down:
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) down --remove-orphans
+.PHONY: help
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*## "} /^##@/ {printf "\n%s\n", substr($$0, 5)} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-docker-compose-test: ascender/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports ascender_1 /bin/bash
+##@ Go
 
-docker-compose-runtest: ascender/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports ascender_1 /start_tests.sh
+.PHONY: build
+build: $(addprefix build-,$(COMMANDS)) ## Build both binaries into bin/
 
-docker-compose-build-schema: ascender/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports --no-deps ascender_1 make genschema
+.PHONY: build-%
+build-%:
+	cd $(SRC) && CGO_ENABLED=0 go build -trimpath -o $(BIN)/$* ./cmd/$*
 
-SCHEMA_DIFF_BASE_BRANCH ?= devel
-detect-schema-change: genschema
-	curl https://s3.amazonaws.com/awx-public-ci-files/$(SCHEMA_DIFF_BASE_BRANCH)/schema.json -o reference-schema.json
-	# Ignore differences in whitespace with -b
-	# diff exits with 1 when files differ - capture but don't fail
-	-diff -u -b reference-schema.json schema.json
+.PHONY: fmt
+fmt: ## gofmt the source tree
+	gofmt -w $(SRC)/internal $(SRC)/cmd $(SRC)/web
 
-docker-compose-clean: ascender/projects
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml rm -sf
+.PHONY: fmt-templates
+fmt-templates: ## Lay out the UI templates on indented lines (see src/internal/tmplws)
+	cd $(SRC) && go run ./internal/tmplws/tmplfmt -w web/templates
 
-docker-compose-container-group-clean:
-	@if [ -f "tools/docker-compose-minikube/_sources/minikube" ]; then \
-	    tools/docker-compose-minikube/_sources/minikube delete; \
-	fi
-	rm -rf tools/docker-compose-minikube/_sources/
+.PHONY: fmt-json
+fmt-json: ## Pretty-print the API's JSON (metadata, locale) with scripts/prettyjson.py
+	python3 -I scripts/prettyjson.py $(SRC)/internal/api >/dev/null
 
-.PHONY: Dockerfile.dev
-## Generate Dockerfile.dev for ascender_devel image
-Dockerfile.dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
-	ansible-playbook tools/ansible/dockerfile.yml \
-		-e dockerfile_name=Dockerfile.dev \
-		-e build_dev=True \
-		-e receptor_image=$(RECEPTOR_IMAGE)
+.PHONY: fmt-docsite
+fmt-docsite: ## Lay out the tables of the documentation site's pages (docs/docsite)
+	cd $(SRC) && go run ./cmd/ascender-docsite fmt -src ../docs/docsite >/dev/null
 
-## Build ascender_devel image for docker compose development environment
-docker-compose-build: Dockerfile.dev
-	DOCKER_BUILDKIT=1 docker build \
-		-f Dockerfile.dev \
-		-t $(DEVEL_IMAGE_NAME) \
-		--build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_devel:$(COMPOSE_TAG) .
+.PHONY: vet
+vet: ## go vet ./...
+	cd $(SRC) && go vet ./...
 
+# Pinned so results don't drift; go run fetches them once into the module
+# cache. staticcheck reads src/staticcheck.conf.
+STATICCHECK := honnef.co/go/tools/cmd/staticcheck@2026.2.2
+DEADCODE    := golang.org/x/tools/cmd/deadcode@v0.52.0
+GOVULNCHECK := golang.org/x/vuln/cmd/govulncheck@v1.9.0
 
-.PHONY: docker-compose-buildx
-## Build awx_devel image for docker compose development environment for multiple architectures
-docker-compose-buildx: Dockerfile.dev
-	- docker buildx create --name docker-compose-buildx
-	docker buildx use docker-compose-buildx
-	- docker buildx build \
-		--push \
-		--build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_devel:$(COMPOSE_TAG) \
-		--platform=$(PLATFORMS) \
-		--tag $(DEVEL_IMAGE_NAME) \
-		-f Dockerfile.dev .
-	- docker buildx rm docker-compose-buildx
+.PHONY: lint
+lint: ## staticcheck, and deadcode (functions no binary can reach)
+	cd $(SRC) && go run $(STATICCHECK) ./...
+	@cd $(SRC) && out="$$(go run $(DEADCODE) ./...)" && { [ -z "$$out" ] || { echo "$$out"; echo "unreachable functions: delete them, or move test-only helpers into _test.go files" >&2; exit 1; }; }
 
-docker-clean:
-	-$(foreach container_id,$(shell docker ps -f name=tools_awx -aq && docker ps -f name=tools_receptor -aq),docker stop $(container_id); docker rm -f $(container_id);)
-	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
+.PHONY: vulncheck
+vulncheck: ## govulncheck: known vulnerabilities the binaries can reach (modules and standard library)
+	cd $(SRC) && go run $(GOVULNCHECK) ./...
 
-docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_var_lib_awx tools_awx_db $(docker volume ls --filter name=tools_valkey_socket_ -q)
+.PHONY: test
+test: ## go test ./... (GOTESTFLAGS=-race adds flags)
+	cd $(SRC) && go test $(GOTESTFLAGS) ./...
 
-docker-refresh: docker-clean docker-compose
+.PHONY: check
+check: fmt fmt-templates fmt-json fmt-docsite licenses build vet docsite-check ## gofmt, layouts, Go module licenses, build, vet and the docs site's links (run before finishing a change)
 
-docker-compose-container-group:
-	MINIKUBE_CONTAINER_GROUP=true $(MAKE) docker-compose
+# CI runs these: they report rather than rewrite.
+.PHONY: fmt-check
+fmt-check: ## Fail if any file needs gofmt, a template or docs table laying out, or API JSON pretty-printing
+	@out="$$(gofmt -l $(SRC)/internal $(SRC)/cmd $(SRC)/web)"; [ -z "$$out" ] || { echo "$$out"; echo "these files need gofmt: run make fmt" >&2; exit 1; }
+	@cd $(SRC) && go run ./internal/tmplws/tmplfmt -l web/templates || { echo "these templates need laying out: run make fmt-templates" >&2; exit 1; }
+	@python3 -I scripts/prettyjson.py --check $(SRC)/internal/api || { echo "these JSON files need pretty-printing: run make fmt-json" >&2; exit 1; }
+	@cd $(SRC) && go run ./cmd/ascender-docsite fmt -src ../docs/docsite -check || { echo "these pages' tables need laying out: run make fmt-docsite" >&2; exit 1; }
 
-VERSION:
-	@echo "awx: $(VERSION)"
+.PHONY: licenses
+licenses: ## Write licenses/go: the license of every Go module the binaries link (scripts/golicenses.py)
+	python3 -I scripts/golicenses.py
 
-PYTHON_VERSION:
-	@echo "$(subst python,,$(PYTHON))"
+.PHONY: licenses-check
+licenses-check: ## Fail if licenses/go does not match the Go modules the binaries link
+	python3 -I scripts/golicenses.py --check
 
-.PHONY: version-for-buildyml
-version-for-buildyml:
-	@echo $(firstword $(subst +, ,$(VERSION)))
-# version-for-buildyml prints a special version string for build.yml,
-# chopping off the sha after the '+' sign.
-# tools/ansible/build.yml was doing this: make print-VERSION | cut -d + -f -1
-# This does the same thing in native make without
-# the pipe or the extra processes, and now the pb does `make version-for-buildyml`
-# Example:
-# 	22.1.1.dev38+g523c0d9781 becomes 22.1.1.dev38
+.PHONY: tidy-check
+tidy-check: ## Fail if go.mod or go.sum needs go mod tidy
+	cd $(SRC) && go mod tidy -diff
 
-.PHONY: Dockerfile
-## Generate Dockerfile for awx image
-Dockerfile: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
-	ansible-playbook tools/ansible/dockerfile.yml \
-		-e receptor_image=$(RECEPTOR_IMAGE) \
-		-e headless=$(HEADLESS)
-
-## Build awx image for deployment on Kubernetes environment.
-ascender-kube-build: Dockerfile
-	DOCKER_BUILDKIT=1 docker build -f Dockerfile \
-		--build-arg VERSION=$(VERSION) \
-		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
-		--build-arg HEADLESS=$(HEADLESS) \
-		-t $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) .
-
-## Build multi-arch awx image for deployment on Kubernetes environment.
-ascender-kube-buildx: Dockerfile
-	- docker buildx create --name ascender-kube-buildx
-	docker buildx use ascender-kube-buildx
-	- docker buildx build \
-		--push \
-		--build-arg VERSION=$(VERSION) \
-		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
-		--build-arg HEADLESS=$(HEADLESS) \
-		--platform=$(PLATFORMS) \
-		--tag $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) \
-		-f Dockerfile .
-	- docker buildx rm ascender-kube-buildx
-
-
-.PHONY: Dockerfile.kube-dev
-## Generate Docker.kube-dev for ascender_kube_devel image
-Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
-	ansible-playbook tools/ansible/dockerfile.yml \
-	    -e dockerfile_name=Dockerfile.kube-dev \
-	    -e kube_dev=True \
-	    -e template_dest=_build_kube_dev \
-	    -e receptor_image=$(RECEPTOR_IMAGE)
-
-## Build ascender_kube_devel image for development on local Kubernetes environment.
-ascender-kube-dev-build: Dockerfile.kube-dev
-	DOCKER_BUILDKIT=1 docker build -f Dockerfile.kube-dev \
-	    --build-arg BUILDKIT_INLINE_CACHE=1 \
-	    --cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
-	    -t $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) .
-
-## Build and push multi-arch ascender_kube_devel image for development on local Kubernetes environment.
-ascender-kube-dev-buildx: Dockerfile.kube-dev
-	- docker buildx create --name ascender-kube-dev-buildx
-	docker buildx use ascender-kube-dev-buildx
-	- docker buildx build \
-		--push \
-		--build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
-		--platform=$(PLATFORMS) \
-		--tag $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
-		-f Dockerfile.kube-dev .
-	- docker buildx rm ascender-kube-dev-buildx
-
-kind-dev-load: ascender-kube-dev-build
-	$(KIND_BIN) load docker-image $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG)
-
-# Translation TASKS
-# --------------------------------------
-
-## generate UI .pot file, an empty template of strings yet to be translated
-pot: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-template --clean
-
-## generate UI .po files for each locale (will update translated strings for `en`)
-po: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-strings -- --clean
-
-## generate API django .pot .po
-messages:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/ascender/bin/activate; \
+# The hook only calls pre-commit.sh, so the checks follow the checkout. A
+# hook of another's is left alone; the marker line tells ours apart.
+.PHONY: hooks
+hooks: ## Install the git pre-commit hook, which runs pre-commit.sh
+	@hook="$$(git rev-parse --git-path hooks/pre-commit 2>/dev/null)" || { echo "hooks: not a git checkout, no hook installed"; exit 0; }; \
+	if [ -e "$$hook" ] && ! grep -q '^# ascender pre-commit.sh' "$$hook"; then \
+		echo "hooks: $$hook is not ours, left as it is: call ./pre-commit.sh from it for the checks"; exit 0; \
 	fi; \
-	$(PYTHON) manage.py makemessages -l en_us --keep-pot
+	mkdir -p "$$(dirname "$$hook")" && \
+	printf '%s\n' '#!/bin/sh' '# ascender pre-commit.sh: installed by make hooks' \
+		'top=$$(git rev-parse --show-toplevel) || exit 1' \
+		'[ ! -x "$$top/pre-commit.sh" ] || exec "$$top/pre-commit.sh"' >"$$hook" && \
+	chmod +x "$$hook" && echo "hooks: installed $$hook (runs pre-commit.sh)"
 
-.PHONY: print-%
-print-%:
-	@echo $($*)
+.PHONY: upgrade
+upgrade: ## Update all dependencies (go get -u) and go mod tidy
+	cd $(SRC) && go get -u -t ./... && go mod tidy
 
-# HELP related targets
-# --------------------------------------
+.PHONY: tidy
+tidy: ## go mod tidy
+	cd $(SRC) && go mod tidy
 
-HELP_FILTER=.PHONY
+.PHONY: i18n-missing
+i18n-missing: ## List UI messages the code uses that a catalog does not translate (LANG_CODE=ja, or ALL=1)
+	cd $(SRC) && go run ./internal/i18n/missing $(if $(ALL),-all,-lang $(or $(LANG_CODE),ja))
 
-## Display help targets
-help:
-	@printf "Available targets:\n"
-	@$(MAKE) -s help/generate | grep -vE "\w($(HELP_FILTER))"
+.PHONY: i18n-import
+i18n-import: ## Merge the old UI's .po translations into the JSON catalogs (OLD=<ascender checkout>)
+	$(if $(OLD),,$(error set OLD to a checkout of github.com/ctrliq/ascender))
+	cd $(SRC) && go run ./internal/i18n/importpo -merge -old '$(OLD)'
 
-## Display help for all targets
-help/all:
-	@printf "Available targets:\n"
-	@$(MAKE) -s help/generate
+.PHONY: clean
+clean: ## Remove bin/
+	rm -rf $(BIN)
 
-## Generate help output from MAKEFILE_LIST
-help/generate:
-	@awk '/^[-a-zA-Z_0-9%:\\\.\/]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = $$1; \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			gsub("\\\\", "", helpCommand); \
-			gsub(":+$$", "", helpCommand); \
-			printf "  \x1b[32;01m%-35s\x1b[0m %s\n", helpCommand, helpMessage; \
-		} else { \
-			helpCommand = $$1; \
-			gsub("\\\\", "", helpCommand); \
-			gsub(":+$$", "", helpCommand); \
-			printf "  \x1b[32;01m%-35s\x1b[0m %s\n", helpCommand, "No help available"; \
-		} \
-	} \
-	{ lastLine = $$0 }' $(MAKEFILE_LIST) | sort -u
-	@printf "\n"
+##@ Documentation site
 
+DOCSITE_LISTEN ?= 127.0.0.1:8090
+DOCSITE_BASE   ?= /
+
+.PHONY: docsite
+docsite: ## Build the documentation site (docs/docsite) as static files in bin/docsite (DOCSITE_BASE=/ is its URL path)
+	cd $(SRC) && go run ./cmd/ascender-docsite build -src ../docs/docsite -base '$(DOCSITE_BASE)' -out $(BIN)/docsite
+
+.PHONY: docsite-serve
+docsite-serve: ## Serve the documentation site on http://127.0.0.1:8090/ (DOCSITE_LISTEN), read again on every page load
+	cd $(SRC) && go run ./cmd/ascender-docsite serve -src ../docs/docsite -static web/static -listen '$(DOCSITE_LISTEN)'
+
+.PHONY: docsite-check
+docsite-check: ## Fail on broken links, missing titles or unused images in the documentation site
+	cd $(SRC) && go run ./cmd/ascender-docsite check -src ../docs/docsite
+
+##@ Run on the host
+
+.PHONY: run-web
+run-web: require-db-password require-secret-key ## Run the web server from source, templates served from disk
+	cd $(SRC) && $(DB_ENV) \
+	ASCENDER_SECRET_KEY_FILE='$(SECRET_KEY_FILE)' \
+	ASCENDER_ADMIN_PASSWORD_FILE='$(ADMIN_PASSWORD_FILE)' \
+	ASCENDER_LISTEN='$(ASCENDER_LISTEN)' ASCENDER_PROJECTS_ROOT='$(ASCENDER_PROJECTS_ROOT)' \
+	ASCENDER_STATIC_DIR=web/static ASCENDER_TEMPLATE_DIR=web/templates \
+	ASCENDER_DOCS_DIR=../docs/docsite \
+	go run ./cmd/ascender-web
+
+.PHONY: migrate
+migrate: require-db-password require-secret-key ## Apply the supplemental schema migrations (indexes) and list them
+	cd $(SRC) && $(DB_ENV) \
+	ASCENDER_SECRET_KEY_FILE='$(SECRET_KEY_FILE)' \
+	go run ./cmd/ascender-web migrate
+
+.PHONY: perf-seed
+perf-seed: require-db-password ## Load scale test data into a *_perf copy of the database (ASCENDER_DB_NAME=ascender_perf)
+	cd $(SRC) && $(DB_ENV) go run ./cmd/zz-perfseed
+
+.PHONY: run-task
+run-task: require-db-password require-secret-key ## Run the task process from source
+	cd $(SRC) && $(DB_ENV) \
+	ASCENDER_SECRET_KEY_FILE='$(SECRET_KEY_FILE)' \
+	ASCENDER_ADMIN_PASSWORD_FILE='$(ADMIN_PASSWORD_FILE)' \
+	ASCENDER_PROJECTS_ROOT='$(ASCENDER_PROJECTS_ROOT)' ASCENDER_JOBOUTPUT_ROOT='$(ASCENDER_JOBOUTPUT_ROOT)' \
+	ASCENDER_CONTAINER_RUNTIME='$(ASCENDER_CONTAINER_RUNTIME)' \
+	go run ./cmd/ascender-task
+
+##@ Docker (deploy/docker-compose.yml; SERVICES=web or task limits to one)
+
+.PHONY: init
+init: ## Prepare this host: install compose and Go if missing, generate the secrets and .env, install the git hook
+	@sh scripts/init.sh '$(SECRETS_DIR)' '$(ENV_FILE)'
+	@$(MAKE) -s hooks
+
+.PHONY: start
+start: require-db-password require-secret-key host-dirs ## Build the images and start the containers
+	$(COMPOSE) up -d --build $(SERVICES)
+
+.PHONY: stop
+stop: ## Stop and remove the containers (volumes are kept)
+	@# Compose warns "No resource found to remove" when there's nothing up.
+	@# docker compose lists stopped containers only with -a; podman-compose
+	@# has no -a and always lists them. A failing ps (daemon down, bad
+	@# compose file) fails the target.
+	@ids="$$($(COMPOSE_ANY) ps -a -q 2>/dev/null)" || ids="$$($(COMPOSE_ANY) ps -q)" || exit $$?; \
+	if [ -n "$$ids" ]; then \
+		echo '$(COMPOSE) down'; $(COMPOSE_ANY) down; \
+	else \
+		echo 'No containers to stop.'; \
+	fi
+
+.PHONY: restart
+restart: require-db-password require-secret-key host-dirs ## Rebuild and recreate the containers
+	$(COMPOSE) up -d --build --force-recreate $(SERVICES)
+
+.PHONY: images
+images: require-db-password require-secret-key ## Build the images without starting them
+	$(COMPOSE) build $(SERVICES)
+
+.PHONY: logs
+logs: ## Follow the containers' logs
+	$(COMPOSE_ANY) logs -f $(SERVICES)
+
+.PHONY: ps
+ps: ## Show the containers' status
+	$(COMPOSE_ANY) ps
+
+.PHONY: require-db-password
+require-db-password:
+	@test -n "$$ASCENDER_DB_PASSWORD" || { echo "ASCENDER_DB_PASSWORD is not set: put it in .secrets/ASCENDER_DB_PASSWORD or the environment; it is generated only together with SECRET_KEY, for a new installation (see deploy/README.md)" >&2; exit 1; }
+
+.PHONY: host-dirs
+host-dirs: ## Create the task container's host directories, owned by its uid
+	@for d in '$(ASCENDER_PROJECTS_DIR)' '$(ASCENDER_JOB_PRIVATE_DIR)'; do \
+		case "$$d" in /*) ;; *) echo "refusing directory '$$d': give an absolute path" >&2; exit 1;; esac; \
+		d="$${d%/}"; \
+		case "$$d" in *..*) echo "refusing directory '$$d'" >&2; exit 1;; esac; \
+		if [ "$$(printf %s "$$d" | tr -cd / | wc -c)" -lt 2 ]; then echo "refusing directory '$$d': give one of its own, such as /var/lib/ascender/projects" >&2; exit 1; fi; \
+		case "$$d" in /home/*/*) ;; /usr/*|/etc/*|/boot/*|/proc/*|/sys/*|/dev/*|/run/*|/root/*|/home/*|/var/lib|/var/log|/var/cache|/var/spool|/var/tmp) echo "refusing directory '$$d': a system directory" >&2; exit 1;; esac; \
+		mkdir -p "$$d" || exit 1; \
+		if [ -n "$$(find "$$d" ! -uid '$(TASK_UID)' -print -quit)" ]; then \
+			if chown -R '$(TASK_UID):0' "$$d"; then echo "$$d now belongs to uid $(TASK_UID)"; \
+			else echo "$$d must belong to uid $(TASK_UID), the task container's user: chown -R $(TASK_UID):0 $$d" >&2; exit 1; fi; \
+		fi; \
+	done
+
+.PHONY: require-secret-key
+require-secret-key:
+	@test -n "$(SECRET_KEY_FILE)" -a -r "$(SECRET_KEY_FILE)" || { echo "No SECRET_KEY: put it in .secrets/SECRET_KEY or set SECRET_KEY_FILE; it is generated only together with the database password, for a new installation (see deploy/README.md)" >&2; exit 1; }

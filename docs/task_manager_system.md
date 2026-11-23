@@ -1,187 +1,337 @@
 # Task Manager System Overview
 
-The task management system is made up of three separate components:
-1. Dependency Manager
-2. Task Manager
-3. Workflow Manager
+The task manager decides when a launched task starts and where it runs.
+In Ascender it is part of the dispatcher of every `ascender-task` process
+(`src/internal/tasks/dispatcher.go`), and does three things:
 
-Each of these run in a separate dispatched task and can run at the same time as one another.
+1. **Claiming** pending tasks: a task process takes the oldest pending task
+   that is not blocked, chooses the instance group and nodes it runs on, and
+   starts it if there is capacity.
+2. **Dependencies**: a task whose project or inventory sources update on
+   launch runs those updates first. This is done by the task's own run once
+   it has been claimed, not by a separate dependency manager.
+3. **The workflow manager** starts workflow jobs, creates the jobs of their
+   nodes as their parents finish, and finishes them.
 
-This system is responsible for deciding when tasks should be scheduled to run. When choosing a task to run, the considerations are:
-1. Creation time
-2. Job dependencies
-3. Capacity
+How the dispatcher runs the tasks it claims, and the other background work
+of `ascender-task`, is described in [Background Tasks](./tasks.md).
 
-Independent tasks are run in order of creation time, earliest first. Tasks with dependencies are also run in creation time order within the group of task dependencies. Capacity is the final consideration when deciding to release a task to be run by the dispatcher.
+When choosing a task to start, the considerations are:
 
-
-## Dependency Manager
-
-Responsible for looking at each pending task and determining whether it should create a dependency for that task.
-For example, if `scm_update_on_launch` is enabled for the project a task uses, a project update will be created as a dependency of that task. The Dependency Manager is responsible for creating that project update.
-
-Dependencies can also have their own dependencies, for example,
-
-```
-+-----------+
-|           |                          created by web API call
-|   Job A   |
-|           |
-+-----------+---+
-                |
-                |
-        +-------v----+
-        |  Inventory |                 dependency of Job A
-        |  Source    |                 created by Dependency Manager
-        |  Update B  |
-        +------------+-------+
-                             |
-                             |
-                      +------v------+
-                      |   Project   |  dependency of Inventory Source Update B
-                      |   Update C  |  created by Dependency Manager
-                      +-------------+
-```
+1. Creation order: pending tasks are considered oldest first (by ID).
+2. Blocking: a task does not start while certain other tasks are active
+   (see [Blocking rules](#blocking-rules)).
+3. Capacity: of the instances and instance groups the task can run on (see
+   [Capacity and placement](#capacity-and-placement)).
+4. Worker slots: a task process runs at most `ASCENDER_TASK_WORKERS` tasks
+   at once (default 4).
 
 
-### Dependency Manager Steps
+## The main loop
 
-1. Get pending tasks (parent tasks) that have `dependencies_processed = False`
-2. As optimization, cache related projects and inventory sources
-3. Create project or inventory update for related project or inventory source if
-    a. not already created
-    b. last update failed
-    c. last project update outside of cache timeout window
-    d. some extra logic applies to inventory update creation
-4. All dependencies (new or old) are linked to the parent task via the `dependent_jobs` field
-    a. This allows us to cancel the parent task if the dependency fails or is canceled
-5. Update the parent tasks with `dependencies_processed = True`
-6. Check and create dependencies for these newly created dependencies
-    a. inventory source updates can have a project update dependency
+Each task process runs a loop (`Dispatcher.Run`) that, on every turn:
 
+1. runs the workflow manager (`processWorkflows`), then
+2. claims pending tasks (`claimAndRun`) until none can be claimed or every
+   worker slot is busy.
 
-## Task Manager
+A turn starts when:
 
-Responsible for looking at each pending task and determining whether Task Manager can start that task.
+* the API creates a task and notifies the `ascender_dispatch` channel;
+* a task this process ran finishes, which may unblock another task, free
+  capacity, or let a workflow node run;
+* the schedule pass has launched its due schedules;
+* 15 seconds have passed since the last turn.
 
-### Task Manager Steps
-
-1. Get pending, waiting, and running tasks that have `dependencies_processed = True`
-2. Before processing pending tasks, the task manager first processes running tasks. This allows it to build a dependency graph and account for the currently consumed capacity in the system.
-    a. dependency graph is just an internal data structure that tracks which jobs are currently running. It also handles "soft" blocking logic
-    b. the capacity is tracked in memory on the `TaskManagerInstances` and `TaskManagerInstanceGroups` objects which are in-memory representations of the instances and instance groups. These data structures are used to help track what consumed capacity will be as we decide that we will start new tasks, and until such time that we actually commit the state changes to the database.
-3. For each pending task:
-    a. Check if total number of tasks started on this task manager cycle is > `start_task_limit`
-    b. Check if [timed out](#timing-out)
-    c. Check if task is blocked
-    d. Check if preferred instances have enough capacity to run the task
-4. Start the task by changing status to `waiting` and submitting task to dispatcher
+Each trigger alone would be enough for the system to work. The notifications
+make tasks start without delay; the periodic turn is the fail-safe for
+anything that changes the scheduling considerations without a notification
+(a node added to the cluster, a task finished by another task process).
 
 
-## Workflow Manager
+## Claiming a task
 
-Responsible for looking at each workflow job and determining if next node can run
+A claim (`claimAndPlace`) is one `UPDATE` that moves the oldest claimable
+`pending` row of `main_unifiedjob` to `waiting`, selecting it with
+`FOR UPDATE SKIP LOCKED`. Jobs, ad hoc commands, project updates, inventory
+updates and system jobs are claimed; workflow jobs and workflow approvals are
+handled by the workflow manager.
 
-### Workflow Manager Steps
+A claimable task:
 
-1. Get all running workflow jobs
-2. Build up a workflow DAG for each workflow job
-3. For each workflow job:
-    a. Check if [timed out](#timing-out)
-    b. Check if next node can start based on previous node status and the associated success / failure / always logic
-4. Create new task and signal start
+* is not blocked by an active task (see [Blocking rules](#blocking-rules));
+* was not found to lack capacity since the last time a task of this process
+  finished, or in the last 15 seconds.
 
+The claimed task is then placed: its instance group, execution node and
+controller node are chosen (see [Capacity and placement](#capacity-and-placement)).
+A task that does not fit goes back to `pending`, and the claim moves on to
+the next one, so a large task waiting for room does not hold back smaller
+ones behind it.
 
-## Task Manager System Architecture
+A placed task goes through the pre-start check (`preStartCheck` in
+`src/internal/tasks/prestart.go`): every credential must provide its
+credential type's required fields (an input source counts), and the
+passwords its credentials prompt for must have been given at launch.
+A task that fails the check fails at once with the explanation, followed by
+"Task failed pre-start check."
 
-Each of the three managers has a single entry point, `schedule()`. The `schedule()` function tries to acquire a single, global lock recorded in the database. If the lock cannot be acquired, the method returns. The failure to acquire the lock indicates that there is another instance currently running `schedule()`.
+The task is then started in a goroutine of the task process. It stays
+`waiting` while its [dependencies](#dependencies-update-on-launch) run, and
+becomes `running` when its own work starts.
 
-Each manager runs inside an atomic DB transaction. If the dispatcher task that is running the manager is killed, none of the created tasks or updates will take effect.
+### Several task processes
 
-### Hybrid Scheduler: Periodic + Event
+Every task process claims tasks, and only for its own node. The claim and
+the placement run under the PostgreSQL advisory lock `task_manager_lock`, so
+that two task processes see each other's claims: without it, both could
+start a job of the same template, or both could fill the last room in an
+instance group. The lock is waited for and held only for the few statements
+of one claim, each committed on its own.
 
-Each manager's `schedule()` function is run (a) periodically by a background task and (b) on job creation or completion. The task manager system would behave correctly if it ran, exclusively, via (a) or (b).
-
-Special note -- the workflow manager is not scheduled to run periodically *directly*, but piggy-backs off the task manager. That is, if task manager sees at least one running workflow job, it will schedule the workflow manager to run.
-
-`schedule()` is triggered via both mechanisms because of the following properties:
-1. It reduces the time from launch to running, resulting a better user experience.
-2. It is a fail-safe in case we miss code-paths, in the present and future, that change the scheduling considerations for which we should call `schedule()` (_i.e._, adding new nodes to Ascender changes the capacity, obscure job error handling that fails a job).
-
-Empirically, the periodic task manager has been effective in the past and will continue to be relied upon with the added event-triggered `schedule()`.
-
-### Bulk Reschedule
-
-Typically, each manager runs asynchronously via the dispatcher system. Dispatcher tasks take resources, so it is important to not schedule tasks unnecessarily. We also need a mechanism to run the manager *after* an atomic transaction block.
-
-Scheduling the managers are facilitated through the `ScheduleTaskManager`, `ScheduleDependencyManager`, and `ScheduleWorkflowManager` classes. These are utilities that help prevent too many managers from being started via the dispatcher system. Think of it as a "do once" mechanism.
-
-```python3
-with transaction.atomic()
-  for t in tasks:
-    if condition:
-      ScheduleTaskManager.schedule()
-```
-
-In the above code, we only want to schedule the TaskManager once after all `tasks` have been processed. `ScheduleTaskManager.schedule()` will handle that logic correctly.
-
-### Timing out
-
-Because of the global lock of the manager, only one manager can run at a time. If that manager gets stuck for whatever reason, it is important to kill it and let a new one take its place. As such, there is special code in the parent dispatcher process to SIGKILL any of the task system managers after a few minutes.
-
-There is an important side effect to this. Because the manager `schedule()` runs in a transaction, the next run will have re-process the same tasks again. This could lead a manager never being able to progress from one run to the next, as each time it times out. In this situation the task system is effectively stuck as new tasks cannot start. To mitigate this, each manager will check if it is about to hit the time out period and bail out early if so. This gives the manager enough time to commit the DB transaction, and the next manager cycle will be able to start with the next set of unprocessed tasks. This ensures that the system can still make incremental progress under high workloads (i.e. many pending tasks).
+A task that one task process returns to `pending` because it does not fit
+there (its instance groups contain no node this process can use, say) is
+claimed by a task process whose node it fits.
 
 
-### Job Lifecycle
+## Blocking rules
 
-| Job Status |                                                       State                                                      |
-|:-----------|:-------------------------------------------------------------------------------------------------------------------|
-| pending    | Job has been launched.  <br>1. Hasn't yet been seen by the scheduler <br>2. Is blocked by another task <br>3. Not enough capacity |
-| waiting    | Job submitted to dispatcher via pg_notify
-| running    | Job is running on a Ascender node.
-| successful | Job finished with `ansible-playbook` return code 0.                                                                  |
-| failed     | Job finished with `ansible-playbook` return code other than 0.                                                       |
-| error      | System failure.                                                                                                    |
+The rules are those of the old task manager's dependency graph. They are
+part of the claim's `UPDATE` (`blockerSQL` and `claimAndPlace` in
+`src/internal/tasks/dispatcher.go`), read from the database on every claim.
+A pending task is not claimed while a task that blocks it is `waiting` or
+`running`:
+
+| Pending task | Blocked by |
+|:-------------|:-----------|
+| Project update | an update of the same project |
+| Inventory update | an update of the same inventory source |
+| System job | any other system job, of whatever system job template |
+| Job | an update of the job's project; an ad hoc command on the job's inventory; an inventory update of the job's inventory, unless the inventory allows jobs while syncing (`allow_jobs_while_syncing`, see [Allow jobs while syncing](./inventory/allow_jobs_while_syncing.md)); a job of the same job template, unless the job allows simultaneous runs (`allow_simultaneous`) |
+| Ad hoc command | another ad hoc command on its inventory; an inventory update of its inventory, unless the inventory allows jobs while syncing |
+
+An inventory update counts for the inventory it was run for, or for its
+source's inventory when it has none. Project updates of `launch_type`
+`sync` (a job bringing its project checkout up to date, see
+[Jobs](./tasks.md#jobs)) block nothing, and are never claimed: they run
+inside the job that needs them. A sliced or federated workflow job does not
+block the jobs of its job template; its own jobs, which allow simultaneous
+runs, block the other jobs of the template while they run.
+
+A blocked task that is at least 30 seconds old gets the explanation
+"waiting for `<type>`-`<id>` to finish", naming the task that blocks it
+(`explainBlocked`), for example "waiting for adhoccommand-12 to finish" or
+"waiting for inventoryupdate-40 to finish". The types are `projectupdate`,
+`inventoryupdate`, `job`, `systemjob`, `adhoccommand` and `workflowjob`.
+When several tasks block it, the one named is chosen in the order of the
+table (for a job: its project's update, then an ad hoc command, then an
+inventory update, then a job of its template), and the oldest of that kind.
+The explanation is written on every turn of the main loop while the task is
+blocked. A task that is claimed and placed drops it, like the capacity
+explanation below, so a running or finished task does not still say why it
+waited; a task that then fails its pre-start check gets that check's
+explanation instead.
+
+Workflow jobs are not claimed; the workflow manager starts them
+(`startWorkflowJob` in `src/internal/tasks/workflow.go`). A pending workflow
+job whose `allow_simultaneous` is off stays pending while another job of its
+template is `waiting` or `running`; for a sliced or federated workflow job,
+whose template is a job template, a job of that template blocks it too. It
+gets the same explanation, naming a workflow job of its template, or else a
+job of its job template (`explainBlockedWorkflow` in
+`src/internal/tasks/workflow_blocked.go`), which it drops when it starts.
+Pending workflow jobs are taken in id order, so the oldest starts first.
+
+Groups of blocked tasks therefore run in the order they were created.
+
+The old task manager also blocked a task while one of its `dependent_jobs`
+was active. In Ascender a task's dependencies are created and waited for by
+the task's own run once it has been claimed (see below), so a pending task
+has none to wait for.
 
 
-### Node Affinity Decider
+## Dependencies (update on launch)
 
-The Task Manager decides which exact node a job will run on. It does so by considering user-configured group execution policy and user-configured capacity. First, the set of groups on which a job _can_ run on is constructed (see the Ascender document on [Clustering](./clustering.md)). The groups are traversed until a node within that group is found. The node with the largest remaining capacity (after accounting for the job's task impact) is chosen first. If there are no instances that can fit the job, then the largest *idle* node is chosen, regardless whether the job fits within its capacity limits. In this second case, it is possible for the instance to exceed its capacity in order to run the job.
+Projects and inventory sources marked **update on launch** are updated when a
+task that uses them runs. The rules, with the cache feature
+(`scm_update_cache_timeout`, `update_cache_timeout`), are:
+
+* A job's project, when it updates on launch, gets a `check` project update
+  first (`projectUpdateDependency` in `src/internal/tasks/run_base.go`),
+  unless the project's latest `check` update succeeded and finished within
+  the project's cache timeout.
+* Each inventory source of a job's or an ad hoc command's inventory that
+  updates on launch gets an inventory update first
+  (`runInventoryDependencies` in `src/internal/tasks/job.go`), unless the
+  source's latest update succeeded and finished within the source's cache
+  timeout.
+* An inventory update from a project (source `scm`) runs the project's
+  update first when that project updates on launch
+  (`invUpdateRun.runDependencies` in `src/internal/tasks/inventory_update.go`).
+* A latest update that failed, errored or was canceled is never reused.
+* A latest update that is still active is waited for instead of starting
+  another. An inventory sync under way is not waited for when the inventory
+  allows jobs while syncing and the source has synced successfully before.
+
+Dependencies are run by the task that needs them, after it has been claimed
+and while it is `waiting` (`runTask` in `src/internal/tasks/run_base.go`):
+
+1. The dependency is created with `launch_type` `dependency` and linked to
+   the task through `dependent_jobs`. A project update is run inline, in the
+   task's worker slot, with this node as its controller (project updates
+   always run on the controller in the control plane). An inventory update
+   is created `pending`, with the source's preferred instance groups (see
+   [Instance Groups on Inventory Sources](./inventory_source_instance_groups.md)),
+   like any other update of the source.
+2. A dependency that already exists is linked through `dependent_jobs` too.
+   While a dependency is `pending`, the waiting task tries to take it and run
+   it inline itself, since every worker slot could be held by tasks waiting
+   for pending dependencies; otherwise its status is checked every 2 seconds.
+   An inventory update is taken only once it is placed, under the task
+   manager lock, as a claim would place it (`claimPlacedDependency`): in its
+   preferred groups with room, or else in the waiting task's own place when
+   that task's group is one of its preferred groups, as the task holds that
+   capacity without using it until its dependencies are done. Otherwise it
+   stays `pending`, and is tried again or claimed by a free worker.
+3. The task's `dependencies_processed` is set, so a task that is re-queued
+   does not run its dependencies again.
+4. If a dependency does not succeed, the task fails with the explanation
+   `Previous Task Failed: {"job_type": "project_update", "job_name": "...", "job_id": "..."}`
+   (or `inventory_update`). A canceled project update dependency cancels the
+   task; a canceled inventory update dependency fails it unless the task was
+   itself canceled.
+
+> **Note.** In the previous implementation a task stayed `pending` while its
+> dependencies ran. In Ascender it is `waiting`, it has been placed, and it
+> holds a worker slot of its task process for the duration.
+
+Separately from update on launch, a job whose project checkout lacks the
+revision it needs syncs the project during its run with a project update of
+`launch_type` `sync` (see [Jobs](./tasks.md#jobs)). That update is not a
+dependency.
+
+For an inventory source of a source control project, see
+[SCM inventory](./inventory/scm_inventory.md).
 
 
-## Managers are short-lived
+## Capacity and placement
 
-Manager instances are short lived. Each time it runs, a new instance of the manager class is created, relevant data is pulled in from database, and the manager processes the data. After running, the instance is cleaned up.
+The placement (`placeTask` in `src/internal/tasks/capacity.go`) is the port of
+the old task manager's capacity rules. It reads, for every claim, the ready
+and enabled instances, the instance groups, and the capacity that the
+`waiting` and `running` tasks consume. A task consumes its task impact on its
+execution node, and a control impact of 1 on its controller node. See
+[Capacity](./capacity.md) for how instance capacity and task impact are
+computed.
+
+1. **Controller.** A task needs a control or hybrid instance of the control
+   plane instance group (`DEFAULT_CONTROL_PLANE_QUEUE_NAME`, `controlplane`
+   by default) with room for the control impact. The task process controls
+   work on its own node only, so this is the claiming node. If it has no
+   room, the task stays pending.
+2. **Project updates and system jobs** run on the controller itself: they
+   need room for their impact plus the control impact there, and the control
+   plane group must be within its limits.
+3. **Other tasks** go through the task's preferred instance groups in order
+   (recorded at launch in `preferred_instance_groups_cache`, from the
+   template, inventory and organization; see [Clustering](./clustering.md)),
+   or the `default` group if none were recorded. The first group that can
+   take the task wins:
+   * The group's limits must allow one more task: `max_concurrent_jobs` and
+     `max_forks` (0 for no limit).
+   * For a container group, the task runs in a pod; for a container group
+     behind a mesh node, the mesh node must be ready and this node must have
+     a receptor to reach it.
+   * Otherwise the execution node is the group's instance with the most
+     capacity left after the task's impact (fewer running tasks on a tie),
+     among the instances this task process can use: its own node when it is
+     a hybrid node, and execution nodes when this node has a receptor to
+     reach the mesh. A hybrid instance also needs room for the control
+     impact. If no instance has room, the largest idle instance is chosen,
+     whatever the task's impact, so that a task larger than any instance can
+     still run. A task on a hybrid execution node is controlled by that node.
+4. A task that fits nowhere returns to `pending`. From 30 seconds after it
+   was created, its explanation becomes "This job is not ready to start
+   because there is not enough available capacity." A task that is placed
+   drops any explanation it got while pending.
+
+The chosen group, nodes and a new task ID (`celery_task_id`, which fences the
+task's [monitor lease](./job_monitor_lease.md) and its final write) are
+stored on the task.
+
+> **Note.** In the previous implementation one task manager placed tasks for
+> the whole cluster, and could make any control node the controller. In
+> Ascender a task is controlled by the node whose task process claimed it.
 
 
-### Blocking Logic
+## Workflow manager
 
-The blocking logic is handled by a mixture of ORM instance references and task manager local tracking data in the scheduler instance.
+The workflow manager (`processWorkflows` in `src/internal/tasks/workflow.go`,
+a port of `dag_workflow.py` and the old `WorkflowManager`) runs at the start
+of every turn of the main loop, in one task process at a time: it takes the
+advisory lock `workflow_manager_lock` without waiting, and a task process
+that cannot get it skips the pass. On each pass it:
 
-There is a distinction between so-called "hard" vs "soft" blocking.
+1. settles workflow approvals whose timeout has expired, approving or
+   failing them according to their `on_timeout` (`timeoutApprovals` in
+   `src/internal/tasks/workflow_approvals.go`);
+2. moves every `pending` workflow job to `running`; workflow jobs consume no
+   capacity and have no execution node;
+3. for every `running` workflow job, builds its graph from its nodes, their
+   edges and the state of their jobs, then:
+   * if the workflow job is being canceled, marks its unstarted nodes as do
+     not run, cancels its nodes' jobs, and finishes it as `canceled` once
+     they have all ended;
+   * marks the nodes that can no longer run as do not run;
+   * when every node has settled, finishes the workflow job as `successful`,
+     or `failed` with "No error handling paths found, marking workflow as
+     failed" when a failed node has no error handling path;
+   * otherwise creates the jobs of the nodes that are ready: their relevant
+     parents have finished, following the success, failure and always edges
+     and their conditions, the convergence rules, and retries (see
+     [Automatic node retries](./workflow.md#automatic-node-retries)).
 
-**Hard blocking** refers to dependencies that are represented in the database via the task `dependent_jobs` field. That is, Job A will not run if any of its `dependent_jobs` are still running.
-
-**Soft blocking** refers to blocking logic that doesn't have a database representation. Imagine Job A and B are both based on the same job template, and concurrent jobs is `disabled`. Job B will be blocked from running if Job A is already running. This is determined purely by the task manager tracking running jobs via the Dependency Graph.
-
-
-### Task Manager Rules
-
-* Groups of blocked tasks run in chronological order
-* Tasks that are not blocked run whenever there is capacity available in the instance group that they are set to run in (one job is always allowed to run per instance group, even if there isn't enough capacity)
-* Only one Project Update for a Project may be running at a time
-* Only one Inventory Update for an Inventory Source may be running at a time
-* Only one Job for a Job Template may be running at a time (the `allow_simultaneous` feature relaxes this condition)
-* Only one System Job may be running at a time
+The jobs of job template nodes are created through
+`api.Server.SpawnWorkflowNodeJob` (`src/internal/api/workflow_spawn.go`),
+which applies the node's and the workflow's prompts with the same rules as a
+launch. Project, inventory source, nested workflow and approval nodes create
+their job directly. The jobs, project updates and inventory updates created
+for nodes are then claimed like any other pending task; nested workflow jobs
+are picked up by the next pass. See [Workflows](./workflow.md).
 
 
-### Update on Launch Logic
+## Locks
 
-This is a feature in Ascender where dynamic inventory and projects associated with Job Templates may be set to invoke and update when related Job Templates are launched. Related to this feature is a cache feature on dynamic inventory updates and project updates. The rules for these two intertwined features are below:
+The cluster-wide passes use PostgreSQL session advisory locks, taken on a
+dedicated connection (`advisoryLocked` in `src/internal/tasks/dispatcher.go`):
 
-* Projects marked as `update on launch` should trigger a project update when a related job template is launched.
-* Inventory sources marked as `update on launch` should trigger an inventory update when a related job template is launched.
-* Spawning of project updates and/or inventory updates should **not** be triggered when a related job template is launched **IF** there is an update && the last update finished successfully && the finished time puts the update within the configured cache window.
-* **Note:** `update on launch` spawned jobs (_i.e._, InventoryUpdate and ProjectUpdate) are considered dependent jobs; in other words, the `launch_type` is `dependent`. If a `dependent` job fails, then everything related to it should also fail.
+| Lock | Taken by | When held |
+|:-----|:---------|:----------|
+| `task_manager_lock` | the claim and placement of a task | waited for |
+| `workflow_manager_lock` | the workflow manager | the pass is skipped |
+| `awx_periodic_scheduler_lock` | the schedule pass, and the schedule sync at startup | the pass is skipped; the sync waits |
+| `inspect_execution_and_hop_nodes_lock` | the heartbeat's reading of the mesh | skipped |
 
-For example permutations of blocking, take a look at this [Task Manager Dependency Rules and Permutations](https://docs.google.com/a/redhat.com/document/d/1AOvKiTMSV0A2RHykHW66BZKBuaJ_l0SJ-VbMwvu-5Gk/edit?usp=sharing) doc.
+The lock keys are derived from the same names the previous Python
+implementation used, so its task processes and Ascender's do not both run a
+pass against the same database at the same time.
+
+There is no time limit on a pass. The old managers ran each pass in one
+database transaction and were killed after a few minutes; Ascender's passes
+commit each step as they go, so a pass that stops halfway keeps the
+progress it committed. A task left `waiting` by a task process that stopped
+between a claim and its start is failed by the reapers (see
+[Heartbeats, capacity and job reaping](./tasks.md#heartbeats-capacity-and-job-reaping)).
+
+
+## Job lifecycle
+
+| Status | Meaning |
+|:-------|:--------|
+| `pending` | The task has been launched and not claimed: no task process has looked at it yet, it is blocked by another task, or there is not enough capacity. |
+| `waiting` | A task process has claimed and placed the task. Its dependencies run while it is waiting. |
+| `running` | The task's work is running. |
+| `successful` | The task finished, with return code 0 for `ansible-playbook`. |
+| `failed` | The task finished with another return code, or timed out ("Job terminated due to timeout"), failed its pre-start check, had a dependency fail, was stopped by a shutdown, or was reaped. |
+| `error` | The task could not run: a system failure, with the explanation or traceback on the job. |
+| `canceled` | The task was canceled. |

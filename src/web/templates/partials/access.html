@@ -1,0 +1,172 @@
+{{define "access_tab"}}
+{{/* ResourceAccessList; the page's Data carries accessRows, accessCanAdd, accessRoles, accessResource */}}
+{{$r := .Data.accessResource}}
+{{template "search_toolbar" (dict "page" . "id" "access" "searchKeys" .Data.searchKeys "ns" "access" "noSelect" true "noDelete" true "addAttr" (pick .Data.accessCanAdd (attr (printf `data-access-add data-resource-type="%s" data-resource-id="%s" data-resource-name="%s" data-no-teams="%v" data-roles="%s"` (str $r.type) (str $r.id) (esc (str $r.name)) .Data.accessNoTeams (esc .Data.accessRoles))) "") "filters" .Data.filters)}}
+{{if .Data.accessRows}}
+	<div class="ascender-paginated-table__overflow-auto">
+		<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Roles")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+			<thead class="pf-v6-c-table__thead">
+				<tr class="pf-v6-c-table__tr">
+					{{template "sort_th" (dict "page" . "key" "username" "label" (t "Username") "id" "access-table-sort-username")}}
+					{{template "sort_th" (dict "page" . "key" "first_name" "label" (t "First name") "id" "access-table-sort-first_name")}}
+					{{template "sort_th" (dict "page" . "key" "last_name" "label" (t "Last name") "id" "access-table-sort-last_name")}}
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+						{{t "Roles"}}
+					</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+				{{range .Data.accessRows}}
+					{{$u := .User}}
+					{{$id := str $u.id}}
+					<tr class="pf-v6-c-table__tr" id="access-item-row-{{$id}}">
+						<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" id="access-record-{{$id}}">
+							<a href="/users/{{$id}}/details"><b>{{$u.username}}</b></a>
+						</td>
+						<td tabindex="-1" data-label="{{t "First name"}}" class="pf-v6-c-table__td">
+							{{$u.first_name}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Last name"}}" class="pf-v6-c-table__td">
+							{{$u.last_name}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Roles"}}" class="pf-v6-c-table__td">
+							<dl class="ascender-detail-list ascender-detail-list--stacked">
+								{{if .UserRoles}}
+									<div>
+										<dt class="ascender-detail-name">{{t "User Roles"}}</dt>
+										<dd class="ascender-detail-value">
+											<div>
+												{{template "access_chips" (dict "roles" .UserRoles "user" $u)}}
+											</div>
+										</dd>
+									</div>
+								{{end}}
+								{{if .TeamRoles}}
+									<div>
+										<dt class="ascender-detail-name">{{t "Team Roles"}}</dt>
+										<dd class="ascender-detail-value">
+											<div>
+												{{template "access_chips" (dict "roles" .TeamRoles "user" $u)}}
+											</div>
+										</dd>
+									</div>
+								{{end}}
+							</dl>
+						</td>
+					</tr>
+				{{end}}
+			</tbody>
+		</table>
+	</div>
+	{{template "pagination_bottom" (dict "page" .)}}
+{{else}}
+	{{if .Data.filters}}
+		{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+	{{else}}
+		{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Roles")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Roles")))}}
+	{{end}}
+{{end}}
+{{end}}
+{{define "access_chips"}}
+{{/* .roles .user: removable role chips, five shown */}}
+{{$u := .user}}
+<div class="pf-v6-c-label-group" data-chip-group>
+	<div class="pf-v6-c-label-group__main">
+		<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
+			{{range $i, $r := .roles}}
+				<li class="pf-v6-c-label-group__list-item"{{if ge $i 5}} hidden data-chip-overflowed{{end}}>
+					<span class="pf-v6-c-label pf-m-outline">
+						<span class="pf-v6-c-label__content">
+							<span class="pf-v6-c-label__text">{{$r.name}}</span>
+						</span>
+						<span class="pf-v6-c-label__actions">
+							<button aria-label="{{t "Remove {0} chip" "0" $r.name}}" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-access-remove data-role-id="{{str $r.id}}" data-role-name="{{$r.name}}" data-user-id="{{str $u.id}}" data-username="{{$u.username}}"{{if has $r.team_id}} data-team-id="{{str $r.team_id}}" data-team-name="{{$r.team_name}}"{{end}}>
+								<span class="pf-v6-c-button__icon">{{icon "pf-close"}}</span>
+							</button>
+						</span>
+					</span>
+				</li>
+			{{end}}
+			{{if gt (len .roles) 5}}
+				<li class="pf-v6-c-label-group__list-item">
+					<button class="pf-v6-c-label pf-m-overflow" type="button" data-chip-overflow data-more="{{t "{0} more" "0" (sub (len .roles) 5)}}">
+						<span class="pf-v6-c-label__content">
+							<span class="pf-v6-c-label__text">
+								{{t "{0} more" "0" (sub (len .roles) 5)}}
+							</span>
+						</span>
+					</button>
+				</li>
+			{{end}}
+		</ul>
+	</div>
+</div>
+{{end}}
+{{define "role_rows"}}
+{{/* UserRolesList / TeamRolesList rows: .page .kind ("user" or "team") .owner */}}
+{{$kind := .kind}}
+{{$owner := .owner}}
+<div class="ascender-paginated-table__overflow-auto">
+	<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (cond (eq $kind "user") (t "User Roles") (t "Team Roles"))}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+		<thead class="pf-v6-c-table__thead">
+			<tr class="pf-v6-c-table__tr">
+				<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+					{{if eq $kind "user"}}{{t "Name"}}{{else}}{{t "Resource Name"}}{{end}}
+				</th>
+				<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+					{{t "Type"}}
+				</th>
+				{{if eq $kind "user"}}
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+						{{t "Role"}}
+					</th>
+				{{else}}
+					{{template "sort_th" (dict "page" .page "key" "id" "label" (t "Role") "id" "roles-table-sort-id")}}
+				{{end}}
+			</tr>
+		</thead>
+		<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+			{{range .page.Data.results}}
+				{{$id := str .id}}
+				{{$sf := .summary_fields}}
+				<tr class="pf-v6-c-table__tr" id="{{if eq $kind "user"}}user-role-row{{else}}role-item-row{{end}}-{{$id}}">
+					<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" id="{{$kind}}Role-{{$id}}">
+						{{if has (dig $sf "resource_name")}}
+							<a id="{{$kind}}Role-{{$id}}" href="{{roleResourceHref $sf}}">
+								<b>{{dig $sf "resource_name"}}</b>
+							</a>
+						{{else}}
+							<b>{{t "System"}}</b>
+						{{end}}
+					</td>
+					<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+						{{dig $sf "resource_type_display_name"}}
+					</td>
+					<td tabindex="-1" data-label="{{t "Role"}}" class="pf-v6-c-table__td">
+						{{if has .name}}
+							<span aria-label="{{.name}}" class="pf-v6-c-label pf-m-outline">
+								<span class="pf-v6-c-label__content">
+									<span class="pf-v6-c-label__text">{{.name}}</span>
+								</span>
+								{{if dig $sf "user_capabilities" "unattach"}}
+									<span class="pf-v6-c-label__actions">
+										<button aria-label="Close {{.name}}" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-role-disassociate data-kind="{{$kind}}" data-owner="{{$owner}}" data-role-id="{{$id}}" data-role-name="{{.name}}" data-resource-name="{{dig $sf "resource_name"}}">
+											<span class="pf-v6-c-button__icon">
+												{{icon "pf-close"}}
+											</span>
+										</button>
+									</span>
+								{{end}}
+							</span>
+						{{end}}
+					</td>
+				</tr>
+			{{end}}
+		</tbody>
+	</table>
+</div>
+{{template "pagination_bottom" (dict "page" .page)}}
+{{end}}
+{{define "access_icons"}}
+<script nonce="{{.Nonce}}">window.ASCENDER_ACCESS_ICONS = {"caret": {{icon "pf-caret-down"}}, "search": {{icon "search"}}, "left": {{icon "angle-left"}}, "right": {{icon "angle-right"}}, "first": {{icon "pf-angle-double-left"}}, "last": {{icon "angle-double-right"}}, "sort": {{icon "arrows-alt-v"}}, "up": {{icon "long-arrow-alt-up"}}, "down": {{icon "long-arrow-alt-down"}}, "close": {{icon "pf-close"}}, "filter": {{icon "filter"}}};</script>
+{{end}}

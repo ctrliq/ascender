@@ -1,0 +1,36 @@
+{
+    "name": "Host Variable Data",
+    "description": "# Retrieve Host Variable Data:\n\nMake a GET request to this resource to retrieve all variables defined for a\nhost.\n\n\n\n# Update Host Variable Data:\n\nMake a PUT or PATCH request to this resource to update variables defined for a\nhost.",
+    "renders": [
+        "application/json",
+        "text/html",
+        "application/yaml"
+    ],
+    "parses": [
+        "application/json",
+        "application/yaml"
+    ],
+    "actions": {
+        "PUT": {
+            "variables": {
+                "type": "json",
+                "required": false,
+                "label": "Variables",
+                "help_text": "Host variables in JSON or YAML format.",
+                "filterable": true,
+                "default": ""
+            }
+        },
+        "GET": {
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Host variables in JSON or YAML format.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "host"
+    ]
+}

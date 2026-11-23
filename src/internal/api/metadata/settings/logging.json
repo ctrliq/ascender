@@ -1,0 +1,518 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `LOG_AGGREGATOR_HOST`: Hostname/IP where external logs will be sent to. (string)\n* `LOG_AGGREGATOR_PORT`: Port on Logging Aggregator to send logs to (if required and not provided in Logging Aggregator). (integer)\n* `LOG_AGGREGATOR_TYPE`: Format messages for the chosen log aggregator. (choice)\n    - `None`: ---------\n    - `logstash`\n    - `splunk`\n    - `loggly`\n    - `sumologic`\n    - `ledger`\n    - `other`\n* `LOG_AGGREGATOR_USERNAME`: Username for external log aggregator (if required; HTTP/s only). (string)\n* `LOG_AGGREGATOR_PASSWORD`: Password or authentication token for external log aggregator (if required; HTTP/s only). (string)\n* `LOG_AGGREGATOR_LOGGERS`: List of loggers that will send HTTP logs to the collector, these can include any or all of: \nascender - service logs, which awx also selects on a deployment that predates the rename\nactivity_stream - activity stream records\njob_events - callback data from Ansible job events\nsystem_tracking - facts gathered from scan jobs\nbroadcast_websocket - errors pertaining to websockets broadcast metrics\njob_lifecycle - logs related to processing of a job\n (list)\n* `LOG_AGGREGATOR_INDIVIDUAL_FACTS`: If set, system tracking facts will be sent for each package, service, or other item found in a scan, allowing for greater search query granularity. If unset, facts will be sent as a single dictionary, allowing for greater efficiency in fact processing. (boolean)\n* `LOG_AGGREGATOR_ENABLED`: Enable sending logs to external log aggregator. (boolean)\n* `LOG_AGGREGATOR_ASCENDER_UUID`: Useful to uniquely identify instances. (string)\n* `LOG_AGGREGATOR_PROTOCOL`: Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS. (choice)\n    - `https`: HTTPS/HTTP\n    - `tcp`: TCP\n    - `udp`: UDP\n    - `relp`: RELP\n* `LOG_AGGREGATOR_TCP_TIMEOUT`: Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols. (integer)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE`: Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it. (boolean)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_TIME`: Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most. (integer)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL`: Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter. (integer)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES`: Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter. (integer)\n* `LOG_AGGREGATOR_VERIFY_CERT`: Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is &quot;https&quot;. If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection. (boolean)\n* `LOG_AGGREGATOR_LEVEL`: Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting) (choice)\n    - `DEBUG`\n    - `INFO`\n    - `WARNING`\n    - `ERROR`\n    - `CRITICAL`\n* `LOG_AGGREGATOR_ACTION_QUEUE_SIZE`: Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds. (integer)\n* `LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY`: Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning. (integer)\n* `LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB`: Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH. (integer)\n* `LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL`: When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue&#x27;s current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored. (integer)\n* `LOG_AGGREGATOR_MAX_DISK_USAGE_PATH`: Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting. (string)\n* `LOG_AGGREGATOR_RSYSLOGD_DEBUG`: Enabled high verbosity debugging for rsyslogd.  Useful for debugging connection issues for external log aggregation. (boolean)\n* `API_400_ERROR_LOG_FORMAT`: The format of logged messages when an API 4XX error occurs, the following variables will be substituted: \nstatus_code - The HTTP status code of the error\nuser_name - The user name attempting to use the API\nurl_path - The URL path to the API endpoint called\nremote_addr - The remote address seen for the user\nerror - The error set by the api endpoint\nVariables need to be in the format {&lt;variable name&gt;}. (string)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `LOG_AGGREGATOR_HOST`: Hostname/IP where external logs will be sent to. (string, default=`\"\"`)\n* `LOG_AGGREGATOR_PORT`: Port on Logging Aggregator to send logs to (if required and not provided in Logging Aggregator). (integer, default=`None`)\n* `LOG_AGGREGATOR_TYPE`: Format messages for the chosen log aggregator. (choice)\n    - `None`: --------- (default)\n    - `logstash`\n    - `splunk`\n    - `loggly`\n    - `sumologic`\n    - `ledger`\n    - `other`\n* `LOG_AGGREGATOR_USERNAME`: Username for external log aggregator (if required; HTTP/s only). (string, default=`\"\"`)\n* `LOG_AGGREGATOR_PASSWORD`: Password or authentication token for external log aggregator (if required; HTTP/s only). (string, default=`\"\"`)\n* `LOG_AGGREGATOR_LOGGERS`: List of loggers that will send HTTP logs to the collector, these can include any or all of: \nascender - service logs, which awx also selects on a deployment that predates the rename\nactivity_stream - activity stream records\njob_events - callback data from Ansible job events\nsystem_tracking - facts gathered from scan jobs\nbroadcast_websocket - errors pertaining to websockets broadcast metrics\njob_lifecycle - logs related to processing of a job\n (list, default=`[&#x27;ascender&#x27;, &#x27;activity_stream&#x27;, &#x27;job_events&#x27;, &#x27;system_tracking&#x27;, &#x27;broadcast_websocket&#x27;, &#x27;job_lifecycle&#x27;]`)\n* `LOG_AGGREGATOR_INDIVIDUAL_FACTS`: If set, system tracking facts will be sent for each package, service, or other item found in a scan, allowing for greater search query granularity. If unset, facts will be sent as a single dictionary, allowing for greater efficiency in fact processing. (boolean, default=`False`)\n* `LOG_AGGREGATOR_ENABLED`: Enable sending logs to external log aggregator. (boolean, default=`False`)\n* `LOG_AGGREGATOR_ASCENDER_UUID`: Useful to uniquely identify instances. (string, default=`\"\"`)\n* `LOG_AGGREGATOR_PROTOCOL`: Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS. (choice)\n    - `https`: HTTPS/HTTP (default)\n    - `tcp`: TCP\n    - `udp`: UDP\n    - `relp`: RELP\n* `LOG_AGGREGATOR_TCP_TIMEOUT`: Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols. (integer, default=`5`)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE`: Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it. (boolean, default=`True`)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_TIME`: Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most. (integer, default=`120`)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL`: Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter. (integer, default=`30`)\n* `LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES`: Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter. (integer, default=`3`)\n* `LOG_AGGREGATOR_VERIFY_CERT`: Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is &quot;https&quot;. If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection. (boolean, default=`True`)\n* `LOG_AGGREGATOR_LEVEL`: Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting) (choice)\n    - `DEBUG`\n    - `INFO` (default)\n    - `WARNING`\n    - `ERROR`\n    - `CRITICAL`\n* `LOG_AGGREGATOR_ACTION_QUEUE_SIZE`: Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds. (integer, default=`131072`)\n* `LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY`: Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning. (integer, default=`5`)\n* `LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB`: Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH. (integer, default=`1`)\n* `LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL`: When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue&#x27;s current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored. (integer, default=`0`)\n* `LOG_AGGREGATOR_MAX_DISK_USAGE_PATH`: Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting. (string, default=`\"/var/lib/ascender\"`)\n* `LOG_AGGREGATOR_RSYSLOGD_DEBUG`: Enabled high verbosity debugging for rsyslogd.  Useful for debugging connection issues for external log aggregation. (boolean, default=`False`)\n* `API_400_ERROR_LOG_FORMAT`: The format of logged messages when an API 4XX error occurs, the following variables will be substituted: \nstatus_code - The HTTP status code of the error\nuser_name - The user name attempting to use the API\nurl_path - The URL path to the API endpoint called\nremote_addr - The remote address seen for the user\nerror - The error set by the api endpoint\nVariables need to be in the format {&lt;variable name&gt;}. (string, default=`\"status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}\"`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "LOG_AGGREGATOR_HOST": {
+                "type": "string",
+                "required": false,
+                "label": "Logging Aggregator",
+                "help_text": "Hostname/IP where external logs will be sent to.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": null
+            },
+            "LOG_AGGREGATOR_PORT": {
+                "type": "integer",
+                "required": false,
+                "label": "Logging Aggregator Port",
+                "help_text": "Port on Logging Aggregator to send logs to (if required and not provided in Logging Aggregator).",
+                "min_value": 1,
+                "max_value": 65535,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": null
+            },
+            "LOG_AGGREGATOR_TYPE": {
+                "type": "choice",
+                "required": false,
+                "label": "Logging Aggregator Type",
+                "help_text": "Format messages for the chosen log aggregator.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": null,
+                "choices": [
+                    [null, "---------"],
+                    ["logstash", "logstash"],
+                    ["splunk", "splunk"],
+                    ["loggly", "loggly"],
+                    ["sumologic", "sumologic"],
+                    ["ledger", "ledger"],
+                    ["other", "other"]
+                ]
+            },
+            "LOG_AGGREGATOR_USERNAME": {
+                "type": "string",
+                "required": false,
+                "label": "Logging Aggregator Username",
+                "help_text": "Username for external log aggregator (if required; HTTP/s only).",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": ""
+            },
+            "LOG_AGGREGATOR_PASSWORD": {
+                "type": "string",
+                "required": false,
+                "label": "Logging Aggregator Password/Token",
+                "help_text": "Password or authentication token for external log aggregator (if required; HTTP/s only).",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": ""
+            },
+            "LOG_AGGREGATOR_LOGGERS": {
+                "type": "list",
+                "required": false,
+                "label": "Loggers Sending Data to Log Aggregator Form",
+                "help_text": "List of loggers that will send HTTP logs to the collector, these can include any or all of: \nascender - service logs, which awx also selects on a deployment that predates the rename\nactivity_stream - activity stream records\njob_events - callback data from Ansible job events\nsystem_tracking - facts gathered from scan jobs\nbroadcast_websocket - errors pertaining to websockets broadcast metrics\njob_lifecycle - logs related to processing of a job\n",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": [
+                    "ascender",
+                    "activity_stream",
+                    "job_events",
+                    "system_tracking",
+                    "broadcast_websocket",
+                    "job_lifecycle"
+                ],
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "LOG_AGGREGATOR_INDIVIDUAL_FACTS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Log System Tracking Facts Individually",
+                "help_text": "If set, system tracking facts will be sent for each package, service, or other item found in a scan, allowing for greater search query granularity. If unset, facts will be sent as a single dictionary, allowing for greater efficiency in fact processing.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": false
+            },
+            "LOG_AGGREGATOR_ENABLED": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enable External Logging",
+                "help_text": "Enable sending logs to external log aggregator.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": false
+            },
+            "LOG_AGGREGATOR_ASCENDER_UUID": {
+                "type": "string",
+                "required": false,
+                "label": "Cluster-wide unique identifier.",
+                "help_text": "Useful to uniquely identify instances.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": ""
+            },
+            "LOG_AGGREGATOR_PROTOCOL": {
+                "type": "choice",
+                "required": false,
+                "label": "Logging Aggregator Protocol",
+                "help_text": "Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": "https",
+                "choices": [
+                    ["https", "HTTPS/HTTP"],
+                    ["tcp", "TCP"],
+                    ["udp", "UDP"],
+                    ["relp", "RELP"]
+                ]
+            },
+            "LOG_AGGREGATOR_TCP_TIMEOUT": {
+                "type": "integer",
+                "required": false,
+                "label": "TCP Connection Timeout",
+                "help_text": "Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "unit": "seconds",
+                "default": 5
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enable TCP keepalives to the log aggregator",
+                "help_text": "Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": true
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_TIME": {
+                "type": "integer",
+                "required": false,
+                "label": "Idle time before the first TCP keepalive probe",
+                "help_text": "Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most.",
+                "min_value": 1,
+                "max_value": 32767,
+                "category": "Logging",
+                "category_slug": "logging",
+                "unit": "seconds",
+                "default": 120
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL": {
+                "type": "integer",
+                "required": false,
+                "label": "Interval between TCP keepalive probes",
+                "help_text": "Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter.",
+                "min_value": 1,
+                "max_value": 32767,
+                "category": "Logging",
+                "category_slug": "logging",
+                "unit": "seconds",
+                "default": 30
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES": {
+                "type": "integer",
+                "required": false,
+                "label": "Number of unanswered TCP keepalive probes before the connection is dropped",
+                "help_text": "Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter.",
+                "min_value": 1,
+                "max_value": 127,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": 3
+            },
+            "LOG_AGGREGATOR_VERIFY_CERT": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enable/disable HTTPS certificate verification",
+                "help_text": "Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is \"https\". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": true
+            },
+            "LOG_AGGREGATOR_LEVEL": {
+                "type": "choice",
+                "required": false,
+                "label": "Logging Aggregator Level Threshold",
+                "help_text": "Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting)",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": "INFO",
+                "choices": [
+                    ["DEBUG", "DEBUG"],
+                    ["INFO", "INFO"],
+                    ["WARNING", "WARNING"],
+                    ["ERROR", "ERROR"],
+                    ["CRITICAL", "CRITICAL"]
+                ]
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_SIZE": {
+                "type": "integer",
+                "required": false,
+                "label": "Maximum number of messages that can be stored in the log action queue",
+                "help_text": "Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.",
+                "min_value": 1,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": 131072
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY": {
+                "type": "integer",
+                "required": false,
+                "label": "Severity at which messages are discarded when the log action queue is nearly full",
+                "help_text": "Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.",
+                "min_value": 0,
+                "max_value": 8,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": 5
+            },
+            "LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB": {
+                "type": "integer",
+                "required": false,
+                "label": "Maximum disk persistence for rsyslogd action queuing (in GB)",
+                "help_text": "Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH.",
+                "min_value": 1,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": 1
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL": {
+                "type": "integer",
+                "required": false,
+                "label": "Interval (in seconds) between rsyslogd queue statistics",
+                "help_text": "When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": 0
+            },
+            "LOG_AGGREGATOR_MAX_DISK_USAGE_PATH": {
+                "type": "string",
+                "required": false,
+                "label": "File system location for rsyslogd disk persistence",
+                "help_text": "Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": "/var/lib/ascender"
+            },
+            "LOG_AGGREGATOR_RSYSLOGD_DEBUG": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enable rsyslogd debugging",
+                "help_text": "Enabled high verbosity debugging for rsyslogd.  Useful for debugging connection issues for external log aggregation.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": false
+            },
+            "API_400_ERROR_LOG_FORMAT": {
+                "type": "string",
+                "required": false,
+                "label": "Log Format For API 4XX Errors",
+                "help_text": "The format of logged messages when an API 4XX error occurs, the following variables will be substituted: \nstatus_code - The HTTP status code of the error\nuser_name - The user name attempting to use the API\nurl_path - The URL path to the API endpoint called\nremote_addr - The remote address seen for the user\nerror - The error set by the api endpoint\nVariables need to be in the format {<variable name>}.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "default": "status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}"
+            }
+        },
+        "GET": {
+            "LOG_AGGREGATOR_HOST": {
+                "type": "string",
+                "label": "Logging Aggregator",
+                "help_text": "Hostname/IP where external logs will be sent to.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_PORT": {
+                "type": "integer",
+                "label": "Logging Aggregator Port",
+                "help_text": "Port on Logging Aggregator to send logs to (if required and not provided in Logging Aggregator).",
+                "min_value": 1,
+                "max_value": 65535,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_TYPE": {
+                "type": "choice",
+                "label": "Logging Aggregator Type",
+                "help_text": "Format messages for the chosen log aggregator.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "choices": [
+                    [null, "---------"],
+                    ["logstash", "logstash"],
+                    ["splunk", "splunk"],
+                    ["loggly", "loggly"],
+                    ["sumologic", "sumologic"],
+                    ["ledger", "ledger"],
+                    ["other", "other"]
+                ]
+            },
+            "LOG_AGGREGATOR_USERNAME": {
+                "type": "string",
+                "label": "Logging Aggregator Username",
+                "help_text": "Username for external log aggregator (if required; HTTP/s only).",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_PASSWORD": {
+                "type": "string",
+                "label": "Logging Aggregator Password/Token",
+                "help_text": "Password or authentication token for external log aggregator (if required; HTTP/s only).",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_LOGGERS": {
+                "type": "list",
+                "label": "Loggers Sending Data to Log Aggregator Form",
+                "help_text": "List of loggers that will send HTTP logs to the collector, these can include any or all of: \nascender - service logs, which awx also selects on a deployment that predates the rename\nactivity_stream - activity stream records\njob_events - callback data from Ansible job events\nsystem_tracking - facts gathered from scan jobs\nbroadcast_websocket - errors pertaining to websockets broadcast metrics\njob_lifecycle - logs related to processing of a job\n",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "LOG_AGGREGATOR_INDIVIDUAL_FACTS": {
+                "type": "boolean",
+                "label": "Log System Tracking Facts Individually",
+                "help_text": "If set, system tracking facts will be sent for each package, service, or other item found in a scan, allowing for greater search query granularity. If unset, facts will be sent as a single dictionary, allowing for greater efficiency in fact processing.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_ENABLED": {
+                "type": "boolean",
+                "label": "Enable External Logging",
+                "help_text": "Enable sending logs to external log aggregator.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_ASCENDER_UUID": {
+                "type": "string",
+                "label": "Cluster-wide unique identifier.",
+                "help_text": "Useful to uniquely identify instances.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_PROTOCOL": {
+                "type": "choice",
+                "label": "Logging Aggregator Protocol",
+                "help_text": "Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.  RELP acknowledges each message and retransmits anything the aggregator did not confirm, where TCP loses whatever was in flight when a connection resets.  It does not currently support TLS.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "choices": [
+                    ["https", "HTTPS/HTTP"],
+                    ["tcp", "TCP"],
+                    ["udp", "UDP"],
+                    ["relp", "RELP"]
+                ]
+            },
+            "LOG_AGGREGATOR_TCP_TIMEOUT": {
+                "type": "integer",
+                "label": "TCP Connection Timeout",
+                "help_text": "Number of seconds for a TCP connection to external log aggregator to timeout. Applies to HTTPS, TCP and RELP log aggregator protocols.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "unit": "seconds"
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE": {
+                "type": "boolean",
+                "label": "Enable TCP keepalives to the log aggregator",
+                "help_text": "Send TCP keepalive probes on an idle connection to the external log aggregator. Firewalls and load balancers discard idle flows without notifying either end, and the connection is then found to be dead only when the next message is written to it, which loses that message. Applies to the TCP log aggregator protocol; HTTPS, UDP and RELP ignore it.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_TIME": {
+                "type": "integer",
+                "label": "Idle time before the first TCP keepalive probe",
+                "help_text": "Number of seconds a connection to the external log aggregator may be idle before the first keepalive probe is sent. Equivalent to the rsyslogd KeepAlive.Time parameter. This should be shorter than the idle timeout of any load balancer or firewall on the path; the operating system default of two hours is longer than most.",
+                "min_value": 1,
+                "max_value": 32767,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "unit": "seconds"
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_INTERVAL": {
+                "type": "integer",
+                "label": "Interval between TCP keepalive probes",
+                "help_text": "Number of seconds between keepalive probes to the external log aggregator once the connection has been found idle. Equivalent to the rsyslogd KeepAlive.Interval parameter.",
+                "min_value": 1,
+                "max_value": 32767,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "unit": "seconds"
+            },
+            "LOG_AGGREGATOR_TCP_KEEPALIVE_PROBES": {
+                "type": "integer",
+                "label": "Number of unanswered TCP keepalive probes before the connection is dropped",
+                "help_text": "Number of unanswered keepalive probes after which the connection to the external log aggregator is considered dead and re-established. Equivalent to the rsyslogd KeepAlive.Probes parameter.",
+                "min_value": 1,
+                "max_value": 127,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_VERIFY_CERT": {
+                "type": "boolean",
+                "label": "Enable/disable HTTPS certificate verification",
+                "help_text": "Flag to control enable/disable of certificate verification when LOG_AGGREGATOR_PROTOCOL is \"https\". If enabled, the log handler will verify certificate sent by external log aggregator before establishing connection.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_LEVEL": {
+                "type": "choice",
+                "label": "Logging Aggregator Level Threshold",
+                "help_text": "Level threshold used by log handler. Severities from lowest to highest are DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the threshold will be ignored by log handler. (messages under category awx.anlytics ignore this setting)",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false,
+                "choices": [
+                    ["DEBUG", "DEBUG"],
+                    ["INFO", "INFO"],
+                    ["WARNING", "WARNING"],
+                    ["ERROR", "ERROR"],
+                    ["CRITICAL", "CRITICAL"]
+                ]
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_SIZE": {
+                "type": "integer",
+                "label": "Maximum number of messages that can be stored in the log action queue",
+                "help_text": "Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.",
+                "min_value": 1,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY": {
+                "type": "integer",
+                "label": "Severity at which messages are discarded when the log action queue is nearly full",
+                "help_text": "Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.",
+                "min_value": 0,
+                "max_value": 8,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB": {
+                "type": "integer",
+                "label": "Maximum disk persistence for rsyslogd action queuing (in GB)",
+                "help_text": "Amount of data to store (in gigabytes) if an rsyslog action takes time to process an incoming message (defaults to 1). Equivalent to the rsyslogd queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH.",
+                "min_value": 1,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_ACTION_QUEUE_STATS_INTERVAL": {
+                "type": "integer",
+                "label": "Interval (in seconds) between rsyslogd queue statistics",
+                "help_text": "When greater than 0, rsyslogd writes its counters to its standard output, which is the container log, once per interval: one JSON object per queue and action, including the external logging action queue's current size, peak size, and cumulative discarded.nf and discarded.full counts. Equivalent to loading the rsyslogd impstats module. The statistics are never sent to the log aggregator. 0 disables them (the default). Only takes effect when external logging is enabled. If a drop-in under /var/lib/ascender/rsyslog/conf.d already loads impstats, that drop-in takes precedence and this setting is ignored.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_MAX_DISK_USAGE_PATH": {
+                "type": "string",
+                "label": "File system location for rsyslogd disk persistence",
+                "help_text": "Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "LOG_AGGREGATOR_RSYSLOGD_DEBUG": {
+                "type": "boolean",
+                "label": "Enable rsyslogd debugging",
+                "help_text": "Enabled high verbosity debugging for rsyslogd.  Useful for debugging connection issues for external log aggregation.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            },
+            "API_400_ERROR_LOG_FORMAT": {
+                "type": "string",
+                "label": "Log Format For API 4XX Errors",
+                "help_text": "The format of logged messages when an API 4XX error occurs, the following variables will be substituted: \nstatus_code - The HTTP status code of the error\nuser_name - The user name attempting to use the API\nurl_path - The URL path to the API endpoint called\nremote_addr - The remote address seen for the user\nerror - The error set by the api endpoint\nVariables need to be in the format {<variable name>}.",
+                "category": "Logging",
+                "category_slug": "logging",
+                "defined_in_file": false
+            }
+        }
+    }
+}

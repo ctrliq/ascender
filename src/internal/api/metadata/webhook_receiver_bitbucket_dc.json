@@ -1,0 +1,11 @@
+{
+    "name": "Bitbucket Dc Webhook Receiver",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

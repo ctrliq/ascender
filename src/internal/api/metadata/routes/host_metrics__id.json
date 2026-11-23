@@ -1,0 +1,83 @@
+{
+    "name": "Host Metric Detail",
+    "description": "# Retrieve a Host Metric:\n\nMake GET request to this resource to retrieve a single host metric\nrecord containing the following fields:\n\n* `id`: Database ID for this host metric. (integer)\n* `hostname`:  (string)\n* `url`: URL for this host metric. (string)\n* `first_automation`: When the host was first automated against (datetime)\n* `last_automation`: When the host was last automated against (datetime)\n* `last_deleted`: When the host was last deleted (datetime)\n* `automated_counter`: How many times was the host automated (integer)\n* `deleted_counter`: How many times was the host deleted (integer)\n* `deleted`: Boolean flag saying whether the host is deleted and therefore no longer counted as automated (boolean)\n* `used_in_inventories`: How many inventories contain this host (integer)\n\n\n\n\n\n# Delete a Host Metric:\n\nMake a DELETE request to this resource to soft-delete this host metric.\n\nA soft deletion will mark the `deleted` field as true and exclude the host\nmetric from license calculations.\nThis may be undone later if the same hostname is automated again afterwards.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this host metric.",
+                "filterable": true
+            },
+            "hostname": {
+                "type": "string",
+                "label": "Hostname",
+                "filterable": true
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this host metric.",
+                "filterable": false
+            },
+            "first_automation": {
+                "type": "datetime",
+                "label": "First automation",
+                "help_text": "When the host was first automated against",
+                "filterable": true
+            },
+            "last_automation": {
+                "type": "datetime",
+                "label": "Last automation",
+                "help_text": "When the host was last automated against",
+                "filterable": true
+            },
+            "last_deleted": {
+                "type": "datetime",
+                "label": "Last deleted",
+                "help_text": "When the host was last deleted",
+                "filterable": true
+            },
+            "automated_counter": {
+                "type": "integer",
+                "label": "Automated counter",
+                "help_text": "How many times was the host automated",
+                "min_value": -9223372036854775808,
+                "max_value": 9223372036854775807,
+                "filterable": true
+            },
+            "deleted_counter": {
+                "type": "integer",
+                "label": "Deleted counter",
+                "help_text": "How many times was the host deleted",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "deleted": {
+                "type": "boolean",
+                "label": "Deleted",
+                "help_text": "Boolean flag saying whether the host is deleted and therefore no longer counted as automated",
+                "filterable": true
+            },
+            "used_in_inventories": {
+                "type": "integer",
+                "label": "Used in inventories",
+                "help_text": "How many inventories contain this host",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "host_metric"
+    ]
+}

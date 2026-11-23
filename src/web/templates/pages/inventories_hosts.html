@@ -1,0 +1,49 @@
+{{define "content"}}
+{{$inv := .Data.inventory}}
+{{$id := str $inv.id}}
+{{$base := str $inv._base}}
+{{$ro := .Data.readonly}}
+{{template "screen_header" (dict "title" (t "Hosts") "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $base) "title" (str $inv.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "hosts" "back" (dict "href" "/inventories" "label" "Back to Inventories") "tabs" .Data.tabs)}}
+		{{template "search_toolbar" (dict "page" . "id" "host-list" "searchKeys" .Data.searchKeys "ns" "host" "addHref" (cond $ro "" (printf "%s/hosts/add" $base)) "kind" "Host" "api" "/api/v2/hosts/" "filters" .Data.filters "runCommand" .Data.adHoc "noDelete" $ro)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Hosts")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "host-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Activity"}}
+							</th>
+							{{template "sort_th" (dict "page" . "key" "description" "label" (t "Description") "id" "host-table-sort-description")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Related Groups"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $h := .Data.results}}
+							{{template "host_row" (dict "host" $h "i" $i "detail" (printf "%s/hosts/%s/details" $base (str $h.id)) "edit" (printf "%s/hosts/%s/edit" $base (str $h.id)) "readonly" $ro "related" true)}}
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Hosts")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Hosts")) "addHref" (cond $ro "" (printf "%s/hosts/add" $base)))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

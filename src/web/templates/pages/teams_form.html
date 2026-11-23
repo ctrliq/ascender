@@ -1,0 +1,30 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$t := .Data.team}}
+{{if $t}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "team" "crumbs" (list (dict "href" "/teams" "title" (t "Teams")) (dict "href" (printf "/teams/%s/details" (str $t.id)) "title" (str $t.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New Team") "stream" "team" "crumbs" (list (dict "href" "/teams" "title" (t "Teams"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_field" (dict "id" "team-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "team-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" true "resource" "organizations" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization") "disabled" (has $t))}}
+				</div>
+				{{with index $e "__all__"}}
+					<div class="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+						{{range .}}<p>{{.}}</p>{{end}}
+					</div>
+				{{end}}
+				{{template "form_actions" (cond (has $t) (printf "/teams/%s/details" (str $t.id)) "/teams")}}
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

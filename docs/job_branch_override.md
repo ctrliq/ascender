@@ -5,10 +5,25 @@ in the `scm_branch` field.
 
 This "Branch Override" feature allows project admins to delegate branch selection to
 admins of Job Templates that use that project (requiring only project
-`use_role`). Admins of Job Templates can further
+`use_role`), by enabling `allow_override` on the project. Admins of Job Templates can further
 delegate that ability to users executing the Job Template
 (requiring only Job Template `execute_role`) by enabling
 `ask_scm_branch_on_launch` on the Job Template.
+
+A job template can set `scm_branch` or `ask_scm_branch_on_launch` only when its
+project allows it (`Project does not allow overriding branch.`). A branch
+prompted at launch is refused when the project does not allow override
+(`Project does not allow override of branch.`); a value equal to the
+template's branch, or to the project's when the template has none, is not an
+override and is always accepted. A `null` `scm_branch` at launch is refused
+(`This field may not be null.`); to run the template's branch, leave the field
+out. Workflow job templates can prompt for `scm_branch` too
+(`ask_scm_branch_on_launch`), and pass it on to the jobs of job templates
+that prompt for it. A schedule or workflow node may save a branch for a
+template that prompts for it, and `null` there removes the saved branch.
+
+The job runs with the template's `scm_branch`, or the prompted one, shown in
+the job's `scm_branch`; when both are empty it runs the project's branch.
 
 ### Source Tree Copy Behavior
 
@@ -16,26 +31,25 @@ _Background:_ Every job run has its own private data directory.
 This folder is temporary, cleaned up at the end of the job run.
 
 This directory contains a copy of the project source tree for the given
-`scm_branch` while the job is running.
+`scm_branch` while the job is running (`makeLocalCopy` in
+`src/internal/tasks/project_cache.go`).
 
-A new shallow copy is made for every job run.
+A new copy is made for every job run.
 Jobs are free to make changes to the project folder and make use of those
 changes while it is still running.
 
-#### Use Cases That No Long Work
+#### Consequences of the Copy
 
-With the introduction of this feature, the function of `scm_clean` is watered
-down. It will still be possible to enable this function, and it will be
-passed through as a parameter to the playbook as a tool for troubleshooting.
-Two notable cases that lose support are documented below:
-
-1) Setting `scm_clean` to `true` will no longer persist changes between job runs.
+1) Changes a job makes to the project folder do not persist between job
+runs, whatever the project's `scm_clean` setting. `scm_clean` is still
+passed to the project update playbook, where it discards local changes in
+the project's own checkout.
 
 This means that jobs that rely on content which is not committed to source
-control may fail now.
+control may fail.
 
-2) Because it is a shallow copy, this folder will not contain the full
-git history for git project types.
+2) The copy leaves out the `.git` directory, so a job has no git history or
+metadata of the project.
 
 
 ### Project Revision Concerns
@@ -46,35 +60,46 @@ is stored when updated, and jobs using that project will employ this revision.
 
 Providing a non-default `scm_branch` in a job comes with some restrictions,
 which are unlike the normal update behavior.
-If `scm_branch` is a branch identifier (not a commit hash or tag), then
-the newest revision is pulled from the source control remote immediately
-before the job starts.
+Before such a job starts, the project is always synced for that branch
+(`src/internal/tasks/project_sync.go`): a project update with `launch_type`
+`sync` and `scm_clean` set runs on the job's node, inside the job, and the
+job's copy is taken from its result. The roles and collections of the
+project's requirements are installed again for it.
+If `scm_branch` is a branch identifier (not a commit hash or tag), the
+newest revision of that branch is pulled from the source control remote
+immediately before the job starts.
 This revision is shown in the `scm_revision` field of the
-job and its respective project update.
+job and of its project update (the job's `project_update`).
 This means that offline job runs are impossible for non-default branches.
 To be sure that a job is running a static version from source control,
 use tags or commit hashes.
 
 Project updates do not save the revision of all branches, only the
-project default branch.
+project default branch. After a job on another branch, the project's
+checkout is left on that branch, and the next job on the default branch
+finds the checkout at another revision and syncs it again.
 
 The `scm_branch` field is not validated, so the project must update
-to assure it is valid.
-If `scm_branch` is provided or prompted for, the `playbook` field of
-Job Templates will not be validated, and users will have to launch
-the Job Template in order to verify presence of the expected playbook.
+to assure it is valid; a job whose branch cannot be checked out fails with
+its sync ("Previous Task Failed").
+When the project allows branch override, the `playbook` field of
+Job Templates is not checked against the project's playbooks, and users will
+have to launch the Job Template in order to verify presence of the expected
+playbook.
 
 
 ### Git Refspec
 
-The field `scm_refspec` has been added to projects. This is provided by
+Projects have a `scm_refspec` field. This is provided by
 the user or left blank.
 
 A non-blank `scm_refspec` field will cause project updates (of any type)
 to pass the `refspec` field when running the Ansible
 git module inside of the `project_update.yml` playbook. When the git module
 is provided with this field, it performs an extra `git fetch` command
-to pull that refspec from the remote.
+to pull that refspec from the remote. A project that allows branch override
+and has no `scm_refspec` fetches `+refs/heads/*:refs/remotes/origin/*`, so
+that every branch of the remote can be used.
 
 The refspec specifies what references the update will download from the remote.
 Examples:

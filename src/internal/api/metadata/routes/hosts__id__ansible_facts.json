@@ -1,0 +1,74 @@
+{
+    "name": "Host Ansible Facts Detail",
+    "description": "# Retrieve a Host:\n\nMake GET request to this resource to retrieve a single host\nrecord containing the following fields:\n\n* `id`: Database ID for this host. (integer)\n* `type`: Data type for this host. (choice)\n* `url`: URL for this host. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this host was created. (datetime)\n* `modified`: Timestamp when this host was last modified. (datetime)\n* `name`: Name of this host. (string)\n* `description`: Optional description of this host. (string)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this host.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this host.",
+                "choices": [
+                    ["host", "Host"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this host.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this host was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this host was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this host.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this host.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "host"
+    ]
+}

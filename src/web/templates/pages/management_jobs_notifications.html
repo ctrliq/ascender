@@ -1,0 +1,10 @@
+{{define "content"}}
+{{$o := .Data.owner}}
+{{template "screen_header" (dict "title" (t "Notifications") "crumbs" $o.Crumbs)}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "notifications" "back" $o.Back "tabs" $o.Tabs)}}
+		{{template "notification_list" (dict "page" . "kinds" (list "started" "success" "error"))}}
+	</div>
+</section>
+{{end}}

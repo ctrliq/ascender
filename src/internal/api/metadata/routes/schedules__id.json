@@ -1,0 +1,353 @@
+{
+    "name": "Schedule Detail",
+    "description": "# Retrieve a Schedule:\n\nMake GET request to this resource to retrieve a single schedule\nrecord containing the following fields:\n\n* `rrule`: A value representing the schedules iCal recurrence rule. (string)\n* `id`: Database ID for this schedule. (integer)\n* `type`: Data type for this schedule. (choice)\n* `url`: URL for this schedule. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this schedule was created. (datetime)\n* `modified`: Timestamp when this schedule was last modified. (datetime)\n* `name`: Name of this schedule. (string)\n* `description`: Optional description of this schedule. (string)\n* `extra_data`:  (json)\n* `inventory`: Inventory applied as a prompt, assuming job template prompts for inventory (id)\n* `scm_branch`:  (string)\n* `job_type`:  (choice)\n    - `None`: ---------\n    - `\"\"`: ---------\n    - `run`: Run\n    - `check`: Check\n* `job_tags`:  (string)\n* `skip_tags`:  (string)\n* `limit`:  (string)\n* `diff_mode`:  (boolean)\n* `verbosity`:  (choice)\n    - `None`: ---------\n    - `0`: 0 (Normal)\n    - `1`: 1 (Verbose)\n    - `2`: 2 (More Verbose)\n    - `3`: 3 (Debug)\n    - `4`: 4 (Connection Debug)\n    - `5`: 5 (WinRM Debug)\n* `execution_environment`: The container image to be used for execution. (id)\n* `forks`:  (integer)\n* `job_slice_count`:  (integer)\n* `timeout`:  (integer)\n* `unified_job_template`:  (id)\n* `enabled`: Enables processing of this schedule. (boolean)\n* `dtstart`: The first occurrence of the schedule occurs on or after this time. (datetime)\n* `dtend`: The last occurrence of the schedule occurs before this time, aftewards the schedule expires. (datetime)\n* `next_run`: The next time that the scheduled action will run. (datetime)\n* `timezone`: The timezone this schedule runs in. This field is extracted from the RRULE. If the timezone in the RRULE is a link to another timezone, the link will be reflected in this field. (field)\n* `until`: The date this schedule will end. This field is computed from the RRULE. If the schedule does not end an empty string will be returned (field)\n\n\n\n\n\n# Update a Schedule:\n\nMake a PUT or PATCH request to this resource to update this\nschedule.  The following fields may be modified:\n\n\n* `rrule`: A value representing the schedules iCal recurrence rule. (string, required)\n\n\n\n\n\n\n\n* `name`: Name of this schedule. (string, required)\n* `description`: Optional description of this schedule. (string, default=`\"\"`)\n* `extra_data`:  (json, default=`{}`)\n* `inventory`: Inventory applied as a prompt, assuming job template prompts for inventory (id, default=``)\n* `scm_branch`:  (string, default=`\"\"`)\n* `job_type`:  (choice)\n    - `None`: --------- (default)\n    - `\"\"`: ---------\n    - `run`: Run\n    - `check`: Check\n* `job_tags`:  (string, default=`\"\"`)\n* `skip_tags`:  (string, default=`\"\"`)\n* `limit`:  (string, default=`\"\"`)\n* `diff_mode`:  (boolean, default=`None`)\n* `verbosity`:  (choice)\n    - `None`: --------- (default)\n    - `0`: 0 (Normal)\n    - `1`: 1 (Verbose)\n    - `2`: 2 (More Verbose)\n    - `3`: 3 (Debug)\n    - `4`: 4 (Connection Debug)\n    - `5`: 5 (WinRM Debug)\n* `execution_environment`: The container image to be used for execution. (id, default=``)\n* `forks`:  (integer, default=`None`)\n* `job_slice_count`:  (integer, default=`None`)\n* `timeout`:  (integer, default=`None`)\n* `unified_job_template`:  (id, required)\n* `enabled`: Enables processing of this schedule. (boolean, default=`True`)\n\n\n\n\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Schedule:\n\nMake a DELETE request to this resource to delete this schedule.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "rrule": {
+                "type": "string",
+                "required": true,
+                "label": "Rrule",
+                "help_text": "A value representing the schedules iCal recurrence rule.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this schedule.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this schedule.",
+                "filterable": true,
+                "default": ""
+            },
+            "extra_data": {
+                "type": "json",
+                "required": false,
+                "label": "Extra data",
+                "filterable": true,
+                "default": {}
+            },
+            "inventory": {
+                "type": "id",
+                "required": false,
+                "label": "Inventory",
+                "help_text": "Inventory applied as a prompt, assuming job template prompts for inventory",
+                "filterable": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "Scm branch",
+                "max_length": 1024,
+                "filterable": false,
+                "default": null
+            },
+            "job_type": {
+                "type": "choice",
+                "required": false,
+                "label": "Job type",
+                "filterable": false,
+                "default": null,
+                "choices": [
+                    [null, "---------"],
+                    ["", "---------"],
+                    ["run", "Run"],
+                    ["check", "Check"]
+                ]
+            },
+            "job_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Job tags",
+                "filterable": false,
+                "default": null
+            },
+            "skip_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Skip tags",
+                "filterable": false,
+                "default": null
+            },
+            "limit": {
+                "type": "string",
+                "required": false,
+                "label": "Limit",
+                "filterable": false,
+                "default": null
+            },
+            "diff_mode": {
+                "type": "boolean",
+                "required": false,
+                "label": "Diff mode",
+                "filterable": false,
+                "default": null
+            },
+            "verbosity": {
+                "type": "choice",
+                "required": false,
+                "label": "Verbosity",
+                "filterable": false,
+                "default": null,
+                "choices": [
+                    [null, "---------"],
+                    [0, "0 (Normal)"],
+                    [1, "1 (Verbose)"],
+                    [2, "2 (More Verbose)"],
+                    [3, "3 (Debug)"],
+                    [4, "4 (Connection Debug)"],
+                    [5, "5 (WinRM Debug)"]
+                ]
+            },
+            "execution_environment": {
+                "type": "id",
+                "required": false,
+                "label": "Execution environment",
+                "help_text": "The container image to be used for execution.",
+                "filterable": true
+            },
+            "forks": {
+                "type": "integer",
+                "required": false,
+                "label": "Forks",
+                "min_value": 0,
+                "filterable": false,
+                "default": null
+            },
+            "job_slice_count": {
+                "type": "integer",
+                "required": false,
+                "label": "Job slice count",
+                "min_value": 0,
+                "filterable": false,
+                "default": null
+            },
+            "timeout": {
+                "type": "integer",
+                "required": false,
+                "label": "Timeout",
+                "filterable": false,
+                "default": null
+            },
+            "unified_job_template": {
+                "type": "id",
+                "required": true,
+                "label": "Unified job template",
+                "filterable": true
+            },
+            "enabled": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enabled",
+                "help_text": "Enables processing of this schedule.",
+                "filterable": true,
+                "default": true
+            }
+        },
+        "GET": {
+            "rrule": {
+                "type": "string",
+                "label": "Rrule",
+                "help_text": "A value representing the schedules iCal recurrence rule.",
+                "filterable": true
+            },
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this schedule.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this schedule.",
+                "choices": [
+                    ["schedule", "Schedule"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this schedule.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this schedule was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this schedule was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this schedule.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this schedule.",
+                "filterable": true
+            },
+            "extra_data": {
+                "type": "json",
+                "label": "Extra data",
+                "filterable": true
+            },
+            "inventory": {
+                "type": "id",
+                "label": "Inventory",
+                "help_text": "Inventory applied as a prompt, assuming job template prompts for inventory",
+                "filterable": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "label": "Scm branch",
+                "filterable": false
+            },
+            "job_type": {
+                "type": "choice",
+                "label": "Job type",
+                "filterable": false,
+                "choices": [
+                    [null, "---------"],
+                    ["", "---------"],
+                    ["run", "Run"],
+                    ["check", "Check"]
+                ]
+            },
+            "job_tags": {
+                "type": "string",
+                "label": "Job tags",
+                "filterable": false
+            },
+            "skip_tags": {
+                "type": "string",
+                "label": "Skip tags",
+                "filterable": false
+            },
+            "limit": {
+                "type": "string",
+                "label": "Limit",
+                "filterable": false
+            },
+            "diff_mode": {
+                "type": "boolean",
+                "label": "Diff mode",
+                "filterable": false
+            },
+            "verbosity": {
+                "type": "choice",
+                "label": "Verbosity",
+                "filterable": false,
+                "choices": [
+                    [null, "---------"],
+                    [0, "0 (Normal)"],
+                    [1, "1 (Verbose)"],
+                    [2, "2 (More Verbose)"],
+                    [3, "3 (Debug)"],
+                    [4, "4 (Connection Debug)"],
+                    [5, "5 (WinRM Debug)"]
+                ]
+            },
+            "execution_environment": {
+                "type": "id",
+                "label": "Execution environment",
+                "help_text": "The container image to be used for execution.",
+                "filterable": true
+            },
+            "forks": {
+                "type": "integer",
+                "label": "Forks",
+                "min_value": 0,
+                "filterable": false
+            },
+            "job_slice_count": {
+                "type": "integer",
+                "label": "Job slice count",
+                "min_value": 0,
+                "filterable": false
+            },
+            "timeout": {
+                "type": "integer",
+                "label": "Timeout",
+                "filterable": false
+            },
+            "unified_job_template": {
+                "type": "id",
+                "label": "Unified job template",
+                "filterable": true
+            },
+            "enabled": {
+                "type": "boolean",
+                "label": "Enabled",
+                "help_text": "Enables processing of this schedule.",
+                "filterable": true
+            },
+            "dtstart": {
+                "type": "datetime",
+                "label": "Dtstart",
+                "help_text": "The first occurrence of the schedule occurs on or after this time.",
+                "filterable": true
+            },
+            "dtend": {
+                "type": "datetime",
+                "label": "Dtend",
+                "help_text": "The last occurrence of the schedule occurs before this time, aftewards the schedule expires.",
+                "filterable": true
+            },
+            "next_run": {
+                "type": "datetime",
+                "label": "Next run",
+                "help_text": "The next time that the scheduled action will run.",
+                "filterable": true
+            },
+            "timezone": {
+                "type": "field",
+                "label": "Timezone",
+                "help_text": "The timezone this schedule runs in. This field is extracted from the RRULE. If the timezone in the RRULE is a link to another timezone, the link will be reflected in this field.",
+                "filterable": false
+            },
+            "until": {
+                "type": "field",
+                "label": "Until",
+                "help_text": "The date this schedule will end. This field is computed from the RRULE. If the schedule does not end an empty string will be returned",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "schedule"
+    ]
+}

@@ -1,0 +1,10 @@
+{{define "content"}}
+{{$o := .Data.owner}}
+{{template "screen_header" (dict "title" (t "Schedules") "stream" $o.Stream "crumbs" $o.Crumbs)}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "schedules" "back" $o.Back "tabs" $o.Tabs)}}
+		{{template "schedule_list" (dict "page" .)}}
+	</div>
+</section>
+{{end}}

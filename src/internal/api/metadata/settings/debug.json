@@ -1,0 +1,51 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `ASCENDER_CLEANUP_PATHS`: Enable or Disable TMP Dir cleanup (boolean)\n* `RECEPTOR_RELEASE_WORK`: Release receptor work (boolean)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `ASCENDER_CLEANUP_PATHS`: Enable or Disable TMP Dir cleanup (boolean, default=`True`)\n* `RECEPTOR_RELEASE_WORK`: Release receptor work (boolean, default=`True`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "ASCENDER_CLEANUP_PATHS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enable or Disable tmp dir cleanup",
+                "help_text": "Enable or Disable TMP Dir cleanup",
+                "category": "Debug",
+                "category_slug": "debug",
+                "default": true
+            },
+            "RECEPTOR_RELEASE_WORK": {
+                "type": "boolean",
+                "required": false,
+                "label": "Release Receptor Work",
+                "help_text": "Release receptor work",
+                "category": "Debug",
+                "category_slug": "debug",
+                "default": true
+            }
+        },
+        "GET": {
+            "ASCENDER_CLEANUP_PATHS": {
+                "type": "boolean",
+                "label": "Enable or Disable tmp dir cleanup",
+                "help_text": "Enable or Disable TMP Dir cleanup",
+                "category": "Debug",
+                "category_slug": "debug",
+                "defined_in_file": false
+            },
+            "RECEPTOR_RELEASE_WORK": {
+                "type": "boolean",
+                "label": "Release Receptor Work",
+                "help_text": "Release receptor work",
+                "category": "Debug",
+                "category_slug": "debug",
+                "defined_in_file": false
+            }
+        }
+    }
+}

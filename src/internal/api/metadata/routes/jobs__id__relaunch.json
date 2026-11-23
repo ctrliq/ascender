@@ -1,0 +1,50 @@
+{
+    "name": "Job Relaunch",
+    "description": "Relaunch a Job:\n\nMake a POST request to this resource to launch a job. If any passwords or variables are required then they should be passed in via POST data.   In order to determine what values are required in order to launch a job based on this job template you may make a GET request to this endpoint.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "passwords_needed_to_start": {
+                "type": "field",
+                "label": "Passwords needed to start",
+                "filterable": false
+            },
+            "retry_counts": {
+                "type": "field",
+                "label": "Retry counts",
+                "filterable": false
+            }
+        },
+        "POST": {
+            "hosts": {
+                "type": "choice",
+                "required": false,
+                "label": "Hosts",
+                "filterable": false,
+                "default": "all",
+                "choices": [
+                    [null, "---------"],
+                    ["all", "No change to job limit"],
+                    ["failed", "All failed and unreachable hosts"]
+                ],
+                "write_only": true
+            },
+            "credential_passwords": {
+                "type": "json",
+                "required": true,
+                "label": "Credential passwords",
+                "filterable": false,
+                "write_only": true
+            }
+        }
+    },
+    "types": [
+        "job"
+    ]
+}

@@ -1,0 +1,71 @@
+/* The hidden attribute wins over component display rules (grid, flex). */
+[hidden] { display: none !important; }
+/* Behaviour-support styles for the Go-rendered UI: positioning for menus
+   that PatternFly React placed with a popper, and a few helpers. */
+.ascender-dropdown { position: relative; display: inline-flex; }
+.ascender-dropdown__menu { position: absolute; top: calc(100% + 0.25rem); left: 0; z-index: 400; min-width: 100%; }
+.ascender-dropdown__menu.pf-m-align-right { left: auto; right: 0; }
+.ascender-dropdown--up .ascender-dropdown__menu { top: auto; bottom: calc(100% + 0.25rem); }
+.ascender-dropdown__menu[hidden] { display: none; }
+.ascender-muted { color: var(--pf-v6-global--disabled-color--100); }
+.ascender-page-header-toolbar__items .ascender-dropdown { align-self: center; }
+.pf-v6-c-page__sidebar.pf-m-collapsed { display: none; }
+/* Cross-fade between pages instead of a blank reload, closer to the old
+   single-page app. Browsers without cross-document view transitions
+   ignore it. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+.pf-v6-c-nav__item:not(.pf-m-expanded) > .pf-v6-c-nav__subnav { display: none; }
+.pf-v6-c-backdrop[hidden] { display: none; }
+.ascender-popover { position: absolute; z-index: 500; max-width: 24rem; }
+.ascender-lookup-table .pf-v6-c-table__td, .ascender-lookup-table .pf-v6-c-table__th { padding-block: 0.5rem; }
+.pf-v6-c-table__sort .pf-v6-c-table__button { text-decoration: none; }
+.ascender-credential-chip { margin-right: 0.25rem; }
+.pf-v6-c-alert-group.pf-m-toast { position: fixed; top: 1rem; right: 1rem; z-index: 600; }
+/* CredentialPluginTestAlert kept AlertGroup's own toast inset. */
+[data-plugin-test-alert] > .pf-v6-c-alert-group.pf-m-toast { top: var(--pf-v6-c-alert-group--m-toast--InsetBlockStart); right: var(--pf-v6-c-alert-group--m-toast--InsetInlineEnd); }
+.ascender-count__card h2 { margin-top: 0; }
+[data-subform][hidden], [data-option-details][hidden], [data-expanded-row][hidden] { display: none; }
+.ascender-masthead-toggle-hidden .pf-v6-c-page__sidebar { display: none; }
+.pf-v6-c-menu__item.pf-m-selected .pf-v6-c-menu__item-select-icon { visibility: visible; }
+.pf-v6-c-menu__item .pf-v6-c-menu__item-select-icon { visibility: hidden; }
+.pf-v6-c-menu__item[data-selected="true"] .pf-v6-c-menu__item-select-icon { visibility: visible; }
+.ascender-dropdown__menu { width: max-content; }
+.ascender-label-select { position: relative; display: block; }
+.ascender-label-select > .pf-v6-c-menu-toggle { width: 100%; }
+.ascender-label-select__menu { top: 100%; left: 0; right: auto; min-width: 100%; max-height: 20rem; overflow: auto; }
+.ascender-label-select .pf-v6-c-menu-toggle.pf-m-typeahead { min-width: 18.5rem; }
+/* A card scrolls its overflow, which cut a typeahead's menu off at the
+   bottom of a short form (CredentialForm showed two credential types). The
+   old Select's popper was never clipped, so the card stops clipping while
+   one of these menus is open. */
+.pf-v6-c-card:has(.ascender-label-select__menu:not([hidden])) { overflow: visible; }
+/* CredentialForm's SelectList: 300px of options, then the list scrolls. */
+.ascender-label-select__menu.ascender-credential-form__styled-select { max-height: none; overflow: visible; }
+.ascender-credential-form__styled-select .pf-v6-c-menu__list { max-height: 300px; overflow-y: auto; }
+/* Inside a group control (InventoryForm) the toggle keeps its own width, as
+   the old typeahead did; only a direct form group child stretches (JobTemplateForm). */
+.pf-v6-c-form__group-control > .ascender-label-select { display: inline-block; max-width: 100%; vertical-align: top; }
+/* Sortable headers are links here; the old UI used buttons, which are inline-block. */
+a.pf-v6-c-table__button { display: inline-block; }
+.ascender-label-select [hidden], .ascender-lookup__chip-holder [hidden] { display: none !important; }
+.ascender-typeahead { position: relative; }
+.ascender-typeahead .pf-v6-c-menu-toggle.pf-m-full-width { width: 100%; }
+
+/* The page size toggle sits inside a dropdown wrapper; give it the theme's
+   pagination toggle background the old direct-child rule set. */
+.pf-v6-theme-dark[data-theme="default"] .pf-v6-c-pagination__page-menu > .ascender-dropdown > .pf-v6-c-menu-toggle { background-color: #13161b; }
+
+/* Wrappers laid out with display: contents still hide with the hidden
+   attribute. */
+[hidden][style*="display: contents"] { display: none !important; }
+/* A multi lookup's hidden value inputs take no room in the form group's
+   flex column (the old form kept them in its state, not the DOM). */
+[data-lookup-values] { display: contents; }
+/* Activity Stream type select: Select's popper menu, 250px wide (the toggle's width) and flush under the toggle. */
+.ascender-activity-stream__type > .ascender-dropdown__menu { top: 100%; min-width: 250px; width: auto; }
+/* AddDropDownButton: the menu sat directly under the toggle (popper, bottom-end). */
+.ascender-add-dropdown > .ascender-dropdown__menu { top: 100%; }
+/* The search key select's menu sat directly under its toggle (Select's popper). */
+[data-search-form] .ascender-dropdown > .ascender-dropdown__menu { top: 100%; }

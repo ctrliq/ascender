@@ -1,0 +1,151 @@
+{{define "content"}}
+{{$p := .Data.project}}
+{{$id := str $p.id}}
+{{$caps := dig $p "summary_fields" "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "project" "crumbs" (list (dict "href" "/projects" "title" (t "Projects")) (dict "href" (printf "/projects/%s/details" $id) "title" (str $p.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/projects" "label" "Back to Projects") "tabs" (or .Data.projectTabs .Data.owner.Tabs))}}
+		{{if .Data.notFound}}
+			{{template "in_page_not_found" .Data.notFound}}
+		{{else if eq .Data.tab "schedules"}}
+			{{template "schedule_list" (dict "page" .)}}
+		{{else if eq .Data.tab "access"}}
+			{{template "access_tab" .}}
+		{{else if eq .Data.tab "job_templates"}}
+			{{template "related_templates" (dict "page" .)}}
+		{{else if eq .Data.tab "notifications"}}
+			{{template "notification_list" (dict "page" . "kinds" (list "started" "success" "error"))}}
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				{{if eq .Data.tab "details"}}
+					<dl class="ascender-detail-list" gutter="sm">
+						{{if has $p.status}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Last Job Status"}}</dt>
+								<dd class="ascender-detail-value">
+									<div style="display: contents;">
+										{{with or (dig $p "summary_fields" "current_job") (dig $p "summary_fields" "last_job")}}
+											<a href="/jobs/project/{{str (dig . "id")}}">
+												{{template "status_label" (str (dig . "status"))}}
+											</a>
+										{{else}}
+											{{template "status_label" (str $p.status)}}
+										{{end}}
+									</div>
+								</dd>
+							</div>
+						{{end}}
+						{{template "detail" (dict "label" (t "Name") "value" (str $p.name) "cy" "project-detail-name")}}
+						{{if has $p.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $p.description))}}
+						{{end}}
+						{{with dig $p "summary_fields" "organization"}}
+							{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))))}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Source Control Type") "value" (cond (has $p.scm_type) (scmLabel (str $p.scm_type)) (t "Manual")))}}
+						{{if has $p.scm_type}}
+							{{if has $p.scm_revision}}
+								{{template "detail" (dict "label" (t "Source Control Revision") "value" (safe (printf `<div class="pf-v6-c-clipboard-copy pf-m-inline" data-cy="project-copy-revision"><span class="pf-v6-c-clipboard-copy__text">%s</span><span class="pf-v6-c-clipboard-copy__actions"><span class="pf-v6-c-clipboard-copy__actions-item"><button aria-label="%s" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-copy="%s" data-tooltip="%s" data-tooltip-pos="top"><span class="pf-v6-c-button__icon">%s</span></button></span></span></div>` (slice (esc $p.scm_revision) 0 7) (esc (t "Copy full revision to clipboard.")) (esc $p.scm_revision) (esc (t "Copy full revision to clipboard.")) (icon "pf-copy"))))}}
+							{{else}}
+								{{template "detail" (dict "label" (t "Source Control Revision") "value" (safe (printf `<span class="ascender-muted" aria-label="%s">%s</span>` (esc (t "The project must be synced before a revision is available.")) (esc (t "Sync for revision")))))}}
+							{{end}}
+						{{end}}
+						{{if has $p.scm_url}}
+							{{template "detail" (dict "label" (t "Source Control URL") "value" (str $p.scm_url) "help" (t "The location where the project is stored."))}}
+						{{end}}
+						{{if has $p.scm_branch}}
+							{{template "detail" (dict "label" (t "Source Control Branch") "value" (str $p.scm_branch) "help" (t "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."))}}
+						{{end}}
+						{{if has $p.scm_refspec}}
+							{{template "detail" (dict "label" (t "Source Control Refspec") "value" (str $p.scm_refspec) "help" (t "A refspec to fetch (passed to the Ansible git module). This parameter allows access to references via the branch field not otherwise available."))}}
+						{{end}}
+						{{with dig $p "summary_fields" "signature_validation_credential"}}
+							{{template "detail" (dict "label" (t "Content Signature Validation Credential") "value" (safe (printf `<a href="/credentials/%s/details"><span class="pf-v6-c-label pf-m-outline ascender-credential-chip"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text"><strong>%s: </strong>%s</span></span></span></a>` (str .id) (str .kind) (esc .name))) "help" (t "Enable content signing to verify that the content has remained secure when a project is synced. If the content has been tampered with, the job will not run."))}}
+						{{end}}
+						{{with dig $p "summary_fields" "credential"}}
+							{{template "detail" (dict "label" (t "Source Control Credential") "value" (safe (printf `<a href="/credentials/%s/details"><span class="pf-v6-c-label pf-m-outline ascender-credential-chip"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text"><strong>%s: </strong>%s</span></span></span></a>` (str .id) (str .kind) (esc .name))))}}
+						{{end}}
+						{{if has $p.scm_type}}
+							{{template "detail" (dict "label" (t "Cache Timeout") "value" (t "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}" "scm_update_cache_timeout" $p.scm_update_cache_timeout))}}
+						{{end}}
+						{{if has $p.webhook_service}}
+							{{template "detail" (dict "label" (t "Webhook Service") "value" (str $p.webhook_service) "cy" "project-detail-webhook-service" "help" (t "Service that webhook requests will be accepted from."))}}
+						{{end}}
+						{{if has $p.webhook_ref_filter}}
+							{{template "detail" (dict "label" (t "Webhook Ref Filter") "value" (str $p.webhook_ref_filter) "cy" "project-detail-webhook-ref-filter")}}
+						{{end}}
+						{{with dig $p "summary_fields" "default_environment"}}
+							{{template "detail" (dict "label" (t "Default Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "help" (t "The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level."))}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Project Base Path") "value" (str $.Data.project_base_dir) "help" (printf "%s %s" (t "Base path used for locating playbooks. Directories found inside this path will be listed in the playbook directory drop-down. Together the base path and selected playbook directory provide the full path used to locate playbooks.") (t "Change PROJECTS_ROOT when deploying {brandName} to change this location." "brandName" "Ascender")))}}
+						{{if has $p.local_path}}
+							{{template "detail" (dict "label" (t "Playbook Directory") "value" (str $p.local_path) "help" (t "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks."))}}
+						{{end}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $p.created "user" (dig $p "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $p.modified "user" (dig $p "summary_fields" "modified_by"))}}
+						{{if or $p.scm_clean $p.scm_delete_on_update $p.scm_track_submodules $p.scm_update_on_launch $p.allow_override $p.reuse_requirements}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Enabled Options"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									<ul data-pf-content="true" class="pf-v6-c-content--ul">
+										{{if $p.scm_clean}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Discard local changes before syncing"}}
+											</li>
+										{{end}}
+										{{if $p.scm_delete_on_update}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Delete the project before syncing"}}
+											</li>
+										{{end}}
+										{{if $p.scm_track_submodules}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Track submodules latest commit on branch"}}
+											</li>
+										{{end}}
+										{{if $p.scm_update_on_launch}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Update revision on job launch"}}
+											</li>
+										{{end}}
+										{{if $p.allow_override}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Allow branch override"}}
+											</li>
+										{{end}}
+										{{if $p.reuse_requirements}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Reuse downloaded requirements"}} {{template "help_button" (t "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged.")}}
+											</li>
+										{{end}}
+									</ul>
+								</dd>
+							</div>
+						{{end}}
+					</dl>
+					<div class="ascender-card-actions-row__wrapper">
+						{{if dig $caps "edit"}}
+							<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="/projects/{{$id}}/edit">
+								<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+							</a>
+						{{end}}
+						{{if dig $caps "start"}}
+							<button aria-label="{{t "Sync Project"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-project-sync="{{$id}}">
+								<span class="pf-v6-c-button__text">{{t "Sync"}}</span>
+							</button>
+						{{end}}
+						{{if dig $caps "delete"}}
+							{{template "delete_button" (dict "name" (str $p.name) "title" (t "Delete Project") "api" (printf "/api/v2/projects/%v/" $id) "redirect" "/projects" "error" (t "Failed to delete project.") "disabled" (eq (str (dig (or (dig $p "summary_fields" "current_job") (dig $p "summary_fields" "last_job")) "status")) "running") "usageKind" "project" "usageId" $id "usageMessage" (t "This project is currently being used by other resources. Are you sure you want to delete it?"))}}
+						{{end}}
+					</div>
+				{{else}}
+					{{template "empty_state" (dict "title" (t "{0} not available yet" "0" .Title) "body" (t "This tab will be available once the related resources are ported."))}}
+				{{end}}
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

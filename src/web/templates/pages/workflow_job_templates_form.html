@@ -1,0 +1,291 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$t := .Data.wfjt}}
+{{if $t}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "job_template,workflow_job_template,workflow_job_template_node" "crumbs" (list (dict "href" "/templates" "title" (t "Templates")) (dict "href" (printf "/templates/workflow_job_template/%s" (str $t.id)) "title" (str $t.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New Workflow Template") "stream" "job_template,workflow_job_template,workflow_job_template_node" "crumbs" (list (dict "href" "/templates" "title" (t "Templates"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-workflow-template-form data-validate data-origin="{{.Data.origin}}"{{if $t}} data-template-id="{{str $t.id}}"{{end}}>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<input type="hidden" name="initial_webhook_key" value="{{$v.initial_webhook_key}}" data-initial-webhook-key>
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "wfjt-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "wfjt-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" .Data.isOrgAdmin "resource" "organizations" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization"))}}
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-control">
+							<div class="pf-v6-c-form__group" data-cy="wfjt-inventory-form-group" data-lookup data-resource="inventories" data-title="{{t "Select {0}" "0" (t "Inventory")}}" data-filter="role_level=use_role">
+								{{template "prompt_header" (dict "id" "wfjt-ask-inventory-on-launch" "label" (t "Inventory") "help" (t "Select the inventory containing the hosts you want this workflow to manage.") "askName" "ask_inventory_on_launch" "asked" $v.ask_inventory_on_launch "for" "wfjt-inventory")}}
+								<div class="pf-v6-c-input-group">
+									<div class="pf-v6-c-input-group__item">
+										<button id="inventory-lookup-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open{{if .Data.inventoryDisabled}} disabled{{end}}>
+											<span class="pf-v6-c-button__icon">
+												{{icon "search"}}
+											</span>
+										</button>
+									</div>
+									<div class="pf-v6-c-input-group__item pf-m-fill">
+										<span class="pf-v6-c-form-control{{if index $e "inventory"}} pf-m-error{{end}}{{if .Data.inventoryDisabled}} pf-m-disabled{{end}}">
+											<input id="inventory-lookup" aria-invalid="false" type="text" value="{{$v.inventory.name}}" readonly data-lookup-name{{if .Data.inventoryDisabled}} disabled{{end}}>
+										</span>
+									</div>
+								</div>
+								<input type="hidden" name="inventory" value="{{$v.inventory.id}}" data-lookup-id>
+								<input type="hidden" name="inventory_name" value="{{$v.inventory.name}}" data-lookup-hidden-name>
+								{{template "field_error" (index $e "inventory")}}
+							</div>
+						</div>
+					</div>
+					<div class="pf-v6-c-form__group" data-cy="wfjt-limit-form-group">
+						{{template "prompt_header" (dict "id" "template-ask-limit-on-launch" "label" (t "Limit") "help" (t "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns.") "askName" "ask_limit_on_launch" "asked" $v.ask_limit_on_launch "for" "wfjt-limit")}}
+						<span class="pf-v6-c-form-control{{if index $e "limit"}} pf-m-error{{end}}">
+							<input id="wfjt-limit" aria-invalid="false" type="text" value="{{$v.limit}}" name="limit">
+						</span>
+						{{template "field_error" (index $e "limit")}}
+					</div>
+					<div class="pf-v6-c-form__group" data-cy="wfjt-scm-branch-form-group">
+						{{template "prompt_header" (dict "id" "wfjt-ask-scm-branch-on-launch" "label" (t "Source control branch") "help" (t "Select a branch for the workflow. This branch is applied to all job template nodes that prompt for a branch.") "askName" "ask_scm_branch_on_launch" "asked" $v.ask_scm_branch_on_launch "for" "wfjt-scm-branch")}}
+						<span class="pf-v6-c-form-control{{if index $e "scm_branch"}} pf-m-error{{end}}">
+							<input id="wfjt-scm-branch" aria-label="{{t "source control branch"}}" aria-invalid="false" type="text" value="{{$v.scm_branch}}" name="scm_branch">
+						</span>
+						{{template "field_error" (index $e "scm_branch")}}
+					</div>
+				</div>
+				<div class="ascender-form-full-width-layout">
+					<div class="pf-v6-c-form__group" data-cy="template-labels-form-group">
+						{{template "prompt_header" (dict "id" "template-ask-labels-on-launch" "label" (t "Labels") "help" (t "Optional labels that describe this workflow job template, such as 'dev' or 'test'. Labels can be used to group and filter workflow job templates and completed jobs.") "askName" "ask_labels_on_launch" "asked" $v.ask_labels_on_launch "for" "template-labels")}}
+						<div class="ascender-label-select" data-label-select data-name="labels" data-resource="labels">
+							<div class="pf-v6-c-menu-toggle pf-m-typeahead" data-label-toggle>
+								<div class="pf-v6-c-text-input-group pf-m-plain">
+									<div class="pf-v6-c-text-input-group__main" autocomplete="off">
+										<div class="pf-v6-c-label-group" data-label-chips{{if not $v.labels}} hidden{{end}}>
+											<div class="pf-v6-c-label-group__main">
+												<ul class="pf-v6-c-label-group__list" role="list">
+													{{range $v.labels}}
+														<li class="pf-v6-c-label-group__list-item" data-chip data-chip-id="{{str .id}}" data-chip-name="{{.name}}">
+															<span class="pf-v6-c-label">
+																<span class="pf-v6-c-label__content">
+																	<span class="pf-v6-c-label__text">
+																		{{.name}}
+																	</span>
+																</span>
+																<span class="pf-v6-c-label__actions">
+																	<button class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" aria-label="Close {{.name}}" data-chip-remove>
+																		<span class="pf-v6-c-button__icon">
+																			{{icon "pf-close"}}
+																		</span>
+																	</button>
+																</span>
+															</span>
+														</li>
+													{{end}}
+												</ul>
+											</div>
+										</div>
+										<span class="pf-v6-c-text-input-group__text">
+											<input class="pf-v6-c-text-input-group__text-input" id="template-labels" aria-label="{{t "Select Labels"}}" placeholder="" type="text" value="" autocomplete="off" data-label-input>
+										</span>
+									</div>
+									<div class="pf-v6-c-text-input-group__utilities" data-label-clear-wrap{{if not $v.labels}} hidden{{end}}>
+										<button class="pf-v6-c-button pf-m-plain" type="button" aria-label="{{t "Clear"}}" data-label-clear>
+											<span class="pf-v6-c-button__icon">
+												{{icon "times"}}
+											</span>
+										</button>
+									</div>
+								</div>
+								<button type="button" class="pf-v6-c-menu-toggle__button" aria-expanded="false" aria-label="Menu toggle" tabindex="-1" data-label-caret>
+									<span class="pf-v6-c-menu-toggle__controls">
+										<span class="pf-v6-c-menu-toggle__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</button>
+							</div>
+							<div class="pf-v6-c-menu ascender-dropdown__menu ascender-label-select__menu" hidden data-label-menu>
+								<div class="pf-v6-c-menu__content">
+									<ul class="pf-v6-c-menu__list" role="listbox" data-label-options>
+									</ul>
+								</div>
+							</div>
+							<div data-label-values>
+								{{range $v.labels}}
+									<input type="hidden" name="labels" value="{{str .id}}" data-ref-id data-ref-name="{{.name}}">
+									<input type="hidden" name="labels_name" value="{{.name}}">
+								{{end}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ascender-form-full-width-layout">
+					<div>
+						<div class="pf-v6-c-form__group" data-editor-group>
+							<div class="ascender-variables-field__header" data-cy="wfjt-variables-label">
+								<div class="pf-v6-l-split pf-m-gutter">
+									<div class="pf-v6-l-split__item">
+										<label for="wfjt-variables" class="pf-v6-c-form__label" id="wfjt-variables-label">
+											<span class="pf-v6-c-form__label-text">
+												{{t "Variables"}}
+											</span>
+										</label>
+										{{template "help_button" (t "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax.")}}
+									</div>
+									<div class="pf-v6-l-split__item">
+										<div class="ascender-button-group__group">
+											{{template "mode_toggle" (dict "json" (isJSON $v.extra_vars))}}
+										</div>
+									</div>
+								</div>
+								<div class="pf-v6-c-check ascender-variables-field__styled-checkbox-field">
+									<input id="template-ask-variables-on-launch" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Prompt on launch"}}" type="checkbox" name="ask_variables_on_launch"{{if $v.ask_variables_on_launch}} checked{{end}}>
+									<label class="pf-v6-c-check__label" for="template-ask-variables-on-launch">
+										<span>{{t "Prompt on launch"}}&nbsp;</span>
+									</label>
+								</div>
+							</div>
+							<div class="ascender-code-editor__focus-wrapper" tabindex="0" data-editor-focus>
+								<div data-cy="code-editor" class="ascender-code-editor__wrapper pf-v6-c-form-control{{if index $e "extra_vars"}} ascender-code-editor__wrapper--has-errors{{end}}" data-code-editor data-editor-id="wfjt-variables" data-rows="auto" data-min-rows="4" data-mode="{{if isJSON $v.extra_vars}}javascript{{else}}yaml{{end}}">
+									<textarea hidden name="extra_vars" data-code-editor-value>{{$v.extra_vars}}</textarea>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__helper-text keyboard-help-text" aria-live="polite">
+								{{t "Press Enter to edit. Press ESC to stop editing."}}
+							</div>
+							{{with index $e "extra_vars"}}
+								<div class="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+									{{range .}}<p>{{.}}</p>{{end}}
+								</div>
+							{{end}}
+						</div>
+					</div>
+					{{template "tag_select" (dict "id" "template-tags" "name" "job_tags" "label" (t "Job Tags") "value" $v.job_tags "help" (t "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.") "askId" "template-ask-tags-on-launch" "askName" "ask_tags_on_launch" "asked" $v.ask_tags_on_launch)}}
+					{{template "tag_select" (dict "id" "template-skip-tags" "name" "skip_tags" "label" (t "Skip Tags") "value" $v.skip_tags "help" (t "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags.") "askId" "template-ask-skip-tags-on-launch" "askName" "ask_skip_tags_on_launch" "asked" $v.ask_skip_tags_on_launch)}}
+				</div>
+				<div class="pf-v6-c-form__group">
+					<div class="pf-v6-c-form__group-label">
+						<label class="pf-v6-c-form__label" for="options">
+							<span class="pf-v6-c-form__label-text">{{t "Options"}}</span>
+						</label>
+						&nbsp;&nbsp;
+					</div>
+					<div class="pf-v6-c-form__group-control">
+						<div class="ascender-form-checkbox-layout">
+							<div class="pf-v6-c-check">
+								<input id="wfjt-enabled-webhooks" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Enable Webhook"}}" type="checkbox" name="enable_webhook"{{if $v.enable_webhook}} checked{{end}} data-enable-webhook>
+								<label class="pf-v6-c-check__label" for="wfjt-enabled-webhooks">
+									<span>
+										{{t "Enable Webhook"}}&nbsp;
+										{{template "help_button" (t "Enable webhook for this workflow job template.")}}
+									</span>
+								</label>
+							</div>
+							{{template "checkbox" (dict "id" "allow_simultaneous" "name" "allow_simultaneous" "label" (t "Enable Concurrent Jobs") "checked" $v.allow_simultaneous "help" (t "If enabled, simultaneous runs of this workflow job template will be allowed."))}}
+							{{template "checkbox" (dict "id" "allow_overwrite_flow_vars_on_relaunch" "name" "allow_overwrite_flow_vars_on_relaunch" "label" (t "Allow Overwriting Variables on Relaunch") "checked" $v.allow_overwrite_flow_vars_on_relaunch "help" (t "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."))}}
+							{{template "checkbox" (dict "id" "allow_force_node_success_on_relaunch" "name" "allow_force_node_success_on_relaunch" "label" (t "Allow Forcing Failed Nodes as Successful on Relaunch") "checked" $v.allow_force_node_success_on_relaunch "help" (t "If enabled, a relaunch from the failed node may carry chosen failed nodes forward as though they had succeeded, so the workflow goes on down their success paths. Meant for a node that fails for a reason that cannot be fixed in time and does not affect what comes after it. A reason is always required, and the node stays marked as forced with who forced it. Approvals can never be forced. Checked when relaunching, so turning it off stops it for runs already started too."))}}
+						</div>
+					</div>
+				</div>
+				<div class="ascender-sub-form-layout" data-webhook-details{{if not $v.enable_webhook}} hidden{{end}}>
+					<h4 class="pf-v6-c-title pf-m-md">{{t "Webhook details"}}</h4>
+					<div class="ascender-form-column-layout">
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="webhook_service">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Webhook Service"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+								<span class="pf-v6-c-form__group-label-help">
+									{{template "help_button" (t "Select a webhook service.")}}
+								</span>
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control{{if index $e "webhook_service"}} pf-m-error{{end}}">
+									<select id="webhook_service" name="webhook_service" aria-invalid="false" data-webhook-service data-initial="{{$v.webhook_service}}">
+										<option value="" disabled{{if not (has $v.webhook_service)}} selected{{end}}>
+											{{t "Choose a Webhook Service"}}
+										</option>
+										{{range .Data.webhookServices}}
+											<option value="{{.value}}"{{if eq .value (str $v.webhook_service)}} selected{{end}}>
+												{{.label}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+								{{template "field_error" (index $e "webhook_service")}}
+							</div>
+						</div>
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="jt-webhookURL">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Webhook URL"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+								<span class="pf-v6-c-form__group-label-help">
+									{{template "help_button" (t "Webhook services can launch jobs with this workflow job template by making a POST request to this URL.")}}
+								</span>
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control pf-m-readonly">
+									<input id="t-webhookURL" aria-label="{{t "Webhook URL"}}" aria-invalid="false" type="text" readonly name="webhook_url" value="{{if $t}}{{$v.webhook_url}}{{else}}{{if has $v.webhook_service}}{{upper (t "a new webhook url will be generated on save.")}}{{end}}{{end}}" data-webhook-url>
+								</span>
+							</div>
+						</div>
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="template-webhook_key">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Webhook Key"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+								<span class="pf-v6-c-form__group-label-help">
+									{{template "help_button" (t "Webhook services can use this as a shared secret.")}}
+								</span>
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<div class="pf-v6-c-input-group">
+									<div class="pf-v6-c-input-group__item pf-m-fill">
+										<span class="pf-v6-c-form-control">
+											<input id="template-webhook_key" aria-label="{{t "workflow job template webhook key"}}" aria-invalid="false" type="text" name="webhook_key" value="{{$v.webhook_key}}" placeholder="{{t "Leave blank to generate a new webhook key on save"}}" data-webhook-key>
+										</span>
+									</div>
+									<div class="pf-v6-c-input-group__item">
+										<button aria-label="{{t "Update webhook key"}}" class="pf-v6-c-button pf-m-tertiary" type="button"{{if or (not $t) (not $v.initial_webhook_key)}} disabled{{else}} data-webhook-key-refresh="/api/v2/workflow_job_templates/{{str $t.id}}/webhook_key/"{{end}}>
+											<span class="pf-v6-c-button__icon">
+												{{icon "sync-alt"}}
+											</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div data-webhook-credential{{if not (has $v.webhook_service)}} hidden{{end}}>
+							{{template "lookup_field" (dict "id" "webhook-credential" "name" "webhook_credential" "label" (t "Webhook Credential") "value" $v.webhook_credential "resource" "credentials" "filter" (printf "credential_type__namespace=%s_token" (str $v.webhook_service)) "title" (t "Select {0}" "0" (t "Webhook Credential")) "help" (t "Optionally select the credential to use to send status updates back to the webhook service.") "errors" (index $e "webhook_credential"))}}
+						</div>
+					</div>
+				</div>
+				{{if $t}}
+					{{template "form_actions" (printf "/templates/workflow_job_template/%s/details" (str $t.id))}}
+				{{else}}
+					{{template "form_actions" "/templates"}}
+				{{end}}
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

@@ -1,0 +1,279 @@
+{
+    "name": "Job Template Launch",
+    "description": "Launch a Job Template:\n\nMake a GET request to this resource to determine if the job_template can be\nlaunched and whether any passwords are required to launch the job_template.\nThe response will include the following fields:\n\n* `ask_variables_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for variables upon launch (boolean, read-only)\n* `ask_tags_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for tags upon launch (boolean, read-only)\n* `ask_skip_tags_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for skip_tags upon launch (boolean, read-only)\n* `ask_job_type_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for job_type upon launch (boolean, read-only)\n* `ask_limit_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for limit upon launch (boolean, read-only)\n* `ask_inventory_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for inventory upon launch (boolean, read-only)\n* `ask_credential_on_launch`: Flag indicating whether the job_template is\n  configured to prompt for credential upon launch (boolean, read-only)\n* `can_start_without_user_input`: Flag indicating if the job_template can be\n  launched without user-input (boolean, read-only)\n* `passwords_needed_to_start`: Password names required to launch the\n  job_template (array, read-only)\n* `variables_needed_to_start`: Required variable names required to launch the\n  job_template (array, read-only)\n* `survey_enabled`: Flag indicating whether the job_template has an enabled\n  survey (boolean, read-only)\n* `inventory_needed_to_start`: Flag indicating the presence of an inventory\n  associated with the job template.  If not then one should be supplied when\n  launching the job (boolean, read-only)\n\nMake a POST request to this resource to launch the job_template. If any\npasswords, inventory, or extra variables (extra_vars) are required, they must\nbe passed via POST data, with extra_vars given as a YAML or JSON string and\nescaped parentheses. If the `inventory_needed_to_start` is `True` then the\n`inventory` is required.\n\nIf successful, the response status code will be 201.  If any required passwords\nare not provided, a 400 status code will be returned.  If the job cannot be\nlaunched, a 405 status code will be returned. If the provided credential or\ninventory are not allowed to be used by the user, then a 403 status code will\nbe returned.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "can_start_without_user_input": {
+                "type": "boolean",
+                "label": "Can start without user input",
+                "filterable": false
+            },
+            "passwords_needed_to_start": {
+                "type": "field",
+                "label": "Passwords needed to start",
+                "filterable": false
+            },
+            "ask_scm_branch_on_launch": {
+                "type": "boolean",
+                "label": "Ask scm branch on launch",
+                "filterable": true
+            },
+            "ask_variables_on_launch": {
+                "type": "boolean",
+                "label": "Ask variables on launch",
+                "filterable": true
+            },
+            "ask_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask tags on launch",
+                "filterable": true
+            },
+            "ask_diff_mode_on_launch": {
+                "type": "boolean",
+                "label": "Ask diff mode on launch",
+                "filterable": true
+            },
+            "ask_skip_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask skip tags on launch",
+                "filterable": true
+            },
+            "ask_job_type_on_launch": {
+                "type": "boolean",
+                "label": "Ask job type on launch",
+                "filterable": true
+            },
+            "ask_limit_on_launch": {
+                "type": "boolean",
+                "label": "Ask limit on launch",
+                "filterable": true
+            },
+            "ask_verbosity_on_launch": {
+                "type": "boolean",
+                "label": "Ask verbosity on launch",
+                "filterable": true
+            },
+            "ask_inventory_on_launch": {
+                "type": "boolean",
+                "label": "Ask inventory on launch",
+                "filterable": true
+            },
+            "ask_credential_on_launch": {
+                "type": "boolean",
+                "label": "Ask credential on launch",
+                "filterable": true
+            },
+            "ask_execution_environment_on_launch": {
+                "type": "boolean",
+                "label": "Ask execution environment on launch",
+                "filterable": true
+            },
+            "ask_labels_on_launch": {
+                "type": "boolean",
+                "label": "Ask labels on launch",
+                "filterable": true
+            },
+            "ask_forks_on_launch": {
+                "type": "boolean",
+                "label": "Ask forks on launch",
+                "filterable": true
+            },
+            "ask_job_slice_count_on_launch": {
+                "type": "boolean",
+                "label": "Ask job slice count on launch",
+                "filterable": true
+            },
+            "ask_timeout_on_launch": {
+                "type": "boolean",
+                "label": "Ask timeout on launch",
+                "filterable": true
+            },
+            "ask_instance_groups_on_launch": {
+                "type": "boolean",
+                "label": "Ask instance groups on launch",
+                "filterable": true
+            },
+            "survey_enabled": {
+                "type": "boolean",
+                "label": "Survey enabled",
+                "filterable": true
+            },
+            "variables_needed_to_start": {
+                "type": "field",
+                "label": "Variables needed to start",
+                "filterable": false
+            },
+            "credential_needed_to_start": {
+                "type": "field",
+                "label": "Credential needed to start",
+                "filterable": false
+            },
+            "inventory_needed_to_start": {
+                "type": "field",
+                "label": "Inventory needed to start",
+                "filterable": false
+            },
+            "job_template_data": {
+                "type": "field",
+                "label": "Job template data",
+                "filterable": false
+            },
+            "defaults": {
+                "type": "field",
+                "label": "Defaults",
+                "filterable": false
+            }
+        },
+        "POST": {
+            "extra_vars": {
+                "type": "json",
+                "required": false,
+                "label": "Extra vars",
+                "filterable": true,
+                "write_only": true
+            },
+            "inventory": {
+                "type": "id",
+                "required": false,
+                "label": "Inventory",
+                "filterable": true,
+                "write_only": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "Scm branch",
+                "max_length": 1024,
+                "filterable": true,
+                "write_only": true
+            },
+            "limit": {
+                "type": "string",
+                "required": false,
+                "label": "Limit",
+                "filterable": true,
+                "write_only": true
+            },
+            "job_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Job tags",
+                "filterable": true,
+                "write_only": true
+            },
+            "skip_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Skip tags",
+                "filterable": true,
+                "write_only": true
+            },
+            "job_type": {
+                "type": "choice",
+                "required": false,
+                "label": "Job type",
+                "filterable": true,
+                "choices": [
+                    ["run", "Run"],
+                    ["check", "Check"]
+                ],
+                "write_only": true
+            },
+            "verbosity": {
+                "type": "choice",
+                "required": false,
+                "label": "Verbosity",
+                "filterable": true,
+                "choices": [
+                    [0, "0 (Normal)"],
+                    [1, "1 (Verbose)"],
+                    [2, "2 (More Verbose)"],
+                    [3, "3 (Debug)"],
+                    [4, "4 (Connection Debug)"],
+                    [5, "5 (WinRM Debug)"]
+                ],
+                "write_only": true
+            },
+            "diff_mode": {
+                "type": "boolean",
+                "required": false,
+                "label": "Diff mode",
+                "filterable": true,
+                "write_only": true
+            },
+            "credentials": {
+                "type": "list_of_ids",
+                "required": false,
+                "label": "Credentials",
+                "filterable": false,
+                "write_only": true
+            },
+            "credential_passwords": {
+                "type": "json",
+                "required": false,
+                "label": "Credential passwords",
+                "filterable": false,
+                "write_only": true
+            },
+            "execution_environment": {
+                "type": "id",
+                "required": false,
+                "label": "Execution environment",
+                "filterable": true,
+                "write_only": true
+            },
+            "labels": {
+                "type": "field",
+                "required": false,
+                "label": "Labels",
+                "filterable": false,
+                "write_only": true
+            },
+            "forks": {
+                "type": "integer",
+                "required": false,
+                "label": "Forks",
+                "min_value": 0,
+                "filterable": true,
+                "write_only": true
+            },
+            "job_slice_count": {
+                "type": "integer",
+                "required": false,
+                "label": "Job slice count",
+                "min_value": 0,
+                "filterable": true,
+                "write_only": true
+            },
+            "timeout": {
+                "type": "integer",
+                "required": false,
+                "label": "Timeout",
+                "filterable": true,
+                "write_only": true
+            },
+            "instance_groups": {
+                "type": "field",
+                "required": false,
+                "label": "Instance groups",
+                "filterable": false,
+                "write_only": true
+            }
+        }
+    },
+    "types": [
+        "job_template"
+    ],
+    "object_roles": [
+        "admin_role",
+        "execute_role",
+        "read_role"
+    ]
+}

@@ -1,0 +1,152 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$ee := .Data.ee}}
+{{$managed := .Data.managed}}
+{{if $ee}}
+	{{template "screen_header" (dict "title" (t "Edit details") "stream" "execution_environment" "crumbs" (list (dict "href" "/execution_environments" "title" (t "Execution Environments")) (dict "href" (printf "/execution_environments/%s" (str $ee.id)) "title" (str $ee.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create new execution environment") "stream" "execution_environment" "crumbs" (list (dict "href" "/execution_environments" "title" (t "Execution Environments"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{if $ee}}<div id="" class="pf-v6-c-card">{{end}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_field" (dict "id" "execution-environment-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "disabled" $managed "errors" (index $e "name"))}}
+					<div class="pf-v6-c-form__group" data-cy="execution-environment-image-form-group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="execution-environment-image">
+								<span class="pf-v6-c-form__label-text">{{t "Image"}}</span>
+								<span class="pf-v6-c-form__label-required" aria-hidden="true">
+									&nbsp;*
+								</span>
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button_html" (printf `<span>%s<br><br>%s<ul class="ascender-execution-environment-helptext__list"><li><code>ghcr.io/ctrliq/ascender-ee:latest</code></li><li><code>repo/project/image-name:tag</code></li></ul></span>` (esc (t "The full image location, including the container registry, image name, and version tag.")) (esc (t "Examples:")))}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "image"}} pf-m-error{{end}}{{if $managed}} pf-m-disabled{{end}}">
+								<input id="execution-environment-image" aria-invalid="{{if index $e "image"}}true{{else}}false{{end}}" required type="text" value="{{$v.image}}" name="image"{{if $managed}} disabled{{end}}>
+								{{if index $e "image"}}
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__icon pf-m-status">
+											{{icon "exclamation-circle"}}
+										</span>
+									</span>
+								{{end}}
+							</span>
+							{{template "field_error" (index $e "image")}}
+						</div>
+					</div>
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="execution-environment-container-options">
+								<span class="pf-v6-c-form__label-text">{{t "Pull"}}</span>
+							</label>
+							&nbsp;&nbsp;
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "pull"}} pf-m-error{{end}}">
+								<select id="container-pull-options" name="pull" aria-label="{{t "Select Input"}}" aria-invalid="false">
+									{{range .Data.pullChoices}}
+										<option class="" value="{{index . 0}}"{{if eq (index . 0) (str $v.pull)}} selected{{end}}>
+											{{tChoice (index . 1)}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{template "field_error" (index $e "pull")}}
+						</div>
+					</div>
+					{{template "form_field" (dict "id" "execution-environment-description" "name" "description" "label" (t "Description") "value" $v.description "disabled" $managed "errors" (index $e "description"))}}
+					{{$orgDisabled := or $managed (and .Data.editing .Data.globalEE)}}
+					<div class="pf-v6-c-form__group" data-lookup data-resource="organizations" data-title="{{t "Select {0}" "0" (t "Organization")}}"{{if not .UC.User.IsSuperuser}} data-filter="role_level=execution_environment_admin_role"{{end}}{{if and .Data.editing .Data.globalEE (not $managed)}} data-tooltip="{{t "Globally available execution environment can not be reassigned to a specific Organization"}}" data-tooltip-pos="top"{{end}}>
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="organization">
+								<span class="pf-v6-c-form__label-text">{{t "Organization"}}</span>
+								{{if not .UC.User.IsSuperuser}}
+									<span class="pf-v6-c-form__label-required" aria-hidden="true">
+										&nbsp;*
+									</span>
+								{{end}}
+							</label>
+							&nbsp;&nbsp;
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<div class="pf-v6-c-input-group">
+								<div class="pf-v6-c-input-group__item">
+									<button id="organization-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open{{if $orgDisabled}} disabled{{end}}>
+										<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+									</button>
+								</div>
+								<div class="pf-v6-c-input-group__item pf-m-fill">
+									<span class="pf-v6-c-form-control{{if index $e "organization"}} pf-m-error{{end}}{{if $orgDisabled}} pf-m-disabled{{end}}">
+										<input id="organization" aria-invalid="{{if index $e "organization"}}true{{else}}false{{end}}" type="text" value="{{$v.organization.name}}" readonly data-lookup-name{{if not .UC.User.IsSuperuser}} required{{end}}{{if $orgDisabled}} disabled{{end}}>
+									</span>
+								</div>
+							</div>
+							<input type="hidden" name="organization" value="{{$v.organization.id}}" data-lookup-id>
+							<input type="hidden" name="organization_name" value="{{$v.organization.name}}" data-lookup-hidden-name>
+							{{if and .UC.User.IsSuperuser (or (not .Data.editing) (not (has $v.organization.id)))}}
+								<div class="pf-v6-c-form__helper-text">
+									<div class="pf-v6-c-helper-text">
+										<div class="pf-v6-c-helper-text__item">
+											<span class="pf-v6-c-helper-text__item-text">
+												{{t "Leave this field blank to make the execution environment globally available."}}
+											</span>
+										</div>
+									</div>
+								</div>
+							{{end}}
+							{{template "field_error" (index $e "organization")}}
+						</div>
+					</div>
+					<div class="pf-v6-c-form__group" data-lookup data-resource="credentials" data-title="{{t "Select {0}" "0" (t "Registry credential")}}" data-filter="credential_type__kind=registry">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="credential">
+								<span class="pf-v6-c-form__label-text">
+									{{t "Registry credential"}}
+								</span>
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button" (t "Credential to authenticate with a protected container registry.")}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<div class="pf-v6-c-input-group">
+								<div class="pf-v6-c-input-group__item">
+									<button id="credential-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open{{if $managed}} disabled{{end}}>
+										<span class="pf-v6-c-button__icon">{{icon "search"}}</span>
+									</button>
+								</div>
+								<div class="pf-v6-c-input-group__item pf-m-fill">
+									<span class="pf-v6-c-form-control{{if index $e "credential"}} pf-m-error{{end}}{{if $managed}} pf-m-disabled{{end}}">
+										<input id="credential" aria-invalid="{{if index $e "credential"}}true{{else}}false{{end}}" type="text" value="{{$v.credential.name}}" readonly data-lookup-name{{if $managed}} disabled{{end}}>
+									</span>
+								</div>
+							</div>
+							<input type="hidden" name="credential" value="{{$v.credential.id}}" data-lookup-id>
+							<input type="hidden" name="credential_name" value="{{$v.credential.name}}" data-lookup-hidden-name>
+							{{template "field_error" (index $e "credential")}}
+						</div>
+					</div>
+					{{template "form_errors" $e}}
+					{{template "form_actions" (cond (has $ee) (printf "/execution_environments/%s/details" (str $ee.id)) "/execution_environments")}}
+				</div>
+			</form>
+		</div>
+		{{if $ee}}</div>{{end}}
+	</div>
+</section>
+{{end}}

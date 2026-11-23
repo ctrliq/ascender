@@ -1,0 +1,434 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `SESSION_COOKIE_AGE`: Number of seconds that a user is inactive before they will need to login again. (integer)\n* `SESSIONS_PER_USER`: Maximum number of simultaneous logged in sessions a user may have. To disable enter -1. (integer)\n* `DISABLE_LOCAL_AUTH`: Controls whether users are prevented from using the built-in authentication system. You probably want to do this if you are using an LDAP or SAML integration. (boolean)\n* `AUTH_BASIC_ENABLED`: Enable HTTP Basic Auth for the API Browser. (boolean)\n* `OAUTH2_PROVIDER`: Dictionary for customizing OAuth 2 timeouts, available items are `ACCESS_TOKEN_EXPIRE_SECONDS`, the duration of access tokens in the number of seconds, `AUTHORIZATION_CODE_EXPIRE_SECONDS`, the duration of authorization codes in the number of seconds, and `REFRESH_TOKEN_EXPIRE_SECONDS`, the duration of refresh tokens, after expired access tokens, in the number of seconds. (nested object)\n* `ALLOW_OAUTH2_FOR_EXTERNAL_USERS`: For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off. (boolean)\n* `LOGIN_REDIRECT_OVERRIDE`: URL to which unauthorized users will be redirected to log in.  If blank, users will be sent to the login page. (string)\n* `ALLOW_METRICS_FOR_ANONYMOUS_USERS`: If true, anonymous users are allowed to poll metrics. (boolean)\n* `AUTHENTICATION_BACKENDS`: List of authentication backends that are enabled, which follows whether each one has the settings it requires. (list)\n* `SOCIAL_AUTH_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object)\n* `SOCIAL_AUTH_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object)\n* `SOCIAL_AUTH_USER_FIELDS`: When set to an empty list `[]`, this setting prevents new user accounts from being created. Only users who have previously logged in using social auth or have a user account with a matching email address will be able to login. (list)\n* `SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL`: Enabling this setting will tell social auth to use the full Email as username instead of the full name (boolean)\n* `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS`: When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP already refuses an existing username. (boolean)\n* `LOCAL_PASSWORD_MIN_LENGTH`: Minimum number of characters required in a local password. 0 means no minimum (integer)\n* `LOCAL_PASSWORD_MIN_DIGITS`: Minimum number of digit characters required in a local password. 0 means no minimum (integer)\n* `LOCAL_PASSWORD_MIN_UPPER`: Minimum number of uppercase characters required in a local password. 0 means no minimum (integer)\n* `LOCAL_PASSWORD_MIN_SPECIAL`: Minimum number of special characters required in a local password. 0 means no minimum (integer)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `SESSION_COOKIE_AGE`: Number of seconds that a user is inactive before they will need to login again. (integer, required)\n* `SESSIONS_PER_USER`: Maximum number of simultaneous logged in sessions a user may have. To disable enter -1. (integer, required)\n* `DISABLE_LOCAL_AUTH`: Controls whether users are prevented from using the built-in authentication system. You probably want to do this if you are using an LDAP or SAML integration. (boolean, required)\n* `AUTH_BASIC_ENABLED`: Enable HTTP Basic Auth for the API Browser. (boolean, required)\n* `OAUTH2_PROVIDER`: Dictionary for customizing OAuth 2 timeouts, available items are `ACCESS_TOKEN_EXPIRE_SECONDS`, the duration of access tokens in the number of seconds, `AUTHORIZATION_CODE_EXPIRE_SECONDS`, the duration of authorization codes in the number of seconds, and `REFRESH_TOKEN_EXPIRE_SECONDS`, the duration of refresh tokens, after expired access tokens, in the number of seconds. (nested object, default=`{&#x27;ACCESS_TOKEN_EXPIRE_SECONDS&#x27;: 31536000000, &#x27;AUTHORIZATION_CODE_EXPIRE_SECONDS&#x27;: 600, &#x27;REFRESH_TOKEN_EXPIRE_SECONDS&#x27;: 2628000}`)\n* `ALLOW_OAUTH2_FOR_EXTERNAL_USERS`: For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off. (boolean, default=`False`)\n* `LOGIN_REDIRECT_OVERRIDE`: URL to which unauthorized users will be redirected to log in.  If blank, users will be sent to the login page. (string, default=`\"\"`)\n* `ALLOW_METRICS_FOR_ANONYMOUS_USERS`: If true, anonymous users are allowed to poll metrics. (boolean, default=`False`)\n\n* `SOCIAL_AUTH_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_USER_FIELDS`: When set to an empty list `[]`, this setting prevents new user accounts from being created. Only users who have previously logged in using social auth or have a user account with a matching email address will be able to login. (list, default=`None`)\n* `SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL`: Enabling this setting will tell social auth to use the full Email as username instead of the full name (boolean, default=`False`)\n* `SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS`: When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP already refuses an existing username. (boolean, default=`False`)\n* `LOCAL_PASSWORD_MIN_LENGTH`: Minimum number of characters required in a local password. 0 means no minimum (integer, default=`0`)\n* `LOCAL_PASSWORD_MIN_DIGITS`: Minimum number of digit characters required in a local password. 0 means no minimum (integer, default=`0`)\n* `LOCAL_PASSWORD_MIN_UPPER`: Minimum number of uppercase characters required in a local password. 0 means no minimum (integer, default=`0`)\n* `LOCAL_PASSWORD_MIN_SPECIAL`: Minimum number of special characters required in a local password. 0 means no minimum (integer, default=`0`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "SESSION_COOKIE_AGE": {
+                "type": "integer",
+                "required": true,
+                "label": "Idle Time Force Log Out",
+                "help_text": "Number of seconds that a user is inactive before they will need to login again.",
+                "min_value": 60,
+                "max_value": 30000000000,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "unit": "seconds",
+                "default": 1800
+            },
+            "SESSIONS_PER_USER": {
+                "type": "integer",
+                "required": true,
+                "label": "Maximum number of simultaneous logged in sessions",
+                "help_text": "Maximum number of simultaneous logged in sessions a user may have. To disable enter -1.",
+                "min_value": -1,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": -1
+            },
+            "DISABLE_LOCAL_AUTH": {
+                "type": "boolean",
+                "required": true,
+                "label": "Disable the built-in authentication system",
+                "help_text": "Controls whether users are prevented from using the built-in authentication system. You probably want to do this if you are using an LDAP or SAML integration.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": false
+            },
+            "AUTH_BASIC_ENABLED": {
+                "type": "boolean",
+                "required": true,
+                "label": "Enable HTTP Basic Auth",
+                "help_text": "Enable HTTP Basic Auth for the API Browser.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": true
+            },
+            "OAUTH2_PROVIDER": {
+                "type": "nested object",
+                "required": false,
+                "label": "OAuth 2 Timeout Settings",
+                "help_text": "Dictionary for customizing OAuth 2 timeouts, available items are `ACCESS_TOKEN_EXPIRE_SECONDS`, the duration of access tokens in the number of seconds, `AUTHORIZATION_CODE_EXPIRE_SECONDS`, the duration of authorization codes in the number of seconds, and `REFRESH_TOKEN_EXPIRE_SECONDS`, the duration of refresh tokens, after expired access tokens, in the number of seconds.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "unit": "seconds",
+                "default": {
+                    "ACCESS_TOKEN_EXPIRE_SECONDS": 31536000000,
+                    "AUTHORIZATION_CODE_EXPIRE_SECONDS": 600,
+                    "REFRESH_TOKEN_EXPIRE_SECONDS": 2628000
+                },
+                "child": {
+                    "type": "integer",
+                    "required": true,
+                    "read_only": false,
+                    "min_value": 1
+                }
+            },
+            "ALLOW_OAUTH2_FOR_EXTERNAL_USERS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow External Users to Create OAuth2 Tokens",
+                "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": false
+            },
+            "LOGIN_REDIRECT_OVERRIDE": {
+                "type": "string",
+                "required": false,
+                "label": "Login redirect override URL",
+                "help_text": "URL to which unauthorized users will be redirected to log in.  If blank, users will be sent to the login page.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": ""
+            },
+            "ALLOW_METRICS_FOR_ANONYMOUS_USERS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow anonymous users to poll metrics",
+                "help_text": "If true, anonymous users are allowed to poll metrics.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": false
+            },
+            "SOCIAL_AUTH_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "Social Auth Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "placeholder": {
+                    "Default": {
+                        "users": true
+                    },
+                    "Test Org": {
+                        "admins": [
+                            "admin@example.com"
+                        ],
+                        "auditors": [
+                            "auditor@example.com"
+                        ],
+                        "users": true
+                    },
+                    "Test Org 2": {
+                        "admins": [
+                            "admin@example.com",
+                            "/^tower-[^@]+*?@.*$/"
+                        ],
+                        "remove_admins": true,
+                        "users": "/^[^@].*?@example\\.com$/i",
+                        "remove_users": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_TEAM_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "Social Auth Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "placeholder": {
+                    "My Team": {
+                        "organization": "Test Org",
+                        "users": [
+                            "/^[^@]+?@test\\.example\\.com$/"
+                        ],
+                        "remove": true
+                    },
+                    "Other Team": {
+                        "organization": "Test Org 2",
+                        "users": "/^[^@]+?@test2\\.example\\.com$/i",
+                        "remove": false
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_USER_FIELDS": {
+                "type": "list",
+                "required": false,
+                "label": "Social Auth User Fields",
+                "help_text": "When set to an empty list `[]`, this setting prevents new user accounts from being created. Only users who have previously logged in using social auth or have a user account with a matching email address will be able to login.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "placeholder": [
+                    "username",
+                    "email"
+                ],
+                "default": null,
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL": {
+                "type": "boolean",
+                "required": false,
+                "label": "Use Email address for usernames",
+                "help_text": "Enabling this setting will tell social auth to use the full Email as username instead of the full name",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": false
+            },
+            "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Prevent username collisions on first login",
+                "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP already refuses an existing username.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": false
+            },
+            "LOCAL_PASSWORD_MIN_LENGTH": {
+                "type": "integer",
+                "required": false,
+                "label": "Minimum number of characters in local password",
+                "help_text": "Minimum number of characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": 0
+            },
+            "LOCAL_PASSWORD_MIN_DIGITS": {
+                "type": "integer",
+                "required": false,
+                "label": "Minimum number of digit characters in local password",
+                "help_text": "Minimum number of digit characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": 0
+            },
+            "LOCAL_PASSWORD_MIN_UPPER": {
+                "type": "integer",
+                "required": false,
+                "label": "Minimum number of uppercase characters in local password",
+                "help_text": "Minimum number of uppercase characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": 0
+            },
+            "LOCAL_PASSWORD_MIN_SPECIAL": {
+                "type": "integer",
+                "required": false,
+                "label": "Minimum number of special characters in local password",
+                "help_text": "Minimum number of special characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "default": 0
+            }
+        },
+        "GET": {
+            "SESSION_COOKIE_AGE": {
+                "type": "integer",
+                "label": "Idle Time Force Log Out",
+                "help_text": "Number of seconds that a user is inactive before they will need to login again.",
+                "min_value": 60,
+                "max_value": 30000000000,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "unit": "seconds"
+            },
+            "SESSIONS_PER_USER": {
+                "type": "integer",
+                "label": "Maximum number of simultaneous logged in sessions",
+                "help_text": "Maximum number of simultaneous logged in sessions a user may have. To disable enter -1.",
+                "min_value": -1,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "DISABLE_LOCAL_AUTH": {
+                "type": "boolean",
+                "label": "Disable the built-in authentication system",
+                "help_text": "Controls whether users are prevented from using the built-in authentication system. You probably want to do this if you are using an LDAP or SAML integration.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "AUTH_BASIC_ENABLED": {
+                "type": "boolean",
+                "label": "Enable HTTP Basic Auth",
+                "help_text": "Enable HTTP Basic Auth for the API Browser.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "OAUTH2_PROVIDER": {
+                "type": "nested object",
+                "label": "OAuth 2 Timeout Settings",
+                "help_text": "Dictionary for customizing OAuth 2 timeouts, available items are `ACCESS_TOKEN_EXPIRE_SECONDS`, the duration of access tokens in the number of seconds, `AUTHORIZATION_CODE_EXPIRE_SECONDS`, the duration of authorization codes in the number of seconds, and `REFRESH_TOKEN_EXPIRE_SECONDS`, the duration of refresh tokens, after expired access tokens, in the number of seconds.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "unit": "seconds",
+                "child": {
+                    "type": "integer",
+                    "min_value": 1
+                }
+            },
+            "ALLOW_OAUTH2_FOR_EXTERNAL_USERS": {
+                "type": "boolean",
+                "label": "Allow External Users to Create OAuth2 Tokens",
+                "help_text": "For security reasons, users from external auth providers (LDAP, SAML, SSO, Radius, and others) are not allowed to create OAuth2 tokens. To change this behavior, enable this setting. Existing tokens will not be deleted when this setting is toggled off.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "LOGIN_REDIRECT_OVERRIDE": {
+                "type": "string",
+                "label": "Login redirect override URL",
+                "help_text": "URL to which unauthorized users will be redirected to log in.  If blank, users will be sent to the login page.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "ALLOW_METRICS_FOR_ANONYMOUS_USERS": {
+                "type": "boolean",
+                "label": "Allow anonymous users to poll metrics",
+                "help_text": "If true, anonymous users are allowed to poll metrics.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "AUTHENTICATION_BACKENDS": {
+                "type": "list",
+                "label": "Authentication Backends",
+                "help_text": "List of authentication backends that are enabled, which follows whether each one has the settings it requires.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "SOCIAL_AUTH_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "label": "Social Auth Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_TEAM_MAP": {
+                "type": "nested object",
+                "label": "Social Auth Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_USER_FIELDS": {
+                "type": "list",
+                "label": "Social Auth User Fields",
+                "help_text": "When set to an empty list `[]`, this setting prevents new user accounts from being created. Only users who have previously logged in using social auth or have a user account with a matching email address will be able to login.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL": {
+                "type": "boolean",
+                "label": "Use Email address for usernames",
+                "help_text": "Enabling this setting will tell social auth to use the full Email as username instead of the full name",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_PREVENT_USERNAME_COLLISIONS": {
+                "type": "boolean",
+                "label": "Prevent username collisions on first login",
+                "help_text": "When enabled, a first external login fails if its username is already taken and no account has the same email, instead of creating an account with a suffixed username. LDAP already refuses an existing username.",
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "LOCAL_PASSWORD_MIN_LENGTH": {
+                "type": "integer",
+                "label": "Minimum number of characters in local password",
+                "help_text": "Minimum number of characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "LOCAL_PASSWORD_MIN_DIGITS": {
+                "type": "integer",
+                "label": "Minimum number of digit characters in local password",
+                "help_text": "Minimum number of digit characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "LOCAL_PASSWORD_MIN_UPPER": {
+                "type": "integer",
+                "label": "Minimum number of uppercase characters in local password",
+                "help_text": "Minimum number of uppercase characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            },
+            "LOCAL_PASSWORD_MIN_SPECIAL": {
+                "type": "integer",
+                "label": "Minimum number of special characters in local password",
+                "help_text": "Minimum number of special characters required in a local password. 0 means no minimum",
+                "min_value": 0,
+                "category": "Authentication",
+                "category_slug": "authentication",
+                "defined_in_file": false
+            }
+        }
+    }
+}

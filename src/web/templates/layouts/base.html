@@ -1,0 +1,87 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="{{.Loc.Lang}}" class="pf-v6-theme-dark" data-theme="default" dir="{{.Loc.Dir}}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#000000">
+		<meta name="description" content="CIQ Ascender">
+		<title>{{.PageTitle}}</title>
+		<link rel="shortcut icon" href="/static/media/favicon.ico">
+		<link rel="stylesheet" href="/static/css/patternfly.css">
+		<link rel="stylesheet" href="/static/css/patternfly-addons.css">
+		<link rel="stylesheet" href="/static/css/theme-default.css">
+		<link rel="stylesheet" href="/static/css/theme-dark.css">
+		<link rel="stylesheet" href="/static/css/theme-light.css">
+		<link rel="stylesheet" href="/static/css/theme-awx.css">
+		<link rel="stylesheet" href="/static/css/ascender-components.css">
+		<link rel="stylesheet" href="/static/css/login.css">
+		<link rel="stylesheet" href="/static/css/app.css">
+		<link rel="stylesheet" href="/static/css/workflow.css">
+		<style>.app{height: 100%;}</style>
+		<script nonce="{{.Nonce}}">
+(function(){
+  var dark = {"default": true, "dark": true, "light": false, "awx": false};
+  try {
+    // A signed-in account's theme wins over what this browser stored.
+    var acct = {{if .UC}}{{.UC.Theme}}{{else}}null{{end}};
+    var t = location.pathname === '/login' ? 'default' : acct !== null ? (acct || 'default') : (sessionStorage.getItem('theme') || localStorage.getItem('theme') || 'default');
+    if (!(t in dark)) { t = 'default'; }
+    document.documentElement.setAttribute('data-theme', t);
+    if (dark[t]) { document.documentElement.classList.add('pf-v6-theme-dark'); } else { document.documentElement.classList.remove('pf-v6-theme-dark'); }
+  } catch (e) {}
+  // The old UI's hash routes (/#/templates) come back as paths: only a
+  // path on this server, never "//host" or "/\host".
+  if (location.hash && /^#\/[^\/\\]/.test(location.hash) && (location.pathname === '/' || location.pathname === '/home')) {
+    location.replace(location.hash.substring(1));
+  }
+})();
+</script>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="app" class="app" style="height: 100%">{{.Body}}</div>
+		<script nonce="{{.Nonce}}">window.ASCENDER = {lang: {{.Loc.Lang}}, pseudo: {{.Loc.Pseudo}}, csrf: {{.CSRF}}, user: {{if .UC}}{{json .UC.Me}}{{else}}null{{end}}, sessionTimeout: {{.SessionTimeout}}, themes: {{json .ThemeList}}, path: {{.Path}}, icons: {help: {{icon "help"}}, caret: {{icon "pf-caret-down"}}, angleRight: {{icon "angle-right"}}, angleDown: {{icon "angle-down"}}, angleUp: {{icon "angle-up"}}, angleDoubleUp: {{icon "angle-double-up"}}, angleDoubleDown: {{icon "angle-double-down"}}, rocket: {{icon "rocket"}}, filter: {{icon "filter"}}, angleLeft: {{icon "angle-left"}}, angleDoubleLeft: {{icon "pf-angle-double-left"}}, angleDoubleRight: {{icon "angle-double-right"}}, longArrowUp: {{icon "long-arrow-alt-up"}}, longArrowDown: {{icon "long-arrow-alt-down"}}, arrowsV: {{icon "arrows-alt-v"}}, pfClose: {{icon "pf-close"}}, cubes: {{icon "cubes"}}, gripVertical: {{icon "rh-ui-grip-vertical-fill"}}, timesCircle: {{icon "times-circle"}}, exclamationCircle: {{icon "exclamation-circle"}}, pfAngleDown: {{icon "pf-angle-down"}}, eye: {{icon "eye"}}, eyeSlash: {{icon "eye-slash"}}, questionCircle: {{icon "question-circle"}}, ellipsisV: {{icon "ellipsis-v"}}, infoCircle: {{icon "info-circle"}}, check: {{icon "check"}}, key: {{icon "key"}}, warnTriangle: {{icon "exclamation-triangle"}}, checkCircle: {{icon "check-circle"}}, alertError: {{iconStyled "times-circle" "color: var(--pf-t--global--color--status--danger--default);"}}, alertDanger: {{iconStyled "exclamation-circle" "color: var(--pf-t--global--color--status--danger--default);"}}, status: {successful: {{statusIcon "successful"}}, failed: {{statusIcon "failed"}}, error: {{statusIcon "error"}}, canceled: {{statusIcon "canceled"}}, running: {{statusIcon "running"}}, pending: {{statusIcon "pending"}}, waiting: {{statusIcon "waiting"}}, new: {{statusIcon "new"}}}}};</script>
+		{{if .Data.editor}}<script src="/static/js/codemirror.js"></script>{{end}}
+		{{with .CatalogURL}}<script src="{{.}}"></script>{{end}}
+		<script src="/static/js/i18n.js"></script>
+		<script src="/static/js/app.js"></script>
+		{{if .Loads "advanced-search"}}<script src="/static/js/advanced-search.js"></script>{{end}}
+		{{if .Loads "host-filter"}}<script src="/static/js/host-filter.js"></script>{{end}}
+		{{if .Loads "credential-plugins"}}
+			<script src="/static/js/credential-plugins.js"></script>
+		{{end}}
+		{{if .Loads "instances-k8s"}}<script src="/static/js/instances-k8s.js"></script>{{end}}
+		{{if .Loads "templates"}}<script src="/static/js/templates.js"></script>{{end}}
+		{{if .Loads "schedules"}}<script src="/static/js/schedules.js"></script>{{end}}
+		{{if .Data.dagre}}<script src="/static/js/vendor/dagre.min.js"></script>{{end}}
+		{{if .Loads "workflow-visualizer"}}
+			<script src="/static/js/workflow-visualizer.js"></script>
+		{{end}}
+		{{if .Loads "workflows"}}<script src="/static/js/workflows.js"></script>{{end}}
+		{{if .Loads "inventory-sources"}}
+			<script src="/static/js/inventory-sources.js"></script>
+		{{end}}
+		{{if .Loads "access"}}
+			{{template "access_icons" .}}
+			<script src="/static/js/access.js"></script>
+		{{end}}
+		{{if .Loads "oauth"}}<script src="/static/js/oauth.js"></script>{{end}}
+		{{if .Loads "activity-stream"}}<script src="/static/js/activity-stream.js"></script>{{end}}
+		{{if .Loads "instances"}}<script src="/static/js/instances.js"></script>{{end}}
+		{{if .Loads "host-metrics"}}<script src="/static/js/host-metrics.js"></script>{{end}}
+		{{if .Loads "settings"}}<script src="/static/js/settings.js"></script>{{end}}
+		{{if .Loads "notification-templates"}}
+			<script src="/static/js/notification-templates.js"></script>
+		{{end}}
+		{{if .Data.adHoc}}<script src="/static/js/ad-hoc.js"></script>{{end}}
+		{{if .Data.managementJobs}}<script src="/static/js/management-jobs.js"></script>{{end}}
+		{{if .Data.d3}}
+			<script src="/static/js/vendor/d3.min.js"></script>
+			<script src="/static/js/topology.js"></script>
+		{{end}}
+		{{if .Data.metricsPage}}<script src="/static/js/metrics.js"></script>{{end}}
+		{{if .Data.dashboard}}<script src="/static/js/dashboard.js"></script>{{end}}
+	</body>
+</html>
+{{end}}

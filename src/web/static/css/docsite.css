@@ -1,0 +1,182 @@
+/* The documentation site (/docs/): what PatternFly's content component
+   leaves to the page. Colors and spacing come from PatternFly's tokens, so
+   every theme applies. */
+
+.docs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pf-t--global--spacer--sm);
+  text-decoration: none;
+}
+/* The masthead is dark in every theme and sets its own text color. */
+.docs-brand__text {
+  color: inherit;
+  font-size: var(--pf-t--global--font--size--lg);
+  white-space: nowrap;
+}
+.docs-masthead-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--pf-t--global--spacer--md);
+  width: 100%;
+}
+.docs-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pf-t--global--spacer--sm);
+  color: inherit;
+}
+.docs-theme select {
+  padding: var(--pf-t--global--spacer--xs) var(--pf-t--global--spacer--sm);
+  border: var(--pf-t--global--border--width--regular) solid rgb(255 255 255 / 30%);
+  border-radius: var(--pf-t--global--border--radius--small);
+  background: transparent;
+  color: inherit;
+  color-scheme: dark;
+  font: inherit;
+  font-size: var(--pf-t--global--font--size--sm);
+}
+@media (max-width: 36rem) {
+  .docs-brand__text,
+  .docs-theme__icon {
+    display: none;
+  }
+}
+
+.docs-body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pf-t--global--spacer--2xl);
+}
+.docs-article {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 60rem;
+}
+.docs-lead {
+  margin-block: var(--pf-t--global--spacer--sm) var(--pf-t--global--spacer--lg);
+  color: var(--pf-t--global--text--color--subtle);
+  font-size: var(--pf-t--global--font--size--lg);
+}
+
+.docs-content img {
+  max-width: 100%;
+  height: auto;
+  border: var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default);
+  border-radius: var(--pf-t--global--border--radius--small);
+}
+.docs-content :is(h2, h3, h4) {
+  scroll-margin-top: var(--pf-t--global--spacer--lg);
+}
+.docs-content code {
+  padding: 0 var(--pf-t--global--spacer--xs);
+  border-radius: var(--pf-t--global--border--radius--small);
+  background: var(--pf-t--global--background--color--secondary--default);
+  font-family: var(--pf-t--global--font--family--mono);
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+}
+.docs-content pre {
+  padding: var(--pf-t--global--spacer--md);
+  overflow-x: auto;
+  border: var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default);
+  border-radius: var(--pf-t--global--border--radius--small);
+  background: var(--pf-t--global--background--color--secondary--default);
+}
+.docs-content pre code {
+  padding: 0;
+  background: none;
+  font-size: var(--pf-t--global--font--size--sm);
+  overflow-wrap: normal;
+  white-space: pre;
+}
+.docs-content table {
+  display: block;
+  max-width: 100%;
+  margin-block-end: var(--pf-t--global--spacer--md);
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--pf-t--global--font--size--sm);
+}
+.docs-content :is(th, td) {
+  padding: var(--pf-t--global--spacer--sm) var(--pf-t--global--spacer--md);
+  border-block-end: var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default);
+  text-align: start;
+  vertical-align: top;
+}
+.docs-content th {
+  font-weight: var(--pf-t--global--font--weight--body--bold);
+}
+.docs-content details {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}
+.docs-content summary {
+  cursor: pointer;
+}
+
+.docs-hint {
+  margin-block: var(--pf-t--global--spacer--md);
+}
+.docs-hint .pf-v6-c-alert__description > :last-child {
+  margin-block-end: 0;
+}
+
+.docs-tabs {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}
+.docs-tabs > .pf-v6-c-tabs {
+  margin-block-end: var(--pf-t--global--spacer--md);
+}
+
+.docs-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--pf-t--global--spacer--md);
+  margin-block-start: var(--pf-t--global--spacer--2xl);
+  padding-block-start: var(--pf-t--global--spacer--lg);
+  border-block-start: var(--pf-t--global--border--width--regular) solid var(--pf-t--global--border--color--default);
+}
+.docs-pager__link {
+  display: flex;
+  flex-direction: column;
+  max-width: 48%;
+  text-decoration: none;
+}
+.docs-pager__link--next {
+  margin-inline-start: auto;
+  text-align: end;
+}
+.docs-pager__label {
+  color: var(--pf-t--global--text--color--subtle);
+  font-size: var(--pf-t--global--font--size--sm);
+}
+
+.docs-toc {
+  position: sticky;
+  top: var(--pf-t--global--spacer--lg);
+  flex: 0 0 15rem;
+  max-height: calc(100vh - 2 * var(--pf-t--global--spacer--lg));
+  overflow-y: auto;
+  font-size: var(--pf-t--global--font--size--sm);
+}
+.docs-toc__title {
+  margin-block-end: var(--pf-t--global--spacer--sm);
+  font-weight: var(--pf-t--global--font--weight--body--bold);
+}
+.docs-toc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.docs-toc__list li + li {
+  margin-block-start: var(--pf-t--global--spacer--xs);
+}
+.docs-toc__list a {
+  text-decoration: none;
+}
+@media (max-width: 75rem) {
+  .docs-toc {
+    display: none;
+  }
+}

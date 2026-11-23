@@ -1,0 +1,11 @@
+{
+    "name": "Dashboard Jobs Graphs",
+    "description": "# View Statistics for Job Runs\n\nMake a GET request to this resource to retrieve aggregate statistics about job runs suitable for graphing.\n\n## Parameters and Filtering\n\nThe `period` of the data can be adjusted with:\n\n    ?period=month\n\nWhere `month` can be replaced with `week`, `two_weeks`, or `day`.  `month` is the default.\n\nThe type of job can be filtered with:\n\n    ?job_type=all\n\nWhere `all` can be replaced with `inv_sync`, `playbook_run` or `scm_update`.  `all` is the default.\n\n## Results\n\nData will be returned in the following format:\n\n    \"jobs\": {\n            \"successful\": [\n                [\n                    1402808400.0, \n                    9\n                ], ... ],\n            \"failed\": [\n    \t        [\n                    1402808400.0, \n                    3\n                ], ... ]\n    }\n\nEach element contains an epoch timestamp represented in seconds and a numerical value indicating\nthe number of events during that time period",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

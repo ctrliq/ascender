@@ -1,0 +1,24 @@
+{
+    "name": "Inventory Script",
+    "description": "Generate inventory group and host data as needed for an inventory script.\n\nRefer to [Dynamic Inventory](http://docs.ansible.com/intro_dynamic_inventory.html)\nfor more information on inventory scripts.\n\n## List Response\n\nMake a GET request to this resource without query parameters to retrieve a JSON\nobject containing groups, including the hosts, children and variables for each\ngroup.  The response data is equivalent to that returned by passing the\n`--list` argument to an inventory script.\n\nSpecify a query string of `?hostvars=1` to retrieve the JSON\nobject above including all host variables.  The `['_meta']['hostvars']` object\nin the response contains an entry for each host with its variables.  This\nresponse format can be used with Ansible 1.3 and later to avoid making a\nseparate API request for each host.  Refer to\n[Tuning the External Inventory Script](http://docs.ansible.com/developing_inventory.html#tuning-the-external-inventory-script)\nfor more information on this feature.\n\nBy default, the inventory script will only return hosts that\nare enabled in the inventory.  This feature allows disabled hosts to be skipped\nwhen running jobs without removing them from the inventory.  Specify a query\nstring of `?all=1` to return all hosts, including disabled ones.\n\nSpecify a query string of `?ascendervars=1` to add variables\nto the hostvars of each host that specifies its enabled state and database ID.\n\nSpecify a query string of `?subset=slice2of5` to produce an inventory that\nhas a restricted number of hosts according to the rules of job slicing.\n\nTo apply multiple query strings, join them with the `&` character, like `?hostvars=1&all=1`.\n\n## Host Response\n\nMake a GET request to this resource with a query string similar to\n`?host=HOSTNAME` to retrieve a JSON object containing host variables for the\nspecified host.  The response data is equivalent to that returned by passing\nthe `--host HOSTNAME` argument to an inventory script.\n\nThe parameter was called `towervars` before the rename, and that spelling is still accepted.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {}
+    },
+    "types": [
+        "inventory"
+    ],
+    "object_roles": [
+        "admin_role",
+        "update_role",
+        "adhoc_role",
+        "use_role",
+        "read_role"
+    ]
+}

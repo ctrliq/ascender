@@ -1,0 +1,20 @@
+---
+# Issues are opened from the forms beside this file; these links send
+# everything else where it belongs.
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ctrliq/ascender/blob/main/SECURITY.md
+    about: Report vulnerabilities privately to security@ciq.com, never in a public issue.
+  - name: Question or idea
+    url: https://github.com/ctrliq/ascender/discussions
+    about: Ask questions and talk ideas over in Discussions.
+  - name: Installer
+    url: https://github.com/ctrliq/ascender-install/issues
+    about: Problems installing or upgrading with the Ascender installer.
+  - name: Operator
+    url: https://github.com/ctrliq/ascender-operator/issues
+    about: Problems with the Ascender operator.
+  - name: Ansible collection
+    url: https://github.com/ctrliq/ascender-collection/issues
+    about: Problems with the ctrliq.ascender Ansible collection.

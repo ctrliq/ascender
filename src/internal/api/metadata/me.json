@@ -1,0 +1,148 @@
+{
+    "name": "Me",
+    "description": "# Retrieve Information about the current User\n\nMake a GET request to retrieve user information about the current user.\n\nOne result should be returned containing the following fields:\n\n* `id`: Database ID for this user. (integer)\n* `type`: Data type for this user. (choice)\n* `url`: URL for this user. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this user was created. (datetime)\n* `modified`: Timestamp when this user was last modified. (datetime)\n* `username`: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. (string)\n* `first_name`:  (string)\n* `last_name`:  (string)\n* `email`:  (string)\n* `is_superuser`: Designates that this user has all permissions without explicitly assigning them. (boolean)\n* `is_system_auditor`:  (boolean)\n* `password`: Field used to change the password. (string)\n* `ldap_dn`:  (string)\n* `preferred_language`:  (string)\n* `preferred_theme`: The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme. (string)\n* `last_login`:  (datetime)\n* `external_account`: Set if the account is managed by an external service (field)\n\n\n\nUse the primary URL for the user (/api/v2/users/N/) to modify the user.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this user.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this user.",
+                "choices": [
+                    ["user", "User"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this user.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this user was created.",
+                "filterable": false
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this user was last modified.",
+                "filterable": false
+            },
+            "username": {
+                "type": "string",
+                "label": "Username",
+                "help_text": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                "filterable": true
+            },
+            "first_name": {
+                "type": "string",
+                "label": "First name",
+                "filterable": true
+            },
+            "last_name": {
+                "type": "string",
+                "label": "Last name",
+                "filterable": true
+            },
+            "email": {
+                "type": "string",
+                "label": "Email address",
+                "filterable": true
+            },
+            "is_superuser": {
+                "type": "boolean",
+                "label": "Superuser status",
+                "help_text": "Designates that this user has all permissions without explicitly assigning them.",
+                "filterable": true
+            },
+            "is_system_auditor": {
+                "type": "boolean",
+                "label": "Is system auditor",
+                "filterable": false
+            },
+            "password": {
+                "type": "string",
+                "label": "Password",
+                "help_text": "Field used to change the password.",
+                "filterable": true
+            },
+            "ldap_dn": {
+                "type": "string",
+                "label": "Ldap dn",
+                "filterable": false
+            },
+            "preferred_language": {
+                "type": "string",
+                "label": "Preferred language",
+                "filterable": false
+            },
+            "preferred_theme": {
+                "type": "string",
+                "label": "Preferred theme",
+                "help_text": "The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.",
+                "filterable": false
+            },
+            "last_login": {
+                "type": "datetime",
+                "label": "Last login",
+                "filterable": true
+            },
+            "external_account": {
+                "type": "field",
+                "label": "External account",
+                "help_text": "Set if the account is managed by an external service",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "user"
+    ],
+    "search_fields": [
+        "username",
+        "first_name",
+        "last_name",
+        "email"
+    ],
+    "related_search_fields": [
+        "profile__search",
+        "roles__search",
+        "main_oauth2idtoken__search",
+        "main_oauth2refreshtoken__search",
+        "workflow_approval_votes__search",
+        "oauth2_provider_devicegrant__search",
+        "social_auth__search",
+        "enterprise_auth__search",
+        "activity_stream__search",
+        "main_oauth2application__search",
+        "main_oauth2accesstoken__search",
+        "oauth2_provider_grant__search"
+    ],
+    "max_page_size": 200
+}

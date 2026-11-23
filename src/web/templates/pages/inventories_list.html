@@ -1,0 +1,125 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Inventories") "stream" "inventory")}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "inventory-list" "searchKeys" .Data.searchKeys "ns" "inventory" "addMenu" (list (dict "href" "/inventories/inventory/add" "label" (t "Add inventory")) (dict "href" "/inventories/smart_inventory/add" "label" (t "Add smart inventory")) (dict "href" "/inventories/constructed_inventory/add" "label" (t "Add constructed inventory")) (dict "href" "/inventories/federated_inventory/add" "label" (t "Add federated inventory"))) "kind" "Inventory" "api" "/api/v2/inventories/" "usageKind" "inventory" "usageMessage" "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}" "usageWarning" "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}" "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Inventories")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "inventory-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Sync Status"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Type"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Organization"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $inv := .Data.results}}
+							{{$id := str $inv.id}}
+							{{$caps := dig $inv "summary_fields" "user_capabilities"}}
+							{{$base := str $inv._base}}
+							<tr class="pf-v6-c-table__tr" id="{{$id}}" aria-labelledby="check-action-{{$id}}" data-row data-id="{{$id}}" data-name="{{$inv.name}}">
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+									{{if $inv.pending_deletion}}
+										<b>{{$inv.name}}</b>
+									{{else}}
+										<a href="{{$base}}/details"><b>{{$inv.name}}</b></a>
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+									{{if eq (str $inv.kind) ""}}
+										{{if $inv.has_inventory_sources}}
+											<a href="{{$base}}/jobs?job.or__inventoryupdate__inventory_source__inventory__id={{$id}}" data-tooltip="{{$inv._sync_tooltip}}" data-tooltip-pos="top">
+												{{template "status_label" (str $inv._sync_status)}}
+											</a>
+										{{else}}
+											<span data-tooltip="{{$inv._sync_tooltip}}" data-tooltip-pos="top">
+												{{template "status_label" (str $inv._sync_status)}}
+											</span>
+										{{end}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+									{{$inv._kind_label}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Organization"}}" class="pf-v6-c-table__td ascender-td-break-word__td">
+									{{with dig $inv "summary_fields" "organization"}}
+										<a href="/organizations/{{str .id}}/details">{{.name}}</a>
+									{{end}}
+								</td>
+								{{if $inv.pending_deletion}}
+									<td tabindex="-1" data-label="{{t "Groups"}}" class="pf-v6-c-table__td">
+										<span class="pf-v6-c-label pf-m-red">
+											<span class="pf-v6-c-label__content">
+												<span class="pf-v6-c-label__text">
+													{{t "Pending delete"}}
+												</span>
+											</span>
+										</span>
+									</td>
+								{{else}}
+									<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+										<div class="ascender-actions-td__grid">
+											<div>
+												<div style="display: contents;">
+													<div>
+														{{if dig $caps "edit"}}
+															<a aria-label="{{t "Edit Inventory"}}" class="pf-v6-c-button pf-m-plain" href="{{$base}}/edit" data-tooltip="{{t "Edit Inventory"}}" data-tooltip-pos="top">
+																<span class="pf-v6-c-button__icon">
+																	{{icon "pencil-alt"}}
+																</span>
+															</a>
+														{{end}}
+													</div>
+												</div>
+											</div>
+											<div>
+												<div style="display: contents;">
+													<div data-tooltip="{{if $inv.has_inventory_sources}}{{t "Inventories with sources cannot be copied"}}{{else}}{{t "Copy Inventory"}}{{end}}" data-tooltip-pos="top">
+														{{if dig $caps "copy"}}
+															<button aria-label="{{t "Copy"}}" class="pf-v6-c-button pf-m-plain" type="button"{{if $inv.has_inventory_sources}} disabled{{else}} data-copy-resource="/api/v2/inventories/{{$id}}/copy/" data-copy-name="{{$inv.name}}" data-copy-error="{{t "Failed to copy inventory."}}"{{end}}>
+																<span class="pf-v6-c-button__icon">
+																	{{icon "copy"}}
+																</span>
+															</button>
+														{{end}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
+								{{end}}
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Inventories")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Inventories")) "addHref" "/inventories/inventory/add")}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

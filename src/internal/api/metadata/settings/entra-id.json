@@ -1,0 +1,397 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `SOCIAL_AUTH_ENTRA_ID_CALLBACK_URL`: Add this URL as a Web redirect URI of the app registration in Entra ID. (string)\n* `SOCIAL_AUTH_ENTRA_ID_KEY`: The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023. (string)\n* `SOCIAL_AUTH_ENTRA_ID_SECRET`: A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source. (string)\n* `SOCIAL_AUTH_ENTRA_ID_TENANT_ID`: The Directory (tenant) ID, or one of the tenant&#x27;s domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted. (string)\n* `SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST`: The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or &lt;subdomain&gt;.ciamlogin.com for an External ID tenant. (string)\n* `SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY`: The claim a new user&#x27;s username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account. (string)\n* `SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN`: Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix. (boolean)\n* `SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM`: The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both. (string)\n* `SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH`: Read the user&#x27;s groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user&#x27;s groups as unknown. (boolean)\n* `SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST`: The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host&#x27;s cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD. (string)\n* `SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS`: A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in. (nested object)\n* `SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP`: Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user&#x27;s groups and claims. Configuration details are available in the documentation. (nested object)\n* `SOCIAL_AUTH_ENTRA_ID_TEAM_MAP`: Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user&#x27;s groups and claims. Configuration details are available in the documentation. (nested object)\n* `SOCIAL_AUTH_ENTRA_ID_USER_FLAGS`: Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters. (nested object)\n* `SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP`: When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration. (boolean)\n* `SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL`: Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service. (string)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n\n* `SOCIAL_AUTH_ENTRA_ID_KEY`: The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023. (string, default=`\"\"`)\n* `SOCIAL_AUTH_ENTRA_ID_SECRET`: A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source. (string, default=`\"\"`)\n* `SOCIAL_AUTH_ENTRA_ID_TENANT_ID`: The Directory (tenant) ID, or one of the tenant&#x27;s domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted. (string, default=`\"\"`)\n* `SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST`: The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or &lt;subdomain&gt;.ciamlogin.com for an External ID tenant. (string, default=`\"login.microsoftonline.com\"`)\n* `SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY`: The claim a new user&#x27;s username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account. (string, default=`\"preferred_username\"`)\n* `SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN`: Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix. (boolean, default=`False`)\n* `SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM`: The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both. (string, default=`\"groups\"`)\n* `SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH`: Read the user&#x27;s groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user&#x27;s groups as unknown. (boolean, default=`False`)\n* `SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST`: The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host&#x27;s cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD. (string, default=`\"\"`)\n* `SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS`: A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in. (nested object, default=`None`)\n* `SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP`: Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user&#x27;s groups and claims. Configuration details are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_ENTRA_ID_TEAM_MAP`: Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user&#x27;s groups and claims. Configuration details are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_ENTRA_ID_USER_FLAGS`: Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters. (nested object, default=`None`)\n* `SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP`: When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration. (boolean, default=`False`)\n* `SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL`: Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service. (string, default=`\"\"`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "SOCIAL_AUTH_ENTRA_ID_KEY": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Client ID",
+                "help_text": "The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": ""
+            },
+            "SOCIAL_AUTH_ENTRA_ID_SECRET": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Client Secret",
+                "help_text": "A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": ""
+            },
+            "SOCIAL_AUTH_ENTRA_ID_TENANT_ID": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Tenant",
+                "help_text": "The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": ""
+            },
+            "SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Authority Host",
+                "help_text": "The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": "login.microsoftonline.com"
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Username Claim",
+                "help_text": "The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": "preferred_username"
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN": {
+                "type": "boolean",
+                "required": false,
+                "label": "Strip the Domain from Entra ID Usernames",
+                "help_text": "Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Groups Claim",
+                "help_text": "The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": "groups"
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH": {
+                "type": "boolean",
+                "required": false,
+                "label": "Read Entra ID Groups from Microsoft Graph",
+                "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST": {
+                "type": "string",
+                "required": false,
+                "label": "Microsoft Graph Host",
+                "help_text": "The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": ""
+            },
+            "SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS": {
+                "type": "nested object",
+                "required": false,
+                "label": "Entra ID Login Rule",
+                "help_text": "A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "placeholder": {
+                    "groups": {
+                        "has_or": [
+                            "11111111-0000-0000-0000-000000000001",
+                            "11111111-0000-0000-0000-000000000002"
+                        ]
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "Entra ID Organization Map",
+                "help_text": "Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "placeholder": {
+                    "Default": {
+                        "triggers_admins": {
+                            "groups": {
+                                "has_or": [
+                                    "11111111-0000-0000-0000-000000000002"
+                                ]
+                            }
+                        },
+                        "triggers_users": {
+                            "groups": {
+                                "has_or": [
+                                    "11111111-0000-0000-0000-000000000001"
+                                ]
+                            }
+                        },
+                        "remove_admins": true,
+                        "remove_users": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_TEAM_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "Entra ID Team Map",
+                "help_text": "Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "placeholder": {
+                    "Operators": {
+                        "organization": "Default",
+                        "triggers": {
+                            "groups": {
+                                "has_or": [
+                                    "11111111-0000-0000-0000-000000000003"
+                                ]
+                            }
+                        },
+                        "remove": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USER_FLAGS": {
+                "type": "nested object",
+                "required": false,
+                "label": "Entra ID User Flags",
+                "help_text": "Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "placeholder": {
+                    "triggers_superuser": {
+                        "groups": {
+                            "has_or": [
+                                "11111111-0000-0000-0000-000000000005"
+                            ]
+                        }
+                    },
+                    "is_superuser": [
+                        "admin"
+                    ],
+                    "triggers_system_auditor": {
+                        "groups": {
+                            "has_or": [
+                                "11111111-0000-0000-0000-000000000004"
+                            ]
+                        }
+                    },
+                    "is_system_auditor": [
+                        "auditor"
+                    ],
+                    "remove_superusers": true,
+                    "remove_system_auditors": true
+                },
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP": {
+                "type": "boolean",
+                "required": false,
+                "label": "Log Out of Entra ID",
+                "help_text": "When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL": {
+                "type": "string",
+                "required": false,
+                "label": "Entra ID Post Logout Redirect URL",
+                "help_text": "Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "default": ""
+            }
+        },
+        "GET": {
+            "SOCIAL_AUTH_ENTRA_ID_CALLBACK_URL": {
+                "type": "string",
+                "label": "Entra ID Callback URL",
+                "help_text": "Add this URL as a Web redirect URI of the app registration in Entra ID.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_KEY": {
+                "type": "string",
+                "label": "Entra ID Client ID",
+                "help_text": "The Application (client) ID of the app registration in Microsoft Entra ID, which was called Azure Active Directory until 2023.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_SECRET": {
+                "type": "string",
+                "label": "Entra ID Client Secret",
+                "help_text": "A client secret of the app registration. Leave blank when using Azure Workload Identity or another client assertion source.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_TENANT_ID": {
+                "type": "string",
+                "label": "Entra ID Tenant",
+                "help_text": "The Directory (tenant) ID, or one of the tenant's domains such as contoso.onmicrosoft.com. Only users of this tenant can log in, so common, organizations and consumers are not accepted.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_AUTHORITY_HOST": {
+                "type": "string",
+                "label": "Entra ID Authority Host",
+                "help_text": "The sign in host of the cloud the tenant lives in: login.microsoftonline.com for the public cloud, login.microsoftonline.us for Azure Government, login.partner.microsoftonline.cn for Azure operated by 21Vianet, or <subdomain>.ciamlogin.com for an External ID tenant.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USERNAME_KEY": {
+                "type": "string",
+                "label": "Entra ID Username Claim",
+                "help_text": "The claim a new user's username is taken from. preferred_username is usually the user principal name. Users are recognized on later logins by their object ID, so renaming them in Entra ID does not lose their account.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USERNAME_STRIP_DOMAIN": {
+                "type": "boolean",
+                "label": "Strip the Domain from Entra ID Usernames",
+                "help_text": "Keep only the part before the @ of the username claim when a user is created, so fernando.roca@contoso.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GROUPS_CLAIM": {
+                "type": "string",
+                "label": "Entra ID Groups Claim",
+                "help_text": "The claim the groups triggers of the maps and rules below match against. Entra ID only sends groups once a groups claim is added in the Token configuration of the app registration, and by default as object IDs rather than names. Use roles to match on app roles instead. A user in too many groups for the token gets none, and the rules below treat that as unknown rather than as no groups. Reading the groups from Microsoft Graph, below, avoids both.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GROUPS_FROM_GRAPH": {
+                "type": "boolean",
+                "label": "Read Entra ID Groups from Microsoft Graph",
+                "help_text": "Read the user's groups from Microsoft Graph at login instead of from the token. Graph has no limit on how many groups and includes nested ones. The groups claim then holds their object IDs, never their names, which any user who can create a group can copy. The app registration needs the delegated Microsoft Graph permission GroupMember.Read.All, with admin consent. If Graph cannot be reached at login, rules on groups treat the user's groups as unknown.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_GRAPH_HOST": {
+                "type": "string",
+                "label": "Microsoft Graph Host",
+                "help_text": "The Microsoft Graph host groups are read from. Leave it blank to use the one of the authority host's cloud: graph.microsoft.com, graph.microsoft.us or microsoftgraph.chinacloudapi.cn. Set it for others, such as dod-graph.microsoft.us for Azure Government DoD.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_LOGIN_TRIGGERS": {
+                "type": "nested object",
+                "label": "Entra ID Login Rule",
+                "help_text": "A trigger rule a user has to match to log in through Entra ID at all. Users it turns away are refused before an account is created for them. Leave it empty to let in every user of the tenant the app registration lets in.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "label": "Entra ID Organization Map",
+                "help_text": "Mapping to organization admins/users from Entra ID logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_TEAM_MAP": {
+                "type": "nested object",
+                "label": "Entra ID Team Map",
+                "help_text": "Mapping of team members (users) from Entra ID logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. Configuration details are available in the documentation.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_USER_FLAGS": {
+                "type": "nested object",
+                "label": "Entra ID User Flags",
+                "help_text": "Make Entra ID users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. A user who stops matching loses the flag at their next login unless remove_superusers or remove_system_auditors is false. A flag with neither is left alone. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group, role or the oid claim where that matters.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_ENTRA_ID_LOGOUT_FROM_IDP": {
+                "type": "boolean",
+                "label": "Log Out of Entra ID",
+                "help_text": "When a user who logged in through Entra ID logs out of Ascender, also end their Microsoft session. Entra ID only sends the browser back to the post logout redirect URL below if it is one of the redirect URIs of the app registration.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_ENTRA_ID_POST_LOGOUT_REDIRECT_URL": {
+                "type": "string",
+                "label": "Entra ID Post Logout Redirect URL",
+                "help_text": "Where Entra ID sends the browser after logging the user out. Defaults to the Base URL of this service.",
+                "category": "Microsoft Entra ID",
+                "category_slug": "entra-id",
+                "defined_in_file": false
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Jobs") "stream" "job")}}
+<section class="pf-v6-c-page__main-section">{{template "jobs_list_card" .}}</section>
+{{end}}

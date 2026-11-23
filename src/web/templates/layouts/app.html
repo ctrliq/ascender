@@ -1,0 +1,207 @@
+{{define "body"}}
+<div class="pf-v6-c-page pf-m-resize-observer pf-m-breakpoint-2xl pf-m-height-breakpoint-lg" id="page">
+	<header class="pf-v6-c-masthead pf-m-display-inline">
+		<div class="pf-v6-c-masthead__main">
+			<span class="pf-v6-c-masthead__toggle">
+				<button aria-expanded="true" id="nav-toggle" aria-label="{{t "Global navigation"}}" class="pf-v6-c-button pf-m-plain pf-m-hamburger" type="button">
+					<span class="pf-v6-c-button__icon">
+						<svg viewBox="0 0 10 10" class="pf-v6-c-button--hamburger-icon pf-v6-svg" width="1em" height="1em">
+							<path class="pf-v6-c-button--hamburger-icon--top" d="M1,1 L9,1"></path>
+							<path class="pf-v6-c-button--hamburger-icon--middle" d="M1,5 L9,5">
+							</path>
+							<path class="pf-v6-c-button--hamburger-icon--arrow" d="M1,5 L1,5 L1,5">
+							</path>
+							<path class="pf-v6-c-button--hamburger-icon--bottom" d="M9,9 L1,9">
+							</path>
+						</svg>
+					</span>
+				</button>
+			</span>
+			<a class="pf-v6-c-masthead__brand ascender-app-container__styled-masthead-brand" href="/">
+				<img class="ascender-brand-logo__img" alt="{{t "{brandName} logo" "brandName" .BrandName}}" src="{{if .HeaderLogo}}{{.HeaderLogo}}{{else}}/static/media/Ascender_logo.svg{{end}}">
+			</a>
+		</div>
+		<div class="pf-v6-c-masthead__content">
+			<div class="ascender-page-header-toolbar__items">
+				<div class="ascender-dropdown" data-dropdown>
+					<button class="pf-v6-c-menu-toggle pf-m-plain" type="button" aria-label="{{t "Theme"}}" aria-expanded="false" data-dropdown-toggle data-tooltip="{{t "Theme"}}" data-tooltip-pos="bottom">
+						<span class="pf-v6-c-menu-toggle__text">{{icon "palette"}}</span>
+					</button>
+					<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+						<div class="pf-v6-c-menu__content">
+							<ul class="pf-v6-c-menu__list" role="menu">
+								{{range .ThemeList}}
+									<li class="pf-v6-c-menu__list-item" role="none">
+										<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-theme-choice="{{.ID}}">
+											<span class="pf-v6-c-menu__item-main">
+												<span class="pf-v6-c-menu__item-text">
+													{{.Name}}
+												</span>
+												<span class="pf-v6-c-menu__item-select-icon">
+													{{icon "check"}}
+												</span>
+											</span>
+										</button>
+									</li>
+								{{end}}
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div style="display: contents;">
+					<a aria-expanded="false" id="toolbar-workflow-approval-badge" aria-label="{{t "Pending Workflow Approvals"}}" class="pf-v6-c-button pf-m-stateful pf-m-read ascender-page-header-toolbar__notification-badge" href="/workflow_approvals?workflow_approvals.status=pending" data-tooltip="{{t "Pending Workflow Approvals"}}" data-tooltip-pos="bottom">
+						<span class="pf-v6-c-button__icon">{{icon "pf-bell"}}</span>
+						<span class="pf-v6-c-button__count" id="toolbar-workflow-approval-count" hidden>
+						</span>
+					</a>
+				</div>
+				<div class="ascender-dropdown" data-dropdown>
+					<button class="pf-v6-c-menu-toggle pf-m-plain pf-m-text" type="button" aria-label="{{t "Info"}}" aria-expanded="false" data-dropdown-toggle>
+						<span class="pf-v6-c-menu-toggle__text">{{icon "question-circle"}}</span>
+						<span class="pf-v6-c-menu-toggle__controls">
+							<span class="pf-v6-c-menu-toggle__toggle-icon">
+								{{icon "pf-caret-down"}}
+							</span>
+						</span>
+					</button>
+					<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+						<div class="pf-v6-c-menu__content">
+							<ul class="pf-v6-c-menu__list" role="menu">
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<a class="pf-v6-c-menu__item" role="menuitem" target="_blank" rel="noopener" href="/docs/">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "Help"}}
+											</span>
+										</span>
+									</a>
+								</li>
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-open-modal="about-modal">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "About"}}
+											</span>
+										</span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="ascender-dropdown" data-dropdown id="toolbar-user-dropdown">
+					<button class="pf-v6-c-menu-toggle pf-m-plain pf-m-text" type="button" aria-expanded="false" data-dropdown-toggle>
+						<span class="pf-v6-c-menu-toggle__text">
+							{{icon "user"}}
+							<span class="ascender-page-header-toolbar__user-name">
+								{{.UC.User.Username}}
+							</span>
+						</span>
+						<span class="pf-v6-c-menu-toggle__controls">
+							<span class="pf-v6-c-menu-toggle__toggle-icon">
+								{{icon "pf-caret-down"}}
+							</span>
+						</span>
+					</button>
+					<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+						<div class="pf-v6-c-menu__content">
+							<ul class="pf-v6-c-menu__list" role="menu">
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<a class="pf-v6-c-menu__item" role="menuitem" href="/users/{{.UC.User.ID}}/details" aria-label="{{t "User details"}}">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "User Details"}}
+											</span>
+										</span>
+									</a>
+								</li>
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<button class="pf-v6-c-menu__item" type="button" role="menuitem" id="logout-button" data-logout>
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t "Logout"}}
+											</span>
+										</span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div id="page-sidebar" class="pf-v6-c-page__sidebar" aria-hidden="false">
+		<div class="pf-v6-c-page__sidebar-main">
+			<div class="pf-v6-c-page__sidebar-body">
+				<nav class="pf-v6-c-nav" aria-label="{{t "Navigation"}}">
+					<ul class="pf-v6-c-nav__list" role="list">
+						{{range $gi, $g := .Nav}}
+							{{if eq $g.ID "settings"}}
+								{{range $g.Routes}}
+									<li class="pf-v6-c-nav__item{{if .Current}} pf-m-current{{end}}">
+										<a class="pf-v6-c-nav__link{{if .Current}} pf-m-current{{end}}" href="{{.Path}}"{{if .Current}} aria-current="page"{{end}}>
+											{{t .Title}}
+										</a>
+									</li>
+								{{end}}
+							{{else}}
+								<li class="pf-v6-c-nav__item pf-m-expanded{{if $g.Current}} pf-m-current{{end}}" data-nav-group>
+									<button class="pf-v6-c-nav__link" id="pf-nav-expandable-{{$g.ID}}" aria-expanded="true" data-nav-toggle>
+										<span class="pf-v6-c-nav__link-text">{{t $g.Title}}</span>
+										<span class="pf-v6-c-nav__toggle">
+											<span class="pf-v6-c-nav__toggle-icon">
+												{{icon "pf-angle-down"}}
+											</span>
+										</span>
+									</button>
+									<section class="pf-v6-c-nav__subnav" aria-labelledby="pf-nav-expandable-{{$g.ID}}">
+										<ul class="pf-v6-c-nav__list" role="list">
+											{{range $g.Routes}}
+												<li class="pf-v6-c-nav__item">
+													<a class="pf-v6-c-nav__link{{if .Current}} pf-m-current{{end}}" href="{{.Path}}"{{if .Current}} aria-current="page"{{end}}>
+														{{t .Title}}
+													</a>
+												</li>
+											{{end}}
+										</ul>
+									</section>
+								</li>
+							{{end}}
+						{{end}}
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<script nonce="{{.Nonce}}">
+// Restore the sidebar (hidden, collapsed groups, scroll) that app.js saved
+// on the previous page, before the first paint so nothing flickers. The
+// group holding the current page always stays open. The script sits inside
+// the sidebar: PatternFly places the main container by its being the
+// sidebar's next sibling (.pf-m-collapsed + .pf-v6-c-page__main-container).
+(function () {
+  try {
+    var s = JSON.parse(sessionStorage.getItem('ascender.nav') || '{}');
+    var sb = document.getElementById('page-sidebar');
+    if (s.hidden) {
+      sb.classList.add('pf-m-collapsed'); sb.setAttribute('aria-hidden', 'true');
+      document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
+    }
+    (s.collapsed || []).forEach(function (id) {
+      var b = document.getElementById('pf-nav-expandable-' + id), li = b && b.closest('[data-nav-group]');
+      if (li && !li.classList.contains('pf-m-current')) { li.classList.remove('pf-m-expanded'); b.setAttribute('aria-expanded', 'false'); }
+    });
+    if (s.scroll) sb.scrollTop = s.scroll;
+  } catch (e) {}
+})();
+</script>
+	</div>
+	<div class="pf-v6-c-page__main-container">
+		<main class="pf-v6-c-page__main" tabindex="-1">{{template "content" .}}</main>
+	</div>
+</div>
+{{template "about_modal" .}}
+{{template "session_modal" .}}
+<div id="ascender-modal-root"></div>
+<div class="pf-v6-c-alert-group pf-m-toast" id="ascender-toasts"></div>
+{{end}}

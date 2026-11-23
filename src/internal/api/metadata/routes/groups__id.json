@@ -1,0 +1,111 @@
+{
+    "name": "Group Detail",
+    "description": "# Retrieve a Group:\n\nMake GET request to this resource to retrieve a single group\nrecord containing the following fields:\n\n* `id`: Database ID for this group. (integer)\n* `type`: Data type for this group. (choice)\n* `url`: URL for this group. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this group was created. (datetime)\n* `modified`: Timestamp when this group was last modified. (datetime)\n* `name`: Name of this group. (string)\n* `description`: Optional description of this group. (string)\n* `inventory`:  (id)\n* `variables`: Group variables in JSON or YAML format. (json)\n\n\n\n\n\n# Update a Group:\n\nMake a PUT or PATCH request to this resource to update this\ngroup.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `name`: Name of this group. (string, required)\n* `description`: Optional description of this group. (string, default=`\"\"`)\n* `inventory`:  (id, required)\n* `variables`: Group variables in JSON or YAML format. (json, default=``)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Group:\n\nMake a DELETE request to this resource to delete this group.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this group.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this group.",
+                "filterable": true,
+                "default": ""
+            },
+            "variables": {
+                "type": "json",
+                "required": false,
+                "label": "Variables",
+                "help_text": "Group variables in JSON or YAML format.",
+                "filterable": true,
+                "default": ""
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this group.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this group.",
+                "choices": [
+                    ["group", "Group"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this group.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this group was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this group was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this group.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this group.",
+                "filterable": true
+            },
+            "inventory": {
+                "type": "id",
+                "label": "Inventory",
+                "filterable": true
+            },
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Group variables in JSON or YAML format.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "group"
+    ]
+}

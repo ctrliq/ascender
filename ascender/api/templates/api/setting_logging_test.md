@@ -1,2 +1,0 @@
-# Test Logging Configuration
-

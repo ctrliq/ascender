@@ -1,0 +1,231 @@
+{{/* Form widgets and tabs shared by job templates and workflow job templates. */}}
+{{define "prompt_header"}}
+{{/* .id .label .required .help .askName .asked .for */}}
+<div class="ascender-field-with-prompt__header">
+	<div>
+		<label class="pf-v6-c-form__label" for="{{.for}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			{{if .required}}
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">*</span>
+			{{end}}
+		</label>
+		{{if .help}}{{template "help_button" .help}}{{end}}
+	</div>
+	<div class="pf-v6-c-check ascender-field-with-prompt__styled-checkbox-field">
+		<input id="{{.id}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Prompt on launch"}}" type="checkbox" name="{{.askName}}"{{if .asked}} checked{{end}}>
+		<label class="pf-v6-c-check__label" for="{{.id}}">
+			<span>{{t "Prompt on launch"}}&nbsp;</span>
+		</label>
+	</div>
+</div>
+{{end}}
+{{define "tag_select"}}
+{{/* .id .name .label .value .help .askId .askName .asked */}}
+<div class="pf-v6-c-form__group" data-cy="{{.id}}-form-group">
+	{{template "prompt_header" (dict "id" .askId "label" .label "help" .help "askName" .askName "asked" .asked "for" .id)}}
+	<div class="ascender-tag-select" data-tag-select data-name="{{.name}}">
+		<div class="pf-v6-c-menu-toggle pf-m-typeahead pf-m-full-width">
+			<div class="pf-v6-c-text-input-group pf-m-plain">
+				<div class="pf-v6-c-text-input-group__main" autocomplete="off">
+					<div class="pf-v6-c-label-group" data-tag-chips{{if not .value}} hidden{{end}}>
+						<div class="pf-v6-c-label-group__main">
+							<ul class="pf-v6-c-label-group__list" role="list">
+								{{range split .value ","}}
+									{{if .}}
+										<li class="pf-v6-c-label-group__list-item" data-chip data-chip-name="{{.}}">
+											<span class="pf-v6-c-label">
+												<span class="pf-v6-c-label__content">
+													<span class="pf-v6-c-label__text">{{.}}</span>
+												</span>
+												<span class="pf-v6-c-label__actions">
+													<button class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" aria-label="Close {{.}}" data-chip-remove>
+														<span class="pf-v6-c-button__icon">
+															{{icon "pf-close"}}
+														</span>
+													</button>
+												</span>
+											</span>
+										</li>
+									{{end}}
+								{{end}}
+							</ul>
+						</div>
+					</div>
+					<span class="pf-v6-c-text-input-group__text">
+						<input class="pf-v6-c-text-input-group__text-input" id="{{.id}}" aria-label="{{t "Select tags"}}" placeholder="{{t "Select tags"}}" type="text" value="" autocomplete="off" data-tag-input>
+					</span>
+				</div>
+			</div>
+			<button type="button" class="pf-v6-c-menu-toggle__button" aria-expanded="false" aria-label="Menu toggle" tabindex="-1">
+				<span class="pf-v6-c-menu-toggle__controls">
+					<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+				</span>
+			</button>
+		</div>
+		<input type="hidden" name="{{.name}}" value="{{.value}}" data-tag-value>
+	</div>
+</div>
+{{end}}
+{{define "survey_tab"}}
+{{/* .page .t (template) .base (UI path) .api (template API path) */}}
+{{$p := .page}}
+{{$t := .t}}
+{{$id := str $t.id}}
+{{$base := .base}}
+{{$caps := dig $t "summary_fields" "user_capabilities"}}
+{{$qs := $p.Data.questions}}
+<div class="pf-v6-c-toolbar ascender-survey-toolbar__toolbar" id="survey-toolbar" data-survey-toolbar data-api="{{.api}}survey_spec/" data-template="{{.api}}">
+	<div class="pf-v6-c-toolbar__content">
+		<div class="pf-v6-c-toolbar__content-section">
+			<div class="pf-v6-c-toolbar__item">
+				<div class="pf-v6-c-check pf-m-standalone">
+					<input id="select-all" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Select all"}}" type="checkbox" data-select-all{{if not (dig $caps "edit")}} disabled{{end}}>
+				</div>
+			</div>
+			<div class="pf-v6-c-toolbar__group">
+				<div class="pf-v6-c-toolbar__item">
+					<div style="display: contents;">
+						{{if dig $caps "edit"}}
+							<a class="pf-v6-c-button pf-m-primary" href="{{$base}}/survey/add">
+								<span class="pf-v6-c-button__text">{{t "Add"}}</span>
+							</a>
+						{{else}}
+							<button class="pf-v6-c-button pf-m-primary" type="button" disabled>
+								<span class="pf-v6-c-button__text">{{t "Add"}}</span>
+							</button>
+						{{end}}
+					</div>
+				</div>
+				{{if and (dig $caps "edit") (gt (len $qs) 1)}}
+					<div class="pf-v6-c-toolbar__item">
+						<button class="pf-v6-c-button pf-m-secondary" type="button" data-tooltip="{{t "Click to rearrange the order of the survey questions"}}" data-tooltip-pos="top" data-survey-order>
+							<span class="pf-v6-c-button__text">{{t "Edit Order"}}</span>
+						</button>
+					</div>
+				{{end}}
+				<div class="pf-v6-c-toolbar__item">
+					<div style="display: contents;">
+						<div data-tooltip="{{t "Select a question to delete"}}" data-tooltip-pos="top">
+							<button class="pf-v6-c-button pf-m-secondary" disabled type="button" data-survey-delete>
+								<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{if $qs}}
+				<div class="pf-v6-c-toolbar__item ascender-survey-toolbar__switch-wrapper">
+					<label class="pf-v6-c-switch" for="survey-toggle">
+						<input id="survey-toggle" class="pf-v6-c-switch__input" type="checkbox" role="switch" aria-label="{{t "Survey Enabled"}}"{{if $t.survey_enabled}} checked{{end}}{{if not (dig $caps "edit")}} disabled{{end}} data-survey-enabled>
+						<span class="pf-v6-c-switch__toggle"></span>
+						<span class="pf-v6-c-switch__label" aria-hidden="true">
+							{{t "Survey Enabled"}}
+						</span>
+					</label>
+				</div>
+				<div class="pf-v6-c-toolbar__item">
+					<button class="pf-v6-c-button pf-m-secondary" type="button" data-survey-preview>
+						<span class="pf-v6-c-button__text">{{t "Preview"}}</span>
+					</button>
+				</div>
+			{{end}}
+		</div>
+	</div>
+	<div class="pf-v6-c-toolbar__content pf-m-hidden" hidden>
+		<div class="pf-v6-c-toolbar__group"></div>
+	</div>
+</div>
+{{if $qs}}
+	<div class="ascender-paginated-table__overflow-auto">
+		<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Survey")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table data-survey-table>
+			<thead class="pf-v6-c-table__thead">
+				<tr class="pf-v6-c-table__tr">
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th">
+						<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+					</th>
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th" data-label="{{t "Name"}}">
+						{{t "Name"}}
+					</th>
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th" data-label="{{t "Type"}}">
+						{{t "Type"}}
+					</th>
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th" data-label="{{t "Default"}}">
+						{{t "Default"}}
+					</th>
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th" data-label="{{t "Actions"}}">
+						{{t "Actions"}}
+					</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+				{{range $i, $q := $qs}}
+					{{$var := str $q.variable}}
+					<tr class="pf-v6-c-table__tr" id="survey-row-{{$var}}" data-row data-id="{{$var}}" data-name="{{$q.question_name}}">
+						<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check" data-cy="{{$var}}-select">
+							<div class="pf-v6-c-check pf-m-standalone">
+								<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "edit")}} disabled{{end}}>
+							</div>
+						</td>
+						<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td" data-cy="{{$var}}-name" id="survey-list-item-{{$var}}">
+							<a href="{{$base}}/survey/edit?question_variable={{urlquery $var}}">
+								<b>{{$q.question_name}}</b>
+							</a>
+							{{if $q.required}}
+								<span aria-label="{{t "Required"}}" class="ascender-survey-list-item__required pf-v6-c-form__label-required" aria-hidden="true">
+									*
+								</span>
+							{{end}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td" data-cy="{{$var}}-type">
+							{{$q.type}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Default"}}" class="pf-v6-c-table__td">
+							{{if eq (str $q.type) "password"}}
+								<span>{{t "ENCRYPTED"}}</span>
+							{{else if eq (str $q.type) "multiselect"}}
+								{{if $q._default_chips}}
+									{{template "label_group" (dict "items" $q._default_chips "max" 5 "total" (len $q._default_chips))}}
+								{{end}}
+							{{else}}
+								<span>{{$q._default}}</span>
+							{{end}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell ascender-survey-list-item__actions-td">
+							<div class="ascender-actions-td__grid">
+								<div>
+									<div style="display: contents;">
+										<div>
+											{{if dig $caps "edit"}}
+												<a class="pf-v6-c-button pf-m-plain" href="{{$base}}/survey/edit?question_variable={{urlquery $var}}" data-tooltip="{{t "Edit Survey"}}" data-tooltip-pos="top" aria-label="{{t "Edit Survey"}}">
+													<span class="pf-v6-c-button__icon">
+														{{icon "pencil-alt"}}
+													</span>
+												</a>
+											{{end}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{end}}
+			</tbody>
+		</table>
+	</div>
+	<script type="application/json" data-survey-spec>{{json $p.Data.survey}}</script>
+{{else}}
+	<div class="pf-v6-c-empty-state">
+		<div class="pf-v6-c-empty-state__content">
+			<div class="pf-v6-c-empty-state__header">
+				<div class="pf-v6-c-empty-state__icon">{{icon "cubes"}}</div>
+				<div class="pf-v6-c-empty-state__title">
+					<h3 class="pf-v6-c-empty-state__title-text">
+						{{t "No survey questions found."}}
+					</h3>
+				</div>
+			</div>
+			<div class="pf-v6-c-empty-state__body">{{t "Please add survey questions."}}</div>
+		</div>
+	</div>
+{{end}}
+{{end}}

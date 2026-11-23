@@ -1,0 +1,391 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `SOCIAL_AUTH_OIDC_KEY`: The OIDC key (Client ID) from your IDP. (string)\n* `SOCIAL_AUTH_OIDC_SECRET`: The OIDC secret (Client Secret) from your IDP. (string)\n* `SOCIAL_AUTH_OIDC_OIDC_ENDPOINT`: The URL for your OIDC provider including the path up to /.well-known/openid-configuration (string)\n* `SOCIAL_AUTH_OIDC_VERIFY_SSL`: Verify the OIDC provider ssl certificate. (boolean)\n* `SOCIAL_AUTH_OIDC_CALLBACK_URL`: Register this URL as a valid redirect URI of the client at your OIDC provider. (string)\n* `SOCIAL_AUTH_OIDC_SCOPE`: Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it. (list)\n* `SOCIAL_AUTH_OIDC_USERNAME_KEY`: The claim a new user&#x27;s username is taken from. (string)\n* `SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN`: Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix. (boolean)\n* `SOCIAL_AUTH_OIDC_GROUPS_CLAIM`: The claim holding the user&#x27;s groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles. (string)\n* `SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS`: A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates. (nested object)\n* `SOCIAL_AUTH_OIDC_ORGANIZATION_MAP`: Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user&#x27;s groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation. (nested object)\n* `SOCIAL_AUTH_OIDC_TEAM_MAP`: Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user&#x27;s groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation. (nested object)\n* `SOCIAL_AUTH_OIDC_USER_FLAGS`: Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {&quot;never&quot;: {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters. (nested object)\n* `SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP`: When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below. (boolean)\n* `SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL`: Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service. (string)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `SOCIAL_AUTH_OIDC_KEY`: The OIDC key (Client ID) from your IDP. (string, default=`\"\"`)\n* `SOCIAL_AUTH_OIDC_SECRET`: The OIDC secret (Client Secret) from your IDP. (string, default=`\"\"`)\n* `SOCIAL_AUTH_OIDC_OIDC_ENDPOINT`: The URL for your OIDC provider including the path up to /.well-known/openid-configuration (string, default=`\"\"`)\n* `SOCIAL_AUTH_OIDC_VERIFY_SSL`: Verify the OIDC provider ssl certificate. (boolean, default=`True`)\n\n* `SOCIAL_AUTH_OIDC_SCOPE`: Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it. (list, default=`[]`)\n* `SOCIAL_AUTH_OIDC_USERNAME_KEY`: The claim a new user&#x27;s username is taken from. (string, default=`\"preferred_username\"`)\n* `SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN`: Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix. (boolean, default=`False`)\n* `SOCIAL_AUTH_OIDC_GROUPS_CLAIM`: The claim holding the user&#x27;s groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles. (string, default=`\"groups\"`)\n* `SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS`: A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates. (nested object, default=`None`)\n* `SOCIAL_AUTH_OIDC_ORGANIZATION_MAP`: Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user&#x27;s groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_OIDC_TEAM_MAP`: Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user&#x27;s groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_OIDC_USER_FLAGS`: Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {&quot;never&quot;: {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters. (nested object, default=`None`)\n* `SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP`: When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below. (boolean, default=`False`)\n* `SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL`: Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service. (string, default=`\"\"`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "SOCIAL_AUTH_OIDC_KEY": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Key",
+                "help_text": "The OIDC key (Client ID) from your IDP.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": null
+            },
+            "SOCIAL_AUTH_OIDC_SECRET": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Secret",
+                "help_text": "The OIDC secret (Client Secret) from your IDP.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": ""
+            },
+            "SOCIAL_AUTH_OIDC_OIDC_ENDPOINT": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Provider URL",
+                "help_text": "The URL for your OIDC provider including the path up to /.well-known/openid-configuration",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": ""
+            },
+            "SOCIAL_AUTH_OIDC_VERIFY_SSL": {
+                "type": "boolean",
+                "required": false,
+                "label": "Verify OIDC Provider Certificate",
+                "help_text": "Verify the OIDC provider ssl certificate.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": true
+            },
+            "SOCIAL_AUTH_OIDC_SCOPE": {
+                "type": "list",
+                "required": false,
+                "label": "OIDC Additional Scopes",
+                "help_text": "Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "placeholder": [
+                    "groups"
+                ],
+                "default": [],
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_OIDC_USERNAME_KEY": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Username Claim",
+                "help_text": "The claim a new user's username is taken from.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": "preferred_username"
+            },
+            "SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN": {
+                "type": "boolean",
+                "required": false,
+                "label": "Strip the Domain from OIDC Usernames",
+                "help_text": "Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": false
+            },
+            "SOCIAL_AUTH_OIDC_GROUPS_CLAIM": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Groups Claim",
+                "help_text": "The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": "groups"
+            },
+            "SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS": {
+                "type": "nested object",
+                "required": false,
+                "label": "OIDC Login Rule",
+                "help_text": "A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "placeholder": {
+                    "groups": {
+                        "has_or": [
+                            "ascender-users",
+                            "ascender-admins"
+                        ]
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_OIDC_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "OIDC Organization Map",
+                "help_text": "Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "placeholder": {
+                    "Default": {
+                        "triggers_admins": {
+                            "groups": {
+                                "has_or": [
+                                    "ascender-admins"
+                                ]
+                            }
+                        },
+                        "triggers_users": {
+                            "groups": {
+                                "has_or": [
+                                    "ascender-users"
+                                ]
+                            }
+                        },
+                        "remove_admins": true,
+                        "remove_users": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_OIDC_TEAM_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "OIDC Team Map",
+                "help_text": "Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "placeholder": {
+                    "Operators": {
+                        "organization": "Default",
+                        "triggers": {
+                            "groups": {
+                                "has_or": [
+                                    "ascender-operators"
+                                ]
+                            }
+                        },
+                        "remove": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_OIDC_USER_FLAGS": {
+                "type": "nested object",
+                "required": false,
+                "label": "OIDC User Flags",
+                "help_text": "Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {\"never\": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "placeholder": {
+                    "triggers_superuser": {
+                        "groups": {
+                            "has_or": [
+                                "11111111-0000-0000-0000-000000000005"
+                            ]
+                        }
+                    },
+                    "is_superuser": [
+                        "admin"
+                    ],
+                    "triggers_system_auditor": {
+                        "groups": {
+                            "has_or": [
+                                "ascender-auditors"
+                            ]
+                        }
+                    },
+                    "is_system_auditor": [
+                        "auditor"
+                    ],
+                    "remove_superusers": true,
+                    "remove_system_auditors": true
+                },
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP": {
+                "type": "boolean",
+                "required": false,
+                "label": "Log Out of the OIDC Provider",
+                "help_text": "When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": false
+            },
+            "SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL": {
+                "type": "string",
+                "required": false,
+                "label": "OIDC Post Logout Redirect URL",
+                "help_text": "Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "default": ""
+            }
+        },
+        "GET": {
+            "SOCIAL_AUTH_OIDC_KEY": {
+                "type": "string",
+                "label": "OIDC Key",
+                "help_text": "The OIDC key (Client ID) from your IDP.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_SECRET": {
+                "type": "string",
+                "label": "OIDC Secret",
+                "help_text": "The OIDC secret (Client Secret) from your IDP.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_OIDC_ENDPOINT": {
+                "type": "string",
+                "label": "OIDC Provider URL",
+                "help_text": "The URL for your OIDC provider including the path up to /.well-known/openid-configuration",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_VERIFY_SSL": {
+                "type": "boolean",
+                "label": "Verify OIDC Provider Certificate",
+                "help_text": "Verify the OIDC provider ssl certificate.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_CALLBACK_URL": {
+                "type": "string",
+                "label": "OIDC Callback URL",
+                "help_text": "Register this URL as a valid redirect URI of the client at your OIDC provider.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_SCOPE": {
+                "type": "list",
+                "label": "OIDC Additional Scopes",
+                "help_text": "Scopes to request on top of openid, profile and email, for example groups when your provider only sends the groups claim to clients that ask for it.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "SOCIAL_AUTH_OIDC_USERNAME_KEY": {
+                "type": "string",
+                "label": "OIDC Username Claim",
+                "help_text": "The claim a new user's username is taken from.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_USERNAME_STRIP_DOMAIN": {
+                "type": "boolean",
+                "label": "Strip the Domain from OIDC Usernames",
+                "help_text": "Keep only the part before the @ of the username claim when an OIDC user is created, so fernando.roca@example.com becomes fernando.roca. Existing users keep their names. Two users whose addresses differ only in the domain would get the same name, and the second gets a random suffix.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_GROUPS_CLAIM": {
+                "type": "string",
+                "label": "OIDC Groups Claim",
+                "help_text": "The claim holding the user's groups, which the groups triggers of the maps and rules below match against. A nested claim can be named by its dotted path, such as realm_access.roles.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_LOGIN_TRIGGERS": {
+                "type": "nested object",
+                "label": "OIDC Login Rule",
+                "help_text": "A trigger rule a user has to match to log in through OIDC at all. Users it turns away are refused before an account is created for them. Leave it empty to let in everyone the provider authenticates.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_OIDC_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "label": "OIDC Organization Map",
+                "help_text": "Mapping to organization admins/users from OIDC logins. On top of the username and email expressions of the other social auth maps, a role may be driven by a trigger rule, given as triggers_admins or triggers_users, which matches on the user's groups and claims. When this is not set the shared social auth organization map applies. Configuration details are available in the documentation.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_OIDC_TEAM_MAP": {
+                "type": "nested object",
+                "label": "OIDC Team Map",
+                "help_text": "Mapping of team members (users) from OIDC logins. Membership may be driven by a trigger rule, given as triggers, which matches on the user's groups and claims. When this is not set the shared social auth team map applies. Configuration details are available in the documentation.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_OIDC_USER_FLAGS": {
+                "type": "nested object",
+                "label": "OIDC User Flags",
+                "help_text": "Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {\"never\": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_OIDC_LOGOUT_FROM_IDP": {
+                "type": "boolean",
+                "label": "Log Out of the OIDC Provider",
+                "help_text": "When a user who logged in through OIDC logs out of Ascender, also end their session at the provider, through its end_session_endpoint. The provider has to allow the post logout redirect URL below.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_OIDC_POST_LOGOUT_REDIRECT_URL": {
+                "type": "string",
+                "label": "OIDC Post Logout Redirect URL",
+                "help_text": "Where the provider sends the browser after logging the user out. Defaults to the Base URL of this service.",
+                "category": "Generic OIDC",
+                "category_slug": "oidc",
+                "defined_in_file": false
+            }
+        }
+    }
+}

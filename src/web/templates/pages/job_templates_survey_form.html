@@ -1,0 +1,170 @@
+{{define "content"}}
+{{$jt := .Data.jt}}
+{{$id := str $jt.id}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$base := printf "/templates/%s/%s" .Data.kind $id}}
+{{$type := str $v.type}}
+{{template "screen_header" (dict "title" .Title "stream" "job_template,workflow_job_template,workflow_job_template_node" "crumbs" (list (dict "href" "/templates" "title" (t "Templates")) (dict "href" $base "title" (str $jt.name)) (dict "href" (printf "%s/survey" $base) "title" (t "Survey"))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "survey" "back" (dict "href" "/templates" "label" "Back to Templates") "tabs" .Data.tabs)}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-survey-question-form data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "question-name" "name" "question_name" "label" (t "Question") "value" $v.question_name "required" true "errors" (index $e "question_name"))}}
+					{{template "form_field" (dict "id" "question-description" "name" "question_description" "label" (t "Description") "value" $v.question_description "errors" (index $e "question_description"))}}
+					{{template "form_field" (dict "id" "question-variable" "name" "variable" "label" (t "Answer variable name") "value" $v.variable "required" true "errors" (index $e "variable") "help" (t "The suggested format for variable names is lowercase and underscore-separated (for example, foo_bar, user_id, host_name, etc.). Variable names with spaces are not allowed."))}}
+					<div class="pf-v6-c-form__group" data-cy="question-answer-type-form-group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="question-type">
+								<span class="pf-v6-c-form__label-text">{{t "Answer type"}}</span>
+								<span class="pf-v6-c-form__label-required" aria-hidden="true">
+									&nbsp;*
+								</span>
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button" (t "Choose an answer type or format you want as the prompt for the user. Refer to the Ascender Documentation for additional information about each option.")}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control">
+								<select id="question-type" name="type" aria-label="{{t "Select Input"}}" data-survey-type>
+									{{range .Data.surveyTypes}}
+										<option value="{{.value}}"{{if eq .value $type}} selected{{end}}>
+											{{.label}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+						</div>
+					</div>
+					{{template "checkbox" (dict "id" "question-required" "name" "required" "label" (t "Required") "checked" $v.required)}}
+				</div>
+				<div class="ascender-form-column-layout">
+					<div data-survey-for="text textarea password" style="display: contents;"{{if not (or (eq $type "text") (eq $type "textarea") (eq $type "password"))}} hidden{{end}}>
+						{{template "form_field" (dict "id" "question-min" "name" "min" "label" (t "Minimum length") "value" $v.min "type" "number" "errors" (index $e "min"))}}
+						{{template "form_field" (dict "id" "question-max" "name" "max" "label" (t "Maximum length") "value" $v.max "type" "number" "errors" (index $e "max"))}}
+					</div>
+					<div data-survey-for="integer float" style="display: contents;"{{if not (or (eq $type "integer") (eq $type "float"))}} hidden{{end}}>
+						{{template "form_field" (dict "id" "question-min-number" "name" "min" "label" (t "Minimum") "value" $v.min "type" "number" "errors" (index $e "min"))}}
+						{{template "form_field" (dict "id" "question-max-number" "name" "max" "label" (t "Maximum") "value" $v.max "type" "number" "errors" (index $e "max"))}}
+					</div>
+					<div data-survey-for="text integer float" style="display: contents;"{{if not (or (eq $type "text") (eq $type "integer") (eq $type "float"))}} hidden{{end}}>
+						{{template "form_field" (dict "id" "question-default" "name" "default" "label" (t "Default answer") "value" $v.default "type" (cond (eq $type "text") "text" "number") "errors" (index $e "default"))}}
+					</div>
+					<div data-survey-for="textarea" style="display: contents;"{{if ne $type "textarea"}} hidden{{end}}>
+						<div class="pf-v6-c-form__group" data-cy="question-default-textarea-form-group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="question-default-textarea">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Default answer"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control">
+									<textarea id="question-default-textarea" name="default" aria-invalid="false" rows="4">{{if eq $type "textarea"}}{{$v.default}}{{end}}</textarea>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div data-survey-for="password" style="display: contents;"{{if ne $type "password"}} hidden{{end}}>
+						<div class="pf-v6-c-form__group" data-cy="question-default-password-form-group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="question-default-password">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Default answer"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<div class="pf-v6-c-input-group" data-secret-group>
+									<div class="pf-v6-c-input-group__item pf-m-fill">
+										<span class="pf-v6-c-form-control">
+											<input id="question-default-password" name="default" aria-invalid="false" type="password" value="{{if eq $type "password"}}{{$v.default}}{{end}}" data-secret-input>
+										</span>
+									</div>
+									<div class="pf-v6-c-input-group__item">
+										<button class="pf-v6-c-button pf-m-control" type="button" aria-label="{{t "Toggle Password"}}" data-tooltip="{{t "Show"}}" data-tooltip-pos="top" data-toggle-password>
+											<span class="pf-v6-c-button__icon">
+												<span data-icon-show>{{icon "eye"}}</span>
+												<span data-icon-hide hidden>
+													{{icon "eye-slash"}}
+												</span>
+											</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div data-survey-for="multiplechoice multiselect" style="display: contents;"{{if not (or (eq $type "multiplechoice") (eq $type "multiselect"))}} hidden{{end}}>
+						<div class="pf-v6-c-form__group" data-cy="question-options-form-group" data-choices>
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="question-options">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Multiple Choice Options"}}
+									</span>
+									<span class="pf-v6-c-form__label-required" aria-hidden="true">
+										&nbsp;*
+									</span>
+								</label>
+								&nbsp;&nbsp;
+								<span class="pf-v6-c-form__group-label-help">
+									{{template "help_button" (printf "%s %s %s" (t "Refer to the") (t "documentation") (t "for more information."))}}
+								</span>
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								{{range $i, $c := $v.choices}}
+									<div class="pf-v6-c-input-group ascender-multiple-choice-field__input-group" data-choice-row>
+										<div class="pf-v6-c-input-group__item pf-m-fill">
+											<span class="pf-v6-c-form-control">
+												<input type="text" name="choice" aria-label="{{t "Choice option"}}" value="{{$c.choice}}" data-choice-text>
+											</span>
+										</div>
+										<div class="pf-v6-c-input-group__item">
+											<button class="pf-v6-c-button pf-m-control ascender-multiple-choice-field__default-toggle{{if $c.isDefault}} ascender-multiple-choice-field__default-toggle--selected{{end}}" type="button" aria-label="{{t "Click to toggle default value"}}" title="{{t "Click to toggle default value"}}" data-choice-default{{if not $c.choice}} disabled{{end}}>
+												<span class="pf-v6-c-button__icon">
+													{{icon "check"}}
+												</span>
+											</button>
+											<input type="hidden" name="choice_default" value="{{if $c.isDefault}}on{{else}}off{{end}}" data-choice-default-value>
+										</div>
+										<div class="pf-v6-c-input-group__item">
+											<button class="pf-v6-c-button pf-m-control" type="button" aria-label="{{t "Remove choice"}}" title="{{t "Remove choice"}}" data-choice-remove>
+												<span class="pf-v6-c-button__icon">
+													{{icon "times"}}
+												</span>
+											</button>
+										</div>
+									</div>
+								{{end}}
+								<div class="ascender-multiple-choice-field__helper-text-wrapper">
+									<button class="pf-v6-c-button pf-m-link pf-m-inline" type="button" data-choice-add>
+										<span class="pf-v6-c-button__icon pf-m-start">
+											{{icon "plus"}}
+										</span>
+										<span class="pf-v6-c-button__text">{{t "Add choice"}}</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{template "form_actions" (printf "%s/survey" $base)}}
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

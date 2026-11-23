@@ -2,52 +2,55 @@
 
 [![ascender CI](https://img.shields.io/github/actions/workflow/status/ctrliq/ascender/ci.yml?branch=main&event=push&label=ascender%20CI)](https://github.com/ctrliq/ascender/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
-[![Python](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/)
+[![Go](https://img.shields.io/badge/go-1.27-blue.svg)](https://go.dev/)
 
-Ascender provides a web-based user interface, REST API, and task engine built on top of [Ansible](https://github.com/ansible/ansible). It is the automation platform at the centre of this project, based on the upstream [AWX](https://github.com/ansible/awx) project and maintained by Ctrl IQ.
+Ascender provides a web-based user interface, REST API, and task engine built
+on top of [Ansible](https://github.com/ansible/ansible). It is the automation
+platform at the centre of this project, based on the upstream
+[AWX](https://github.com/ansible/awx) project and maintained by Ctrl IQ.
+
+This version of Ascender is written in Go. It keeps the same REST API, the same
+user interface and the same database as the Python releases, so an existing
+Ascender installation upgrades in place.
 
 ## Requirements
 
-- Docker with Compose, for the development environment
-- Python 3.14, matching what the container images build against
+- Docker or Podman with Compose, to run Ascender on a single host
 - A Kubernetes cluster for production, which the installer can provision for you
 
 ## Installation
 
-For production, use the [Ascender installer](https://github.com/ctrliq/ascender-install). It deploys onto a single VM using [k3s](https://k3s.io/), or onto AKS, DKP, EKS, GKE, RKE2, OCP, or TKGI with a kubeconfig and a namespace.
+For production, use the [Ascender installer](https://github.com/ctrliq/ascender-install).
+It deploys onto a single VM using [k3s](https://k3s.io/), or onto AKS, DKP,
+EKS, GKE, RKE2, OCP, or TKGI with a kubeconfig and a namespace. See the
+[installation guide](./docs/docsite/installation/index.md).
 
-For development, bring up the containerised environment:
+To try Ascender on one host with Compose:
 
 ```bash
-make docker-compose
+make init     # install Compose and Go if missing, generate the secrets and .env
+make start    # build the images and start them, with PostgreSQL
 ```
 
-See [Running the Development Environment in Docker](./docs/development/docker.md) for the full walkthrough, and [kind.md](./docs/development/kind.md) or [minikube.md](./docs/development/minikube.md) for cluster-based alternatives.
+Then open http://localhost:8070/ and log in as `admin` with the password in
+`.secrets/ADMIN_PASSWORD`. [deploy/README.md](./deploy/README.md) covers the
+configuration and running against an existing database.
 
 ## Using Ascender
 
-Once the development stack is up, create an administrator and start the services:
+The user interface is at `/` and the REST API at `/api/v2/`. The installation,
+administration and user guides are served by Ascender itself under `/docs/`.
 
-```bash
-make adduser
-make migrate
-```
-
-The `Makefile` is the entry point for day-to-day work, covering `requirements`, `develop`, and `collectstatic`.
-
-To drive a running server from the command line or from a playbook, use [ascender-kit](https://github.com/ctrliq/ascender-kit) or the [ctrliq.ascender](https://github.com/ctrliq/ascender-collection) collection.
-
-## Testing
-
-Ascender uses pytest, with tox for environment management.
-
-- **Unit and functional**: `py.test ascender/main/tests/`
-- **Configuration**: [`pyproject.toml`](./pyproject.toml) and [`tox.ini`](./tox.ini)
+To drive a running server from the command line or from a playbook, use
+[ascender-kit](https://github.com/ctrliq/ascender-kit) or the
+[ctrliq.ascender](https://github.com/ctrliq/ascender-collection) collection.
 
 ## Documentation
 
-- Product documentation is at [docs.ascender-automation.org](https://docs.ascender-automation.org)
-- Developer documentation lives in [docs/](./docs), covering clustering, credentials, and mesh
+- Installation, administration and user guides are in [docs/docsite/](./docs/docsite/index.md)
+- Deployment and configuration are in [deploy/README.md](./deploy/README.md)
+- Developer documentation lives in [docs/](./docs/README.md), starting with
+  [Developing Ascender](./docs/development/README.md)
 
 ## The Ascender ecosystem
 
@@ -65,9 +68,12 @@ Ascender uses pytest, with tox for environment management.
 | [ascender-ledger](https://github.com/ctrliq/ascender-ledger) | Reporting tool for host facts and playbook changes |
 | [ascender-galaxy-proxy](https://github.com/ctrliq/ascender-galaxy-proxy) | Caching proxy for Ansible Galaxy collection downloads |
 | [ascender-playbooks](https://github.com/ctrliq/ascender-playbooks) | Example playbooks for use with Ascender |
+
 ## Contributing
 
-- See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, testing, and pull requests.
+- See [CONTRIBUTING.md](./CONTRIBUTING.md) for pull requests, and
+  [Developing Ascender](./docs/development/README.md) for building, running
+  and testing from source.
 - Contributions require a Developer Certificate of Origin sign-off, per [DCO_1_1.md](./DCO_1_1.md).
 - Report bugs and feature ideas via [GitHub Issues](https://github.com/ctrliq/ascender/issues).
 - For security vulnerabilities, follow [SECURITY.md](./SECURITY.md) rather than opening an issue.

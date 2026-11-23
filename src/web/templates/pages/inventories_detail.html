@@ -1,0 +1,398 @@
+{{define "content"}}
+{{$inv := .Data.inventory}}
+{{$id := str $inv.id}}
+{{$base := str $inv._base}}
+{{$kind := str $inv.kind}}
+{{$caps := dig $inv "summary_fields" "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $base) "title" (str $inv.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/inventories" "label" "Back to Inventories") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list"{{if ne $kind ""}} gutter="sm"{{end}}>
+					{{if eq $kind "smart"}}
+						{{template "detail" (dict "label" (t "Name") "value" (str $inv.name))}}
+						{{if has $inv.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $inv.description))}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Type") "value" (t "Smart inventory"))}}
+						{{with dig $inv "summary_fields" "organization"}}
+							{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))))}}
+						{{end}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Smart host filter"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								<span class="pf-v6-c-label pf-m-outline">
+									<span class="pf-v6-c-label__content">
+										<span class="pf-v6-c-label__text">
+											{{$inv.host_filter}}
+										</span>
+									</span>
+								</span>
+							</dd>
+						</div>
+						{{template "detail" (dict "label" (t "Total hosts") "value" (str $inv.total_hosts))}}
+						{{if $inv._instance_groups}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Instance groups"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "label_group" (dict "items" $inv._instance_groups "max" 5 "total" (len $inv._instance_groups) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{template "variables_detail" (dict "cy" "smart-inventory-detail-variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4)}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Last modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
+					{{else if eq $kind "constructed"}}
+						{{template "detail" (dict "label" (t "Name") "value" (str $inv.name) "cy" "constructed-inventory-name")}}
+						{{with dig $inv "_source" "summary_fields" "last_job"}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Last Job Status"}}</dt>
+								<dd class="ascender-detail-value">
+									<a href="/jobs/inventory/{{str .id}}">
+										{{template "status_label" (str .status)}}
+									</a>
+								</dd>
+							</div>
+						{{end}}
+						{{if has $inv.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $inv.description) "cy" "constructed-inventory-description")}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Type") "value" (t "Constructed Inventory") "cy" "constructed-inventory-type")}}
+						{{if has $inv.limit}}
+							{{template "detail" (dict "label" (t "Limit") "value" (str $inv.limit) "cy" "constructed-inventory-limit" "help" "The limit to restrict the returned hosts for the constructed inventory plugin. Refer to Ansible documentation for the proper syntax.")}}
+						{{end}}
+						{{with dig $inv "summary_fields" "organization"}}
+							{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))) "cy" "constructed-inventory-organization")}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Total groups") "value" (str $inv.total_groups) "cy" "constructed-inventory-total-groups" "help" "This field is deprecated and will be removed in a future release. Total number of groups in this inventory.")}}
+						{{template "detail" (dict "label" (t "Total hosts") "value" (str $inv.total_hosts) "cy" "constructed-inventory-total-hosts" "help" "This field is deprecated and will be removed in a future release. Total number of hosts in this inventory.")}}
+						{{template "detail" (dict "label" (t "Total inventory sources") "value" (str $inv.total_inventory_sources) "cy" "constructed-inventory-sources" "help" "Total number of external inventory sources configured within this inventory.")}}
+						{{template "detail" (dict "label" (t "Update cache timeout") "value" (str $inv.update_cache_timeout) "cy" "constructed-inventory-cache-timeout" "help" "The cache timeout for the constructed inventory's auto-created source. Time in seconds to consider an inventory sync to be current.")}}
+						{{template "detail" (dict "label" (t "Inventory sources with failures") "value" (str $inv.inventory_sources_with_failures) "cy" "constructed-inventory-sources-with-failures" "help" "Number of external inventory sources in this inventory with failures.")}}
+						{{template "detail" (dict "label" (t "Verbosity") "value" (str $inv.verbosity) "cy" "constructed-inventory-verbosity" "help" "The verbosity level for the constructed inventory's auto-created source.")}}
+						{{if $inv._instance_groups}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="constructed-inventory-instance-groups-label">
+									{{t "Instance Groups"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="constructed-inventory-instance-groups-value">
+									{{template "label_group" (dict "items" $inv._instance_groups "max" 5 "total" (len $inv._instance_groups) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{if or $inv.prevent_instance_group_fallback $inv.allow_jobs_while_syncing}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="constructed-inventory-instance-group-fallback-label">
+									{{t "Enabled Options"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="constructed-inventory-instance-group-fallback-value">
+									<ul data-pf-content="true" class="pf-v6-c-content--ul">
+										{{if $inv.prevent_instance_group_fallback}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Prevent Instance Group Fallback"}}
+												{{template "help_button" (t "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.")}}
+											</li>
+										{{end}}
+										{{if $inv.allow_jobs_while_syncing}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Allow Jobs While Syncing"}}
+												{{template "help_button" (t "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish.")}}
+											</li>
+										{{end}}
+									</ul>
+								</dd>
+							</div>
+						{{end}}
+						{{with dig $inv "summary_fields" "labels"}}
+							{{if .results}}
+								<div>
+									<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="constructed-inventory-labels-label">
+										{{t "Labels"}}
+										{{template "help_button" (t "Optional labels that describe this inventory, such as 'dev' or 'test'. Labels can be used to group and filter inventories and completed jobs.")}}
+									</dt>
+									<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="constructed-inventory-labels-value">
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</dd>
+								</div>
+							{{end}}
+						{{end}}
+						{{if $inv._input_inventories}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Input Inventories"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "label_group" (dict "items" $inv._input_inventories "max" 5 "total" (len $inv._input_inventories) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "label" (t "Source vars") "value" (str $inv.source_vars) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
+					{{else if eq $kind "federated"}}
+						{{template "detail" (dict "label" (t "Name") "value" (str $inv.name) "cy" "federated-inventory-name")}}
+						{{if has $inv.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $inv.description) "cy" "federated-inventory-description")}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Type") "value" (t "Federated Inventory") "cy" "federated-inventory-type")}}
+						{{with dig $inv "summary_fields" "organization"}}
+							{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))) "cy" "federated-inventory-organization")}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Total hosts") "value" (str $inv.total_hosts) "cy" "federated-inventory-total-hosts" "help" "This field is deprecated and will be removed in a future release. Total number of hosts in this inventory.")}}
+						{{template "detail" (dict "label" (t "Total groups") "value" (str $inv.total_groups) "cy" "federated-inventory-total-groups" "help" "This field is deprecated and will be removed in a future release. Total number of groups in this inventory.")}}
+						{{with dig $inv "summary_fields" "labels"}}
+							{{if .results}}
+								<div>
+									<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="federated-inventory-labels-label">
+										{{t "Labels"}}
+									</dt>
+									<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="federated-inventory-labels-value">
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</dd>
+								</div>
+							{{end}}
+						{{end}}
+						{{if $inv._input_inventories}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Input Inventories"}}
+									{{template "help_button" (t "Source inventories whose hosts will be routed to their respective instance groups when a job is launched against this federated inventory.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "label_group" (dict "items" $inv._input_inventories "max" 5 "total" (len $inv._input_inventories) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
+					{{else}}
+						{{template "detail" (dict "label" (t "Name") "value" (str $inv.name) "cy" "inventory-detail-name")}}
+						{{if has $inv.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $inv.description))}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Type") "value" (t "Inventory"))}}
+						{{with dig $inv "summary_fields" "organization"}}
+							{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))))}}
+						{{end}}
+						{{template "detail" (dict "label" (t "Total hosts") "value" (str $inv.total_hosts))}}
+						{{if $inv._instance_groups}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Instance Groups"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "label_group" (dict "items" $inv._instance_groups "max" 5 "total" (len $inv._instance_groups) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{if or $inv.prevent_instance_group_fallback $inv.allow_deletes_while_in_use $inv.allow_jobs_while_syncing}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="jt-detail-enabled-options-label">
+									{{t "Enabled Options"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="jt-detail-enabled-options-value">
+									<ul data-pf-content="true" class="pf-v6-c-content--ul">
+										{{if $inv.prevent_instance_group_fallback}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Prevent Instance Group Fallback"}}
+											</li>
+										{{end}}
+										{{if $inv.allow_deletes_while_in_use}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Allow Deletes While In Use"}}
+											</li>
+										{{end}}
+										{{if $inv.allow_jobs_while_syncing}}
+											<li data-pf-content="true" class="pf-v6-c-content--li">
+												{{t "Allow Jobs While Syncing"}}
+											</li>
+										{{end}}
+									</ul>
+								</dd>
+							</div>
+						{{end}}
+						{{with dig $inv "summary_fields" "labels"}}
+							{{if .results}}
+								<div>
+									<dt class="ascender-detail-name ascender-detail-name--full-width">
+										{{t "Labels"}}
+										{{template "help_button" (t "Optional labels that describe this inventory, such as 'dev' or 'test'. Labels can be used to group and filter inventories and completed jobs.")}}
+									</dt>
+									<dd class="ascender-detail-value ascender-detail-value--full-width">
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</dd>
+								</div>
+							{{end}}
+						{{end}}
+						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
+					{{end}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a class="pf-v6-c-button pf-m-primary" href="{{$base}}/edit"{{if eq $kind "smart"}} aria-label="{{t "edit"}}"{{end}}>
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if eq $kind "constructed"}}
+						{{if dig $inv "_source" "summary_fields" "user_capabilities" "start"}}
+							<button aria-label="{{t "Sync"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-sync-all="/api/v2/inventories/{{$id}}/update_inventory_sources/">
+								<span class="pf-v6-c-button__text">{{t "Sync"}}</span>
+							</button>
+						{{end}}
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{if eq $kind "smart"}}
+							{{template "delete_button" (dict "name" (str $inv.name) "title" (t "Delete smart inventory") "api" (printf "/api/v2/inventories/%v/" $id) "redirect" "/inventories" "error" (t "Failed to delete smart inventory."))}}
+						{{else}}
+							{{template "delete_button" (dict "name" (str $inv.name) "title" (t "Delete Inventory") "api" (printf "/api/v2/inventories/%v/" $id) "redirect" "/inventories" "error" (t "Failed to delete inventory.") "usageKind" "inventory" "usageId" $id "usageMessage" (t "This inventory is currently being used by other resources. Are you sure you want to delete it?"))}}
+						{{end}}
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "sources"}}
+			{{template "search_toolbar" (dict "page" . "id" "inventory-sources-list" "searchKeys" .Data.searchKeys "ns" "inventory_source" "addHref" (printf "%s/sources/add" $base) "kind" "Inventory Source" "api" "/api/v2/inventory_sources/" "usageKind" "inventorySource" "usageMessage" "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete them anyway?}}" "filters" .Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><button aria-label="%s" class="pf-v6-c-button pf-m-secondary" type="button" data-sync-all="/api/v2/inventories/%s/update_inventory_sources/"><span class="pf-v6-c-button__text">%s</span></button></div></div>` (esc (t "Sync all")) $id (esc (t "Sync all")))))}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "Inventory Sources"}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "inventory-sources-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Status"}}
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Type"}}
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+									{{t "Actions"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $i, $src := .Data.results}}
+								{{$sid := str $src.id}}
+								{{$scaps := dig $src "summary_fields" "user_capabilities"}}
+								{{$job := $src._job}}
+								<tr class="pf-v6-c-table__tr" id="source-row-{{$sid}}" data-row data-id="{{$sid}}" data-name="{{$src.name}}">
+									<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__check" data-cy="check-action-{{$sid}}">
+										<div class="pf-v6-c-check pf-m-standalone">
+											<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $scaps "delete")}} data-no-delete{{end}}>
+										</div>
+									</td>
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td">
+										<a href="{{$base}}/sources/{{$sid}}/details">
+											<b>{{$src.name}}</b>
+										</a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+										{{if $job}}
+											<div style="display: contents;">
+												<a href="/jobs/inventory/{{str $job.id}}" data-tooltip data-tooltip-pos="top">
+													{{template "status_label" (str $job.status)}}
+													<template data-tooltip-content>
+														<div>{{t "MOST RECENT SYNC"}}</div>
+														<div>{{t "JOB ID:"}} {{str $job.id}}</div>
+														<div>
+															{{t "STATUS:"}} {{upper (str $job.status)}}
+														</div>
+														{{if has $job.finished}}
+															<div>
+																{{t "FINISHED:"}} {{dt $job.finished}}
+															</div>
+														{{end}}
+													</template>
+												</a>
+											</div>
+										{{end}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+										{{$src._type_label}}
+									</td>
+									<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+										<div class="ascender-actions-td__grid">
+											{{if dig $scaps "start"}}
+												{{$st := ""}}
+												{{if $job}}{{$st = str $job.status}}{{end}}
+												{{if or (eq $st "running") (eq $st "pending") (eq $st "waiting")}}
+													<div>
+														<div style="display: contents;">
+															<div>
+																{{with dig $src "summary_fields" "current_job"}}
+																	<button aria-label="{{t "Cancel Inventory Source Sync"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Cancel Inventory Source Sync"}}" data-tooltip-pos="top" data-cancel-job="/api/v2/inventory_updates/{{str .id}}/cancel/" data-name="{{$src.name}}">
+																		<span class="pf-v6-c-button__icon">
+																			{{icon "minus-circle"}}
+																		</span>
+																	</button>
+																{{end}}
+															</div>
+														</div>
+													</div>
+												{{else}}
+													<div>
+														<div style="display: contents;">
+															<div data-tooltip="{{t "Sync"}}" data-tooltip-pos="top">
+																<div style="display: contents;">
+																	<button aria-label="{{t "Start sync source"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Start sync process"}}" data-tooltip-pos="top" data-source-sync="/api/v2/inventory_sources/{{$sid}}/update/">
+																		<span class="pf-v6-c-button__text">
+																			{{icon "sync"}}
+																		</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												{{end}}
+											{{end}}
+											<div>
+												<div style="display: contents;">
+													<div>
+														{{if dig $scaps "edit"}}
+															<a aria-label="{{t "Edit Source"}}" class="pf-v6-c-button pf-m-plain" href="{{$base}}/sources/{{$sid}}/edit" data-tooltip="{{t "Edit"}}" data-tooltip-pos="top">
+																<span class="pf-v6-c-button__icon">
+																	{{icon "pencil-alt"}}
+																</span>
+															</a>
+														{{end}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Inventory Sources")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Inventory Sources")) "addHref" (printf "%s/sources/add" $base))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "access"}}
+			{{template "access_tab" .}}
+		{{else if eq .Data.tab "jobs"}}
+			{{template "related_jobs" (dict "page" .)}}
+		{{else if eq .Data.tab "job_templates"}}
+			{{template "related_templates" (dict "page" .)}}
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				{{template "empty_state" (dict "title" (t "{0} not available yet" "0" .Title) "body" (t "This tab will be available once the related resources are ported."))}}
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

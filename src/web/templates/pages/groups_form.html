@@ -1,0 +1,31 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$g := .Data.group}}
+{{$inv := .Data.inventory}}
+{{$ib := str $inv._base}}
+{{$gb := .Data.groupBase}}
+{{if $g}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/groups" $ib) "title" (t "Groups")) (dict "href" (printf "%s/details" $gb) "title" (str $g.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $ib) "title" (str $inv.name)) (dict "href" (printf "%s/groups" $ib) "title" (t "Groups"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "inventoryGroup-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "inventoryGroup-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					<div class="ascender-form-full-width-layout">
+						{{template "variables_field" (dict "id" "inventoryGroup-variables" "name" "variables" "label" (t "Variables") "value" $v.variables "errors" (index $e "variables"))}}
+					</div>
+					{{template "form_actions" (cond (has $g) (printf "%s/details" $gb) (printf "%s/groups" $ib))}}
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

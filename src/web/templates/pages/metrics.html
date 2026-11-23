@@ -1,0 +1,83 @@
+{{define "content"}}
+{{if .Data.error}}
+	<section class="pf-v6-c-page__main-section">
+		<div id="" class="pf-v6-c-card">
+			<div class="pf-v6-c-card__body">{{template "content_error" .Data.error}};</div>
+		</div>
+	</section>
+{{else}}
+	{{template "screen_header" (dict "title" (t "Metrics") "stream" "*")}}
+	<section class="pf-v6-c-page__main-section">
+		<div id="" class="pf-v6-c-card" data-metrics>
+			<div class="pf-v6-c-card__header">
+				<div class="pf-v6-c-card__header-main">
+					<div class="pf-v6-c-toolbar">
+						<div class="pf-v6-c-toolbar__content">
+							<div class="pf-v6-c-toolbar__content-section">
+								<div class="pf-v6-c-toolbar__group">
+									<div class="pf-v6-c-toolbar__item">{{t "Instance"}}</div>
+									<div class="pf-v6-c-toolbar__item">
+										{{template "metrics_select" (dict "kind" "instance" "placeholder" (t "Select an instance") "options" .Data.instances "all" .Data.hasAll)}}
+									</div>
+									<div class="pf-v6-c-toolbar__item">{{t "Metric"}}</div>
+									<div class="pf-v6-c-toolbar__item">
+										{{template "metrics_select" (dict "kind" "metric" "placeholder" (t "Select a metric") "options" .Data.metrics)}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pf-v6-c-toolbar__content pf-m-hidden" hidden="">
+							<div class="pf-v6-c-toolbar__group"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pf-v6-c-card__body" data-metrics-body>
+				<div class="pf-v6-c-empty-state" data-metrics-empty>
+					<div class="pf-v6-c-empty-state__content">
+						<div class="pf-v6-c-empty-state__header">
+							<div class="pf-v6-c-empty-state__icon">{{icon "cubes"}}</div>
+							<div class="pf-v6-c-empty-state__title">
+								<h3 class="pf-v6-c-empty-state__title-text">
+									{{t "Select an instance and a metric to show chart"}}
+								</h3>
+							</div>
+						</div>
+						<div class="pf-v6-c-empty-state__body"></div>
+					</div>
+				</div>
+				<div id="chart" hidden></div>
+			</div>
+		</div>
+	</section>
+	<template data-metrics-error="404">{{template "content_error" 404}}</template>
+	<template data-metrics-error="other">{{template "content_error" 500}}</template>
+{{end}}
+{{end}}
+{{define "metrics_select"}}
+<div class="ascender-dropdown" data-dropdown data-metrics-select="{{.kind}}">
+	<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" data-dropdown-toggle>
+		<span class="pf-v6-c-menu-toggle__text" data-metrics-label>{{.placeholder}}</span>
+		<span class="pf-v6-c-menu-toggle__controls">
+			<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+		</span>
+	</button>
+	<div class="pf-v6-c-menu ascender-dropdown__menu" hidden data-dropdown-menu>
+		<div class="pf-v6-c-menu__content">
+			<ul class="pf-v6-c-menu__list" role="listbox">
+				{{range .options}}
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item" type="button" role="option" aria-selected="false" data-metrics-option="{{.}}">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">
+									{{if and $.all (eq . "All")}}{{t "All"}}{{else}}{{.}}{{end}}
+								</span>
+							</span>
+						</button>
+					</li>
+				{{end}}
+			</ul>
+		</div>
+	</div>
+</div>
+{{end}}

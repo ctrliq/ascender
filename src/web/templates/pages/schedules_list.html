@@ -1,0 +1,6 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Schedules") "stream" "schedule")}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">{{template "schedule_list" (dict "page" .)}}</div>
+</section>
+{{end}}

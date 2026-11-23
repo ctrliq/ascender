@@ -1,0 +1,107 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$i := .Data.instance}}
+{{$edit := has $i}}
+{{if $edit}}
+	{{template "screen_header" (dict "title" .Title "stream" "instance" "crumbs" (list (dict "href" "/instances" "title" (t "Instances")) (dict "href" (printf "/instances/%s/details" (str $i.id)) "title" (str $i.hostname))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "instance" "crumbs" (list (dict "href" "/instances" "title" (t "Instances"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "hostname" "name" "hostname" "label" (t "Host Name") "value" $v.hostname "required" true "disabled" $edit "errors" (index $e "hostname"))}}
+					{{template "form_field" (dict "id" "instance-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{template "form_field" (dict "id" "instance-state" "name" "node_state" "label" (t "Instance State") "value" $v.node_state "disabled" true "help" (t "Sets the current life cycle stage of this instance. Default is \"installed.\"") "errors" (index $e "node_state"))}}
+					{{template "form_field" (dict "id" "instance-port" "name" "listener_port" "label" (t "Listener Port") "value" $v.listener_port "type" "number" "help" (t "Select the port that Receptor will listen on for incoming connections, e.g. 27199.") "errors" (index $e "listener_port"))}}
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="instance-type">
+								<span class="pf-v6-c-form__label-text">{{t "Instance Type"}}</span>
+								<span class="pf-v6-c-form__label-required" aria-hidden="true">
+									&nbsp;*
+								</span>
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button" (t "Sets the role that this instance will play within mesh topology. Default is \"execution.\"")}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if $edit}} pf-m-disabled{{end}}">
+								<select id="node_type" name="node_type" aria-label="{{t "Select Input"}}" aria-invalid="false"{{if $edit}} disabled{{end}}>
+									<option class="" value="execution"{{if eq $v.node_type "execution"}} selected{{end}}>
+										{{t "Execution"}}
+									</option>
+									<option class="" value="hop"{{if eq $v.node_type "hop"}} selected{{end}}>
+										{{t "Hop"}}
+									</option>
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{with index $e "node_type"}}
+								<div class="pf-v6-c-form__helper-text">
+									<div class="pf-v6-c-helper-text">
+										<div class="pf-v6-c-helper-text__item pf-m-error">
+											<span class="pf-v6-c-helper-text__item-text">
+												{{join . " "}}
+											</span>
+										</div>
+									</div>
+								</div>
+							{{end}}
+						</div>
+					</div>
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="instance-option-checkboxes">
+								<span class="pf-v6-c-form__label-text">{{t "Options"}}</span>
+							</label>
+							&nbsp;&nbsp;
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							{{template "checkbox" (dict "id" "enabled" "name" "enabled" "label" (t "Enable Instance") "checked" $v.enabled "help" (t "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."))}}
+							{{template "checkbox" (dict "id" "managed-by-policy" "name" "managed_by_policy" "label" (t "Managed by Policy") "checked" $v.managed_by_policy "help" (t "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."))}}
+							{{template "checkbox" (dict "id" "peers_from_control_nodes" "name" "peers_from_control_nodes" "label" (t "Peers from control nodes") "checked" $v.peers_from_control_nodes "help" (t "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."))}}
+							{{with index $e "peers_from_control_nodes"}}
+								<div class="pf-v6-c-form__helper-text">
+									<div class="pf-v6-c-helper-text">
+										<div class="pf-v6-c-helper-text__item pf-m-error">
+											<span class="pf-v6-c-helper-text__item-text">
+												{{join . " "}}
+											</span>
+										</div>
+									</div>
+								</div>
+							{{end}}
+						</div>
+					</div>
+					<div class="ascender-form-full-width-layout">
+						<div class="pf-v6-c-form__group pf-m-action">
+							<div class="pf-v6-c-form__group-control">
+								<div class="pf-v6-c-form__actions">
+									<button aria-label="{{t "Save"}}" class="pf-v6-c-button pf-m-primary" type="submit">
+										<span class="pf-v6-c-button__text">{{t "Save"}}</span>
+									</button>
+									<a aria-label="{{t "Cancel"}}" class="pf-v6-c-button pf-m-link" href="{{if $edit}}/instances/{{str $i.id}}/details{{else}}/instances{{end}}">
+										<span class="pf-v6-c-button__text">{{t "Cancel"}}</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

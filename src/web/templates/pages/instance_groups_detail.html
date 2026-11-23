@@ -1,0 +1,236 @@
+{{define "content"}}
+{{$g := .Data.ig}}
+{{$id := str $g.id}}
+{{$sf := $g.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{$cg := .Data.container}}
+{{$base := .Data.base}}
+{{template "screen_header" (dict "title" .Title "stream" "instance_group" "crumbs" (list (dict "href" "/instance_groups" "title" (t "Instance Groups")) (dict "href" $base "title" (str $g.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/instance_groups" "label" (cond $cg "Back to instance groups" "Back to Instance Groups")) "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					{{$pfx := cond $cg "container-group" "instance-group"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="{{$pfx}}-detail-name-label" id="{{$pfx}}-detail-name">
+							{{t "Name"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="{{$pfx}}-detail-name-value">
+							{{$g.name}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name" data-cy="{{$pfx}}-type-label" id="{{$pfx}}-type">
+							{{t "Type"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="{{$pfx}}-type-value">
+							{{if or $cg $g.is_container_group}}
+								{{t "Container group"}}
+							{{else}}
+								{{t "Instance group"}}
+							{{end}}
+						</dd>
+					</div>
+					{{if not $cg}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail--break-word" data-cy="instance-group-policy-instance-minimum-label" id="instance-group-policy-instance-minimum">
+								{{t "Policy instance minimum"}}
+								{{template "help_button" (t "Minimum number of instances that will be automatically\n          assigned to this group when new instances come online.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail--break-word" data-cy="instance-group-policy-instance-minimum-value">
+								<span class="pf-v6-c-badge pf-m-read">
+									{{str $g.policy_instance_minimum}}
+								</span>
+							</dd>
+						</div>
+						<div>
+							<dt class="ascender-detail-name ascender-detail--break-word" data-cy="instance-group-policy-instance-percentage-label" id="instance-group-policy-instance-percentage">
+								{{t "Policy instance percentage"}}
+								{{template "help_button" (t "Minimum percentage of all instances that will be automatically\n          assigned to this group when new instances come online.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail--break-word" data-cy="instance-group-policy-instance-percentage-value">
+								<span class="pf-v6-c-badge pf-m-read">
+									{{str $g.policy_instance_percentage}} %
+								</span>
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="instance-group-max-concurrent-jobs-label" id="instance-group-max-concurrent-jobs">
+							{{t "Max concurrent jobs"}}
+							{{template "help_button" (t "Maximum number of jobs to run concurrently on this group.\n          Zero means no limit will be enforced.")}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="instance-group-max-concurrent-jobs-value">
+							<span class="pf-v6-c-badge pf-m-read">
+								{{str $g.max_concurrent_jobs}}
+							</span>
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="instance-group-max-forks-label" id="instance-group-max-forks">
+							{{t "Max forks"}}
+							{{template "help_button" (t "Maximum number of forks to allow across all jobs running concurrently on this group.\n          Zero means no limit will be enforced.")}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="instance-group-max-forks-value">
+							<span class="pf-v6-c-badge pf-m-read">{{str $g.max_forks}}</span>
+						</dd>
+					</div>
+					{{if $cg}}
+						{{with dig $sf "mesh_node"}}
+							<div>
+								<dt class="ascender-detail-name" data-cy="container-group-mesh-node-label" id="container-group-mesh-node">
+									{{t "Mesh node"}}
+									{{template "help_button" (t "Hop node of the receptor mesh that runs the pods of this group in its own cluster")}}
+								</dt>
+								<dd class="ascender-detail-value" data-cy="container-group-mesh-node-value">
+									<a href="/instances/{{str .id}}/details">
+										<span class="pf-v6-c-label pf-m-blue pf-m-outline">
+											<span class="pf-v6-c-label__content">
+												<span class="pf-v6-c-label__text">
+													{{.hostname}}
+												</span>
+											</span>
+										</span>
+									</a>
+								</dd>
+							</div>
+						{{end}}
+						{{with dig $sf "credential"}}
+							<div>
+								<dt class="ascender-detail-name" data-cy="container-group-credential-label" id="container-group-credential">
+									{{t "Credential"}}
+									{{template "help_button" (t "Credential to authenticate with Kubernetes or OpenShift")}}
+								</dt>
+								<dd class="ascender-detail-value" data-cy="container-group-credential-value">
+									<a href="/credentials/{{str .id}}">
+										<span class="pf-v6-c-label pf-m-blue pf-m-outline">
+											<span class="pf-v6-c-label__content">
+												<span class="pf-v6-c-label__text">{{.name}}</span>
+											</span>
+										</span>
+									</a>
+								</dd>
+							</div>
+						{{end}}
+					{{else}}
+						{{if num $g.capacity}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail--break-word" data-cy="instance-group-used-capacity-label" id="instance-group-used-capacity">
+									{{t "Used capacity"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail--break-word" data-cy="instance-group-used-capacity-value">
+									<span class="pf-v6-c-badge pf-m-read">
+										{{usedPct $g.percent_capacity_remaining}} %
+									</span>
+								</dd>
+							</div>
+						{{else}}
+							<div>
+								<dt class="ascender-detail-name" data-cy="instance-group-used-capacity-label" id="instance-group-used-capacity">
+									{{t "Used capacity"}}
+								</dt>
+								<dd class="ascender-detail-value" data-cy="instance-group-used-capacity-value">
+									<span class="ascender-instance-group-details__unavailable">
+										{{t "Unavailable"}}
+									</span>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Created"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{with dig $sf "created_by"}}
+								{{tHTML "{dateStr} by <0>{username}</0>" "dateStr" (dt $g.created) "username" .username "0" (safe (printf `<a href="/users/%s">` (esc .id)))}}
+							{{else}}
+								{{dt $g.created}}
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Last Modified"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{with dig $sf "modified_by"}}
+								{{tHTML "{dateStr} by <0>{username}</0>" "dateStr" (dt $g.modified) "username" .username "0" (safe (printf `<a href="/users/%s">` (esc .id)))}}
+							{{else}}
+								{{dt $g.modified}}
+							{{end}}
+						</dd>
+					</div>
+					{{if and $cg (has $g.pod_spec_override)}}
+						{{template "variables_detail" (dict "cy" "container-group-detail-pod-spec-override" "label" (t "Pod spec override") "value" (str $g.pod_spec_override) "help" (t "Custom Kubernetes or OpenShift Pod specification.") "rows" 6)}}
+					{{end}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$base}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{template "delete_button" (dict "name" (str $g.name) "title" (t "Delete instance group") "api" (printf "/api/v2/instance_groups/%s/" $id) "redirect" "/instance_groups" "usageKind" "instanceGroup" "usageId" $id "usageMessage" (cond $cg (t "This container group is currently being by other resources. Are you sure you want to delete it?") (t "This instance group is currently being by other resources. Are you sure you want to delete it?")))}}
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "instances"}}
+			{{template "health_check_alert"}}
+			{{template "search_toolbar" (dict "page" . "id" "instance-list" "searchKeys" .Data.searchKeys "ns" "instance" "kind" "Instance" "expandAll" true "filters" .Data.filters "disassociate" (printf "/api/v2/instance_groups/%s/instances/" $id) "actionsBefore" .Data.associateButton "healthCheck" (dict "pending" .Data.pending "disabled" (not .Data.canAssociate)))}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Instances")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{template "sort_th" (dict "page" . "key" "hostname" "label" (t "Name") "id" "instance-table-sort-hostname" "help" (t "Health checks can only be run on execution nodes."))}}
+								{{template "sort_th" (dict "page" . "key" "errors" "label" (t "Status") "id" "instance-table-sort-errors")}}
+								{{template "sort_th" (dict "page" . "key" "node_type" "label" (t "Node Type") "id" "instance-table-sort-node_type")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Capacity Adjustment"}}
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Used Capacity"}}
+								</th>
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+									{{t "Actions"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{template "instance_rows" (dict "page" . "href" (printf "/instance_groups/%s/instances/" $id) "cls" "ascender-instance-group-instance-list-item" "group" true)}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Instances")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Instances")))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.tab "jobs"}}
+			{{template "search_toolbar" (dict "page" . "id" "job-list" "searchKeys" .Data.searchKeys "ns" "job" "kind" "Job" "api" "/api/v2/jobs/" "expandAll" true "filters" .Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button id="jobs-list-cancel-button" aria-labelledby="jobs-list-cancel-button" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-cancel-selected><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}" "numJobsToCancel" 0)))))}}
+			{{if .Data.results}}
+				{{template "jobs_table" (dict "page" . "showType" true "aria" (t "{pluralizedItemName} List" "pluralizedItemName" (t "Jobs")))}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Jobs")) "body" (t "Please run a job to populate this list."))}}
+				{{end}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

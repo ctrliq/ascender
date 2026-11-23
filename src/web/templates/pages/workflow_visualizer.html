@@ -1,0 +1,83 @@
+{{define "content"}}
+{{$t := .Data.wfjt}}
+{{$id := str $t.id}}
+{{$sf := $t.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{$base := printf "/templates/workflow_job_template/%s" $id}}
+{{template "screen_header" (dict "title" (t "Visualizer") "stream" "job_template,workflow_job_template,workflow_job_template_node" "crumbs" (list (dict "href" "/templates" "title" (t "Templates")) (dict "href" $base "title" (str $t.name)) (dict "href" (printf "%s/visualizer" $base) "title" (t "Visualizer"))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "visualizer" "back" (dict "href" "/templates" "label" "Back to Templates") "tabs" (list (dict "key" "details" "href" (printf "%s/details" $base) "label" "Details") (dict "key" "access" "href" (printf "%s/access" $base) "label" "Access") (dict "key" "notifications" "href" (printf "%s/notifications" $base) "label" "Notifications") (dict "key" "schedules" "href" (printf "%s/schedules" $base) "label" "Schedules") (dict "key" "visualizer" "href" (printf "%s/visualizer" $base) "label" "Visualizer") (dict "key" "jobs" "href" (printf "%s/jobs" $base) "label" "Jobs") (dict "key" "survey" "href" (printf "%s/survey" $base) "label" "Survey")))}}
+	</div>
+</section>
+<div class="ascender-full-page" data-wf-visualizer data-template-id="{{$id}}" data-template-name="{{$t.name}}" data-template-org="{{str $t.organization}}" data-read-only="{{if dig $caps "edit"}}false{{else}}true{{end}}" data-superuser="{{if .Data.isSuperuser}}true{{else}}false{{end}}" data-details-url="{{$base}}/details">
+	<div class="ascender-visualizer__wrapper" data-wf-wrapper>
+		<div id="visualizer-toolbar" data-wf-toolbar hidden>
+			<div class="ascender-visualizer-toolbar__display-align-items">
+				<h2 id="visualizer-toolbar-template-name" class="pf-v6-c-title pf-m-xl ascender-visualizer-toolbar__white-space-margin">
+					{{$t.name}}
+				</h2>
+				<div class="ascender-visualizer-toolbar__align-items-display">
+					<div>{{t "Total Nodes"}}</div>
+					<span id="visualizer-total-nodes-badge" class="pf-v6-c-badge pf-m-read ascender-visualizer-toolbar__badge">
+						0
+					</span>
+					<div style="display: contents;">
+						<button id="visualizer-toggle-legend" aria-label="{{t "Toggle legend"}}" data-tooltip="{{t "Toggle legend"}}" class="pf-v6-c-button pf-m-plain ascender-visualizer-toolbar__action-button" type="button" disabled>
+							<span class="pf-v6-c-button__text">{{icon "compass"}}</span>
+						</button>
+					</div>
+					<div style="display: contents;">
+						<button id="visualizer-toggle-tools" aria-label="{{t "Toggle tools"}}" data-tooltip="{{t "Toggle tools"}}" class="pf-v6-c-button pf-m-plain ascender-visualizer-toolbar__action-button" type="button" disabled>
+							<span class="pf-v6-c-button__text">{{icon "wrench"}}</span>
+						</button>
+					</div>
+					<div style="display: contents;">
+						<a id="visualizer-documentation" target="_blank" rel="noopener noreferrer" href="{{.Data.docsURL}}" aria-label="{{t "Workflow documentation"}}" data-tooltip="{{t "Workflow documentation"}}" class="pf-v6-c-button pf-m-plain ascender-visualizer-toolbar__action-button">
+							<span class="pf-v6-c-button__text">{{icon "book"}}</span>
+						</a>
+					</div>
+					{{if dig $caps "start"}}
+						<div style="display: contents;">
+							<button id="visualizer-launch" aria-label="{{t "Launch workflow"}}" data-tooltip="{{t "Launch workflow"}}" class="pf-v6-c-button pf-m-plain ascender-visualizer-toolbar__action-button" type="button" disabled data-launch="/api/v2/workflow_job_templates/{{$id}}/" data-launch-type="workflow_job_template" data-launch-name="{{$t.name}}">
+								<span class="pf-v6-c-button__text">{{icon "rocket"}}</span>
+							</button>
+						</div>
+					{{end}}
+					{{if dig $caps "edit"}}
+						<div style="display: contents;">
+							<button id="visualizer-delete-all" aria-label="{{t "Delete all nodes"}}" data-tooltip="{{t "Delete all nodes"}}" class="pf-v6-c-button pf-m-plain ascender-visualizer-toolbar__action-button" type="button" disabled>
+								<span class="pf-v6-c-button__text">{{icon "trash-alt"}}</span>
+							</button>
+						</div>
+						<button id="visualizer-save" aria-label="{{t "Save"}}" class="pf-v6-c-button pf-m-primary ascender-visualizer-toolbar__margin-0-32" type="button">
+							<span class="pf-v6-c-button__text">{{t "Save"}}</span>
+						</button>
+					{{end}}
+					<button id="visualizer-close" aria-label="{{t "Close"}}" class="pf-v6-c-button pf-m-plain" type="button">
+						<span class="pf-v6-c-button__icon">{{icon "pf-close"}}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="ascender-visualizer__centered-content" data-wf-loading>
+			{{template "wf_content_loading"}}
+		</div>
+	</div>
+</div>
+{{template "workflow_visualizer_icons" $}}
+{{end}}
+{{define "wf_content_loading"}}
+<div class="pf-v6-c-empty-state">
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">
+				<svg class="pf-v6-c-spinner pf-m-xl" role="progressbar" viewBox="0 0 100 100" aria-label="Contents">
+					<circle class="pf-v6-c-spinner__path" cx="50" cy="50" r="45" fill="none">
+					</circle>
+				</svg>
+			</div>
+		</div>
+	</div>
+</div>
+{{end}}

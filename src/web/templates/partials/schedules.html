@@ -1,0 +1,428 @@
+{{define "schedule_toggle"}}
+{{/* .id .enabled .disabled .class */}}
+<div style="display: contents;">
+	<label class="pf-v6-c-switch{{if .class}} {{.class}}{{end}}" for="schedule-{{.id}}-toggle" data-tooltip="{{if .enabled}}{{t "Schedule is active"}}{{else}}{{t "Schedule is inactive"}}{{end}}" data-tooltip-pos="top">
+		<input id="schedule-{{.id}}-toggle" class="pf-v6-c-switch__input" role="switch" aria-label="{{t "Toggle schedule"}}" type="checkbox"{{if .enabled}} checked{{end}}{{if .disabled}} disabled{{end}} data-schedule-toggle="/api/v2/schedules/{{.id}}/">
+		<span class="pf-v6-c-switch__toggle"></span>
+		<span class="pf-v6-c-switch__label" aria-hidden="true">{{t "On"}}</span>
+	</label>
+</div>
+{{end}}
+{{define "schedule_list"}}
+{{/* .page */}}
+{{$p := .page}}
+{{template "search_toolbar" (dict "page" $p "id" "schedule-list" "searchKeys" $p.Data.searchKeys "ns" "schedule" "addHref" $p.Data.addHref "kind" "Schedule" "api" "/api/v2/schedules/" "filters" $p.Data.filters)}}
+{{if $p.Data.rows}}
+	<div class="ascender-paginated-table__overflow-auto">
+		<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Schedules")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+			<thead class="pf-v6-c-table__thead">
+				<tr class="pf-v6-c-table__tr">
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+						<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+					</th>
+					{{template "sort_th" (dict "page" $p "key" "name" "label" (t "Name") "id" "schedule-table-sort-name")}}
+					{{template "sort_th" (dict "page" $p "key" "unified_job_template" "label" (t "Related resource") "id" "schedule-table-sort-unified_job_template")}}
+					{{template "sort_th" (dict "page" $p "key" "unified_job_template__polymorphic_ctype__model" "label" (t "Resource type") "id" "schedule-table-sort-unified_job_template__polymorphic_ctype__model")}}
+					{{template "sort_th" (dict "page" $p "key" "next_run" "label" (t "Next Run") "id" "schedule-table-sort-next_run")}}
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+						{{t "Actions"}}
+					</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+				{{range $i, $row := $p.Data.rows}}
+					{{$s := $row.S}}
+					{{$id := str $s.id}}
+					{{$caps := dig $s "summary_fields" "user_capabilities"}}
+					<tr class="pf-v6-c-table__tr" id="schedule-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$s.name}}">
+						<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+							<div class="pf-v6-c-check pf-m-standalone">
+								<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+							</div>
+						</td>
+						<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+							<a href="{{$row.Base}}/details"><b>{{$s.name}}</b></a>
+							{{if $row.Warnings}}
+								<span>
+									<span class="ascender-schedule-list-item__exclamation-triangle-icon" data-tooltip="{{join $row.Warnings "\n"}}" data-tooltip-pos="right">
+										{{icon "exclamation-triangle"}}
+									</span>
+								</span>
+							{{end}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Related resource"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="related-resource-{{$id}}">
+							<a href="{{$row.Related}}">
+								<b>
+									{{str (dig $s "summary_fields" "unified_job_template" "name")}}
+								</b>
+							</a>
+						</td>
+						<td tabindex="-1" data-label="{{t "Resource type"}}" class="pf-v6-c-table__td">
+							{{$row.Type}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Next Run"}}" class="pf-v6-c-table__td">
+							{{if $row.NextRun}}
+								<dl class="ascender-detail-list ascender-detail-list--stacked">
+									<div>
+										<dt class="ascender-detail-name">{{t "Next Run"}}</dt>
+										<dd class="ascender-detail-value">{{$row.NextRun}}</dd>
+									</div>
+								</dl>
+							{{end}}
+						</td>
+						<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+							<div class="ascender-actions-td__grid" style="grid-template-columns: auto 40px;">
+								{{template "schedule_toggle" (dict "id" $id "enabled" $row.Enabled "disabled" $row.Disabled "class" "")}}
+								<div>
+									<div style="display: contents;">
+										<div>
+											{{if $row.CanEdit}}
+												<a aria-label="{{t "Edit Schedule"}}" class="pf-v6-c-button pf-m-plain ascender-schedule-list-item__grid-column-2" href="{{$row.Base}}/edit" data-tooltip="{{t "Edit Schedule"}}" data-tooltip-pos="top">
+													<span class="pf-v6-c-button__icon">
+														{{icon "pencil-alt"}}
+													</span>
+												</a>
+											{{end}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{{end}}
+			</tbody>
+		</table>
+	</div>
+	{{template "pagination_bottom" (dict "page" $p)}}
+{{else}}
+	{{if $p.Data.filters}}
+		{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+	{{else}}
+		{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Schedules")) "body" $p.Data.emptyBody)}}
+	{{end}}
+{{end}}
+{{end}}
+{{define "schedule_freq_select"}}
+{{/* .id .name .values .exception .noneLabel */}}
+{{$v := .values}}
+{{$ex := .exception}}
+{{$any := pick $ex (gt (len $v.ExceptionFrequency) 0) (gt (len $v.Frequency) 0)}}
+<div class="ascender-frequency-select" data-frequency-select data-none-label="{{.noneLabel}}">
+	<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" id="{{.id}}" data-frequency-toggle>
+		<span class="pf-v6-c-menu-toggle__text">
+			{{if $any}}{{t "Select frequency"}}{{else}}{{.noneLabel}}{{end}}
+		</span>
+		<span class="pf-v6-c-menu-toggle__controls">
+			<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+		</span>
+	</button>
+	<div class="pf-v6-c-menu ascender-dropdown__menu ascender-frequency-select__menu" hidden data-frequency-menu>
+		<div class="pf-v6-c-menu__content">
+			<ul class="pf-v6-c-menu__list" role="listbox" aria-label="{{t "Frequency"}}">
+				<li class="pf-v6-c-menu__list-item ascender-schedule-form-fields__select-clear-option" role="none">
+					<button class="pf-v6-c-menu__item" type="button" role="option" data-frequency-none>
+						<span class="pf-v6-c-menu__item-main">
+							<span class="pf-v6-c-menu__item-text">{{.noneLabel}}</span>
+						</span>
+					</button>
+				</li>
+				{{range $f := frequencies}}
+					{{$on := pick $ex ($v.HasException $f) ($v.Has $f)}}
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<label class="pf-v6-c-menu__item" role="option" aria-selected="{{if $on}}true{{else}}false{{end}}">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-check">
+									<input class="pf-v6-c-check__input" type="checkbox" name="{{$.name}}" value="{{$f}}"{{if $on}} checked{{end}} data-frequency-option>
+								</span>
+								<span class="pf-v6-c-menu__item-text">
+									{{t (frequencyLabel $f)}}
+								</span>
+							</span>
+						</label>
+					</li>
+				{{end}}
+			</ul>
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "schedule_datetime"}}
+{{/* .label .dateName .timeName .date .time .dateAria .timeAria .errors */}}
+{{$de := index .errors .dateName}}
+{{$te := index .errors .timeName}}
+<div class="pf-v6-c-form__group" data-cy="schedule-{{.label}}">
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="schedule-{{.label}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+		</label>
+		&nbsp;&nbsp;
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<span class="ascender-date-time-picker__group">
+			<div class="pf-v6-c-date-picker" name="{{.dateName}}" style="--pf-v6-c-date-picker__input--c-form-control--width-chars: 10;" data-date-picker>
+				<div class="pf-v6-c-date-picker__input">
+					<div class="pf-v6-c-input-group">
+						<div class="pf-v6-c-input-group__item">
+							<span class="pf-v6-c-form-control{{if $de}} pf-m-error{{end}}">
+								<input aria-label="{{.dateAria}}" aria-invalid="{{if $de}}true{{else}}false{{end}}" placeholder="YYYY-MM-DD" type="text" value="{{.date}}" name="{{.dateName}}" data-date-input>
+							</span>
+						</div>
+						<div class="pf-v6-c-input-group__item">
+							<button aria-haspopup="dialog" aria-label="Toggle date picker" class="pf-v6-c-button pf-m-control" type="button" data-date-toggle>
+								<span class="pf-v6-c-button__icon">{{icon "calendar-alt"}}</span>
+							</button>
+							<input type="date" tabindex="-1" aria-hidden="true" class="ascender-date-time-picker__native" data-date-native>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pf-v6-c-date-picker" data-time-picker>
+				<div class="pf-v6-c-date-picker__input" name="{{.timeName}}" style="--pf-v6-c-date-picker__input--c-form-control--Width: 150px;">
+					<div class="pf-v6-c-input-group">
+						<div class="pf-v6-c-input-group__item">
+							<div>
+								<div style="padding-left: 0px;">
+									<span class="pf-v6-c-form-control pf-m-icon{{if $te}} pf-m-error{{end}}">
+										<input aria-haspopup="menu" aria-label="{{.timeAria}}" autocomplete="off" aria-invalid="{{if $te}}true{{else}}false{{end}}" placeholder="hh:mm AM/PM" type="text" value="{{.time}}" name="{{.timeName}}" data-time-input>
+										<span class="pf-v6-c-form-control__utilities">
+											<span class="pf-v6-c-form-control__icon">
+												{{icon "outlined-clock"}}
+											</span>
+										</span>
+									</span>
+									<div class="pf-v6-c-menu ascender-dropdown__menu ascender-time-picker__menu" hidden data-time-menu>
+										<div class="pf-v6-c-menu__content">
+											<ul class="pf-v6-c-menu__list" role="listbox" data-time-list>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</span>
+		{{template "field_error" $de}}
+		{{template "field_error" $te}}
+	</div>
+</div>
+{{end}}
+{{define "schedule_subform"}}
+{{/* .prefix .freq .o .errors .exception .visible */}}
+{{$f := .freq}}
+{{$p := printf "%s.%s" .prefix $f}}
+{{$id := printf "%s-%s" .prefix $f}}
+{{$o := .o}}
+{{$e := .errors}}
+{{$ex := .exception}}
+<div class="ascender-form-column-layout ascender-form-column-layout--stacked" data-subform="{{$p}}"{{if not .visible}} hidden{{end}}>
+	<p class="ascender-frequency-detail-subform__grid-column-1-1">
+		<b>{{t (frequencyLabel $f)}}</b>
+	</p>
+	<div class="pf-v6-c-form__group" name="{{$p}}.interval">
+		<div class="pf-v6-c-form__group-label">
+			<label class="pf-v6-c-form__label" for="schedule-run-every-{{$id}}">
+				<span class="pf-v6-c-form__label-text">
+					{{if $ex}}{{t "Skip every"}}{{else}}{{t "Run every"}}{{end}}
+				</span>
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			</label>
+			&nbsp;&nbsp;
+		</div>
+		<div class="pf-v6-c-form__group-control">
+			<div class="ascender-frequency-detail-subform__display-flex">
+				<span class="pf-v6-c-form-control ascender-frequency-detail-subform__margin-right-10{{if index $e (printf "%s.interval" $p)}} pf-m-error{{end}}">
+					<input id="schedule-run-every-{{$id}}" min="1" step="1" aria-invalid="false" type="number" value="{{$o.Interval}}" name="{{$p}}.interval" data-interval>
+				</span>
+				{{$msg := printf "{intervalValue, plural, one {%s} other {%ss}}" $f $f}}
+				<p class="ascender-frequency-detail-subform__run-every-label" data-interval-label data-msgid="{{$msg}}">
+					{{t $msg "intervalValue" $o.Interval}}
+				</p>
+			</div>
+			{{template "field_error" (index $e (printf "%s.interval" $p))}}
+		</div>
+	</div>
+	{{if eq $f "week"}}
+		<div class="pf-v6-c-form__group" name="{{$p}}.daysOfWeek">
+			<div class="pf-v6-c-form__group-label">
+				<label class="pf-v6-c-form__label" for="schedule-days-of-week-{{$id}}">
+					<span class="pf-v6-c-form__label-text">{{t "On days"}}</span>
+					<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+				</label>
+				&nbsp;&nbsp;
+			</div>
+			<div class="pf-v6-c-form__group-control">
+				<div class="ascender-frequency-detail-subform__display-flex">
+					{{range $code := weekdays}}
+						{{$lc := weekdayShort $code}}
+						<div class="pf-v6-c-check ascender-frequency-detail-subform__checkbox">
+							<input id="schedule-days-of-week-{{lower $lc}}-{{$id}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t (weekdayLabel $code)}}" type="checkbox"{{if $o.HasDay $code}} checked{{end}} name="{{$p}}.daysOfWeek" value="{{$code}}">
+							<label class="pf-v6-c-check__label" for="schedule-days-of-week-{{lower $lc}}-{{$id}}">
+								{{t $lc}}
+							</label>
+						</div>
+					{{end}}
+				</div>
+				{{template "field_error" (index $e (printf "%s.daysOfWeek" $p))}}
+			</div>
+		</div>
+	{{end}}
+	{{if or (eq $f "month") (eq $f "year")}}
+		{{$day := eq $o.RunOn "day"}}
+		{{$the := eq $o.RunOn "the"}}
+		<div class="pf-v6-c-form__group" name="{{$p}}.runOn" data-run-on>
+			<div class="pf-v6-c-form__group-label">
+				<label class="pf-v6-c-form__label" for="schedule-run-on-{{$id}}">
+					<span class="pf-v6-c-form__label-text">{{t "Run on"}}</span>
+					<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+				</label>
+				&nbsp;&nbsp;
+			</div>
+			<div class="pf-v6-c-form__group-control">
+				<div class="pf-v6-c-radio ascender-frequency-detail-subform__run-on-radio">
+					<input id="schedule-run-on-day-{{$id}}" class="pf-v6-c-radio__input" aria-invalid="false" type="radio" value="day"{{if $day}} checked{{end}} name="{{$p}}.runOn">
+					<label class="pf-v6-c-radio__label" for="schedule-run-on-day-{{$id}}">
+						<div class="ascender-frequency-detail-subform__display-align-items">
+							{{if eq $f "month"}}
+								<span class="ascender-frequency-detail-subform__margin-right-10" id="radio-schedule-run-on-day">
+									{{t "Day"}}
+								</span>
+							{{else}}
+								<span class="pf-v6-c-form-control ascender-frequency-detail-subform__margin-right-10{{if not $day}} pf-m-disabled{{end}}" data-run-on-field="day">
+									<select id="schedule-run-on-day-month-{{$id}}" aria-label="{{t "Select Input"}}" aria-invalid="false" name="{{$p}}.runOnDayMonth"{{if not $day}} disabled{{end}}>
+										{{range $m := months}}
+											<option class="" value="{{index $m 0}}"{{if eq (index $m 0) $o.RunOnDayMonth}} selected{{end}}>
+												{{t (index $m 1)}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+							{{end}}
+							<span class="pf-v6-c-form-control{{if not $day}} pf-m-disabled{{end}}" data-run-on-field="day">
+								<input id="schedule-run-on-day-number-{{$id}}" min="1" max="31" step="1" aria-invalid="false" type="number" value="{{$o.RunOnDayNumber}}" name="{{$p}}.runOnDayNumber"{{if not $day}} disabled{{end}}>
+							</span>
+						</div>
+					</label>
+				</div>
+				<div class="pf-v6-c-radio ascender-frequency-detail-subform__run-on-radio">
+					<input id="schedule-run-on-the-{{$id}}" class="pf-v6-c-radio__input" aria-invalid="false" type="radio" value="the"{{if $the}} checked{{end}} name="{{$p}}.runOn">
+					<label class="pf-v6-c-radio__label" for="schedule-run-on-the-{{$id}}">
+						<div class="ascender-frequency-detail-subform__display-align-items">
+							<span class="ascender-frequency-detail-subform__margin-right-10" id="radio-schedule-run-on-the-{{$id}}">
+								{{t "The"}}
+							</span>
+							<span class="pf-v6-c-form-control{{if not $the}} pf-m-disabled{{end}}" data-run-on-field="the">
+								<select id="schedule-run-on-the-occurrence-{{$id}}" aria-label="{{t "Select Input"}}" aria-invalid="false" name="{{$p}}.runOnTheOccurrence"{{if not $the}} disabled{{end}}>
+									{{range $c := occurrences}}
+										<option class="" value="{{index $c 0}}"{{if eq (index $c 0) $o.RunOnTheOccurrence}} selected{{end}}>
+											{{t (index $c 1)}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							<span class="pf-v6-c-form-control{{if not $the}} pf-m-disabled{{end}}" data-run-on-field="the">
+								<select id="schedule-run-on-the-day-{{$id}}" aria-label="{{t "Select Input"}}" aria-invalid="false" name="{{$p}}.runOnTheDay"{{if not $the}} disabled{{end}}>
+									{{range $d := runOnDays}}
+										<option class="" value="{{index $d 0}}"{{if eq (index $d 0) $o.RunOnTheDay}} selected{{end}}>
+											{{t (index $d 1)}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{if eq $f "year"}}
+								<span class="ascender-frequency-detail-subform__margin-left-10" id="of-schedule-run-on-the-month-{{$id}}">
+									{{t "of"}}
+								</span>
+								<span class="pf-v6-c-form-control{{if not $the}} pf-m-disabled{{end}}" data-run-on-field="the">
+									<select id="schedule-run-on-the-month-{{$id}}" aria-label="{{t "Select Input"}}" aria-invalid="false" name="{{$p}}.runOnTheMonth"{{if not $the}} disabled{{end}}>
+										{{range $m := months}}
+											<option class="" value="{{index $m 0}}"{{if eq (index $m 0) $o.RunOnTheMonth}} selected{{end}}>
+												{{t (index $m 1)}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+							{{end}}
+						</div>
+					</label>
+				</div>
+				{{template "field_error" (index $e (printf "%s.runOn" $p))}}
+			</div>
+		</div>
+	{{end}}
+	<div class="pf-v6-c-form__group" name="{{$p}}.end" data-end-group>
+		<div class="pf-v6-c-form__group-label">
+			<label class="pf-v6-c-form__label" for="schedule-end-{{$id}}">
+				<span class="pf-v6-c-form__label-text">{{t "End"}}</span>
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			</label>
+			&nbsp;&nbsp;
+		</div>
+		<div class="pf-v6-c-form__group-control">
+			<div class="pf-v6-c-radio">
+				<input id="end-never-{{$id}}" class="pf-v6-c-radio__input" aria-invalid="false" type="radio" value="never"{{if eq $o.End "never"}} checked{{end}} name="{{$p}}.end">
+				<label class="pf-v6-c-radio__label" for="end-never-{{$id}}">{{t "Never"}}</label>
+			</div>
+			<div class="pf-v6-c-radio">
+				<input id="end-after-{{$id}}" class="pf-v6-c-radio__input" aria-invalid="false" type="radio" value="after"{{if eq $o.End "after"}} checked{{end}} name="{{$p}}.end">
+				<label class="pf-v6-c-radio__label" for="end-after-{{$id}}">
+					{{t "After number of occurrences"}}
+				</label>
+			</div>
+			<div class="pf-v6-c-radio">
+				<input id="end-on-date-{{$id}}" class="pf-v6-c-radio__input" aria-invalid="false" type="radio" value="onDate"{{if eq $o.End "onDate"}} checked{{end}} name="{{$p}}.end">
+				<label class="pf-v6-c-radio__label" for="end-on-date-{{$id}}">
+					{{t "On date"}}
+				</label>
+			</div>
+			{{template "field_error" (index $e (printf "%s.end" $p))}}
+		</div>
+	</div>
+	<div data-end-after{{if ne $o.End "after"}} hidden{{end}}>
+		{{template "form_field" (dict "id" (printf "schedule-occurrences-%s" $id) "name" (printf "%s.occurrences" $p) "label" (t "Occurrences") "value" $o.Occurrences "required" true "type" "number" "min" "1" "errors" (index $e (printf "%s.occurrences" $p)))}}
+	</div>
+	<div data-end-ondate{{if ne $o.End "onDate"}} hidden{{end}}>
+		{{template "schedule_datetime" (dict "label" (t "End date/time") "dateName" (printf "%s.endDate" $p) "timeName" (printf "%s.endTime" $p) "date" $o.EndDate "time" $o.EndTime "dateAria" (t "End date") "timeAria" (t "End time") "errors" $e)}}
+	</div>
+</div>
+{{end}}
+{{define "schedule_frequency_details"}}
+{{/* list of freqDetail */}}
+{{range .}}
+	<div>
+		<div class="ascender-frequency-details__label">{{.Label}}</div>
+		<dl class="ascender-detail-list" gutter="sm">
+			{{template "detail" (dict "label" (cond .Skip (t "Skip every") (t "Run every")) "value" .RunEvery "cy" (printf "%s-run-every" .Prefix))}}
+			{{if .OnDays}}
+				{{template "detail" (dict "label" (t "On days") "value" .OnDays "cy" (printf "%s-days-of-week" .Prefix))}}
+			{{end}}
+			{{if .RunOn}}
+				{{template "detail" (dict "label" (t "Run on") "value" .RunOn "cy" (printf "%s-run-on-day" .Prefix))}}
+			{{end}}
+			{{template "detail" (dict "label" (t "End") "value" .End "cy" (printf "%s-end" .Prefix))}}
+		</dl>
+	</div>
+{{end}}
+{{end}}

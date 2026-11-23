@@ -1,221 +1,86 @@
-# Releasing Ascender (and awx-operator)
+# Releasing Ascender
 
-The release process for Ascender is mostly automated as of version 19.5.0.
+A release of Ascender is a GitHub release of this repository. Publishing one
+runs `.github/workflows/release.yml` ("Release Images"), which checks the
+tagged commit, builds the two images for it, signs them, and moves `:latest`
+when the release is the newest one. Nothing else is published: there is no
+staging or promotion workflow to run by hand.
 
-If you need to revert a release, please refer to the [Revert a Release](#revert-a-release) section.
+How the images are built, and what they contain, is in
+[Building the Ascender Images](./build_images.md).
 
-## Select the next release version
+Not covered here: the Kubernetes operator (released from the operator
+repository, with its OperatorHub submissions), Ansible collections, and
+release announcements.
 
-There are two methods you can use to get the next release version. The manual way and the automated way.
 
-### Automated Way
+## Before releasing
 
-#### Get a github token
+Every pull request runs `.github/workflows/ci.yml`: formatting (gofmt, the
+template layout, the API's JSON), `go mod tidy`, the Go module licenses, the build and `go vet`; `make lint`; `make test`
+against a PostgreSQL database; `govulncheck` (informational, it does not
+fail the run); and a build and smoke test of both images. Every push to
+`main` then publishes development images (`devel_images.yml`, see
+[Published images](./build_images.md#published-images)), which can be
+tried before the commit is released.
 
-Log into your github account, under your user icon go to Settings => Developer Settings => Personal Access Tokens => Tokens (classic).
-Select the Generate new token => Generate new token (classic)
-Fill in the note, select no scopes select "Generate token".
-Copy the token and create a file at `~/.github_creds` or in your awx repo as `.github_creds`. Enter the token in this file.
-Run `./tools/scripts/get_next_release.py`
-This will use your token to go query for the PRs in the release and scan their bodies to select X/Y/Z and suggest new versions and spit out notifications.
 
-### Manual Way
+## Publishing a release
 
-#### Get latest release version and list of new work
+1. On the repository's Releases page, draft a new release and give it a new
+   tag on the commit to release. Tags so far are plain versions, such as
+   `26.0.1`. The image version is the tag with a leading `v` removed, and it
+   must be a valid image tag (letters, digits, `_`, `.` and `-`, at most 128
+   characters, not starting with `.` or `-`); otherwise the workflow stops
+   at its first job.
+2. Write the release notes, and mark the release as a pre-release if it is
+   one.
+3. Publish it. A draft starts nothing; the workflow runs on the `published`
+   event.
 
-1. Open the main project page for [Ascender](github.com/ctrliq/ascender/releases) and [AWX Operator](https://github.com/ansible/awx-operator/releases).
+The workflow then runs these jobs:
 
-Find the latest releases of the projects on the right hand side of the screen:
+| Job | Does |
+| --- | --- |
+| `version` | Works out the version from the tag, and whether `:latest` should move: yes for a release, no for a pre-release |
+| `checks` | Checks out the tag and runs `make fmt-check`, `make tidy-check`, `make licenses-check`, `make vet` and `make test GOTESTFLAGS='-race -count=1'`. It loads the schema into a PostgreSQL service first, as the CI test job does, so the database-backed tests run too. The images are built only when this passes |
+| `images` | Builds `ascender-web` and `ascender-task` from the tag for `linux/amd64` and `linux/arm64`, without a layer cache, with `ASCENDER_VERSION` set to the version, and pushes them as `ghcr.io/ctrliq/ascender/ascender-{web,task}:<version>` with an SBOM and build provenance. Each image is signed with cosign (keyless, through the workflow's GitHub OIDC identity) and given a build provenance attestation, both on its digest |
+| `promote` | Moves `:latest` (see below) |
 
-![Latest Release](img/latest-release.png)
+Each image's digest, version, platforms and tags are in the run's summary.
+To verify a release image's signature and attestation, see
+[Published images](./build_images.md#published-images).
 
-2. Open the compare screen for the two projects [Ascender](github.com/ctrliq/ascender/compare) and [AWX Operator](https://github.com/ansible/awx-operator/compare).
-In the two dropdowns near the top of the page leave the `compare` menu at devel and select the drop down for `base` and then select `tags` and finally select the latest release from step 1:
+Runs for one release tag queue rather than cancel each other.
 
-![PR Compare Screen](img/compare-screen.png)
 
-The page will now automatically update with a list of PRs that are in `Ascender/devel` but not in the last release.
+## When `:latest` moves
 
-![PR Compare List](img/pr_compare_list.png)
+`promote` points `ghcr.io/ctrliq/ascender/ascender-web:latest` and
+`ascender-task:latest` at the release's images, both at once, and only once
+both are built. It copies the multi-arch image index under the new tag with
+`docker buildx imagetools create`, so nothing is rebuilt, and the
+signatures and attestations, made on the digest, still apply.
 
-Use this list of PRs to decide if this is a X-stream (major) release, Y-stream (minor) release, or a Z-stream (patch) release. Use [semver](https://semver.org/#summary) to help determine what kind of release is needed.
+For a published release it does this only when the release is the
+repository's latest release, as GitHub reports it. A pre-release leaves
+`:latest` alone, and so does an older release whose build finishes after a
+newer one's. `promote` runs for one release at a time, across all releases.
+So `ascender-web:latest` and `ascender-task:latest` always come from the same
+release, and never go back to an older one by themselves.
 
-#### Select the next release version
 
-Indicators of a Z-stream release:
+## Rebuilding a release
 
-- No significant new features have been merged into devel since the last release.
+The workflow can be run by hand (Actions, "Release Images", "Run workflow")
+to rebuild the images of a release that exists, for example to pick up a
+fixed base image. It takes two inputs:
 
-Indicators of a Y-stream release:
+- `tag`: the release tag to build. It must exist.
+- `latest`: also move `:latest` to this build (on by default).
 
-- Additional features, non disrupting change of subcomponents.
-
-Indicators of an X-stream release:
-
-- Disruptive changes.
-
-If the latest release of `Ascender` is 19.5.0:
-
-- X-stream release version will be 20.0.0.
-- Y-stream release version will be 19.6.0.
-- Z-stream release version will be 19.5.1.
-
-With very few exceptions the new `AWX Operator` release will always be a Y-stream release.
-
-## Stage the release
-
-To stage the release, maintainers of this repository can run the [Stage Release](github.com/ctrliq/ascender/actions/workflows/stage.yml) workflow.
-
-The link above will take you directly to the flow execution; if you wanted to manually navigate to the screen:
-
-1. Click "Actions" at the top of GitHub.
-2. Click on the "Stage Release" workflow.
-
-Once you are on the Stage Release workflow page:
-
-3. Click the "Run Workflow" drop down.
-4. Populate the inputs.
-5. Click the "Run workflow" button.
-
-![Staging Ascender](img/stage-release.png)
-
-This workflow will:
-
-- Build awx from devel
-- Build awx-operator from devel
-- Run smoke tests
-- Create a draft release for both `ansible/awx` and `ansible/awx-operator`
-
-## Promote the draft releases
-
-### Releasing Ascender and the ctrliq.ascender collection
-
-Once staging is complete we can complete the release of awx and the operator.
-
-1. navigate to the [Releases page](github.com/ctrliq/ascender/releases) for Ascender and verify things look ok.
-
-2. Click the pencil icon on the draft:
-
-![Verify draft release](img/verify-draft-release.png)
-
-3. Click the generate release notes button (turns grey after clicking once)
-
-4. Add in a message of what operator version is release with this Ascender version (if applicable):
-```
-## AWX Operator
-Released with AWX Operator v0.23.0
-```
-
-5. Click "Publish Release":
-
-![Publish release](img/publish-release.png)
-
-Once the release is published, another workflow called [Promote Release](github.com/ctrliq/ascender/actions/workflows/promote.yml) will start running:
-
-![Promote release](img/promote-release.png)
-
-This workflow will take the generated images and promote them to quay.io in addition it will also release the ctrliq.ascender collection. The overall process will not take long.
-
-6. Once the workflow is finished, verify that the new image is present on the [Repository Tags](https://quay.io/repository/ansible/awx?tag=latest&tab=tags) on Quay:
-
-![Verify released Ascender image](img/verify-released-ascender-image.png)
-
-7. Go to the ctrliq.ascender collection on [Ansible Galaxy](https://galaxy.ansible.com/ctrliq/ascender) and validate the latest version matches and was updated recently:
-
-![Verify release ctrliq.ascender collection](img/galaxy.png)
-
-### Releasing the AWX Operator
-
-Once the Ascender image is live, we can now release the AWX Operator.
-
-1. Navigate to the [Releases page](https://github.com/ansible/awx-operator/releases) for AWX Operator and follow the same process used for publishing the Ascender draft except note the version of Ascender released with Operator.
-
-Once published, the workflow [Promote AWX Operator image](https://github.com/ansible/awx-operator/actions/workflows/promote.yaml) will run:
-
-![Operator Promotion](img/operator-promote.png)
-
-This workflow will take the generated images and promote them to quay.io.
-
-2. Once complete, verify the image is on the [awx-operator Quay repository](https://quay.io/repository/ansible/awx-operator?tab=tags):
-
-![Verify released awx-operator image](img/verify-released-ascender-operator-image.png)
-
-## Send notifications
-
-Send notifications to the following groups:
-
-  * [Ansible Community forum](https://forum.ansible.com/)
-  * [#social:ansible.com](https://matrix.to/#/#social:ansible.com) `@newsbot` for inclusion in The Bullhorn)
-  * [#awx:ansible.com](https://forum.ansible.com/g/AWX/members)
-  * #aap-controller Slack channel
-
-These messages are templated out for you in the output of `get_next_release.yml`.
-
-Note: The Slack message is the same as the Matrix message.
-
-### Announcements
-
-* Provide enough information for the reader
-* Include:
-  * **What:** What is this, why should someone care
-  * **Why:** Why is this important
-  * **How:** How do I use this (docs, config options)
-  * **Call to action:** What type of feedback are we looking for
-* Link to PR(s) for larger features
-* `@newsbot` supports [Markdown](https://www.markdownguide.org/cheat-sheet/), so use formatted links, bullet points
-* Release Manager posts into social Matrix Channel
-* Appears in next weeks [Bulhorn](https://forum.ansible.com/c/news/bullhorn)
-
-
-
-## Create operator hub PRs.
-Operator hub PRs are generated via an Ansible Playbook. See someone on the Ascender team for the location of the playbooks and instructions on how to run them.
-
-## Adding New Operator to Operator Hub
-
-1. If you have not already fork the repos:
-  * https://github.com/redhat-openshift-ecosystem/community-operators-prod
-  * https://github.com/k8s-operatorhub/community-operators
-
-2. If you have not already, install
-  * [the operator-sdk](https://sdk.operatorframework.io/docs/installation/)
-  * [kustomize](https://kustomize.io/)
-  * [opm](https://docs.openshift.com/container-platform/4.9/cli_reference/opm/cli-opm-install.html)
-
-3. Download the script from https://github.com/ansible/awx-operator/blob/devel/hack/publish-to-operator-hub.sh into your awx-operator repo as release_operator_hub.sh
-
-4. Make sure you are logged into quay.io with `docker login quay.io`
-
-5. Run the script like `OPERATOR_PATH=<path to your operator repo> VERSION=1.1.2 PREV_VERSION=1.1.1 FORK=john-westcott-iv ./release_operator_hub.sh`
-  * Make sure to change the new and previous versions and update your fork!
-
-6. Create the PRs as described by the output of the script. Submit them just the way they are when you open them.
-
-
-## Revert a Release
-
-Decide whether or not you can just fall-forward with a new Ascender Release to fix a bad release. If you need to remove published artifacts from publicly facing repositories, follow the steps below.
-
-Here are the steps needed to revert an Ascender and an AWX-Operator release. Depending on your use case, follow the steps for reverting just an Ascender release, an Operator release or both.
-
-
-1. Navigate to the [Ascender Release Page](github.com/ctrliq/ascender/releases) and delete the Ascender Release that needs to be removed.
-
-![Revert-1-Image](img/revert-1.png)
-
-2. Navigate to the [Ascender Tags Page](github.com/ctrliq/ascender/tags) and delete the Ascender Tag that got created by the Github Actions Workflow from when you originally tried to release Ascender. You need delete the release in step 1 before you can do this step. The tag must not be tied to a release if you want to delete a tag.
-
-![Tag-Revert-1-Image](img/tag-revert-1.png)
-[comment]: <> (Need an image here for actually deleting an orphaned tag, place here during next release)
-
-3. Navigate to the [AWX Operator Release Page]() and delete the AWX-Operator release that needs to be removed.
-
-![Revert-2-Image](img/revert-2.png)
-
-4. Navigate to [quay.io](https://quay.io/repository/ansible/awx?tag=latest&tab=tags) and delete the published Ascender image(s) and tags.
-
-5. Navigate to [quay.io](https://github.com/ansible/awx-operator/releases) and delete the published AWX Operator image(s) and tags.
-
-6. Navigate to the [Ansible Galaxy Collections](https://galaxy.ansible.com/awx/awx) website and remove the published Ascender collection with the bad tag.
-
-7. [Restart the Release Process](#releasing-awx-and-awx-operator)
+A manual run goes through the same `checks`, `images` and `promote` jobs.
+The rebuilt images replace the release's `<version>` tags. When `latest` is
+on, `:latest` moves to the rebuild whether or not the tag is the latest
+release, which is also how `:latest` is pointed back at an earlier release.
+The workflows never delete an image or a tag.

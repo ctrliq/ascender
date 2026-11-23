@@ -1,0 +1,261 @@
+{
+    "name": "Workflow Job Node Detail",
+    "description": "# Retrieve a Workflow Job Node:\n\nMake GET request to this resource to retrieve a single workflow job node\nrecord containing the following fields:\n\n* `id`: Database ID for this workflow job node. (integer)\n* `type`: Data type for this workflow job node. (choice)\n* `url`: URL for this workflow job node. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this workflow job node was created. (datetime)\n* `modified`: Timestamp when this workflow job node was last modified. (datetime)\n* `extra_data`:  (json)\n* `inventory`: Inventory applied as a prompt, assuming job template prompts for inventory (id)\n* `scm_branch`:  (string)\n* `job_type`:  (choice)\n    - `None`: ---------\n    - `\"\"`: ---------\n    - `run`: Run\n    - `check`: Check\n* `job_tags`:  (string)\n* `skip_tags`:  (string)\n* `limit`:  (string)\n* `diff_mode`:  (boolean)\n* `verbosity`:  (choice)\n    - `None`: ---------\n    - `0`: 0 (Normal)\n    - `1`: 1 (Verbose)\n    - `2`: 2 (More Verbose)\n    - `3`: 3 (Debug)\n    - `4`: 4 (Connection Debug)\n    - `5`: 5 (WinRM Debug)\n* `execution_environment`: The container image to be used for execution. (id)\n* `forks`:  (integer)\n* `job_slice_count`:  (integer)\n* `timeout`:  (integer)\n* `job`:  (id)\n* `workflow_job`:  (id)\n* `unified_job_template`:  (id)\n* `success_nodes`:  (field)\n* `failure_nodes`:  (field)\n* `always_nodes`:  (field)\n* `condition_nodes`:  (field)\n* `condition_edges`: List of condition data for each conditional edge originating from this node; id is the target node. (field)\n* `all_parents_must_converge`: If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node (boolean)\n* `do_not_run`: Indicates that a job will not be created when True. Workflow runtime semantics will mark this True if the node is in a path that will decidedly not be ran. A value of False means the node may not run. (boolean)\n* `prior_run_succeeded`: Set when a workflow is relaunched from a failed node: the node&#x27;s job succeeded in the prior run, so it is carried forward as already-successful. It spawns no new job, but the scheduler treats it as a successful parent so its success/always paths are still traversed. (boolean)\n* `prior_run_elapsed`: Elapsed time (seconds) of this node&#x27;s job in the run it was carried forward from. (float)\n* `forced_success`: Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set. (boolean)\n* `forced_success_reason`: Why the node was forced as successful, as given by whoever relaunched the workflow. (string)\n* `forced_success_by`: The user who forced the node as successful. (id)\n* `forced_success_job`: The failed job whose outcome was overridden when the node was forced as successful. (id)\n* `max_retries`: Maximum number of times this node&#x27;s job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried. (integer)\n* `retry_attempts`: Number of times this node&#x27;s job has been automatically retried after failing. (integer)\n* `retried_jobs`:  (field)\n* `identifier`: An identifier coresponding to the workflow job template node that this node was created from. (string)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this workflow job node.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this workflow job node.",
+                "choices": [
+                    ["workflow_job_node", "Workflow Job Node"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this workflow job node.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this workflow job node was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this workflow job node was last modified.",
+                "filterable": true
+            },
+            "extra_data": {
+                "type": "json",
+                "label": "Extra data",
+                "filterable": true
+            },
+            "inventory": {
+                "type": "id",
+                "label": "Inventory",
+                "help_text": "Inventory applied as a prompt, assuming job template prompts for inventory",
+                "filterable": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "label": "Scm branch",
+                "filterable": false
+            },
+            "job_type": {
+                "type": "choice",
+                "label": "Job type",
+                "filterable": false,
+                "choices": [
+                    [null, "---------"],
+                    ["", "---------"],
+                    ["run", "Run"],
+                    ["check", "Check"]
+                ]
+            },
+            "job_tags": {
+                "type": "string",
+                "label": "Job tags",
+                "filterable": false
+            },
+            "skip_tags": {
+                "type": "string",
+                "label": "Skip tags",
+                "filterable": false
+            },
+            "limit": {
+                "type": "string",
+                "label": "Limit",
+                "filterable": false
+            },
+            "diff_mode": {
+                "type": "boolean",
+                "label": "Diff mode",
+                "filterable": false
+            },
+            "verbosity": {
+                "type": "choice",
+                "label": "Verbosity",
+                "filterable": false,
+                "choices": [
+                    [null, "---------"],
+                    [0, "0 (Normal)"],
+                    [1, "1 (Verbose)"],
+                    [2, "2 (More Verbose)"],
+                    [3, "3 (Debug)"],
+                    [4, "4 (Connection Debug)"],
+                    [5, "5 (WinRM Debug)"]
+                ]
+            },
+            "execution_environment": {
+                "type": "id",
+                "label": "Execution environment",
+                "help_text": "The container image to be used for execution.",
+                "filterable": true
+            },
+            "forks": {
+                "type": "integer",
+                "label": "Forks",
+                "min_value": 0,
+                "filterable": false
+            },
+            "job_slice_count": {
+                "type": "integer",
+                "label": "Job slice count",
+                "min_value": 0,
+                "filterable": false
+            },
+            "timeout": {
+                "type": "integer",
+                "label": "Timeout",
+                "filterable": false
+            },
+            "job": {
+                "type": "id",
+                "label": "Job",
+                "filterable": true
+            },
+            "workflow_job": {
+                "type": "id",
+                "label": "Workflow job",
+                "filterable": true
+            },
+            "unified_job_template": {
+                "type": "id",
+                "label": "Unified job template",
+                "filterable": true
+            },
+            "success_nodes": {
+                "type": "field",
+                "label": "Success nodes",
+                "filterable": false
+            },
+            "failure_nodes": {
+                "type": "field",
+                "label": "Failure nodes",
+                "filterable": false
+            },
+            "always_nodes": {
+                "type": "field",
+                "label": "Always nodes",
+                "filterable": false
+            },
+            "condition_nodes": {
+                "type": "field",
+                "label": "Condition nodes",
+                "filterable": false
+            },
+            "condition_edges": {
+                "type": "field",
+                "label": "Condition edges",
+                "help_text": "List of condition data for each conditional edge originating from this node; id is the target node.",
+                "filterable": false
+            },
+            "all_parents_must_converge": {
+                "type": "boolean",
+                "label": "All parents must converge",
+                "help_text": "If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node",
+                "filterable": true
+            },
+            "do_not_run": {
+                "type": "boolean",
+                "label": "Do not run",
+                "help_text": "Indicates that a job will not be created when True. Workflow runtime semantics will mark this True if the node is in a path that will decidedly not be ran. A value of False means the node may not run.",
+                "filterable": true
+            },
+            "prior_run_succeeded": {
+                "type": "boolean",
+                "label": "Prior run succeeded",
+                "help_text": "Set when a workflow is relaunched from a failed node: the node's job succeeded in the prior run, so it is carried forward as already-successful. It spawns no new job, but the scheduler treats it as a successful parent so its success/always paths are still traversed.",
+                "filterable": true
+            },
+            "prior_run_elapsed": {
+                "type": "float",
+                "label": "Prior run elapsed",
+                "help_text": "Elapsed time (seconds) of this node's job in the run it was carried forward from.",
+                "filterable": true
+            },
+            "forced_success": {
+                "type": "boolean",
+                "label": "Forced success",
+                "help_text": "Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set.",
+                "filterable": true
+            },
+            "forced_success_reason": {
+                "type": "string",
+                "label": "Forced success reason",
+                "help_text": "Why the node was forced as successful, as given by whoever relaunched the workflow.",
+                "filterable": true
+            },
+            "forced_success_by": {
+                "type": "id",
+                "label": "Forced success by",
+                "help_text": "The user who forced the node as successful.",
+                "filterable": true
+            },
+            "forced_success_job": {
+                "type": "id",
+                "label": "Forced success job",
+                "help_text": "The failed job whose outcome was overridden when the node was forced as successful.",
+                "filterable": true
+            },
+            "max_retries": {
+                "type": "integer",
+                "label": "Max retries",
+                "help_text": "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.",
+                "min_value": 0,
+                "max_value": 100,
+                "filterable": true
+            },
+            "retry_attempts": {
+                "type": "integer",
+                "label": "Retry attempts",
+                "help_text": "Number of times this node's job has been automatically retried after failing.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "retried_jobs": {
+                "type": "field",
+                "label": "Retried jobs",
+                "filterable": false
+            },
+            "identifier": {
+                "type": "string",
+                "label": "Identifier",
+                "help_text": "An identifier coresponding to the workflow job template node that this node was created from.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "workflow_job_node"
+    ]
+}

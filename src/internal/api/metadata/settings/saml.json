@@ -1,0 +1,602 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `SAML_AUTO_CREATE_OBJECTS`: When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login. (boolean)\n* `SOCIAL_AUTH_SAML_CALLBACK_URL`: Register the service as a service provider (SP) with each identity provider (IdP) you have configured. Provide your SP Entity ID and this ACS URL for your application. (string)\n* `SOCIAL_AUTH_SAML_METADATA_URL`: If your identity provider (IdP) allows uploading an XML metadata file, you can download one from this URL. (string)\n* `SOCIAL_AUTH_SAML_SP_ENTITY_ID`: The application-defined unique identifier used as the audience of the SAML service provider (SP) configuration. This is usually the URL for the service. (string)\n* `SOCIAL_AUTH_SAML_SP_PUBLIC_CERT`: Create a keypair to use as a service provider (SP) and include the certificate content here. (string)\n* `SOCIAL_AUTH_SAML_SP_PRIVATE_KEY`: Create a keypair to use as a service provider (SP) and include the private key content here. (string)\n* `SOCIAL_AUTH_SAML_ORG_INFO`: Provide the URL, display name, and the name of your app. Refer to the documentation for example syntax. (nested object)\n* `SOCIAL_AUTH_SAML_TECHNICAL_CONTACT`: Provide the name and email address of the technical contact for your service provider. Refer to the documentation for example syntax. (nested object)\n* `SOCIAL_AUTH_SAML_SUPPORT_CONTACT`: Provide the name and email address of the support contact for your service provider. Refer to the documentation for example syntax. (nested object)\n* `SOCIAL_AUTH_SAML_ENABLED_IDPS`: Configure the Entity ID, SSO URL and certificate for each identity provider (IdP) in use. Multiple SAML IdPs are supported. Some IdPs may provide user data using attribute names that differ from the default OIDs. Attribute names may be overridden for each IdP. An optional label may be set for each IdP to control the text of its login button. Refer to the Ansible documentation for additional details and syntax. (nested object)\n* `SOCIAL_AUTH_SAML_SECURITY_CONFIG`: A dict of key value pairs that are passed to the underlying python-saml security setting https://github.com/onelogin/python-saml#settings (nested object)\n* `SOCIAL_AUTH_SAML_SP_EXTRA`: A dict of key value pairs to be passed to the underlying python-saml Service Provider configuration setting. (nested object)\n* `SOCIAL_AUTH_SAML_EXTRA_DATA`: A list of tuples that maps IDP attributes to extra_attributes. Each attribute will be a list of values, even if only 1 value. (list)\n* `SOCIAL_AUTH_SAML_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object)\n* `SOCIAL_AUTH_SAML_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object)\n* `SOCIAL_AUTH_SAML_ORGANIZATION_ATTR`: Used to translate user organization membership. (nested object)\n* `SOCIAL_AUTH_SAML_TEAM_ATTR`: Used to translate user team membership. (nested object)\n* `SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR`: Used to map super users and system auditors from SAML. (nested object)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `SAML_AUTO_CREATE_OBJECTS`: When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login. (boolean, default=`True`)\n\n\n* `SOCIAL_AUTH_SAML_SP_ENTITY_ID`: The application-defined unique identifier used as the audience of the SAML service provider (SP) configuration. This is usually the URL for the service. (string, default=`\"\"`)\n* `SOCIAL_AUTH_SAML_SP_PUBLIC_CERT`: Create a keypair to use as a service provider (SP) and include the certificate content here. (string, required)\n* `SOCIAL_AUTH_SAML_SP_PRIVATE_KEY`: Create a keypair to use as a service provider (SP) and include the private key content here. (string, required)\n* `SOCIAL_AUTH_SAML_ORG_INFO`: Provide the URL, display name, and the name of your app. Refer to the documentation for example syntax. (nested object, required)\n* `SOCIAL_AUTH_SAML_TECHNICAL_CONTACT`: Provide the name and email address of the technical contact for your service provider. Refer to the documentation for example syntax. (nested object, required)\n* `SOCIAL_AUTH_SAML_SUPPORT_CONTACT`: Provide the name and email address of the support contact for your service provider. Refer to the documentation for example syntax. (nested object, required)\n* `SOCIAL_AUTH_SAML_ENABLED_IDPS`: Configure the Entity ID, SSO URL and certificate for each identity provider (IdP) in use. Multiple SAML IdPs are supported. Some IdPs may provide user data using attribute names that differ from the default OIDs. Attribute names may be overridden for each IdP. An optional label may be set for each IdP to control the text of its login button. Refer to the Ansible documentation for additional details and syntax. (nested object, default=`{}`)\n* `SOCIAL_AUTH_SAML_SECURITY_CONFIG`: A dict of key value pairs that are passed to the underlying python-saml security setting https://github.com/onelogin/python-saml#settings (nested object, default=`{&#x27;requestedAuthnContext&#x27;: False}`)\n* `SOCIAL_AUTH_SAML_SP_EXTRA`: A dict of key value pairs to be passed to the underlying python-saml Service Provider configuration setting. (nested object, default=`None`)\n* `SOCIAL_AUTH_SAML_EXTRA_DATA`: A list of tuples that maps IDP attributes to extra_attributes. Each attribute will be a list of values, even if only 1 value. (list, default=`None`)\n* `SOCIAL_AUTH_SAML_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_SAML_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_SAML_ORGANIZATION_ATTR`: Used to translate user organization membership. (nested object, default=`{}`)\n* `SOCIAL_AUTH_SAML_TEAM_ATTR`: Used to translate user team membership. (nested object, default=`{}`)\n* `SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR`: Used to map super users and system auditors from SAML. (nested object, default=`{}`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "SAML_AUTO_CREATE_OBJECTS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Automatically Create Organizations and Teams on SAML Login",
+                "help_text": "When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "default": true
+            },
+            "SOCIAL_AUTH_SAML_SP_ENTITY_ID": {
+                "type": "string",
+                "required": false,
+                "label": "SAML Service Provider Entity ID",
+                "help_text": "The application-defined unique identifier used as the audience of the SAML service provider (SP) configuration. This is usually the URL for the service.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "default": ""
+            },
+            "SOCIAL_AUTH_SAML_SP_PUBLIC_CERT": {
+                "type": "string",
+                "required": true,
+                "label": "SAML Service Provider Public Certificate",
+                "help_text": "Create a keypair to use as a service provider (SP) and include the certificate content here.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "default": ""
+            },
+            "SOCIAL_AUTH_SAML_SP_PRIVATE_KEY": {
+                "type": "string",
+                "required": true,
+                "label": "SAML Service Provider Private Key",
+                "help_text": "Create a keypair to use as a service provider (SP) and include the private key content here.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "default": ""
+            },
+            "SOCIAL_AUTH_SAML_ORG_INFO": {
+                "type": "nested object",
+                "required": true,
+                "label": "SAML Service Provider Organization Info",
+                "help_text": "Provide the URL, display name, and the name of your app. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "en-US": {
+                        "name": "example",
+                        "displayname": "Example",
+                        "url": "http://www.example.com"
+                    }
+                },
+                "default": {},
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_TECHNICAL_CONTACT": {
+                "type": "nested object",
+                "required": true,
+                "label": "SAML Service Provider Technical Contact",
+                "help_text": "Provide the name and email address of the technical contact for your service provider. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "givenName": "Technical Contact",
+                    "emailAddress": "techsup@example.com"
+                },
+                "default": {},
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_SUPPORT_CONTACT": {
+                "type": "nested object",
+                "required": true,
+                "label": "SAML Service Provider Support Contact",
+                "help_text": "Provide the name and email address of the support contact for your service provider. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "givenName": "Support Contact",
+                    "emailAddress": "support@example.com"
+                },
+                "default": {},
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_ENABLED_IDPS": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Enabled Identity Providers",
+                "help_text": "Configure the Entity ID, SSO URL and certificate for each identity provider (IdP) in use. Multiple SAML IdPs are supported. Some IdPs may provide user data using attribute names that differ from the default OIDs. Attribute names may be overridden for each IdP. An optional label may be set for each IdP to control the text of its login button. Refer to the Ansible documentation for additional details and syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "Okta": {
+                        "entity_id": "http://www.okta.com/HHniyLkaxk9e76wD0Thh",
+                        "url": "https://dev-123456.oktapreview.com/app/ansibletower/HHniyLkaxk9e76wD0Thh/sso/saml",
+                        "x509cert": "MIIDpDCCAoygAwIBAgIGAVVZ4rPzMA0GCSqGSIb3...",
+                        "attr_user_permanent_id": "username",
+                        "attr_first_name": "first_name",
+                        "attr_last_name": "last_name",
+                        "attr_username": "username",
+                        "attr_email": "email"
+                    },
+                    "OneLogin": {
+                        "entity_id": "https://app.onelogin.com/saml/metadata/123456",
+                        "url": "https://example.onelogin.com/trust/saml2/http-post/sso/123456",
+                        "x509cert": "MIIEJjCCAw6gAwIBAgIUfuSD54OPSBhndDHh3gZo...",
+                        "attr_user_permanent_id": "name_id",
+                        "attr_first_name": "User.FirstName",
+                        "attr_last_name": "User.LastName",
+                        "attr_username": "User.email",
+                        "attr_email": "User.email"
+                    }
+                },
+                "default": {},
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_SECURITY_CONFIG": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Security Config",
+                "help_text": "A dict of key value pairs that are passed to the underlying python-saml security setting https://github.com/onelogin/python-saml#settings",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "nameIdEncrypted": false,
+                    "authnRequestsSigned": false,
+                    "logoutRequestSigned": false,
+                    "logoutResponseSigned": false,
+                    "signMetadata": false,
+                    "wantMessagesSigned": false,
+                    "wantAssertionsSigned": false,
+                    "wantAssertionsEncrypted": false,
+                    "wantNameId": true,
+                    "wantNameIdEncrypted": false,
+                    "wantAttributeStatement": true,
+                    "requestedAuthnContext": true,
+                    "requestedAuthnContextComparison": "exact",
+                    "metadataValidUntil": "2015-06-26T20:00:00Z",
+                    "metadataCacheDuration": "PT518400S",
+                    "signatureAlgorithm": "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+                    "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1"
+                },
+                "default": {
+                    "requestedAuthnContext": false
+                },
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_SP_EXTRA": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Service Provider extra configuration data",
+                "help_text": "A dict of key value pairs to be passed to the underlying python-saml Service Provider configuration setting.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {},
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_EXTRA_DATA": {
+                "type": "list",
+                "required": false,
+                "label": "SAML IDP to extra_data attribute mapping",
+                "help_text": "A list of tuples that maps IDP attributes to extra_attributes. Each attribute will be a list of values, even if only 1 value.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": [
+                    ["attribute_name", "extra_data_name_for_attribute"],
+                    ["department", "department"],
+                    ["manager_full_name", "manager_full_name"]
+                ],
+                "default": null,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "Default": {
+                        "users": true
+                    },
+                    "Test Org": {
+                        "admins": [
+                            "admin@example.com"
+                        ],
+                        "auditors": [
+                            "auditor@example.com"
+                        ],
+                        "users": true
+                    },
+                    "Test Org 2": {
+                        "admins": [
+                            "admin@example.com",
+                            "/^tower-[^@]+*?@.*$/"
+                        ],
+                        "remove_admins": true,
+                        "users": "/^[^@].*?@example\\.com$/i",
+                        "remove_users": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_TEAM_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "My Team": {
+                        "organization": "Test Org",
+                        "users": [
+                            "/^[^@]+?@test\\.example\\.com$/"
+                        ],
+                        "remove": true
+                    },
+                    "Other Team": {
+                        "organization": "Test Org 2",
+                        "users": "/^[^@]+?@test2\\.example\\.com$/i",
+                        "remove": false
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_ORGANIZATION_ATTR": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Organization Attribute Mapping",
+                "help_text": "Used to translate user organization membership.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "saml_attr": "organization",
+                    "saml_admin_attr": "organization_admin",
+                    "saml_auditor_attr": "organization_auditor",
+                    "remove": true,
+                    "remove_admins": true,
+                    "remove_auditors": true
+                },
+                "default": {},
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_TEAM_ATTR": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML Team Attribute Mapping",
+                "help_text": "Used to translate user team membership.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": {
+                    "saml_attr": "team",
+                    "remove": true,
+                    "team_org_map": [
+                        {
+                            "team": "Marketing",
+                            "organization": "Red Hat"
+                        },
+                        {
+                            "team": "Human Resources",
+                            "organization": "Red Hat"
+                        },
+                        {
+                            "team": "Engineering",
+                            "organization": "Red Hat"
+                        },
+                        {
+                            "team": "Engineering",
+                            "organization": "Ansible"
+                        },
+                        {
+                            "team": "Quality Engineering",
+                            "organization": "Ansible"
+                        },
+                        {
+                            "team": "Sales",
+                            "organization": "Ansible"
+                        }
+                    ]
+                },
+                "default": {},
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR": {
+                "type": "nested object",
+                "required": false,
+                "label": "SAML User Flags Attribute Mapping",
+                "help_text": "Used to map super users and system auditors from SAML.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "placeholder": [
+                    ["is_superuser_attr", "saml_attr"],
+                    [
+                        "is_superuser_value",
+                        ["value"]
+                    ],
+                    [
+                        "is_superuser_role",
+                        ["saml_role"]
+                    ],
+                    ["remove_superusers", true],
+                    ["is_system_auditor_attr", "saml_attr"],
+                    [
+                        "is_system_auditor_value",
+                        ["value"]
+                    ],
+                    [
+                        "is_system_auditor_role",
+                        ["saml_role"]
+                    ],
+                    ["remove_system_auditors", true]
+                ],
+                "default": {},
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                }
+            }
+        },
+        "GET": {
+            "SAML_AUTO_CREATE_OBJECTS": {
+                "type": "boolean",
+                "label": "Automatically Create Organizations and Teams on SAML Login",
+                "help_text": "When enabled (the default), mapped Organizations and Teams will be created automatically on successful SAML login.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_CALLBACK_URL": {
+                "type": "string",
+                "label": "SAML Assertion Consumer Service (ACS) URL",
+                "help_text": "Register the service as a service provider (SP) with each identity provider (IdP) you have configured. Provide your SP Entity ID and this ACS URL for your application.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_METADATA_URL": {
+                "type": "string",
+                "label": "SAML Service Provider Metadata URL",
+                "help_text": "If your identity provider (IdP) allows uploading an XML metadata file, you can download one from this URL.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_SP_ENTITY_ID": {
+                "type": "string",
+                "label": "SAML Service Provider Entity ID",
+                "help_text": "The application-defined unique identifier used as the audience of the SAML service provider (SP) configuration. This is usually the URL for the service.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_SP_PUBLIC_CERT": {
+                "type": "string",
+                "label": "SAML Service Provider Public Certificate",
+                "help_text": "Create a keypair to use as a service provider (SP) and include the certificate content here.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_SP_PRIVATE_KEY": {
+                "type": "string",
+                "label": "SAML Service Provider Private Key",
+                "help_text": "Create a keypair to use as a service provider (SP) and include the private key content here.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_SAML_ORG_INFO": {
+                "type": "nested object",
+                "label": "SAML Service Provider Organization Info",
+                "help_text": "Provide the URL, display name, and the name of your app. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_TECHNICAL_CONTACT": {
+                "type": "nested object",
+                "label": "SAML Service Provider Technical Contact",
+                "help_text": "Provide the name and email address of the technical contact for your service provider. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_SUPPORT_CONTACT": {
+                "type": "nested object",
+                "label": "SAML Service Provider Support Contact",
+                "help_text": "Provide the name and email address of the support contact for your service provider. Refer to the documentation for example syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_ENABLED_IDPS": {
+                "type": "nested object",
+                "label": "SAML Enabled Identity Providers",
+                "help_text": "Configure the Entity ID, SSO URL and certificate for each identity provider (IdP) in use. Multiple SAML IdPs are supported. Some IdPs may provide user data using attribute names that differ from the default OIDs. Attribute names may be overridden for each IdP. An optional label may be set for each IdP to control the text of its login button. Refer to the Ansible documentation for additional details and syntax.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_SECURITY_CONFIG": {
+                "type": "nested object",
+                "label": "SAML Security Config",
+                "help_text": "A dict of key value pairs that are passed to the underlying python-saml security setting https://github.com/onelogin/python-saml#settings",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_SP_EXTRA": {
+                "type": "nested object",
+                "label": "SAML Service Provider extra configuration data",
+                "help_text": "A dict of key value pairs to be passed to the underlying python-saml Service Provider configuration setting.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_EXTRA_DATA": {
+                "type": "list",
+                "label": "SAML IDP to extra_data attribute mapping",
+                "help_text": "A list of tuples that maps IDP attributes to extra_attributes. Each attribute will be a list of values, even if only 1 value.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "label": "SAML Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_TEAM_MAP": {
+                "type": "nested object",
+                "label": "SAML Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_SAML_ORGANIZATION_ATTR": {
+                "type": "nested object",
+                "label": "SAML Organization Attribute Mapping",
+                "help_text": "Used to translate user organization membership.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_TEAM_ATTR": {
+                "type": "nested object",
+                "label": "SAML Team Attribute Mapping",
+                "help_text": "Used to translate user team membership.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR": {
+                "type": "nested object",
+                "label": "SAML User Flags Attribute Mapping",
+                "help_text": "Used to map super users and system auditors from SAML.",
+                "category": "SAML",
+                "category_slug": "saml",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            }
+        }
+    }
+}

@@ -1,284 +1,437 @@
 # Ascender Clustering Overview
 
-Ascender supports multi-node configurations. Here is an example configuration with two control plane nodes.
+Ascender runs as two programs that share one PostgreSQL database:
+
+- `ascender-web` serves the REST API, the UI and the websocket. It keeps no
+  state of its own, so any number of copies can run behind a load balancer.
+- `ascender-task` does the background work: it registers its node as an
+  instance, claims and runs jobs, runs the cluster heartbeat, launches
+  schedules and runs the periodic cleanups. Each `ascender-task` process is
+  one control plane node (an `Instance`), named by `ASCENDER_CLUSTER_HOST_ID`
+  (the host name when unset).
+
+Execution and hop nodes run no Ascender process. They run
+[receptor](https://github.com/ansible/receptor) and `ansible-runner`, and the
+control plane reaches them through a receptor node beside `ascender-task`.
 
 ```
-       ┌───────────────────────────┐
-       │      Load-balancer        │
-       │   (configured separately) │
-       └───┬───────────────────┬───┘
-           │   round robin API │
-           ▼       requests    ▼
-
-  Ascender Control               Ascender Control
-    Node 1                    Node 2
-┌──────────────┐           ┌──────────────┐
-│              │           │              │
-│ ┌──────────┐ │           │ ┌──────────┐ │
-│ │ awx-task │ │           │ │ awx-task │ │
-│ ├──────────┤ │           │ ├──────────┤ │
-│ │ awx-ee   │ │           │ │ awx-ee   │ │
-│ ├──────────┤ │           │ ├──────────┤ │
-│ │ awx-web  │ │           │ │ awx-web  │ │
-│ ├──────────┤ │           │ ├──────────┤ │
-│ │ valkey   │ │           │ │ valkey   │ │
-│ └──────────┘ │           │ └──────────┘ │
-│              │           │              │
-└──────────────┴─────┬─────┴──────────────┘
-                     │
-                     │
-               ┌─────▼─────┐
-               │ Postgres  │
-               │ database  │
-               └───────────┘
+            ┌──────────────────────────┐
+            │      Load balancer       │
+            │ (configured separately)  │
+            └────┬────────────────┬────┘
+                 │  API, UI and   │
+                 ▼  websockets    ▼
+          ┌──────────────┐  ┌──────────────┐
+          │ ascender-web │  │ ascender-web │
+          └──────┬───────┘  └──────┬───────┘
+                 │                 │
+               ┌─▼─────────────────▼─┐
+               │     PostgreSQL      │
+               └─▲─────────────────▲─┘
+                 │                 │
+       ┌─────────┴────────┐ ┌──────┴───────────┐
+       │  ascender-task   │ │  ascender-task   │
+       │  (node A)        │ │  (node B)        │
+       │  receptor        │ │  receptor        │
+       └─────────┬────────┘ └──────┬───────────┘
+                 │  receptor mesh  │
+                 ▼                 ▼
+         execution and hop nodes, container group pods
 ```
 
-There are two main deployment types, virtual machines (VM) or K8S. Ansible Automation Platform (AAP) can be installed via VM or K8S deployments. The upstream Ascender project can only be installed via a K8S deployment. Either deployment type supports cluster scaling.
-- Control plane nodes run a number of background services that are managed by supervisord
-  - dispatcher
-  - wsbroadcast
-  - callback receiver
-  - receptor (*managed under systemd)
-  - valkey (*managed under systemd)
-  - uvicorn
-  - rsyslog
-- For K8S deployments, these background processes are containerized
-  - `awx-ee`: receptor
-  - `awx-web`: uvicorn, wsbroadcast, rsyslog
-  - `awx-task`: dispatcher, callback receiver
-  - `valkey`: valkey
-- Each control node is monolithic and contains all the necessary components for handling API requests and running jobs.
-- A load balancer in front of the cluster can handle incoming web requests and send them control nodes based on load balancing rules (e.g. round robin)
-- All control nodes on the cluster interact single, shared Postgres database
-- Ascender is configured in such a way that if any of these services or their components fail, then all services are restarted. If these fail sufficiently (often in a short span of time), then the entire instance will be placed offline in an automated fashion in order to allow remediation without causing unexpected behavior.
+On Kubernetes the operator runs `ascender-web` and `ascender-task` as
+separate containers and sets `IS_K8S` in the settings file
+(`ASCENDER_SETTINGS_FILE`). Elsewhere (docker compose, a VM) the two binaries
+run as they are; see `deploy/README.md`. In both cases a cluster grows by
+running more `ascender-task` processes, each with its own
+`ASCENDER_CLUSTER_HOST_ID`, against the same database (on Kubernetes, by
+raising the replica count).
 
-## Scaling the cluster
+## Instance types
 
-For AAP deployments, scaling up involves modifying `inventory`and re-running setup.sh
-For K8s deployments, scaling up is handled by changing the number of replicas in the Ascender replica set.
+| Type | Runs | Registered by |
+| --- | --- | --- |
+| `hybrid` | `ascender-task`; controls jobs and runs them on this node with podman or docker | `ascender-task` at startup (`ASCENDER_NODE_TYPE=hybrid`, the default) |
+| `control` | `ascender-task`; controls jobs but runs none on this node | `ascender-task` at startup (`ASCENDER_NODE_TYPE=control`; the Kubernetes operator uses this) |
+| `execution` | receptor and `ansible-runner`; runs jobs sent over the mesh | the API on Kubernetes, or `ascender-web provision_instance` |
+| `hop` | receptor only; routes mesh traffic, and can run the pods of a container group (see [Container Groups](./container_groups/README.md)) | the API on Kubernetes, or `ascender-web provision_instance` |
 
-After scaling up, the new control plane node is registered in the database as a new `Instance`.
+`ascender-task` refuses to start with any `ASCENDER_NODE_TYPE` other than
+`hybrid` or `control`. A `control` node has all the machinery to run jobs,
+but the capacity rules never place execution work on it, so control nodes can
+be sized for control work alone while execution nodes, or container groups,
+run the jobs.
 
-Instance types:
-`hybrid` (AAP only) - control plane node that can also run jobs
-`control` - control plane node that cannot run jobs
-`execution` - not a control node, this instance can only run jobs
-`hop` (AAP only) - not a control node, this instance serves to route traffic from control nodes to execution nodes
+### Registration
 
-Note, hybrid (AAP only) and control nodes are identical other than the `type` indicated in the database. `control`-type nodes still have all the machinery to run jobs, but are disabled through the API. The reason is that users may wish to provision control nodes with less hardware resources, and have a separate fleet of nodes to run jobs (i.e. execution nodes).
+At startup, before it claims any work, `ascender-task` registers its node
+(`src/internal/tasks/provision.go`, `src/internal/models/instance_register.go`):
+a new node is created in the `installed` state with no capacity, and a node
+that already has a row goes back to `installed` with the type it is started
+as. It then applies the instance group membership policies (see below). On
+Kubernetes it also registers the two default instance groups:
+`DEFAULT_CONTROL_PLANE_QUEUE_NAME` (`controlplane`) taking every control node,
+and `DEFAULT_EXECUTION_QUEUE_NAME` (`default`) as a container group, with the
+pod spec override and limits the settings file gives in
+`DEFAULT_EXECUTION_QUEUE_POD_SPEC_OVERRIDE`,
+`DEFAULT_EXECUTION_QUEUE_MAX_FORKS` and
+`DEFAULT_EXECUTION_QUEUE_MAX_CONCURRENT_JOBS`. The first heartbeat health
+check then makes the node `ready` and gives it capacity.
+
+`ascender-task check_instance_ready` exits 0 when this node's instance is
+`ready`, for a readiness probe.
+
+Outside Kubernetes the first task process of a new installation, finding no
+instance group at all, creates the same two groups (`registerFirstQueues`),
+each with `policy_instance_percentage` 100: `controlplane` takes every
+control and hybrid node, and `default`, an ordinary instance group, every
+hybrid and execution node. Once any instance group exists they are left to
+the administrator: a group deleted later is not created again.
+
+Groups are also created or updated with `ascender-web register_queue`, the
+old installer's command:
+
+```
+ascender-web register_queue --queuename NAME [--instance_percent N] [--instance_minimum N] [--hostnames NODE,...]
+```
+
+It creates the group when it is missing and sets its policy percentage and
+minimum; `--hostnames` adds those instances (not hop nodes) to the group and
+to its policy instance list, and never removes one. It fails, naming the
+host, when a hostname is not an instance that can run jobs.
+
+Execution and hop nodes are added through `POST /api/v2/instances/` (only when
+`IS_K8S` is set, as before) or with the management commands of
+`ascender-web` (`src/cmd/ascender-web/commands.go`):
+
+```
+ascender-web provision_instance --hostname NAME --node_type execution|hop
+ascender-web add_receptor_address --instance NAME --address ADDRESS [--port N] \
+    [--protocol tcp|ws|wss] [--websocket_path PATH] [--is_internal] [--canonical] [--peers_from_control_nodes]
+ascender-web deprovision_instance --hostname NAME
+```
+
+`GET /api/v2/instances/N/install_bundle/` returns a tarball for an execution
+or hop node: a receptor certificate and key signed by the mesh CA, the CA,
+the work signing public key, and the `ansible.receptor` playbook and
+inventory that set the node up. The CA and its key and the work signing key
+are read from `ASCENDER_RECEPTOR_DIR` (default `/etc/receptor`). Only a
+superuser can download a bundle; the old application also let a system
+auditor.
 
 ## Communication between nodes
 
-Each control node is connected to the other nodes via the following
+| Between | Connection | Purpose |
+| --- | --- | --- |
+| every process and PostgreSQL | PostgreSQL protocol | queries, `LISTEN`/`NOTIFY`, advisory locks |
+| `ascender-task` and its receptor | receptor's control socket | mesh status, work units, health checks |
+| receptor nodes | receptor mesh (TCP, or websockets) | routing work to execution nodes, advertisements |
+| `ascender-task` and a container group's cluster | Kubernetes API (HTTPS) | creating and reading job pods |
 
-| Node           | Connection Type      | Purpose                            |
-|----------------|----------------------|------------------------------------|
-| control node   | websockets, receptor | sending websockets, heartbeat      |
-| execution      | receptor             | submitting jobs, heartbeat         |
-| hop (AAP only) | receptor             | routing traffic to execution nodes |
-| postgres       | postgres TCP/IP      | read and write queries, pg notify  |
+Ascender processes never connect to each other. There is no websocket
+backplane between control nodes and no Redis: everything one process tells
+the others goes through PostgreSQL.
 
+### PostgreSQL
 
-I.e. control nodes are connected to other control nodes via websockets and receptor.
+The database is the only shared state. Besides ordinary queries the processes
+use two `NOTIFY` channels:
+
+- `ascender_dispatch`: the API wakes the task processes with it when a job is
+  created, canceled or asked for a health check, or when an execution
+  environment image is no longer used
+  (`src/internal/api/project_updates.go`, `src/internal/tasks/dispatcher.go`).
+- `ascender_websocket`: job status changes, job events and the other
+  websocket messages, published by whichever process produced them and
+  relayed by every `ascender-web` to the browsers subscribed to them
+  (`src/internal/api/websocket.go`). A browser therefore sees the events of a
+  job controlled by any node, whichever `ascender-web` it is connected to.
+  Job events travel as references and are read back from the database only
+  when someone is subscribed to the job.
+
+Advisory locks keep cluster-wide passes to one process at a time:
+claiming and placing tasks (the old task manager's lock), the schedule pass,
+the mesh inspection, and changes to instance group membership.
 
 ### Receptor
 
-Receptor provides an overlay network that connects control, execution, and hop nodes together.
+Receptor provides an overlay network that connects control, execution and hop
+nodes. Nodes on the mesh are connected by persistent TCP or websocket
+connections, and a node can reach any other node on the mesh even when they
+are not directly connected:
 
-Receptor is used for establishing periodic heartbeats and submitting jobs to execution nodes.
-
-The connected nodes form a mesh. It works by connecting nodes via persistent TCP/IP connections. Importantly, once a node is on the mesh, it can be accessed from all other nodes on the mesh, even if not directly connected via TCP.
-
+```
 node A <---TCP---> node B <---TCP---> node C
-
-node A is reachable from node C (and vice versa). Receptor does this by routing traffic through the receptor process running on node B.
-
-
-### Websockets
-
-Each control node establishes a websocket connection to each other control node. We call this the websocket backplane.
-
-```
-┌────────┐
-│        │
-│browser │
-│        │
-└───┬────┘
-    │ websocket connection
-    │
-┌───▼─────┐            ┌─────────┐
-│ control │            │ control │
-│ node A  │◄───────────┤ node B  │
-└─────────┘  websocket └─────────┘
-             connection
-             (job event)
 ```
 
-The Ascender UI will open websocket connections to the server to stream certain data in real time. For example, the job events on the Job Detail Page is streaming over a websocket connection and rendered in real time. The browser has no way of choosing which control node it connects to, instead the connection is handled by the load balancer, the same way http API requests are handled.
+Node A reaches node C (and the other way round) through the receptor process
+on node B.
 
-Therefore, we could have a situation where the browser is connected control node A, but is requesting job events that are emitted from control node B. As such, control node B will send job events over a separate, persistent websocket connection to control node A. Once control node A has received that message, it can then propagate it to the browser.
+`ascender-task` talks to its local receptor node over its control socket
+(`src/internal/receptor/receptor.go`). The socket, the TLS client and whether
+work is signed are read from the receptor configuration file
+(`ASCENDER_RECEPTOR_CONFIG`, default `/etc/receptor/receptor.conf`);
+`ASCENDER_RECEPTOR_SOCKET` overrides the socket's path when it is mounted
+elsewhere. A node with no receptor configuration, or whose socket does not
+exist, runs no mesh work: it cannot use execution nodes or container groups
+behind a hop node.
 
-One consequence of this is that control node B must *broadcast* this message to all other control nodes, because it doesn't know which node the browser is connected to.
-
-The websocket backplane is handled by the wsbroadcast service that is part of the application startup.
-
-
-### Postgres
-
-Ascender is a Django application and uses the psycopg3 library to establish connections to the Postgres database.
-Only control nodes need direct access to the database.
-
-Importantly Ascender relies on the Postgres notify system for inter-process communication. The dispatcher system spawns separate processes/threads that run in parallel. For example, it runs the task manager periodically, and the task manager needs to be able to communicate with the main dispatcher thread. It does this via `pg_notify`.
+On Kubernetes (`IS_K8S`) each `ascender-task` keeps its receptor's
+configuration in step with the database (`src/internal/tasks/receptor_config.go`):
+at startup and every heartbeat period it adds a peer for every receptor
+address with `peers_from_control_nodes`, rewrites the file when it differs,
+and tells receptor to reload it. Outside Kubernetes the deployment provides
+the receptor configuration and its peers; `ascender-task` does not write it.
 
 ## Node health
 
-Node health is determined by the `cluster_node_heartbeat`. This is a periodic task that runs on each control node.
+Every `ascender-task` runs the cluster heartbeat every 60 seconds
+(`src/internal/tasks/heartbeat.go`). The heartbeat period and the number of
+missed heartbeats tolerated are fixed in the code
+(`src/internal/models/instance_health.go`); they are not settings.
 
-1. Get a list of instances registered to the database.
-2. `inspect_execution_nodes` looks at each execution node
-  a. get a DB advisory lock so that only a single control plane node runs this inspection at given time.
-  b. set `last_seen` based on Receptor's own heartbeat system
-    - Each node on the Receptor mesh sends advertisements out to other nodes. The `Time` field in this payload can be used to set `last_seen`
-  c. use `receptorctl status` to gather node information advertised on the Receptor mesh
-  d. run `execution_node_health_check`
-    - This is an async task submitted to the dispatcher and attempts to run `ansible-runner --worker-info` against that node
-    - This command will return important information about the node's hardware resources like CPU cores, total memory, and ansible-runner version
-    - This information will be used to calculate capacity for that instance
-3. Determine if other nodes are lost based the `last_seen` value determined in step 2
-  a. `grace_period = settings.CLUSTER_NODE_HEARTBEAT_PERIOD * settings.CLUSTER_NODE_MISSED_HEARTBEAT_TOLERANCE`
-  b. if `last_seen` is before this grace period, mark instance as lost
-4. Determine if *this* node is lost and run `local_health_check`
-  a. call `get_cpu_count` and `get_mem_in_bytes` directly from ansible-runner, which is what `ansible-runner --worker-info` calls under the hood
-5. If *this* instance was not found in the database, register it
-6. Compare *this* node's ansible-runner version with that of other instances
-  a. if this version is older, call `stop_local_services` which shuts down itself
-7. For other instances marked as lost (step 3)
-  a. reap running, pending, and waiting jobs on that instance (mark them as failed)
-  b. delete instance from DB instance list
-8. `cluster_node_heartbeat` is called from the dispatcher, and the dispatcher parent process passes `worker_tasks` data to this method
-  a. reap local jobs that are not active (that is, no dispatcher worker is actively processing it)
+1. **This node checks itself first**, so that a slow receptor never delays its
+   check-in. It records its CPU count (`runtime.NumCPU`), total memory
+   (`MemTotal` from `/proc/meminfo`) and version (`ASCENDER_VERSION`), sets
+   `last_seen`, recomputes its capacity and, if it was `installed` or
+   `unavailable`, becomes `ready`. If its own row is missing it logs an error,
+   unless `ASCENDER_AUTO_DEPROVISION_INSTANCES` is set, in which case it
+   registers itself again.
+2. **The mesh is inspected** by one control node at a time (an advisory lock):
+   - the mesh status (what `receptorctl status` shows) is read from the local
+     receptor; instance links in the `adding` state become `established` once
+     the mesh shows the connection;
+   - each execution or hop node's advertisement time becomes its `last_seen`;
+   - an execution node advertising while `installed` or `unavailable` gets a
+     health check, and so does an enabled execution node with no capacity,
+     at most every 30 minutes;
+   - a hop node advertising while `installed` or `unavailable` becomes `ready`.
+3. **Lost nodes are handled.** A control or hybrid node is lost when its
+   `last_seen` is more than two heartbeat periods (120 seconds) old; an
+   execution or hop node gets one receptor advertisement period more (180
+   seconds). For every lost node other than this one:
+   - its running jobs (as execution or controller node) and the waiting jobs
+     it controls are failed with "Job reaped due to instance shutdown". Jobs
+     that hold a job monitor lease are left to the job monitor instead (see
+     "Job runtime behaviour");
+   - a lost control node is removed when `ASCENDER_AUTO_DEPROVISION_INSTANCES`
+     is set (the operator sets it: a pod that is gone does not come back
+     under its name); any other lost node that was `ready` is marked
+     `unavailable` with no capacity.
+4. **This node's own leftovers are reaped**: a task it controls that is
+   running, or has been waiting for six minutes, without a goroutine in this
+   process running it is failed.
+
+A health check of an execution node (`execution_node_health_check`) runs
+`ansible-runner worker --worker-info` on the node as a receptor work unit. Its
+answer (CPU count, memory, `ansible-runner` version) is saved and the node's
+capacity recomputed from it; errors mark the node `unavailable`. An
+administrator can start one with `POST /api/v2/instances/N/health_check/`
+(execution nodes only).
+
+> **Note:** the old heartbeat compared this node's `ansible-runner` version
+> with the other nodes' and shut its own services down when it was older.
+> `ascender-task` does not.
+
+### Removing nodes
+
+Setting an instance's `node_state` to `deprovisioning` through the API is
+allowed on Kubernetes, as before, for nodes that are not managed (those added
+through the API). Nodes registered by `ascender-task` or `provision_instance`
+are managed. Beyond the old rules, any node, managed or not and on any
+platform, can be set to `deprovisioning` once the heartbeat has marked it
+`unavailable` and it has not checked in since. Every minute `ascender-task`
+removes the deprovisioning nodes that no job runs on, waits on or is
+controlled by any more, with their links and receptor addresses.
+
+`ascender-web deprovision_instance --hostname NAME` removes a node at once.
+
+A hop node that runs the pods of a container group cannot be deprovisioned
+until it is removed from those groups.
 
 ## Instance groups
 
-As mentioned, control and execution nodes are registered in the database as instances. These instances can be groups into instance groups via the API.
+Instances are grouped into instance groups, which jobs are assigned to.
 
-## Configuring Instances and Instance Groups from the API
-
-Instance Groups can be created by posting to `/api/v2/instance_groups` as a System Administrator.
-
-Once created, `Instances` can be associated with an Instance Group with:
+Instance groups are created by a system administrator with
+`POST /api/v2/instance_groups/`. An instance is associated with a group with:
 
 ```
-HTTP POST /api/v2/instance_groups/x/instances/ {'id': y}`
+POST /api/v2/instance_groups/N/instances/ {"id": X}
 ```
 
-An `Instance` that is added to an `InstanceGroup` will automatically reconfigure itself to listen on the group's work queue. See the following section `Instance Group Policies` for more details.
+or from the instance's side with `POST /api/v2/instances/X/instance_groups/`.
+`{"id": X, "disassociate": true}` removes it. The membership of control and
+hop nodes cannot be changed this way, and a hybrid node cannot be removed
+from the control plane group.
 
+The groups named by `DEFAULT_CONTROL_PLANE_QUEUE_NAME` and
+`DEFAULT_EXECUTION_QUEUE_NAME` cannot be deleted, renamed, turned into or out
+of container groups, or have their `policy_instance_percentage` or
+`policy_instance_list` changed.
 
-### Instance Group Policies
+### Instance group policies
 
-Ascender `Instances` can be configured to automatically join `Instance Groups` when they come online by defining a policy. These policies are evaluated for
-every new Instance that comes online.
+Instances join instance groups automatically through the policies of the
+groups. The policies are applied when `ascender-task` starts, when an
+instance is registered or deprovisioned, and after any API change to a group
+or a membership (`src/internal/models/cluster_policy.go`). Three optional
+fields of an instance group control them:
 
-Instance Group Policies are controlled by three optional fields on an `Instance Group`:
+- `policy_instance_list`: a fixed list of instance host names that always
+  belong to the group.
+- `policy_instance_minimum`: the group keeps at least this many instances. If
+  fewer instances are available, all of them are placed in the group.
+- `policy_instance_percentage` (0 to 100): at least this percentage of the
+  instances belong to the group.
 
-- `policy_instance_percentage`: This is a number between 0 - 100. It guarantees that this percentage of active Ascender instances will be added to this `Instance Group`. As new instances come online, if the number of Instances in this group relative to the total number of instances is fewer than the given percentage, then new ones will be added until the percentage condition is satisfied.
-- `policy_instance_minimum`: This policy attempts to keep at least this many `Instances` in the `Instance Group`. If the number of available instances is lower than this minimum, then all `Instances` will be placed in this `Instance Group`.
-- `policy_instance_list`: This is a fixed list of `Instance` names to always include in this `Instance Group`.
+The list is applied first, then the minimums, then the percentages, each time
+giving instances to the groups with the fewest instances and taking the
+instances that belong to the fewest groups. Only instances with
+`managed_by_policy` set count for the minimum and the percentage.
 
-- `Instances` that are assigned directly to `Instance Groups` by posting to `/api/v2/instance_groups/x/instances` or `/api/v2/instances/x/instance_groups` are automatically added to the `policy_instance_list`. This means they are subject to the normal caveats for `policy_instance_list` and must be manually managed.
+- Control nodes never join a group other than the control plane group, and
+  execution nodes never join the control plane group. Hop nodes join no
+  group. Container groups have no instances, and their policy fields cannot
+  be set.
+- An instance associated with a group through the API
+  (`/api/v2/instance_groups/N/instances/` or
+  `/api/v2/instances/X/instance_groups/`) is added to the group's
+  `policy_instance_list`, and removed from it when disassociated, so it is
+  subject to the same rules as any other listed instance.
+- `policy_instance_percentage` and `policy_instance_minimum` work together.
+  With a percentage of 50, a minimum of 2 and 6 instances, 3 of them are in
+  the group. With 2 instances, both are, to satisfy the minimum.
+- Policies do not stop an instance from belonging to several groups, but
+  percentages that sum to 100 have that effect: with four groups at 25 each,
+  the instances are spread among them without overlap.
 
-- `policy_instance_percentage` and `policy_instance_minimum` work together. For example, if you have a `policy_instance_percentage` of 50% and a `policy_instance_minimum` of 2 and you start 6 `Instances`, 3 of them would be assigned to the `Instance Group`. If you reduce the number of `Instances` to 2, then both of them would be assigned to the `Instance Group` to satisfy `policy_instance_minimum`. In this way, you can set a lower bound on the amount of available resources.
+### Pinning an instance to specific groups
 
-- Policies don't actively prevent `Instances` from being associated with multiple `Instance Groups` but this can effectively be achieved by making the percentages sum to 100. If you have 4 `Instance Groups`, assign each a percentage value of 25 and the `Instances` will be distributed among them with no overlap.
+To keep an instance in chosen groups only, without the minimum and
+percentage policies adding it to others:
 
-
-### Manually Pinning Instances to Specific Groups
-
-If you have a special `Instance` which needs to be _exclusively_ assigned to a specific `Instance Group` but don't want it to automatically join _other_ groups via "percentage" or "minimum" policies:
-
-1. Add the `Instance` to one or more `Instance Group`s' `policy_instance_list`.
-2. Update the `Instance`'s `managed_by_policy` property to be `False`.
-
-This will prevent the `Instance` from being automatically added to other groups based on percentage and minimum policy; it will **only** belong to the groups you've manually assigned it to:
+1. Add the instance to the groups' `policy_instance_list`.
+2. Set the instance's `managed_by_policy` to `false`.
 
 ```
-HTTP PATCH /api/v2/instance_groups/N/
+PATCH /api/v2/instance_groups/N/
 {
     "policy_instance_list": ["special-instance"]
 }
 
-HTTP PATCH /api/v2/instances/X/
+PATCH /api/v2/instances/X/
 {
-    "managed_by_policy": False
+    "managed_by_policy": false
 }
 ```
 
+## Status and monitoring
 
-### Status and Monitoring
+`GET /api/v2/ping/` reports:
 
-Ascender itself reports as much status as it can via the API at `/api/v2/ping` in order to provide validation of the health of the cluster. This includes:
+- `active_node`: the `ASCENDER_CLUSTER_HOST_ID` of the `ascender-web` process
+  that answered;
+- every instance but the hop nodes, with its type, capacity, version and
+  last heartbeat;
+- every instance group with its capacity and member instances.
 
-- The instance servicing the HTTP request.
-- The last heartbeat time of all other instances in the cluster.
-- Instance Groups and Instance membership in those groups.
+`/api/v2/instances/` and `/api/v2/instance_groups/` give the details,
+including consumed capacity, running jobs and membership.
+`/api/v2/mesh_visualizer/` lists the nodes and the links between them.
 
-A more detailed view of Instances and Instance Groups, including running jobs and membership
-information can be seen at `/api/v2/instances/` and `/api/v2/instance_groups`.
+## Job runtime behaviour
 
-### Job Runtime Behavior
+When a job is created, the API notifies `ascender_dispatch`. Every
+`ascender-task` listens on that channel and also polls every 15 seconds. To
+claim a task, a process moves the oldest pending task that is not blocked to
+`waiting` and places it, under the task manager's advisory lock, so that two
+processes never see the same capacity or start two jobs that block each
+other (`src/internal/tasks/dispatcher.go`, `src/internal/tasks/capacity.go`).
+A task is blocked while another job of the same template runs (unless the
+template allows simultaneous runs), while its project or (unless the
+inventory allows jobs while syncing) its inventory is updating. A task that
+does not fit anywhere goes back to `pending` and is tried again when a job
+finishes, or after 15 seconds. `ASCENDER_TASK_WORKERS` (default 4) limits
+how many tasks one process runs at once; capacity still decides what fits.
 
-Ideally a regular user of Ascender should not notice any semantic difference to the way jobs are run and reported. Behind the scenes it is worth pointing out the differences in how the system behaves.
+The node that claims a task is its controller: each `ascender-task` controls
+the work it claims, and executes it on its own node (a hybrid node), on an
+execution node reached through its receptor, or in a container group's pod.
+Within an instance group the task goes to the instance it can reach that has
+the most capacity left. The old task manager could make any control node the
+controller; here the controller is always the claiming node.
 
-When a job is submitted from the API interface, it gets pushed into the dispatcher queue via postgres notify/listen (https://www.postgresql.org/docs/10/sql-notify.html), and the task is handled by the dispatcher process running on that specific Ascender node.  If an instance fails while executing jobs, then the work is marked as permanently failed.
+As instances come online they add capacity to the cluster and to the groups
+they belong to. An instance in several groups gives capacity to all of them,
+and a job running on it consumes capacity in all of them. Instances need not
+have equal capacity. See [Capacity](./capacity.md).
 
-If a cluster is divided into separate Instance Groups, then the behavior is similar to the cluster as a whole. If two instances are assigned to a group then either one is just as likely to receive a job as any other in the same group.
+If every instance of the groups a job may use is offline or full, the job
+stays `pending` until one has room. Provision fallback capacity for this
+case.
 
-As Ascender instances are brought online, it effectively expands the work capacity of the Ascender system. If those instances are also placed into Instance Groups, then they also expand that group's capacity. If an instance is performing work and it is a member of multiple groups, then capacity will be reduced from all groups for which it is a member. De-provisioning an instance will remove capacity from the cluster wherever that instance was assigned.
+What happens to running work when its controller stops depends on where it
+runs. A job running in a container group pod or on an execution node holds a
+job monitor lease: when its controller shuts down or is lost, another control
+node takes the lease over and goes on reading the job's output (see
+[the job monitor lease](./job_monitor_lease.md)). A job running on a hybrid
+node's own container runtime fails when that node shuts down; a project or
+inventory update stopped by a shutdown is re-queued instead, unless it is the
+inline sync of a job.
 
-It's important to note that not all instances are required to be provisioned with an equal capacity.
+### Project synchronization
 
-If an Instance Group is configured but all instances in that group are offline or unavailable, any jobs that are launched targeting only that group will be stuck in a waiting state until instances become available. Fallback or backup resources should be provisioned to handle any work that might encounter this scenario.
+A job needs the project's source tree on the node that prepares its private
+data directory, which is the controller. Before the job runs, the controller
+syncs the project if its checkout is missing, is not at the project's
+revision, or the job overrides the branch, or if the roles and collections
+cache is incomplete (`src/internal/tasks/project_sync.go`). The sync is a
+project update with `launch_type` `sync` and `job_type` `run`, run on the
+controller as part of the job, and the synced tree is then copied into the
+job's private data directory. Only `check` updates change the project's
+revision and its lists of playbooks and inventories.
 
-#### Project Synchronization Behavior
+A sync does not change the project's status or last job, unless it is the
+project's first update (`templateRunning` and `templateFinished` in
+`src/internal/tasks/run_base.go`), so a job's failed sync of another branch
+does not mark the project failed.
 
-It is important that project updates run on the instance which prepares the ansible-runner private data directory.
-This is accomplished by a project sync which is done by the dispatcher control / launch process.
-The sync will update the source tree to the correct version on the instance immediately prior to transmitting the job.
-If the needed revision is already locally checked out and Galaxy or Collections updates are not needed, then a sync may not be performed.
+Project updates run in the control plane execution environment. On
+Kubernetes they run as `local` work of the receptor beside `ascender-task`,
+which mounts the projects directory at the same path; elsewhere they run in
+a container started with podman or docker on the controller.
 
-When the sync happens, it is recorded in the database as a project update with a `launch_type` of "sync" and a `job_type` of "run". Project syncs will not change the status or version of the project; instead, they will update the source tree _only_ on the instance where they run. The only exception to this behavior is when the project is in the "never updated" state (meaning that no project updates of any type have been run), in which case a sync should fill in the project's initial revision and status, and subsequent syncs should not make such changes.
+### Controlling where a job runs
 
-All project updates run with container isolation (like jobs) and volume mount to the persistent projects folder.
+Project updates and system jobs always run in the control plane group
+(`DEFAULT_CONTROL_PLANE_QUEUE_NAME`, `controlplane`). System jobs run inside
+`ascender-task` itself.
 
-#### Controlling Where a Particular Job Runs
+Every other job is placed in the first of its preferred instance groups with
+room. The preferred groups are computed when the job is created and stored
+with it:
 
-By default, a job will be submitted to the default queue (formerly the `tower` queue).
-To see the name of the queue, view the setting `DEFAULT_EXECUTION_QUEUE_NAME`.
-Administrative actions, like project updates, will run in the control plane queue.
-The name of the control plane queue is surfaced in the setting `DEFAULT_CONTROL_PLANE_QUEUE_NAME`.
+1. the instance groups given when it was launched, if the template prompts
+   for them; otherwise
+2. the job template's instance groups, then the inventory's, then the
+   organization's (the job's organization), stopping after the job template
+   or the inventory when it sets `prevent_instance_group_fallback`;
+3. if none of these has any, the global groups: the
+   `DEFAULT_EXECUTION_QUEUE_NAME` group (`default`), and outside Kubernetes
+   also the `DEFAULT_CONTROL_PLANE_QUEUE_NAME` group (`controlplane`).
 
+Inventory updates use the inventory source's groups first; see
+[Instance Groups on Inventory Sources](./inventory_source_instance_groups.md).
+Ad hoc commands use the instance groups given when they are launched, else the
+inventory's groups, then its organization's.
 
-##### How to Restrict the Instances a Job Will Run On
+If a job template, inventory or organization has instance groups, its jobs
+do not fall back to the global groups: when all of the listed groups are
+full the job stays `pending`. To prefer a group but still allow any capacity,
+add `default` to the list after it.
 
-If the Job Template, Inventory, or Organization have instance groups associated with them, a job run from that Job Template will not be eligible for the default behavior. This means that if all of the instance associated with these three resources are out of capacity, the job will remain in the `pending` state until capacity frees up.
+### Enabling and disabling an instance
 
-
-##### How to Set Up a Preferred Instance Group
-
-The order of preference in determining which instance group the job gets submitted to is as follows:
-
-1. Job Template
-2. Inventory
-3. Organization (by way of Inventory)
-
-To expand further: If instance groups are associated with the Job Template and all of them are at capacity, then the job will be submitted to instance groups specified on Inventory, and then Organization.
-
-The global `tower` group can still be associated with a resource, just like any of the custom instance groups defined in the playbook. This can be used to specify a preferred instance group on the job template or inventory, but still allow the job to be submitted to any instance if those are out of capacity.
-
-
-#### Instance Enable / Disable
-
-In order to support temporarily taking an `Instance` offline, there is a boolean property `enabled` defined on each instance.
-
-When this property is disabled, no jobs will be assigned to that `Instance`. Existing jobs will finish but no new work will be assigned.
+Each instance has an `enabled` flag. A disabled instance has no capacity and
+is given no new work; jobs already running on it finish.

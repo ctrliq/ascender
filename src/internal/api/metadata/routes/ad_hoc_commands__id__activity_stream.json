@@ -1,0 +1,144 @@
+{
+    "name": "Ad Hoc Command Activity Stream List",
+    "description": "# List Activity Streams for an Ad Hoc Command:\n\nMake a GET request to this resource to retrieve a list of\nactivity streams associated with the selected\nad hoc command.\n\nThe resulting data structure contains:\n\n    {\n        \"count\": 99,\n        \"next\": null,\n        \"previous\": null,\n        \"results\": [\n            ...\n        ]\n    }\n\nThe `count` field indicates the total number of activity streams\nfound for the given query.  The `next` and `previous` fields provides links to\nadditional results if there are more than will fit on a single page.  The\n`results` list contains zero or more activity stream records.  \n\n## Results\n\nEach activity stream data structure includes the following fields:\n\n* `id`: Database ID for this activity stream. (integer)\n* `type`: Data type for this activity stream. (choice)\n* `url`: URL for this activity stream. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `timestamp`:  (datetime)\n* `operation`: The action taken with respect to the given object(s). (choice)\n    - `create`: Entity Created\n    - `update`: Entity Updated\n    - `delete`: Entity Deleted\n    - `associate`: Entity Associated with another Entity\n    - `disassociate`: Entity was Disassociated with another Entity\n* `changes`: A summary of the new and changed values when an object is created, updated, or deleted (json)\n* `object1`: For create, update, and delete events this is the object type that was affected. For associate and disassociate events this is the object type associated or disassociated with object2. (string)\n* `object2`: Unpopulated for create, update, and delete events. For associate and disassociate events this is the object type that object1 is being associated with. (string)\n* `object_association`: When present, shows the field name of the role or relationship that changed. (field)\n* `action_node`: The cluster node the activity took place on. (string)\n* `object_type`: When present, shows the model on which the role or relationship was defined. (field)\n\n\n\n## Sorting\n\nTo specify that activity streams are returned in a particular\norder, use the `order_by` query string parameter on the GET request.\n\n    ?order_by=name\n\nPrefix the field name with a dash `-` to sort in reverse:\n\n    ?order_by=-name\n\nMultiple sorting fields may be specified by separating the field names with a\ncomma `,`:\n\n    ?order_by=name,some_other_field\n\n## Pagination\n\nUse the `page_size` query string parameter to change the number of results\nreturned for each request.  Use the `page` query string parameter to retrieve\na particular page of results.\n\n    ?page_size=100&page=2\n\nThe `previous` and `next` links returned with the results will set these query\nstring parameters automatically.\n\n## Searching\n\nUse the `search` query string parameter to perform a case-insensitive search\nwithin all designated text fields of a model.\n\n    ?search=findme\n\n(_Added in Ansible Tower 3.1.0_) Search across related fields:\n\n    ?related__search=findme\n\nNote: If you want to provide more than one search term, multiple\nsearch fields with the same key, like `?related__search=foo&related__search=bar`,\nwill be ORed together. Terms separated by commas, like `?related__search=foo,bar`\nwill be ANDed together.\n\n## Filtering\n\nAny additional query string parameters may be used to filter the list of\nresults returned to those matching a given value.  Only fields and relations\nthat exist in the database may be used for filtering.  Any special characters\nin the specified value should be url-encoded. For example:\n\n    ?field=value%20xyz\n\nFields may also span relations, only for fields and relationships defined in\nthe database:\n\n    ?other__field=value\n\nTo exclude results matching certain criteria, prefix the field parameter with\n`not__`:\n\n    ?not__field=value\n\nBy default, all query string filters are AND'ed together, so\nonly the results matching *all* filters will be returned.  To combine results\nmatching *any* one of multiple criteria, prefix each query string parameter\nwith `or__`:\n\n    ?or__field=value&or__field=othervalue\n    ?or__not__field=value&or__field=othervalue\n\n(_Added in Ansible Tower 1.4.5_) The default AND filtering applies all filters\nsimultaneously to each related object being filtered across database\nrelationships.  The chain filter instead applies filters separately for each\nrelated object. To use, prefix the query string parameter with `chain__`:\n\n    ?chain__related__field=value&chain__related__field2=othervalue\n    ?chain__not__related__field=value&chain__related__field2=othervalue\n\nIf the first query above were written as\n`?related__field=value&related__field2=othervalue`, it would return only the\nprimary objects where the *same* related object satisfied both conditions.  As\nwritten using the chain filter, it would return the intersection of primary\nobjects matching each condition.\n\nField lookups may also be used for more advanced queries, by appending the\nlookup to the field name:\n\n    ?field__lookup=value\n\nThe following field lookups are supported:\n\n* `exact`: Exact match (default lookup if not specified).\n* `iexact`: Case-insensitive version of `exact`.\n* `contains`: Field contains value.\n* `icontains`: Case-insensitive version of `contains`.\n* `startswith`: Field starts with value.\n* `istartswith`: Case-insensitive version of `startswith`.\n* `endswith`: Field ends with value.\n* `iendswith`: Case-insensitive version of `endswith`.\n* `regex`: Field matches the given regular expression.\n* `iregex`: Case-insensitive version of `regex`.\n* `gt`: Greater than comparison.\n* `gte`: Greater than or equal to comparison.\n* `lt`: Less than comparison.\n* `lte`: Less than or equal to comparison.\n* `isnull`: Check whether the given field or related object is null; expects a\n  boolean value.\n* `in`: Check whether the given field's value is present in the list provided;\n  expects a list of items.\n\nBoolean values may be specified as `True` or `1` for true, `False` or `0` for\nfalse (both case-insensitive).\n\nNull values may be specified as `None` or `Null` (both case-insensitive),\nthough it is preferred to use the `isnull` lookup to explicitly check for null\nvalues.\n\nLists (for the `in` lookup) may be specified as a comma-separated list of\nvalues.\n\n(_Added in Ansible Tower 3.1.0_) Filtering based on the requesting user's\nlevel of access by query string parameter.\n\n* `role_level`: Level of role to filter on, such as `admin_role`",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this activity stream.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this activity stream.",
+                "choices": [
+                    ["activity_stream", "Activity Stream"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this activity stream.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "timestamp": {
+                "type": "datetime",
+                "label": "Timestamp",
+                "filterable": true
+            },
+            "operation": {
+                "type": "choice",
+                "label": "Operation",
+                "help_text": "The action taken with respect to the given object(s).",
+                "filterable": true,
+                "choices": [
+                    ["create", "Entity Created"],
+                    ["update", "Entity Updated"],
+                    ["delete", "Entity Deleted"],
+                    ["associate", "Entity Associated with another Entity"],
+                    ["disassociate", "Entity was Disassociated with another Entity"]
+                ]
+            },
+            "changes": {
+                "type": "json",
+                "label": "Changes",
+                "help_text": "A summary of the new and changed values when an object is created, updated, or deleted",
+                "filterable": true
+            },
+            "object1": {
+                "type": "string",
+                "label": "Object1",
+                "help_text": "For create, update, and delete events this is the object type that was affected. For associate and disassociate events this is the object type associated or disassociated with object2.",
+                "filterable": true
+            },
+            "object2": {
+                "type": "string",
+                "label": "Object2",
+                "help_text": "Unpopulated for create, update, and delete events. For associate and disassociate events this is the object type that object1 is being associated with.",
+                "filterable": true
+            },
+            "object_association": {
+                "type": "field",
+                "label": "Object association",
+                "help_text": "When present, shows the field name of the role or relationship that changed.",
+                "filterable": false
+            },
+            "action_node": {
+                "type": "string",
+                "label": "Action node",
+                "help_text": "The cluster node the activity took place on.",
+                "filterable": true
+            },
+            "object_type": {
+                "type": "field",
+                "label": "Object type",
+                "help_text": "When present, shows the model on which the role or relationship was defined.",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "activity_stream"
+    ],
+    "search_fields": [
+        "changes"
+    ],
+    "related_search_fields": [
+        "workflow_job_node__search",
+        "workflow_approval_template__search",
+        "unified_job__search",
+        "execution_environment__search",
+        "o_auth2_application__search",
+        "inventory_update__search",
+        "group__search",
+        "inventory__search",
+        "receptor_address__search",
+        "organization__search",
+        "job__search",
+        "notification__search",
+        "project_update__search",
+        "unified_job_template__search",
+        "team__search",
+        "o_auth2_access_token__search",
+        "workflow_approval__search",
+        "instance_group__search",
+        "credential__search",
+        "project__search",
+        "ad_hoc_command__search",
+        "actor__search",
+        "credential_type__search",
+        "notification_template__search",
+        "schedule__search",
+        "host__search",
+        "instance__search",
+        "job_template__search",
+        "label__search",
+        "inventory_source__search",
+        "workflow_job__search",
+        "workflow_job_template__search",
+        "workflow_job_template_node__search",
+        "role__search"
+    ],
+    "max_page_size": 200
+}

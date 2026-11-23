@@ -1,0 +1,30 @@
+{
+    "name": "Bulk Host Delete",
+    "description": "# Bulk Host Delete\n\nThis endpoint allows the client to delete multiple hosts from inventories.\nThey may do this by providing a list of hosts ID's to be deleted.\n\nExample:\n\n    {\n        \"hosts\": [1, 2, 3, 4, 5]\n    }\n\nReturn data:\n\n    {\n        \"hosts\": {\n            \"1\": \"The host a1 was deleted\",\n            \"2\": \"The host a2 was deleted\",\n            \"3\": \"The host a3 was deleted\",\n            \"4\": \"The host a4 was deleted\",\n            \"5\": \"The host a5 was deleted\",\n        }\n    }",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {
+            "hosts": {
+                "type": "list",
+                "required": true,
+                "label": "Hosts",
+                "help_text": "List of hosts ids to be deleted, e.g. [105, 130, 131, 200]",
+                "max_length": 100000,
+                "filterable": false,
+                "child": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false
+                },
+                "write_only": true
+            }
+        },
+        "GET": {}
+    }
+}

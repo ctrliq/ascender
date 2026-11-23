@@ -1,0 +1,138 @@
+{
+    "name": "Organization Detail",
+    "description": "# Retrieve an Organization:\n\nMake GET request to this resource to retrieve a single organization\nrecord containing the following fields:\n\n* `id`: Database ID for this organization. (integer)\n* `type`: Data type for this organization. (choice)\n* `url`: URL for this organization. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this organization was created. (datetime)\n* `modified`: Timestamp when this organization was last modified. (datetime)\n* `name`: Name of this organization. (string)\n* `description`: Optional description of this organization. (string)\n* `max_hosts`: Maximum number of hosts allowed to be managed by this organization. (integer)\n* `default_environment`: The default execution environment for jobs run by this organization. (id)\n\n\n\n\n\n# Update an Organization:\n\nMake a PUT or PATCH request to this resource to update this\norganization.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `name`: Name of this organization. (string, required)\n* `description`: Optional description of this organization. (string, default=`\"\"`)\n* `max_hosts`: Maximum number of hosts allowed to be managed by this organization. (integer, default=`0`)\n* `default_environment`: The default execution environment for jobs run by this organization. (id, default=``)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete an Organization:\n\nMake a DELETE request to this resource to delete this organization.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this organization.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this organization.",
+                "filterable": true,
+                "default": ""
+            },
+            "max_hosts": {
+                "type": "integer",
+                "required": false,
+                "label": "Max hosts",
+                "help_text": "Maximum number of hosts allowed to be managed by this organization.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true,
+                "default": 0
+            },
+            "default_environment": {
+                "type": "id",
+                "required": false,
+                "label": "Default environment",
+                "help_text": "The default execution environment for jobs run by this organization.",
+                "filterable": true
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this organization.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this organization.",
+                "choices": [
+                    ["organization", "Organization"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this organization.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this organization was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this organization was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this organization.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this organization.",
+                "filterable": true
+            },
+            "max_hosts": {
+                "type": "integer",
+                "label": "Max hosts",
+                "help_text": "Maximum number of hosts allowed to be managed by this organization.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "default_environment": {
+                "type": "id",
+                "label": "Default environment",
+                "help_text": "The default execution environment for jobs run by this organization.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "organization"
+    ],
+    "object_roles": [
+        "admin_role",
+        "execute_role",
+        "project_admin_role",
+        "inventory_admin_role",
+        "credential_admin_role",
+        "workflow_admin_role",
+        "notification_admin_role",
+        "job_template_admin_role",
+        "execution_environment_admin_role",
+        "auditor_role",
+        "member_role",
+        "read_role",
+        "approval_role"
+    ]
+}

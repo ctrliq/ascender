@@ -1,0 +1,200 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_CALLBACK_URL`: Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail. (string)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_URL`: The URL for your Github Enterprise instance, e.g.: http(s)://hostname/. Refer to Github Enterprise documentation for more details. (string)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL`: The API URL for your GitHub Enterprise instance, e.g.: http(s)://hostname/api/v3/. Refer to Github Enterprise documentation for more details. (string)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY`: The OAuth2 key (Client ID) from your GitHub Enterprise developer application. (string)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET`: The OAuth2 secret (Client Secret) from your GitHub Enterprise developer application. (string)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_URL`: The URL for your Github Enterprise instance, e.g.: http(s)://hostname/. Refer to Github Enterprise documentation for more details. (string, default=`\"\"`)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL`: The API URL for your GitHub Enterprise instance, e.g.: http(s)://hostname/api/v3/. Refer to Github Enterprise documentation for more details. (string, default=`\"\"`)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY`: The OAuth2 key (Client ID) from your GitHub Enterprise developer application. (string, default=`\"\"`)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET`: The OAuth2 secret (Client Secret) from your GitHub Enterprise developer application. (string, default=`\"\"`)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP`: Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation. (nested object, default=`None`)\n* `SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP`: Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation. (nested object, default=`None`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_URL": {
+                "type": "string",
+                "required": false,
+                "label": "GitHub Enterprise URL",
+                "help_text": "The URL for your Github Enterprise instance, e.g.: http(s)://hostname/. Refer to Github Enterprise documentation for more details.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "default": ""
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL": {
+                "type": "string",
+                "required": false,
+                "label": "GitHub Enterprise API URL",
+                "help_text": "The API URL for your GitHub Enterprise instance, e.g.: http(s)://hostname/api/v3/. Refer to Github Enterprise documentation for more details.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "default": ""
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY": {
+                "type": "string",
+                "required": false,
+                "label": "GitHub Enterprise OAuth2 Key",
+                "help_text": "The OAuth2 key (Client ID) from your GitHub Enterprise developer application.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "default": ""
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET": {
+                "type": "string",
+                "required": false,
+                "label": "GitHub Enterprise OAuth2 Secret",
+                "help_text": "The OAuth2 secret (Client Secret) from your GitHub Enterprise developer application.",
+                "category": "GitHub OAuth2",
+                "category_slug": "github-enterprise",
+                "default": ""
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "GitHub Enterprise OAuth2 Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "placeholder": {
+                    "Default": {
+                        "users": true
+                    },
+                    "Test Org": {
+                        "admins": [
+                            "admin@example.com"
+                        ],
+                        "auditors": [
+                            "auditor@example.com"
+                        ],
+                        "users": true
+                    },
+                    "Test Org 2": {
+                        "admins": [
+                            "admin@example.com",
+                            "/^tower-[^@]+*?@.*$/"
+                        ],
+                        "remove_admins": true,
+                        "users": "/^[^@].*?@example\\.com$/i",
+                        "remove_users": true
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP": {
+                "type": "nested object",
+                "required": false,
+                "label": "GitHub Enterprise OAuth2 Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "placeholder": {
+                    "My Team": {
+                        "organization": "Test Org",
+                        "users": [
+                            "/^[^@]+?@test\\.example\\.com$/"
+                        ],
+                        "remove": true
+                    },
+                    "Other Team": {
+                        "organization": "Test Org 2",
+                        "users": "/^[^@]+?@test2\\.example\\.com$/i",
+                        "remove": false
+                    }
+                },
+                "default": null,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            }
+        },
+        "GET": {
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_CALLBACK_URL": {
+                "type": "string",
+                "label": "GitHub Enterprise OAuth2 Callback URL",
+                "help_text": "Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_URL": {
+                "type": "string",
+                "label": "GitHub Enterprise URL",
+                "help_text": "The URL for your Github Enterprise instance, e.g.: http(s)://hostname/. Refer to Github Enterprise documentation for more details.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL": {
+                "type": "string",
+                "label": "GitHub Enterprise API URL",
+                "help_text": "The API URL for your GitHub Enterprise instance, e.g.: http(s)://hostname/api/v3/. Refer to Github Enterprise documentation for more details.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY": {
+                "type": "string",
+                "label": "GitHub Enterprise OAuth2 Key",
+                "help_text": "The OAuth2 key (Client ID) from your GitHub Enterprise developer application.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET": {
+                "type": "string",
+                "label": "GitHub Enterprise OAuth2 Secret",
+                "help_text": "The OAuth2 secret (Client Secret) from your GitHub Enterprise developer application.",
+                "category": "GitHub OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP": {
+                "type": "nested object",
+                "label": "GitHub Enterprise OAuth2 Organization Map",
+                "help_text": "Mapping to organization admins/users from social auth accounts. This setting\ncontrols which users are placed into which organizations based on their\nusername and email address. Configuration details are available in the\ndocumentation.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            },
+            "SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP": {
+                "type": "nested object",
+                "label": "GitHub Enterprise OAuth2 Team Map",
+                "help_text": "Mapping of team members (users) from social auth accounts. Configuration\ndetails are available in the documentation.",
+                "category": "GitHub Enterprise OAuth2",
+                "category_slug": "github-enterprise",
+                "defined_in_file": false,
+                "child": {
+                    "type": "nested object",
+                    "child": {
+                        "type": "field",
+                        "required": true,
+                        "read_only": false
+                    }
+                }
+            }
+        }
+    }
+}

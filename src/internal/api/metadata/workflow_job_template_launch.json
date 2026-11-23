@@ -1,0 +1,146 @@
+{
+    "name": "Workflow Job Template Launch",
+    "description": "Launch a Workflow Job Template:\n\nMake a GET request to this resource to determine if the workflow_job_template\ncan be launched and whether any passwords are required to launch the\nworkflow_job_template. The response will include the following fields:\n\n* `can_start_without_user_input`: Flag indicating if the workflow_job_template\n  can be launched without user-input (boolean, read-only)\n* `variables_needed_to_start`: Required variable names required to launch the\n  workflow_job_template (array, read-only)\n* `survey_enabled`: Flag indicating whether the workflow_job_template has an\n  enabled survey (boolean, read-only)\n* `extra_vars`: Text which is the `extra_vars` field of this workflow_job_template\n  (text, read-only)\n* `node_templates_missing`: List of node ids of all nodes that have a\n  null `unified_job_template`, which will cause their branches to stop\n  execution (list, read-only)\n* `node_prompts_rejected`: List of node ids of all nodes that have\n  specified a field that will be rejected because its  `unified_job_template`\n  does not allow prompting for this field, this will not halt execution of\n  the branch but the field will be ignored (list, read-only)\n* `workflow_job_template_data`: JSON object listing general information of\n  this workflow_job_template (JSON object, read-only)\n\nMake a POST request to this resource to launch the workflow_job_template. If any\ncredential, inventory, project or extra variables (extra_vars) are required, they\nmust be passed via POST data, with extra_vars given as a YAML or JSON string and\nescaped parentheses.\n\nIf successful, the response status code will be 201.  If any required passwords\nare not provided, a 400 status code will be returned.  If the workflow job cannot\nbe launched, a 405 status code will be returned. If the provided credential or\ninventory are not allowed to be used by the user, then a 403 status code will\nbe returned.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "ask_inventory_on_launch": {
+                "type": "boolean",
+                "label": "Ask inventory on launch",
+                "filterable": true
+            },
+            "ask_limit_on_launch": {
+                "type": "boolean",
+                "label": "Ask limit on launch",
+                "filterable": true
+            },
+            "ask_scm_branch_on_launch": {
+                "type": "boolean",
+                "label": "Ask scm branch on launch",
+                "filterable": true
+            },
+            "can_start_without_user_input": {
+                "type": "boolean",
+                "label": "Can start without user input",
+                "filterable": false
+            },
+            "defaults": {
+                "type": "field",
+                "label": "Defaults",
+                "filterable": false
+            },
+            "survey_enabled": {
+                "type": "boolean",
+                "label": "Survey enabled",
+                "filterable": true
+            },
+            "variables_needed_to_start": {
+                "type": "field",
+                "label": "Variables needed to start",
+                "filterable": false
+            },
+            "node_templates_missing": {
+                "type": "field",
+                "label": "Node templates missing",
+                "filterable": false
+            },
+            "node_prompts_rejected": {
+                "type": "field",
+                "label": "Node prompts rejected",
+                "filterable": false
+            },
+            "workflow_job_template_data": {
+                "type": "field",
+                "label": "Workflow job template data",
+                "filterable": false
+            },
+            "ask_variables_on_launch": {
+                "type": "boolean",
+                "label": "Ask variables on launch",
+                "filterable": true
+            },
+            "ask_labels_on_launch": {
+                "type": "boolean",
+                "label": "Ask labels on launch",
+                "filterable": true
+            },
+            "ask_skip_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask skip tags on launch",
+                "filterable": true
+            },
+            "ask_tags_on_launch": {
+                "type": "boolean",
+                "label": "Ask tags on launch",
+                "filterable": true
+            }
+        },
+        "POST": {
+            "extra_vars": {
+                "type": "json",
+                "required": false,
+                "label": "Extra vars",
+                "filterable": true,
+                "write_only": true
+            },
+            "inventory": {
+                "type": "id",
+                "required": false,
+                "label": "Inventory",
+                "filterable": true,
+                "write_only": true
+            },
+            "limit": {
+                "type": "string",
+                "required": false,
+                "label": "Limit",
+                "filterable": false,
+                "write_only": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "Scm branch",
+                "max_length": 1024,
+                "filterable": false,
+                "write_only": true
+            },
+            "labels": {
+                "type": "field",
+                "required": false,
+                "label": "Labels",
+                "filterable": false,
+                "write_only": true
+            },
+            "skip_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Skip tags",
+                "filterable": false,
+                "write_only": true
+            },
+            "job_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Job tags",
+                "filterable": false,
+                "write_only": true
+            }
+        }
+    },
+    "types": [
+        "workflow_job_template"
+    ],
+    "object_roles": [
+        "admin_role",
+        "execute_role",
+        "read_role",
+        "approval_role"
+    ]
+}

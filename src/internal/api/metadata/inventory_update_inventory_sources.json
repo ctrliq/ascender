@@ -1,0 +1,31 @@
+{
+    "name": "Inventory Sources Update",
+    "description": "# Update Inventory Sources\n\nMake a GET request to this resource to determine if any of the inventory sources for\nthis inventory can be updated. The response will include the following fields for each\ninventory source:\n\n* `inventory_source`: ID of the inventory_source\n  (integer, read-only)\n* `can_update`: Flag indicating if this inventory source can be updated\n  (boolean, read-only)\n\nMake a POST request to this resource to update the inventory sources. The response\nstatus code will be a 202. The response will contain the follow fields for each of the individual\ninventory sources:\n\n* `status`: `started` or message why the update could not be started.\n  (string, read-only)\n* `inventory_update`: ID of the inventory update job that was started.\n  (integer, read-only)\n* `project_update`: ID of the project update job that was started if this inventory source is an SCM source.\n  (integer, read-only, optional)\n\nNote: All manual inventory sources (source=\"\") will be ignored by the update_inventory_sources endpoint.  This endpoint will not update inventory sources for Smart Inventories.  \n\n\nResponse code from this action will be:\n\n - 200 if all inventory source updates were successful\n - 202 if some inventory source updates were successful, but some failed\n - 400 if all of the inventory source updates failed\n - 400 if there are no inventory sources in the inventory",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "can_update": {
+                "type": "boolean",
+                "label": "Can update",
+                "filterable": false
+            }
+        },
+        "POST": {}
+    },
+    "types": [
+        "inventory_source"
+    ],
+    "object_roles": [
+        "admin_role",
+        "update_role",
+        "adhoc_role",
+        "use_role",
+        "read_role"
+    ]
+}

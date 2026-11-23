@@ -1,0 +1,157 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `CUSTOM_LOGIN_INFO`: If needed, you can add specific information (such as a legal notice or a disclaimer) to a text box in the login modal using this setting. Any content added must be in plain text or an HTML fragment, as other markup languages are not supported. (string)\n* `CUSTOM_TITLE`: If set, this text will replace the default brand name in the browser tab title throughout the application. (string)\n* `CUSTOM_LOGO`: To set up a custom logo, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported. (string)\n* `CUSTOM_HEADER_LOGO`: To set up a custom logo for the application header, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported. (string)\n* `CUSTOM_THEME`: The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=&quot;custom&quot;], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=&quot;custom&quot;] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images. (string)\n* `CUSTOM_THEME_NAME`: Name shown for the custom theme in the theme list. Defaults to Custom when left blank. (string)\n* `MAX_UI_JOB_EVENTS`: Maximum number of job events for the UI to retrieve within a single request. (integer)\n* `UI_LIVE_UPDATES_ENABLED`: If disabled, the page will not refresh when events are received. Reloading the page will be required to get the latest details. (boolean)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `CUSTOM_LOGIN_INFO`: If needed, you can add specific information (such as a legal notice or a disclaimer) to a text box in the login modal using this setting. Any content added must be in plain text or an HTML fragment, as other markup languages are not supported. (string, default=`\"\"`)\n* `CUSTOM_TITLE`: If set, this text will replace the default brand name in the browser tab title throughout the application. (string, default=`\"\"`)\n* `CUSTOM_LOGO`: To set up a custom logo, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported. (string, default=`\"\"`)\n* `CUSTOM_HEADER_LOGO`: To set up a custom logo for the application header, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported. (string, default=`\"\"`)\n* `CUSTOM_THEME`: The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=&quot;custom&quot;], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=&quot;custom&quot;] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images. (string, default=`\"\"`)\n* `CUSTOM_THEME_NAME`: Name shown for the custom theme in the theme list. Defaults to Custom when left blank. (string, default=`\"\"`)\n* `MAX_UI_JOB_EVENTS`: Maximum number of job events for the UI to retrieve within a single request. (integer, required)\n* `UI_LIVE_UPDATES_ENABLED`: If disabled, the page will not refresh when events are received. Reloading the page will be required to get the latest details. (boolean, required)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "CUSTOM_LOGIN_INFO": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Login Info",
+                "help_text": "If needed, you can add specific information (such as a legal notice or a disclaimer) to a text box in the login modal using this setting. Any content added must be in plain text or an HTML fragment, as other markup languages are not supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "default": ""
+            },
+            "CUSTOM_TITLE": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Browser Title",
+                "help_text": "If set, this text will replace the default brand name in the browser tab title throughout the application.",
+                "category": "UI",
+                "category_slug": "ui",
+                "default": ""
+            },
+            "CUSTOM_LOGO": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Login Logo",
+                "help_text": "To set up a custom logo, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "placeholder": "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=",
+                "default": ""
+            },
+            "CUSTOM_HEADER_LOGO": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Header Logo",
+                "help_text": "To set up a custom logo for the application header, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "placeholder": "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=",
+                "default": ""
+            },
+            "CUSTOM_THEME": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Theme",
+                "help_text": "The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=\"custom\"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=\"custom\"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.",
+                "category": "UI",
+                "category_slug": "ui",
+                "default": ""
+            },
+            "CUSTOM_THEME_NAME": {
+                "type": "string",
+                "required": false,
+                "label": "Custom Theme Name",
+                "help_text": "Name shown for the custom theme in the theme list. Defaults to Custom when left blank.",
+                "category": "UI",
+                "category_slug": "ui",
+                "default": ""
+            },
+            "MAX_UI_JOB_EVENTS": {
+                "type": "integer",
+                "required": true,
+                "label": "Max Job Events Retrieved by UI",
+                "help_text": "Maximum number of job events for the UI to retrieve within a single request.",
+                "min_value": 100,
+                "category": "UI",
+                "category_slug": "ui",
+                "default": 4000
+            },
+            "UI_LIVE_UPDATES_ENABLED": {
+                "type": "boolean",
+                "required": true,
+                "label": "Enable Live Updates in the UI",
+                "help_text": "If disabled, the page will not refresh when events are received. Reloading the page will be required to get the latest details.",
+                "category": "UI",
+                "category_slug": "ui",
+                "default": true
+            }
+        },
+        "GET": {
+            "CUSTOM_LOGIN_INFO": {
+                "type": "string",
+                "label": "Custom Login Info",
+                "help_text": "If needed, you can add specific information (such as a legal notice or a disclaimer) to a text box in the login modal using this setting. Any content added must be in plain text or an HTML fragment, as other markup languages are not supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "CUSTOM_TITLE": {
+                "type": "string",
+                "label": "Custom Browser Title",
+                "help_text": "If set, this text will replace the default brand name in the browser tab title throughout the application.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "CUSTOM_LOGO": {
+                "type": "string",
+                "label": "Custom Login Logo",
+                "help_text": "To set up a custom logo, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "CUSTOM_HEADER_LOGO": {
+                "type": "string",
+                "label": "Custom Header Logo",
+                "help_text": "To set up a custom logo for the application header, provide a file that you create. For the custom logo to look its best, use a .png file with a transparent background. GIF, PNG and JPEG formats are supported.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "CUSTOM_THEME": {
+                "type": "string",
+                "label": "Custom Theme",
+                "help_text": "The contents of a CSS file, offered in the theme list alongside the themes that ship with the product. Scope the rules to html[data-theme=\"custom\"], the way the shipped themes scope theirs, and add html.pf-v6-theme-dark[data-theme=\"custom\"] for a dark theme. @import and remote URLs are rejected: use a relative path or a data: URI for fonts and images.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "CUSTOM_THEME_NAME": {
+                "type": "string",
+                "label": "Custom Theme Name",
+                "help_text": "Name shown for the custom theme in the theme list. Defaults to Custom when left blank.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "MAX_UI_JOB_EVENTS": {
+                "type": "integer",
+                "label": "Max Job Events Retrieved by UI",
+                "help_text": "Maximum number of job events for the UI to retrieve within a single request.",
+                "min_value": 100,
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            },
+            "UI_LIVE_UPDATES_ENABLED": {
+                "type": "boolean",
+                "label": "Enable Live Updates in the UI",
+                "help_text": "If disabled, the page will not refresh when events are received. Reloading the page will be required to get the latest details.",
+                "category": "UI",
+                "category_slug": "ui",
+                "defined_in_file": false
+            }
+        }
+    }
+}

@@ -1,0 +1,77 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Applications") "stream" "o_auth2_application,o_auth2_access_token")}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "applications-list" "searchKeys" .Data.searchKeys "ns" "applications" "addHref" (cond .Data.canAdd "/applications/add" "") "kind" "Application" "api" "/api/v2/applications/" "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Applications")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "applications-table-sort-name")}}
+							{{template "sort_th" (dict "page" . "key" "organization" "label" (t "Organization") "id" "applications-table-sort-organization")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Last Modified"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $a := .Data.results}}
+							{{$id := str $a.id}}
+							{{$caps := dig $a "summary_fields" "user_capabilities"}}
+							<tr class="pf-v6-c-table__tr" id="application-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$a.name}}">
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+									<a href="/applications/{{$id}}/details"><b>{{$a.name}}</b></a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Organization"}}" class="pf-v6-c-table__td ascender-td-break-word__td">
+									<a href="/organizations/{{str (dig $a "summary_fields" "organization" "id")}}">
+										<b>{{dig $a "summary_fields" "organization" "name"}}</b>
+									</a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Last Modified"}}" class="pf-v6-c-table__td">
+									{{dt $a.modified}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+									<div class="ascender-actions-td__grid">
+										<div>
+											<div style="display: contents;">
+												<div>
+													{{if dig $caps "edit"}}
+														<a aria-label="{{t "Edit application"}}" class="pf-v6-c-button pf-m-plain" href="/applications/{{$id}}/edit" data-tooltip="{{t "Edit application"}}" data-tooltip-pos="top">
+															<span class="pf-v6-c-button__icon">
+																{{icon "pencil-alt"}}
+															</span>
+														</a>
+													{{end}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Applications")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Applications")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

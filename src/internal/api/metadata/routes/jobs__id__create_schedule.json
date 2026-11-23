@@ -1,0 +1,29 @@
+{
+    "name": "Job Create Schedule",
+    "description": "Create a schedule based on a job:\n\nMake a POST request to this endpoint to create a schedule that launches\nthe job template that launched this job, and uses the same\nparameters that the job was launched with. These parameters include all\n\"prompted\" resources such as `extra_vars`, `inventory`, `limit`, etc.\n\nJobs that were launched with user-provided passwords cannot have a schedule\ncreated from them.\n\nMake a GET request for information about what those prompts are and\nwhether or not a schedule can be created.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {
+            "can_schedule": {
+                "type": "field",
+                "label": "Can schedule",
+                "filterable": false
+            },
+            "prompts": {
+                "type": "field",
+                "label": "Prompts",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "job"
+    ]
+}

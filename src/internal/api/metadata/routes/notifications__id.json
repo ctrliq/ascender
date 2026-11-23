@@ -1,0 +1,120 @@
+{
+    "name": "Notification Detail",
+    "description": "# Retrieve a Notification:\n\nMake GET request to this resource to retrieve a single notification\nrecord containing the following fields:\n\n* `id`: Database ID for this notification. (integer)\n* `type`: Data type for this notification. (choice)\n* `url`: URL for this notification. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this notification was created. (datetime)\n* `modified`: Timestamp when this notification was last modified. (datetime)\n* `notification_template`:  (id)\n* `error`:  (string)\n* `status`:  (choice)\n    - `pending`: Pending\n    - `successful`: Successful\n    - `failed`: Failed\n* `notifications_sent`:  (integer)\n* `notification_type`:  (choice)\n    - `email`: Email\n    - `grafana`: Grafana\n    - `irc`: IRC\n    - `matrix`: Matrix\n    - `mattermost`: Mattermost\n    - `pagerduty`: Pagerduty\n    - `rocketchat`: Rocket.Chat\n    - `slack`: Slack\n    - `twilio`: Twilio\n    - `webhook`: Webhook\n* `recipients`:  (string)\n* `subject`:  (string)\n* `body`: Notification body (json)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this notification.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this notification.",
+                "choices": [
+                    ["notification", "Notification"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this notification.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this notification was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this notification was last modified.",
+                "filterable": true
+            },
+            "notification_template": {
+                "type": "id",
+                "label": "Notification template",
+                "filterable": true
+            },
+            "error": {
+                "type": "string",
+                "label": "Error",
+                "filterable": true
+            },
+            "status": {
+                "type": "choice",
+                "label": "Status",
+                "filterable": true,
+                "choices": [
+                    ["pending", "Pending"],
+                    ["successful", "Successful"],
+                    ["failed", "Failed"]
+                ]
+            },
+            "notifications_sent": {
+                "type": "integer",
+                "label": "Notifications sent",
+                "filterable": true
+            },
+            "notification_type": {
+                "type": "choice",
+                "label": "Notification type",
+                "filterable": true,
+                "choices": [
+                    ["email", "Email"],
+                    ["grafana", "Grafana"],
+                    ["irc", "IRC"],
+                    ["matrix", "Matrix"],
+                    ["mattermost", "Mattermost"],
+                    ["pagerduty", "Pagerduty"],
+                    ["rocketchat", "Rocket.Chat"],
+                    ["slack", "Slack"],
+                    ["twilio", "Twilio"],
+                    ["webhook", "Webhook"]
+                ]
+            },
+            "recipients": {
+                "type": "string",
+                "label": "Recipients",
+                "filterable": true
+            },
+            "subject": {
+                "type": "string",
+                "label": "Subject",
+                "filterable": true
+            },
+            "body": {
+                "type": "json",
+                "label": "Body",
+                "help_text": "Notification body",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "notification"
+    ]
+}

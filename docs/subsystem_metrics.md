@@ -1,128 +1,206 @@
 # Subsystem Metrics
 
-The subsystem metrics offers a flexible way to collect and aggregate metrics across the application and display them at the `api/v2/metrics` endpoint.
+Subsystem metrics are per-node operational counters of Ascender's own
+machinery, as opposed to the database gauges (counts of objects, jobs by
+status, instance capacity) that are read from the database on every request.
+Both are served in Prometheus format at `/api/v2/metrics/`.
 
-```python
-m = Metrics() # initialize the metrics object
-m.inc("foo", 1) # increment a value
-m.pipe_execute() # save the values to Redis
-```
+In the Go implementation the only subsystem that reports metrics is the event
+writer in `ascender-task`, the part that stores job events and that the old
+implementation called the callback receiver. The metric names are unchanged
+so existing dashboards and alerts keep working.
 
-## Endpoint reflects Redis
+The code is in three places:
 
-The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `ascender_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
+- `src/internal/tasks/subsystem_metrics.go`: the counters and the loop that
+  publishes them from `ascender-task`;
+- `src/internal/api/subsystem_metrics.go`: publishing, and what each
+  `ascender-web` keeps of what it receives;
+- `src/internal/api/metrics.go`: the endpoint, which renders the database
+  gauges and the subsystem metrics.
 
-```
-valkey /run/valkey/valkey.sock> hget ascender_metrics callback_receiver_events_insert_db
-"100"
-```
-
-Each control node tracks its own metrics. Thus, there will be a `callback_receiver_events_insert_db` metric for each instance in the cluster.
-
-## Metrics class
-
-`subsystem_metrics.Metrics` is a class that can access, track, and update the Redis metrics. It is the interface between the python code and the Redis instance that ultimately stores the metrics. Different parts of the application are expected to initialize their own `Metrics` object and use it to interface with Redis.
-
-## Performance consideration
-
-Saving to Redis can be expensive if called too frequently, i.e. called rapidly in a while loop.
-
-As such, the subsystem metrics is designed to track and aggregate data in-memory, and only update to Redis periodically. Because the endpoint only reflects what is in Redis, there could be a delay between the moment the measurement is taken and when that measurement is displayed at the endpoint.
-
-The `inc` and `set` commands only affect the in-memory values, and calling `pipe_execute` updates the corresponding metrics in Redis. The trade-off with this design is real-time accuracy of the measurements reported at the `api/v2/metrics` endpoint. Keep in mind that this endpoint is likely to be scraped at an interval of 5-15 seconds from Prometheus.Therefore having a system that reports metrics at a resolution of < 1 second is not necessary.
-
-## Thread safety
-
-The Metrics object is not thread safe. Each thread should initialize and use its own `Metrics` object. `set` and `inc` will update a basic python int object without using any sort of mutex or lock. As such, multiple threads accessing and updating this value could lead to inaccuracies and race conditions.
-
-However, from the perspective of Redis, `pipe_execute` *is* thread safe. So multiple `Metrics` objects can track and increment the same metric across threads and processes.
+## How the numbers travel
 
 ```
-                                                     In memory
-          Thread 1  +-------------+                 +---------+
-                    |             |  inc("foo", 1)  |         |
-        +---------->|  Metrics A  | --------------->|  IntM() +-----------------+
-        |           |             |                 |         |   pipe_execute  |
-        |           +-------------+                 +---------+                 |
-        |                                                                   +---v---+
-Process                                                                     |       |
-                                                                            | Redis |
-        |                                                                   |       |
-        |                                            In memory              +---^---+
-        |           +-------------+                 +---------+                 |
-        | Thread 2  |             |  inc("foo", 1)  |         |                 |
-        +---------->|  Metrics B  | --------------->|  IntM() +-----------------+
-                    |             |                 |         |   pipe_execute
-                    +-------------+                 +---------+
+ascender-task                          PostgreSQL               every ascender-web
+callbackMetrics (in memory)
+  -- every 3 s, if changed -->  NOTIFY ascender_websocket  -->  latest snapshot per instance (in memory)
+     group "metrics"                                              --> GET /api/v2/metrics/
 ```
 
-## When to call pipe_execute
+1. **Counting.** `ascender-task` keeps one set of counters in memory
+   (`callbackMetrics`). The code that takes in and stores events updates
+   it: `jobEventSink` in `src/internal/tasks/job_events.go` for jobs, ad hoc
+   commands and project updates, `src/internal/tasks/inventory_update.go` for
+   inventory updates, and `src/internal/tasks/system_job.go` for system jobs.
+   An update takes a mutex, changes a value in a map, and marks the counters
+   changed. It does no I/O.
+2. **Publishing.** Every three seconds `Dispatcher.publishMetrics` takes a
+   snapshot of the counters, if anything changed since the last one, and
+   publishes it with `Server.PublishSubsystemMetrics`. The snapshot goes
+   through the same PostgreSQL `NOTIFY` channel as websocket messages
+   (`ascender_websocket`, see [Websockets](websockets.md)), in the group
+   `metrics`, as
+   `{"instance": "<node>", "metrics": "<JSON of the counters>", "metrics_namespace": "callback_receiver"}`.
+   `<node>` is the task process's `ASCENDER_CLUSTER_HOST_ID` (by default its
+   host name).
+3. **Keeping.** Every `ascender-web` process listens on that channel. It does
+   not pass the `metrics` group on to websocket clients. Instead
+   `storeSubsystemMetrics` replaces whatever it held for that instance with
+   the new snapshot.
+4. **Serving.** `/api/v2/metrics/` renders what the web process holds, one
+   sample per node, labelled `node="<instance>"`.
 
-As mentioned, it is best practice to ensure `pipe_execute` is not called too frequently. For convenience, the `should_pipe_execute` method can be used to determine whether enough time has elapsed since the last `pipe_execute` to warrant a new call. This interval is determined by the `SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_VALKEY` setting.
+The counters are cumulative from the start of the `ascender-task` process, so
+a lost snapshot loses nothing that the next one does not carry. Every web
+replica receives every snapshot, so all replicas serve the same values,
+whichever one a scraper reaches.
 
-```python
-m = Metrics()
-while True:
-    m.inc("foo", 1)
-    if m.should_pipe_execute():
-        m.pipe_execute()
-    if some_condition:
-        break
-m.pipe_execute()
+Consequences an operator may notice:
+
+- Restarting `ascender-task` resets its counters to zero. The old
+  implementation kept them in Valkey.
+- The node list starts with the serving `ascender-web`'s own
+  `ASCENDER_CLUSTER_HOST_ID`, which is always present and reads zero if no
+  task process with that name has published. A web-only node therefore
+  appears with zeros. The other instances follow, sorted by name.
+- A snapshot is sent only when something changed. A web process that has just
+  started does not list another node until that node next stores an event.
+- A node that stops publishing (scaled down or deprovisioned) keeps its last
+  values on the endpoint until the web process restarts.
+
+## The endpoint
+
+`GET /api/v2/metrics/` is open to superusers and system auditors. With the
+`ALLOW_METRICS_FOR_ANONYMOUS_USERS` setting on, anyone can read it, without
+logging in.
+
+By default the response is Prometheus text exposition (`text/plain`), the
+database gauges first and then the subsystem metrics. A browser asking for
+HTML gets the same text in the browsable API page.
+
+| Query parameter | Effect |
+| --- | --- |
+| `subsystemonly=1` | Only the subsystem metrics. |
+| `dbonly=1` | Only the database gauges. |
+| `node=<hostname>` | Subsystem samples of that node only. |
+| `metric=<name>` | Only that subsystem metric family. |
+| `format=json` | The same data as JSON (below). |
+
+`node` and `metric` apply only to the subsystem metrics. Each takes one value.
+The old implementation accepted a parameter repeated to select several nodes
+or metrics; Go uses the first value.
+
+With `format=json`, each family becomes a key holding its help text, type and
+samples:
+
+```json
+{
+  "callback_receiver_events_insert_db": {
+    "help_text": "Number of events batch inserted into database",
+    "type": "gauge",
+    "samples": [{"labels": {"node": "ascender-task-1"}, "value": 1532}]
+  }
+}
 ```
 
-Although the metric `foo` is being incremented very frequently in-memory, the metrics won't save to Redis each iteration of the while loop. Instead, it will only save to Redis if `should_pipe_execute` is `True`.
+Histogram samples also carry `"sample_type"`: `bucket`, `count` or `sum`.
 
-In the example above, once `some_condition` hits, there may still be values accrued in the `Metrics` object that still haven't been saved to Redis. Therefore a final `pipe_execute` is needed to ensure all values are updated in Redis.
+### Database gauges
 
-## Metric types
+These are computed on each request (`Server.dbMetrics`) and are not
+subsystem metrics: `ascender_system_info`, the `*_total` counts of
+organizations, users, teams, inventories, projects, job templates,
+workflow job templates, hosts (all and active), schedules and sessions,
+running and pending jobs, job wait and run times over the last hour
+(`ascender_job_wait_seconds_*`, `ascender_job_run_seconds_*`,
+`ascender_job_timing_sample_total`), jobs by status, per-instance capacity,
+CPU, memory, info, launch types, job statuses, consumed and remaining
+capacity, and `ascender_database_connections_total`. Every family is also
+served under its former `awx_` name.
 
-#### Metrics intended to increment over time
+### Subsystem metrics
 
-* `IntM` - data that can be represented by an integer (whole number). e.g. number of events inserted into database
-* `FloatM` - data that can be represented by a float, e.g. time it took to insert events into database
+All are labelled `node`; the last three also carry
+`subsystem="callback_receiver"`. All are reported as gauges, except the
+histogram.
 
-The above metrics are designed to increment (increase) the values in Redis. That is, calling `pipe_execute` will *add* the value currently stored in-memory to the value stored in Redis.
+| Metric | Meaning in Go |
+| --- | --- |
+| `callback_receiver_events_queue_size_redis` | Always 0. Events go straight from a running job to the writer, with no queue in between. Kept for compatibility. |
+| `callback_receiver_events_popped_redis` | Events received from running jobs. |
+| `callback_receiver_events_in_memory` | Events received and not yet stored or discarded. An event is discarded when it duplicates one already stored, or when it is given up after failing its retries. |
+| `callback_receiver_batch_events_errors` | Batch inserts that failed. The events of a failed batch are then saved one by one. |
+| `callback_receiver_events_insert_db_seconds` | Total time spent saving events. |
+| `callback_receiver_events_insert_db` | Events stored, in batches or one by one. |
+| `callback_receiver_events_broadcast` | Stored events handed to the websocket publisher. Events the `MAX_WEBSOCKET_EVENT_RATE` limit held back are not counted; events that `UI_LIVE_UPDATES_ENABLED` being off keeps from going out are. |
+| `callback_receiver_batch_events_insert_db` | Histogram of the number of events in each batch insert, buckets 10, 50, 150, 350, 650, 2000 and +Inf. One observation per save that stored anything. |
+| `callback_receiver_event_processing_avg_seconds` | For the latest save, the average time from an event's creation to its storage, over the events that carried a creation time. |
+| `subsystem_metrics_pipe_execute_calls` | Snapshots published. |
+| `subsystem_metrics_pipe_execute_seconds` | Total time spent publishing snapshots. The help text still says "saving metrics to valkey". |
+| `subsystem_metrics_send_metrics_seconds` | The same value as `subsystem_metrics_pipe_execute_seconds`: in Go, saving and sending are one step. |
 
-Note, to decrease a value, you can increment by a negative number, e.g. `inc("foo", -1)`
-
-#### Metrics intended to override the previous value
-
-* `SetIntM` - e.g. number of events in the Redis queue right now
-* `SetFloatM` - e.g. time it took to execute the last task manager
-
-The above metrics are designed to override whatever values are in Redis. Calling `pipe_execute` will *set* (and override) the value currently stored in-memory to the value stored in Redis.
-
-#### Observing data that falls into buckets
-
-* `HistogramM` - observations of a measurement across time that falls into pre-defined buckets
-
-Example, the following metric captures how many events are batch-inserted into the database.
+The histogram is cumulative: each bucket includes the observations of the
+buckets before it. Given
 
 ```
 callback_receiver_batch_events_insert_db_bucket{le="10",node="ascender_1"} 1
 callback_receiver_batch_events_insert_db_bucket{le="50",node="ascender_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="150",node="ascender_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="350",node="ascender_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="650",node="ascender_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="2000",node="ascender_1"} 5
+...
 callback_receiver_batch_events_insert_db_bucket{le="+Inf",node="ascender_1"} 5
 callback_receiver_batch_events_insert_db_count{node="ascender_1"} 5
-callback_receiver_batch_events_insert_db_sum{node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_sum{node="ascender_1"} 112
 ```
 
-The histogram is cumulative, meaning each successive bucket includes the values in the *preceding* bucket. In the above, one occurrence of the insertion process resulted in less than 10 events being inserted into the database. Four (5-1) occurrences resulted in between 10 and 50 events being inserted into the database.
+one save inserted 10 events or fewer in its batch, and four (5 - 1) inserted
+between 11 and 50.
 
-## Metrics broadcast
+Values whose name ends in `_seconds` are rendered as floats. All other values
+are rendered as integers.
 
-Periodically, the `Metrics` object will broadcast the full metrics dataset to other control nodes in the cluster. This ensures that the metrics endpoint has data from all instances, not just the instance that the browser happens to be connected to at that moment.
+> **Not implemented:** the old dispatcher and task manager metrics
+> (`task_manager_*`, `dependency_manager_*`, `workflow_manager_*`,
+> `dispatcher_pool_*`, `dispatcher_availability`) do not exist in Go. The
+> `SUBSYSTEM_METRICS_*` settings are not read: the three-second interval
+> and the histogram buckets are fixed in the code.
 
-This data received from other metrics is stored in Redis as a JSON string. For example, in a cluster with three control nodes, each Redis instance will contain the following keys.
+## The Metrics screen
 
-```
-ascender_metrics_instance_ascender_1
-ascender_metrics_instance_ascender_2
-ascender_metrics_instance_ascender_3
-```
+The UI's Metrics page (`/metrics`, `src/internal/web/metrics.go` and
+`src/web/static/js/metrics.js`) offers the non-execution instances and the
+metric names returned by `/api/v2/metrics/?subsystemonly=1&format=json`. Once
+an instance and a metric are chosen, it reads that metric every three seconds
+and charts the last fifty readings. With more than one instance it also
+offers "All", which charts every node.
 
-The `api/v2/metrics` endpoint will load the data from each of these instances, format it into Prometheus, and return it as a response.
+## Adding a metric
+
+1. **Count it in `ascender-task`.** Add a method on `subsystemCounters` in
+   `src/internal/tasks/subsystem_metrics.go` that takes `c.mu`, updates
+   `c.vals["<name>"]`, and sets `c.changed = true`, then call it on
+   `callbackMetrics` where the thing happens. Values are `float64`. Add to the
+   value for a running total, or assign it for a last-value gauge; the
+   snapshot sends the current value either way. Keep it to this in-memory
+   update: publishing is already batched.
+2. **Render it.** In `Server.subsystemMetrics` (`src/internal/api/metrics.go`)
+   add the name and help text to the `gauges` list, or write its family
+   alongside the others. Read values with `val(n, name)`, which renders zero
+   for a node that has not published, and test `want(name)` so the `metric`
+   filter works. Name a value `..._seconds` if it is fractional: other names
+   are rendered as integers.
+3. **Mind the size.** The whole snapshot travels in one `NOTIFY`, inside a
+   JSON string, so its quotes are escaped. An envelope over 7900 bytes is
+   dropped and a warning logged (`publishNotice` in
+   `src/internal/api/websocket.go`). Today's snapshot is a small fraction of
+   that.
+4. **Histogram buckets** are listed twice: `SubsystemMetricBuckets` in
+   `src/internal/tasks/subsystem_metrics.go` counts the observations, and the
+   `le` labels in `Server.subsystemMetrics` render them. Change both together.
+5. **A new subsystem**, such as metrics from another part of `ascender-task`,
+   needs more than a new name. `storeSubsystemMetrics` accepts only the
+   `callback_receiver` namespace and keeps a single snapshot per instance, so
+   a second namespace has to be keyed separately there and published under
+   its own namespace.
+
+The Metrics screen picks up a new metric on its own, since it lists whatever
+the endpoint returns.

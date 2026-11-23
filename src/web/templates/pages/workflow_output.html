@@ -1,0 +1,98 @@
+{{define "content"}}
+{{$j := .Data.job}}
+{{$id := str $j.id}}
+{{$seg := .Data.typeSeg}}
+{{$caps := dig $j "summary_fields" "user_capabilities"}}
+{{$api := printf "/api/v2/workflow_jobs/%s/" $id}}
+{{template "screen_header" (dict "title" (t "Output") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (str $j.name)))))}}
+<section class="pf-v6-c-page__main-section">
+	<div>
+		<div class="pf-v6-c-card ascender-job__workflow-card">
+			{{template "routed_tabs" (dict "current" "output" "back" (dict "href" "/jobs" "label" "Back to Jobs") "tabs" (list (dict "key" "details" "href" (printf "/jobs/%s/%s/details" $seg $id) "label" "Details") (dict "key" "output" "href" (printf "/jobs/%s/%s/output" $seg $id) "label" "Output")))}}
+			<div class="pf-v6-c-card__body ascender-workflow-output__card-body">
+				<div class="ascender-workflow-output__wrapper" data-wf-output data-job-id="{{$id}}" data-job-api="{{$api}}" data-status="{{$j.status}}" data-started="{{str $j.started}}" data-finished="{{str $j.finished}}">
+					<div class="ascender-workflow-output-toolbar__toolbar" id="workflow-output-toolbar">
+						<div class="ascender-workflow-output-toolbar__job">
+							<h1>{{$j.name}}</h1>
+							<span data-wf-status-label>
+								{{template "status_label" (str $j.status)}}
+							</span>
+						</div>
+						<div class="ascender-workflow-output-toolbar__actions">
+							{{with .Data.wfjtID}}
+								<div style="display: contents;">
+									<a id="edit-workflow" aria-label="{{t "Edit workflow"}}" data-tooltip="{{t "Edit workflow"}}" class="pf-v6-c-button pf-m-plain ascender-workflow-output-toolbar__action-button" href="/templates/workflow_job_template/{{.}}/visualizer">
+										<span class="pf-v6-c-button__text">
+											{{icon "project-diagram"}}
+										</span>
+									</a>
+								</div>
+							{{end}}
+							<div style="display: contents;">
+								<button id="workflow-output-toggle-legend" aria-label="{{t "Toggle Legend"}}" data-tooltip="{{t "Toggle Legend"}}" class="pf-v6-c-button pf-m-plain ascender-workflow-output-toolbar__action-button" type="button">
+									<span class="pf-v6-c-button__text">{{icon "compass"}}</span>
+								</button>
+							</div>
+							<div style="display: contents;">
+								<button id="workflow-output-toggle-tools" aria-label="{{t "Toggle Tools"}}" data-tooltip="{{t "Toggle Tools"}}" class="pf-v6-c-button pf-m-plain ascender-workflow-output-toolbar__action-button" type="button">
+									<span class="pf-v6-c-button__text">{{icon "wrench"}}</span>
+								</button>
+							</div>
+							<div class="ascender-workflow-output-toolbar__badge-label">
+								{{t "Total Nodes"}}
+							</div>
+							<span class="pf-v6-c-badge pf-m-read ascender-workflow-output-toolbar__badge" id="workflow-total-nodes-badge">
+								0
+							</span>
+							<div class="ascender-workflow-output-toolbar__badge-label">
+								{{t "Elapsed"}}
+							</div>
+							<div style="display: contents;">
+								<span id="workflow-elapsed-badge" data-tooltip="{{t "Elapsed time that the job ran"}}" class="pf-v6-c-badge pf-m-read ascender-workflow-output-toolbar__badge ascender-workflow-output-toolbar__elapsed-badge">
+									{{.Data.elapsedText}}
+								</span>
+							</div>
+							{{if and .Data.active (dig $caps "start")}}
+								<div style="display: contents;">
+									<button aria-label="{{t "Cancel {0}" "0" $j.name}}" data-tooltip="{{t "Cancel {0}" "0" $j.name}}" class="pf-v6-c-button pf-m-plain" type="button" data-cancel-job="{{$api}}cancel/" data-name="{{$j.name}}">
+										<span class="pf-v6-c-button__icon">
+											{{icon "minus-circle"}}
+										</span>
+									</button>
+								</div>
+							{{end}}
+							{{if dig $caps "start"}}
+								{{if .Data.relaunchFromFailed}}
+									<div style="display: contents;">
+										<span>
+											{{template "workflow_relaunch_dropdown" (dict "job" $j "id" "workflow-output-relaunch")}}
+										</span>
+									</div>
+								{{else}}
+									<div style="display: contents;">
+										<button class="pf-v6-c-button pf-m-plain ascender-workflow-output-toolbar__action-button" type="button" aria-label="{{t "Relaunch"}}" data-tooltip="{{t "Relaunch Job"}}" data-relaunch="{{$api}}relaunch/" data-relaunch-seg="workflow">
+											<span class="pf-v6-c-button__text">
+												{{icon "rocket"}}
+											</span>
+										</button>
+									</div>
+								{{end}}
+							{{end}}
+							{{if and (dig $caps "delete") .Data.canDelete}}
+								<div style="display: contents;">
+									<button aria-label="{{t "Delete"}}" data-tooltip="{{t "Delete Job"}}" class="pf-v6-c-button pf-m-plain" type="button" data-delete-one data-delete-kind="Job" data-api="{{$api}}" data-name="{{$j.name}}" data-redirect="/jobs">
+										<span class="pf-v6-c-button__text">
+											{{icon "trash-alt"}}
+										</span>
+									</button>
+								</div>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{template "workflow_visualizer_icons" $}}
+{{end}}

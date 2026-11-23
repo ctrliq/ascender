@@ -1,0 +1,11 @@
+{
+    "name": "Mesh Visualizer",
+    "description": "Make a GET request to this resource to obtain a list all Receptor Nodes and their links.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

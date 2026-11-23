@@ -1,0 +1,51 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Labels") "stream" "label")}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "labels-list" "searchKeys" .Data.searchKeys "ns" "labels" "noSelect" true "noDelete" true "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Labels")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "labels-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Organization"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range .Data.results}}
+							{{$org := dig . "summary_fields" "organization"}}
+							<tr class="pf-v6-c-table__tr">
+								<td tabindex="-1" class="pf-v6-c-table__td" style="width: 46px; min-width: 0px; max-width: 46px;">
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+									<b>
+										<a href="/templates?template.labels__name__icontains={{urlquery (str .name)}}&amp;template.labels__id={{str .id}}">
+											{{.name}}
+										</a>
+									</b>
+								</td>
+								<td tabindex="-1" data-label="{{t "Organization"}}" class="pf-v6-c-table__td">
+									{{with $org}}{{.name}}{{end}}
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Labels")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Labels")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

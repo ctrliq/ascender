@@ -1,0 +1,116 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Users") "stream" "user")}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "user-list" "searchKeys" .Data.searchKeys "ns" "user" "addHref" (cond .Data.canAdd "/users/add" "") "kind" "User" "api" "/api/v2/users/" "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Users")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "username" "label" (t "Username") "id" "user-table-sort-username")}}
+							{{template "sort_th" (dict "page" . "key" "first_name" "label" (t "First Name") "id" "user-table-sort-first_name")}}
+							{{template "sort_th" (dict "page" . "key" "last_name" "label" (t "Last Name") "id" "user-table-sort-last_name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Email"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Organization"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Role"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $u := .Data.results}}
+							{{$id := str $u.id}}
+							{{$caps := dig $u "summary_fields" "user_capabilities"}}
+							<tr class="pf-v6-c-table__tr" id="user-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$u.username}}">
+								<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Username"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+									<a href="/users/{{$id}}/details"><b>{{$u.username}}</b></a>
+									{{if has $u.ldap_dn}}
+										<span class="ascender-user-list-item__margin-left-12">
+											<span aria-label="{{t "ldap user"}}" class="pf-v6-c-label">
+												<span class="pf-v6-c-label__content">
+													<span class="pf-v6-c-label__text">
+														{{t "LDAP"}}
+													</span>
+												</span>
+											</span>
+										</span>
+									{{else if $u.auth}}
+										<span class="ascender-user-list-item__margin-left-12">
+											<span aria-label="{{t "social login"}}" class="pf-v6-c-label">
+												<span class="pf-v6-c-label__content">
+													<span class="pf-v6-c-label__text">
+														{{t "SOCIAL"}}
+													</span>
+												</span>
+											</span>
+										</span>
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "First Name"}}" class="pf-v6-c-table__td">
+									{{$u.first_name}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Last Name"}}" class="pf-v6-c-table__td">
+									{{$u.last_name}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Email"}}" class="pf-v6-c-table__td">
+									{{$u.email}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Organization"}}" class="pf-v6-c-table__td">
+									{{with dig $u "summary_fields" "organization" "name"}}
+										{{.}}
+									{{else}}
+										—
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Role"}}" class="pf-v6-c-table__td">
+									{{t (userType $u)}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+									<div class="ascender-actions-td__grid">
+										<div>
+											<div style="display: contents;">
+												<div>
+													{{if dig $caps "edit"}}
+														<a aria-label="{{t "Edit User"}}" class="pf-v6-c-button pf-m-plain" href="/users/{{$id}}/edit" data-tooltip="{{t "Edit User"}}" data-tooltip-pos="top">
+															<span class="pf-v6-c-button__icon">
+																{{icon "pencil-alt"}}
+															</span>
+														</a>
+													{{end}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Users")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Users")) "addHref" (cond .Data.canAdd "/users/add" ""))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

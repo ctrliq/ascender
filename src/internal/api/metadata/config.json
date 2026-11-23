@@ -1,0 +1,11 @@
+{
+    "name": "Configuration",
+    "description": "# Site configuration settings and general information\n\nMake a GET request to this resource to retrieve the configuration containing\nthe following fields (some fields may not be visible to all users):\n\n* `project_base_dir`: Path on the server where projects and playbooks are \\\n  stored.\n* `project_local_paths`: List of directories beneath `project_base_dir` to\n  use when creating/editing a manual project.\n* `time_zone`: The configured time zone for the server.\n* `version`: Version of the Ascender package installed.\n* `become_methods`: The privilege escalation methods available to a job.\n* `user_ldap_fields`: Present when LDAP is enabled: the user fields LDAP\n  manages, which are read-only for a user with an `ldap_dn`.\n\n\n\n# No licence to install\n\nAscender does not use subscriptions. This method took a Red Hat entitlement\nmanifest and answers `400` instead, rather than a bare `405`, so a client that\nposts one is told why.\n\n\n\n# No licence to remove\n\nAscender does not use subscriptions. This method cleared the installed licence\nand answers `400`, the same way POST does.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

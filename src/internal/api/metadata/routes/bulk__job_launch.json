@@ -1,0 +1,482 @@
+{
+    "name": "Bulk Job Launch",
+    "description": "# Bulk Job Launch\n\nThis endpoint allows the client to launch multiple UnifiedJobTemplates at a time, along side any launch time parameters that they would normally set at launch time.\n\nExample:\n\n    {\n        \"name\": \"my bulk job\",\n        \"jobs\": [\n            {\"unified_job_template\": 7, \"inventory\": 2},\n            {\"unified_job_template\": 7, \"credentials\": [3]}\n        ]\n    }",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {
+            "name": {
+                "type": "string",
+                "required": false,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this workflow job.",
+                "filterable": true,
+                "default": "Bulk Job Launch",
+                "write_only": true
+            },
+            "jobs": {
+                "type": "field",
+                "required": true,
+                "label": "Jobs",
+                "help_text": "List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]",
+                "max_length": 100000,
+                "filterable": false,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "help_text": "List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]",
+                    "children": {
+                        "id": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": true,
+                            "label": "ID",
+                            "help_text": "Database ID for this workflow job node.",
+                            "filterable": true
+                        },
+                        "type": {
+                            "type": "choice",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Type",
+                            "help_text": "Data type for this workflow job node."
+                        },
+                        "url": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Url",
+                            "help_text": "URL for this workflow job node.",
+                            "filterable": false
+                        },
+                        "related": {
+                            "type": "object",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Related",
+                            "help_text": "Data structure with URLs of related resources.",
+                            "filterable": false
+                        },
+                        "summary_fields": {
+                            "type": "object",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Summary fields",
+                            "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                            "filterable": false
+                        },
+                        "created": {
+                            "type": "datetime",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Created",
+                            "help_text": "Timestamp when this workflow job node was created.",
+                            "filterable": true
+                        },
+                        "modified": {
+                            "type": "datetime",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Modified",
+                            "help_text": "Timestamp when this workflow job node was last modified.",
+                            "filterable": true
+                        },
+                        "extra_data": {
+                            "type": "json",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Extra data",
+                            "filterable": true,
+                            "default": {}
+                        },
+                        "inventory": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Inventory",
+                            "min_value": 1,
+                            "filterable": true
+                        },
+                        "scm_branch": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Scm branch",
+                            "max_length": 1024,
+                            "filterable": false,
+                            "default": null
+                        },
+                        "job_type": {
+                            "type": "choice",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Job type",
+                            "filterable": false,
+                            "default": null,
+                            "choices": [
+                                [null, "---------"],
+                                ["", "---------"],
+                                ["run", "Run"],
+                                ["check", "Check"]
+                            ]
+                        },
+                        "job_tags": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Job tags",
+                            "filterable": false,
+                            "default": null
+                        },
+                        "skip_tags": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Skip tags",
+                            "filterable": false,
+                            "default": null
+                        },
+                        "limit": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Limit",
+                            "filterable": false,
+                            "default": null
+                        },
+                        "diff_mode": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Diff mode",
+                            "filterable": false,
+                            "default": null
+                        },
+                        "verbosity": {
+                            "type": "choice",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Verbosity",
+                            "filterable": false,
+                            "default": null,
+                            "choices": [
+                                [null, "---------"],
+                                [0, "0 (Normal)"],
+                                [1, "1 (Verbose)"],
+                                [2, "2 (More Verbose)"],
+                                [3, "3 (Debug)"],
+                                [4, "4 (Connection Debug)"],
+                                [5, "5 (WinRM Debug)"]
+                            ]
+                        },
+                        "execution_environment": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Execution environment",
+                            "min_value": 1,
+                            "filterable": true
+                        },
+                        "forks": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Forks",
+                            "min_value": 0,
+                            "filterable": false,
+                            "default": null
+                        },
+                        "job_slice_count": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Job slice count",
+                            "min_value": 0,
+                            "filterable": false,
+                            "default": null
+                        },
+                        "timeout": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Timeout",
+                            "filterable": false,
+                            "default": null
+                        },
+                        "job": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Job",
+                            "filterable": true
+                        },
+                        "workflow_job": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Workflow job",
+                            "filterable": true
+                        },
+                        "unified_job_template": {
+                            "type": "id",
+                            "required": true,
+                            "read_only": false,
+                            "label": "Unified job template",
+                            "help_text": "Primary key of the template for this job, can be a job template or inventory source.",
+                            "min_value": 1,
+                            "filterable": true
+                        },
+                        "success_nodes": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Success nodes",
+                            "filterable": false
+                        },
+                        "failure_nodes": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Failure nodes",
+                            "filterable": false
+                        },
+                        "always_nodes": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Always nodes",
+                            "filterable": false
+                        },
+                        "condition_nodes": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Condition nodes",
+                            "filterable": false
+                        },
+                        "condition_edges": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Condition edges",
+                            "help_text": "List of condition data for each conditional edge originating from this node; id is the target node.",
+                            "filterable": false
+                        },
+                        "all_parents_must_converge": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": false,
+                            "label": "All parents must converge",
+                            "help_text": "If enabled then the node will only run if all of the parent nodes have met the criteria to reach this node",
+                            "filterable": true,
+                            "default": false
+                        },
+                        "do_not_run": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Do not run",
+                            "help_text": "Indicates that a job will not be created when True. Workflow runtime semantics will mark this True if the node is in a path that will decidedly not be ran. A value of False means the node may not run.",
+                            "filterable": true,
+                            "default": false
+                        },
+                        "prior_run_succeeded": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Prior run succeeded",
+                            "help_text": "Set when a workflow is relaunched from a failed node: the node's job succeeded in the prior run, so it is carried forward as already-successful. It spawns no new job, but the scheduler treats it as a successful parent so its success/always paths are still traversed.",
+                            "filterable": true,
+                            "default": false
+                        },
+                        "prior_run_elapsed": {
+                            "type": "float",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Prior run elapsed",
+                            "help_text": "Elapsed time (seconds) of this node's job in the run it was carried forward from.",
+                            "filterable": true
+                        },
+                        "forced_success": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Forced success",
+                            "help_text": "Set when a workflow is relaunched from a failed node and this node was forced as successful: its job failed in the prior run, but whoever relaunched it chose to carry it forward as though it had succeeded. Such a node also has prior_run_succeeded set.",
+                            "filterable": true
+                        },
+                        "forced_success_reason": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Forced success reason",
+                            "help_text": "Why the node was forced as successful, as given by whoever relaunched the workflow.",
+                            "filterable": true
+                        },
+                        "forced_success_by": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Forced success by",
+                            "help_text": "The user who forced the node as successful.",
+                            "filterable": true
+                        },
+                        "forced_success_job": {
+                            "type": "id",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Forced success job",
+                            "help_text": "The failed job whose outcome was overridden when the node was forced as successful.",
+                            "filterable": true
+                        },
+                        "max_retries": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Max retries",
+                            "help_text": "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried.",
+                            "min_value": 0,
+                            "max_value": 100,
+                            "filterable": true,
+                            "default": 0
+                        },
+                        "retry_attempts": {
+                            "type": "integer",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Retry attempts",
+                            "help_text": "Number of times this node's job has been automatically retried after failing.",
+                            "min_value": 0,
+                            "filterable": true
+                        },
+                        "retried_jobs": {
+                            "type": "field",
+                            "required": false,
+                            "read_only": true,
+                            "label": "Retried jobs",
+                            "filterable": false
+                        },
+                        "identifier": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Identifier",
+                            "help_text": "An identifier coresponding to the workflow job template node that this node was created from.",
+                            "max_length": 512,
+                            "filterable": true
+                        },
+                        "credentials": {
+                            "type": "list",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Credentials",
+                            "filterable": false,
+                            "child": {
+                                "type": "integer",
+                                "required": true,
+                                "read_only": false,
+                                "min_value": 1
+                            }
+                        },
+                        "labels": {
+                            "type": "list",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Labels",
+                            "filterable": false,
+                            "child": {
+                                "type": "integer",
+                                "required": true,
+                                "read_only": false,
+                                "min_value": 1
+                            }
+                        },
+                        "instance_groups": {
+                            "type": "list",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Instance groups",
+                            "filterable": false,
+                            "child": {
+                                "type": "integer",
+                                "required": true,
+                                "read_only": false,
+                                "min_value": 1
+                            }
+                        }
+                    },
+                    "write_only": true
+                },
+                "write_only": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this workflow job.",
+                "filterable": true,
+                "write_only": true
+            },
+            "extra_vars": {
+                "type": "json",
+                "required": false,
+                "label": "Extra vars",
+                "filterable": true,
+                "write_only": true
+            },
+            "organization": {
+                "type": "id",
+                "required": false,
+                "label": "Organization",
+                "help_text": "Inherit permissions from this organization. If not provided, a organization the user is a member of will be selected automatically.",
+                "filterable": true,
+                "default": null,
+                "write_only": true
+            },
+            "inventory": {
+                "type": "id",
+                "required": false,
+                "label": "Inventory",
+                "filterable": true,
+                "write_only": true
+            },
+            "limit": {
+                "type": "string",
+                "required": false,
+                "label": "Limit",
+                "filterable": false,
+                "write_only": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "Scm branch",
+                "max_length": 1024,
+                "filterable": false,
+                "write_only": true
+            },
+            "skip_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Skip tags",
+                "filterable": false,
+                "write_only": true
+            },
+            "job_tags": {
+                "type": "string",
+                "required": false,
+                "label": "Job tags",
+                "filterable": false,
+                "write_only": true
+            }
+        },
+        "GET": {}
+    }
+}

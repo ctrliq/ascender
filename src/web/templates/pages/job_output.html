@@ -1,0 +1,289 @@
+{{define "content"}}
+{{$j := .Data.job}}
+{{$id := str $j.id}}
+{{$seg := .Data.typeSeg}}
+{{template "screen_header" (dict "title" (t "Output") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (str $j.name)))))}}
+<section class="pf-v6-c-page__main-section">
+	<div>
+		<div class="pf-v6-c-card"{{if .Data.running}} data-job-live="/jobs/{{$seg}}/{{$id}}/output/live" data-counter="{{.Data.maxCounter}}" data-started="{{str $j.started}}"{{end}}>
+			<div class="ascender-routed-tabs__tab-bar">
+				{{template "routed_tabs" (dict "current" "output" "back" (dict "href" "/jobs" "label" "Back to Jobs") "tabs" (list (dict "key" "details" "href" (printf "/jobs/%s/%s/details" $seg $id) "label" "Details") (dict "key" "output" "href" (printf "/jobs/%s/%s/output" $seg $id) "label" "Output")))}}
+				{{template "workflow_nav" .Data.wfNav}}
+			</div>
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed ascender-job-output__card-body">
+				<div class="ascender-job-output__header">
+					{{template "job_output_title" .}}
+					<div class="ascender-output-toolbar__wrapper">
+						{{template "job_output_counts" .}}
+						<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Elapsed Time"}}">
+							<div>{{t "Elapsed"}}</div>
+							<div style="display: contents;">
+								<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge ascender-output-toolbar__elapsed-badge" data-tooltip="{{t "Elapsed time that the job ran"}}" data-tooltip-pos="top">
+									{{.Data.elapsed}}
+								</span>
+							</div>
+						</div>
+						{{if dig $j "summary_fields" "user_capabilities" "start"}}
+							<div style="display: contents;">
+								{{if eq (str $j.type) "project_update"}}
+									<button aria-label="{{t "Relaunch"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Relaunch Job"}}" data-tooltip-pos="top" data-project-sync="{{str $j.project}}">
+										<span class="pf-v6-c-button__icon">{{icon "rocket"}}</span>
+									</button>
+								{{else if ne (str $j.type) "system_job"}}
+									{{template "relaunch_action" (dict "job" $j "coll" .Data.coll "seg" $seg)}}
+								{{end}}
+							</div>
+						{{end}}
+						{{if or (eq (str $j.status) "pending") (eq (str $j.status) "waiting") (eq (str $j.status) "running")}}
+							<div style="display: contents;">
+								<button aria-label="{{t "Cancel"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Cancel {0}" "0" $j.name}}" data-tooltip-pos="top" data-cancel-job="/api/v2/{{.Data.coll}}/{{$id}}/cancel/" data-name="{{$j.name}}">
+									<span class="pf-v6-c-button__icon">
+										{{icon "minus-circle"}}
+									</span>
+								</button>
+							</div>
+						{{end}}
+						{{if dig $j "related" "stdout"}}
+							<div style="display: contents;">
+								<button aria-label="{{t "Copy Output"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Copy Output"}}" data-tooltip-pos="top" data-copy-output>
+									<span class="pf-v6-c-button__icon">{{icon "copy"}}</span>
+								</button>
+							</div>
+							<div style="display: contents;">
+								<a href="/api/v2/{{.Data.coll}}/{{$id}}/stdout/?format=txt_download" data-tooltip="{{t "Download Output"}}" data-tooltip-pos="top">
+									<button aria-label="{{t "Download Output"}}" class="pf-v6-c-button pf-m-plain" type="button">
+										<span class="pf-v6-c-button__icon">
+											{{icon "download"}}
+										</span>
+									</button>
+								</a>
+							</div>
+						{{end}}
+						{{if dig $j "summary_fields" "user_capabilities" "delete"}}
+							<div style="display: contents;">
+								<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Delete Job"}}" data-tooltip-pos="top" data-delete-one data-delete-kind="Job" data-api="/api/v2/{{.Data.coll}}/{{$id}}/" data-name="{{$j.name}}" data-redirect="/jobs">
+									<span class="pf-v6-c-button__text">{{icon "trash-alt"}}</span>
+								</button>
+							</div>
+						{{end}}
+					</div>
+				</div>
+				<div class="host-status-bar ascender-host-status-bar__wrapper">
+					{{template "job_output_bar" .}}
+				</div>
+				<div class="ascender-job-output-search__toolbar-wrapper">
+					<div class="pf-v6-c-toolbar" id="job_output-toolbar">
+						<div class="pf-v6-c-toolbar__content ascender-job-output-search__toolbar-content">
+							<div class="pf-v6-c-toolbar__content-section">
+								<div class="pf-v6-c-toolbar__group pf-m-toggle-group pf-m-show">
+									<div class="pf-v6-c-toolbar__toggle">
+										<button aria-haspopup="false" aria-label="Show Filters" class="pf-v6-c-button pf-m-plain" type="button">
+											<span class="pf-v6-c-button__icon">
+												{{icon "filter"}}
+											</span>
+										</button>
+									</div>
+									<div class="pf-v6-c-toolbar__item"{{if .Data.running}} data-tooltip="{{t "Search is disabled while the job is running"}}" data-tooltip-pos="top" data-output-search-disabled{{end}}>
+										{{template "search_form" (dict "page" . "searchKeys" .Data.searchKeys "ns" "job_output" "optionsApi" .Data.eventsAPI "disabled" .Data.running)}}
+									</div>
+								</div>
+								{{if .Data.running}}
+									<button class="pf-v6-c-button pf-m-secondary" type="button" data-output-follow>
+										<span class="pf-v6-c-button__text">{{t "Unfollow"}}</span>
+									</button>
+								{{end}}
+							</div>
+						</div>
+						{{template "search_chips" (dict "page" . "filters" .Data.filters "searchKeys" .Data.searchKeys)}}
+					</div>
+				</div>
+				<div class="ascender-page-controls__controlls-wrapper">
+					<div class="ascender-page-controls__expand-collapse-wrapper">
+						{{if and (eq (str $j.type) "job") (not .Data.flat)}}
+							<button aria-label="{{t "Collapse all job events"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-collapse-all>
+								<span class="pf-v6-c-button__icon">{{icon "angle-down"}}</span>
+							</button>
+						{{end}}
+					</div>
+					<div class="ascender-page-controls__scroll-wrapper">
+						<button aria-label="{{t "Scroll previous"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-scroll="prev">
+							<span class="pf-v6-c-button__icon">{{icon "angle-up"}}</span>
+						</button>
+						<button aria-label="{{t "Scroll next"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-scroll="next">
+							<span class="pf-v6-c-button__icon">{{icon "angle-down"}}</span>
+						</button>
+						<button aria-label="{{t "Scroll first"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-scroll="first">
+							<span class="pf-v6-c-button__icon">{{icon "angle-double-up"}}</span>
+						</button>
+						<button aria-label="{{t "Scroll last"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-scroll="last">
+							<span class="pf-v6-c-button__icon">{{icon "angle-double-down"}}</span>
+						</button>
+					</div>
+				</div>
+				<div class="ascender-output-wrapper ascender-job-output__wrapper">
+					{{if not .Data.lines}}
+						{{if .Data.flat}}
+							{{template "job_output_search_empty"}}
+						{{else}}
+							{{template "job_output_empty" .}}
+						{{end}}
+					{{end}}
+					<div tabindex="-1" class="ascender-output-scroll ascender-job-output__scroll-container" style="--ascender-job-output-gutter-width: 85px;" data-output-scroll-container data-job-api="/api/v2/{{.Data.coll}}/{{$id}}/"{{if not .Data.lines}} hidden{{end}}>
+						{{range .Data.lines}}{{template "job_output_line" .}}{{end}}
+					</div>
+					<template data-host-modal-parts>
+						<span data-status="ok">{{template "status_label" "ok"}}</span>
+						<span data-status="changed">{{template "status_label" "changed"}}</span>
+						<span data-status="failed">{{template "status_label" "failed"}}</span>
+						<span data-status="skipped">{{template "status_label" "skipped"}}</span>
+						<span data-status="unreachable">
+							{{template "status_label" "unreachable"}}
+						</span>
+						<span data-icon="cubes">{{icon "cubes"}}</span>
+					</template>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}
+{{define "job_output_title"}}
+{{$j := .Data.job}}
+<div class="ascender-job-output__header-title">
+	<h1>{{$j.name}}</h1>
+	{{template "status_label" (str $j.status)}}
+</div>
+{{end}}
+{{define "job_output_counts"}}
+{{$j := .Data.job}}
+{{if .Data.showCounts}}
+	{{$plays := num (dig $j "playbook_counts" "play_count")}}
+	{{$tasks := num (dig $j "playbook_counts" "task_count")}}
+	{{if gt $plays 0}}
+		<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Play Count"}}">
+			<div>{{t "Plays"}}</div>
+			<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge">{{$plays}}</span>
+		</div>
+	{{end}}
+	{{if gt $tasks 0}}
+		<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Task Count"}}">
+			<div>{{t "Tasks"}}</div>
+			<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge">{{$tasks}}</span>
+		</div>
+	{{end}}
+	{{if gt .Data.hosts 0}}
+		<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Host Count"}}">
+			<div>{{t "Hosts"}}</div>
+			<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge">
+				{{.Data.hosts}}
+			</span>
+		</div>
+	{{end}}
+	{{if gt .Data.dark 0}}
+		<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Unreachable Host Count"}}">
+			<div>{{t "Unreachable"}}</div>
+			<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge ascender-output-toolbar__badge--unreachable" data-tooltip="{{t "Unreachable Hosts"}}" data-tooltip-pos="top">
+				{{.Data.dark}}
+			</span>
+		</div>
+	{{end}}
+	{{if gt .Data.failures 0}}
+		<div class="ascender-output-toolbar__badge-group" aria-label="{{t "Failed Host Count"}}">
+			<div>{{t "Failed"}}</div>
+			<span class="pf-v6-c-badge pf-m-read ascender-output-toolbar__badge ascender-output-toolbar__badge--failed" data-tooltip="{{t "Failed Hosts"}}" data-tooltip-pos="top">
+				{{.Data.failures}}
+			</span>
+		</div>
+	{{end}}
+{{end}}
+{{end}}
+{{define "job_output_bar"}}
+{{range .Data.bar}}
+	<div style="display: contents;">
+		<div class="ascender-host-status-bar__segment" style="background-color: {{.Color}}; flex-grow: {{.Grow}};">
+		</div>
+	</div>
+{{end}}
+{{end}}
+{{define "job_output_line"}}
+<div class="ascender-job-event-line" data-output-line data-level="{{.Level}}"{{if .UUID}} data-uuid="{{.UUID}}"{{end}}{{if .Parent}} data-parent="{{.Parent}}"{{end}}{{if .Toggle}} data-toggle-line{{end}}{{if .Host}} data-host-event="{{.Counter}}"{{end}}>
+	<div class="ascender-job-event-line-toggle__wrapper">
+		{{if .Toggle}}
+			<button class="ascender-job-event-line-toggle__button" type="button" aria-label="{{t "Toggle"}}" data-output-toggle>
+				{{icon "angle-down"}}
+			</button>
+		{{end}}
+	</div>
+	<div class="ascender-job-event-line-number">{{.Number}}</div>
+	<div class="ascender-job-event-line-text" type="job_event_line_text">
+		{{safe .HTML}}
+		{{if .Time}}<span class="time" data-time="{{.TimeISO}}">{{.Time}}</span>{{end}}
+	</div>
+</div>
+{{end}}
+{{define "job_output_empty"}}
+{{/* EmptyOutput: waiting while the job runs, the failure, or none */}}
+{{$j := .Data.job}}
+{{$failed := and (not .Data.running) (eq (str $j.status) "failed")}}
+<div class="pf-v6-c-empty-state ascender-empty-output__height-100" data-output-empty>
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">
+				{{if $failed}}
+					{{iconClassed "exclamation-circle" "ascender-empty-output__icon"}}
+				{{else}}
+					{{icon "cubes"}}
+				{{end}}
+			</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h3 class="pf-v6-c-empty-state__title-text">
+					{{if .Data.running}}
+						{{t "Waiting for job output…"}}
+					{{else if $failed}}
+						{{t "This job failed and has no output."}}
+					{{else}}
+						{{t "No output found for this job."}}
+					{{end}}
+				</h3>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">
+			{{if $failed}}
+				{{t "Return to"}} <a href="/jobs/{{.Data.typeSeg}}/{{str $j.id}}/details">
+					{{t "details."}}
+				</a>
+				<br>
+				{{with $j.job_explanation}}{{t "Failure Explanation:"}} {{.}}{{end}}
+			{{end}}
+		</div>
+	</div>
+</div>
+{{end}}
+{{define "job_output_live"}}
+{{$j := .Data.job}}
+<div data-live data-status="{{str $j.status}}"{{if .Data.running}} data-running{{end}} data-counter="{{.Data.maxCounter}}" data-started="{{str $j.started}}" data-elapsed="{{.Data.elapsed}}">
+	<div data-live-title>{{template "job_output_title" .}}</div>
+	<div data-live-counts>{{template "job_output_counts" .}}</div>
+	<div data-live-bar>{{template "job_output_bar" .}}</div>
+	<div data-live-lines>{{range .Data.lines}}{{template "job_output_line" .}}{{end}}</div>
+	<template data-live-empty>{{template "job_output_empty" .}}</template>
+</div>
+{{end}}
+{{define "job_output_search_empty"}}
+{{/* EmptyOutput when the search finds nothing */}}
+<div class="pf-v6-c-empty-state ascender-empty-output__height-100" data-output-empty data-search-empty>
+	<div class="pf-v6-c-empty-state__content">
+		<div class="pf-v6-c-empty-state__header">
+			<div class="pf-v6-c-empty-state__icon">{{icon "search"}}</div>
+			<div class="pf-v6-c-empty-state__title">
+				<h3 class="pf-v6-c-empty-state__title-text">
+					{{t "The search filter did not produce any results…"}}
+				</h3>
+			</div>
+		</div>
+		<div class="pf-v6-c-empty-state__body">
+			{{t "Please try another search using the filter above"}}
+		</div>
+	</div>
+</div>
+{{end}}

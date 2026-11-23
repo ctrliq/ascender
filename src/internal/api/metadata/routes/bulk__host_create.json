@@ -1,0 +1,86 @@
+{
+    "name": "Bulk Host Create",
+    "description": "# Bulk Host Create\n\nThis endpoint allows the client to create multiple hosts and associate them with an inventory. They may do this by providing the inventory ID and a list of json that would normally be provided to create hosts.\n\nExample:\n\n    {\n        \"inventory\": 1,\n        \"hosts\": [\n            {\"name\": \"example1.com\", \"variables\": \"ansible_connection: local\"},\n            {\"name\": \"example2.com\"}\n        ]\n    }\n\nReturn data:\n\n    {\n        \"url\": \"/api/v2/inventories/3/hosts/\",\n        \"hosts\": [\n            {\n                \"name\": \"example1.com\",\n                \"enabled\": true,\n                \"instance_id\": \"\",\n                \"description\": \"\",\n                \"variables\": \"ansible_connection: local\",\n                \"id\": 1255,\n                \"url\": \"/api/v2/hosts/1255/\",\n                \"inventory\": \"/api/v2/inventories/3/\"\n            },\n            {\n                \"name\": \"example2.com\",\n                \"enabled\": true,\n                \"instance_id\": \"\",\n                \"description\": \"\",\n                \"variables\": \"\",\n                \"id\": 1256,\n                \"url\": \"/api/v2/hosts/1256/\",\n                \"inventory\": \"/api/v2/inventories/3/\"\n            }\n        ]\n    }",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {
+            "inventory": {
+                "type": "id",
+                "required": true,
+                "label": "Inventory",
+                "help_text": "Primary Key ID of inventory to add hosts to.",
+                "filterable": false,
+                "write_only": true
+            },
+            "hosts": {
+                "type": "list",
+                "required": true,
+                "label": "Hosts",
+                "help_text": "List of hosts to be created, JSON. e.g. [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]",
+                "max_length": 100000,
+                "filterable": false,
+                "child": {
+                    "type": "nested object",
+                    "required": true,
+                    "read_only": false,
+                    "children": {
+                        "name": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "label": "Name",
+                            "max_length": 512,
+                            "help_text": "Name of this host.",
+                            "filterable": true
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Enabled",
+                            "help_text": "Is this host online and available for running jobs?",
+                            "filterable": true,
+                            "default": true
+                        },
+                        "instance_id": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Instance id",
+                            "help_text": "The value used by the remote inventory source to uniquely identify the host",
+                            "max_length": 1024,
+                            "filterable": true,
+                            "default": ""
+                        },
+                        "description": {
+                            "type": "string",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Description",
+                            "help_text": "Optional description of this host.",
+                            "filterable": true,
+                            "default": ""
+                        },
+                        "variables": {
+                            "type": "json",
+                            "required": false,
+                            "read_only": false,
+                            "label": "Variables",
+                            "help_text": "Host variables in JSON or YAML format.",
+                            "filterable": true,
+                            "default": ""
+                        }
+                    }
+                },
+                "write_only": true
+            }
+        },
+        "GET": {}
+    }
+}

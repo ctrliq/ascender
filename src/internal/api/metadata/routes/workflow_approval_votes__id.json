@@ -1,0 +1,106 @@
+{
+    "name": "Workflow Approval Vote Detail",
+    "description": "# Retrieve a Workflow Approval Vote:\n\nMake GET request to this resource to retrieve a single workflow approval vote\nrecord containing the following fields:\n\n* `id`: Database ID for this workflow approval vote. (integer)\n* `type`: Data type for this workflow approval vote. (choice)\n* `url`: URL for this workflow approval vote. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this workflow approval vote was created. (datetime)\n* `workflow_approval`:  (id)\n* `user`:  (id)\n* `vote`: Whether this user approved or denied the workflow approval. (choice)\n    - `approve`: Approve\n    - `deny`: Deny\n* `comment`: Optional comment the user submitted along with their vote. (string)\n* `workflow_approval_name`: Name of the approval node at the time of the vote, kept after the approval is deleted. (string)\n* `workflow_job_id`: ID of the workflow job the approval belonged to, kept after the approval is deleted. (integer)\n* `workflow_job_name`: Name of the workflow job the approval belonged to, kept after the approval is deleted. (string)\n* `user_name`: Username of the voter at the time of the vote, kept after the user is deleted. (string)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this workflow approval vote.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this workflow approval vote.",
+                "choices": [
+                    ["workflow_approval_vote", "Workflow Approval Vote"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this workflow approval vote.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this workflow approval vote was created.",
+                "filterable": true
+            },
+            "workflow_approval": {
+                "type": "id",
+                "label": "Workflow approval",
+                "filterable": true
+            },
+            "user": {
+                "type": "id",
+                "label": "User",
+                "filterable": true
+            },
+            "vote": {
+                "type": "choice",
+                "label": "Vote",
+                "help_text": "Whether this user approved or denied the workflow approval.",
+                "filterable": true,
+                "choices": [
+                    ["approve", "Approve"],
+                    ["deny", "Deny"]
+                ]
+            },
+            "comment": {
+                "type": "string",
+                "label": "Comment",
+                "help_text": "Optional comment the user submitted along with their vote.",
+                "filterable": true
+            },
+            "workflow_approval_name": {
+                "type": "string",
+                "label": "Workflow approval name",
+                "help_text": "Name of the approval node at the time of the vote, kept after the approval is deleted.",
+                "filterable": true
+            },
+            "workflow_job_id": {
+                "type": "integer",
+                "label": "Workflow job id",
+                "help_text": "ID of the workflow job the approval belonged to, kept after the approval is deleted.",
+                "filterable": true
+            },
+            "workflow_job_name": {
+                "type": "string",
+                "label": "Workflow job name",
+                "help_text": "Name of the workflow job the approval belonged to, kept after the approval is deleted.",
+                "filterable": true
+            },
+            "user_name": {
+                "type": "string",
+                "label": "User name",
+                "help_text": "Username of the voter at the time of the vote, kept after the user is deleted.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "workflow_approval_vote"
+    ]
+}

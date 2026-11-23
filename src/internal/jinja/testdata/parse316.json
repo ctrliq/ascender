@@ -1,0 +1,1845 @@
+{
+ "jinja2": "3.1.6",
+ "templates": [
+  {
+   "source": "",
+   "parse": "Template(body=[])",
+   "error": null
+  },
+  {
+   "source": "hello",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='hello')])])",
+   "error": null
+  },
+  {
+   "source": "a\nb\n",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a\\nb')])])",
+   "error": null
+  },
+  {
+   "source": "a\r\nb\rc",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a\\nb\\nc')])])",
+   "error": null
+  },
+  {
+   "source": "line\n\n",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='line\\n')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x }}",
+   "parse": "Template(body=[Output(nodes=[Name(name='x', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "  {{- x -}}  ",
+   "parse": "Template(body=[Output(nodes=[Name(name='x', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x }}\n",
+   "parse": "Template(body=[Output(nodes=[Name(name='x', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "a {#- c -#} b",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a'), TemplateData(data='b')])])",
+   "error": null
+  },
+  {
+   "source": "a {# c #}",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a ')])])",
+   "error": null
+  },
+  {
+   "source": "a {#+ c +#} b",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a '), TemplateData(data=' b')])])",
+   "error": null
+  },
+  {
+   "source": "{# multi\nline #}x",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='x')])])",
+   "error": null
+  },
+  {
+   "source": "{#",
+   "parse": "Template(body=[])",
+   "error": null
+  },
+  {
+   "source": "x {#",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='x ')])])",
+   "error": null
+  },
+  {
+   "source": "{# unterminated",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Missing end of comment tag"
+   }
+  },
+  {
+   "source": "{% raw %}{{ x }}{% endraw %}",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='{{ x }}')])])",
+   "error": null
+  },
+  {
+   "source": "{%- raw -%} a {%- endraw -%} b",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a'), TemplateData(data='b')])])",
+   "error": null
+  },
+  {
+   "source": "{% raw %}x",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Missing end of raw directive"
+   }
+  },
+  {
+   "source": "{%raw%}{%endraw%}",
+   "parse": "Template(body=[])",
+   "error": null
+  },
+  {
+   "source": "a {%+ if x %}b{% endif %}",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a ')]), If(test=Name(name='x', ctx='load'), body=[Output(nodes=[TemplateData(data='b')])], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "a\n  {%- if x -%}\n b \n{%- endif %}",
+   "parse": "Template(body=[Output(nodes=[TemplateData(data='a')]), If(test=Name(name='x', ctx='load'), body=[Output(nodes=[TemplateData(data='b')])], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{{x}}{{y}}",
+   "parse": "Template(body=[Output(nodes=[Name(name='x', ctx='load'), Name(name='y', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x -}}\n\n{{ y }}",
+   "parse": "Template(body=[Output(nodes=[Name(name='x', ctx='load'), Name(name='y', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 00 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0_0 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1_000 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1000)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0b101 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=5)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0o17 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=15)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0x1F }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=31)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0XfF }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=255)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0b }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'end of print statement', got 'b'"
+   }
+  },
+  {
+   "source": "{{ 1.5 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1.5)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1e3 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1000.0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1.5e-3 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=0.0015)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1_0.2_5 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=10.25)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1E+2 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=100.0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ .5 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '.'"
+   }
+  },
+  {
+   "source": "{{ 1. }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected name or number"
+   }
+  },
+  {
+   "source": "{{ 1.e5 }}",
+   "parse": "Template(body=[Output(nodes=[Getattr(node=Const(value=1), attr='e5', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 12345678901234567890123 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=12345678901234567890123)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1e400 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=inf)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 0.1 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=0.1)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1e16 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1e+16)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1e15 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1000000000000000.0)])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1e-5 }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1e-05)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x.1 }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='x', ctx='load'), arg=Const(value=1), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x.1.2 }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Getitem(node=Name(name='x', ctx='load'), arg=Const(value=1), ctx='load'), arg=Const(value=2), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x[1.5] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='x', ctx='load'), arg=Const(value=1.5), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 'a' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='a')])])",
+   "error": null
+  },
+  {
+   "source": "{{ \"b\" }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='b')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 'a' 'b' \"c\" }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='abc')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 'a\\nb\\tc\\\\d\\'e' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=\"a\\nb\\tc\\\\d'e\")])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\x41é\\U0001F600' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='Aé😀')])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\N{EM DASH}' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='—')])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\101\\0' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='A\\x00')])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\d\\q' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='\\\\d\\\\q')])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\x4' }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "truncated \\xXX escape"
+   }
+  },
+  {
+   "source": "{{ '\\u12' }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "truncated \\uXXXX escape"
+   }
+  },
+  {
+   "source": "{{ '\\U12345678' }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "illegal Unicode character"
+   }
+  },
+  {
+   "source": "{{ '\\N{NOPE}' }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unknown Unicode character name"
+   }
+  },
+  {
+   "source": "{{ '\\N' }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "malformed \\N character escape"
+   }
+  },
+  {
+   "source": "{{ 'é' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='é')])])",
+   "error": null
+  },
+  {
+   "source": "{{ '\\é' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='\\\\xe9')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 'line\nbreak' }}",
+   "parse": "Template(body=[Output(nodes=[Const(value='line\\nbreak')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 'unterminated }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected char \"'\" at 3"
+   }
+  },
+  {
+   "source": "{{ \"it's\" }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=\"it's\")])])",
+   "error": null
+  },
+  {
+   "source": "{{ true }} {{ False }} {{ none }} {{ None }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=True), TemplateData(data=' '), Const(value=False), TemplateData(data=' '), Const(value=None), TemplateData(data=' '), Const(value=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ [1, 2,] }}",
+   "parse": "Template(body=[Output(nodes=[List(items=[Const(value=1), Const(value=2)])])])",
+   "error": null
+  },
+  {
+   "source": "{{ [] }}",
+   "parse": "Template(body=[Output(nodes=[List(items=[])])])",
+   "error": null
+  },
+  {
+   "source": "{{ {} }}",
+   "parse": "Template(body=[Output(nodes=[Dict(items=[])])])",
+   "error": null
+  },
+  {
+   "source": "{{ {'a': 1, 'b': [2]} }}",
+   "parse": "Template(body=[Output(nodes=[Dict(items=[Pair(key=Const(value='a'), value=Const(value=1)), Pair(key=Const(value='b'), value=List(items=[Const(value=2)]))])])])",
+   "error": null
+  },
+  {
+   "source": "{{ (1, 2) }}",
+   "parse": "Template(body=[Output(nodes=[Tuple(items=[Const(value=1), Const(value=2)], ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ () }}",
+   "parse": "Template(body=[Output(nodes=[Tuple(items=[], ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ (1,) }}",
+   "parse": "Template(body=[Output(nodes=[Tuple(items=[Const(value=1)], ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ 1, 2 }}",
+   "parse": "Template(body=[Output(nodes=[Tuple(items=[Const(value=1), Const(value=2)], ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ (1) }}",
+   "parse": "Template(body=[Output(nodes=[Const(value=1)])])",
+   "error": null
+  },
+  {
+   "source": "{{ a + b - c }}",
+   "parse": "Template(body=[Output(nodes=[Sub(left=Add(left=Name(name='a', ctx='load'), right=Name(name='b', ctx='load')), right=Name(name='c', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a * b / c // d % e }}",
+   "parse": "Template(body=[Output(nodes=[Mod(left=FloorDiv(left=Div(left=Mul(left=Name(name='a', ctx='load'), right=Name(name='b', ctx='load')), right=Name(name='c', ctx='load')), right=Name(name='d', ctx='load')), right=Name(name='e', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a ** b ** c }}",
+   "parse": "Template(body=[Output(nodes=[Pow(left=Pow(left=Name(name='a', ctx='load'), right=Name(name='b', ctx='load')), right=Name(name='c', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ -a ** 2 }}",
+   "parse": "Template(body=[Output(nodes=[Pow(left=Neg(node=Name(name='a', ctx='load')), right=Const(value=2))])])",
+   "error": null
+  },
+  {
+   "source": "{{ +a }}",
+   "parse": "Template(body=[Output(nodes=[Pos(node=Name(name='a', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ not a }}",
+   "parse": "Template(body=[Output(nodes=[Not(node=Name(name='a', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ not not a }}",
+   "parse": "Template(body=[Output(nodes=[Not(node=Not(node=Name(name='a', ctx='load')))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a and b or c }}",
+   "parse": "Template(body=[Output(nodes=[Or(left=And(left=Name(name='a', ctx='load'), right=Name(name='b', ctx='load')), right=Name(name='c', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a or b and c }}",
+   "parse": "Template(body=[Output(nodes=[Or(left=Name(name='a', ctx='load'), right=And(left=Name(name='b', ctx='load'), right=Name(name='c', ctx='load')))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a ~ b ~ c }}",
+   "parse": "Template(body=[Output(nodes=[Concat(nodes=[Name(name='a', ctx='load'), Name(name='b', ctx='load'), Name(name='c', ctx='load')])])])",
+   "error": null
+  },
+  {
+   "source": "{{ a + b ~ c * d }}",
+   "parse": "Template(body=[Output(nodes=[Add(left=Name(name='a', ctx='load'), right=Concat(nodes=[Name(name='b', ctx='load'), Mul(left=Name(name='c', ctx='load'), right=Name(name='d', ctx='load'))]))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a == b != c < d <= e > f >= g }}",
+   "parse": "Template(body=[Output(nodes=[Compare(expr=Name(name='a', ctx='load'), ops=[Operand(op='eq', expr=Name(name='b', ctx='load')), Operand(op='ne', expr=Name(name='c', ctx='load')), Operand(op='lt', expr=Name(name='d', ctx='load')), Operand(op='lteq', expr=Name(name='e', ctx='load')), Operand(op='gt', expr=Name(name='f', ctx='load')), Operand(op='gteq', expr=Name(name='g', ctx='load'))])])])",
+   "error": null
+  },
+  {
+   "source": "{{ a in b }}",
+   "parse": "Template(body=[Output(nodes=[Compare(expr=Name(name='a', ctx='load'), ops=[Operand(op='in', expr=Name(name='b', ctx='load'))])])])",
+   "error": null
+  },
+  {
+   "source": "{{ a not in b }}",
+   "parse": "Template(body=[Output(nodes=[Compare(expr=Name(name='a', ctx='load'), ops=[Operand(op='notin', expr=Name(name='b', ctx='load'))])])])",
+   "error": null
+  },
+  {
+   "source": "{{ not a in b }}",
+   "parse": "Template(body=[Output(nodes=[Not(node=Compare(expr=Name(name='a', ctx='load'), ops=[Operand(op='in', expr=Name(name='b', ctx='load'))]))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a if b }}",
+   "parse": "Template(body=[Output(nodes=[CondExpr(test=Name(name='b', ctx='load'), expr1=Name(name='a', ctx='load'), expr2=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ a if b else c }}",
+   "parse": "Template(body=[Output(nodes=[CondExpr(test=Name(name='b', ctx='load'), expr1=Name(name='a', ctx='load'), expr2=Name(name='c', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a if b else c if d else e }}",
+   "parse": "Template(body=[Output(nodes=[CondExpr(test=Name(name='b', ctx='load'), expr1=Name(name='a', ctx='load'), expr2=CondExpr(test=Name(name='d', ctx='load'), expr1=Name(name='c', ctx='load'), expr2=Name(name='e', ctx='load')))])])",
+   "error": null
+  },
+  {
+   "source": "{{ a.b.c }}",
+   "parse": "Template(body=[Output(nodes=[Getattr(node=Getattr(node=Name(name='a', ctx='load'), attr='b', ctx='load'), attr='c', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[\"b\"][0] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Getitem(node=Name(name='a', ctx='load'), arg=Const(value='b'), ctx='load'), arg=Const(value=0), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[1:2] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=Const(value=1), stop=Const(value=2), step=None), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[:2] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=None, stop=Const(value=2), step=None), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[1:] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=Const(value=1), stop=None, step=None), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[::2] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=None, stop=None, step=Const(value=2)), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[:] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=None, stop=None, step=None), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[1:2:3] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Slice(start=Const(value=1), stop=Const(value=2), step=Const(value=3)), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[1, 2] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Tuple(items=[Const(value=1), Const(value=2)], ctx='load'), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Tuple(items=[], ctx='load'), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a[:,1] }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Tuple(items=[Slice(start=None, stop=None, step=None), Const(value=1)], ctx='load'), ctx='load')])])",
+   "error": {
+    "type": "SyntaxError",
+    "message": "invalid syntax (<template>, line 12)"
+   }
+  },
+  {
+   "source": "{{ f() }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(1, 2) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[Const(value=1), Const(value=2)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(a=1) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[], kwargs=[Keyword(key='a', value=Const(value=1))], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(1, b=2, *c, **d) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[Const(value=1)], kwargs=[Keyword(key='b', value=Const(value=2))], dyn_args=Name(name='c', ctx='load'), dyn_kwargs=Name(name='d', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(*a) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[], kwargs=[], dyn_args=Name(name='a', ctx='load'), dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(**a) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=Name(name='a', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(1,) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Name(name='f', ctx='load'), args=[Const(value=1)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ f(a=1, 2) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "invalid syntax for function call expression"
+   }
+  },
+  {
+   "source": "{{ f(*a, b) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "invalid syntax for function call expression"
+   }
+  },
+  {
+   "source": "{{ f(**a, b=1) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "invalid syntax for function call expression"
+   }
+  },
+  {
+   "source": "{{ f(**a, *b) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "invalid syntax for function call expression"
+   }
+  },
+  {
+   "source": "{{ a.b(c)[d].e() }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Getattr(node=Getitem(node=Call(node=Getattr(node=Name(name='a', ctx='load'), attr='b', ctx='load'), args=[Name(name='c', ctx='load')], kwargs=[], dyn_args=None, dyn_kwargs=None), arg=Name(name='d', ctx='load'), ctx='load'), attr='e', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x|upper }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x | default(\"y\") | upper }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Filter(node=Name(name='x', ctx='load'), name='default', args=[Const(value='y')], kwargs=[], dyn_args=None, dyn_kwargs=None), name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x|join(\",\") }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='join', args=[Const(value=',')], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x|f.g }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='f.g', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'f.g'."
+   }
+  },
+  {
+   "source": "{{ x|truncate(5, killwords=true) }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='truncate', args=[Const(value=5)], kwargs=[Keyword(key='killwords', value=Const(value=True))], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ -x|abs }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Neg(node=Name(name='x', ctx='load')), name='abs', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is defined }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='defined', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is not none }}",
+   "parse": "Template(body=[Output(nodes=[Not(node=Test(node=Name(name='x', ctx='load'), name='none', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None))])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is divisibleby 3 }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='divisibleby', args=[Const(value=3)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is divisibleby(3) }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='divisibleby', args=[Const(value=3)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is sameas y.z }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='sameas', args=[Getattr(node=Name(name='y', ctx='load'), attr='z', ctx='load')], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is a.b }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='a.b', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No test named 'a.b'."
+   }
+  },
+  {
+   "source": "{{ x is defined and y }}",
+   "parse": "Template(body=[Output(nodes=[And(left=Test(node=Name(name='x', ctx='load'), name='defined', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), right=Name(name='y', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is defined or y }}",
+   "parse": "Template(body=[Output(nodes=[Or(left=Test(node=Name(name='x', ctx='load'), name='defined', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), right=Name(name='y', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is defined else y }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'end of print statement', got 'else'"
+   }
+  },
+  {
+   "source": "{{ x is in [1] }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='in', args=[List(items=[Const(value=1)])], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x is is y }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='is', args=[Name(name='y', ctx='load')], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No test named 'is'."
+   }
+  },
+  {
+   "source": "{{ x is upper|lower }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Test(node=Name(name='x', ctx='load'), name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), name='lower', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ x|lower is upper }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Filter(node=Name(name='x', ctx='load'), name='lower', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ (x|f)(1) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Filter(node=Name(name='x', ctx='load'), name='f', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), args=[Const(value=1)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'f'."
+   }
+  },
+  {
+   "source": "{{ x|f(1)(2) }}",
+   "parse": "Template(body=[Output(nodes=[Call(node=Filter(node=Name(name='x', ctx='load'), name='f', args=[Const(value=1)], kwargs=[], dyn_args=None, dyn_kwargs=None), args=[Const(value=2)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'f'."
+   }
+  },
+  {
+   "source": "{{ \"%s\"|format(x) }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Const(value='%s'), name='format', args=[Name(name='x', ctx='load')], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": null
+  },
+  {
+   "source": "{{ a.0 }}",
+   "parse": "Template(body=[Output(nodes=[Getitem(node=Name(name='a', ctx='load'), arg=Const(value=0), ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ a.\"b\" }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected name or number"
+   }
+  },
+  {
+   "source": "{{ a. }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected name or number"
+   }
+  },
+  {
+   "source": "{{ a | }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of print statement'"
+   }
+  },
+  {
+   "source": "{{ a is }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of print statement'"
+   }
+  },
+  {
+   "source": "{{ a if }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of print statement'"
+   }
+  },
+  {
+   "source": "{{ a if b else }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of print statement'"
+   }
+  },
+  {
+   "source": "{{ x[ }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}', expected ']'"
+   }
+  },
+  {
+   "source": "{{ x( }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}', expected ')'"
+   }
+  },
+  {
+   "source": "{% if a %}x{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='a', ctx='load'), body=[Output(nodes=[TemplateData(data='x')])], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{% if a %}x{% elif b %}y{% elif c %}z{% else %}w{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='a', ctx='load'), body=[Output(nodes=[TemplateData(data='x')])], elif_=[If(test=Name(name='b', ctx='load'), body=[Output(nodes=[TemplateData(data='y')])], elif_=[], else_=[]), If(test=Name(name='c', ctx='load'), body=[Output(nodes=[TemplateData(data='z')])], elif_=[], else_=[])], else_=[Output(nodes=[TemplateData(data='w')])])])",
+   "error": null
+  },
+  {
+   "source": "{% if a, b %}{% endif %}",
+   "parse": "Template(body=[If(test=Tuple(items=[Name(name='a', ctx='load'), Name(name='b', ctx='load')], ctx='load'), body=[], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{% if a: %}x{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='a', ctx='load'), body=[Output(nodes=[TemplateData(data='x')])], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y %}{{ x }}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[Output(nodes=[Name(name='x', ctx='load')])], else_=[], test=None, recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y %}a{% else %}b{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[Output(nodes=[TemplateData(data='a')])], else_=[Output(nodes=[TemplateData(data='b')])], test=None, recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for k, v in d.items() %}{% endfor %}",
+   "parse": "Template(body=[For(target=Tuple(items=[Name(name='k', ctx='store'), Name(name='v', ctx='store')], ctx='store'), iter=Call(node=Getattr(node=Name(name='d', ctx='load'), attr='items', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), body=[], else_=[], test=None, recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y if x > 1 %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=Compare(expr=Name(name='x', ctx='load'), ops=[Operand(op='gt', expr=Const(value=1))]), recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y recursive %}{{ loop(x) }}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[Output(nodes=[Call(node=Name(name='loop', ctx='load'), args=[Name(name='x', ctx='load')], kwargs=[], dyn_args=None, dyn_kwargs=None)])], else_=[], test=None, recursive=True)])",
+   "error": null
+  },
+  {
+   "source": "{% for (a, b) in c %}{% endfor %}",
+   "parse": "Template(body=[For(target=Tuple(items=[Name(name='a', ctx='store'), Name(name='b', ctx='store')], ctx='store'), iter=Name(name='c', ctx='load'), body=[], else_=[], test=None, recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in a, b %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Tuple(items=[Name(name='a', ctx='load'), Name(name='b', ctx='load')], ctx='load'), body=[], else_=[], test=None, recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y if a if b else c %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=CondExpr(test=Name(name='b', ctx='load'), expr1=Name(name='a', ctx='load'), expr2=Name(name='c', ctx='load')), recursive=False)])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y if z recursive %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=Name(name='z', ctx='load'), recursive=True)])",
+   "error": null
+  },
+  {
+   "source": "{% set x = 1 %}",
+   "parse": "Template(body=[Assign(target=Name(name='x', ctx='store'), node=Const(value=1))])",
+   "error": null
+  },
+  {
+   "source": "{% set x, y = 1, 2 %}",
+   "parse": "Template(body=[Assign(target=Tuple(items=[Name(name='x', ctx='store'), Name(name='y', ctx='store')], ctx='store'), node=Tuple(items=[Const(value=1), Const(value=2)], ctx='load'))])",
+   "error": null
+  },
+  {
+   "source": "{% set ns.attr = 1 %}",
+   "parse": "Template(body=[Assign(target=NSRef(name='ns', attr='attr'), node=Const(value=1))])",
+   "error": null
+  },
+  {
+   "source": "{% set x %}body{% endset %}",
+   "parse": "Template(body=[AssignBlock(target=Name(name='x', ctx='store'), filter=None, body=[Output(nodes=[TemplateData(data='body')])])])",
+   "error": null
+  },
+  {
+   "source": "{% set x | upper %}b{% endset %}",
+   "parse": "Template(body=[AssignBlock(target=Name(name='x', ctx='store'), filter=Filter(node=None, name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), body=[Output(nodes=[TemplateData(data='b')])])])",
+   "error": null
+  },
+  {
+   "source": "{% set x = y | f %}",
+   "parse": "Template(body=[Assign(target=Name(name='x', ctx='store'), node=Filter(node=Name(name='y', ctx='load'), name='f', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None))])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'f'."
+   }
+  },
+  {
+   "source": "{% set (a, b) = c %}",
+   "parse": "Template(body=[Assign(target=Tuple(items=[Name(name='a', ctx='store'), Name(name='b', ctx='store')], ctx='store'), node=Name(name='c', ctx='load'))])",
+   "error": null
+  },
+  {
+   "source": "{% set a.b = 1 %}",
+   "parse": "Template(body=[Assign(target=NSRef(name='a', attr='b'), node=Const(value=1))])",
+   "error": null
+  },
+  {
+   "source": "{% set 1 = 2 %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "can't assign to 'const'"
+   }
+  },
+  {
+   "source": "{% set true = 1 %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "can't assign to 'const'"
+   }
+  },
+  {
+   "source": "{% set f() = 1 %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'end of statement block', got '('"
+   }
+  },
+  {
+   "source": "{% set [a] = b %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "can't assign to 'list'"
+   }
+  },
+  {
+   "source": "{% set a, (b, c) = d %}",
+   "parse": "Template(body=[Assign(target=Tuple(items=[Name(name='a', ctx='store'), Tuple(items=[Name(name='b', ctx='store'), Name(name='c', ctx='store')], ctx='store')], ctx='store'), node=Name(name='d', ctx='load'))])",
+   "error": null
+  },
+  {
+   "source": "{% set x %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Unexpected end of template. Jinja was looking for the following tags: 'endset'. The innermost block that needs to be closed is 'set'."
+   }
+  },
+  {
+   "source": "{% macro m(a, b=1) %}{{ a }}{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[Name(name='a', ctx='param'), Name(name='b', ctx='param')], defaults=[Const(value=1)], body=[Output(nodes=[Name(name='a', ctx='load')])])])",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[], defaults=[], body=[])])",
+   "error": null
+  },
+  {
+   "source": "{% macro m(a=1, b) %}{% endmacro %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "non-default argument follows default argument"
+   }
+  },
+  {
+   "source": "{% macro m(a.b) %}{% endmacro %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token ',', got '.'"
+   }
+  },
+  {
+   "source": "{% macro m %}{% endmacro %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token '(', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% macro m(a,) %}{% endmacro %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got ')'"
+   }
+  },
+  {
+   "source": "{% call m() %}x{% endcall %}",
+   "parse": "Template(body=[CallBlock(call=Call(node=Name(name='m', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), args=[], defaults=[], body=[Output(nodes=[TemplateData(data='x')])])])",
+   "error": null
+  },
+  {
+   "source": "{% call(a, b) m(1) %}{{ a }}{% endcall %}",
+   "parse": "Template(body=[CallBlock(call=Call(node=Name(name='m', ctx='load'), args=[Const(value=1)], kwargs=[], dyn_args=None, dyn_kwargs=None), args=[Name(name='a', ctx='param'), Name(name='b', ctx='param')], defaults=[], body=[Output(nodes=[Name(name='a', ctx='load')])])])",
+   "error": null
+  },
+  {
+   "source": "{% call m %}x{% endcall %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected call"
+   }
+  },
+  {
+   "source": "{% filter upper %}x{% endfilter %}",
+   "parse": "Template(body=[FilterBlock(body=[Output(nodes=[TemplateData(data='x')])], filter=Filter(node=None, name='upper', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None))])",
+   "error": null
+  },
+  {
+   "source": "{% filter f(1)|g %}x{% endfilter %}",
+   "parse": "Template(body=[FilterBlock(body=[Output(nodes=[TemplateData(data='x')])], filter=Filter(node=Filter(node=None, name='f', args=[Const(value=1)], kwargs=[], dyn_args=None, dyn_kwargs=None), name='g', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None))])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'g'."
+   }
+  },
+  {
+   "source": "{% with %}x{% endwith %}",
+   "parse": "Template(body=[With(targets=[], values=[], body=[Output(nodes=[TemplateData(data='x')])])])",
+   "error": null
+  },
+  {
+   "source": "{% with a = 1, b = 2 %}{{ a }}{% endwith %}",
+   "parse": "Template(body=[With(targets=[Name(name='a', ctx='param'), Name(name='b', ctx='param')], values=[Const(value=1), Const(value=2)], body=[Output(nodes=[Name(name='a', ctx='load')])])])",
+   "error": null
+  },
+  {
+   "source": "{% with a = 1 b = 2 %}{% endwith %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token ',', got 'b'"
+   }
+  },
+  {
+   "source": "{% autoescape true %}{{ x }}{% endautoescape %}",
+   "parse": "Template(body=[Scope(body=[ScopedEvalContextModifier(options=[Keyword(key='autoescape', value=Const(value=True))], body=[Output(nodes=[Name(name='x', ctx='load')])])])])",
+   "error": null
+  },
+  {
+   "source": "{% block b %}x{% endblock %}",
+   "parse": "Template(body=[Block(name='b', body=[Output(nodes=[TemplateData(data='x')])], scoped=False, required=False)])",
+   "error": null
+  },
+  {
+   "source": "{% block b %}x{% endblock b %}",
+   "parse": "Template(body=[Block(name='b', body=[Output(nodes=[TemplateData(data='x')])], scoped=False, required=False)])",
+   "error": null
+  },
+  {
+   "source": "{% block b scoped %}{% endblock %}",
+   "parse": "Template(body=[Block(name='b', body=[], scoped=True, required=False)])",
+   "error": null
+  },
+  {
+   "source": "{% block b required %} {% endblock %}",
+   "parse": "Template(body=[Block(name='b', body=[Output(nodes=[TemplateData(data=' ')])], scoped=False, required=True)])",
+   "error": null
+  },
+  {
+   "source": "{% block b required %}x{% endblock %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Required blocks can only contain comments or whitespace"
+   }
+  },
+  {
+   "source": "{% block a-b %}{% endblock %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Block names in Jinja have to be valid Python identifiers and may not contain hyphens, use an underscore instead."
+   }
+  },
+  {
+   "source": "{% extends \"base.html\" %}",
+   "parse": "Template(body=[Extends(template=Const(value='base.html'))])",
+   "error": null
+  },
+  {
+   "source": "{% include \"x\" %}",
+   "parse": "Template(body=[Include(template=Const(value='x'), with_context=True, ignore_missing=False)])",
+   "error": null
+  },
+  {
+   "source": "{% include \"x\" ignore missing %}",
+   "parse": "Template(body=[Include(template=Const(value='x'), with_context=True, ignore_missing=True)])",
+   "error": null
+  },
+  {
+   "source": "{% include \"x\" without context %}",
+   "parse": "Template(body=[Include(template=Const(value='x'), with_context=False, ignore_missing=False)])",
+   "error": null
+  },
+  {
+   "source": "{% include \"x\" ignore missing with context %}",
+   "parse": "Template(body=[Include(template=Const(value='x'), with_context=True, ignore_missing=True)])",
+   "error": null
+  },
+  {
+   "source": "{% import \"x\" as y %}",
+   "parse": "Template(body=[Import(template=Const(value='x'), target='y', with_context=False)])",
+   "error": null
+  },
+  {
+   "source": "{% import \"x\" as y with context %}",
+   "parse": "Template(body=[Import(template=Const(value='x'), target='y', with_context=True)])",
+   "error": null
+  },
+  {
+   "source": "{% from \"x\" import a, b as c %}",
+   "parse": "Template(body=[FromImport(template=Const(value='x'), names=['a', ('b', 'c')], with_context=False)])",
+   "error": null
+  },
+  {
+   "source": "{% from \"x\" import a with context %}",
+   "parse": "Template(body=[FromImport(template=Const(value='x'), names=['a'], with_context=True)])",
+   "error": null
+  },
+  {
+   "source": "{% from \"x\" import _a %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "names starting with an underline can not be imported"
+   }
+  },
+  {
+   "source": "{% from \"x\" import %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% from \"x\" import a, %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% from \"x\" import a as %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% print a, b %}",
+   "parse": "Template(body=[Output(nodes=[Name(name='a', ctx='load'), Name(name='b', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{% print %}",
+   "parse": "Template(body=[Output(nodes=[])])",
+   "error": null
+  },
+  {
+   "source": "{{",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of template'"
+   }
+  },
+  {
+   "source": "{{ foo",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected end of template, expected 'end of print statement'."
+   }
+  },
+  {
+   "source": "{{ foo }",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}'"
+   }
+  },
+  {
+   "source": "{{ foo }}}",
+   "parse": "Template(body=[Output(nodes=[Name(name='foo', ctx='load'), TemplateData(data='}')])])",
+   "error": null
+  },
+  {
+   "source": "{% foo %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'foo'."
+   }
+  },
+  {
+   "source": "{% if x %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Unexpected end of template. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'."
+   }
+  },
+  {
+   "source": "{% if x %}{% endfor %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'."
+   }
+  },
+  {
+   "source": "{% for x in y %}{% endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endif'. Jinja was looking for the following tags: 'endfor' or 'else'. The innermost block that needs to be closed is 'for'."
+   }
+  },
+  {
+   "source": "{% endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endif'."
+   }
+  },
+  {
+   "source": "{% if x %}{% for y in z %}{% endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endif'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'endfor' or 'else'. The innermost block that needs to be closed is 'for'."
+   }
+  },
+  {
+   "source": "{% %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "tag name expected"
+   }
+  },
+  {
+   "source": "{% 1 %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "tag name expected"
+   }
+  },
+  {
+   "source": "{{ 1 + }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of print statement'"
+   }
+  },
+  {
+   "source": "{{ ) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected ')'"
+   }
+  },
+  {
+   "source": "{{ (1 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}', expected ')'"
+   }
+  },
+  {
+   "source": "{{ [1 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}', expected ']'"
+   }
+  },
+  {
+   "source": "{{ {1: 2 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected '}'"
+   }
+  },
+  {
+   "source": "{{ x] }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected ']'"
+   }
+  },
+  {
+   "source": "{{ (] }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected ']', expected ')'"
+   }
+  },
+  {
+   "source": "{{ x $ y }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected char '$' at 5"
+   }
+  },
+  {
+   "source": "{{ x ! y }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected char '!' at 5"
+   }
+  },
+  {
+   "source": "{{ x\n$ }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected char '$' at 5"
+   }
+  },
+  {
+   "source": "{{ é }}",
+   "parse": "Template(body=[Output(nodes=[Name(name='é', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ x·y }}",
+   "parse": "Template(body=[Output(nodes=[Name(name='x·y', ctx='load')])])",
+   "error": null
+  },
+  {
+   "source": "{{ ٣abc }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Invalid character in identifier"
+   }
+  },
+  {
+   "source": "{{ a b }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'end of print statement', got 'b'"
+   }
+  },
+  {
+   "source": "{% if %}{% endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Expected an expression, got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% for in y %}{% endfor %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'in', got 'y'"
+   }
+  },
+  {
+   "source": "{% for x y %}{% endfor %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'in', got 'y'"
+   }
+  },
+  {
+   "source": "{% else %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'else'."
+   }
+  },
+  {
+   "source": "{% if x %}{% else %}{% else %}{% endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'else'. Jinja was looking for the following tags: 'endif'. The innermost block that needs to be closed is 'if'."
+   }
+  },
+  {
+   "source": "{% block %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% endblock %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endblock'."
+   }
+  },
+  {
+   "source": "{% call x() %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Unexpected end of template. Jinja was looking for the following tags: 'endcall'. The innermost block that needs to be closed is 'call'."
+   }
+  },
+  {
+   "source": "{% macro %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{{ x }} {% if %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Expected an expression, got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% set %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Expected an expression, got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% with x %}{% endwith %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token '=', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% for x in y %}{% else %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Unexpected end of template. Jinja was looking for the following tags: 'endfor'. The innermost block that needs to be closed is 'for'."
+   }
+  },
+  {
+   "source": "{% if x %}\n{{ y\n",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected end of template, expected 'end of print statement'."
+   }
+  },
+  {
+   "source": "x\n\n{{ 1 + }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of print statement'"
+   }
+  },
+  {
+   "source": "{% raw %}",
+   "parse": "Template(body=[])",
+   "error": null
+  },
+  {
+   "source": "{{ x }}{# ",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Missing end of comment tag"
+   }
+  },
+  {
+   "source": "{% if x -%}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Unexpected end of template. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'."
+   }
+  },
+  {
+   "source": "{%- endif %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "Encountered unknown tag 'endif'."
+   }
+  },
+  {
+   "source": "{{ 1 +\n 2 }}",
+   "parse": "Template(body=[Output(nodes=[Add(left=Const(value=1), right=Const(value=2))])])",
+   "error": null
+  },
+  {
+   "source": "{{ \"a\" \"b }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected char '\"' at 7"
+   }
+  },
+  {
+   "source": "{{ x|1 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'integer'"
+   }
+  },
+  {
+   "source": "{{ x is 1 }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'integer'"
+   }
+  },
+  {
+   "source": "{{ x.(1) }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected name or number"
+   }
+  },
+  {
+   "source": "{{ a[1:2:3:4] }}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token ',', got ':'"
+   }
+  },
+  {
+   "source": "{% filter %}{% endfilter %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% extends %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "unexpected 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% import \"x\" %}",
+   "parse": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'as', got 'end of statement block'"
+   }
+  },
+  {
+   "source": "{% block a %}{% endblock %}{% block a %}{% endblock %}",
+   "parse": "Template(body=[Block(name='a', body=[], scoped=False, required=False), Block(name='a', body=[], scoped=False, required=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "block 'a' defined twice"
+   }
+  },
+  {
+   "source": "{% block a %}{% block a %}{% endblock %}{% endblock %}",
+   "parse": "Template(body=[Block(name='a', body=[Block(name='a', body=[], scoped=False, required=False)], scoped=False, required=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "block 'a' defined twice"
+   }
+  },
+  {
+   "source": "{% if x %}{% extends \"a\" %}{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='x', ctx='load'), body=[Extends(template=Const(value='a'))], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{% for x in y %}{% extends \"a\" %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[Extends(template=Const(value='a'))], else_=[], test=None, recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "cannot use extend from a non top-level scope"
+   }
+  },
+  {
+   "source": "{% block b %}{% extends \"a\" %}{% endblock %}",
+   "parse": "Template(body=[Block(name='b', body=[Extends(template=Const(value='a'))], scoped=False, required=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "cannot use extend from a non top-level scope"
+   }
+  },
+  {
+   "source": "{% for loop in y %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='loop', ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=None, recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "Can't assign to special loop variable in for-loop target"
+   }
+  },
+  {
+   "source": "{% for x in y %}{% set loop = 1 %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[Assign(target=Name(name='loop', ctx='store'), node=Const(value=1))], else_=[], test=None, recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "Can't assign to special loop variable in for-loop target"
+   }
+  },
+  {
+   "source": "{% for x, loop in y %}{% endfor %}",
+   "parse": "Template(body=[For(target=Tuple(items=[Name(name='x', ctx='store'), Name(name='loop', ctx='store')], ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=None, recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "Can't assign to special loop variable in for-loop target"
+   }
+  },
+  {
+   "source": "{% set loop = 1 %}",
+   "parse": "Template(body=[Assign(target=Name(name='loop', ctx='store'), node=Const(value=1))])",
+   "error": null
+  },
+  {
+   "source": "{{ x|nope }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{{ x is nope }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No test named 'nope'."
+   }
+  },
+  {
+   "source": "{% if x|nope %}{% endif %}",
+   "parse": "Template(body=[If(test=Filter(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), body=[], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{% if x %}{{ y|nope }}{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='x', ctx='load'), body=[Output(nodes=[Filter(node=Name(name='y', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])], elif_=[], else_=[])])",
+   "error": null
+  },
+  {
+   "source": "{{ a if b|nope else c }}",
+   "parse": "Template(body=[Output(nodes=[CondExpr(test=Filter(node=Name(name='b', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), expr1=Name(name='a', ctx='load'), expr2=Name(name='c', ctx='load'))])])",
+   "error": null
+  },
+  {
+   "source": "{% if x %}{% for y in z %}{{ y|nope }}{% endfor %}{% endif %}",
+   "parse": "Template(body=[If(test=Name(name='x', ctx='load'), body=[For(target=Name(name='y', ctx='store'), iter=Name(name='z', ctx='load'), body=[Output(nodes=[Filter(node=Name(name='y', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])], else_=[], test=None, recursive=False)], elif_=[], else_=[])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{{ x|nope1|nope2 }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Filter(node=Name(name='x', ctx='load'), name='nope1', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), name='nope2', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope2'."
+   }
+  },
+  {
+   "source": "{{ x|nope(y|nope2) }}",
+   "parse": "Template(body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='nope', args=[Filter(node=Name(name='y', ctx='load'), name='nope2', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% macro m(caller) %}{{ caller() }}{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[Name(name='caller', ctx='param')], defaults=[], body=[Output(nodes=[Call(node=Name(name='caller', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "When defining macros or call blocks the special \"caller\" argument must be omitted or be given a default."
+   }
+  },
+  {
+   "source": "{% macro m(caller=1) %}{{ caller() }}{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[Name(name='caller', ctx='param')], defaults=[Const(value=1)], body=[Output(nodes=[Call(node=Name(name='caller', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])])",
+   "error": null
+  },
+  {
+   "source": "{% macro m(caller) %}x{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[Name(name='caller', ctx='param')], defaults=[], body=[Output(nodes=[TemplateData(data='x')])])])",
+   "error": null
+  },
+  {
+   "source": "{% macro m(caller, b=1) %}{{ caller }}{% endmacro %}",
+   "parse": "Template(body=[Macro(name='m', args=[Name(name='caller', ctx='param'), Name(name='b', ctx='param')], defaults=[Const(value=1)], body=[Output(nodes=[Name(name='caller', ctx='load')])])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "When defining macros or call blocks the special \"caller\" argument must be omitted or be given a default."
+   }
+  },
+  {
+   "source": "{% call(caller) m() %}{{ caller }}{% endcall %}",
+   "parse": "Template(body=[CallBlock(call=Call(node=Name(name='m', ctx='load'), args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), args=[Name(name='caller', ctx='param')], defaults=[], body=[Output(nodes=[Name(name='caller', ctx='load')])])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "When defining macros or call blocks the special \"caller\" argument must be omitted or be given a default."
+   }
+  },
+  {
+   "source": "{% block b %}{{ x|nope }}{% endblock %}{{ y|nope2 }}",
+   "parse": "Template(body=[Block(name='b', body=[Output(nodes=[Filter(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])], scoped=False, required=False), Output(nodes=[Filter(node=Name(name='y', ctx='load'), name='nope2', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope2'."
+   }
+  },
+  {
+   "source": "{% set x %}{{ y|nope }}{% endset %}",
+   "parse": "Template(body=[AssignBlock(target=Name(name='x', ctx='store'), filter=None, body=[Output(nodes=[Filter(node=Name(name='y', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)])])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% filter nope %}x{% endfilter %}",
+   "parse": "Template(body=[FilterBlock(body=[Output(nodes=[TemplateData(data='x')])], filter=Filter(node=None, name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None))])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% for x in y|nope %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Filter(node=Name(name='y', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), body=[], else_=[], test=None, recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% for x in y if x|nope %}{% endfor %}",
+   "parse": "Template(body=[For(target=Name(name='x', ctx='store'), iter=Name(name='y', ctx='load'), body=[], else_=[], test=Filter(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None), recursive=False)])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% with a = x|nope %}{% endwith %}",
+   "parse": "Template(body=[With(targets=[Name(name='a', ctx='param')], values=[Filter(node=Name(name='x', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)], body=[])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{{ x is defined(y|nope) }}",
+   "parse": "Template(body=[Output(nodes=[Test(node=Name(name='x', ctx='load'), name='defined', args=[Filter(node=Name(name='y', ctx='load'), name='nope', args=[], kwargs=[], dyn_args=None, dyn_kwargs=None)], kwargs=[], dyn_args=None, dyn_kwargs=None)])])",
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  }
+ ]
+}

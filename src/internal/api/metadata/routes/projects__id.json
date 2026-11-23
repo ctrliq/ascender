@@ -1,0 +1,452 @@
+{
+    "name": "Project Detail",
+    "description": "# Retrieve a Project:\n\nMake GET request to this resource to retrieve a single project\nrecord containing the following fields:\n\n* `id`: Database ID for this project. (integer)\n* `type`: Data type for this project. (choice)\n* `url`: URL for this project. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this project was created. (datetime)\n* `modified`: Timestamp when this project was last modified. (datetime)\n* `name`: Name of this project. (string)\n* `description`: Optional description of this project. (string)\n* `local_path`: Local path (relative to PROJECTS_ROOT) containing playbooks and related files for this project. (string)\n* `scm_type`: Specifies the source control system used to store the project. (choice)\n    - `\"\"`: Manual\n    - `git`: Git\n    - `svn`: Subversion\n    - `archive`: Remote Archive\n* `scm_url`: The location where the project is stored. (string)\n* `scm_branch`: Specific branch, tag or commit to checkout. (string)\n* `scm_refspec`: For git projects, an additional refspec to fetch. (string)\n* `scm_clean`: Discard any local changes before syncing the project. (boolean)\n* `scm_track_submodules`: Track submodules latest commits on defined branch. (boolean)\n* `scm_delete_on_update`: Delete the project before syncing. (boolean)\n* `credential`:  (id)\n* `timeout`: The amount of time (in seconds) to run before the task is canceled. (integer)\n* `scm_revision`: The last revision fetched by a project update (string)\n* `last_job_run`:  (datetime)\n* `last_job_failed`:  (boolean)\n* `next_job_run`:  (datetime)\n* `status`:  (choice)\n    - `new`: New\n    - `pending`: Pending\n    - `waiting`: Waiting\n    - `running`: Running\n    - `successful`: Successful\n    - `failed`: Failed\n    - `error`: Error\n    - `canceled`: Canceled\n    - `never updated`: Never Updated\n    - `ok`: OK\n    - `missing`: Missing\n* `organization`: The organization used to determine access to this template. (id)\n* `scm_update_on_launch`: Update the project when a job is launched that uses the project. (boolean)\n* `scm_update_cache_timeout`: The number of seconds after the last project update ran that a new project update will be launched as a job dependency. (integer)\n* `allow_override`: Allow changing the SCM branch or revision in a job template that uses this project. (boolean)\n* `reuse_requirements`: Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update. (boolean)\n* `default_environment`: The default execution environment for jobs run using this project. (id)\n* `signature_validation_credential`: An optional credential used for validating files in the project against unexpected changes. (id)\n* `webhook_service`: Service that webhook requests will be accepted from (choice)\n    - `\"\"`: ---------\n    - `github`: GitHub\n    - `gitlab`: GitLab\n    - `bitbucket_dc`: BitBucket DataCenter\n\n* `webhook_ref_filter`: Only sync the project when the webhook ref matches this fnmatch pattern (e.g. refs/heads/main or refs/heads/release-*). When empty, any push or tag event triggers a sync. (string)\n* `last_update_failed`:  (boolean)\n* `last_updated`:  (datetime)\n\n\n\n\n\n# Update a Project:\n\nMake a PUT or PATCH request to this resource to update this\nproject.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `name`: Name of this project. (string, required)\n* `description`: Optional description of this project. (string, default=`\"\"`)\n* `local_path`: Local path (relative to PROJECTS_ROOT) containing playbooks and related files for this project. (string, default=`\"\"`)\n* `scm_type`: Specifies the source control system used to store the project. (choice)\n    - `\"\"`: Manual (default)\n    - `git`: Git\n    - `svn`: Subversion\n    - `archive`: Remote Archive\n* `scm_url`: The location where the project is stored. (string, default=`\"\"`)\n* `scm_branch`: Specific branch, tag or commit to checkout. (string, default=`\"\"`)\n* `scm_refspec`: For git projects, an additional refspec to fetch. (string, default=`\"\"`)\n* `scm_clean`: Discard any local changes before syncing the project. (boolean, default=`False`)\n* `scm_track_submodules`: Track submodules latest commits on defined branch. (boolean, default=`False`)\n* `scm_delete_on_update`: Delete the project before syncing. (boolean, default=`False`)\n* `credential`:  (id, default=``)\n* `timeout`: The amount of time (in seconds) to run before the task is canceled. (integer, default=`0`)\n\n\n\n\n\n* `organization`: The organization used to determine access to this template. (id, default=``)\n* `scm_update_on_launch`: Update the project when a job is launched that uses the project. (boolean, default=`False`)\n* `scm_update_cache_timeout`: The number of seconds after the last project update ran that a new project update will be launched as a job dependency. (integer, default=`0`)\n* `allow_override`: Allow changing the SCM branch or revision in a job template that uses this project. (boolean, default=`False`)\n* `reuse_requirements`: Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update. (boolean, default=`True`)\n* `default_environment`: The default execution environment for jobs run using this project. (id, default=``)\n* `signature_validation_credential`: An optional credential used for validating files in the project against unexpected changes. (id, default=``)\n* `webhook_service`: Service that webhook requests will be accepted from (choice)\n    - `\"\"`: ---------\n    - `github`: GitHub\n    - `gitlab`: GitLab\n    - `bitbucket_dc`: BitBucket DataCenter\n* `webhook_key`: Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set. (string, default=`\"\"`)\n* `webhook_ref_filter`: Only sync the project when the webhook ref matches this fnmatch pattern (e.g. refs/heads/main or refs/heads/release-*). When empty, any push or tag event triggers a sync. (string, default=`\"\"`)\n\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Project:\n\nMake a DELETE request to this resource to delete this project.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this project.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this project.",
+                "filterable": true,
+                "default": ""
+            },
+            "local_path": {
+                "type": "string",
+                "required": false,
+                "label": "Local path",
+                "help_text": "Local path (relative to PROJECTS_ROOT) containing playbooks and related files for this project.",
+                "max_length": 1024,
+                "filterable": true
+            },
+            "scm_type": {
+                "type": "choice",
+                "required": false,
+                "label": "SCM Type",
+                "help_text": "Specifies the source control system used to store the project.",
+                "filterable": true,
+                "default": "",
+                "choices": [
+                    ["", "Manual"],
+                    ["git", "Git"],
+                    ["svn", "Subversion"],
+                    ["archive", "Remote Archive"]
+                ]
+            },
+            "scm_url": {
+                "type": "string",
+                "required": false,
+                "label": "SCM URL",
+                "help_text": "The location where the project is stored.",
+                "max_length": 1024,
+                "filterable": true,
+                "default": ""
+            },
+            "scm_branch": {
+                "type": "string",
+                "required": false,
+                "label": "SCM Branch",
+                "help_text": "Specific branch, tag or commit to checkout.",
+                "max_length": 256,
+                "filterable": true,
+                "default": ""
+            },
+            "scm_refspec": {
+                "type": "string",
+                "required": false,
+                "label": "SCM refspec",
+                "help_text": "For git projects, an additional refspec to fetch.",
+                "max_length": 1024,
+                "filterable": true,
+                "default": ""
+            },
+            "scm_clean": {
+                "type": "boolean",
+                "required": false,
+                "label": "Scm clean",
+                "help_text": "Discard any local changes before syncing the project.",
+                "filterable": true,
+                "default": false
+            },
+            "scm_track_submodules": {
+                "type": "boolean",
+                "required": false,
+                "label": "Scm track submodules",
+                "help_text": "Track submodules latest commits on defined branch.",
+                "filterable": true,
+                "default": false
+            },
+            "scm_delete_on_update": {
+                "type": "boolean",
+                "required": false,
+                "label": "Scm delete on update",
+                "help_text": "Delete the project before syncing.",
+                "filterable": true,
+                "default": false
+            },
+            "credential": {
+                "type": "id",
+                "required": false,
+                "label": "Credential",
+                "filterable": true
+            },
+            "timeout": {
+                "type": "integer",
+                "required": false,
+                "label": "Timeout",
+                "help_text": "The amount of time (in seconds) to run before the task is canceled.",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true,
+                "default": 0
+            },
+            "organization": {
+                "type": "id",
+                "required": false,
+                "label": "Organization",
+                "help_text": "The organization used to determine access to this template.",
+                "filterable": true
+            },
+            "scm_update_on_launch": {
+                "type": "boolean",
+                "required": false,
+                "label": "Scm update on launch",
+                "help_text": "Update the project when a job is launched that uses the project.",
+                "filterable": true,
+                "default": false
+            },
+            "scm_update_cache_timeout": {
+                "type": "integer",
+                "required": false,
+                "label": "Scm update cache timeout",
+                "help_text": "The number of seconds after the last project update ran that a new project update will be launched as a job dependency.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true,
+                "default": 0
+            },
+            "allow_override": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow override",
+                "help_text": "Allow changing the SCM branch or revision in a job template that uses this project.",
+                "filterable": true,
+                "default": false
+            },
+            "reuse_requirements": {
+                "type": "boolean",
+                "required": false,
+                "label": "Reuse requirements",
+                "help_text": "Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update.",
+                "filterable": true,
+                "default": true
+            },
+            "default_environment": {
+                "type": "id",
+                "required": false,
+                "label": "Default environment",
+                "help_text": "The default execution environment for jobs run using this project.",
+                "filterable": true
+            },
+            "signature_validation_credential": {
+                "type": "id",
+                "required": false,
+                "label": "Signature validation credential",
+                "help_text": "An optional credential used for validating files in the project against unexpected changes.",
+                "filterable": true
+            },
+            "webhook_service": {
+                "type": "choice",
+                "required": false,
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["github", "GitHub"],
+                    ["gitlab", "GitLab"],
+                    ["bitbucket_dc", "BitBucket DataCenter"]
+                ]
+            },
+            "webhook_key": {
+                "type": "string",
+                "required": false,
+                "label": "Webhook key",
+                "help_text": "Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.",
+                "max_length": 64,
+                "filterable": true,
+                "write_only": true
+            },
+            "webhook_ref_filter": {
+                "type": "string",
+                "required": false,
+                "label": "Webhook ref filter",
+                "help_text": "Only sync the project when the webhook ref matches this fnmatch pattern (e.g. refs/heads/main or refs/heads/release-*). When empty, any push or tag event triggers a sync.",
+                "max_length": 1024,
+                "filterable": true,
+                "default": ""
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this project.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this project.",
+                "filterable": true,
+                "choices": [
+                    ["project", "Project"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this project.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this project was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this project was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this project.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this project.",
+                "filterable": true
+            },
+            "local_path": {
+                "type": "string",
+                "label": "Local path",
+                "help_text": "Local path (relative to PROJECTS_ROOT) containing playbooks and related files for this project.",
+                "filterable": true
+            },
+            "scm_type": {
+                "type": "choice",
+                "label": "SCM Type",
+                "help_text": "Specifies the source control system used to store the project.",
+                "filterable": true,
+                "choices": [
+                    ["", "Manual"],
+                    ["git", "Git"],
+                    ["svn", "Subversion"],
+                    ["archive", "Remote Archive"]
+                ]
+            },
+            "scm_url": {
+                "type": "string",
+                "label": "SCM URL",
+                "help_text": "The location where the project is stored.",
+                "filterable": true
+            },
+            "scm_branch": {
+                "type": "string",
+                "label": "SCM Branch",
+                "help_text": "Specific branch, tag or commit to checkout.",
+                "filterable": true
+            },
+            "scm_refspec": {
+                "type": "string",
+                "label": "SCM refspec",
+                "help_text": "For git projects, an additional refspec to fetch.",
+                "filterable": true
+            },
+            "scm_clean": {
+                "type": "boolean",
+                "label": "Scm clean",
+                "help_text": "Discard any local changes before syncing the project.",
+                "filterable": true
+            },
+            "scm_track_submodules": {
+                "type": "boolean",
+                "label": "Scm track submodules",
+                "help_text": "Track submodules latest commits on defined branch.",
+                "filterable": true
+            },
+            "scm_delete_on_update": {
+                "type": "boolean",
+                "label": "Scm delete on update",
+                "help_text": "Delete the project before syncing.",
+                "filterable": true
+            },
+            "credential": {
+                "type": "id",
+                "label": "Credential",
+                "filterable": true
+            },
+            "timeout": {
+                "type": "integer",
+                "label": "Timeout",
+                "help_text": "The amount of time (in seconds) to run before the task is canceled.",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "scm_revision": {
+                "type": "string",
+                "label": "SCM Revision",
+                "help_text": "The last revision fetched by a project update",
+                "filterable": true
+            },
+            "last_job_run": {
+                "type": "datetime",
+                "label": "Last job run",
+                "filterable": true
+            },
+            "last_job_failed": {
+                "type": "boolean",
+                "label": "Last job failed",
+                "filterable": true
+            },
+            "next_job_run": {
+                "type": "datetime",
+                "label": "Next job run",
+                "filterable": true
+            },
+            "status": {
+                "type": "choice",
+                "label": "Status",
+                "filterable": true,
+                "choices": [
+                    ["new", "New"],
+                    ["pending", "Pending"],
+                    ["waiting", "Waiting"],
+                    ["running", "Running"],
+                    ["successful", "Successful"],
+                    ["failed", "Failed"],
+                    ["error", "Error"],
+                    ["canceled", "Canceled"],
+                    ["never updated", "Never Updated"],
+                    ["ok", "OK"],
+                    ["missing", "Missing"]
+                ]
+            },
+            "organization": {
+                "type": "id",
+                "label": "Organization",
+                "help_text": "The organization used to determine access to this template.",
+                "filterable": true
+            },
+            "scm_update_on_launch": {
+                "type": "boolean",
+                "label": "Scm update on launch",
+                "help_text": "Update the project when a job is launched that uses the project.",
+                "filterable": true
+            },
+            "scm_update_cache_timeout": {
+                "type": "integer",
+                "label": "Scm update cache timeout",
+                "help_text": "The number of seconds after the last project update ran that a new project update will be launched as a job dependency.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "allow_override": {
+                "type": "boolean",
+                "label": "Allow override",
+                "help_text": "Allow changing the SCM branch or revision in a job template that uses this project.",
+                "filterable": true
+            },
+            "reuse_requirements": {
+                "type": "boolean",
+                "label": "Reuse requirements",
+                "help_text": "Reuse the roles and collections downloaded for an earlier revision of this project while its requirements files and Galaxy credentials are unchanged, instead of downloading them again on every project update.",
+                "filterable": true
+            },
+            "default_environment": {
+                "type": "id",
+                "label": "Default environment",
+                "help_text": "The default execution environment for jobs run using this project.",
+                "filterable": true
+            },
+            "signature_validation_credential": {
+                "type": "id",
+                "label": "Signature validation credential",
+                "help_text": "An optional credential used for validating files in the project against unexpected changes.",
+                "filterable": true
+            },
+            "webhook_service": {
+                "type": "choice",
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["github", "GitHub"],
+                    ["gitlab", "GitLab"],
+                    ["bitbucket_dc", "BitBucket DataCenter"]
+                ]
+            },
+            "webhook_ref_filter": {
+                "type": "string",
+                "label": "Webhook ref filter",
+                "help_text": "Only sync the project when the webhook ref matches this fnmatch pattern (e.g. refs/heads/main or refs/heads/release-*). When empty, any push or tag event triggers a sync.",
+                "filterable": true
+            },
+            "last_update_failed": {
+                "type": "boolean",
+                "label": "Last update failed",
+                "filterable": false
+            },
+            "last_updated": {
+                "type": "datetime",
+                "label": "Last updated",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "project"
+    ],
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "update_role",
+        "read_role"
+    ]
+}

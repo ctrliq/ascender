@@ -1,0 +1,11 @@
+{
+    "name": "Bulk",
+    "description": "# Bulk Actions\n\nThis endpoint lists available bulk action APIs.",
+    "renders": [
+        "text/html",
+        "application/json"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

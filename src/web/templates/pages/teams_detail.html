@@ -1,0 +1,79 @@
+{{define "content"}}
+{{$t := .Data.team}}
+{{$id := str $t.id}}
+{{$sf := $t.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "team" "crumbs" (list (dict "href" "/teams" "title" (t "Teams")) (dict "href" (printf "/teams/%s/details" $id) "title" (str $t.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/teams" "label" "Back to Teams") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					<div>
+						<dt class="ascender-detail-name" data-cy="team-detail-name-label" id="team-detail-name">
+							{{t "Name"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="team-detail-name-value">
+							{{$t.name}}
+						</dd>
+					</div>
+					{{if has $t.description}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Description"}}</dt>
+							<dd class="ascender-detail-value">{{$t.description}}</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "organization"}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Organization"}}</dt>
+							<dd class="ascender-detail-value">
+								<a href="/organizations/{{str .id}}">{{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Created"}}</dt>
+						<dd class="ascender-detail-value">{{dt $t.created}}</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name">{{t "Last Modified"}}</dt>
+						<dd class="ascender-detail-value">{{dt $t.modified}}</dd>
+					</div>
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="/teams/{{$id}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="Team" data-delete-title="{{t "Delete Team"}}" data-api="/api/v2/teams/{{$id}}/" data-name="{{$t.name}}" data-redirect="/teams">
+							<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+						</button>
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "access"}}
+			{{template "access_tab" .}}
+		{{else if eq .Data.tab "roles"}}
+			{{if userIsSysAdmin .Data.results}}
+				<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+					{{template "empty_state" (dict "title" (t "System Administrator") "body" (t "System administrators have unrestricted access to all resources."))}}
+				</div>
+			{{else}}
+				{{template "search_toolbar" (dict "page" . "id" "team-roles" "searchKeys" .Data.searchKeys "ns" "roles" "noSelect" true "noDelete" true "addAttr" (pick .Data.canAddRoles (attr (printf `data-roles-add data-kind="team" data-owner="%s"` $id)) "") "filters" .Data.filters)}}
+				{{if .Data.results}}
+					{{template "role_rows" (dict "page" . "kind" "team" "owner" $id)}}
+				{{else}}
+					{{if .Data.filters}}
+						{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+					{{else}}
+						{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Team Roles")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Team Roles")))}}
+					{{end}}
+				{{end}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

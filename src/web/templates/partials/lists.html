@@ -1,0 +1,274 @@
+{{/* The jobs and templates list cards, shared by their screens and the dashboard tabs. */}}
+{{define "jobs_list_card"}}
+<div class="pf-v6-c-card">
+	{{template "search_toolbar" (dict "page" . "id" "job-list" "searchKeys" .Data.searchKeys "ns" "job" "kind" "Job" "api" "/api/v2/unified_jobs/" "expandAll" true "filters" .Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button id="jobs-list-cancel-button" aria-labelledby="jobs-list-cancel-button" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-cancel-selected><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}" "numJobsToCancel" 0)))))}}
+	{{if .Data.results}}
+		{{template "jobs_table" (dict "page" . "showType" .Data.showType "aria" (t "{pluralizedItemName} List" "pluralizedItemName" (t "Jobs")))}}
+	{{else}}
+		{{if .Data.filters}}
+			{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+		{{else}}
+			{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Jobs")) "body" (t "Please run a job to populate this list."))}}
+		{{end}}
+	{{end}}
+</div>
+{{end}}
+{{define "templates_list_card"}}
+<div class="pf-v6-c-card">
+	{{template "search_toolbar" (dict "page" . "id" "template-list" "searchKeys" .Data.searchKeys "ns" "template" "addMenu" .Data.addMenu "kind" "Template" "api" "/api/v2/unified_job_templates/" "usageKind" "template" "usageMessage" "{0, plural, one {This template is currently being used by some workflow nodes. Are you sure you want to delete it?} other {Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?}}" "expandAll" true "filters" .Data.filters)}}
+	{{if .Data.results}}
+		<div class="ascender-paginated-table__overflow-auto">
+			<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Templates")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+				<thead class="pf-v6-c-table__thead">
+					<tr class="pf-v6-c-table__tr">
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+						</th>
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+						</th>
+						{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "template-table-sort-name")}}
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							{{t "Activity"}}
+						</th>
+						{{template "sort_th" (dict "page" . "key" "last_job_run" "label" (t "Last Ran") "id" "template-table-sort-last_job_run")}}
+						{{template "sort_th" (dict "page" . "key" "type" "label" (t "Type") "id" "template-table-sort-type")}}
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+							{{t "Actions"}}
+						</th>
+					</tr>
+				</thead>
+				<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+					{{template "template_rows" .Data.results}}
+				</tbody>
+			</table>
+		</div>
+		{{template "pagination_bottom" (dict "page" .)}}
+	{{else}}
+		{{if .Data.filters}}
+			{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+		{{else}}
+			{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Templates")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Templates")) "addHref" "/templates/job_template/add")}}
+		{{end}}
+	{{end}}
+</div>
+{{end}}
+{{define "template_rows"}}
+{{/* the TemplateListItem rows of a templates list */}}
+{{range $i, $t := .}}
+	{{$id := str $t.id}}
+	{{$type := str $t.type}}
+	{{$caps := dig $t "summary_fields" "user_capabilities"}}
+	{{$sf := $t.summary_fields}}
+	{{$coll := cond (eq $type "job_template") "job_templates" "workflow_job_templates"}}
+	{{$recent := dig $sf "recent_jobs"}}
+	<tr class="pf-v6-c-table__tr" id="template-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$t.name}}" data-api="/api/v2/{{$coll}}/{{$id}}/">
+		<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__toggle">
+			<button aria-expanded="false" aria-labelledby="simple-node{{$i}} expand-toggle{{$i}}" id="expand-toggle{{$i}}" aria-label="{{t "Details"}}" class="pf-v6-c-button pf-m-plain pf-m-small" type="button" data-expand-row>
+				<span class="pf-v6-c-button__icon">
+					<div class="pf-v6-c-table__toggle-icon">{{icon "pf-angle-down"}}</div>
+				</span>
+			</button>
+		</td>
+		<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+			<div class="pf-v6-c-check pf-m-standalone">
+				<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+			</div>
+		</td>
+		<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+			<a href="/templates/{{$type}}/{{$id}}"><b>{{$t.name}}</b></a>
+			{{if and (eq $type "job_template") (or (not (dig $sf "project")) (and (not (dig $sf "inventory")) (not $t.ask_inventory_on_launch)))}}
+				<span>
+					<span data-tooltip="{{t "Resources are missing from this template."}}" data-tooltip-pos="right" style="color: var(--pf-t--global--color--status--danger--default); margin-left: 8px;">
+						{{icon "exclamation-triangle"}}
+					</span>
+				</span>
+			{{end}}
+		</td>
+		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td">
+			{{if $recent}}{{template "sparkline" $recent}}{{end}}
+		</td>
+		<td tabindex="-1" data-label="{{t "Last Ran"}}" class="pf-v6-c-table__td">
+			{{if $recent}}
+				{{with index $recent 0}}
+					{{if has .finished}}{{dt .finished}}{{else}}{{t "Running"}}{{end}}
+				{{end}}
+			{{end}}
+		</td>
+		<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+			{{if eq $type "workflow_job_template"}}
+				{{t "Workflow Job Template"}}
+			{{else}}
+				{{t "Job Template"}}
+			{{end}}
+		</td>
+		<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: {{if eq $type "workflow_job_template"}}200px{{else}}160px{{end}};">
+			<div class="ascender-actions-td__grid">
+				{{if eq $type "workflow_job_template"}}
+					<div>
+						<div style="display: contents;">
+							<div>
+								<a id="template-action-visualizer-{{$id}}" aria-label="{{t "Visualizer"}}" class="pf-v6-c-button pf-m-plain" href="/templates/workflow_job_template/{{$id}}/visualizer" data-tooltip="{{t "Visualizer"}}" data-tooltip-pos="top">
+									<span class="pf-v6-c-button__icon">
+										{{icon "project-diagram"}}
+									</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				{{end}}
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{if dig $caps "start"}}
+								<button id="template-action-launch-{{$id}}" aria-label="{{t "Launch template"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Launch Template"}}" data-tooltip-pos="top" data-launch="/api/v2/{{$coll}}/{{$id}}/" data-launch-type="{{$type}}" data-launch-name="{{$t.name}}">
+									<span class="pf-v6-c-button__icon">{{icon "rocket"}}</span>
+								</button>
+							{{end}}
+						</div>
+					</div>
+				</div>
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{if dig $caps "edit"}}
+								<a id="template-action-edit-{{$id}}" aria-label="{{t "Edit Template"}}" class="pf-v6-c-button pf-m-plain" href="/templates/{{$type}}/{{$id}}/edit" data-tooltip="{{t "Edit Template"}}" data-tooltip-pos="top">
+									<span class="pf-v6-c-button__icon">{{icon "pencil-alt"}}</span>
+								</a>
+							{{end}}
+						</div>
+					</div>
+				</div>
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{if dig $caps "copy"}}
+								<button id="template-action-copy-{{$id}}" aria-label="{{t "Copy"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Copy Template"}}" data-tooltip-pos="top" data-copy-resource="/api/v2/{{$coll}}/{{$id}}/copy/" data-copy-name="{{$t.name}}" data-copy-error="{{t "Failed to copy template."}}">
+									<span class="pf-v6-c-button__icon">{{icon "copy"}}</span>
+								</button>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr class="pf-v6-c-table__tr pf-v6-c-table__expandable-row" hidden id="expanded-template-row-{{$id}}" data-expanded-row>
+		<td tabindex="-1" class="pf-v6-c-table__td" colspan="2"></td>
+		<td tabindex="-1" class="pf-v6-c-table__td" colspan="5">
+			<div class="pf-v6-c-table__expandable-row-content">
+				<dl class="ascender-detail-list">
+					{{if has $t.description}}
+						{{template "detail" (dict "label" (t "Description") "value" (str $t.description) "cy" (printf "template-%s-description" $id))}}
+					{{end}}
+					{{with dig $sf "organization"}}
+						{{template "detail" (dict "label" (t "Organization") "value" (safe (printf `<a href="/organizations/%s/details">%s</a>` (str .id) (esc .name))) "cy" (printf "template-%s-organization" $id))}}
+					{{end}}
+					{{with dig $sf "inventory"}}
+						{{template "detail" (dict "label" (t "Inventory") "value" (safe (printf `<a href="/inventories/%s/%s/details">%s</a>%s` (cond (eq (str .kind) "smart") "smart_inventory" "inventory") (str .id) (esc .name) (cond $t.ask_inventory_on_launch (printf "<span> %s</span>" (esc (t "(Prompt on launch)"))) ""))) "cy" (printf "template-%s-inventory" $id))}}
+					{{else}}
+						{{if and (eq $type "job_template") (not $t.ask_inventory_on_launch)}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Inventory"}}</dt>
+								<dd class="ascender-detail-value ascender-detail-value--deleted">
+									{{t "Deleted"}}
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{with dig $sf "project"}}
+						{{template "detail" (dict "label" (t "Project") "value" (safe (printf `<a href="/projects/%s/details">%s</a>` (str .id) (esc .name))) "cy" (printf "template-%s-project" $id))}}
+					{{end}}
+					{{with dig $sf "execution_environment"}}
+						{{template "detail" (dict "label" (t "Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "cy" "execution-environment-detail")}}
+					{{end}}
+					{{template "detail" (dict "label" (t "Last Modified") "value" (dt $t.modified) "cy" (printf "template-%s-last-modified" $id))}}
+					{{with dig $sf "credentials"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="template-{{$id}}-credentials-label" id="template-{{$id}}-credentials">
+									{{t "Credentials"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="template-{{$id}}-credentials-value">
+									<div>{{template "credential_chips" .}}</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{with dig $sf "labels"}}
+						{{if .results}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="template-{{$id}}-labels-label">
+									{{t "Labels"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="template-{{$id}}-labels-value">
+									<div>
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+				</dl>
+			</div>
+		</td>
+	</tr>
+{{end}}
+{{end}}
+{{define "related_jobs"}}
+{{/* .page: JobList on a resource's Jobs tab (no Type column), in its own card */}}
+{{$p := .page}}
+<div id="" class="pf-v6-c-card">
+	{{template "search_toolbar" (dict "page" $p "id" "job-list" "searchKeys" $p.Data.searchKeys "ns" "job" "kind" "Job" "api" "/api/v2/unified_jobs/" "expandAll" true "filters" $p.Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button id="jobs-list-cancel-button" aria-labelledby="jobs-list-cancel-button" class="pf-v6-c-button pf-m-secondary" disabled type="button" data-cancel-selected><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "{numJobsToCancel, plural, one {Cancel job} other {Cancel jobs}}" "numJobsToCancel" 0)))))}}
+	{{if $p.Data.results}}
+		{{template "jobs_table" (dict "page" $p "showType" false "aria" (t "{pluralizedItemName} List" "pluralizedItemName" (t "Jobs")))}}
+	{{else}}
+		{{if $p.Data.filters}}
+			{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+		{{else}}
+			{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Jobs")) "body" (t "Please run a job to populate this list."))}}
+		{{end}}
+	{{end}}
+</div>
+{{end}}
+{{define "related_templates"}}
+{{/* .page: RelatedTemplateList (job templates of a project, inventory or credential), in its own card */}}
+{{$p := .page}}
+<div id="" class="pf-v6-c-card">
+	{{template "search_toolbar" (dict "page" $p "id" "template-list" "searchKeys" $p.Data.searchKeys "ns" "template" "addHref" $p.Data.relatedAddHref "kind" "Job template" "api" "/api/v2/job_templates/" "usageKind" "template" "usageMessage" "{0, plural, one {This template is currently being used by some workflow nodes. Are you sure you want to delete it?} other {Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?}}" "expandAll" true "filters" $p.Data.filters)}}
+	{{if $p.Data.results}}
+		<div class="ascender-paginated-table__overflow-auto">
+			<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Job templates")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+				<thead class="pf-v6-c-table__thead">
+					<tr class="pf-v6-c-table__tr">
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+						</th>
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+						</th>
+						{{template "sort_th" (dict "page" $p "key" "name" "label" (t "Name") "id" "template-table-sort-name")}}
+						{{template "sort_th" (dict "page" $p "key" "type" "label" (t "Type") "id" "template-table-sort-type")}}
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+							{{t "Recent jobs"}}
+						</th>
+						<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+							{{t "Actions"}}
+						</th>
+					</tr>
+				</thead>
+				<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+					{{template "template_rows" $p.Data.results}}
+				</tbody>
+			</table>
+		</div>
+		{{template "pagination_bottom" (dict "page" $p)}}
+	{{else}}
+		{{if $p.Data.filters}}
+			{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+		{{else}}
+			{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Job templates")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Job templates")))}}
+		{{end}}
+	{{end}}
+</div>
+{{end}}

@@ -1,11 +1,14 @@
 ---
-name: ✨ Feature request
-description: Suggest an idea for this project
+name: Feature request
+description: "✨ Suggest an idea for Ascender"
+labels:
+  - enhancement
 body:
   - type: markdown
     attributes:
       value: |
-        Feature Request issues are for **feature requests** only.
+        Feature requests are for **new features or enhancements** to Ascender only.
+        To talk an idea over first, start a [discussion](https://github.com/ctrliq/ascender/discussions).
 
   - type: checkboxes
     id: terms
@@ -21,20 +24,19 @@ body:
     id: feature-type
     attributes:
       label: Feature type
-      description: >-
-        What kind of feature is this?
+      description: What kind of feature is this?
       multiple: false
       options:
-        - "New Feature"
-        - "Enhancement to Existing Feature"
+        - New feature
+        - Enhancement to an existing feature
     validations:
       required: true
 
   - type: textarea
     id: summary
     attributes:
-      label: Feature Summary
-      description: Briefly describe the desired enhancement.
+      label: Feature summary
+      description: Briefly describe the feature or enhancement.
     validations:
       required: true
 
@@ -42,21 +44,25 @@ body:
     id: components
     attributes:
       label: Select the relevant components
+      description: >-
+        Requests for the installer, the operator or the Ansible collection belong in
+        [ascender-install](https://github.com/ctrliq/ascender-install/issues),
+        [ascender-operator](https://github.com/ctrliq/ascender-operator/issues) or
+        [ascender-collection](https://github.com/ctrliq/ascender-collection/issues).
       options:
         - label: UI
         - label: API
+        - label: Jobs and the task runner
         - label: Docs
-        - label: Collection
-        - label: CLI
         - label: Other
 
   - type: textarea
-    id: steps-to-reproduce
+    id: scenario
     attributes:
-      label: Steps to reproduce
+      label: Scenario
       description: >-
-        Describe the necessary steps to understand the scenario of the requested enhancement. 
-        Include all the steps that will help the developer and QE team understand what you are requesting.
+        The steps or situation that show what you are asking for: what you are trying to do, and
+        everything a developer needs to understand it.
     validations:
       required: true
 
@@ -64,15 +70,15 @@ body:
     id: current-results
     attributes:
       label: Current results
-      description: What is currently happening on the scenario?
+      description: What happens in that scenario today?
     validations:
       required: true
 
   - type: textarea
-    id: sugested-results
+    id: suggested-results
     attributes:
-      label: Sugested feature result
-      description: What is the result this new feature will bring?
+      label: Suggested result
+      description: What would the new feature let you do?
     validations:
       required: true
 
@@ -80,6 +86,6 @@ body:
     id: additional-information
     attributes:
       label: Additional information
-      description: Please provide any other information you think is relevant that could help us understand your feature request.
+      description: Anything else that helps us understand the request.
     validations:
       required: false

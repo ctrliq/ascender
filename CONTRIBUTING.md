@@ -1,75 +1,96 @@
 # Contributing to Ascender
 
 Thanks for your interest in contributing to Ascender. This document covers the
-development setup, testing, and pull request guidelines.
+development setup, testing, and pull request guidelines for the Go
+implementation.
 
 ## Development setup
 
-Fork and clone the repository:
+Fork and clone the repository, and add the main repository as a second
+remote, so you can rebase onto it later:
 
 ```bash
 git clone https://github.com/<your-user>/ascender.git
 cd ascender
-```
-
-Bring up the containerised development environment:
-
-```bash
-make docker-compose
-```
-
-See [docs/development/docker.md](./docs/development/docker.md) for the full
-walkthrough, and [kind.md](./docs/development/kind.md) or
-[minikube.md](./docs/development/minikube.md) for cluster-based alternatives.
-
-Add the main repository as a second remote, so you can rebase onto it later:
-
-```bash
 git remote add upstream https://github.com/ctrliq/ascender.git
 ```
+
+You need Go (the version in [`src/go.mod`](./src/go.mod)), make, and docker
+or podman with compose. The Go module is in [`src/`](./src/); the top-level
+[`Makefile`](./Makefile) drives everything, and `make help` lists the targets.
+
+The applications need a PostgreSQL database and the `SECRET_KEY` its
+encrypted fields are written with, in `.secrets/ASCENDER_DB_PASSWORD` and
+`.secrets/SECRET_KEY` (the directory is ignored by git and kept out of image
+builds). `make init` generates both for a new installation, with the admin
+password in `.secrets/ADMIN_PASSWORD`, and installs podman compose (or docker
+compose) and Go when the host lacks them. Then either start the whole stack in
+containers:
+
+```bash
+make init       # once: compose, Go, the secrets and .env
+make start      # build both images and start them, with PostgreSQL, under compose
+```
+
+or run the binaries from source against the compose database:
+
+```bash
+make run-web    # API and UI on http://localhost:8070/, templates served from disk
+make run-task   # the job runner
+```
+
+[deploy/README.md](./deploy/README.md) describes every configuration variable.
 
 ## Running tests
 
 Every pull request runs the checks in
-[`.github/workflows/ci.yml`](./.github/workflows/ci.yml). Run the ones your
-change can affect before pushing, in the development environment, and run the
-whole API suite rather than only the tests you touched: a new setting, for
-example, fails a test in `ascender/conf/tests/` that no logging test exercises.
+[`.github/workflows/ci.yml`](./.github/workflows/ci.yml). Run them before
+pushing:
 
 ```bash
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && make test"
+make check      # gofmt, template layout, API JSON layout, Go module licenses, build, go vet
+make lint       # staticcheck and deadcode
+make test GOTESTFLAGS='-race -count=1'
 ```
 
-`make test` is what CI's `api-test` job runs. It covers every directory in
-`TEST_DIRS` and then runs `ascender-manage check_migrations` and
-`ascender-manage check_settings`. The lint, type-check and UI jobs, and the
-command for each, are listed in
-[`.github/copilot-instructions.md`](./.github/copilot-instructions.md).
+`make check` rewrites files that need formatting; CI runs `make fmt-check`,
+`make tidy-check` and `make licenses-check`, which only report. The git
+pre-commit hook (`make hooks`, which `make init` runs) runs those three on
+what a commit touches (`pre-commit.sh`); `ASCENDER_SKIP_HOOKS=1` skips it.
 
-Configuration lives in [`pyproject.toml`](./pyproject.toml) and [`tox.ini`](./tox.ini).
+Tests that need a database or a directory server skip without one. To run
+them, point `ASCENDER_TEST_DATABASE_URL` at a throwaway PostgreSQL database
+holding the schema (the web binary's `migrate` command loads it into an empty
+database) and `ASCENDER_TEST_LDAP_URI` at a test LDAP server. Never point them
+at a database whose data you want to keep.
 
-## Adding a setting
+## Conventions
 
-A setting registered in `ascender/main/conf.py` or `ascender/conf/conf.py`
-needs more than the registration, and CI checks each part:
+The Go implementation keeps the REST API, the user interface and the database
+schema of the Python application, so a change has a few extra rules:
 
-| Change | Checked by |
-|---|---|
-| Add it to `ascender/settings/typed.py` (`ascender-manage generate_setting_types` writes the file) | `ascender/conf/tests/functional/test_setting_types.py` |
-| Regenerate `ascender/ui/src/types/api.generated.ts` with `make ui-api-types` and commit it | `ui-api-types-drift` |
-| Give it a default its own field accepts | `ascender-manage check_settings` |
-
-Also:
-
-- Set `min_value` and `max_value` to the range the setting's consumer accepts.
-  A value rsyslog or the kernel ignores passes validation and then silently
-  does nothing. Test that out-of-range values are rejected and that a
-  non-default value reaches the consumer.
-- A `LOG_AGGREGATOR_*` setting also needs a default in
-  `ascender/settings/defaults.py`. The rsyslog configurer clears its cached
-  values by the names `dir(settings)` returns, which are the database rows and
-  the file defaults, so a reverted setting with no file default keeps its old
-  value.
+- **API responses** keep the old field order and wording. Build them with
+  `api.OMap`, and check them against the golden responses captured from the
+  old application.
+- **UI pages** call the API in-process (`UI.apiCall`) rather than reading the
+  database, so the UI never bypasses API permissions or validation.
+- **Templates** follow JSX's whitespace rule: a line break between tags or
+  actions renders as nothing, so a space that must render goes on the same
+  line. `make fmt-templates` lays them out.
+- **Text** shown to users is translated with the old application's message
+  ids: `{{t "msgid"}}` in templates, `p.Loc.T` in Go, `t('msgid')` in scripts.
+- **Schema changes** go in a new file under
+  [`src/internal/db/migrations`](./src/internal/db/migrations). Never edit
+  the baseline. A migration is for what a new database, or one upgraded from
+  the Python application, needs; the two applications never share a
+  database.
+- **Go modules:** `make check` regenerates [`licenses/go/`](./licenses/go)
+  (`make licenses`), one license per module linked into the binaries, and
+  CI fails when it is out of date. Commit it with the `go.mod` change.
+- **Other third-party code** you add (a script, a font, a stylesheet, code
+  ported from another project) needs its license text in
+  [`licenses/`](./licenses) by hand and a line in
+  [`NOTICE.txt`](./NOTICE.txt).
 
 ## Making changes
 
@@ -103,9 +124,7 @@ related #123
 ```
 
 Reference the issue a change addresses with `related #nnn`, in the commit
-message and the PR description, as the
-[pull request template](./.github/PULL_REQUEST_TEMPLATE.md) asks. Maintainers
-close the issue themselves.
+message and the PR description. Maintainers close the issue themselves.
 
 ### Developer Certificate of Origin
 
@@ -122,9 +141,6 @@ git commit -s -m "Short summary"
 2. One logical change per PR. Do not bundle unrelated fixes.
 3. Target the `main` branch.
 4. Explain what changed and why in the PR description.
-5. For the template's ASCENDER VERSION, run `make VERSION` inside the
-   development container. On a host without `setuptools-scm` it prints only
-   `awx: `.
 
 CI on a pull request from a fork waits until a maintainer approves the run.
 

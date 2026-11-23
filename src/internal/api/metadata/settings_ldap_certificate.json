@@ -1,0 +1,21 @@
+{
+    "name": "LDAP Server Certificate",
+    "description": "# Fetch an LDAP Server Certificate\n\nMake a POST request to this resource with `server_uri` (an LDAP server URI, as `AUTH_LDAP_SERVER_URI` takes it) to read the certificate chain the first server that answers presents: `ldaps://` servers when they connect, `ldap://` servers after Start TLS. The chain is not checked. The response lists each certificate with its SHA-256 fingerprint, says whether the system trust store already accepts it (`trusted`), and gives in `ca_cert` the certificates to put in `AUTH_LDAP_CA_CERT`: the certificate authorities the server sent, or its own certificate when it sent no other (`leaf_only`).",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {
+            "server_uri": {
+                "type": "string",
+                "required": true,
+                "label": "LDAP Server URI",
+                "help_text": "URI of the LDAP server to read the certificate of, such as \"ldaps://ldap.example.com:636\". With several URIs, the first one that answers is read."
+            }
+        }
+    }
+}

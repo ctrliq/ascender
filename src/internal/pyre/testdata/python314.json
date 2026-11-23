@@ -1,0 +1,2563 @@
+{
+ "python": "3.14.8",
+ "compile": [
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a|b|c",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(a)(b)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?P<name>x)(?P=name)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?:a)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?i)abc",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?i:a)b",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?-i:a)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?x) a b # comment\n c",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[a-z]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[^a-z]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[]]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[^]]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[a-]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[-a]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[\\d\\w\\s]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[\\D]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\x41",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\u0041",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\U0001F600",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\N{EM DASH}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\N{em dash}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\N{HANGUL SYLLABLE GAG}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\N{CJK UNIFIED IDEOGRAPH-4E00}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\0",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\01",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\012",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\141",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(a)\\1",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)\\10",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2,}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{,3}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2,3}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{x}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2,3",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a*?",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a+?",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a??",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a*+",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a++",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a?+",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a{2,3}+",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?>ab)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?=a)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?!a)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?<=ab)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?<!ab)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?<=a|b)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(a)?(?(1)b|c)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?P<n>a)?(?(n)b)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?#comment)a",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "{",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?=a)*",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "x{0}",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "^$",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\A\\Z\\z\\b\\B",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?a)\\w",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?u)\\w",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?s).",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?m)^",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?a:\\w)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?im-sx:a)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\\\",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?P<a1_é>x)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\t",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "[\\]]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?<!)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?!)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?i)(?m)a",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?x)  (?i)a",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": ")",
+   "flags": 0,
+   "error": "unbalanced parenthesis at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "a)",
+   "flags": 0,
+   "error": "unbalanced parenthesis at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(a",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "((a)",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[",
+   "flags": 0,
+   "error": "unterminated character set at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[a",
+   "flags": 0,
+   "error": "unterminated character set at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[^",
+   "flags": 0,
+   "error": "unterminated character set at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[a-",
+   "flags": 0,
+   "error": "unterminated character set at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[z-a]",
+   "flags": 0,
+   "error": "bad character range z-a at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\d-z]",
+   "flags": 0,
+   "error": "bad character range \\d-z at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "[a-\\d]",
+   "flags": 0,
+   "error": "bad character range a-\\d at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\w-]",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "*",
+   "flags": 0,
+   "error": "nothing to repeat at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "+a",
+   "flags": 0,
+   "error": "nothing to repeat at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "?",
+   "flags": 0,
+   "error": "nothing to repeat at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "a**",
+   "flags": 0,
+   "error": "multiple repeat at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "a*{2}",
+   "flags": 0,
+   "error": "multiple repeat at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "{2}",
+   "flags": 0,
+   "error": "nothing to repeat at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "^*",
+   "flags": 0,
+   "error": "nothing to repeat at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "\\",
+   "flags": 0,
+   "error": "bad escape (end of pattern) at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "a\\",
+   "flags": 0,
+   "error": "bad escape (end of pattern) at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "\\q",
+   "flags": 0,
+   "error": "bad escape \\q at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\x4",
+   "flags": 0,
+   "error": "incomplete escape \\x4 at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\x",
+   "flags": 0,
+   "error": "incomplete escape \\x at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\u12",
+   "flags": 0,
+   "error": "incomplete escape \\u12 at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\U0011FFFF",
+   "flags": 0,
+   "error": "bad escape \\U0011FFFF at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\U1234567",
+   "flags": 0,
+   "error": "incomplete escape \\U1234567 at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "\\N",
+   "flags": 0,
+   "error": "missing { at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "\\N{",
+   "flags": 0,
+   "error": "missing character name at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "\\N{}",
+   "flags": 0,
+   "error": "missing character name at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "\\N{NO SUCH NAME}",
+   "flags": 0,
+   "error": "undefined character name 'NO SUCH NAME' at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\q]",
+   "flags": 0,
+   "error": "bad escape \\q at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\8]",
+   "flags": 0,
+   "error": "bad escape \\8 at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\A]",
+   "flags": 0,
+   "error": "bad escape \\A at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "\\8",
+   "flags": 0,
+   "error": "invalid group reference 8 at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "\\1",
+   "flags": 0,
+   "error": "invalid group reference 1 at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(a)\\2",
+   "flags": 0,
+   "error": "invalid group reference 2 at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(a\\1)",
+   "flags": 0,
+   "error": "cannot refer to an open group at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "\\400",
+   "flags": 0,
+   "error": "octal escape value \\400 outside of range 0-0o377 at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "[\\400]",
+   "flags": 0,
+   "error": "octal escape value \\400 outside of range 0-0o377 at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(?",
+   "flags": 0,
+   "error": "unexpected end of pattern at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P",
+   "flags": 0,
+   "error": "unexpected end of pattern at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?Px)",
+   "flags": 0,
+   "error": "unknown extension ?Px at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<",
+   "flags": 0,
+   "error": "missing group name at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<>a)",
+   "flags": 0,
+   "error": "missing group name at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<1a>x)",
+   "flags": 0,
+   "error": "bad character in group name '1a' at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<a",
+   "flags": 0,
+   "error": "missing >, unterminated name at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<a>x)(?P<a>y)",
+   "flags": 0,
+   "error": "redefinition of group name 'a' as group 2; was group 1 at position 12",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P=",
+   "flags": 0,
+   "error": "missing group name at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P=a)",
+   "flags": 0,
+   "error": "unknown group name 'a' at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P=1)",
+   "flags": 0,
+   "error": "bad character in group name '1' at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<a>(?P=a))",
+   "flags": 0,
+   "error": "cannot refer to an open group at position 10",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<",
+   "flags": 0,
+   "error": "unexpected end of pattern at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<x)",
+   "flags": 0,
+   "error": "unknown extension ?<x at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(?z)",
+   "flags": 0,
+   "error": "unknown extension ?z at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(?#abc",
+   "flags": 0,
+   "error": "missing ), unterminated comment at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "(?=a",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<=a*)",
+   "flags": 0,
+   "error": "look-behind requires fixed-width pattern",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<=a|bc)",
+   "flags": 0,
+   "error": "look-behind requires fixed-width pattern",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<!a+)",
+   "flags": 0,
+   "error": "look-behind requires fixed-width pattern",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<=a{1,2})",
+   "flags": 0,
+   "error": "look-behind requires fixed-width pattern",
+   "type": "error"
+  },
+  {
+   "pattern": "(?<=(a)\\1)",
+   "flags": 0,
+   "error": "cannot refer to group defined in the same lookbehind subpattern at position 9",
+   "type": "error"
+  },
+  {
+   "pattern": "(a)(?<=\\1)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?<=(?P<x>a)(?P=x))",
+   "flags": 0,
+   "error": "cannot refer to group defined in the same lookbehind subpattern at position 18",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(",
+   "flags": 0,
+   "error": "missing group name at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?()",
+   "flags": 0,
+   "error": "missing group name at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(1",
+   "flags": 0,
+   "error": "missing ), unterminated name at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(0)a)",
+   "flags": 0,
+   "error": "bad group number at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(a)b)",
+   "flags": 0,
+   "error": "unknown group name 'a' at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(1)a|b|c)",
+   "flags": 0,
+   "error": "conditional backref with more than two branches at position 8",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(2)a)",
+   "flags": 0,
+   "error": "invalid group reference 2 at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(a)(?(9)b)",
+   "flags": 0,
+   "error": "invalid group reference 9 at position 6",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(1a)b)",
+   "flags": 0,
+   "error": "bad character in group name '1a' at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(1)a",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 0",
+   "type": "error"
+  },
+  {
+   "pattern": "(?(1)a)(b)",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?i",
+   "flags": 0,
+   "error": "missing -, : or ) at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?i-",
+   "flags": 0,
+   "error": "missing flag at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?i-:a)",
+   "flags": 0,
+   "error": "missing flag at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?-",
+   "flags": 0,
+   "error": "missing flag at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?-:a)",
+   "flags": 0,
+   "error": "missing flag at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?i-i:a)",
+   "flags": 0,
+   "error": "bad inline flags: flag turned on and off at position 5",
+   "type": "error"
+  },
+  {
+   "pattern": "(?L)a",
+   "flags": 0,
+   "error": "bad inline flags: cannot use 'L' flag with a str pattern at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?au)a",
+   "flags": 0,
+   "error": "bad inline flags: flags 'a', 'u' and 'L' are incompatible at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?-a:b)",
+   "flags": 0,
+   "error": "bad inline flags: cannot turn off flags 'a', 'u' and 'L' at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "(?iz)",
+   "flags": 0,
+   "error": "unknown flag at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?i!)",
+   "flags": 0,
+   "error": "missing -, : or ) at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?-z:a)",
+   "flags": 0,
+   "error": "unknown flag at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?-i!",
+   "flags": 0,
+   "error": "missing : at position 4",
+   "type": "error"
+  },
+  {
+   "pattern": "a(?i)b",
+   "flags": 0,
+   "error": "global flags not at the start of the expression at position 1",
+   "type": "error"
+  },
+  {
+   "pattern": "(a)(?i)",
+   "flags": 0,
+   "error": "global flags not at the start of the expression at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "a|(?i)b",
+   "flags": 0,
+   "error": "global flags not at the start of the expression at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "(?:(?i)a)",
+   "flags": 0,
+   "error": "global flags not at the start of the expression at position 3",
+   "type": "error"
+  },
+  {
+   "pattern": "(?x)a(?i)",
+   "flags": 0,
+   "error": "global flags not at the start of the expression at position 5",
+   "type": "error"
+  },
+  {
+   "pattern": "a{3,2}",
+   "flags": 0,
+   "error": "min repeat greater than max repeat at position 2",
+   "type": "error"
+  },
+  {
+   "pattern": "a{4294967295}",
+   "flags": 0,
+   "error": "the repetition number is too large",
+   "type": "OverflowError"
+  },
+  {
+   "pattern": "a{1,4294967295}",
+   "flags": 0,
+   "error": "the repetition number is too large",
+   "type": "OverflowError"
+  },
+  {
+   "pattern": "a{99999999999}",
+   "flags": 0,
+   "error": "the repetition number is too large",
+   "type": "OverflowError"
+  },
+  {
+   "pattern": "(?a)(?u)a",
+   "flags": 0,
+   "error": "ASCII and UNICODE flags are incompatible",
+   "type": "ValueError"
+  },
+  {
+   "pattern": "abc\n(",
+   "flags": 0,
+   "error": "missing ), unterminated subpattern at position 4 (line 2, column 1)",
+   "type": "error"
+  },
+  {
+   "pattern": "ab\ncd\nef)",
+   "flags": 0,
+   "error": "unbalanced parenthesis at position 8 (line 3, column 3)",
+   "type": "error"
+  },
+  {
+   "pattern": "x\n\\",
+   "flags": 0,
+   "error": "bad escape (end of pattern) at position 2 (line 2, column 1)",
+   "type": "error"
+  },
+  {
+   "pattern": "(?P<a>x)\n(?P<a>y)",
+   "flags": 0,
+   "error": "redefinition of group name 'a' as group 2; was group 1 at position 13 (line 2, column 5)",
+   "type": "error"
+  },
+  {
+   "pattern": "[\n",
+   "flags": 0,
+   "error": "unterminated character set at position 0 (line 1, column 1)",
+   "type": "error"
+  },
+  {
+   "pattern": "(?i)a",
+   "flags": 2,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a",
+   "flags": 64,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a b",
+   "flags": 64,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "a # c",
+   "flags": 64,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?-x: a )",
+   "flags": 64,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?x: a )",
+   "flags": 0,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "error": null,
+   "type": null
+  },
+  {
+   "pattern": "(?u)a",
+   "flags": 256,
+   "error": "ASCII and UNICODE flags are incompatible",
+   "type": "ValueError"
+  },
+  {
+   "pattern": "(?L)a",
+   "flags": 0,
+   "error": "bad inline flags: cannot use 'L' flag with a str pattern at position 3",
+   "type": "error"
+  }
+ ],
+ "match": [
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "s": "abc",
+   "match": true
+  },
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "s": "abcd",
+   "match": true
+  },
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "s": "xabc",
+   "match": false
+  },
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "abc",
+   "flags": 0,
+   "s": "ABC",
+   "match": false
+  },
+  {
+   "pattern": "abc",
+   "flags": 2,
+   "s": "ABC",
+   "match": true
+  },
+  {
+   "pattern": "abc",
+   "flags": 2,
+   "s": "aBc",
+   "match": true
+  },
+  {
+   "pattern": "abc",
+   "flags": 2,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "abc",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "abc\n",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "abc\n\n",
+   "match": false
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "ab c",
+   "match": false
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "é",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "Ⅻ",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "٣",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "_",
+   "match": true
+  },
+  {
+   "pattern": "\\w+$",
+   "flags": 0,
+   "s": "á",
+   "match": false
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "s": "é",
+   "match": false
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "s": "_",
+   "match": true
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "s": "5",
+   "match": true
+  },
+  {
+   "pattern": "\\w",
+   "flags": 256,
+   "s": "٣",
+   "match": false
+  },
+  {
+   "pattern": "(?a)\\w",
+   "flags": 0,
+   "s": "é",
+   "match": false
+  },
+  {
+   "pattern": "(?a)\\w",
+   "flags": 0,
+   "s": "e",
+   "match": true
+  },
+  {
+   "pattern": "(?a:\\w)\\w",
+   "flags": 0,
+   "s": "éé",
+   "match": false
+  },
+  {
+   "pattern": "(?a:\\w)\\w",
+   "flags": 0,
+   "s": "eé",
+   "match": true
+  },
+  {
+   "pattern": "(?a:\\w)\\w",
+   "flags": 0,
+   "s": "ee",
+   "match": true
+  },
+  {
+   "pattern": "\\d",
+   "flags": 0,
+   "s": "5",
+   "match": true
+  },
+  {
+   "pattern": "\\d",
+   "flags": 0,
+   "s": "٣",
+   "match": true
+  },
+  {
+   "pattern": "\\d",
+   "flags": 0,
+   "s": "Ⅻ",
+   "match": false
+  },
+  {
+   "pattern": "\\d",
+   "flags": 0,
+   "s": "²",
+   "match": false
+  },
+  {
+   "pattern": "\\d",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "\\d",
+   "flags": 256,
+   "s": "5",
+   "match": true
+  },
+  {
+   "pattern": "\\d",
+   "flags": 256,
+   "s": "٣",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\t",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\n",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\u000b",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\f",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\r",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\u001c",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\u001d",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\u001e",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "\u001f",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "​",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "　",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "﻿",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 256,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "\\s",
+   "flags": 256,
+   "s": "\u001c",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 256,
+   "s": " ",
+   "match": false
+  },
+  {
+   "pattern": "\\s",
+   "flags": 256,
+   "s": "\u000b",
+   "match": true
+  },
+  {
+   "pattern": "[\\S]",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "[\\S]",
+   "flags": 0,
+   "s": " ",
+   "match": false
+  },
+  {
+   "pattern": "[\\S]",
+   "flags": 0,
+   "s": "\u001c",
+   "match": false
+  },
+  {
+   "pattern": "[^\\s]",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "[^\\s]",
+   "flags": 0,
+   "s": " ",
+   "match": false
+  },
+  {
+   "pattern": "[^\\s]",
+   "flags": 0,
+   "s": "\u001c",
+   "match": false
+  },
+  {
+   "pattern": "[a\\W]",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "[a\\W]",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "[a\\W]",
+   "flags": 0,
+   "s": "!",
+   "match": true
+  },
+  {
+   "pattern": "[a\\W]",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "[a\\W]",
+   "flags": 0,
+   "s": "é",
+   "match": false
+  },
+  {
+   "pattern": "[^a\\W]",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "[^a\\W]",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "[^a\\W]",
+   "flags": 0,
+   "s": "!",
+   "match": false
+  },
+  {
+   "pattern": "[^a\\W]",
+   "flags": 0,
+   "s": "é",
+   "match": true
+  },
+  {
+   "pattern": "[^a\\W]",
+   "flags": 0,
+   "s": "\n",
+   "match": false
+  },
+  {
+   "pattern": "[^\\d\\s]",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "[^\\d\\s]",
+   "flags": 0,
+   "s": "1",
+   "match": false
+  },
+  {
+   "pattern": "[^\\d\\s]",
+   "flags": 0,
+   "s": " ",
+   "match": false
+  },
+  {
+   "pattern": "[^\\d\\s]",
+   "flags": 0,
+   "s": "٣",
+   "match": false
+  },
+  {
+   "pattern": "\\D\\S\\W",
+   "flags": 0,
+   "s": "a!!",
+   "match": true
+  },
+  {
+   "pattern": "\\D\\S\\W",
+   "flags": 0,
+   "s": "1!!",
+   "match": false
+  },
+  {
+   "pattern": "\\D\\S\\W",
+   "flags": 0,
+   "s": "aa!",
+   "match": true
+  },
+  {
+   "pattern": "\\D\\S\\W",
+   "flags": 0,
+   "s": "a a",
+   "match": false
+  },
+  {
+   "pattern": "[^a]",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "[^a]",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "[^a]",
+   "flags": 0,
+   "s": "\n",
+   "match": true
+  },
+  {
+   "pattern": ".",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": ".",
+   "flags": 0,
+   "s": "\n",
+   "match": false
+  },
+  {
+   "pattern": ".",
+   "flags": 16,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": ".",
+   "flags": 16,
+   "s": "\n",
+   "match": true
+  },
+  {
+   "pattern": "(?s:.)",
+   "flags": 0,
+   "s": "\n",
+   "match": true
+  },
+  {
+   "pattern": "a$",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a$",
+   "flags": 0,
+   "s": "a\n",
+   "match": true
+  },
+  {
+   "pattern": "a$",
+   "flags": 0,
+   "s": "a\n\n",
+   "match": false
+  },
+  {
+   "pattern": "a$",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "a$",
+   "flags": 8,
+   "s": "a\nb",
+   "match": true
+  },
+  {
+   "pattern": "a$",
+   "flags": 8,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "a\\Z",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a\\Z",
+   "flags": 0,
+   "s": "a\n",
+   "match": false
+  },
+  {
+   "pattern": "a\\z",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a\\z",
+   "flags": 0,
+   "s": "a\n",
+   "match": false
+  },
+  {
+   "pattern": ".*^b",
+   "flags": 8,
+   "s": "a\nb",
+   "match": false
+  },
+  {
+   "pattern": ".*^b",
+   "flags": 8,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": ".*^b",
+   "flags": 0,
+   "s": "a\nb",
+   "match": false
+  },
+  {
+   "pattern": "\\Aa",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "\\Aa",
+   "flags": 0,
+   "s": "ba",
+   "match": false
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 0,
+   "s": "a ",
+   "match": true
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 0,
+   "s": "aé",
+   "match": false
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 0,
+   "s": "a!",
+   "match": true
+  },
+  {
+   "pattern": "a\\B",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "a\\B",
+   "flags": 0,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": "a\\B",
+   "flags": 0,
+   "s": "a ",
+   "match": false
+  },
+  {
+   "pattern": "\\B",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "\\B",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "\\b",
+   "flags": 0,
+   "s": "",
+   "match": false
+  },
+  {
+   "pattern": "\\b",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "\\b",
+   "flags": 0,
+   "s": " ",
+   "match": false
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 256,
+   "s": "aé",
+   "match": true
+  },
+  {
+   "pattern": "a\\b",
+   "flags": 256,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "(a)\\1",
+   "flags": 0,
+   "s": "aa",
+   "match": true
+  },
+  {
+   "pattern": "(a)\\1",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "(a)\\1",
+   "flags": 2,
+   "s": "aA",
+   "match": true
+  },
+  {
+   "pattern": "(?P<x>ab)(?P=x)",
+   "flags": 0,
+   "s": "abab",
+   "match": true
+  },
+  {
+   "pattern": "(?P<x>ab)(?P=x)",
+   "flags": 0,
+   "s": "abba",
+   "match": false
+  },
+  {
+   "pattern": "(a)?(?(1)b|c)",
+   "flags": 0,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": "(a)?(?(1)b|c)",
+   "flags": 0,
+   "s": "c",
+   "match": true
+  },
+  {
+   "pattern": "(a)?(?(1)b|c)",
+   "flags": 0,
+   "s": "ac",
+   "match": false
+  },
+  {
+   "pattern": "(a)?(?(1)b|c)",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "(?P<n>a)?(?(n)b)x",
+   "flags": 0,
+   "s": "abx",
+   "match": true
+  },
+  {
+   "pattern": "(?P<n>a)?(?(n)b)x",
+   "flags": 0,
+   "s": "x",
+   "match": true
+  },
+  {
+   "pattern": "(?P<n>a)?(?(n)b)x",
+   "flags": 0,
+   "s": "ax",
+   "match": false
+  },
+  {
+   "pattern": "(?<=a)b",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "(?<=a)b",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": ".(?<=a)b",
+   "flags": 0,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": ".(?<=a)b",
+   "flags": 0,
+   "s": "cb",
+   "match": false
+  },
+  {
+   "pattern": ".(?<!a)b",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": ".(?<!a)b",
+   "flags": 0,
+   "s": "cb",
+   "match": true
+  },
+  {
+   "pattern": "a(?=b)",
+   "flags": 0,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": "a(?=b)",
+   "flags": 0,
+   "s": "ac",
+   "match": false
+  },
+  {
+   "pattern": "a(?!b)",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "a(?!b)",
+   "flags": 0,
+   "s": "ac",
+   "match": true
+  },
+  {
+   "pattern": "(?>a+)a",
+   "flags": 0,
+   "s": "aaa",
+   "match": false
+  },
+  {
+   "pattern": "(?>a+)a",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "a++a",
+   "flags": 0,
+   "s": "aaa",
+   "match": false
+  },
+  {
+   "pattern": "a*+b",
+   "flags": 0,
+   "s": "aab",
+   "match": true
+  },
+  {
+   "pattern": "a*+b",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "a*+b",
+   "flags": 0,
+   "s": "aa",
+   "match": false
+  },
+  {
+   "pattern": "a{2,3}+a",
+   "flags": 0,
+   "s": "aaa",
+   "match": false
+  },
+  {
+   "pattern": "a{2,3}+a",
+   "flags": 0,
+   "s": "aaaa",
+   "match": true
+  },
+  {
+   "pattern": "a{2}$",
+   "flags": 0,
+   "s": "aa",
+   "match": true
+  },
+  {
+   "pattern": "a{2}$",
+   "flags": 0,
+   "s": "aaa",
+   "match": false
+  },
+  {
+   "pattern": "a{2}$",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "a{2,}$",
+   "flags": 0,
+   "s": "aaaa",
+   "match": true
+  },
+  {
+   "pattern": "a{2,}$",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "a{,2}$",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "a{,2}$",
+   "flags": 0,
+   "s": "aa",
+   "match": true
+  },
+  {
+   "pattern": "a{,2}$",
+   "flags": 0,
+   "s": "aaa",
+   "match": false
+  },
+  {
+   "pattern": "a{2,3}$",
+   "flags": 0,
+   "s": "aa",
+   "match": true
+  },
+  {
+   "pattern": "a{2,3}$",
+   "flags": 0,
+   "s": "aaa",
+   "match": true
+  },
+  {
+   "pattern": "a{2,3}$",
+   "flags": 0,
+   "s": "aaaa",
+   "match": false
+  },
+  {
+   "pattern": "a{}",
+   "flags": 0,
+   "s": "a{}",
+   "match": true
+  },
+  {
+   "pattern": "a{}",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "a{x}",
+   "flags": 0,
+   "s": "a{x}",
+   "match": true
+  },
+  {
+   "pattern": "a{2",
+   "flags": 0,
+   "s": "a{2",
+   "match": true
+  },
+  {
+   "pattern": "a*?$",
+   "flags": 0,
+   "s": "aaa",
+   "match": true
+  },
+  {
+   "pattern": "x{0}y",
+   "flags": 0,
+   "s": "y",
+   "match": true
+  },
+  {
+   "pattern": "x{0}y",
+   "flags": 0,
+   "s": "xy",
+   "match": false
+  },
+  {
+   "pattern": "a|b|c$",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a|b|c$",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "a|b|c$",
+   "flags": 0,
+   "s": "c",
+   "match": true
+  },
+  {
+   "pattern": "a|b|c$",
+   "flags": 0,
+   "s": "cc",
+   "match": false
+  },
+  {
+   "pattern": "a|b|c$",
+   "flags": 0,
+   "s": "ax",
+   "match": true
+  },
+  {
+   "pattern": "(?:ab|a)c",
+   "flags": 0,
+   "s": "ac",
+   "match": true
+  },
+  {
+   "pattern": "(?:ab|a)c",
+   "flags": 0,
+   "s": "abc",
+   "match": true
+  },
+  {
+   "pattern": "(?i)straße",
+   "flags": 0,
+   "s": "STRASSE",
+   "match": false
+  },
+  {
+   "pattern": "(?i)straße",
+   "flags": 0,
+   "s": "STRAßE",
+   "match": true
+  },
+  {
+   "pattern": "(?i)straße",
+   "flags": 0,
+   "s": "Straße",
+   "match": true
+  },
+  {
+   "pattern": "(?i)k",
+   "flags": 0,
+   "s": "K",
+   "match": true
+  },
+  {
+   "pattern": "(?i)k",
+   "flags": 0,
+   "s": "K",
+   "match": true
+  },
+  {
+   "pattern": "(?i)[a-z]+$",
+   "flags": 0,
+   "s": "ABC",
+   "match": true
+  },
+  {
+   "pattern": "(?i)[a-z]+$",
+   "flags": 0,
+   "s": "aBc",
+   "match": true
+  },
+  {
+   "pattern": "(?i:a)b",
+   "flags": 0,
+   "s": "Ab",
+   "match": true
+  },
+  {
+   "pattern": "(?i:a)b",
+   "flags": 0,
+   "s": "AB",
+   "match": false
+  },
+  {
+   "pattern": "(?-i:a)b",
+   "flags": 2,
+   "s": "aB",
+   "match": true
+  },
+  {
+   "pattern": "(?-i:a)b",
+   "flags": 2,
+   "s": "AB",
+   "match": false
+  },
+  {
+   "pattern": "(?x) a b # comment",
+   "flags": 0,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": "(?x) a b # comment",
+   "flags": 0,
+   "s": "a b",
+   "match": false
+  },
+  {
+   "pattern": "(?x) a\\ b [ ]c",
+   "flags": 0,
+   "s": "a b c",
+   "match": true
+  },
+  {
+   "pattern": "(?x) a\\ b [ ]c",
+   "flags": 0,
+   "s": "ab c",
+   "match": false
+  },
+  {
+   "pattern": "(?x:a b)c d",
+   "flags": 0,
+   "s": "abc d",
+   "match": true
+  },
+  {
+   "pattern": "(?x:a b)c d",
+   "flags": 0,
+   "s": "abcd",
+   "match": false
+  },
+  {
+   "pattern": "a b",
+   "flags": 64,
+   "s": "ab",
+   "match": true
+  },
+  {
+   "pattern": "(?m)^b",
+   "flags": 0,
+   "s": "a\nb",
+   "match": false
+  },
+  {
+   "pattern": "(?m)^b",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "\\x41\\u0042\\U00000043\\N{EM DASH}",
+   "flags": 0,
+   "s": "ABC—",
+   "match": true
+  },
+  {
+   "pattern": "\\0\\01\\012\\141",
+   "flags": 0,
+   "s": "\u0000\u0001\na",
+   "match": true
+  },
+  {
+   "pattern": "[\\x41-\\x43]+$",
+   "flags": 0,
+   "s": "ABC",
+   "match": true
+  },
+  {
+   "pattern": "[\\x41-\\x43]+$",
+   "flags": 0,
+   "s": "ABD",
+   "match": false
+  },
+  {
+   "pattern": "[\\]]",
+   "flags": 0,
+   "s": "]",
+   "match": true
+  },
+  {
+   "pattern": "[]a]+$",
+   "flags": 0,
+   "s": "]a]",
+   "match": true
+  },
+  {
+   "pattern": "[a-]+$",
+   "flags": 0,
+   "s": "a-",
+   "match": true
+  },
+  {
+   "pattern": "[a-]+$",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "[\\^]",
+   "flags": 0,
+   "s": "^",
+   "match": true
+  },
+  {
+   "pattern": "[\\\\]",
+   "flags": 0,
+   "s": "\\",
+   "match": true
+  },
+  {
+   "pattern": "\\.\\*\\+\\?\\(\\)\\[\\]\\{\\}\\|\\$\\^",
+   "flags": 0,
+   "s": ".*+?()[]{}|$^",
+   "match": true
+  },
+  {
+   "pattern": "#",
+   "flags": 0,
+   "s": "#",
+   "match": true
+  },
+  {
+   "pattern": " ",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "[ #]",
+   "flags": 0,
+   "s": " ",
+   "match": true
+  },
+  {
+   "pattern": "[ #]",
+   "flags": 0,
+   "s": "#",
+   "match": true
+  },
+  {
+   "pattern": "😀+$",
+   "flags": 0,
+   "s": "😀😀",
+   "match": true
+  },
+  {
+   "pattern": "😀+$",
+   "flags": 0,
+   "s": "x",
+   "match": false
+  },
+  {
+   "pattern": "[😀-😂]",
+   "flags": 0,
+   "s": "😁",
+   "match": true
+  },
+  {
+   "pattern": "[😀-😂]",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "(?<!)a",
+   "flags": 0,
+   "s": "a",
+   "match": false
+  },
+  {
+   "pattern": "(?!)|a",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "(?=a)*b",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": ".*@example\\.com$",
+   "flags": 2,
+   "s": "jane@EXAMPLE.com",
+   "match": true
+  },
+  {
+   "pattern": ".*@example\\.com$",
+   "flags": 2,
+   "s": "jane@example.org",
+   "match": false
+  },
+  {
+   "pattern": "^(?!admin).*$",
+   "flags": 0,
+   "s": "admin",
+   "match": false
+  },
+  {
+   "pattern": "^(?!admin).*$",
+   "flags": 0,
+   "s": "jane",
+   "match": true
+  },
+  {
+   "pattern": "^(?!admin).*$",
+   "flags": 0,
+   "s": "xadmin",
+   "match": true
+  },
+  {
+   "pattern": "(ab)*\\1",
+   "flags": 0,
+   "s": "abab",
+   "match": true
+  },
+  {
+   "pattern": "(ab)*\\1",
+   "flags": 0,
+   "s": "ab",
+   "match": false
+  },
+  {
+   "pattern": "(a)|b\\1",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "(a)|b\\1",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "(?:(a)|b)\\1",
+   "flags": 0,
+   "s": "b",
+   "match": false
+  },
+  {
+   "pattern": "(?:(a)|b)\\1",
+   "flags": 0,
+   "s": "aa",
+   "match": true
+  },
+  {
+   "pattern": "(a*)+$",
+   "flags": 0,
+   "s": "aaa",
+   "match": true
+  },
+  {
+   "pattern": "(a*)+$",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "(a|)+b",
+   "flags": 0,
+   "s": "aab",
+   "match": true
+  },
+  {
+   "pattern": "(a|)+b",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  },
+  {
+   "pattern": "",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "",
+   "flags": 0,
+   "s": "a",
+   "match": true
+  },
+  {
+   "pattern": "a|",
+   "flags": 0,
+   "s": "",
+   "match": true
+  },
+  {
+   "pattern": "a|",
+   "flags": 0,
+   "s": "b",
+   "match": true
+  }
+ ]
+}

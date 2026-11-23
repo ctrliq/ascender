@@ -1,0 +1,167 @@
+{{define "content"}}
+{{$ee := .Data.ee}}
+{{$id := str $ee.id}}
+{{$sf := $ee.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "execution_environment" "crumbs" (list (dict "href" "/execution_environments" "title" (t "Execution Environments")) (dict "href" (printf "/execution_environments/%s" $id) "title" (str $ee.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/execution_environments" "label" "Back to execution environments") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					<div>
+						<dt class="ascender-detail-name" data-cy="execution-environment-detail-name-label" id="execution-environment-detail-name">
+							{{t "Name"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="execution-environment-detail-name-value">
+							{{$ee.name}}
+						</dd>
+					</div>
+					{{if has $ee.image}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="execution-environment-detail-image-label" id="execution-environment-detail-image">
+								{{t "Image"}}
+								{{template "help_button_html" (printf `<span>%s<br><br>%s<ul class="ascender-execution-environment-helptext__list"><li><code>ghcr.io/ctrliq/ascender-ee:latest</code></li><li><code>repo/project/image-name:tag</code></li></ul></span>` (esc (t "The full image location, including the container registry, image name, and version tag.")) (esc (t "Examples:")))}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="execution-environment-detail-image-value">
+								{{$ee.image}}
+							</dd>
+						</div>
+					{{end}}
+					{{if has $ee.description}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="execution-environment-detail-description-label" id="execution-environment-detail-description">
+								{{t "Description"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="execution-environment-detail-description-value">
+								{{$ee.description}}
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="execution-environment-managed-by-tower-label" id="execution-environment-managed-by-tower">
+							{{t "Managed"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="execution-environment-managed-by-tower-value">
+							{{if $ee.managed}}{{t "True"}}{{else}}{{t "False"}}{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name" data-cy="execution-environment-detail-organization-label" id="execution-environment-detail-organization">
+							{{t "Organization"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="execution-environment-detail-organization-value">
+							{{if $ee.organization}}
+								<a href="/organizations/{{str (dig $sf "organization" "id")}}/details">
+									{{dig $sf "organization" "name"}}
+								</a>
+							{{else}}
+								{{t "Globally Available"}}
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name" data-cy="execution-environment-pull-label" id="execution-environment-pull">
+							{{t "Pull"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="execution-environment-pull-value">
+							{{.Data.pull}}
+						</dd>
+					</div>
+					{{with dig $sf "credential"}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="execution-environment-credential-label" id="execution-environment-credential">
+								{{t "Registry credential"}}
+								{{template "help_button" (t "Credential to authenticate with a protected container registry.")}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="execution-environment-credential-value">
+								<span class="pf-v6-c-label pf-m-outline pf-m-blue">
+									<span class="pf-v6-c-label__content">
+										<span class="pf-v6-c-label__text">{{.name}}</span>
+									</span>
+								</span>
+							</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Created"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{with dig $sf "created_by"}}
+								{{tHTML "{dateStr} by <0>{username}</0>" "dateStr" (dt $ee.created) "username" .username "0" (safe (printf `<a href="/users/%s">` (esc .id)))}}
+							{{else}}
+								{{dt $ee.created}}
+							{{end}}
+						</dd>
+					</div>
+					<div>
+						<dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label" id="user-date-detail">
+							{{t "Last Modified"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">
+							{{with dig $sf "modified_by"}}
+								{{tHTML "{dateStr} by <0>{username}</0>" "dateStr" (dt $ee.modified) "username" .username "0" (safe (printf `<a href="/users/%s">` (esc .id)))}}
+							{{else}}
+								{{dt $ee.modified}}
+							{{end}}
+						</dd>
+					</div>
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="/execution_environments/{{$id}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						{{template "delete_button" (dict "name" (str $ee.image) "title" (t "Delete Execution Environment") "api" (printf "/api/v2/execution_environments/%s/" $id) "redirect" "/execution_environments" "usageKind" "executionEnvironment" "usageId" $id "usageMessage" (t "This execution environment is currently being used by other resources. Are you sure you want to delete it?"))}}
+					{{end}}
+				</div>
+			</div>
+		{{else}}
+			{{template "search_toolbar" (dict "page" . "id" "execution_environments-list" "searchKeys" .Data.searchKeys "ns" "execution_environments" "noSelect" true "noDelete" true "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Templates")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "execution_environments-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									{{t "Type"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range .Data.results}}
+								<tr class="pf-v6-c-table__tr" id="template-row-{{str .id}}">
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+										<a href="/templates/{{.type}}/{{str .id}}/details">
+											<b>{{.name}}</b>
+										</a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+										{{if eq (str .type) "job_template"}}
+											{{t "Job Template"}}
+										{{else}}
+											{{t "Workflow Job Template"}}
+										{{end}}
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Templates")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Templates")))}}
+				{{end}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

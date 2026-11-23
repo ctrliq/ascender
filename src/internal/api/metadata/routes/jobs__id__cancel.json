@@ -1,0 +1,24 @@
+{
+    "name": "Job Cancel",
+    "description": "# Determine if a Job can be canceled\n\nMake a GET request to this resource to determine if the job can be canceled.\nThe response will include the following field:\n\n* `can_cancel`: Indicates whether this job can be canceled (boolean, read-only)\n\n\n\n# Cancel a Job\nMake a POST request to this resource to cancel a pending or running job.  The\nresponse status code will be 202 if successful, or 405 if the job cannot be\ncanceled.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {
+            "can_cancel": {
+                "type": "boolean",
+                "label": "Can cancel",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "job"
+    ]
+}

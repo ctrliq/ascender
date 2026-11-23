@@ -1,0 +1,87 @@
+{{define "content"}}
+{{$u := .Data.user}}
+{{$id := str $u.id}}
+{{$t := .Data.token}}
+{{$tid := str $t.id}}
+{{$sf := $t.summary_fields}}
+{{template "screen_header" (dict "title" (t "Details") "stream" "user" "crumbs" (list (dict "href" "/users" "title" (t "Users")) (dict "href" (printf "/users/%s" $id) "title" (str $u.username)) (dict "href" (printf "/users/%s/tokens" $id) "title" (t "Tokens"))))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "details" "back" (dict "href" (printf "/users/%s/tokens" $id) "label" "Back to Tokens") "tabs" (list (dict "key" "details" "href" (printf "/users/%s/tokens/%s/details" $id $tid) "label" "Details")))}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<dl class="ascender-detail-list">
+				{{with dig $sf "application" "name"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="application-token-detail-name-label" id="application-token-detail-name">
+							{{t "Application"}}
+							{{template "help_button" (t "The application that this token belongs to, or leave this field empty to create a Personal Access Token.")}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="application-token-detail-name-value">
+							{{.}}
+						</dd>
+					</div>
+				{{end}}
+				{{if has $t.description}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="application-token-detail-description-label" id="application-token-detail-description">
+							{{t "Description"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="application-token-detail-description-value">
+							{{$t.description}}
+						</dd>
+					</div>
+				{{end}}
+				{{if has .Data.scope}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="application-token-detail-scope-label" id="application-token-detail-scope">
+							{{t "Scope"}}
+							{{template "help_button" (t "Scope for the token's access")}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="application-token-detail-scope-value">
+							{{.Data.scope}}
+						</dd>
+					</div>
+				{{end}}
+				<div>
+					<dt class="ascender-detail-name" data-cy="application-token-detail-expires-label" id="application-token-detail-expires">
+						{{t "Expires"}}
+					</dt>
+					<dd class="ascender-detail-value" data-cy="application-token-detail-expires-value">
+						{{dt $t.expires}}
+					</dd>
+				</div>
+				{{template "user_date_detail" (dict "label" (t "Created") "date" $t.created "user" (dig $sf "user"))}}
+				{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $t.modified "user" (dig $sf "user"))}}
+			</dl>
+			<div class="ascender-card-actions-row__wrapper">
+				{{template "delete_button" (dict "name" (cond (has (dig $sf "application" "name")) (str (dig $sf "application" "name")) (t "Personal Access Token")) "title" (t "Delete User Token") "api" (printf "/api/v2/tokens/%s/" $tid) "redirect" (printf "/users/%s/tokens" $id) "error" (t "Failed to user token."))}}
+			</div>
+		</div>
+	</div>
+</section>
+{{with .Data.created}}
+	{{template "created_modal_open" (dict "title" (t "Token information") "alert" (t "This is the only time the token value and associated refresh token value will be shown.") "alertClass" "ascender-user-tokens__token-alert")}}
+	{{if has .token}}
+		<div>
+			<dt class="ascender-detail-name">{{t "Token"}}</dt>
+			<dd class="ascender-detail-value">
+				{{template "clipboard_expansion" (dict "id" "token" "value" (str .token))}}
+			</dd>
+		</div>
+	{{end}}
+	{{if has .refresh_token}}
+		<div>
+			<dt class="ascender-detail-name">{{t "Refresh Token"}}</dt>
+			<dd class="ascender-detail-value">
+				{{template "clipboard_expansion" (dict "id" "refresh-token" "value" (str .refresh_token))}}
+			</dd>
+		</div>
+	{{end}}
+	<div>
+		<dt class="ascender-detail-name">{{t "Expires"}}</dt>
+		<dd class="ascender-detail-value">{{dt .expires}}</dd>
+	</div>
+	{{template "created_modal_close"}}
+	<span hidden data-replace-url="/users/{{$id}}/tokens/{{$tid}}/details"></span>
+{{end}}
+{{end}}

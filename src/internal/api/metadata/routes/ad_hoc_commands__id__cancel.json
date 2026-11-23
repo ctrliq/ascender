@@ -1,0 +1,24 @@
+{
+    "name": "Ad Hoc Command Cancel",
+    "description": "# Retrieve an Ad Hoc Command:\n\nMake GET request to this resource to retrieve a single ad hoc command\nrecord containing the following fields:\n\n* `can_cancel`:  (boolean)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {
+            "can_cancel": {
+                "type": "boolean",
+                "label": "Can cancel",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "ad_hoc_command"
+    ]
+}

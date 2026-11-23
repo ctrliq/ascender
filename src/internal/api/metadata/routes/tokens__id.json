@@ -1,0 +1,118 @@
+{
+    "name": "OAuth Token Detail",
+    "description": "# Retrieve an Access Token:\n\nMake GET request to this resource to retrieve a single access token\nrecord containing the following fields:\n\n* `id`: Database ID for this access token. (integer)\n* `type`: Data type for this access token. (choice)\n* `url`: URL for this access token. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this access token was created. (datetime)\n* `modified`: Timestamp when this access token was last modified. (datetime)\n* `description`: Optional description of this access token. (string)\n* `user`: The user representing the token owner (id)\n* `token`:  (string)\n* `refresh_token`:  (field)\n* `application`:  (id)\n* `expires`:  (datetime)\n* `scope`: Allowed scopes, further restricts user&#x27;s permissions. Must be a simple space-separated string with allowed scopes [&#x27;read&#x27;, &#x27;write&#x27;]. (string)\n\n\n\n\n\n# Update an Access Token:\n\nMake a PUT or PATCH request to this resource to update this\naccess token.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `description`: Optional description of this access token. (string, default=`\"\"`)\n\n\n\n\n\n* `scope`: Allowed scopes, further restricts user&#x27;s permissions. Must be a simple space-separated string with allowed scopes [&#x27;read&#x27;, &#x27;write&#x27;]. (string, default=`\"write\"`)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete an Access Token:\n\nMake a DELETE request to this resource to delete this access token.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "Id",
+                "help_text": "Database ID for this access token.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this access token.",
+                "choices": [
+                    ["o_auth2_access_token", "Access Token"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this access token.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this access token was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this access token was last modified.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this access token.",
+                "filterable": true
+            },
+            "user": {
+                "type": "id",
+                "label": "User",
+                "help_text": "The user representing the token owner",
+                "filterable": true
+            },
+            "token": {
+                "type": "string",
+                "label": "Token",
+                "filterable": true
+            },
+            "refresh_token": {
+                "type": "field",
+                "label": "Refresh token",
+                "filterable": false
+            },
+            "application": {
+                "type": "id",
+                "label": "Application",
+                "filterable": true
+            },
+            "expires": {
+                "type": "datetime",
+                "label": "Expires",
+                "filterable": true
+            },
+            "scope": {
+                "type": "string",
+                "label": "Scope",
+                "help_text": "Allowed scopes, further restricts user's permissions. Must be a simple space-separated string with allowed scopes ['read', 'write'].",
+                "filterable": true
+            }
+        },
+        "PUT": {
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this access token.",
+                "filterable": true,
+                "default": ""
+            },
+            "scope": {
+                "type": "string",
+                "required": false,
+                "label": "Scope",
+                "help_text": "Allowed scopes, further restricts user's permissions. Must be a simple space-separated string with allowed scopes ['read', 'write'].",
+                "filterable": true,
+                "default": "write"
+            }
+        }
+    },
+    "types": [
+        "o_auth2_access_token"
+    ]
+}

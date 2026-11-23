@@ -1,0 +1,97 @@
+{
+    "name": "Inventory Tree",
+    "description": "# Group Tree for an Inventory:\n\nMake a GET request to this resource to retrieve a hierarchical view of groups\nassociated with the selected inventory.\n\nThe resulting data structure contains a list of root groups, with each group\nalso containing a list of its children.\n\n## Results\n\nEach group data structure includes the following fields:\n\n* `id`: Database ID for this group. (integer)\n* `type`: Data type for this group. (choice)\n* `url`: URL for this group. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this group was created. (datetime)\n* `modified`: Timestamp when this group was last modified. (datetime)\n* `name`: Name of this group. (string)\n* `description`: Optional description of this group. (string)\n* `inventory`:  (id)\n* `variables`: Group variables in JSON or YAML format. (json)\n* `children`:  (field)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this group.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this group.",
+                "choices": [
+                    ["group", "Group"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this group.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this group was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this group was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this group.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this group.",
+                "filterable": true
+            },
+            "inventory": {
+                "type": "id",
+                "label": "Inventory",
+                "filterable": true
+            },
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Group variables in JSON or YAML format.",
+                "filterable": true
+            },
+            "children": {
+                "type": "field",
+                "label": "Children",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "group"
+    ],
+    "object_roles": [
+        "admin_role",
+        "update_role",
+        "adhoc_role",
+        "use_role",
+        "read_role"
+    ]
+}

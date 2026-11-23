@@ -1,0 +1,179 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$inv := .Data.inventory}}
+{{$kind := .Data.kind}}
+{{$seg := .Data.segment}}
+{{if $inv}}
+	{{template "screen_header" (dict "title" (t "Edit details") "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" (str $inv._base)) "title" (str $inv.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{if .Data.loadError}}
+			<div class="pf-v6-c-card__body">{{template "content_error" .Data.loadError}}</div>
+		{{else}}
+			{{$nested := and $inv (eq $kind "federated")}}
+			{{if $nested}}
+				{{/* FederatedInventoryEdit drew its own page section and card inside the screen's */}}
+				<section class="pf-v6-c-page__main-section">
+				<div class="pf-v6-c-card">
+			{{end}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate data-inventory-form>
+					<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+					<div class="ascender-form-column-layout">
+						{{template "form_errors" $e}}
+						{{template "form_field" (dict "id" (cond (eq $kind "") "inventory-name" "name") "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+						{{template "form_field" (dict "id" (cond (eq $kind "") "inventory-description" "description") "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+						{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" true "resource" "organizations" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization"))}}
+						{{if eq $kind "smart"}}
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="host-filter">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Smart host filter"}}
+										</span>
+										<span class="pf-v6-c-form__label-required" aria-hidden="true">
+											&nbsp;*
+										</span>
+									</label>
+									&nbsp;&nbsp;
+									<span class="pf-v6-c-form__group-label-help">
+										{{template "help_button" (t "Populate the hosts for this inventory by using a search filter. Example: ansible_facts__ansible_distribution:\"RedHat\". Refer to the documentation for further syntax and examples.  Refer to the Ansible Controller documentation for further syntax and examples.")}}
+									</span>
+								</div>
+								<div class="pf-v6-c-form__group-control" data-host-filter>
+									{{/* HostFilterLookup; host-filter.js draws the chips and runs the modal */}}
+									{{$noOrg := not (dig $v "organization" "id")}}
+									{{if $noOrg}}
+										<div style="display: contents;" data-host-filter-tip>
+									{{end}}
+									<div class="pf-v6-c-input-group"{{if $noOrg}} data-tooltip="{{t "Please select an organization before editing the host filter"}}" data-tooltip-pos="top"{{end}}>
+										<div class="pf-v6-c-input-group__item">
+											<button id="host-filter" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control"{{if $noOrg}} disabled{{end}} type="button">
+												<span class="pf-v6-c-button__icon">
+													{{icon "search"}}
+												</span>
+											</button>
+										</div>
+										<div class="pf-v6-c-input-group__item">
+											<div class="ascender-host-filter-lookup__chip-holder pf-v6-c-form-control" data-host-filter-chips>
+											</div>
+										</div>
+									</div>
+									{{if $noOrg}}</div>{{end}}
+									<input type="hidden" name="host_filter" value="{{$v.host_filter}}" data-host-filter-value{{with $v.host_filter_param}} data-host-filter-param="{{.}}"{{end}}>
+									{{with index $e "host_filter"}}
+										<div class="pf-v6-c-form__helper-text" aria-live="polite">
+											<div class="pf-v6-c-helper-text">
+												<div class="pf-v6-c-helper-text__item pf-m-error">
+													<span class="pf-v6-c-helper-text__item-icon">
+														{{icon "exclamation-circle"}}
+													</span>
+													<span class="pf-v6-c-helper-text__item-text">
+														{{join . " "}}
+													</span>
+												</div>
+											</div>
+										</div>
+									{{end}}
+								</div>
+							</div>
+						{{end}}
+						{{if ne $kind "federated"}}
+							{{template "multi_lookup" (dict "draggable" true "description" (t "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag.") "id" "org-instance-groups" "name" "instance_groups" "label" (t "Instance Groups") "values" $v.instance_groups "resource" "instance_groups" "title" (t "Select {0}" "0" (t "Instance Groups")) "help" (cond (ne $kind "") (t "Select the Instance Groups for this Inventory to run on.") ""))}}
+						{{end}}
+						{{if or (eq $kind "constructed") (eq $kind "federated")}}
+							{{template "multi_lookup" (dict "draggable" true "id" "input-inventories-lookup" "name" "input_inventories" "label" (t "Input Inventories") "values" $v.input_inventories "required" true "resource" "inventories" "filter" (cond (eq $kind "federated") "kind=" "not__kind__in=constructed,federated") "title" (t "Select {0}" "0" (t "Input Inventories")) "errors" (index $e "input_inventories") "help" (cond (eq $kind "federated") (t "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically.") (t "Select Input Inventories for the constructed inventory plugin.")))}}
+						{{end}}
+						{{if eq $kind "constructed"}}
+							{{template "form_field" (dict "id" "cache-timeout" "name" "update_cache_timeout" "label" (t "Cache timeout (seconds)") "value" $v.update_cache_timeout "type" "number" "errors" (index $e "update_cache_timeout") "help" (t "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."))}}
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="verbosity">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Verbosity"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+									<span class="pf-v6-c-form__group-label-help">
+										{{template "help_button" (t "Control the level of output Ansible will produce for inventory source update jobs.")}}
+									</span>
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<span class="pf-v6-c-form-control">
+										<select id="verbosity" name="verbosity" aria-label="{{t "Verbosity"}}">
+											{{range $i, $label := list (t "0 (Normal)") (t "1 (Verbose)") (t "2 (More Verbose)") (t "3 (Debug)") (t "4 (Connection Debug)") (t "5 (WinRM Debug)")}}
+												<option value="{{$i}}"{{if eq (printf "%d" $i) (str $v.verbosity)}} selected{{end}}>
+													{{$label}}
+												</option>
+											{{end}}
+										</select>
+										<span class="pf-v6-c-form-control__utilities">
+											<span class="pf-v6-c-form-control__toggle-icon">
+												{{icon "pf-caret-down"}}
+											</span>
+										</span>
+									</span>
+								</div>
+							</div>
+							<div class="ascender-form-full-width-layout">
+								{{template "constructed_hint"}}
+							</div>
+							{{template "form_field" (dict "id" "limit" "name" "limit" "label" (t "Limit") "value" $v.limit "errors" (index $e "limit") "help" "The limit to restrict the returned hosts for the constructed inventory plugin. Refer to Ansible documentation for the proper syntax.")}}
+						{{end}}
+						{{if ne $kind "federated"}}
+							<div class="ascender-form-full-width-layout">
+						{{end}}
+						{{if eq $kind ""}}
+							{{template "label_select" (dict "id" "inventory-labels" "name" "labels" "label" (t "Labels") "values" $v.labels "help" (t "Optional labels that describe this inventory, such as 'dev' or 'test'. Labels can be used to group and filter inventories and completed jobs."))}}
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="inventory-option-checkboxes">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Options"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="ascender-form-checkbox-layout">
+										{{template "checkbox" (dict "id" "option-prevent-instance-group-fallback" "name" "prevent_instance_group_fallback" "label" (t "Prevent Instance Group Fallback") "checked" $v.prevent_instance_group_fallback "help" (t "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."))}}
+										{{template "checkbox" (dict "id" "option-allow-deletes-while-in-use" "name" "allow_deletes_while_in_use" "label" (t "Allow Deletes While In Use") "checked" $v.allow_deletes_while_in_use "help" (t "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."))}}
+										{{template "checkbox" (dict "id" "option-allow-jobs-while-syncing" "name" "allow_jobs_while_syncing" "label" (t "Allow Jobs While Syncing") "checked" $v.allow_jobs_while_syncing "help" (t "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. With update on launch, a job still waits for a sync started for it, and for a running one when that source has never synced successfully."))}}
+									</div>
+								</div>
+							</div>
+							{{template "variables_field" (dict "id" "inventory-variables" "name" "variables" "label" (t "Variables") "value" $v.variables "errors" (index $e "variables") "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
+						{{else if eq $kind "smart"}}
+							{{template "variables_field" (dict "id" "variables" "name" "variables" "label" (t "Variables") "value" $v.variables "errors" (index $e "variables") "help" (t "Enter inventory variables using either JSON or YAML syntax. Use the radio button to toggle between the two. Refer to the Ansible Controller documentation for example syntax."))}}
+						{{else if eq $kind "constructed"}}
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="constructed-inventory-option-checkboxes">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Options"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<div class="ascender-form-checkbox-layout">
+										{{template "checkbox" (dict "id" "option-allow-jobs-while-syncing" "name" "allow_jobs_while_syncing" "label" (t "Allow Jobs While Syncing") "checked" $v.allow_jobs_while_syncing "help" (t "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish."))}}
+									</div>
+								</div>
+							</div>
+							{{template "variables_field" (dict "id" "source_vars" "name" "source_vars" "label" (t "Source vars") "value" $v.source_vars "required" true "errors" (index $e "source_vars") "help" (t "Variables used to configure the constructed inventory plugin. The plugin parameter is required. Refer to the Ansible constructed inventory plugin documentation for the available options."))}}
+						{{end}}
+						{{if ne $kind "federated"}}</div>{{end}}
+						{{template "form_actions" (cond (has $inv) (printf "%s/details" (str $inv._base)) "/inventories")}}
+					</div>
+				</form>
+			</div>
+			{{if $nested}}</div></section>{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

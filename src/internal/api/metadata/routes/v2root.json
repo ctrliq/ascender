@@ -1,0 +1,11 @@
+{
+    "name": "Version 2",
+    "description": "Version 2 of the REST API.\n\nMake a GET request to this resource to obtain a list of all child resources\navailable via the API.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

@@ -1,0 +1,177 @@
+{{define "content"}}
+{{$p := .}}
+<section class="pf-v6-c-page__main-section pf-m-condensed" style="display: flex; justify-content: space-between;">
+	<h2 data-cy="screen-title" class="pf-v6-c-title pf-m-2xl">{{t "Activity Stream"}}</h2>
+	<span id="grouped-type-select-id" hidden>{{t "Activity Stream type selector"}}</span>
+	<div class="ascender-dropdown ascender-activity-stream__type" data-dropdown>
+		<button class="pf-v6-c-menu-toggle ascender-activity-stream__styled-menu-toggle" type="button" aria-expanded="false" data-dropdown-toggle>
+			<span class="pf-v6-c-menu-toggle__text">{{t .Data.typeLabel}}</span>
+			<span class="pf-v6-c-menu-toggle__controls">
+				<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+			</span>
+		</button>
+		<div class="pf-v6-c-menu pf-m-scrollable activityTypeSelect ascender-dropdown__menu" aria-labelledby="grouped-type-select-id" hidden data-dropdown-menu>
+			<div class="pf-v6-c-menu__content">
+				{{range .Data.typeGroups}}
+					<section class="pf-v6-c-menu__group">
+						<h1 class="pf-v6-c-menu__group-title">{{t .Label}}</h1>
+						<ul role="listbox" aria-multiselectable="false" class="pf-v6-c-menu__list">
+							{{range .Options}}
+								<li class="pf-v6-c-menu__list-item" role="none">
+									<a class="pf-v6-c-menu__item" role="option" aria-selected="false" href="{{$p.Path}}{{if ne (index . 0) "all"}}?type={{index . 0}}{{else}}?type=all{{end}}">
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">
+												{{t (index . 1)}}
+											</span>
+										</span>
+									</a>
+								</li>
+							{{end}}
+						</ul>
+					</section>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</section>
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "activity_stream-list" "searchKeys" .Data.searchKeys "ns" "activity_stream" "noSelect" true "noDelete" true "filters" .Data.filters)}}
+		{{if .Data.rows}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Events")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "timestamp" "label" (t "Time") "id" "activity_stream-table-sort-timestamp")}}
+							{{template "sort_th" (dict "page" . "key" "actor__username" "label" (t "Initiated by") "id" "activity_stream-table-sort-actor__username")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Event"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range .Data.rows}}
+							{{$id := str .Item.id}}
+							<tr class="pf-v6-c-table__tr" id="activity-stream-row-{{$id}}" aria-labelledby="check-action-{{$id}}">
+								<td tabindex="-1" class="pf-v6-c-table__td"></td>
+								<td tabindex="-1" data-label="{{t "Time"}}" class="pf-v6-c-table__td">
+									{{if .Item.timestamp}}{{dt .Item.timestamp}}{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Initiated By"}}" class="pf-v6-c-table__td">
+									{{.Actor}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Event"}}" class="pf-v6-c-table__td" id="check-action-{{$id}}">
+									{{.Description}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+									<div class="ascender-actions-td__grid">
+										<div>
+											<div style="display: contents;">
+												<div>
+													<button aria-label="{{t "View event details"}}" data-tooltip="{{t "View event details"}}" data-tooltip-pos="top" class="pf-v6-c-button pf-m-plain" type="button" data-activity-detail="{{$id}}">
+														<span class="pf-v6-c-button__icon">
+															{{icon "search-plus"}}
+														</span>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<template data-activity-detail-modal="{{$id}}">
+										<div class="pf-v6-c-backdrop" data-modal>
+											<div class="pf-v6-l-bullseye">
+												<div role="dialog" aria-label="{{t "Event detail modal"}}" aria-labelledby="activity-detail-title-{{$id}}" aria-modal="true" class="pf-v6-c-modal-box pf-m-lg">
+													<div class="pf-v6-c-modal-box__close">
+														<button aria-label="{{t "Close"}}" class="pf-v6-c-button pf-m-plain" type="button" data-close-modal>
+															<span class="pf-v6-c-button__icon">
+																{{icon "pf-close"}}
+															</span>
+														</button>
+													</div>
+													<header class="pf-v6-c-modal-box__header">
+														<h1 id="activity-detail-title-{{$id}}" class="pf-v6-c-modal-box__title">
+															<span class="pf-v6-c-modal-box__title-text">
+																{{t "Event detail"}}
+															</span>
+														</h1>
+													</header>
+													<div class="pf-v6-c-modal-box__body">
+														<dl class="ascender-detail-list" gutter="sm">
+															<div>
+																<dt class="ascender-detail-name">
+																	{{t "Time"}}
+																</dt>
+																<dd class="ascender-detail-value">
+																	{{dt .Item.timestamp}}
+																</dd>
+															</div>
+															<div>
+																<dt class="ascender-detail-name">
+																	{{t "Initiated by"}}
+																</dt>
+																<dd class="ascender-detail-value">
+																	{{.Actor}}
+																</dd>
+															</div>
+															{{with .Setting}}
+																{{if has .category}}
+																	<div>
+																		<dt class="ascender-detail-name">
+																			{{t "Setting category"}}
+																		</dt>
+																		<dd class="ascender-detail-value">
+																			{{.category}}
+																		</dd>
+																	</div>
+																{{end}}
+																{{if has .name}}
+																	<div>
+																		<dt class="ascender-detail-name">
+																			{{t "Setting name"}}
+																		</dt>
+																		<dd class="ascender-detail-value">
+																			{{.name}}
+																		</dd>
+																	</div>
+																{{end}}
+															{{end}}
+															<div>
+																<dt class="ascender-detail-name ascender-detail-name--full-width">
+																	{{t "Action"}}
+																</dt>
+																<dd class="ascender-detail-value ascender-detail-value--full-width">
+																	{{.Description}}
+																</dd>
+															</div>
+															{{if .Changes}}
+																{{template "variables_detail" (dict "cy" "activity-stream-detail-changes" "label" (t "Changes") "value" .Changes "rows" .Rows)}}
+															{{end}}
+														</dl>
+													</div>
+												</div>
+											</div>
+										</div>
+									</template>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Events")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Events")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

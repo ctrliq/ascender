@@ -1,0 +1,300 @@
+{
+    "name": "Instance Group Detail",
+    "description": "# Retrieve an Instance Group:\n\nMake GET request to this resource to retrieve a single instance group\nrecord containing the following fields:\n\n* `id`: Database ID for this instance group. (integer)\n* `type`: Data type for this instance group. (choice)\n* `url`: URL for this instance group. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `name`: Name of this instance group. (string)\n* `created`: Timestamp when this instance group was created. (datetime)\n* `modified`: Timestamp when this instance group was last modified. (datetime)\n* `capacity`:  (field)\n* `consumed_capacity`:  (field)\n* `percent_capacity_remaining`:  (field)\n* `jobs_running`:  (field)\n* `max_concurrent_jobs`: Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced. (integer)\n* `max_forks`: Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced. (integer)\n* `jobs_total`: Count of all jobs that target this instance group (integer)\n* `instances`:  (field)\n* `is_container_group`: Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. (boolean)\n* `credential`:  (id)\n* `mesh_node`: Hop node of the receptor mesh that runs this container group&#x27;s pods. Leave empty to use this cluster&#x27;s API. (id)\n* `policy_instance_percentage`: Minimum percentage of all instances that will be automatically assigned to this group when new instances come online. (integer)\n* `policy_instance_minimum`: Static minimum number of Instances that will be automatically assign to this group when new instances come online. (integer)\n* `policy_instance_list`: List of exact-match Instances that will be assigned to this group (json)\n* `pod_spec_override`:  (string)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n\n\n\n\n\n# Update an Instance Group:\n\nMake a PUT or PATCH request to this resource to update this\ninstance group.  The following fields may be modified:\n\n\n\n\n\n\n* `name`: Name of this instance group. (string, required)\n\n\n\n\n\n\n* `max_concurrent_jobs`: Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced. (integer, default=`0`)\n* `max_forks`: Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced. (integer, default=`0`)\n\n\n* `is_container_group`: Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster. (boolean, default=``)\n* `credential`:  (id, default=``)\n* `mesh_node`: Hop node of the receptor mesh that runs this container group&#x27;s pods. Leave empty to use this cluster&#x27;s API. (id, default=``)\n* `policy_instance_percentage`: Minimum percentage of all instances that will be automatically assigned to this group when new instances come online. (integer, default=`0`)\n* `policy_instance_minimum`: Static minimum number of Instances that will be automatically assign to this group when new instances come online. (integer, default=`0`)\n* `policy_instance_list`: List of exact-match Instances that will be assigned to this group (json, default=``)\n* `pod_spec_override`:  (string, default=`\"\"`)\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete an Instance Group:\n\nMake a DELETE request to this resource to delete this instance group.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 250,
+                "help_text": "Name of this instance group.",
+                "filterable": true
+            },
+            "max_concurrent_jobs": {
+                "type": "integer",
+                "required": false,
+                "label": "Max Concurrent Jobs",
+                "help_text": "Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced.",
+                "min_value": 0,
+                "filterable": true,
+                "default": 0
+            },
+            "max_forks": {
+                "type": "integer",
+                "required": false,
+                "label": "Max Forks",
+                "help_text": "Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced.",
+                "min_value": 0,
+                "filterable": true,
+                "default": 0
+            },
+            "is_container_group": {
+                "type": "boolean",
+                "required": false,
+                "label": "Is container group",
+                "help_text": "Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster.",
+                "filterable": true
+            },
+            "credential": {
+                "type": "id",
+                "required": false,
+                "label": "Credential",
+                "filterable": true
+            },
+            "mesh_node": {
+                "type": "id",
+                "required": false,
+                "label": "Mesh node",
+                "help_text": "Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API.",
+                "filterable": true
+            },
+            "policy_instance_percentage": {
+                "type": "integer",
+                "required": false,
+                "label": "Policy Instance Percentage",
+                "help_text": "Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.",
+                "min_value": 0,
+                "max_value": 100,
+                "filterable": true,
+                "default": 0
+            },
+            "policy_instance_minimum": {
+                "type": "integer",
+                "required": false,
+                "label": "Policy Instance Minimum",
+                "help_text": "Static minimum number of Instances that will be automatically assign to this group when new instances come online.",
+                "min_value": 0,
+                "filterable": true,
+                "default": 0
+            },
+            "policy_instance_list": {
+                "type": "json",
+                "required": false,
+                "label": "Policy Instance List",
+                "help_text": "List of exact-match Instances that will be assigned to this group",
+                "filterable": true,
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "pod_spec_override": {
+                "type": "string",
+                "required": false,
+                "label": "Pod spec override",
+                "filterable": true,
+                "default": {
+                    "apiVersion": "v1",
+                    "kind": "Pod",
+                    "metadata": {
+                        "namespace": "default",
+                        "labels": {
+                            "ansible_job": ""
+                        }
+                    },
+                    "spec": {
+                        "serviceAccountName": "default",
+                        "automountServiceAccountToken": false,
+                        "affinity": {
+                            "podAntiAffinity": {
+                                "preferredDuringSchedulingIgnoredDuringExecution": [
+                                    {
+                                        "weight": 100,
+                                        "podAffinityTerm": {
+                                            "labelSelector": {
+                                                "matchExpressions": [
+                                                    {
+                                                        "key": "ansible_job",
+                                                        "operator": "Exists"
+                                                    }
+                                                ]
+                                            },
+                                            "topologyKey": "kubernetes.io/hostname"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "containers": [
+                            {
+                                "image": "ghcr.io/ctrliq/ascender-ee:latest",
+                                "name": "worker",
+                                "args": [
+                                    "ansible-runner",
+                                    "worker",
+                                    "--private-data-dir=/runner"
+                                ],
+                                "resources": {
+                                    "requests": {
+                                        "cpu": "250m",
+                                        "memory": "100Mi"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this instance group.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this instance group.",
+                "choices": [
+                    ["instance_group", "Instance Group"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this instance group.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this instance group.",
+                "filterable": true
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this instance group was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this instance group was last modified.",
+                "filterable": true
+            },
+            "capacity": {
+                "type": "field",
+                "label": "Capacity",
+                "filterable": false
+            },
+            "consumed_capacity": {
+                "type": "field",
+                "label": "Consumed capacity",
+                "filterable": false
+            },
+            "percent_capacity_remaining": {
+                "type": "field",
+                "label": "Percent capacity remaining",
+                "filterable": false
+            },
+            "jobs_running": {
+                "type": "field",
+                "label": "Jobs running",
+                "filterable": false
+            },
+            "max_concurrent_jobs": {
+                "type": "integer",
+                "label": "Max Concurrent Jobs",
+                "help_text": "Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "max_forks": {
+                "type": "integer",
+                "label": "Max Forks",
+                "help_text": "Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "jobs_total": {
+                "type": "integer",
+                "label": "Jobs total",
+                "help_text": "Count of all jobs that target this instance group",
+                "filterable": false
+            },
+            "instances": {
+                "type": "field",
+                "label": "Instances",
+                "filterable": false
+            },
+            "is_container_group": {
+                "type": "boolean",
+                "label": "Is container group",
+                "help_text": "Indicates whether instances in this group are containerized.Containerized groups have a designated Openshift or Kubernetes cluster.",
+                "filterable": true
+            },
+            "credential": {
+                "type": "id",
+                "label": "Credential",
+                "filterable": true
+            },
+            "mesh_node": {
+                "type": "id",
+                "label": "Mesh node",
+                "help_text": "Hop node of the receptor mesh that runs this container group's pods. Leave empty to use this cluster's API.",
+                "filterable": true
+            },
+            "policy_instance_percentage": {
+                "type": "integer",
+                "label": "Policy Instance Percentage",
+                "help_text": "Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.",
+                "min_value": 0,
+                "max_value": 100,
+                "filterable": true
+            },
+            "policy_instance_minimum": {
+                "type": "integer",
+                "label": "Policy Instance Minimum",
+                "help_text": "Static minimum number of Instances that will be automatically assign to this group when new instances come online.",
+                "min_value": 0,
+                "filterable": true
+            },
+            "policy_instance_list": {
+                "type": "json",
+                "label": "Policy Instance List",
+                "help_text": "List of exact-match Instances that will be assigned to this group",
+                "filterable": true,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "pod_spec_override": {
+                "type": "string",
+                "label": "Pod spec override",
+                "filterable": true
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "instance_group"
+    ],
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "read_role"
+    ]
+}

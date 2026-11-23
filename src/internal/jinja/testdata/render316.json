@@ -1,0 +1,4483 @@
+{
+ "jinja2": "3.1.6",
+ "cases": [
+  {
+   "source": "{{ n }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7",
+   "error": null
+  },
+  {
+   "source": "{{ f }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2.5",
+   "error": null
+  },
+  {
+   "source": "{{ neg }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "-3",
+   "error": null
+  },
+  {
+   "source": "{{ s }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello World",
+   "error": null
+  },
+  {
+   "source": "{{ none }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "None",
+   "error": null
+  },
+  {
+   "source": "{{ yes }} {{ no }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True False",
+   "error": null
+  },
+  {
+   "source": "{{ items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[3, 1, 2]",
+   "error": null
+  },
+  {
+   "source": "{{ d }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'b': 2, 'a': 1, 'c': 3}",
+   "error": null
+  },
+  {
+   "source": "{{ nested }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[[1, 2], [3, 4]]",
+   "error": null
+  },
+  {
+   "source": "{{ users[0] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'name': 'ann', 'age': 30, 'role': 'admin'}",
+   "error": null
+  },
+  {
+   "source": "{{ big }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "12345678901234567890",
+   "error": null
+  },
+  {
+   "source": "{{ big * big }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "152415787532388367501905199875019052100",
+   "error": null
+  },
+  {
+   "source": "{{ 2 ** 64 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "18446744073709551616",
+   "error": null
+  },
+  {
+   "source": "{{ 1.0 }} {{ 1e16 }} {{ 1e15 }} {{ 0.1 + 0.2 }} {{ 1e-5 }} {{ 100.0 / 3 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1.0 1e+16 1000000000000000.0 0.30000000000000004 1e-05 33.333333333333336",
+   "error": null
+  },
+  {
+   "source": "{{ (1, 2) }} {{ (1,) }} {{ () }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "(1, 2) (1,) ()",
+   "error": null
+  },
+  {
+   "source": "{{ 'it\\'s' }} {{ ['a', \"b'c\"] }} {{ {'k': none, 1: 2.0} }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "it's ['a', \"b'c\"] {'k': None, 1: 2.0}",
+   "error": null
+  },
+  {
+   "source": "{{ [] }} {{ {} }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[] {}",
+   "error": null
+  },
+  {
+   "source": "{{ uni }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "straße ÉCOLE ﬁ",
+   "error": null
+  },
+  {
+   "source": "{{ html }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<b>\"x\" & 'y'</b>",
+   "error": null
+  },
+  {
+   "source": "{{ multiline }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "line one\nline two\n\nline four",
+   "error": null
+  },
+  {
+   "source": "{{ \"\\u00e9\\U0001F600\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "é😀",
+   "error": null
+  },
+  {
+   "source": "{{ 10 ** 5000 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit"
+   }
+  },
+  {
+   "source": "{{ (10 ** 4299) | string | length }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "4300",
+   "error": null
+  },
+  {
+   "source": "{{ -0.0 }} {{ 1e308 * 10 }} {{ -(1e308 * 10) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "-0.0 inf -inf",
+   "error": null
+  },
+  {
+   "source": "{{ 3 / 0 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ZeroDivisionError",
+    "message": "division by zero"
+   }
+  },
+  {
+   "source": "{{ 3 // 0 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ZeroDivisionError",
+    "message": "division by zero"
+   }
+  },
+  {
+   "source": "{{ 3 % 0 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ZeroDivisionError",
+    "message": "division by zero"
+   }
+  },
+  {
+   "source": "{{ 3.5 // 2 }} {{ -7 // 2 }} {{ -7 % 3 }} {{ 7 % -3 }} {{ -7.5 % 2 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1.0 -4 2 -2 0.5",
+   "error": null
+  },
+  {
+   "source": "{{ 2 ** -1 }} {{ 0 ** -1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ZeroDivisionError",
+    "message": "zero to a negative power"
+   }
+  },
+  {
+   "source": "{{ (-8) ** 0.5 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "(1.7319121124709868e-16+2.8284271247461903j)",
+   "error": null
+  },
+  {
+   "source": "{{ 10 ** 400 > 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ 1 + \"a\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for +: 'int' and 'str'"
+   }
+  },
+  {
+   "source": "{{ \"a\" + 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "can only concatenate str (not \"int\") to str"
+   }
+  },
+  {
+   "source": "{{ [1] + (2,) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "can only concatenate list (not \"tuple\") to list"
+   }
+  },
+  {
+   "source": "{{ \"ab\" * 3 }} {{ 3 * [0] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "ababab [0, 0, 0]",
+   "error": null
+  },
+  {
+   "source": "{{ \"a\" * 2.0 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "can't multiply sequence by non-int of type 'float'"
+   }
+  },
+  {
+   "source": "{{ \"a\" - \"b\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for -: 'str' and 'str'"
+   }
+  },
+  {
+   "source": "{{ -\"a\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "bad operand type for unary -: 'str'"
+   }
+  },
+  {
+   "source": "{{ none + 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for +: 'NoneType' and 'int'"
+   }
+  },
+  {
+   "source": "{{ d + d }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for +: 'dict' and 'dict'"
+   }
+  },
+  {
+   "source": "{{ 1 < \"a\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'<' not supported between instances of 'int' and 'str'"
+   }
+  },
+  {
+   "source": "{{ items < [3, 2] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ none < none }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'<' not supported between instances of 'NoneType' and 'NoneType'"
+   }
+  },
+  {
+   "source": "{{ 1 == 1.0 }} {{ \"a\" == \"a\" }} {{ [1, 2] == [1, 2] }} {{ (1,) == [1] }} {{ d == {\"a\": 1, \"b\": 2, \"c\": 3} }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True True False True",
+   "error": null
+  },
+  {
+   "source": "{{ 1 < 2 < 3 }} {{ 3 > 2 > 2 }} {{ 1 != 2 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True False True",
+   "error": null
+  },
+  {
+   "source": "{{ \"a\" in \"cat\" }} {{ 2 in items }} {{ \"a\" in d }} {{ 5 not in items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True True True",
+   "error": null
+  },
+  {
+   "source": "{{ 1 in \"a\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'in <string>' requires string as left operand, not int"
+   }
+  },
+  {
+   "source": "{{ \"a\" in 5 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "argument of type 'int' is not a container or iterable"
+   }
+  },
+  {
+   "source": "{{ not none }} {{ not items }} {{ none or \"x\" }} {{ 0 and 1 }} {{ \"\" or 0 or [] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True False x 0 []",
+   "error": null
+  },
+  {
+   "source": "{{ s ~ n ~ none ~ yes }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello World7NoneTrue",
+   "error": null
+  },
+  {
+   "source": "{{ n if yes else 0 }} {{ n if no }}x",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7 x",
+   "error": null
+  },
+  {
+   "source": "{{ \"x\" if none }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ +n }} {{ -f }} {{ +yes }} {{ -yes }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7 -2.5 1 -1",
+   "error": null
+  },
+  {
+   "source": "{{ 7 // 2.0 }} {{ 7 / 2 }} {{ 6 / 3 }} {{ 2 ** 0.5 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3.0 3.5 2.0 1.4142135623730951",
+   "error": null
+  },
+  {
+   "source": "{{ 1_000 + 0x10 + 0o7 + 0b11 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1026",
+   "error": null
+  },
+  {
+   "source": "{{ 1e400 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "inf",
+   "error": null
+  },
+  {
+   "source": "{{ missing }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing.attr }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing.attr }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing.attr }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing.attr }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing[\"k\"] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing[\"k\"] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing[\"k\"] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing[\"k\"] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing + 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing + 1 }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing + 1 }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing + 1 }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing ~ \"x\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "x",
+   "error": null
+  },
+  {
+   "source": "{{ missing ~ \"x\" }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing ~ \"x\" }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "x",
+   "error": null
+  },
+  {
+   "source": "{{ missing ~ \"x\" }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{% if missing %}y{% else %}n{% endif %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "n",
+   "error": null
+  },
+  {
+   "source": "{% if missing %}y{% else %}n{% endif %}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{% if missing %}y{% else %}n{% endif %}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "n",
+   "error": null
+  },
+  {
+   "source": "{% if missing %}y{% else %}n{% endif %}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{% for x in missing %}{{ x }}{% else %}empty{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "empty",
+   "error": null
+  },
+  {
+   "source": "{% for x in missing %}{{ x }}{% else %}empty{% endfor %}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{% for x in missing %}{{ x }}{% else %}empty{% endfor %}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "empty",
+   "error": null
+  },
+  {
+   "source": "{% for x in missing %}{{ x }}{% else %}empty{% endfor %}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | length }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "0",
+   "error": null
+  },
+  {
+   "source": "{{ missing | length }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | length }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "0",
+   "error": null
+  },
+  {
+   "source": "{{ missing | length }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing is defined }} {{ missing is undefined }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False True",
+   "error": null
+  },
+  {
+   "source": "{{ missing is defined }} {{ missing is undefined }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "False True",
+   "error": null
+  },
+  {
+   "source": "{{ missing is defined }} {{ missing is undefined }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "False True",
+   "error": null
+  },
+  {
+   "source": "{{ missing is defined }} {{ missing is undefined }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "False True",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(\"dflt\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "dflt",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(\"dflt\") }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "dflt",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(\"dflt\") }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "dflt",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(\"dflt\") }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "dflt",
+   "error": null
+  },
+  {
+   "source": "{{ d.nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d.nope }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ d.nope }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d.nope }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ d[\"nope\"] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d[\"nope\"] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ d[\"nope\"] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d[\"nope\"] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ items[10] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items[10] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "list object has no element 10"
+   }
+  },
+  {
+   "source": "{{ items[10] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items[10] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "10"
+   }
+  },
+  {
+   "source": "{{ items.nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items.nope }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'list object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ items.nope }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items.nope }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ s.nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ s.nope }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'str object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ s.nope }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ s.nope }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ job.nope.deeper }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.nope.deeper }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.nope.deeper }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.nope.deeper }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.nope }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.nope }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.nope }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ missing == missing }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ missing == missing }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing == missing }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ missing == missing }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing == 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing == 1 }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing == 1 }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing == 1 }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing() }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing() }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing() }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing.method() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing.method() }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing.method() }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing.method() }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ [missing] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[Undefined]",
+   "error": null
+  },
+  {
+   "source": "{{ [missing] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "[Undefined]",
+   "error": null
+  },
+  {
+   "source": "{{ [missing] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "[Undefined]",
+   "error": null
+  },
+  {
+   "source": "{{ [missing] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | upper }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | upper }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | upper }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | upper }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | int }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | int }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | int }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | int }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[]",
+   "error": null
+  },
+  {
+   "source": "{{ missing | list }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | list }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "[]",
+   "error": null
+  },
+  {
+   "source": "{{ missing | list }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing in items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing in items }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing in items }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing in items }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ 1 in missing }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ 1 in missing }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ 1 in missing }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ 1 in missing }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | tojson }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "Object of type Undefined is not JSON serializable"
+   }
+  },
+  {
+   "source": "{{ missing | tojson }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "Object of type StrictUndefined is not JSON serializable"
+   }
+  },
+  {
+   "source": "{{ missing | tojson }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "Object of type ChainableUndefined is not JSON serializable"
+   }
+  },
+  {
+   "source": "{{ missing | tojson }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "Object of type DescriptiveUndefined is not JSON serializable"
+   }
+  },
+  {
+   "source": "{{ missing | e }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | e }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | e }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | e }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing[0:1] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing[0:1] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing[0:1] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing[0:1] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ \"%s\" % missing }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" % missing }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ \"%s\" % missing }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" % missing }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | string }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | string }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | string }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | string }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ items[missing] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items[missing] }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "list object has no element Undefined"
+   }
+  },
+  {
+   "source": "{{ items[missing] }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items[missing] }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing < 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing < 1 }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing < 1 }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing < 1 }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ -missing }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ -missing }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ -missing }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ -missing }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing is none }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing is none }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing is none }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing is none }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "False",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(none) is none }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(none) is none }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(none) is none }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ missing | default(none) is none }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ none.attr }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ none.attr }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'None' has no attribute 'attr'"
+   }
+  },
+  {
+   "source": "{{ none.attr }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ none.attr }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "attr"
+   }
+  },
+  {
+   "source": "{{ n.attr }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ n.attr }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'int object' has no attribute 'attr'"
+   }
+  },
+  {
+   "source": "{{ n.attr }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ n.attr }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "attr"
+   }
+  },
+  {
+   "source": "{{ \"{}\".format(missing) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"{}\".format(missing) }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ \"{}\".format(missing) }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"{}\".format(missing) }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | join(\",\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | join(\",\") }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | join(\",\") }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | join(\",\") }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | first }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | first }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | first }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ missing | first }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing | sum }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "0",
+   "error": null
+  },
+  {
+   "source": "{{ missing | sum }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'missing' is undefined"
+   }
+  },
+  {
+   "source": "{{ missing | sum }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "0",
+   "error": null
+  },
+  {
+   "source": "{{ missing | sum }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ missing|pprint }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Undefined",
+   "error": null
+  },
+  {
+   "source": "{{ missing|pprint }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "Undefined",
+   "error": null
+  },
+  {
+   "source": "{{ missing|pprint }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "Undefined",
+   "error": null
+  },
+  {
+   "source": "{{ missing|pprint }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "missing"
+   }
+  },
+  {
+   "source": "{{ ''.__class__ }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ ''.__class__.__mro__ }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute '__class__' of 'str' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ items.append(4) }}{{ items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'append' of 'list' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ items.append }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d.update({\"z\": 1}) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'update' of 'dict' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ d.pop(\"a\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'pop' of 'dict' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ d.clear }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ items.pop() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'pop' of 'list' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ items.sort() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'sort' of 'list' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ d._private }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ key_items.items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<built-in method items of dict object at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ key_items[\"items\"] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "value",
+   "error": null
+  },
+  {
+   "source": "{{ key_items.keys() | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['items', 'keys']",
+   "error": null
+  },
+  {
+   "source": "{{ d.items() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "dict_items([('b', 2), ('a', 1), ('c', 3)])",
+   "error": null
+  },
+  {
+   "source": "{{ d.keys() }} {{ d.values() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "dict_keys(['b', 'a', 'c']) dict_values([2, 1, 3])",
+   "error": null
+  },
+  {
+   "source": "{{ d.get(\"a\") }} {{ d.get(\"z\") }} {{ d.get(\"z\", 9) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1 None 9",
+   "error": null
+  },
+  {
+   "source": "{{ d.copy() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'b': 2, 'a': 1, 'c': 3}",
+   "error": null
+  },
+  {
+   "source": "{{ items.index(2) }} {{ items.count(3) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2 1",
+   "error": null
+  },
+  {
+   "source": "{{ items.copy() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[3, 1, 2]",
+   "error": null
+  },
+  {
+   "source": "{{ (1, 2, 1).count(1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2",
+   "error": null
+  },
+  {
+   "source": "{{ range(5) }} {{ range(2, 10, 3) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "range(0, 5) range(2, 10, 3)",
+   "error": null
+  },
+  {
+   "source": "{{ range(5) | list }} {{ range(10, 0, -3) | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[0, 1, 2, 3, 4] [10, 7, 4, 1]",
+   "error": null
+  },
+  {
+   "source": "{{ range(100001) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "OverflowError",
+    "message": "Range too big. The sandbox blocks ranges larger than MAX_RANGE (100000)."
+   }
+  },
+  {
+   "source": "{{ range(0, 200001, 2) | length }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "OverflowError",
+    "message": "Range too big. The sandbox blocks ranges larger than MAX_RANGE (100000)."
+   }
+  },
+  {
+   "source": "{{ range(1, 2, 0) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "range() arg 3 must not be zero"
+   }
+  },
+  {
+   "source": "{{ range() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "range expected at least 1 argument, got 0"
+   }
+  },
+  {
+   "source": "{{ range(\"a\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'str' object cannot be interpreted as an integer"
+   }
+  },
+  {
+   "source": "{{ \"{0} {x}\".format(1, x=2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1 2",
+   "error": null
+  },
+  {
+   "source": "{{ \"{0.__class__}\".format(\"a\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"{a.b}\".format(a=d) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2",
+   "error": null
+  },
+  {
+   "source": "{{ \"{a[b]}\".format(a=d) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2",
+   "error": null
+  },
+  {
+   "source": "{{ \"{}\".format(d.__class__) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ \"{x}\".format_map({\"x\": 5}) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "5",
+   "error": null
+  },
+  {
+   "source": "{{ \"{:>8.2f}|{:<5}|{:^7}|{:,}|{:x}|{:08.3e}\".format(3.14159, \"ab\", \"mid\", 1234567, 255, 12345.678) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "    3.14|ab   |  mid  |1,234,567|ff|1.235e+04",
+   "error": null
+  },
+  {
+   "source": "{{ \"{!r} {!s}\".format(\"a\", \"b\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "'a' b",
+   "error": null
+  },
+  {
+   "source": "{{ \"{}{}\".format(1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "IndexError",
+    "message": "tuple index out of range"
+   }
+  },
+  {
+   "source": "{{ \"{0}{}\".format(1, 2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "cannot switch from manual field specification to automatic field numbering"
+   }
+  },
+  {
+   "source": "{{ \"{\".format() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "Single '{' encountered in format string"
+   }
+  },
+  {
+   "source": "{{ \"{:d}\".format(\"x\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "Unknown format code 'd' for object of type 'str'"
+   }
+  },
+  {
+   "source": "{{ dict(a=1, b=2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'a': 1, 'b': 2}",
+   "error": null
+  },
+  {
+   "source": "{{ dict([(\"x\", 1)]) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'x': 1}",
+   "error": null
+  },
+  {
+   "source": "{{ dict }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<class 'dict'>",
+   "error": null
+  },
+  {
+   "source": "{{ range }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<function safe_range at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ cycler }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<class 'jinja2.utils.Cycler'>",
+   "error": null
+  },
+  {
+   "source": "{{ namespace }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<class 'jinja2.utils.Namespace'>",
+   "error": null
+  },
+  {
+   "source": "{{ self }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<TemplateReference None>",
+   "error": null
+  },
+  {
+   "source": "{{ lipsum is callable }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ s.upper }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<built-in method upper of str object at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ s.format }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<function str.format at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ n.real }} {{ n.imag }} {{ f.is_integer() }} {{ 4.0.is_integer() }} {{ n.bit_length() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7 0 False True 3",
+   "error": null
+  },
+  {
+   "source": "{{ dict.mro() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute 'mro' of 'type' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ items.__len__() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "SecurityError",
+    "message": "access to attribute '__len__' of 'list' object is unsafe."
+   }
+  },
+  {
+   "source": "{{ d.items.__self__ }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ s.upper() }} {{ s.lower() }} {{ s.title() }} {{ s.capitalize() }} {{ s.swapcase() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "HELLO WORLD hello world Hello World Hello world hELLO wORLD",
+   "error": null
+  },
+  {
+   "source": "{{ uni.upper() }} {{ uni.lower() }} {{ uni.title() }} {{ uni.casefold() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "STRASSE ÉCOLE FI straße école ﬁ Straße École Fi strasse école fi",
+   "error": null
+  },
+  {
+   "source": "{{ s.split() }} {{ s.split(\"o\") }} {{ s.split(\"o\", 1) }} {{ \"a,b,,c\".split(\",\") }} {{ \"  a  b  \".split() }} {{ \"a b c\".rsplit(\" \", 1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['Hello', 'World'] ['Hell', ' W', 'rld'] ['Hell', ' World'] ['a', 'b', '', 'c'] ['a', 'b'] ['a b', 'c']",
+   "error": null
+  },
+  {
+   "source": "{{ s.replace(\"o\", \"0\") }} {{ s.replace(\"o\", \"0\", 1) }} {{ s.startswith(\"He\") }} {{ s.endswith((\"x\", \"ld\")) }} {{ s.find(\"o\") }} {{ s.rfind(\"o\") }} {{ s.find(\"z\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hell0 W0rld Hell0 World True True 4 7 -1",
+   "error": null
+  },
+  {
+   "source": "{{ s.index(\"z\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "substring not found"
+   }
+  },
+  {
+   "source": "{{ s.count(\"l\") }} {{ \"  x  \".strip() }}|{{ \"xxaxx\".strip(\"x\") }}|{{ \"  x\".lstrip() }}|{{ \"x  \".rstrip() }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 x|a|x|x|",
+   "error": null
+  },
+  {
+   "source": "{{ s.center(21, \"*\") }}|{{ s.ljust(15, \".\") }}|{{ s.rjust(15) }}|{{ \"42\".zfill(5) }}|{{ \"-42\".zfill(5) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "*****Hello World*****|Hello World....|    Hello World|00042|-0042",
+   "error": null
+  },
+  {
+   "source": "{{ \",\".join([\"a\", \"b\"]) }} {{ \"-\".join(\"abc\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a,b a-b-c",
+   "error": null
+  },
+  {
+   "source": "{{ \",\".join([1, 2]) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "sequence item 0: expected str instance, int found"
+   }
+  },
+  {
+   "source": "{{ s.partition(\" \") }} {{ s.rpartition(\"o\") }} {{ multiline.splitlines() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "('Hello', ' ', 'World') ('Hello W', 'o', 'rld') ['line one', 'line two', '', 'line four']",
+   "error": null
+  },
+  {
+   "source": "{{ \"abc\".isalpha() }} {{ \"12\".isdigit() }} {{ \"ab12\".isalnum() }} {{ \"  \".isspace() }} {{ \"Ab\".istitle() }} {{ \"ab\".islower() }} {{ \"AB\".isupper() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True True True True True True",
+   "error": null
+  },
+  {
+   "source": "{{ \"prefix_x\".removeprefix(\"prefix_\") }} {{ \"x.txt\".removesuffix(\".txt\") }} {{ \"a\\tb\".expandtabs(4) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "x x a   b",
+   "error": null
+  },
+  {
+   "source": "{{ s[0] }} {{ s[-1] }} {{ s[1:5] }} {{ s[::-1] }} {{ s[::2] }} {{ s[100:] }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "H d ello dlroW olleH HloWrd |",
+   "error": null
+  },
+  {
+   "source": "{{ items[1:] }} {{ items[:-1] }} {{ items[::-1] }} {{ (1, 2, 3)[1:] }} {{ range(10)[2:8:2] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[1, 2] [3, 1] [2, 1, 3] (2, 3) range(2, 8, 2)",
+   "error": null
+  },
+  {
+   "source": "{{ s[100] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ n[0] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ s[\"x\"] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ d[0:1] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "KeyError",
+    "message": "slice(0, 1, None)"
+   }
+  },
+  {
+   "source": "{{ items[1:2:0] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "slice step cannot be zero"
+   }
+  },
+  {
+   "source": "{{ \"%s and %s\" % (\"a\", \"b\") }} {{ \"%d%%\" % 50 }} {{ \"%05.1f\" % 3.14159 }} {{ \"%-5s|\" % \"ab\" }} {{ \"%x %X %o\" % (255, 255, 8) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a and b 50% 003.1 ab   | ff FF 10",
+   "error": null
+  },
+  {
+   "source": "{{ \"%(a)s-%(b)d\" % {\"a\": \"x\", \"b\": 3} }} {{ \"%r\" % \"q\" }} {{ \"%e\" % 12345.678 }} {{ \"%g %g %g\" % (0.0001, 1e20, 123.456) }} {{ \"%c\" % 65 }} {{ \"%+d\" % 5 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "x-3 'q' 1.234568e+04 0.0001 1e+20 123.456 A +5",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" % (1, 2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "not all arguments converted during string formatting"
+   }
+  },
+  {
+   "source": "{{ \"%s %s\" % (1,) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "not enough arguments for format string"
+   }
+  },
+  {
+   "source": "{{ \"%d\" % \"x\" }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "%d format: a real number is required, not str"
+   }
+  },
+  {
+   "source": "{{ \"%z\" % 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "unsupported format character 'z' (0x7a) at index 1"
+   }
+  },
+  {
+   "source": "{{ \"%s\" % [1, 2] }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[1, 2]",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" % d }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'b': 2, 'a': 1, 'c': 3}",
+   "error": null
+  },
+  {
+   "source": "{{ \"%(a)s\" % 1 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "format requires a mapping"
+   }
+  },
+  {
+   "source": "{{ neg | abs }} {{ -2.5 | abs }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 2.5",
+   "error": null
+  },
+  {
+   "source": "{{ \"a\" | abs }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "bad operand type for abs(): 'str'"
+   }
+  },
+  {
+   "source": "{{ users[0] | attr(\"name\") }}|{{ d | attr(\"items\") }}|{{ d | attr(\"a\") }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "|<built-in method items of dict object at 0x?>||",
+   "error": null
+  },
+  {
+   "source": "{{ items | batch(2) | list }} {{ items | batch(2, \"x\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[[3, 1], [2]] [[3, 1], [2, 'x']]",
+   "error": null
+  },
+  {
+   "source": "{{ s | capitalize }} {{ s | center(15) }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello world   Hello World  |",
+   "error": null
+  },
+  {
+   "source": "{{ items | count }} {{ s | length }} {{ d | length }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 11 3",
+   "error": null
+  },
+  {
+   "source": "{{ none | d(\"x\") }} {{ empty | default(\"e\", true) }} {{ 0 | default(5) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "None e 0",
+   "error": null
+  },
+  {
+   "source": "{{ d | dictsort }} {{ d | dictsort(reverse=true) }} {{ d | dictsort(by=\"value\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[('a', 1), ('b', 2), ('c', 3)] [('c', 3), ('b', 2), ('a', 1)] [('a', 1), ('b', 2), ('c', 3)]",
+   "error": null
+  },
+  {
+   "source": "{{ {\"B\": 1, \"a\": 2} | dictsort }} {{ {\"B\": 1, \"a\": 2} | dictsort(true) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[('a', 2), ('B', 1)] [('B', 1), ('a', 2)]",
+   "error": null
+  },
+  {
+   "source": "{{ d | dictsort(by=\"x\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "FilterArgumentError",
+    "message": "You can only sort by either \"key\" or \"value\""
+   }
+  },
+  {
+   "source": "{{ html | e }} {{ html | escape }} {{ html | forceescape }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "&lt;b&gt;&#34;x&#34; &amp; &#39;y&#39;&lt;/b&gt; &lt;b&gt;&#34;x&#34; &amp; &#39;y&#39;&lt;/b&gt; &lt;b&gt;&#34;x&#34; &amp; &#39;y&#39;&lt;/b&gt;",
+   "error": null
+  },
+  {
+   "source": "{{ 1 | filesizeformat }} {{ 999 | filesizeformat }} {{ 1000 | filesizeformat }} {{ 123456789 | filesizeformat }} {{ 1048576 | filesizeformat(true) }} {{ 10**30 | filesizeformat }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for ** or pow(): 'int' and 'str'"
+   }
+  },
+  {
+   "source": "{{ \"x\" | filesizeformat }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "could not convert string to float: 'x'"
+   }
+  },
+  {
+   "source": "{{ items | first }} {{ s | first }} {{ [] | first }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 H ",
+   "error": null
+  },
+  {
+   "source": "{{ num_str | float }} {{ \"x\" | float }} {{ \"x\" | float(1.5) }} {{ 3 | float }} {{ \"1e3\" | float }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "42.0 0.0 1.5 3.0 1000.0",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s-%s\" | format(1, 2) }} {{ \"%(a)s\" | format(a=5) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1-2 5",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" | format(1, a=2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "FilterArgumentError",
+    "message": "can't handle positional and keyword arguments at the same time"
+   }
+  },
+  {
+   "source": "{{ users | groupby(\"role\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[('admin', [{'name': 'ann', 'age': 30, 'role': 'admin'}, {'name': 'cid', 'age': 35, 'role': 'admin'}]), ('user', [{'name': 'Bob', 'age': 25, 'role': 'user'}, {'name': 'dee', 'role': 'user'}])]",
+   "error": null
+  },
+  {
+   "source": "{% for g in users | groupby(\"role\") %}{{ g.grouper }}:{{ g.list | map(attribute=\"name\") | join(\",\") }};{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "admin:ann,cid;user:Bob,dee;",
+   "error": null
+  },
+  {
+   "source": "{% for role, people in users | groupby(\"role\") %}{{ role }}={{ people | length }} {% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "admin=2 user=2 ",
+   "error": null
+  },
+  {
+   "source": "{{ users | groupby(\"age\", default=0) | map(attribute=\"grouper\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[0, 25, 30, 35]",
+   "error": null
+  },
+  {
+   "source": "{{ multiline | indent }}|{{ multiline | indent(2, true) }}|{{ multiline | indent(\"> \", blank=true) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "line one\n    line two\n\n    line four|  line one\n  line two\n\n  line four|line one\n> line two\n> \n> line four",
+   "error": null
+  },
+  {
+   "source": "{{ num_str | int }} {{ \"x\" | int }} {{ \"x\" | int(7) }} {{ float_str | int }} {{ \"0x1f\" | int(base=16) }} {{ 3.9 | int }} {{ \"1_000\" | int }} {{ \" 12 \" | int }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "42 0 7 3 31 3 1000 12",
+   "error": null
+  },
+  {
+   "source": "{{ items | join }} {{ items | join(\", \") }} {{ users | join(\",\", attribute=\"name\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "312 3, 1, 2 ann,Bob,cid,dee",
+   "error": null
+  },
+  {
+   "source": "{{ items | last }} {{ s | last }} {{ [] | last }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2 d ",
+   "error": null
+  },
+  {
+   "source": "{{ (x for x in items) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token ')', got 'for'"
+   }
+  },
+  {
+   "source": "{{ s | list }} {{ d | list }} {{ \"\" | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'] ['b', 'a', 'c'] []",
+   "error": null
+  },
+  {
+   "source": "{{ s | lower }} {{ s | upper }} {{ s | title }} {{ \"hello-world foo(bar) x\" | title }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "hello world HELLO WORLD Hello World Hello-World Foo(Bar) X",
+   "error": null
+  },
+  {
+   "source": "{{ d | items | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[('b', 2), ('a', 1), ('c', 3)]",
+   "error": null
+  },
+  {
+   "source": "{{ items | map(\"string\") | list }} {{ users | map(attribute=\"name\") | list }} {{ users | map(attribute=\"age\", default=0) | list }} {{ words | map(\"upper\") | join(\",\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['3', '1', '2'] ['ann', 'Bob', 'cid', 'dee'] [30, 25, 35, 0] BANANA,APPLE,CHERRY,APPLE",
+   "error": null
+  },
+  {
+   "source": "{{ items | map(\"nope\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateRuntimeError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{{ items | map }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<generator object sync_do_map at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ items | map() | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "FilterArgumentError",
+    "message": "map requires a filter argument"
+   }
+  },
+  {
+   "source": "{{ items | max }} {{ items | min }} {{ words | max }} {{ words | min(case_sensitive=true) }} {{ users | max(attribute=\"name\") }} {{ [] | max }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 1 cherry Apple {'name': 'dee', 'role': 'user'} ",
+   "error": null
+  },
+  {
+   "source": "{{ d | pprint }} {{ items | pprint }} {{ s | pprint }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'a': 1, 'b': 2, 'c': 3} [3, 1, 2] 'Hello World'",
+   "error": null
+  },
+  {
+   "source": "{{ users | pprint }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[{'age': 30, 'name': 'ann', 'role': 'admin'},\n {'age': 25, 'name': 'Bob', 'role': 'user'},\n {'age': 35, 'name': 'cid', 'role': 'admin'},\n {'name': 'dee', 'role': 'user'}]",
+   "error": null
+  },
+  {
+   "source": "{{ items | reject(\"odd\") | list }} {{ items | select(\"odd\") | list }} {{ [0, 1, none, \"\", \"a\"] | select | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[2] [3, 1] [1, 'a']",
+   "error": null
+  },
+  {
+   "source": "{{ users | selectattr(\"role\", \"equalto\", \"admin\") | map(attribute=\"name\") | list }} {{ users | rejectattr(\"age\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['ann', 'cid'] [{'name': 'dee', 'role': 'user'}]",
+   "error": null
+  },
+  {
+   "source": "{{ items | select(\"nope\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateRuntimeError",
+    "message": "No test named 'nope'."
+   }
+  },
+  {
+   "source": "{{ s | replace(\"World\", \"There\") }} {{ \"aaa\" | replace(\"a\", \"b\", 2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello There bba",
+   "error": null
+  },
+  {
+   "source": "{{ items | reverse | list }} {{ s | reverse }} {{ items | reverse }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[2, 1, 3] dlroW olleH <list_reverseiterator object at 0x?>",
+   "error": null
+  },
+  {
+   "source": "{{ d | reverse | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['c', 'a', 'b']",
+   "error": null
+  },
+  {
+   "source": "{{ 2.5 | round }} {{ 3.5 | round }} {{ 2.675 | round(2) }} {{ 3.14159 | round(2, \"floor\") }} {{ 3.14159 | round(1, \"ceil\") }} {{ 5 | round }} {{ 1234 | round(-2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2.0 4.0 2.67 3.14 3.2 5 1200",
+   "error": null
+  },
+  {
+   "source": "{{ 1 | round(method=\"x\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "FilterArgumentError",
+    "message": "method must be common, ceil or floor"
+   }
+  },
+  {
+   "source": "{{ \"x\" | round }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "type str doesn't define __round__ method"
+   }
+  },
+  {
+   "source": "{{ html | safe }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<b>\"x\" & 'y'</b>",
+   "error": null
+  },
+  {
+   "source": "{{ items | slice(2) | list }} {{ range(10) | slice(3, \"x\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[[3, 1], [2]] [[0, 1, 2, 3], [4, 5, 6, 'x'], [7, 8, 9, 'x']]",
+   "error": null
+  },
+  {
+   "source": "{{ items | sort }} {{ words | sort }} {{ words | sort(case_sensitive=true) }} {{ words | sort(reverse=true) }} {{ users | sort(attribute=\"age\") | map(attribute=\"name\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'age'"
+   }
+  },
+  {
+   "source": "{{ users | sort(attribute=\"role,name\") | map(attribute=\"name\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['ann', 'cid', 'Bob', 'dee']",
+   "error": null
+  },
+  {
+   "source": "{{ mixed | sort }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'<' not supported between instances of 'str' and 'int'"
+   }
+  },
+  {
+   "source": "{{ n | string }} {{ none | string }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7 None",
+   "error": null
+  },
+  {
+   "source": "{{ \"<p>a  <b>b</b>\n c</p> &amp; <!-- x -->d\" | striptags }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a b c & d",
+   "error": null
+  },
+  {
+   "source": "{{ items | sum }} {{ users | sum(attribute=\"age\", start=1) }} {{ [[1], [2]] | sum(start=[]) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'age'"
+   }
+  },
+  {
+   "source": "{{ words | sum }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "unsupported operand type(s) for +: 'int' and 'str'"
+   }
+  },
+  {
+   "source": "{{ \"  x  \" | trim }}|{{ \"--x--\" | trim(\"-\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "x|x",
+   "error": null
+  },
+  {
+   "source": "{{ \"Hello beautiful world\" | truncate(10) }}|{{ \"Hello beautiful world\" | truncate(10, true) }}|{{ \"Hello beautiful world\" | truncate(18, false, \"!\") }}|{{ \"short\" | truncate(3) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello...|Hello b...|Hello beautiful world|short",
+   "error": null
+  },
+  {
+   "source": "{{ \"abc\" | truncate(2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "AssertionError",
+    "message": "expected length >= 3, got 2"
+   }
+  },
+  {
+   "source": "{{ words | unique | list }} {{ words | unique(case_sensitive=true) | list }} {{ users | unique(attribute=\"role\") | map(attribute=\"name\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['banana', 'Apple', 'cherry'] ['banana', 'Apple', 'cherry', 'apple'] ['ann', 'Bob']",
+   "error": null
+  },
+  {
+   "source": "{{ \"a b&c\" | urlencode }} {{ d | urlencode }} {{ [(\"a b\", 1)] | urlencode }} {{ \"é/x\" | urlencode }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a%20b%26c b=2&a=1&c=3 a+b=1 %C3%A9/x",
+   "error": null
+  },
+  {
+   "source": "{{ \"visit https://example.com/x?a=1, or www.test.org.\" | urlize }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "visit <a href=\"https://example.com/x?a=1\" rel=\"noopener\">https://example.com/x?a=1</a>, or <a href=\"https://www.test.org\" rel=\"noopener\">www.test.org</a>.",
+   "error": null
+  },
+  {
+   "source": "{{ \"mail me@example.com (http://a.co)\" | urlize(nofollow=true, target=\"_blank\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "mail <a href=\"mailto:me@example.com\">me@example.com</a> (<a href=\"http://a.co\" rel=\"nofollow noopener\" target=\"_blank\">http://a.co</a>)",
+   "error": null
+  },
+  {
+   "source": "{{ \"long https://example.com/very/long/path here\" | urlize(15) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "long <a href=\"https://example.com/very/long/path\" rel=\"noopener\">https://example...</a> here",
+   "error": null
+  },
+  {
+   "source": "{{ \"one two  three\" | wordcount }} {{ uni | wordcount }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 3",
+   "error": null
+  },
+  {
+   "source": "{{ \"The quick brown fox jumps over the lazy dog\" | wordwrap(10) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "The quick\nbrown fox\njumps over\nthe lazy\ndog",
+   "error": null
+  },
+  {
+   "source": "{{ \"a-very-long-hyphenated-word in text\" | wordwrap(8) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a-very-\nlong-hyp\nhenated-\nword in\ntext",
+   "error": null
+  },
+  {
+   "source": "{{ \"Loooooooooooooong word\" | wordwrap(5, false) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Loooooooooooooong\nword",
+   "error": null
+  },
+  {
+   "source": "{{ {\"class\": \"a b\", \"id\": none, \"data\": \"<x>\"} | xmlattr }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": " class=\"a b\" data=\"&lt;x&gt;\"",
+   "error": null
+  },
+  {
+   "source": "{{ {\"bad key\": 1} | xmlattr }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "Invalid character in attribute name: 'bad key'"
+   }
+  },
+  {
+   "source": "{{ d | tojson }} {{ users | tojson }} {{ html | tojson }} {{ none | tojson }} {{ \"é😀\" | tojson }} {{ [1.0, 1e100, (1, 2)] | tojson }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{\"a\": 1, \"b\": 2, \"c\": 3} [{\"age\": 30, \"name\": \"ann\", \"role\": \"admin\"}, {\"age\": 25, \"name\": \"Bob\", \"role\": \"user\"}, {\"age\": 35, \"name\": \"cid\", \"role\": \"admin\"}, {\"name\": \"dee\", \"role\": \"user\"}] \"\\u003cb\\u003e\\\"x\\\" \\u0026 \\u0027y\\u0027\\u003c/b\\u003e\" null \"\\u00e9\\ud83d\\ude00\" [1.0, 1e+100, [1, 2]]",
+   "error": null
+  },
+  {
+   "source": "{{ d | tojson(2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{\n  \"a\": 1,\n  \"b\": 2,\n  \"c\": 3\n}",
+   "error": null
+  },
+  {
+   "source": "{{ {1: 2, \"a\": 3} | tojson }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'<' not supported between instances of 'str' and 'int'"
+   }
+  },
+  {
+   "source": "{{ {(1, 2): 3} | tojson }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "keys must be str, int, float, bool or None, not tuple"
+   }
+  },
+  {
+   "source": "{{ items | random in items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True",
+   "error": null
+  },
+  {
+   "source": "{{ items | upper(1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "do_upper() takes 1 positional argument but 2 were given"
+   }
+  },
+  {
+   "source": "{{ s | truncate(1, 2, 3, 4, 5, 6) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "do_truncate() takes from 2 to 6 positional arguments but 8 were given"
+   }
+  },
+  {
+   "source": "{{ s | replace(\"a\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "do_replace() missing 1 required positional argument: 'new'"
+   }
+  },
+  {
+   "source": "{{ s | center(width=5, x=1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "do_center() got an unexpected keyword argument 'x'"
+   }
+  },
+  {
+   "source": "{{ s | length(1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "len() takes exactly one argument (2 given)"
+   }
+  },
+  {
+   "source": "{{ items | join(d=\"-\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3-1-2",
+   "error": null
+  },
+  {
+   "source": "{{ items | nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No filter named 'nope'."
+   }
+  },
+  {
+   "source": "{% if s %}{{ s | nope }}{% endif %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateRuntimeError",
+    "message": "No filter named 'nope' found."
+   }
+  },
+  {
+   "source": "{{ n is odd }} {{ n is even }} {{ n is divisibleby 7 }} {{ n is divisibleby(2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True False True False",
+   "error": null
+  },
+  {
+   "source": "{{ none is none }} {{ yes is boolean }} {{ no is false }} {{ yes is true }} {{ 1 is true }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True True True False",
+   "error": null
+  },
+  {
+   "source": "{{ n is integer }} {{ f is float }} {{ yes is integer }} {{ n is number }} {{ s is string }} {{ d is mapping }} {{ items is sequence }} {{ s is sequence }} {{ n is sequence }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True False True True True True True False",
+   "error": null
+  },
+  {
+   "source": "{{ items is iterable }} {{ n is iterable }} {{ s is lower }} {{ \"ab\" is lower }} {{ \"AB\" is upper }} {{ html | e is escaped }} {{ s is escaped }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True False False True True True False",
+   "error": null
+  },
+  {
+   "source": "{{ s is callable }} {{ s.upper is callable }} {{ range is callable }} {{ 2 is in items }} {{ \"upper\" is filter }} {{ \"odd\" is test }} {{ \"nope\" is filter }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "False True True True True True False",
+   "error": null
+  },
+  {
+   "source": "{{ n is eq 7 }} {{ n is == 7 }} {{ n is ne 7 }} {{ n is gt 3 }} {{ n is ge 7 }} {{ n is lt 3 }} {{ n is le 7 }} {{ n is greaterthan 1 }} {{ n is lessthan 1 }} {{ n is equalto 7 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token 'name', got '=='"
+   }
+  },
+  {
+   "source": "{{ none is sameas none }} {{ items is sameas items }} {{ n is sameas 7 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "True True True",
+   "error": null
+  },
+  {
+   "source": "{{ \"a\" is odd }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "not all arguments converted during string formatting"
+   }
+  },
+  {
+   "source": "{{ n is nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateAssertionError",
+    "message": "No test named 'nope'."
+   }
+  },
+  {
+   "source": "{{ n is divisibleby }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "test_divisibleby() missing 1 required positional argument: 'num'"
+   }
+  },
+  {
+   "source": "{{ n is divisibleby 0 }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ZeroDivisionError",
+    "message": "division by zero"
+   }
+  },
+  {
+   "source": "{{ users | selectattr(\"name\", \"lower\") | map(attribute=\"name\") | list }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "['ann', 'cid', 'dee']",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop.index }}/{{ loop.length }}:{{ x }}{{ \",\" if not loop.last }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1/3:3,2/3:1,3/3:2",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop.index0 }}{{ loop.revindex }}{{ loop.revindex0 }}{{ loop.first }}{{ loop.last }} {% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "032TrueFalse 121FalseFalse 210FalseTrue ",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop.previtem }}|{{ loop.nextitem }};{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "|1;3|2;1|;",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop.cycle(\"a\", \"b\") }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "aba",
+   "error": null
+  },
+  {
+   "source": "{% for x in [1, 1, 2, 2, 1] %}{% if loop.changed(x) %}{{ x }}{% endif %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "121",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<LoopContext 1/3><LoopContext 2/3><LoopContext 3/3>",
+   "error": null
+  },
+  {
+   "source": "{% for k, v in d.items() %}{{ k }}={{ v }};{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "b=2;a=1;c=3;",
+   "error": null
+  },
+  {
+   "source": "{% for k, v in d | dictsort %}{{ k }}={{ v }};{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a=1;b=2;c=3;",
+   "error": null
+  },
+  {
+   "source": "{% for a, b in nested %}{{ a + b }} {% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3 7 ",
+   "error": null
+  },
+  {
+   "source": "{% for a, b in items %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "cannot unpack non-iterable int object"
+   }
+  },
+  {
+   "source": "{% for a, b in [(1, 2, 3)] %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "too many values to unpack (expected 2, got 3)"
+   }
+  },
+  {
+   "source": "{% for a in 5 %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "'int' object is not iterable"
+   }
+  },
+  {
+   "source": "{% for x in items if x > 1 %}{{ x }}{{ loop.length }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3222",
+   "error": null
+  },
+  {
+   "source": "{% for x in [] %}a{% else %}none{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "none",
+   "error": null
+  },
+  {
+   "source": "{% for x in items if x > 5 %}a{% else %}filtered{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "filtered",
+   "error": null
+  },
+  {
+   "source": "{% for x in s %}{{ x }}.{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "H.e.l.l.o. .W.o.r.l.d.",
+   "error": null
+  },
+  {
+   "source": "{% for x in d %}{{ x }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "bac",
+   "error": null
+  },
+  {
+   "source": "{% for x in range(3) %}{% for y in range(2) %}{{ x }}{{ y }}{{ loop.depth }} {% endfor %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "001 011 101 111 201 211 ",
+   "error": null
+  },
+  {
+   "source": "{% for node in tree recursive %}{{ node.name }}[{{ loop.depth }}]{% if node.children %}({{ loop(node.children) }}){% endif %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a[1](a1[2]a2[2](a2x[3]))b[1]",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop(items) }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "The loop must have the 'recursive' marker to be called recursively."
+   }
+  },
+  {
+   "source": "{% set total = 0 %}{% for x in items %}{% set total = total + x %}{% endfor %}{{ total }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "0",
+   "error": null
+  },
+  {
+   "source": "{% set ns = namespace(total=0) %}{% for x in items %}{% set ns.total = ns.total + x %}{% endfor %}{{ ns.total }} {{ ns }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "6 <Namespace {'total': 6}>",
+   "error": null
+  },
+  {
+   "source": "{% set x = 5 %}{% set x.y = 1 %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateRuntimeError",
+    "message": "cannot assign attribute on non-namespace object"
+   }
+  },
+  {
+   "source": "{% set ns = namespace() %}{{ ns.nope }}|{{ ns.items }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "|",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{% set y = x %}{% endfor %}{{ y }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ x }}{% set x = 1 %}{{ x }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1",
+   "error": null
+  },
+  {
+   "source": "{% set x, y = 1, 2 %}{{ x }}{{ y }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "12",
+   "error": null
+  },
+  {
+   "source": "{% set x, y = [1] %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "not enough values to unpack (expected 2, got 1)"
+   }
+  },
+  {
+   "source": "{% set a, b = \"xy\" %}{{ b }}{{ a }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "yx",
+   "error": null
+  },
+  {
+   "source": "{% set s %}captured {{ n }}{% endset %}[{{ s }}]",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[captured 7]",
+   "error": null
+  },
+  {
+   "source": "{% set s | upper %}captured{% endset %}{{ s }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "CAPTURED",
+   "error": null
+  },
+  {
+   "source": "{% if n > 5 %}big{% elif n > 2 %}mid{% else %}small{% endif %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "big",
+   "error": null
+  },
+  {
+   "source": "{% if items %}{% set z = 1 %}{% endif %}{{ z }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1",
+   "error": null
+  },
+  {
+   "source": "{% macro greet(name, greeting=\"Hello\") %}{{ greeting }}, {{ name }}!{% endmacro %}{{ greet(\"Ann\") }} {{ greet(\"Bob\", \"Hi\") }} {{ greet(name=\"Cy\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Hello, Ann! Hi, Bob! Hello, Cy!",
+   "error": null
+  },
+  {
+   "source": "{% macro m(a) %}{{ a }}{% endmacro %}{{ m() }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "|",
+   "error": null
+  },
+  {
+   "source": "{% macro m(a) %}{{ a }}{% endmacro %}{{ m(1, 2) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "macro 'm' takes not more than 1 argument(s)"
+   }
+  },
+  {
+   "source": "{% macro m(a) %}{{ a }}{% endmacro %}{{ m(b=1) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "macro 'm' takes no keyword argument 'b'"
+   }
+  },
+  {
+   "source": "{% macro m() %}{{ varargs }}{{ kwargs }}{% endmacro %}{{ m(1, 2, x=3) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "(1, 2){'x': 3}",
+   "error": null
+  },
+  {
+   "source": "{% macro m(a, b=a) %}{{ b }}{% endmacro %}{{ m(4) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "4",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}x{% endmacro %}{{ m }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<Macro 'm'>",
+   "error": null
+  },
+  {
+   "source": "{% macro m(n) %}{% if n > 0 %}{{ n }}{{ m(n - 1) }}{% endif %}{% endmacro %}{{ m(3) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "321",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ caller() }}{% endmacro %}{% call m() %}inside{% endcall %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "inside",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ caller(5) }}{% endmacro %}{% call(x) m() %}got {{ x }}{% endcall %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "got 5",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ caller() }}{% endmacro %}{{ m() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "No caller defined"
+   }
+  },
+  {
+   "source": "{% macro m() %}{{ x }}{% endmacro %}{% set x = 1 %}{{ m() }}{% set x = 2 %}{{ m() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "12",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ x }}{% endmacro %}{{ m() }}{% set x = 3 %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ n }}{% endmacro %}{{ m() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "7",
+   "error": null
+  },
+  {
+   "source": "{{ m.name }}{% macro m(a, b) %}{% endmacro %}{{ m.arguments }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'m' is undefined"
+   }
+  },
+  {
+   "source": "{% filter upper %}hello {{ s }}{% endfilter %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "HELLO HELLO WORLD",
+   "error": null
+  },
+  {
+   "source": "{% filter length %}abc{% endfilter %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "sequence item 0: expected str instance, int found"
+   }
+  },
+  {
+   "source": "{% with a = 1, b = n %}{{ a + b }}{% endwith %}{{ a }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "8",
+   "error": null
+  },
+  {
+   "source": "{% with a = 1 %}{% with b = a + 1 %}{{ b }}{% endwith %}{% endwith %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2",
+   "error": null
+  },
+  {
+   "source": "{% block b %}block {{ n }}{% endblock %} after",
+   "context": "CTX",
+   "mode": "default",
+   "output": "block 7 after",
+   "error": null
+  },
+  {
+   "source": "{% block b %}{{ x }}{% endblock %}{% set x = 1 %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{% set x = 1 %}{% block b %}{{ x }}{% endblock %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "1",
+   "error": null
+  },
+  {
+   "source": "{% for i in items %}{% block b %}{{ i }}{% endblock %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{% for i in items %}{% block b scoped %}{{ i }}{% endblock %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "312",
+   "error": null
+  },
+  {
+   "source": "{% block a %}A{% endblock %}{{ self.a() }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "AA",
+   "error": null
+  },
+  {
+   "source": "{% block a %}{{ super() }}{% endblock %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "there is no parent block called 'a'."
+   }
+  },
+  {
+   "source": "{% block r required %}{% endblock %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateRuntimeError",
+    "message": "Required block 'r' not found"
+   }
+  },
+  {
+   "source": "{% extends \"x.html\" %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no loader for this environment specified"
+   }
+  },
+  {
+   "source": "{% include \"x.html\" %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no loader for this environment specified"
+   }
+  },
+  {
+   "source": "{% include \"x\" ignore missing %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no loader for this environment specified"
+   }
+  },
+  {
+   "source": "{% include [] %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplatesNotFound",
+    "message": "Tried to select from an empty list of templates."
+   }
+  },
+  {
+   "source": "{% import \"x\" as y %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no loader for this environment specified"
+   }
+  },
+  {
+   "source": "{% from \"x\" import y %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no loader for this environment specified"
+   }
+  },
+  {
+   "source": "{% autoescape true %}{{ html }} {{ html | safe }} {{ s ~ html }}{% endautoescape %} {{ html }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "&lt;b&gt;&#34;x&#34; &amp; &#39;y&#39;&lt;/b&gt; <b>\"x\" & 'y'</b> Hello World&lt;b&gt;&#34;x&#34; &amp; &#39;y&#39;&lt;/b&gt; <b>\"x\" & 'y'</b>",
+   "error": null
+  },
+  {
+   "source": "{% autoescape true %}{% set v %}<i>{% endset %}{{ v }}{{ v | length }}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<i>3",
+   "error": null
+  },
+  {
+   "source": "{% autoescape true %}{{ items | join(\"<\") }}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "3&lt;1&lt;2",
+   "error": null
+  },
+  {
+   "source": "{% autoescape yes %}{{ \"<x>\" }}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<x>",
+   "error": null
+  },
+  {
+   "source": "{% raw %}{{ not parsed }}{% endraw %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{{ not parsed }}",
+   "error": null
+  },
+  {
+   "source": "a {# comment #} b",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a  b",
+   "error": null
+  },
+  {
+   "source": "{%- if yes -%}  trimmed  {%- endif -%}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "trimmed",
+   "error": null
+  },
+  {
+   "source": "{% set c = cycler(\"odd\", \"even\") %}{{ c.next() }}{{ c.next() }}{{ c.next() }}{{ c.current }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "oddevenoddeven",
+   "error": null
+  },
+  {
+   "source": "{% set j = joiner(\"|\") %}{{ j() }}a{{ j() }}b{{ j() }}c",
+   "context": "CTX",
+   "mode": "default",
+   "output": "a|b|c",
+   "error": null
+  },
+  {
+   "source": "{{ lipsum(1, false, 5, 6) | wordcount }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "5",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ x }}{% endfor %}{{ x }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "312",
+   "error": null
+  },
+  {
+   "source": "{% set x = 1 %}{% for i in [1] %}{% set x = 2 %}{{ x }}{% endfor %}{{ x }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "21",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{% if loop.first %}{% set f = x %}{% endif %}{% endfor %}{{ f }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "2.5",
+   "error": null
+  },
+  {
+   "source": "{{ caller }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ loop }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{% for x in items %}{{ loop.cycle() }}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TypeError",
+    "message": "no items for cycling given"
+   }
+  },
+  {
+   "source": "{% for x in (y for y in items) %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "TemplateSyntaxError",
+    "message": "expected token ')', got 'for'"
+   }
+  },
+  {
+   "source": "{% autoescape yes %}{{ \"<a>\" ~ \"<b>\" }}|{{ s ~ \"<\" }}|{{ (\"<\",) }}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<a><b>|Hello World&lt;|('<',)",
+   "error": null
+  },
+  {
+   "source": "{% autoescape no %}{{ \"<x>\" }}{% autoescape yes %}{{ \"<y>\" }}{% endautoescape %}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<x><y>",
+   "error": null
+  },
+  {
+   "source": "{% macro m() %}{{ \"<m>\" }}{% endmacro %}{% autoescape true %}{{ m() }}{% endautoescape %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "<m>",
+   "error": null
+  },
+  {
+   "source": "{% set x %}a{% endset %}{% filter upper %}{{ x }}{% endfilter %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "A",
+   "error": null
+  },
+  {
+   "source": "{{ \"%s\" % none }} {{ \"%s\" % (none,) }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "None None",
+   "error": null
+  },
+  {
+   "source": "{% for a, b in d %}{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "ValueError",
+    "message": "not enough values to unpack (expected 2, got 1)"
+   }
+  },
+  {
+   "source": "{{ items | sort(attribute=\"nope\") }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "[3, 1, 2]",
+   "error": null
+  },
+  {
+   "source": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Job #42 'Stub JobTemplate' successful: https://towerhost/#/jobs/playbook/1010",
+   "error": null
+  },
+  {
+   "source": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "Job #42 'Stub JobTemplate' successful: https://towerhost/#/jobs/playbook/1010",
+   "error": null
+  },
+  {
+   "source": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "Job #42 'Stub JobTemplate' successful: https://towerhost/#/jobs/playbook/1010",
+   "error": null
+  },
+  {
+   "source": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "Job #42 'Stub JobTemplate' successful: https://towerhost/#/jobs/playbook/1010",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.name }} {{ job.hosts }} {{ job.host_status_counts }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "Stub Inventory ['host1', 'host2'] {'ok': 5, 'changed': 3, 'failures': 0}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.name }} {{ job.hosts }} {{ job.host_status_counts }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "Stub Inventory ['host1', 'host2'] {'ok': 5, 'changed': 3, 'failures': 0}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.name }} {{ job.hosts }} {{ job.host_status_counts }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "Stub Inventory ['host1', 'host2'] {'ok': 5, 'changed': 3, 'failures': 0}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.inventory.name }} {{ job.hosts }} {{ job.host_status_counts }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "Stub Inventory ['host1', 'host2'] {'ok': 5, 'changed': 3, 'failures': 0}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.created_by.username }} {{ job.summary_fields.labels }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "admin {'count': 0, 'results': []}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.created_by.username }} {{ job.summary_fields.labels }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "admin {'count': 0, 'results': []}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.created_by.username }} {{ job.summary_fields.labels }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "admin {'count': 0, 'results': []}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.created_by.username }} {{ job.summary_fields.labels }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "admin {'count': 0, 'results': []}",
+   "error": null
+  },
+  {
+   "source": "{{ job.extra_vars }} {{ job.elapsed }} {{ job.failed }} {{ job.limit }}|",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{\"a\": 1} 0.403018 False |",
+   "error": null
+  },
+  {
+   "source": "{{ job.extra_vars }} {{ job.elapsed }} {{ job.failed }} {{ job.limit }}|",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "{\"a\": 1} 0.403018 False |",
+   "error": null
+  },
+  {
+   "source": "{{ job.extra_vars }} {{ job.elapsed }} {{ job.failed }} {{ job.limit }}|",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "{\"a\": 1} 0.403018 False |",
+   "error": null
+  },
+  {
+   "source": "{{ job.extra_vars }} {{ job.elapsed }} {{ job.failed }} {{ job.limit }}|",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "{\"a\": 1} 0.403018 False |",
+   "error": null
+  },
+  {
+   "source": "{% if job.failed %}FAILED{% else %}ok{% endif %} {{ job.host_status_counts.ok + job.host_status_counts.changed }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "ok 8",
+   "error": null
+  },
+  {
+   "source": "{% if job.failed %}FAILED{% else %}ok{% endif %} {{ job.host_status_counts.ok + job.host_status_counts.changed }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "ok 8",
+   "error": null
+  },
+  {
+   "source": "{% if job.failed %}FAILED{% else %}ok{% endif %} {{ job.host_status_counts.ok + job.host_status_counts.changed }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "ok 8",
+   "error": null
+  },
+  {
+   "source": "{% if job.failed %}FAILED{% else %}ok{% endif %} {{ job.host_status_counts.ok + job.host_status_counts.changed }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "ok 8",
+   "error": null
+  },
+  {
+   "source": "{{ job.nope }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.nope }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.nope }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.nope }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ job.summary_fields.nope.name }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.summary_fields.nope.name }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "'dict object' has no attribute 'nope'"
+   }
+  },
+  {
+   "source": "{{ job.summary_fields.nope.name }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields.nope.name }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": null,
+   "error": {
+    "type": "UndefinedError",
+    "message": "nope"
+   }
+  },
+  {
+   "source": "{{ job | tojson }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{\"elapsed\": 0.403018, \"extra_vars\": \"{\\\"a\\\": 1}\", \"failed\": false, \"host_status_counts\": {\"changed\": 3, \"failures\": 0, \"ok\": 5}, \"hosts\": [\"host1\", \"host2\"], \"id\": 42, \"limit\": \"\", \"name\": \"Stub JobTemplate\", \"status\": \"successful\", \"summary_fields\": {\"created_by\": {\"id\": 1, \"username\": \"admin\"}, \"inventory\": {\"id\": 17, \"name\": \"Stub Inventory\", \"total_hosts\": 1}, \"labels\": {\"count\": 0, \"results\": []}}, \"url\": \"/api/v2/jobs/42/\"}",
+   "error": null
+  },
+  {
+   "source": "{{ job | tojson }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "{\"elapsed\": 0.403018, \"extra_vars\": \"{\\\"a\\\": 1}\", \"failed\": false, \"host_status_counts\": {\"changed\": 3, \"failures\": 0, \"ok\": 5}, \"hosts\": [\"host1\", \"host2\"], \"id\": 42, \"limit\": \"\", \"name\": \"Stub JobTemplate\", \"status\": \"successful\", \"summary_fields\": {\"created_by\": {\"id\": 1, \"username\": \"admin\"}, \"inventory\": {\"id\": 17, \"name\": \"Stub Inventory\", \"total_hosts\": 1}, \"labels\": {\"count\": 0, \"results\": []}}, \"url\": \"/api/v2/jobs/42/\"}",
+   "error": null
+  },
+  {
+   "source": "{{ job | tojson }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "{\"elapsed\": 0.403018, \"extra_vars\": \"{\\\"a\\\": 1}\", \"failed\": false, \"host_status_counts\": {\"changed\": 3, \"failures\": 0, \"ok\": 5}, \"hosts\": [\"host1\", \"host2\"], \"id\": 42, \"limit\": \"\", \"name\": \"Stub JobTemplate\", \"status\": \"successful\", \"summary_fields\": {\"created_by\": {\"id\": 1, \"username\": \"admin\"}, \"inventory\": {\"id\": 17, \"name\": \"Stub Inventory\", \"total_hosts\": 1}, \"labels\": {\"count\": 0, \"results\": []}}, \"url\": \"/api/v2/jobs/42/\"}",
+   "error": null
+  },
+  {
+   "source": "{{ job | tojson }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "{\"elapsed\": 0.403018, \"extra_vars\": \"{\\\"a\\\": 1}\", \"failed\": false, \"host_status_counts\": {\"changed\": 3, \"failures\": 0, \"ok\": 5}, \"hosts\": [\"host1\", \"host2\"], \"id\": 42, \"limit\": \"\", \"name\": \"Stub JobTemplate\", \"status\": \"successful\", \"summary_fields\": {\"created_by\": {\"id\": 1, \"username\": \"admin\"}, \"inventory\": {\"id\": 17, \"name\": \"Stub Inventory\", \"total_hosts\": 1}, \"labels\": {\"count\": 0, \"results\": []}}, \"url\": \"/api/v2/jobs/42/\"}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields | pprint }}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "{'created_by': {'id': 1, 'username': 'admin'},\n 'inventory': {'id': 17, 'name': 'Stub Inventory', 'total_hosts': 1},\n 'labels': {'count': 0, 'results': []}}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields | pprint }}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "{'created_by': {'id': 1, 'username': 'admin'},\n 'inventory': {'id': 17, 'name': 'Stub Inventory', 'total_hosts': 1},\n 'labels': {'count': 0, 'results': []}}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields | pprint }}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "{'created_by': {'id': 1, 'username': 'admin'},\n 'inventory': {'id': 17, 'name': 'Stub Inventory', 'total_hosts': 1},\n 'labels': {'count': 0, 'results': []}}",
+   "error": null
+  },
+  {
+   "source": "{{ job.summary_fields | pprint }}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "{'created_by': {'id': 1, 'username': 'admin'},\n 'inventory': {'id': 17, 'name': 'Stub Inventory', 'total_hosts': 1},\n 'labels': {'count': 0, 'results': []}}",
+   "error": null
+  },
+  {
+   "source": "{% for h in job.hosts %}- {{ h }}\n{% endfor %}",
+   "context": "CTX",
+   "mode": "default",
+   "output": "- host1\n- host2\n",
+   "error": null
+  },
+  {
+   "source": "{% for h in job.hosts %}- {{ h }}\n{% endfor %}",
+   "context": "CTX",
+   "mode": "strict",
+   "output": "- host1\n- host2\n",
+   "error": null
+  },
+  {
+   "source": "{% for h in job.hosts %}- {{ h }}\n{% endfor %}",
+   "context": "CTX",
+   "mode": "chainable",
+   "output": "- host1\n- host2\n",
+   "error": null
+  },
+  {
+   "source": "{% for h in job.hosts %}- {{ h }}\n{% endfor %}",
+   "context": "CTX",
+   "mode": "descriptive",
+   "output": "- host1\n- host2\n",
+   "error": null
+  }
+ ],
+ "contexts": {
+  "CTX": {
+   "job": {
+    "id": 42,
+    "name": "Stub JobTemplate",
+    "status": "successful",
+    "failed": false,
+    "elapsed": 0.403018,
+    "hosts": [
+     "host1",
+     "host2"
+    ],
+    "limit": "",
+    "extra_vars": "{\"a\": 1}",
+    "url": "/api/v2/jobs/42/",
+    "summary_fields": {
+     "inventory": {
+      "id": 17,
+      "name": "Stub Inventory",
+      "total_hosts": 1
+     },
+     "created_by": {
+      "username": "admin",
+      "id": 1
+     },
+     "labels": {
+      "count": 0,
+      "results": []
+     }
+    },
+    "host_status_counts": {
+     "ok": 5,
+     "changed": 3,
+     "failures": 0
+    }
+   },
+   "url": "https://towerhost/#/jobs/playbook/1010",
+   "job_friendly_name": "Job",
+   "n": 7,
+   "f": 2.5,
+   "neg": -3,
+   "zero": 0,
+   "s": "Hello World",
+   "html": "<b>\"x\" & 'y'</b>",
+   "empty": "",
+   "none": null,
+   "yes": true,
+   "no": false,
+   "items": [
+    3,
+    1,
+    2
+   ],
+   "words": [
+    "banana",
+    "Apple",
+    "cherry",
+    "apple"
+   ],
+   "nested": [
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "d": {
+    "b": 2,
+    "a": 1,
+    "c": 3
+   },
+   "users": [
+    {
+     "name": "ann",
+     "age": 30,
+     "role": "admin"
+    },
+    {
+     "name": "Bob",
+     "age": 25,
+     "role": "user"
+    },
+    {
+     "name": "cid",
+     "age": 35,
+     "role": "admin"
+    },
+    {
+     "name": "dee",
+     "role": "user"
+    }
+   ],
+   "big": 12345678901234567890,
+   "uni": "straße ÉCOLE ﬁ",
+   "multiline": "line one\nline two\n\nline four",
+   "tree": [
+    {
+     "name": "a",
+     "children": [
+      {
+       "name": "a1",
+       "children": []
+      },
+      {
+       "name": "a2",
+       "children": [
+        {
+         "name": "a2x",
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "b",
+     "children": []
+    }
+   ],
+   "mixed": [
+    1,
+    "a",
+    null
+   ],
+   "key_items": {
+    "items": "value",
+    "keys": "k"
+   },
+   "num_str": "42",
+   "float_str": "3.75"
+  }
+ }
+}

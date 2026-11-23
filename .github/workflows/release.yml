@@ -1,0 +1,201 @@
+---
+# Publishing a GitHub release publishes its images, for amd64 and arm64:
+#   ghcr.io/ctrliq/ascender/ascender-web:{<version>,latest}
+#   ghcr.io/ctrliq/ascender/ascender-task:{<version>,latest}
+# <version> is the release tag without a leading "v". Each image is signed
+# with cosign and carries build provenance and an SBOM.
+#
+# :latest moves only once both images of a release are built, for both at
+# once, and only to the repository's latest release (a pre-release, or an
+# older release finishing after a newer one, leaves it alone), so web and
+# task never point at different releases or go back to an older one.
+#
+# Run it by hand to rebuild a release's images (say, for a base image fix);
+# "latest" then moves :latest to that build whether or not it is the
+# latest release.
+name: Release Images
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to build (it must exist)
+        required: true
+      latest:
+        description: Also move :latest to this build
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# One build per release at a time; moving :latest has its own group,
+# shared by every release (promote below).
+concurrency:
+  group: release-images-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+      latest: ${{ steps.version.outputs.latest }}
+    steps:
+      - name: Release version
+        id: version
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          # A release asks for :latest unless it is a pre-release (promote
+          # still checks it is the latest release); a manual run when asked.
+          LATEST: ${{ github.event_name == 'release' && !github.event.release.prerelease || github.event_name == 'workflow_dispatch' && inputs.latest }}
+        run: |
+          version="${TAG#v}"
+          # It becomes an image tag, which allows only these characters.
+          if ! [[ "$version" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+            echo "::error::release tag '$TAG' cannot be an image tag"
+            exit 1
+          fi
+          {
+            echo "tag=$TAG"
+            echo "version=$version"
+            echo "latest=$LATEST"
+          } >> "$GITHUB_OUTPUT"
+
+  # The checks pull requests run, on the tag itself: a release is built
+  # only from a commit that passes them.
+  checks:
+    needs: version
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    # The database the CI test job uses (see ci.yml), so the
+    # database-backed tests run here too rather than skip.
+    services:
+      postgres:
+        image: quay.io/sclorg/postgresql-18-c9s:latest@sha256:1732d0a342e2790afc100e1fe741704e5c4413dfba9a3ab3b571c26b8cb0da6f
+        env:
+          POSTGRESQL_USER: ascender
+          POSTGRESQL_PASSWORD: ci
+          POSTGRESQL_DATABASE: ascender
+          POSTGRESQL_ADMIN_PASSWORD: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -q"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      ASCENDER_TEST_DATABASE_URL: postgres://postgres:ci@localhost:5432/ascender?sslmode=disable
+      ASCENDER_SCRATCH_DATABASE_URL: postgres://postgres:ci@localhost:5432/postgres?sslmode=disable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: refs/tags/${{ needs.version.outputs.tag }}
+
+      - name: Set up Go
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5  # v7.1.0
+        with:
+          go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
+
+      - name: Load the schema
+        working-directory: src
+        env:
+          ASCENDER_DATABASE_URL: ${{ env.ASCENDER_TEST_DATABASE_URL }}
+          ASCENDER_SECRET_KEY: ci-only-secret-key
+        run: go run ./cmd/ascender-web migrate
+
+      - name: Checks
+        run: |
+          make fmt-check
+          make tidy-check
+          make licenses-check
+          make vet
+          make test GOTESTFLAGS='-race -count=1'
+
+  images:
+    needs: [version, checks]
+    uses: ./.github/workflows/images.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    with:
+      image-path: ghcr.io/${{ github.repository }}
+      ref: refs/tags/${{ needs.version.outputs.tag }}
+      version: ${{ needs.version.outputs.version }}
+      platforms: linux/amd64,linux/arm64
+      cache-scope: ascender-release
+      sign: true
+      tags: |
+        type=raw,value=${{ needs.version.outputs.version }}
+
+  # Points :latest of both images at this release's, after both are built.
+  # imagetools copies the multi-arch index under the new tag without a
+  # rebuild; the signatures and attestations are on the digest, so they
+  # carry over.
+  promote:
+    needs: [version, images]
+    if: needs.version.outputs.latest == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    concurrency:
+      group: release-images-latest
+      cancel-in-progress: false
+    steps:
+      - name: Check this is the latest release
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          if [ "$MANUAL" = true ]; then
+            echo "promote=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          newest="$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)"
+          if [ "$newest" = "$TAG" ]; then
+            echo "promote=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::$TAG is not the latest release ($newest); :latest stays where it is"
+            echo "promote=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check.outputs.promote == 'true'
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+
+      - name: Log in to GHCR
+        if: steps.check.outputs.promote == 'true'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550  # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Move :latest
+        if: steps.check.outputs.promote == 'true'
+        env:
+          IMAGE_PATH: ghcr.io/${{ github.repository }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          # Registry paths must be lower case; an owner name may not be.
+          base="${IMAGE_PATH,,}"
+          for component in web task; do
+            image="$base/ascender-$component"
+            docker buildx imagetools create --tag "$image:latest" "$image:$VERSION"
+            echo "$image:latest -> $image:$VERSION" >> "$GITHUB_STEP_SUMMARY"
+          done

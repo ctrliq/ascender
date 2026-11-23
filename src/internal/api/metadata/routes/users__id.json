@@ -1,0 +1,197 @@
+{
+    "name": "User Detail",
+    "description": "# Retrieve a User:\n\nMake GET request to this resource to retrieve a single user\nrecord containing the following fields:\n\n* `id`: Database ID for this user. (integer)\n* `type`: Data type for this user. (choice)\n* `url`: URL for this user. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this user was created. (datetime)\n* `modified`: Timestamp when this user was last modified. (datetime)\n* `username`: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. (string)\n* `first_name`:  (string)\n* `last_name`:  (string)\n* `email`:  (string)\n* `is_superuser`: Designates that this user has all permissions without explicitly assigning them. (boolean)\n* `is_system_auditor`:  (boolean)\n* `password`: Field used to change the password. (string)\n* `ldap_dn`:  (string)\n* `preferred_language`:  (string)\n* `preferred_theme`: The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme. (string)\n* `last_login`:  (datetime)\n* `external_account`: Set if the account is managed by an external service (field)\n\n\n\n\n\n# Update a User:\n\nMake a PUT or PATCH request to this resource to update this\nuser.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n* `username`: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. (string, required)\n* `first_name`:  (string, default=`\"\"`)\n* `last_name`:  (string, default=`\"\"`)\n* `email`:  (string, default=`\"\"`)\n* `is_superuser`: Designates that this user has all permissions without explicitly assigning them. (boolean, default=`False`)\n* `is_system_auditor`:  (boolean, default=`False`)\n* `password`: Field used to change the password. (string, default=`\"\"`)\n\n* `preferred_language`:  (string, default=`\"\"`)\n* `preferred_theme`: The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme. (string, default=`\"\"`)\n\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a User:\n\nMake a DELETE request to this resource to delete this user.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this user.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this user.",
+                "choices": [
+                    ["user", "User"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this user.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this user was created.",
+                "filterable": false
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this user was last modified.",
+                "filterable": false
+            },
+            "username": {
+                "type": "string",
+                "label": "Username",
+                "help_text": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                "filterable": true
+            },
+            "first_name": {
+                "type": "string",
+                "label": "First name",
+                "filterable": true
+            },
+            "last_name": {
+                "type": "string",
+                "label": "Last name",
+                "filterable": true
+            },
+            "email": {
+                "type": "string",
+                "label": "Email address",
+                "filterable": true
+            },
+            "is_superuser": {
+                "type": "boolean",
+                "label": "Superuser status",
+                "help_text": "Designates that this user has all permissions without explicitly assigning them.",
+                "filterable": true
+            },
+            "is_system_auditor": {
+                "type": "boolean",
+                "label": "Is system auditor",
+                "filterable": false
+            },
+            "password": {
+                "type": "string",
+                "label": "Password",
+                "help_text": "Field used to change the password.",
+                "filterable": true
+            },
+            "ldap_dn": {
+                "type": "string",
+                "label": "Ldap dn",
+                "filterable": false
+            },
+            "preferred_language": {
+                "type": "string",
+                "label": "Preferred language",
+                "filterable": false
+            },
+            "preferred_theme": {
+                "type": "string",
+                "label": "Preferred theme",
+                "help_text": "The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.",
+                "filterable": false
+            },
+            "last_login": {
+                "type": "datetime",
+                "label": "Last login",
+                "filterable": true
+            },
+            "external_account": {
+                "type": "field",
+                "label": "External account",
+                "help_text": "Set if the account is managed by an external service",
+                "filterable": false
+            }
+        },
+        "PUT": {
+            "username": {
+                "type": "string",
+                "required": true,
+                "label": "Username",
+                "help_text": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                "max_length": 150,
+                "filterable": true
+            },
+            "first_name": {
+                "type": "string",
+                "required": false,
+                "label": "First name",
+                "max_length": 150,
+                "filterable": true
+            },
+            "last_name": {
+                "type": "string",
+                "required": false,
+                "label": "Last name",
+                "max_length": 150,
+                "filterable": true
+            },
+            "email": {
+                "type": "string",
+                "required": false,
+                "label": "Email address",
+                "max_length": 254,
+                "filterable": true
+            },
+            "is_superuser": {
+                "type": "boolean",
+                "required": false,
+                "label": "Superuser status",
+                "help_text": "Designates that this user has all permissions without explicitly assigning them.",
+                "filterable": true,
+                "default": false
+            },
+            "is_system_auditor": {
+                "type": "boolean",
+                "required": false,
+                "label": "Is system auditor",
+                "filterable": false,
+                "default": false
+            },
+            "password": {
+                "type": "string",
+                "required": false,
+                "label": "Password",
+                "help_text": "Field used to change the password.",
+                "filterable": true,
+                "default": ""
+            },
+            "preferred_language": {
+                "type": "string",
+                "required": false,
+                "label": "Preferred language",
+                "filterable": false,
+                "default": ""
+            },
+            "preferred_theme": {
+                "type": "string",
+                "required": false,
+                "label": "Preferred theme",
+                "help_text": "The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.",
+                "max_length": 32,
+                "filterable": false,
+                "default": ""
+            }
+        }
+    },
+    "types": [
+        "user"
+    ]
+}

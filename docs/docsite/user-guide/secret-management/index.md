@@ -1,0 +1,302 @@
+---
+title: Secret Management System
+description: Link Ascender credential fields to secrets stored in external systems such as HashiCorp Vault, CyberArk, AWS Secrets Manager, Azure Key Vault, and Thycotic.
+weight: 22
+---
+
+Users and admins upload machine and cloud credentials so that automation can access machines and external services on their behalf. By default, sensitive credential values (such as SSH passwords, SSH private keys, API tokens for cloud services) are stored in the database after being encrypted. With external credentials backed by credential plugins, you can map credential fields (like a password or an SSH Private key) to values stored in a secret management system instead of providing them to Ascender directly. Ascender provides a secret management system that includes integrations for:
+
+- [AWS Secrets Manager Lookup](#aws-secrets-manager-lookup)
+- [Centrify Vault Credential Provider Lookup](#centrify-vault-credential-provider-lookup)
+- [CyberArk Central Credential Provider (CCP) Lookup](#cyberark-central-credential-provider-ccp-lookup)
+- [CyberArk Conjur Secrets Manager Lookup](#cyberark-conjur-secrets-manager-lookup)
+- [GitHub App Installation Access Token Lookup](#github-app-installation-access-token-lookup)
+- [HashiCorp Vault Secret Lookup](#hashicorp-vault-secret-lookup) (KV)
+- [HashiCorp Vault Signed SSH](#hashicorp-vault-signed-ssh)
+- [Microsoft Azure Key Vault](#microsoft-azure-key-vault) (KMS)
+- [Thycotic DevOps Secrets Vault](#thycotic-devops-secrets-vault)
+- [Thycotic Secret Server](#thycotic-secret-server)
+
+These external secret values will be fetched prior to running a playbook that needs them. For more information on specifying these credentials in the User Interface, see [Credentials](../credentials).
+
+## Configure and link secret lookups
+
+When configuring Ascender to pull a secret from a 3rd-party system, it is in essence linking credential fields to external systems. To link a credential field to a value stored in an external system, select the external credential corresponding to that system and provide metadata to look up the desired value. The metadata input fields are part of the external credential type definition of the source credential.
+
+The secret management systems listed on this page are built into Ascender, and the list is fixed: other systems cannot be added, and a custom credential type cannot be an external (lookup) type.
+
+Use the Ascender User Interface to configure and use each of the supported 3rd-party secret management systems.
+
+1. First, create an external credential for authenticating with the secret management system. At minimum, provide a name for the external credential and select one of the following for the **Credential Type**:
+
+   - [AWS Secrets Manager Lookup](#aws-secrets-manager-lookup)
+   - [Centrify Vault Credential Provider Lookup](#centrify-vault-credential-provider-lookup)
+   - [CyberArk Central Credential Provider (CCP) Lookup](#cyberark-central-credential-provider-ccp-lookup)
+   - [CyberArk Conjur Secrets Manager Lookup](#cyberark-conjur-secrets-manager-lookup)
+   - [GitHub App Installation Access Token Lookup](#github-app-installation-access-token-lookup)
+   - [HashiCorp Vault Secret Lookup](#hashicorp-vault-secret-lookup)
+   - [HashiCorp Vault Signed SSH](#hashicorp-vault-signed-ssh)
+   - [Microsoft Azure Key Vault](#microsoft-azure-key-vault)
+   - [Thycotic DevOps Secrets Vault](#thycotic-devops-secrets-vault)
+   - [Thycotic Secret Server](#thycotic-secret-server)
+
+2. Navigate to the credential form of the target credential and link one or more input fields to the external credential along with metadata for locating the secret in the external system. The target credential is the one whose fields receive the looked-up secrets, for example a Machine credential whose password is kept in HashiCorp Vault.
+3. For any of the fields below the **Type Details** area that you want to link to the external credential, click the **Key** icon of the input field. You are prompted to set the input source to use to retrieve your secret information.
+
+   ![Credential section of the external secret management system dialog](/assets/images/credentials-link-credential-prompt.webp)
+
+4. Select the credential you want to link to, and click **Next**. This takes you to the **Metadata** tab of the input source. Metadata is specific to the input source you select:
+
+   | Input Source | Metadata | Description |
+   | --- | --- | --- |
+   | *AWS Secrets Manager lookup* | AWS Secrets Manager Region (required) | The region where the secrets manager is located. |
+   | | AWS Secret Name (required) | The name of the secret in AWS Secrets Manager. |
+   | *Centrify Vault Credential Provider Lookup* | Account Name (required) | The local system account or domain account name enrolled in Centrify Vault, for example `root` or `DOMAIN/Administrator`. |
+   | | System Name (required) | The machine name enrolled in the Centrify portal. |
+   | *CyberArk Central Credential Provider Lookup* | Object Query (required) | Lookup query for the object, for example `Safe=TestSafe;Object=testAccountName123`. |
+   | | Object Query Format | Select `Exact` (the default) for a specific secret name, or `Regexp` for a secret that has a dynamically generated name. |
+   | | Object Property | The property of the object to return: `Username`, `Password` or `Address`. Leave it empty to return the password. |
+   | | Reason | If required by the object's policy, supply a reason for checking out the secret, as CyberArk logs those. |
+   | *CyberArk Conjur Secrets Manager Lookup* | Secret Identifier | The identifier for the secret, for example `/some/identifier`. |
+   | | Secret Version | Specify a version of the secret, if necessary; otherwise, leave it empty to use the latest version. |
+   | *GitHub App Installation Access Token Lookup* | Description (Optional) | Optional note describing the linked field. No metadata is required to retrieve the token. |
+   | *HashiCorp Vault Secret Lookup* | Name of Secret Backend | The name of the KV secret backend. Leave it empty to use the first segment of **Path to Secret** instead. |
+   | | Path to Secret (required) | The path to the secret in the secret backend, for example `/some/secret/`. |
+   | | Path to Auth | The path where the authentication method is mounted, for example `approle`. Leave it empty to use the credential's **Path to Auth**. |
+   | | Key Name (required) | The name of the key to look up in the secret. |
+   | | Secret Version (v2 only) | Specify a version, if necessary; otherwise, leave it empty to use the latest version. |
+   | *HashiCorp Vault Signed SSH* | Unsigned Public Key (required) | The public key of the certificate you want signed. It needs to be present in the authorized keys file of the target hosts. |
+   | | Path to Secret (required) | The path where the SSH secrets engine is mounted, for example `ssh`. |
+   | | Path to Auth | The path where the authentication method is mounted, for example `approle`. Leave it empty to use the credential's **Path to Auth**. |
+   | | Role Name (required) | The name of the Vault role used to sign the key. A role is a collection of SSH settings and parameters stored in Vault, so you can have, for example, a role allowed to get a certificate signed for root and other, less privileged ones. |
+   | | Valid Principals | The users or hostnames the certificate should be signed for. Leave it empty to use the role's default. |
+   | *Microsoft Azure Key Vault* | Secret Name (required) | The name of the secret to look up, as it is referenced in the Azure key vault. |
+   | | Secret Version | Specify a version of the secret, if necessary; otherwise, leave it empty to use the latest version. |
+   | *Thycotic DevOps Secrets Vault* | Secret Path (required) | The path of the secret, for example `/test/secret1`. |
+   | | Secret Field (required) | The field to extract from the secret. |
+   | | Should the secret be base64 decoded? (required) | `No Decoding` (the default) or `Decode Base64`, typically used for secrets that store files, such as SSH keys. |
+   | *Thycotic Secret Server* | Secret ID (required) | The integer ID of the secret. |
+   | | Secret Field (required) | The field to extract from the secret. |
+
+   The OIDC variants of the two HashiCorp Vault types (*HashiCorp Vault Secret Lookup (OIDC)* and *HashiCorp Vault Signed SSH (OIDC)*) take the same metadata; their **Path to Auth** is where the JWT authentication method is mounted, for example `jwt`.
+
+   This example shows the Metadata prompt for HashiVault Secret Lookup.
+
+   ![Metadata section of the external secret management system dialog](/assets/images/credentials-link-metadata-prompt.webp)
+
+5. Click **Test** to verify connection to the secret management system. If the lookup is unsuccessful, an error message like this one displays:
+
+   ![Example exception dialog for credentials lookup](/assets/images/credentials-link-metadata-test-error.webp)
+
+6. When done, click **OK**. This closes the prompt window and returns you to the Details screen of your target credential. **Repeat these steps**, starting with step 3 above to complete the remaining input fields for the target credential. By linking the information in this manner, Ascender retrieves sensitive information, such as username, password, keys, certificates, and tokens from the 3rd-party management systems and populates that data into the remaining fields of the target credential form.
+7. If necessary, supply any information manually for those fields that do not use linking as a way of retrieving sensitive information. Refer to the appropriate [Credential Types](../credentials#credential-types) for more detail about each of the fields.
+8. Click **Save** when done.
+
+### AWS Secrets Manager Lookup
+
+This plugin allows AWS to be used as a credential input source to pull secrets from AWS SecretsManager. [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) provides similar service to [Microsoft Azure Key Vault](#microsoft-azure-key-vault), and the AWS collection provides a lookup plugin for it.
+
+When **AWS Secrets Manager lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **AWS Access Key**: provide the access key used for communicating with AWS Secrets Manager
+- **AWS Secret Key**: provide the secret key as obtained from the AWS IAM console
+
+Both keys are optional. If you leave both empty, the lookup authenticates as the AWS identity of the Ascender controller instead (its `AWS_*` environment variables, a web identity token, or the container or EC2 instance role). That is refused unless a system administrator has turned on **Allow AWS Secrets Manager Lookups Without Keys** (`AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS`) in the Miscellaneous System settings.
+
+Below shows an example of a configured AWS Secret Manager credential.
+
+![Example new AWS Secret Manager credential lookup dialog](/assets/images/credentials-create-aws-secret-credential.webp)
+
+### Centrify Vault Credential Provider Lookup
+
+You need the Centrify Vault web service running to store secrets in order for this integration to work. When **Centrify Vault Credential Provider Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Centrify Tenant URL** (required): provide the URL used for communicating with Centrify's secret management system
+- **Centrify API User** (required): provide the username
+- **Centrify API Password** (required): provide the password
+- **OAuth2 Application ID**: specify the identifier given associated with the OAuth2 client
+- **OAuth2 Scope**: specify the scope of the OAuth2 client
+
+Below shows an example of a configured Centrify Vault credential.
+
+![Example new Centrify Vault credential lookup dialog](/assets/images/credentials-create-centrify-vault-credential.webp)
+
+### CyberArk Central Credential Provider (CCP) Lookup
+
+You need the CyberArk Central Credential Provider web service running to store secrets in order for this integration to work. When **CyberArk Central Credential Provider Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **CyberArk CCP URL** (required): provide the URL used for communicating with CyberArk CCP's secret management system; must include URL scheme (http, https, etc.)
+- **Web Service ID**: optionally specify the identifier for the web service; leaving it blank defaults to AIMWebService
+- **Application ID** (required): specify the identifier given by CyberArk CCP services
+- **Client Key**: paste the client key if provided by CyberArk
+- **Client Certificate**: include the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines when pasting the certificate, if provided by CyberArk
+- **Verify SSL Certificates**: this option is only available when the URL uses HTTPS. Check this option to verify the server's SSL certificate is valid and trusted. Environments that use internal or private CAs should leave this option unchecked to disable verification.
+
+Below shows an example of a configured CyberArk CCP credential.
+
+![Example new CyberArk CCP credential lookup dialog](/assets/images/credentials-create-cyberark-ccp-credential.webp)
+
+### CyberArk Conjur Secrets Manager Lookup
+
+With a Conjur Cloud tenant available to target, configure the CyberArk Conjur Secrets Lookup external management system credential plugin as documented.
+
+When **CyberArk Conjur Secrets Manager Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Conjur URL** (required): provide the URL used for communicating with CyberArk Conjur's secret management system; must include URL scheme (http, https, etc.)
+- **API Key** (required): provide the key given by your Conjur admin
+- **Account** (required): the organization's account name
+- **Username** (required): the specific authenticated user for this service
+- **Public Key Certificate**: include the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines when pasting the public key, if provided by CyberArk
+
+Below shows an example of a configured CyberArk Conjur credential.
+
+![Example new CyberArk Conjur Secret lookup dialog](/assets/images/credentials-create-cyberark-conjur-credential.webp)
+
+### GitHub App Installation Access Token Lookup
+
+This plugin allows a [GitHub App](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps) to be used as a credential input source, generating installation access tokens scoped to the repositories its installation has been granted access to. Because the tokens are issued to an App owned by the organization rather than to an individual account, they are commonly used in place of a personal access token for authenticating [Source Control](../credentials#source-control) credentials used by projects.
+
+Register the GitHub App and install it before configuring the lookup. The App requires the **Contents: Read-only** repository permission for Git access over HTTPS. It is installed on an organization or personal account, and during installation is granted access to either all repositories or a selected list. The generated token can only reach repositories the installation was granted access to, so verify that the repositories used by your projects are included. Each organization the App is installed on has its own installation, with its own installation ID.
+
+When **GitHub App Installation Access Token Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **GitHub API endpoint URL**: provide the URL used for communicating with the GitHub API. Use `https://api.github.com` for GitHub.com, `https://gh.your.org/api/v3` for a self-hosted Enterprise instance, or `https://api.SUBDOMAIN.ghe.com` for Enterprise Cloud
+- **GitHub App ID or Client ID** (required): provide either identifier for the App, found on the App's settings page under **Developer settings > GitHub Apps**
+- **GitHub App Installation ID** (required): provide the identifier of the App installation, found at the end of the installation's configuration URL, for example `59980338` in `https://github.com/settings/installations/59980338`
+- **RSA Private Key** (required): include the `BEGIN RSA PRIVATE KEY` and `END RSA PRIVATE KEY` lines when pasting the contents of the PEM file generated for the App
+
+Below shows the GitHub App Installation Access Token Lookup credential form. Click **Test** to verify that Ascender can generate a token before saving.
+
+![Example new GitHub App Installation Access Token lookup dialog](/assets/images/credentials-create-github-app-credential.webp)
+
+To use the lookup for project syncs, link it to the **Password** field of a Source Control credential, and set that credential's **Username** to `x-access-token`, which GitHub requires as the username when the password is an installation access token. The example below shows a Source Control credential whose **Password** field is retrieved from the GitHub App lookup.
+
+![Example Source Control credential with its password linked to a GitHub App lookup](/assets/images/credentials-github-app-scm-target.webp)
+
+Installation access tokens authenticate over HTTPS, so the project's **Source Control URL** must use the HTTPS form of the repository, such as `https://github.com/your-org/your-repo.git`. This lookup does not apply to projects that clone over SSH. Those projects continue to use a Source Control credential with an **SCM Private Key** and an SSH-form URL such as `git@github.com:your-org/your-repo.git`.
+
+Installation access tokens expire one hour after they are issued. Ascender resolves linked input fields each time the credential is used, so a new token is generated for every project sync and no rotation is required.
+
+### HashiCorp Vault Secret Lookup
+
+When **HashiCorp Vault Secret Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Server URL** (required): provide the URL used for communicating with HashiCorp Vault's secret management system
+- **Token**: specify the access token used to authenticate HashiCorp's server
+- **CA Certificate**: specify the CA certificate used to verify HashiCorp's server
+- **Approle Role_ID**: specify the ID if using Approle for authentication
+- **Approle Secret_ID**: specify the corresponding secret ID for Approle authentication
+- **Client Certificate**: specify a PEM-encoded client certificate when using the TLS auth method including any required intermediate certificates expected by Vault
+- **Client Certificate Key**: specify a PEM-encoded certificate private key when using the TLS auth method
+- **TLS Authentication Role**: specify the role or certificate name in Vault that corresponds to your client certificate when using the TLS auth method. If it is not provided, Vault will attempt to match the certificate automatically
+- **Namespace name**: specify the namespace name (Vault Enterprise only)
+- **Kubernetes role**: specify the role name when using Kubernetes authentication
+- **Username**: enter the username of the user to be used to authenticate this service
+- **Password**: enter the password associated with the user to authenticate this service
+- **Path to Auth**: specify a path if other than the default path of `/approle`
+- **API Version** (required): select v1 for static lookups and v2 for versioned lookups
+
+For more detail about the Approle auth method and its fields, refer to the [Vault documentation for Approle Auth Method](https://developer.hashicorp.com/vault/docs/auth/approle).
+
+LDAP authentication requires LDAP to be configured in HashiCorp's Vault UI. A policy may be added to the user if they want access to a specific engine created. As long as the bind is set properly, the user should be able to successfully authenticate. Cubbyhole is the name of the default secret mount. If you have proper permissions, you can create other mounts and write key values to those. For more detail about the LDAP auth method and its fields, refer to the [Vault documentation for LDAP auth method](https://developer.hashicorp.com/vault/docs/auth/ldap).
+
+For more detail about the userpass auth method and its fields, refer to the [Vault documentation for userpass auth method](https://developer.hashicorp.com/vault/docs/auth/userpass).
+
+For more detail about the Kubernetes auth method and its fields, refer to the [Vault documentation for Kubernetes auth method](https://developer.hashicorp.com/vault/docs/auth/kubernetes).
+
+For more detail about the TLS certificate auth method and its fields, refer to the [Vault documentation for TLS certificates auth method](https://developer.hashicorp.com/vault/docs/auth/cert).
+
+Below shows an example of a configured HashiCorp Vault Secret Lookup credential for LDAP.
+
+![Example new HashiCorp Vault Secret lookup dialog](/assets/images/credentials-create-hashicorp-kv-credential.webp)
+
+To test the lookup, create another credential that uses the HashiCorp Vault lookup. The example below shows the attributes for a machine credential configured to look up HashiCorp Vault secret credentials:
+
+![Example machine credential lookup metadata for HashiCorp Vault](/assets/images/credentials-machine-test-hashicorp-metadata.webp)
+
+### HashiCorp Vault Signed SSH
+
+When **HashiCorp Vault Signed SSH** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Server URL** (required): provide the URL used for communicating with HashiCorp Signed SSH's secret management system
+- **Token**: specify the access token used to authenticate HashiCorp's server
+- **CA Certificate**: specify the CA certificate used to verify HashiCorp's server
+- **Approle Role_ID**: specify the ID for Approle authentication
+- **Approle Secret_ID**: specify the corresponding secret ID for Approle authentication
+- **Client Certificate**: specify a PEM-encoded client certificate when using the TLS auth method including any required intermediate certificates expected by Vault
+- **Client Certificate Key**: specify a PEM-encoded certificate private key when using the TLS auth method
+- **TLS Authentication Role**: specify the role or certificate name in Vault that corresponds to your client certificate when using the TLS auth method. If it is not provided, Vault will attempt to match the certificate automatically
+- **Namespace name**: specify the namespace name (Vault Enterprise only)
+- **Kubernetes role**: specify the role name when using Kubernetes authentication
+- **Username**: enter the username of the user to be used to authenticate this service
+- **Password**: enter the password associated with the user to authenticate this service
+- **Path to Auth**: specify a path if other than the default path of `/approle`
+
+For more detail about the Approle auth method and its fields, refer to the [Vault documentation for Approle Auth Method](https://developer.hashicorp.com/vault/docs/auth/approle).
+
+For more detail about the Kubernetes auth method and its fields, refer to the [Vault documentation for Kubernetes auth method](https://developer.hashicorp.com/vault/docs/auth/kubernetes).
+
+For more detail about the TLS certificate auth method and its fields, refer to the [Vault documentation for TLS certificates auth method](https://developer.hashicorp.com/vault/docs/auth/cert).
+
+Below shows an example of a configured HashiCorp SSH Secrets Engine credential.
+
+![Example new HashiCorp Vault Signed SSH credential lookup dialog](/assets/images/credentials-create-hashicorp-ssh-credential.webp)
+
+### HashiCorp Vault Secret Lookup (OIDC)
+
+Works like **HashiCorp Vault Secret Lookup**, but stores no secret to log in to Vault with: each job logs in as itself, with a short-lived token Ascender signs for it, through the JWT auth method of Vault. Workload identity has to be turned on, and Vault set up to trust Ascender, as described in [Workload Identity](/admin-guide/workload-identity).
+
+- **Server URL** (required): the URL of Vault. It is also the audience of the token, so it has to match `bound_audiences` in the Vault role exactly, port included
+- **API Version** (required): `v1` for static key/value lookups, `v2` for versioned ones
+- **CA Certificate**: the CA certificate used to verify the certificate of Vault
+- **Path to Auth** (required): where the JWT auth method is mounted, `jwt` by default
+- **JWT Role** (required): the role in the JWT auth method that decides, by the claims of the token, which jobs may log in and with which policies
+- **Namespace name**: the namespace to use (Vault Enterprise only)
+
+The metadata of a lookup is the same as for **HashiCorp Vault Secret Lookup**, with **Path to Auth** naming the JWT mount when it is not the default one.
+
+The **Test** button asks for a job template: the test logs in with a token carrying the claims of that template, and shows the claims that were sent.
+
+### HashiCorp Vault Signed SSH (OIDC)
+
+Works like **HashiCorp Vault Signed SSH**, logging in to Vault as the job instead of with a stored secret. It takes the same fields as **HashiCorp Vault Secret Lookup (OIDC)** except **API Version**, and the same metadata as **HashiCorp Vault Signed SSH**. See [Workload Identity](/admin-guide/workload-identity).
+
+### Microsoft Azure Key Vault
+
+When **Microsoft Azure Key Vault** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Vault URL (DNS Name)** (required): provide the URL used for communicating with MS Azure's key management system
+- **Client ID** (required): provide the identifier as obtained by the Azure Active Directory
+- **Client Secret** (required): provide the secret as obtained by the Azure Active Directory
+- **Tenant ID** (required): provide the unique identifier that is associated with an Azure Active Directory instance within an Azure subscription
+- **Cloud Environment**: select the applicable cloud environment to apply
+
+Below shows an example of a configured Microsoft Azure KMS credential.
+
+![Example new Microsoft Azure Key Vault credential lookup dialog](/assets/images/credentials-create-azure-kms-credential.webp)
+
+### Thycotic DevOps Secrets Vault
+
+When **Thycotic DevOps Secrets Vault** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Tenant** (required): provide the tenant name, for example `ex` when the URL is `https://ex.secretsvaultcloud.com`
+- **Top-level Domain (TLD)**: select the top-level domain of the tenant: `ca`, `com` (the default), `com.au` or `eu`
+- **Client ID** (required): provide the identifier as obtained by the Thycotic secret management system
+- **Client Secret** (required): provide the secret as obtained by the Thycotic secret management system
+- **URL template**: the template the vault URL is built from, with the first `{}` replaced by the tenant and the second by the top-level domain; it defaults to `https://{}.secretsvaultcloud.{}`
+
+Below shows an example of a configured Thycotic DevOps Secrets Vault credential.
+
+![Example new Thycotic DevOps Secrets Vault credential lookup dialog](/assets/images/credentials-create-thycotic-devops-credential.webp)
+
+### Thycotic Secret Server
+
+When **Thycotic Secrets Server** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **Secret Server URL** (required): provide the URL used for communicating with the Thycotic Secrets Server management system
+- **Username** (required): specify the authenticated user for this service
+- **Password** (required): provide the password associated with the user
+
+Below shows an example of a configured Thycotic Secret Server credential.
+
+![Example new Thycotic Secret Server credential lookup dialog](/assets/images/credentials-create-thycotic-server-credential.webp)

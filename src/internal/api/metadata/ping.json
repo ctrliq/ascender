@@ -1,0 +1,11 @@
+{
+    "name": "Ping",
+    "description": "A simple view that reports very basic information about this\ninstance, which is acceptable to be public information.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

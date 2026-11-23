@@ -1,0 +1,24 @@
+{
+    "name": "Inventory Source Update",
+    "description": "# Update Inventory Source\n\nMake a GET request to this resource to determine if the group can be updated\nfrom its inventory source.  The response will include the following field:\n\n* `can_update`: Flag indicating if this inventory source can be updated\n  (boolean, read-only)\n\nMake a POST request to this resource to update the inventory source.  If\nsuccessful, the response status code will be 202.  If the inventory source is\nnot defined or cannot be updated, a 405 status code will be returned.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "can_update": {
+                "type": "boolean",
+                "label": "Can update",
+                "filterable": false
+            }
+        },
+        "POST": {}
+    },
+    "types": [
+        "inventory_source"
+    ]
+}

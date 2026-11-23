@@ -1,0 +1,128 @@
+{
+    "name": "System Job Template Detail",
+    "description": "# Retrieve a System Job Template:\n\nMake GET request to this resource to retrieve a single system job template\nrecord containing the following fields:\n\n* `id`: Database ID for this system job template. (integer)\n* `type`: Data type for this system job template. (choice)\n* `url`: URL for this system job template. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this system job template was created. (datetime)\n* `modified`: Timestamp when this system job template was last modified. (datetime)\n* `name`: Name of this system job template. (string)\n* `description`: Optional description of this system job template. (string)\n* `last_job_run`:  (datetime)\n* `last_job_failed`:  (boolean)\n* `next_job_run`:  (datetime)\n* `status`:  (choice)\n    - `new`: New\n    - `pending`: Pending\n    - `waiting`: Waiting\n    - `running`: Running\n    - `successful`: Successful\n    - `failed`: Failed\n    - `error`: Error\n    - `canceled`: Canceled\n    - `never updated`: Never Updated\n    - `ok`: OK\n    - `missing`: Missing\n    - `none`: No External Source\n    - `updating`: Updating\n* `execution_environment`: The container image to be used for execution. (id)\n* `job_type`:  (choice)\n    - `\"\"`: ---------\n    - `cleanup_jobs`: Remove jobs older than a certain number of days\n    - `cleanup_activitystream`: Remove activity stream entries older than a certain number of days\n    - `cleanup_sessions`: Removes expired browser sessions from the database\n    - `cleanup_tokens`: Removes expired OAuth 2 access tokens and refresh tokens",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this system job template.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this system job template.",
+                "filterable": true,
+                "choices": [
+                    ["system_job_template", "System Job Template"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this system job template.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this system job template was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this system job template was last modified.",
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this system job template.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this system job template.",
+                "filterable": true
+            },
+            "last_job_run": {
+                "type": "datetime",
+                "label": "Last job run",
+                "filterable": true
+            },
+            "last_job_failed": {
+                "type": "boolean",
+                "label": "Last job failed",
+                "filterable": true
+            },
+            "next_job_run": {
+                "type": "datetime",
+                "label": "Next job run",
+                "filterable": true
+            },
+            "status": {
+                "type": "choice",
+                "label": "Status",
+                "filterable": true,
+                "choices": [
+                    ["new", "New"],
+                    ["pending", "Pending"],
+                    ["waiting", "Waiting"],
+                    ["running", "Running"],
+                    ["successful", "Successful"],
+                    ["failed", "Failed"],
+                    ["error", "Error"],
+                    ["canceled", "Canceled"],
+                    ["never updated", "Never Updated"],
+                    ["ok", "OK"],
+                    ["missing", "Missing"],
+                    ["none", "No External Source"],
+                    ["updating", "Updating"]
+                ]
+            },
+            "execution_environment": {
+                "type": "id",
+                "label": "Execution environment",
+                "help_text": "The container image to be used for execution.",
+                "filterable": true
+            },
+            "job_type": {
+                "type": "choice",
+                "label": "Job type",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["cleanup_jobs", "Remove jobs older than a certain number of days"],
+                    ["cleanup_activitystream", "Remove activity stream entries older than a certain number of days"],
+                    ["cleanup_sessions", "Removes expired browser sessions from the database"],
+                    ["cleanup_tokens", "Removes expired OAuth 2 access tokens and refresh tokens"]
+                ]
+            }
+        }
+    },
+    "types": [
+        "system_job_template"
+    ]
+}

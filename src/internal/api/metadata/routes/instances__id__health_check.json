@@ -1,0 +1,77 @@
+{
+    "name": "Instance Health Check",
+    "description": "# Health Check Data\n\nHealth checks are used to obtain important data about an instance.\nInstance fields affected by the health check are shown in this view.\nFundamentally, health checks require running code on the machine in question.\n\n - For instances with `node_type` of \"control\" or \"hybrid\", health checks are\nperformed as part of a periodic task that runs in the background.\n - For instances with `node_type` of \"execution\", health checks are done by submitting\na work unit through the receptor mesh.\n\nIf ran through the receptor mesh, the invoked command is:\n\n```\nansible-runner worker --worker-info\n```\n\nFor execution nodes, these checks are _not_ performed on a regular basis.\nHealth checks against functional nodes will be ran when the node is first discovered.\nHealth checks against nodes with errors will be repeated at a reduced frequency.\n\n\n\n\n# Manually Initiate a Health Check\nFor purposes of error remediation or debugging, a health check can be\nmanually initiated by making a POST request to this endpoint.\n\nThis will submit the work unit to the target node through the receptor mesh and wait for it to finish.\nThe model will be updated with the result.\nUp-to-date values of the fields will be returned in the response data.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "uuid": {
+                "type": "string",
+                "label": "Uuid",
+                "filterable": true
+            },
+            "hostname": {
+                "type": "string",
+                "label": "Hostname",
+                "filterable": true
+            },
+            "ip_address": {
+                "type": "string",
+                "label": "Ip address",
+                "filterable": true
+            },
+            "version": {
+                "type": "string",
+                "label": "Version",
+                "filterable": true
+            },
+            "last_health_check": {
+                "type": "datetime",
+                "label": "Last health check",
+                "help_text": "Last time a health check was ran on this instance to refresh cpu, memory, and capacity.",
+                "filterable": true
+            },
+            "errors": {
+                "type": "string",
+                "label": "Errors",
+                "help_text": "Any error details from the last health check.",
+                "filterable": true
+            },
+            "cpu": {
+                "type": "decimal",
+                "label": "Cpu",
+                "filterable": true
+            },
+            "memory": {
+                "type": "integer",
+                "label": "Memory",
+                "help_text": "Total system memory of this instance in bytes.",
+                "filterable": true
+            },
+            "cpu_capacity": {
+                "type": "integer",
+                "label": "Cpu capacity",
+                "filterable": true
+            },
+            "mem_capacity": {
+                "type": "integer",
+                "label": "Mem capacity",
+                "filterable": true
+            },
+            "capacity": {
+                "type": "integer",
+                "label": "Capacity",
+                "filterable": true
+            }
+        },
+        "POST": {}
+    },
+    "types": [
+        "instance"
+    ]
+}

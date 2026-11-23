@@ -1,0 +1,249 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Dashboard") "stream" "all")}}
+{{$c := .Data.counts}}
+<section class="pf-v6-c-page__main-section">
+	<div class="ascender-dashboard__counts">
+		<a class="ascender-count__link" href="/hosts">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2>{{num (dig $c "hosts" "total")}}</h2>
+				{{t "Hosts"}}
+			</div>
+		</a>
+		<a class="ascender-count__link" href="/hosts?host.last_job_host_summary__failed=true">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2 class="failed">{{num (dig $c "hosts" "failed")}}</h2>
+				{{t "Failed hosts"}}
+			</div>
+		</a>
+		<a class="ascender-count__link" href="/inventories">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2>{{num (dig $c "inventories" "total")}}</h2>
+				{{t "Inventories"}}
+			</div>
+		</a>
+		<a class="ascender-count__link" href="/inventories?inventory.inventory_sources_with_failures__gt=0">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2 class="failed">{{num (dig $c "inventories" "inventory_failed")}}</h2>
+				{{t "Inventory sync failures"}}
+			</div>
+		</a>
+		<a class="ascender-count__link" href="/projects">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2>{{num (dig $c "projects" "total")}}</h2>
+				{{t "Projects"}}
+			</div>
+		</a>
+		<a class="ascender-count__link" href="/projects?project.status__in=failed,canceled">
+			<div class="pf-v6-c-card pf-m-clickable ascender-count__card">
+				<h2 class="failed">{{num (dig $c "projects" "failed")}}</h2>
+				{{t "Project sync failures"}}
+			</div>
+		</a>
+	</div>
+</section>
+<section class="pf-v6-c-page__main-section ascender-dashboard__main-page-section">
+	<div class="pf-v6-c-page__main-body">
+		<div class="spacer">
+			<div id="dashboard-main-container" class="pf-v6-c-card">
+				<div aria-label="{{t "Tabs"}}" class="pf-v6-c-tabs pf-m-animate-current" data-tabs>
+					<ul class="pf-v6-c-tabs__list" role="tablist">
+						<li class="pf-v6-c-tabs__item{{if eq .Data.tab 0}} pf-m-current{{end}}" role="presentation">
+							<button type="button" class="pf-v6-c-tabs__link" id="dashboard-tab-0" aria-controls="dashboard-tab-section-0" role="tab" aria-selected="{{if eq .Data.tab 0}}true{{else}}false{{end}}" aria-label="{{t "Job status graph tab"}}" data-tab="0">
+								<span class="pf-v6-c-tabs__item-text">{{t "Job status"}}</span>
+							</button>
+						</li>
+						<li class="pf-v6-c-tabs__item{{if eq .Data.tab 1}} pf-m-current{{end}}" role="presentation">
+							<button type="button" class="pf-v6-c-tabs__link" id="dashboard-tab-1" aria-controls="dashboard-tab-section-1" role="tab" aria-selected="{{if eq .Data.tab 1}}true{{else}}false{{end}}" aria-label="{{t "Recent Jobs list tab"}}" data-tab="1">
+								<span class="pf-v6-c-tabs__item-text">{{t "Recent Jobs"}}</span>
+							</button>
+						</li>
+						<li class="pf-v6-c-tabs__item{{if eq .Data.tab 2}} pf-m-current{{end}}" role="presentation">
+							<button type="button" class="pf-v6-c-tabs__link" id="dashboard-tab-2" aria-controls="dashboard-tab-section-2" role="tab" aria-selected="{{if eq .Data.tab 2}}true{{else}}false{{end}}" aria-label="{{t "Recent Templates list tab"}}" data-tab="2">
+								<span class="pf-v6-c-tabs__item-text">
+									{{t "Recent Templates"}}
+								</span>
+							</button>
+						</li>
+					</ul>
+				</div>
+				<section{{if ne .Data.tab 0}} hidden{{end}} class="pf-v6-c-tab-content" id="dashboard-tab-section-0" aria-labelledby="dashboard-tab-0" role="tabpanel" tabindex="0" data-tab-panel="0">
+					<div class="pf-v6-c-card__header ascender-dashboard-graph__card-header">
+						<div class="pf-v6-c-card__header-main">
+							<div class="ascender-dashboard-graph__card-actions">
+								<div class="ascender-dropdown" data-dropdown>
+									<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" data-dropdown-toggle>
+										<span class="pf-v6-c-menu-toggle__text">
+											{{t "Past month"}}
+										</span>
+										<span class="pf-v6-c-menu-toggle__controls">
+											<span class="pf-v6-c-menu-toggle__toggle-icon">
+												{{icon "pf-caret-down"}}
+											</span>
+										</span>
+									</button>
+									<div class="pf-v6-c-menu ascender-dropdown__menu" hidden data-dropdown-menu>
+										<div class="pf-v6-c-menu__content">
+											<ul class="pf-v6-c-menu__list" role="menu">
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-period="month">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Past month"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-period="two_weeks">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Past two weeks"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-period="week">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Past week"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-period="day">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Past 24 hours"}}
+															</span>
+														</span>
+													</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="ascender-dropdown" data-dropdown>
+									<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" data-dropdown-toggle>
+										<span class="pf-v6-c-menu-toggle__text">
+											{{t "All job types"}}
+										</span>
+										<span class="pf-v6-c-menu-toggle__controls">
+											<span class="pf-v6-c-menu-toggle__toggle-icon">
+												{{icon "pf-caret-down"}}
+											</span>
+										</span>
+									</button>
+									<div class="pf-v6-c-menu ascender-dropdown__menu" hidden data-dropdown-menu>
+										<div class="pf-v6-c-menu__content">
+											<ul class="pf-v6-c-menu__list" role="menu">
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-type="all">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "All job types"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-type="inv_sync">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Inventory sync"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-type="scm_update">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "SCM update"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-type="playbook_run">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Playbook run"}}
+															</span>
+														</span>
+													</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="ascender-dropdown" data-dropdown>
+									<button class="pf-v6-c-menu-toggle" type="button" aria-expanded="false" style="min-width: 165px;" data-dropdown-toggle>
+										<span class="pf-v6-c-menu-toggle__text">
+											{{t "All jobs"}}
+										</span>
+										<span class="pf-v6-c-menu-toggle__controls">
+											<span class="pf-v6-c-menu-toggle__toggle-icon">
+												{{icon "pf-caret-down"}}
+											</span>
+										</span>
+									</button>
+									<div class="pf-v6-c-menu ascender-dropdown__menu" hidden data-dropdown-menu>
+										<div class="pf-v6-c-menu__content">
+											<ul class="pf-v6-c-menu__list" role="menu">
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-status="all">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "All jobs"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-status="successful">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Successful jobs"}}
+															</span>
+														</span>
+													</button>
+												</li>
+												<li class="pf-v6-c-menu__list-item" role="none">
+													<button class="pf-v6-c-menu__item" type="button" role="menuitem" data-graph-status="failed">
+														<span class="pf-v6-c-menu__item-main">
+															<span class="pf-v6-c-menu__item-text">
+																{{t "Failed jobs"}}
+															</span>
+														</span>
+													</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pf-v6-c-card__body">
+						<div id="d3-line-chart-root" style="margin-top: 3rem;" data-job-graph></div>
+					</div>
+				</section>
+				<section{{if ne .Data.tab 1}} hidden{{end}} class="pf-v6-c-tab-content" id="dashboard-tab-section-1" aria-labelledby="dashboard-tab-1" role="tabpanel" tabindex="0" data-tab-panel="1">
+					<div data-dashboard-list="jobs">
+						{{if eq .Data.tab 1}}{{template "jobs_list_card" .Data.listPage}}{{end}}
+					</div>
+				</section>
+				<section{{if ne .Data.tab 2}} hidden{{end}} class="pf-v6-c-tab-content" id="dashboard-tab-section-2" aria-labelledby="dashboard-tab-2" role="tabpanel" tabindex="0" data-tab-panel="2">
+					<div data-dashboard-list="templates">
+						{{if eq .Data.tab 2}}
+							{{template "templates_list_card" .Data.listPage}}
+						{{end}}
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

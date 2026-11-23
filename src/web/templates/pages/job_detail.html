@@ -1,0 +1,360 @@
+{{define "content"}}
+{{$j := .Data.job}}
+{{$id := str $j.id}}
+{{$seg := .Data.typeSeg}}
+{{$sf := $j.summary_fields}}
+{{$type := str $j.type}}
+{{$coll := .Data.coll}}
+{{template "screen_header" (dict "title" (t "Details") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (str $j.name)))))}}
+<section class="pf-v6-c-page__main-section">
+	<div>
+		<div class="pf-v6-c-card">
+			<div class="ascender-routed-tabs__tab-bar">
+				{{template "routed_tabs" (dict "current" "details" "back" (dict "href" "/jobs" "label" "Back to Jobs") "tabs" (list (dict "key" "details" "href" (printf "/jobs/%s/%s/details" $seg $id) "label" "Details") (dict "key" "output" "href" (printf "/jobs/%s/%s/output" $seg $id) "label" "Output")))}}
+				{{template "workflow_nav" .Data.wfNav}}
+			</div>
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list">
+					{{template "detail" (dict "label" (t "Job ID") "value" $id "cy" "job-id")}}
+					<div>
+						<dt class="ascender-detail-name{{if has $j.job_explanation}} ascender-detail-name--full-width{{end}}" data-cy="job-status-label" id="job-status">
+							{{t "Status"}}
+						</dt>
+						<dd class="ascender-detail-value{{if has $j.job_explanation}} ascender-detail-value--full-width{{end}}" data-cy="job-status-value">
+							<div class="ascender-job-detail__status-detail-value">
+								{{template "status_label" (str $j.status)}}
+								{{if and (has $j.job_explanation) (ne (str $j.job_explanation) (str $j.status))}}
+									{{$j.job_explanation}}
+								{{end}}
+							</div>
+						</dd>
+					</div>
+					{{if has $j.started}}
+						{{template "detail" (dict "label" (t "Started") "value" (dt $j.started) "cy" "job-started-date")}}
+					{{else}}
+						{{template "detail" (dict "label" (t "Started") "value" (t "Unknown Start Date") "cy" "job-started-date")}}
+					{{end}}
+					{{if has $j.finished}}
+						{{template "detail" (dict "label" (t "Finished") "value" (dt $j.finished) "cy" "job-finished-date")}}
+					{{end}}
+					{{with dig $sf "job_template"}}
+						{{template "detail" (dict "label" (t "Job Template") "value" (safe (printf `<a href="/templates/job_template/%s">%s</a>` (str .id) (esc .name))) "cy" "job-template")}}
+					{{end}}
+					{{with dig $sf "workflow_job_template"}}
+						{{template "detail" (dict "label" (t "Workflow Job Template") "value" (safe (printf `<a href="/templates/workflow_job_template/%s">%s</a>` (str .id) (esc .name))) "cy" "workflow-job-template")}}
+					{{end}}
+					{{with dig $sf "source_workflow_job"}}
+						{{if has .id}}
+							{{template "detail" (dict "label" (t "Source Workflow Job") "value" (safe (printf `<a href="/jobs/workflow/%s">%s - %s</a>` (str .id) (str .id) (esc .name))) "cy" "source-workflow-job")}}
+						{{end}}
+					{{end}}
+					{{template "detail" (dict "label" (t "Job Type") "value" .Data.typeLabel "cy" "job-type" "help" (t "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."))}}
+					{{if eq $type "project_update"}}
+						{{template "detail" (dict "label" (t "Source Control Type") "value" (t (scmLabel (str $j.scm_type))) "cy" "source-control-type")}}
+					{{end}}
+					{{with $j.launched_by}}
+						{{if has .name}}
+							{{template "detail" (dict "label" (t "Launched By") "value" (pick (has .url) (safe (printf `<a href="%s">%s</a>` (launchedByHref .) (esc .name))) (str .name)) "cy" "job-launched-by")}}
+						{{end}}
+					{{end}}
+					{{if and (ne $type "project_update") (ne $type "system_job")}}
+						{{with dig $sf "inventory"}}
+							{{template "detail" (dict "label" (t "Inventory") "value" (safe (printf `<a href="/inventories/%s/%s">%s</a>` (cond (eq (str .kind) "smart") "smart_inventory" "inventory") (str .id) (esc .name))) "cy" "job-inventory" "help" (t "Select the inventory containing the hosts you want this job to manage."))}}
+						{{else}}
+							{{if ne $type "workflow_job"}}
+								<div>
+									<dt class="ascender-detail-name" data-cy="job-inventory-label">
+										{{t "Inventory"}}
+										{{template "help_button" (t "Select the inventory containing the hosts you want this job to manage.")}}
+									</dt>
+									<dd class="ascender-detail-value ascender-detail-value--deleted" data-cy="job-inventory-value">
+										{{t "Deleted"}}
+									</dd>
+								</div>
+							{{end}}
+						{{end}}
+					{{end}}
+					{{with dig $sf "inventory_source"}}
+						{{template "detail" (dict "label" (t "Inventory Source") "value" (safe (printf `<a href="/inventories/inventory/%s/sources/%s">%s</a>` (str (dig $sf "inventory" "id")) (str .id) (esc .name))) "cy" "job-inventory-source")}}
+						{{if not (dig $sf "source_project")}}
+							{{template "detail" (dict "label" (t "Source") "value" $.Data.sourceLabel "cy" "job-inventory-source-type")}}
+						{{end}}
+					{{end}}
+					{{if eq $type "inventory_update"}}
+						{{with dig $sf "source_project"}}
+							{{template "detail" (dict "label" (t "Source") "value" (safe (printf `<a href="/projects/%s/details">%s</a>` (str .id) (esc .name))) "cy" "job-project" "help" (t "The project from which this inventory update is sourced."))}}
+							{{$st := str .status}}
+							{{with $j.source_project_update}}
+								<div>
+									<dt class="ascender-detail-name" data-cy="job-project-status-label" id="job-project-status">
+										{{t "Project Update Status"}}
+										{{template "help_button" (t "Project checkout results")}}
+									</dt>
+									<dd class="ascender-detail-value" data-cy="job-project-status-value">
+										<a href="/jobs/project/{{str .}}">
+											{{template "status_label" $st}}
+										</a>
+									</dd>
+								</div>
+							{{else}}
+								{{template "detail" (dict "label" (t "Project Update Status") "value" (t "No Status Available") "cy" "job-project-status" "help" (t "Project checkout results"))}}
+							{{end}}
+						{{end}}
+					{{end}}
+					{{if or (eq $type "job") (eq $type "project_update")}}
+						{{with dig $sf "project"}}
+							{{template "detail" (dict "label" (t "Project") "value" (safe (printf `<a href="/projects/%s/details">%s</a>` (str .id) (esc .name))) "cy" "job-project" "help" (t "Select the project containing the playbook you want this job to execute."))}}
+							{{with dig $sf "project_update"}}
+								<div>
+									<dt class="ascender-detail-name" data-cy="job-project-status-label" id="job-project-status">
+										{{t "Project Update Status"}}
+										{{template "help_button" (t "Project checkout results")}}
+									</dt>
+									<dd class="ascender-detail-value" data-cy="job-project-status-value">
+										<a href="/jobs/project/{{str .id}}">
+											{{template "status_label" (str .status)}}
+										</a>
+									</dd>
+								</div>
+							{{else}}
+								{{template "detail" (dict "label" (t "Project Update Status") "value" (t "No Status Available") "cy" "job-project-status" "help" (t "Project checkout results"))}}
+							{{end}}
+						{{else}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Project"}}</dt>
+								<dd class="ascender-detail-value ascender-detail-value--deleted">
+									{{t "Deleted"}}
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if has $j.scm_branch}}
+						{{template "detail" (dict "label" (t "Source Control Branch") "value" (str $j.scm_branch) "cy" "source-control-branch" "help" (t "Branch to use in job run. Project default used if blank."))}}
+					{{end}}
+					{{if has $j.scm_revision}}
+						{{template "detail" (dict "label" (t "Revision") "value" (str $j.scm_revision) "cy" "job-scm-revision")}}
+					{{end}}
+					{{if has $j.playbook}}
+						{{template "detail" (dict "label" (t "Playbook") "value" (str $j.playbook) "cy" "job-playbook" "help" (t "Select the playbook to be executed by this job."))}}
+					{{end}}
+					{{if has $j.limit}}
+						{{template "detail" (dict "label" (t "Limit") "value" (str $j.limit) "cy" "job-limit" "help" (t "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed."))}}
+					{{end}}
+					{{if has $j.verbosity}}
+						{{template "detail" (dict "label" (t "Verbosity") "value" .Data.verbosity "cy" "job-verbosity" "help" (t "Control the level of output ansible will produce as the playbook executes."))}}
+					{{end}}
+					{{if ne $type "workflow_job"}}
+						{{with dig $sf "execution_environment"}}
+							{{template "detail" (dict "label" (t "Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "cy" "job-execution-environment" "help" (t "The execution environment used for this job."))}}
+						{{end}}
+					{{end}}
+					{{if has $j.execution_node}}
+						{{template "detail" (dict "label" (t "Execution Node") "value" (str $j.execution_node) "cy" "job-execution-node")}}
+					{{end}}
+					{{if has $j.controller_node}}
+						{{template "detail" (dict "label" (t "Controller Node") "value" (str $j.controller_node) "cy" "job-controller-node")}}
+					{{end}}
+					{{with dig $sf "instance_group"}}
+						{{if eq (str .is_container_group) "true"}}
+							{{template "detail" (dict "label" (t "Container Group") "value" (safe (printf `<a href="/instance_groups/container_group/%s">%s</a>` (str .id) (esc .name))) "cy" "job-container-group")}}
+						{{else}}
+							{{template "detail" (dict "label" (t "Instance Group") "value" (safe (printf `<a href="/instance_groups/%s">%s</a>` (str .id) (esc .name))) "cy" "job-instance-group" "help" (t "The instance group the job ran on."))}}
+						{{end}}
+					{{end}}
+					{{if eq $type "ad_hoc_command"}}
+						{{with dig $sf "instance_groups"}}
+							{{if .}}
+								<div>
+									<dt class="ascender-detail-name" data-cy="job-launch-instance-groups-label" id="job-launch-instance-groups">
+										{{t "Requested Instance Groups"}}
+										{{template "help_button" (t "Instance groups picked when the command was launched, in order of preference.")}}
+									</dt>
+									<dd class="ascender-detail-value" data-cy="job-launch-instance-groups-value">
+										<div>
+											<div class="pf-v6-c-label-group">
+												<div class="pf-v6-c-label-group__main">
+													<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
+														{{range $i, $g := .}}
+															<li class="pf-v6-c-label-group__list-item"{{if ge $i 5}} hidden data-chip-overflowed{{end}}>
+																<span class="pf-v6-c-label pf-m-outline">
+																	<span class="pf-v6-c-label__content">
+																		<span class="pf-v6-c-label__text">
+																			{{if eq (str $g.is_container_group) "true"}}
+																				<a href="/instance_groups/container_group/{{str $g.id}}">
+																					{{$g.name}}
+																				</a>
+																			{{else}}
+																				<a href="/instance_groups/{{str $g.id}}">
+																					{{$g.name}}
+																				</a>
+																			{{end}}
+																		</span>
+																	</span>
+																</span>
+															</li>
+														{{end}}
+														{{if gt (len .) 5}}
+															<li class="pf-v6-c-label-group__list-item">
+																<button class="pf-v6-c-label pf-m-overflow" type="button" data-chip-overflow data-more="{{t "{0} more" "0" (sub (len .) 5)}}">
+																	<span class="pf-v6-c-label__content">
+																		<span class="pf-v6-c-label__text">
+																			{{t "{0} more" "0" (sub (len .) 5)}}
+																		</span>
+																	</span>
+																</button>
+															</li>
+														{{end}}
+													</ul>
+												</div>
+											</div>
+										</div>
+									</dd>
+								</div>
+							{{end}}
+						{{end}}
+					{{end}}
+					{{if and (has $j.job_slice_number) (has $j.job_slice_count)}}
+						{{template "detail" (dict "label" (t "Job Slice") "value" (printf "%s/%s" (str $j.job_slice_number) (str $j.job_slice_count)) "cy" "job-slice" "help" (t "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."))}}
+					{{end}}
+					{{if and (eq $type "workflow_job") $j.is_sliced_job}}
+						{{template "detail" (dict "label" (t "Job Slice Parent") "value" (t "True") "cy" "job-slice-parent")}}
+					{{end}}
+					{{if has $j.forks}}
+						{{template "detail" (dict "label" (t "Forks") "value" (str $j.forks) "cy" "forks" "help" (t "The number of parallel or simultaneous processes to use while executing the playbook."))}}
+					{{end}}
+					{{if has $j.timeout}}
+						{{template "detail" (dict "label" (t "Timeout") "value" (cond (ne (num $j.timeout) 0) (t "{0} seconds" "0" (str $j.timeout)) (t "No timeout specified")) "cy" "timeout" "help" (t "The amount of time (in seconds) to run before the job is canceled."))}}
+					{{end}}
+					{{if has $j.job_tags}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="job-tags-label">
+								{{t "Job Tags"}}
+								{{template "help_button" (t "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="job-tags-value">
+								<div class="pf-v6-c-label-group">
+									<div class="pf-v6-c-label-group__main">
+										<ul class="pf-v6-c-label-group__list" role="list">
+											{{range split (str $j.job_tags) ","}}
+												<li class="pf-v6-c-label-group__list-item">
+													<span class="pf-v6-c-label pf-m-outline">
+														<span class="pf-v6-c-label__content">
+															<span class="pf-v6-c-label__text">
+																{{.}}
+															</span>
+														</span>
+													</span>
+												</li>
+											{{end}}
+										</ul>
+									</div>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $j.skip_tags}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="job-skip-tags-label">
+								{{t "Skip Tags"}}
+								{{template "help_button" (t "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task.")}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="job-skip-tags-value">
+								<div class="pf-v6-c-label-group">
+									<div class="pf-v6-c-label-group__main">
+										<ul class="pf-v6-c-label-group__list" role="list">
+											{{range split (str $j.skip_tags) ","}}
+												<li class="pf-v6-c-label-group__list-item">
+													<span class="pf-v6-c-label pf-m-outline">
+														<span class="pf-v6-c-label__content">
+															<span class="pf-v6-c-label__text">
+																{{.}}
+															</span>
+														</span>
+													</span>
+												</li>
+											{{end}}
+										</ul>
+									</div>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "credentials"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="job-credentials-label" id="job-credentials">
+									{{t "Credentials"}}
+									{{template "help_button" (t "The credentials this job ran with.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="job-credentials-value">
+									<div>{{template "credential_chips" .}}</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{with dig $sf "credential"}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="job-machine-credential-label" id="job-machine-credential">
+								{{t "Machine Credential"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="job-machine-credential-value">
+								<div>{{template "credential_chips" (list .)}}</div>
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "labels"}}
+						{{if .results}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="job-labels-label" id="job-labels">
+									{{t "Labels"}}
+									{{template "help_button" (t "Optional labels that describe this job template, such as 'dev' or 'test'.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="job-labels-value">
+									<div>
+										{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+									</div>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if has $j.module_name}}
+						{{template "detail" (dict "label" (t "Module Name") "value" (str $j.module_name) "cy" "job-module-name" "helpHTML" (printf `%s <a href="https://docs.ansible.com/ansible/latest/modules/%s_module.html" target="_blank" rel="noopener noreferrer">%s</a>` (esc (t "These arguments are used with the specified module. You can find information about {moduleName} by clicking " "moduleName" (str $j.module_name))) (esc (str $j.module_name)) (esc (t "here."))))}}
+					{{end}}
+					{{if has $j.module_args}}
+						{{template "detail" (dict "label" (t "Module Arguments") "value" (str $j.module_args) "cy" "job-module-arguments")}}
+					{{end}}
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $j.created "user" (dig $sf "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $j.modified "user" (dig $sf "modified_by"))}}
+					{{if has $j.extra_vars}}
+						{{template "variables_detail" (dict "cy" "job-detail-extra-variables" "label" (t "Variables") "value" (str $j.extra_vars) "rows" 4 "help" (t "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook."))}}
+					{{end}}
+					{{if eq $type "job"}}
+						{{template "variables_detail" (dict "cy" "job-detail-artifacts" "label" (t "Artifacts") "value" (json $j.artifacts) "rows" 4)}}
+					{{end}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $sf "user_capabilities" "start"}}
+						{{if eq $type "project_update"}}
+							<button class="pf-v6-c-button pf-m-primary" type="button" aria-label="{{t "Relaunch"}}" data-project-sync="{{str $j.project}}">
+								<span class="pf-v6-c-button__text">{{t "Relaunch"}}</span>
+							</button>
+						{{else if ne $type "system_job"}}
+							{{template "relaunch_action" (dict "job" $j "coll" $coll "seg" $seg "primary" true)}}
+						{{end}}
+					{{end}}
+					{{if or (eq (str $j.status) "pending") (eq (str $j.status) "waiting") (eq (str $j.status) "running")}}
+						<button class="pf-v6-c-button pf-m-secondary" type="button" aria-label="{{t "Cancel"}}" data-cancel-job="/api/v2/{{$coll}}/{{$id}}/cancel/" data-name="{{$j.name}}">
+							<span class="pf-v6-c-button__text">{{t "Cancel"}}</span>
+						</button>
+					{{end}}
+					{{if dig $sf "user_capabilities" "delete"}}
+						<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="Job" data-api="/api/v2/{{$coll}}/{{$id}}/" data-name="{{$j.name}}" data-redirect="/jobs">
+							<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+						</button>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

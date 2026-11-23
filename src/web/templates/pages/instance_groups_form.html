@@ -1,0 +1,62 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$g := .Data.ig}}
+{{$cg := .Data.container}}
+{{if $g}}
+	{{template "screen_header" (dict "title" (t "Edit details") "stream" "instance_group" "crumbs" (list (dict "href" "/instance_groups" "title" (t "Instance Groups")) (dict "href" (printf "/instance_groups/%s%s" (cond $cg "container_group/" "") (str $g.id)) "title" (str $g.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "instance_group" "crumbs" (list (dict "href" "/instance_groups" "title" (t "Instance Groups"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate{{if $cg}} data-container-group-form{{end}}>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{if $cg}}
+						{{template "form_field" (dict "id" "container-group-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+						{{template "lookup_field" (dict "id" "container-group-mesh-node" "name" "mesh_node" "label" (t "Mesh node") "value" $v.mesh_node "help" (t "Hop node of the receptor mesh that runs the pods of this group in the cluster it lives in, using its own service account. The work reaches it through the mesh, so this cluster needs no access to that one. Leave blank to run the pods through the API of this cluster.") "errors" (index $e "mesh_node") "resource" "instances" "title" (t "Select {0}" "0" (t "a mesh node")) "filter" "node_type=hop" "displayKey" "hostname")}}
+						<div data-credential-holder{{if dig $v "mesh_node" "id"}} hidden{{end}}>
+							{{template "lookup_field" (dict "id" "credential" "name" "credential" "label" (t "Credential") "value" $v.credential "help" (t "Credential to authenticate with Kubernetes or OpenShift. Must be of type \"Kubernetes/OpenShift API Bearer Token\". If left blank, the underlying Pod's service account will be used.") "errors" (index $e "credential") "resource" "credentials" "title" (t "Select {0}" "0" (t "Credential")) "filter" "credential_type__kind=kubernetes")}}
+						</div>
+						{{template "form_field" (dict "id" "instance-group-max-concurrent-jobs" "name" "max_concurrent_jobs" "label" (t "Max concurrent jobs") "value" $v.max_concurrent_jobs "type" "number" "min" "0" "help" (t "Maximum number of jobs to run concurrently on this group.\n          Zero means no limit will be enforced.") "errors" (index $e "max_concurrent_jobs"))}}
+						{{template "form_field" (dict "id" "instance-group-max-forks" "name" "max_forks" "label" (t "Max forks") "value" $v.max_forks "type" "number" "min" "0" "help" (t "Maximum number of forks to allow across all jobs running concurrently on this group.\n          Zero means no limit will be enforced.") "errors" (index $e "max_forks"))}}
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="container-groups-option-checkbox">
+									<span class="pf-v6-c-form__label-text">{{t "Options"}}</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<div class="ascender-form-checkbox-layout">
+									<div class="pf-v6-c-check">
+										<input id="container-groups-override-pod-specification" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Customize pod specification"}}" type="checkbox" value="true" name="override"{{if $v.override}} checked{{end}} data-override-toggle>
+										<label class="pf-v6-c-check__label" for="container-groups-override-pod-specification">
+											<span>{{t "Customize pod specification"}}&nbsp;</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ascender-sub-form-layout" data-override-subform{{if not $v.override}} hidden{{end}}>
+							<div class="ascender-form-full-width-layout">
+								{{template "variables_field" (dict "id" "custom-pod-spec" "name" "pod_spec_override" "label" (t "Custom pod spec") "value" (str $v.pod_spec_override) "help" (t "Field for passing a custom Kubernetes or OpenShift Pod specification.") "errors" (index $e "pod_spec_override") "source" .Data.podSpecSource)}}
+							</div>
+						</div>
+					{{else}}
+						{{template "form_field" (dict "id" "instance-group-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+						{{template "form_field" (dict "id" "instance-group-policy-instance-minimum" "name" "policy_instance_minimum" "label" (t "Policy instance minimum") "value" $v.policy_instance_minimum "type" "number" "min" "0" "help" (t "Minimum number of instances that will be automatically assigned to this group when new instances come online.") "errors" (index $e "policy_instance_minimum"))}}
+						{{template "form_field" (dict "id" "instance-group-policy-instance-percentage" "name" "policy_instance_percentage" "label" (t "Policy instance percentage") "value" $v.policy_instance_percentage "type" "number" "min" "0" "max" "100" "help" (t "Minimum percentage of all instances that will be automatically assigned to this group when new instances come online.") "errors" (index $e "policy_instance_percentage"))}}
+						{{template "form_field" (dict "id" "instance-group-max-concurrent-jobs" "name" "max_concurrent_jobs" "label" (t "Max concurrent jobs") "value" $v.max_concurrent_jobs "type" "number" "min" "0" "help" (t "Maximum number of jobs to run concurrently on this group. Zero means no limit will be enforced.") "errors" (index $e "max_concurrent_jobs"))}}
+						{{template "form_field" (dict "id" "instance-group-max-forks" "name" "max_forks" "label" (t "Max forks") "value" $v.max_forks "type" "number" "min" "0" "help" (t "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced.") "errors" (index $e "max_forks"))}}
+					{{end}}
+					{{template "form_errors" $e}}
+					{{template "form_actions" (cond (has $g) (printf "/instance_groups/%s%s/details" (cond $cg "container_group/" "") (str $g.id)) "/instance_groups")}}
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

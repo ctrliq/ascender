@@ -1,0 +1,59 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Host Metrics"))}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "host_metrics-list" "searchKeys" .Data.searchKeys "ns" "host_metrics" "singleKey" true "noAdvanced" true "noDelete" true "filters" .Data.filters "actionsAfter" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><div><button aria-label="%s" class="pf-v6-c-button pf-m-secondary pf-m-progress" disabled type="button" data-host-metrics-delete><span class="pf-v6-c-button__text">%s</span></button></div></div></div>` (esc (t "Delete")) (esc (t "Delete")))))}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Host Metrics")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "hostname" "label" (t "Hostname") "id" "host_metrics-table-sort-hostname")}}
+							{{template "sort_th" (dict "page" . "key" "first_automation" "label" (t "First automated") "id" "host_metrics-table-sort-first_automation" "help" (t "When was the host first automated"))}}
+							{{template "sort_th" (dict "page" . "key" "last_automation" "label" (t "Last automated") "id" "host_metrics-table-sort-last_automation" "help" (t "When was the host last automated"))}}
+							{{template "sort_th" (dict "page" . "key" "automated_counter" "label" (t "Automation") "id" "host_metrics-table-sort-automated_counter" "help" (t "How many times was the host automated"))}}
+							{{template "sort_th" (dict "page" . "key" "deleted_counter" "label" (t "Deleted") "id" "host_metrics-table-sort-deleted_counter" "help" (t "How many times was the host deleted"))}}
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $m := .Data.results}}
+							<tr class="pf-v6-c-table__tr" id="host_metrics-row-{{$m.hostname}}" data-row data-id="{{str $m.id}}" data-name="{{$m.hostname}}">
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Hostname"}}" class="pf-v6-c-table__td">
+									{{$m.hostname}}
+								</td>
+								<td tabindex="-1" data-label="{{t "First automation"}}" class="pf-v6-c-table__td">
+									{{dt $m.first_automation}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Last automation"}}" class="pf-v6-c-table__td">
+									{{dt $m.last_automation}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Automation"}}" class="pf-v6-c-table__td">
+									{{str $m.automated_counter}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Deleted"}}" class="pf-v6-c-table__td">
+									{{str $m.deleted_counter}}
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Host Metrics")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Host Metrics")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

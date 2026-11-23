@@ -1,0 +1,117 @@
+{{define "content"}}
+{{$o := .Data.organization}}
+{{$id := str $o.id}}
+{{$caps := dig $o "summary_fields" "user_capabilities"}}
+{{template "screen_header" (dict "title" .Title "stream" "organization" "crumbs" (list (dict "href" "/organizations" "title" (t "Organizations")) (dict "href" (printf "/organizations/%s/details" $id) "title" (str $o.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" "/organizations" "label" "Back to Organizations") "tabs" (list (dict "key" "details" "href" (printf "/organizations/%s/details" $id) "label" "Details") (dict "key" "access" "href" (printf "/organizations/%s/access" $id) "label" "Access") (dict "key" "teams" "href" (printf "/organizations/%s/teams" $id) "label" "Teams") (dict "key" "execution_environments" "href" (printf "/organizations/%s/execution_environments" $id) "label" "Execution Environments") (dict "key" "notifications" "href" (printf "/organizations/%s/notifications" $id) "label" "Notifications")))}}
+		{{if eq .Data.tab "access"}}
+			{{template "access_tab" .}}
+		{{else if eq .Data.tab "notifications"}}
+			{{template "notification_list" (dict "page" . "kinds" (list "approvals" "started" "success" "error" "changed"))}}
+		{{else if eq .Data.tab "teams"}}
+			{{template "search_toolbar" (dict "page" . "id" "team-list" "searchKeys" .Data.searchKeys "ns" "team" "noSelect" true "noDelete" true "filters" .Data.filters)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Teams")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact">
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "team-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+									{{t "Actions"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range .Data.results}}
+								{{$tid := str .id}}
+								<tr class="pf-v6-c-table__tr" id="team-row-{{$tid}}">
+									<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+										<a href="/teams/{{$tid}}/details"><b>{{.name}}</b></a>
+									</td>
+									<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+										<div class="ascender-actions-td__grid">
+											<div>
+												<div style="display: contents;">
+													<div>
+														{{if dig .summary_fields "user_capabilities" "edit"}}
+															<a aria-label="{{t "Edit Team"}}" class="pf-v6-c-button pf-m-plain ascender-organization-team-list-item__grid-column-2" href="/teams/{{$tid}}/edit" data-tooltip="{{t "Edit Team"}}" data-tooltip-pos="top">
+																<span class="pf-v6-c-button__icon">
+																	{{icon "pencil-alt"}}
+																</span>
+															</a>
+														{{end}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Teams")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Teams")))}}
+				{{end}}
+			{{end}}
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				{{if eq .Data.tab "details"}}
+					<dl class="ascender-detail-list" gutter="sm">
+						{{template "detail" (dict "label" (t "Name") "value" (str $o.name) "cy" "organization-detail-name")}}
+						{{if has $o.description}}
+							{{template "detail" (dict "label" (t "Description") "value" (str $o.description))}}
+						{{end}}
+						{{with dig $o "summary_fields" "default_environment"}}
+							{{template "detail" (dict "label" (t "Default Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "help" (t "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."))}}
+						{{end}}
+						{{template "user_date_detail" (dict "label" (t "Created") "date" $o.created "user" (dig $o "summary_fields" "created_by"))}}
+						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $o.modified "user" (dig $o "summary_fields" "modified_by"))}}
+						{{if .Data.instance_groups}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Instance Groups"}}
+									{{template "help_button" (t "The Instance Groups for this Organization to run on.")}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "label_group" (dict "items" (igLinks .Data.instance_groups) "max" 5 "total" (len .Data.instance_groups) "color" "blue")}}
+								</dd>
+							</div>
+						{{end}}
+						{{if .Data.galaxy_credentials}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Galaxy Credentials"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									<div>
+										{{template "credential_chips" (credLinks .Data.galaxy_credentials)}}
+									</div>
+								</dd>
+							</div>
+						{{end}}
+					</dl>
+					<div class="ascender-card-actions-row__wrapper">
+						{{if dig $caps "edit"}}
+							<a aria-label="{{t "Edit"}}" class="pf-v6-c-button pf-m-primary" href="/organizations/{{$id}}/edit">
+								<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+							</a>
+						{{end}}
+						{{if dig $caps "delete"}}
+							{{template "delete_button" (dict "name" (str $o.name) "title" (t "Delete Organization") "api" (printf "/api/v2/organizations/%v/" $id) "redirect" "/organizations" "error" (t "Failed to delete organization.") "usageKind" "organization" "usageId" $id "usageMessage" (t "This organization is currently being by other resources. Are you sure you want to delete it?"))}}
+						{{end}}
+					</div>
+				{{else}}
+					{{template "empty_state" (dict "title" (t "{0} not available yet" "0" .Title) "body" (t "This tab will be available once the related resources are ported."))}}
+				{{end}}
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

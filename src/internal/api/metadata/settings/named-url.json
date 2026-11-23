@@ -1,0 +1,38 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `NAMED_URL_FORMATS`: Read-only list of key-value pairs that shows the standard format of all available named URLs. (nested object)\n* `NAMED_URL_GRAPH_NODES`: Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources (nested object)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {},
+        "GET": {
+            "NAMED_URL_FORMATS": {
+                "type": "nested object",
+                "label": "Formats of all available named urls",
+                "help_text": "Read-only list of key-value pairs that shows the standard format of all available named URLs.",
+                "category": "Named URL",
+                "category_slug": "named-url",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            },
+            "NAMED_URL_GRAPH_NODES": {
+                "type": "nested object",
+                "label": "List of all named url graph nodes.",
+                "help_text": "Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources",
+                "category": "Named URL",
+                "category_slug": "named-url",
+                "defined_in_file": false,
+                "child": {
+                    "type": "field"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "name": "Project Copy",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "name": {
+                "type": "string",
+                "label": "Name"
+            }
+        },
+        "POST": {
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name"
+            }
+        }
+    },
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "update_role",
+        "read_role"
+    ]
+}

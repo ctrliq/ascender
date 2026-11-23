@@ -1,0 +1,115 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Notification Templates") "stream" "notification_template")}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "notification-templates-list" "searchKeys" .Data.searchKeys "ns" "notification_templates" "addHref" (cond .Data.canAdd "/notification_templates/add" "") "kind" "Notification Templates" "api" "/api/v2/notification_templates/" "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Notification Templates")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "notification-templates-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Status"}}
+							</th>
+							{{template "sort_th" (dict "page" . "key" "notification_type" "label" (t "Type") "id" "notification-templates-table-sort-notification_type")}}
+							{{template "sort_th" (dict "page" . "key" "organization" "label" (t "Organization") "id" "notification-templates-table-sort-organization")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $e := .Data.results}}
+							{{$id := str $e.id}}
+							{{$caps := dig $e "summary_fields" "user_capabilities"}}
+							{{$recent := dig $e "summary_fields" "recent_notifications"}}
+							<tr class="pf-v6-c-table__tr" id="notification-template-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$e.name}}">
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="template-name-{{$id}}">
+									<a href="/notification_templates/{{$id}}"><b>{{$e.name}}</b></a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td" data-nt-status>
+									{{if $recent}}
+										{{with index $recent 0}}
+											{{template "status_label" (str .status)}}
+										{{end}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+									{{with index $.Data.typeLabels (str $e.notification_type)}}
+										{{.}}
+									{{else}}
+										{{$e.notification_type}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Oragnization"}}" class="pf-v6-c-table__td">
+									<a href="/organizations/{{str (dig $e "summary_fields" "organization" "id")}}/details">
+										<b>{{dig $e "summary_fields" "organization" "name"}}</b>
+									</a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 120px;">
+									<div class="ascender-actions-td__grid">
+										<div>
+											<div style="display: contents;">
+												<div data-tooltip="{{t "Test notification"}}" data-tooltip-pos="top">
+													<button aria-label="{{t "Test Notification"}}" class="pf-v6-c-button pf-m-plain" type="button" data-nt-test="{{$id}}"{{if $recent}}{{with index $recent 0}}{{if eq (str .status) "running"}} disabled=""{{end}}{{end}}{{end}}>
+														<span class="pf-v6-c-button__icon">
+															{{icon "bell"}}
+														</span>
+													</button>
+												</div>
+											</div>
+										</div>
+										{{if dig $caps "edit"}}
+											<div>
+												<div style="display: contents;">
+													<div>
+														<a aria-label="{{t "Edit Notification Template"}}" class="pf-v6-c-button pf-m-plain" href="/notification_templates/{{$id}}/edit" data-tooltip="{{t "Edit"}}" data-tooltip-pos="top">
+															<span class="pf-v6-c-button__icon">
+																{{icon "pencil-alt"}}
+															</span>
+														</a>
+													</div>
+												</div>
+											</div>
+										{{end}}
+										{{if dig $caps "copy"}}
+											<div>
+												<div style="display: contents;">
+													<div>
+														<button aria-label="{{t "Copy"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Copy Notification Template"}}" data-tooltip-pos="top" data-copy-resource="/api/v2/notification_templates/{{$id}}/copy/" data-copy-name="{{$e.name}}" data-copy-error="{{t "Failed to copy template."}}">
+															<span class="pf-v6-c-button__icon">
+																{{icon "copy"}}
+															</span>
+														</button>
+													</div>
+												</div>
+											</div>
+										{{end}}
+									</div>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Notification Templates")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Notification Templates")))}}
+			{{end}}
+		{{end}}
+		{{template "nt_status_templates"}}
+	</div>
+</section>
+{{end}}

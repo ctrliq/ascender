@@ -1,0 +1,34 @@
+{
+    "name": "LDAP Server Test",
+    "description": "# Test an LDAP Server\n\nMake a POST request to this resource to connect to an LDAP server and bind as its bind DN (anonymously when the DN and password are empty), as a login would, without saving anything. `server` is `default` or a server number from 1 to 5. The server's saved settings are used, except for those of its settings given by their full names (such as `AUTH_LDAP_1_SERVER_URI`): `SERVER_URI`, `BIND_DN`, `BIND_PASSWORD`, `START_TLS`, `CA_CERT`, `USER_SEARCH`, `USER_DN_TEMPLATE`, `USER_ATTR_MAP`, `GROUP_SEARCH`, `GROUP_TYPE`, `GROUP_TYPE_PARAMS`, `REQUIRE_GROUP`, `DENY_GROUP` and `USER_FLAGS_BY_GROUP`. A `BIND_PASSWORD` of `$encrypted$` is the saved password, which is only sent to the saved server URI.\n\nA success gives the server that answered and how the connection was protected (`tls`: `ldaps`, `start_tls` or `none`); a failure gives the `stage` it failed at (`connect` or `bind`), the `error` and, when there is one, a `hint`.\n\nWith `username` and `password`, a login as that user is also tried, as the login page would try it, and reported under `login`: how the user's DN was found (`dn_from`, `dn`, `matches`, `search_errors`), and either `ok` with the `attributes`, `groups` and `flags` the login would give the user, or the `stage` it stopped at (`local_account`, `search`, `user_bind`, `require_group`, `deny_group`, `configuration`), the `reason` or `error`, and a `hint`. When a group requirement refused it, `member_of` (the user's memberOf values) and `groups` (the groups `GROUP_SEARCH` and `GROUP_TYPE` find) show what the directory reported. No account is created or changed.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {
+            "server": {
+                "type": "string",
+                "required": false,
+                "label": "LDAP Server",
+                "help_text": "Which LDAP server to test: default, or 1 to 5.",
+                "default": "default"
+            },
+            "username": {
+                "type": "string",
+                "required": false,
+                "label": "Username",
+                "help_text": "A directory user to test a login as. Optional."
+            },
+            "password": {
+                "type": "string",
+                "required": false,
+                "label": "Password",
+                "help_text": "The password of the user to test a login as. Required with a username."
+            }
+        }
+    }
+}

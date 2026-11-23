@@ -1,0 +1,93 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$a := .Data.app}}
+{{if $a}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "o_auth2_application,o_auth2_access_token" "crumbs" (list (dict "href" "/applications" "title" (t "Applications")) (dict "href" (printf "/applications/%s" (str $a.id)) "title" (str $a.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New Application") "stream" "o_auth2_application,o_auth2_access_token" "crumbs" (list (dict "href" "/applications" "title" (t "Applications"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{if $a}}<div id="" class="pf-v6-c-card">{{end}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate data-application-form>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_field" (dict "id" "name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" true "resource" "organizations" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization"))}}
+					{{template "app_select" (dict "id" "authType" "name" "authorization_grant_type" "label" (t "Authorization grant type") "help" (t "The Grant type the user must use to acquire tokens for this application") "value" (str $v.authorization_grant_type) "choices" .Data.grantChoices "disabled" (has $a) "errors" (index $e "authorization_grant_type"))}}
+					<div class="pf-v6-c-form__group" data-cy="redirect_uris-form-group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="redirect_uris">
+								<span class="pf-v6-c-form__label-text">{{t "Redirect URIs"}}</span>
+								{{if eq (str $v.authorization_grant_type) "authorization-code"}}
+									<span class="pf-v6-c-form__label-required" aria-hidden="true">
+										&nbsp;*
+									</span>
+								{{end}}
+							</label>
+							&nbsp;&nbsp;
+							<span class="pf-v6-c-form__group-label-help">
+								{{template "help_button" (t "Allowed URIs list, space separated")}}
+							</span>
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "redirect_uris"}} pf-m-error{{end}}">
+								<input id="redirect_uris" aria-invalid="{{if index $e "redirect_uris"}}true{{else}}false{{end}}"{{if eq (str $v.authorization_grant_type) "authorization-code"}} required{{end}} type="text" value="{{$v.redirect_uris}}" name="redirect_uris" data-redirect-uris>
+								{{if index $e "redirect_uris"}}
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__icon pf-m-status">
+											{{icon "exclamation-circle"}}
+										</span>
+									</span>
+								{{end}}
+							</span>
+							{{template "field_error" (index $e "redirect_uris")}}
+						</div>
+					</div>
+					{{template "app_select" (dict "id" "clientType" "name" "client_type" "label" (t "Client type") "help" (t "Set to Public or Confidential depending on how secure the client device is.") "value" (str $v.client_type) "choices" .Data.clientChoices "errors" (index $e "client_type"))}}
+					{{template "form_errors" $e}}
+					{{template "form_actions" (cond (has $a) (printf "/applications/%s/details" (str $a.id)) "/applications")}}
+				</div>
+			</form>
+		</div>
+		{{if $a}}</div>{{end}}
+	</div>
+</section>
+{{end}}
+{{define "app_select"}}
+{{/* .id .name .label .help .value .choices .disabled .errors: AnsibleSelect with an empty first choice */}}
+<div class="pf-v6-c-form__group">
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+		</label>
+		&nbsp;&nbsp;
+		<span class="pf-v6-c-form__group-label-help">{{template "help_button" .help}}</span>
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<span class="pf-v6-c-form-control{{if .errors}} pf-m-error{{end}}{{if .disabled}} pf-m-disabled{{end}}">
+			<select id="{{.id}}" name="{{.name}}" aria-label="{{t "Select Input"}}" aria-invalid="{{if .errors}}true{{else}}false{{end}}" data-required{{if .disabled}} disabled{{end}}>
+				<option class="" value=""></option>
+				{{range .choices}}
+					<option class="" value="{{index . 0}}"{{if eq (index . 0) $.value}} selected{{end}}>
+						{{tChoice (index . 1)}}
+					</option>
+				{{end}}
+			</select>
+			<span class="pf-v6-c-form-control__utilities">
+				{{if .errors}}
+					<span class="pf-v6-c-form-control__icon pf-m-status">
+						{{icon "exclamation-circle"}}
+					</span>
+				{{end}}
+				<span class="pf-v6-c-form-control__toggle-icon">{{icon "pf-caret-down"}}</span>
+			</span>
+		</span>
+		{{template "field_error" .errors}}
+	</div>
+</div>
+{{end}}

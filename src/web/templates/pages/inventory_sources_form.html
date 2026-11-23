@@ -1,0 +1,285 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$inv := .Data.inventory}}
+{{$s := .Data.source}}
+{{$h := .Data.help}}
+{{$invBase := .Data.invBase}}
+{{$src := str $v.source}}
+{{$cn := .Data.credentialNamespaces}}
+{{$ns := index $cn $src}}
+{{if $s}}
+	{{template "screen_header" (dict "title" (t "Edit details") "stream" "inventory,inventory_source" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $invBase) "title" (str $inv.name)) (dict "href" (printf "%s/sources" $invBase) "title" (t "Sources")) (dict "href" (printf "%s/sources/%s/details" $invBase (str $s.id)) "title" (str $s.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create new source") "stream" "inventory,inventory_source" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $invBase) "title" (str $inv.name)) (dict "href" (printf "%s/sources" $invBase) "title" (t "Sources"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{if .Data.loadError}}
+			<div class="pf-v6-c-card__body">{{template "content_error" .Data.loadError}}</div>
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-source-form data-validate data-namespaces="{{json $cn}}"{{if .Data.initialJSON}} data-initial="{{.Data.initialJSON}}"{{end}} data-source-vars-help="{{json .Data.sourceVarsHelps}}">
+					<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+					<input type="hidden" name="project_allow_override" value="{{if $v.project_allow_override}}true{{else}}false{{end}}" data-project-allow-override>
+					<div class="ascender-form-column-layout">
+						{{template "form_errors" $e}}
+						{{template "form_field" (dict "id" "name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+						{{template "form_field" (dict "id" "description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+						{{template "lookup_field" (dict "id" "execution-environments" "name" "execution_environment" "label" (t "Execution Environment") "value" $v.execution_environment "resource" "execution_environments" "filter" .Data.eeFilter "title" (t "Select {0}" "0" (t "Execution Environment")) "errors" (index $e "execution_environment"))}}
+						{{template "multi_lookup" (dict "draggable" true "description" (t "Note: The order in which these are selected sets the execution precedence. Select more than one to enable drag.") "id" "org-instance-groups" "name" "instance_groups" "label" (t "Instance Groups") "values" $v.instance_groups "resource" "instance_groups" "title" (t "Select {0}" "0" (t "Instance Groups")) "help" $h.instanceGroups)}}
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="source">
+									<span class="pf-v6-c-form__label-text">{{t "Source"}}</span>
+									<span class="pf-v6-c-form__label-required" aria-hidden="true">
+										&nbsp;*
+									</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control{{if index $e "source"}} pf-m-error{{end}}">
+									<select id="source" name="source" aria-label="{{t "Select Input"}}" aria-invalid="false" required data-source-select>
+										<option value="" disabled{{if eq $src ""}} selected{{end}}>
+											{{t "Choose a source"}}
+										</option>
+										{{range .Data.sourceChoices}}
+											<option value="{{index . 0}}"{{if eq (index . 0) $src}} selected{{end}}>
+												{{tChoice (index . 1)}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+								{{template "field_error" (index $e "source")}}
+							</div>
+						</div>
+						<div class="ascender-sub-form-layout" data-source-details{{if or (eq $src "") (eq $src "custom")}} hidden{{end}}>
+							<h4 class="pf-v6-c-title pf-m-md">{{t "Source details"}}</h4>
+							<div class="ascender-form-column-layout">
+								<div data-scm-only data-scm-branch-group style="display: contents;"{{if or (ne $src "scm") (not $v.project_allow_override)}} hidden{{end}}>
+									{{template "form_field" (dict "id" "project-scm-branch" "name" "scm_branch" "label" (t "Source Control Branch/Tag/Commit") "value" $v.scm_branch "help" $h.scmBranch "errors" (index $e "scm_branch"))}}
+								</div>
+								<div class="pf-v6-c-form__group" data-lookup data-resource="credentials" data-title="{{t "Select {0}" "0" (t "Credential")}}" data-filter="{{if eq $src "scm"}}credential_type__kind=cloud{{else if $ns}}credential_type__namespace={{index $ns "namespace"}}{{end}}" data-credential-group>
+									<div class="pf-v6-c-form__group-label">
+										<label class="pf-v6-c-form__label" for="credential">
+											<span class="pf-v6-c-form__label-text">
+												{{t "Credential"}}
+											</span>
+											<span class="pf-v6-c-form__label-required" aria-hidden="true" data-credential-required{{if not (and $ns (index $ns "required"))}} hidden{{end}}>
+												&nbsp;*
+											</span>
+										</label>
+										&nbsp;&nbsp;
+									</div>
+									<div class="pf-v6-c-form__group-control">
+										<div class="pf-v6-c-input-group">
+											<div class="pf-v6-c-input-group__item">
+												<button id="credential-open" aria-label="{{t "Search"}}" class="pf-v6-c-button pf-m-control" type="button" data-lookup-open>
+													<span class="pf-v6-c-button__icon">
+														{{icon "search"}}
+													</span>
+												</button>
+											</div>
+											<div class="pf-v6-c-input-group__item pf-m-fill">
+												<span class="pf-v6-c-form-control{{if index $e "credential"}} pf-m-error{{end}}">
+													<input id="credential" aria-invalid="false" type="text" value="{{$v.credential.name}}" readonly data-lookup-name{{if and $ns (index $ns "required")}} required{{end}}>
+												</span>
+											</div>
+										</div>
+										<input type="hidden" name="credential" value="{{$v.credential.id}}" data-lookup-id>
+										<input type="hidden" name="credential_name" value="{{$v.credential.name}}" data-lookup-hidden-name>
+										{{template "field_error" (index $e "credential")}}
+									</div>
+								</div>
+								<div data-scm-only style="display: contents;"{{if ne $src "scm"}} hidden{{end}}>
+									{{template "lookup_field" (dict "id" "project" "name" "source_project" "label" (t "Project") "value" $v.source_project "required" true "resource" "projects" "filter" "role_level=use_role" "title" (t "Select {0}" "0" (t "Project")) "errors" (index $e "source_project"))}}
+									<div class="pf-v6-c-form__group">
+										<div class="pf-v6-c-form__group-label">
+											<label class="pf-v6-c-form__label" for="source_path">
+												<span class="pf-v6-c-form__label-text">
+													{{t "Inventory file"}}
+												</span>
+												<span class="pf-v6-c-form__label-required" aria-hidden="true">
+													&nbsp;*
+												</span>
+											</label>
+											&nbsp;&nbsp;
+											<span class="pf-v6-c-form__group-label-help">
+												{{template "help_button" $h.sourcePath}}
+											</span>
+										</div>
+										<div class="pf-v6-c-form__group-control" data-source-path-select>
+											{{template "typeahead" (dict "id" "source_path" "name" "source_path" "label" (t "Select source path") "placeholder" (t "Select source path") "value" $v.source_path "required" true "auto" true "items" .Data.sourcePaths "createLabel" (t "Set source path to"))}}
+											{{template "field_error" (index $e "source_path")}}
+										</div>
+									</div>
+								</div>
+								<div data-vmware-only style="display: contents;"{{if ne $src "vmware"}} hidden{{end}}>
+									<div class="pf-v6-c-form__group">
+										<div class="pf-v6-c-form__group-label">
+											<label class="pf-v6-c-form__label" for="vmware-plugin">
+												<span class="pf-v6-c-form__label-text">
+													{{t "Collection"}}
+												</span>
+											</label>
+											&nbsp;&nbsp;
+											<span class="pf-v6-c-form__group-label-help">
+												{{template "help_button" $h.vmwarePlugin}}
+											</span>
+										</div>
+										<div class="pf-v6-c-form__group-control">
+											<span class="pf-v6-c-form-control">
+												<select id="vmware-plugin" name="vmware_plugin" aria-label="{{t "Select Input"}}" aria-invalid="false">
+													{{range .Data.vmwarePlugins}}
+														<option value="{{index . 0}}"{{if eq (index . 0) (str $v.vmware_plugin)}} selected{{end}}>
+															{{index . 1}}
+														</option>
+													{{end}}
+												</select>
+												<span class="pf-v6-c-form-control__utilities">
+													<span class="pf-v6-c-form-control__toggle-icon">
+														{{icon "pf-caret-down"}}
+													</span>
+												</span>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="pf-v6-c-form__group">
+									<div class="pf-v6-c-form__group-label">
+										<label class="pf-v6-c-form__label" for="verbosity">
+											<span class="pf-v6-c-form__label-text">
+												{{t "Verbosity"}}
+											</span>
+										</label>
+										&nbsp;&nbsp;
+										<span class="pf-v6-c-form__group-label-help">
+											{{template "help_button" $h.verbosity}}
+										</span>
+									</div>
+									<div class="pf-v6-c-form__group-control">
+										<span class="pf-v6-c-form-control">
+											<select id="verbosity" name="verbosity" aria-label="{{t "Select Input"}}" aria-invalid="false">
+												{{range .Data.verbosities}}
+													<option value="{{index . 0}}"{{if eq (index . 0) (str $v.verbosity)}} selected{{end}}>
+														{{index . 1}}
+													</option>
+												{{end}}
+											</select>
+											<span class="pf-v6-c-form-control__utilities">
+												<span class="pf-v6-c-form-control__toggle-icon">
+													{{icon "pf-caret-down"}}
+												</span>
+											</span>
+										</span>
+									</div>
+								</div>
+								{{template "form_field" (dict "id" "host-filter" "name" "host_filter" "label" (t "Host Filter") "value" $v.host_filter "help" $h.hostFilter "errors" (index $e "host_filter"))}}
+								{{template "form_field" (dict "id" "inventory-enabled-var" "name" "enabled_var" "label" (t "Enabled Variable") "value" $v.enabled_var "help" $h.enabledVar "errors" (index $e "enabled_var"))}}
+								{{template "form_field" (dict "id" "inventory-enabled-value" "name" "enabled_value" "label" (t "Enabled Value") "value" $v.enabled_value "help" $h.enabledValue "errors" (index $e "enabled_value"))}}
+								<div class="ascender-form-full-width-layout">
+									<div class="pf-v6-c-form__group">
+										<div class="pf-v6-c-form__group-label">
+											<label class="pf-v6-c-form__label" for="option-checkboxes">
+												<span class="pf-v6-c-form__label-text">
+													{{t "Update options"}}
+												</span>
+											</label>
+											&nbsp;&nbsp;
+										</div>
+										<div class="pf-v6-c-form__group-control">
+											<div class="ascender-form-checkbox-layout">
+												<div class="pf-v6-c-check">
+													<input id="overwrite" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Overwrite"}}" type="checkbox" name="overwrite"{{if $v.overwrite}} checked{{end}}>
+													<label class="pf-v6-c-check__label" for="overwrite">
+														<span>
+															{{t "Overwrite"}}&nbsp;
+															{{template "help_button_html" $h.overwrite}}
+														</span>
+													</label>
+												</div>
+												<div class="pf-v6-c-check">
+													<input id="overwrite_vars" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Overwrite variables"}}" type="checkbox" name="overwrite_vars"{{if $v.overwrite_vars}} checked{{end}}>
+													<label class="pf-v6-c-check__label" for="overwrite_vars">
+														<span>
+															{{t "Overwrite variables"}}&nbsp;
+															{{template "help_button_html" $h.overwriteVars}}
+														</span>
+													</label>
+												</div>
+												<div class="pf-v6-c-check">
+													<input id="update_on_launch" class="pf-v6-c-check__input" aria-invalid="false" aria-label="{{t "Update on launch"}}" type="checkbox" name="update_on_launch"{{if $v.update_on_launch}} checked{{end}} data-update-on-launch>
+													<label class="pf-v6-c-check__label" for="update_on_launch">
+														<span>
+															{{t "Update on launch"}}&nbsp;
+															<span data-update-on-launch-help style="display: contents;">
+																{{template "help_button_html" .Data.updateOnLaunchHelp}}
+															</span>
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div data-cache-timeout style="display: contents;"{{if not $v.update_on_launch}} hidden{{end}}>
+									{{template "form_field" (dict "id" "cache-timeout" "name" "update_cache_timeout" "label" (t "Cache timeout (seconds)") "value" $v.update_cache_timeout "type" "number" "min" "0" "help" $h.cacheTimeout "errors" (index $e "update_cache_timeout"))}}
+								</div>
+								<div class="ascender-form-full-width-layout">
+									<div>
+										<div class="pf-v6-c-form__group" data-editor-group>
+											<div class="ascender-variables-field__header" data-cy="source_vars-label">
+												<div class="pf-v6-l-split pf-m-gutter">
+													<div class="pf-v6-l-split__item">
+														<label for="source_vars" class="pf-v6-c-form__label" id="source_vars-label">
+															<span class="pf-v6-c-form__label-text">
+																{{t "Source variables"}}
+															</span>
+														</label>
+														<span data-source-vars-help style="display: contents;">
+															{{template "help_button_html" (index .Data.sourceVarsHelps $src)}}
+														</span>
+													</div>
+													<div class="pf-v6-l-split__item">
+														<div class="ascender-button-group__group">
+															{{template "mode_toggle" (dict "json" (isJSON $v.source_vars))}}
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="ascender-code-editor__focus-wrapper" tabindex="0" data-editor-focus>
+												<div data-cy="code-editor" class="ascender-code-editor__wrapper pf-v6-c-form-control{{if index $e "source_vars"}} ascender-code-editor__wrapper--has-errors{{end}}" data-code-editor data-editor-id="source_vars" data-rows="auto" data-min-rows="4" data-mode="{{if isJSON $v.source_vars}}javascript{{else}}yaml{{end}}">
+													<textarea hidden name="source_vars" data-code-editor-value>{{$v.source_vars}}</textarea>
+												</div>
+											</div>
+											<div class="pf-v6-c-form__helper-text keyboard-help-text" aria-live="polite">
+												{{t "Press Enter to edit. Press ESC to stop editing."}}
+											</div>
+											{{with index $e "source_vars"}}
+												<div class="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+													{{range .}}<p>{{.}}</p>{{end}}
+												</div>
+											{{end}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						{{if $s}}
+							{{template "form_actions" (printf "%s/sources/%s/details" $invBase (str $s.id))}}
+						{{else}}
+							{{template "form_actions" (printf "%s/sources" $invBase)}}
+						{{end}}
+					</div>
+				</form>
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

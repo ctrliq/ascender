@@ -1,0 +1,1471 @@
+{
+    "english": [
+        "\n    Returns a dictionary of capabilities the user has on the particular\n    instance.  *NOTE* This is not a direct mapping of can_* methods into this\n    dictionary, it is intended to munge some queries in a way that is\n    convenient for the user interface to consume and hide or show various\n    actions in the interface.\n    ",
+        "\nChecking the settings registry against itself.\n\nEvery registered setting declares the kind of value it accepts, as a field, and\ncarries a default. Nothing asked whether the two agree. A default that its own\nfield rejects is not a startup error: it surfaces when somebody reads that\nsetting through the API, which is a long way from the line that caused it.\n",
+        " --worker-info output is not a YAML dict, output:",
+        " is not a Galaxy name",
+        " is not a registered instance.",
+        " is not a registered instance; reaping ",
+        " is not a registered instance; resetting ",
+        " is not a valid active state",
+        "' is not a valid integer or UUID",
+        "A unique ID identifying this resource by the resource server.",
+        "Cannot change hostname.",
+        "Cannot change listener port for managed nodes.",
+        "Cannot change listener port.",
+        "Cannot change node type.",
+        "Cannot change peers.",
+        "Check the variables handed to a relaunch.\n\n        The answers the survey defines are validated as a launch validates them,\n        and $encrypted$ is refused wherever it is not a survey password. Every\n        other key is a plain workflow variable, and\n        allow_overwrite_flow_vars_on_relaunch is what decides whether those are\n        allowed at all. Returns a list of error strings, empty when the\n        variables can be used.",
+        "Database ID for this role.",
+        "Failed to connect to database for pg_notify: ",
+        "The supplied new instance is not a valid model instance.",
+        "The supplied old instance is not a valid model instance.",
+        "YAML parse error - not a YAML mapping",
+        "requirements file is not a list or mapping",
+        {
+            "id": "%s is not a valid kwarg",
+            "style": "percent"
+        },
+        {
+            "id": "%s with this (%s) combination already exists.",
+            "style": "percent"
+        },
+        {
+            "id": "'{}' is not a valid integer or UUID",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot change instance group membership of control-only node: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot change instance group membership of hop node : {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Failed to connect to database for pg_notify: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Group-group updates took %d queries for %d group-group relationships",
+            "style": "percent"
+        },
+        {
+            "id": "Group-host updates took %d queries for %d group-host relationships",
+            "style": "percent"
+        },
+        {
+            "id": "Host {} is not a registered instance.",
+            "style": "brace"
+        },
+        {
+            "id": "Not starting {} task pk={} because {} is not a valid active state",
+            "style": "brace"
+        },
+        {
+            "id": "Organization {} not found or you don't have permissions to access it",
+            "style": "brace"
+        },
+        {
+            "id": "Remote node {} --worker-info output is not a YAML dict, output:{}",
+            "style": "brace"
+        },
+        {
+            "id": "The OIDC user flags setting %s of %s is not a boolean, so the flag will not be removed",
+            "style": "percent"
+        },
+        {
+            "id": "The OIDC user flags username list for %s of %s will be ignored because it is not a list of usernames",
+            "style": "percent"
+        },
+        {
+            "id": "User %(user_ansible_id)s is not a superuser and gateway is locked, denying access!",
+            "style": "percent"
+        },
+        {
+            "id": "group-group and group-host deletions took %d queries for %d relationships",
+            "style": "percent"
+        },
+        {
+            "id": "role requirement {} is not a Galaxy name",
+            "style": "brace"
+        },
+        {
+            "id": "{0} is not a valid archive",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a dynamic input field",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a registered instance; reaping {}",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a registered instance; resetting {} to pending",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a valid Ascender task",
+            "style": "brace"
+        }
+    ],
+    "exact": {
+        "Application with this Name and Organization already exists.": {
+            "ar": "التطبيق بهذا الاسم و Organization موجود سلفاً.",
+            "es": "Aplicación con este Nombre y Organization ya existe.",
+            "fr": "Un objet Application avec ces champs Nom et Organization existe déjà.",
+            "hi": "एप्लिकेशन with this नाम और Organization already exists.",
+            "ja": "この 名前 と Organization を持った アプリケーション が既に存在します。",
+            "ko": "이 이름 그리고 Organization(을)를 가진 애플리케이션이(가) 이미 존재합니다.",
+            "nl": "Toepassing met deze Naam en Organization bestaat al.",
+            "zh": "应用 with this Name and Organization already exists."
+        },
+        "Credential input source with this Target credential and Input field name already exists.": {
+            "ar": "Credential input source بهذا Target credential و Input field name موجود سلفاً.",
+            "es": "Credential input source con este Target credential y Input field name ya existe.",
+            "fr": "Un objet Credential input source avec ces champs Target credential et Input field name existe déjà.",
+            "hi": "Credential input source with this Target credential और Input field name already exists.",
+            "ja": "この Target credential と Input field name を持った Credential input source が既に存在します。",
+            "ko": "이 Target credential 그리고 Input field name(을)를 가진 Credential input source이(가) 이미 존재합니다.",
+            "nl": "Credential input source met deze Target credential en Input field name bestaat al."
+        },
+        "Execution environment with this Name already exists.": {
+            "ar": "النموذج Execution environment والحقل Name موجود مسبقاً.",
+            "es": "Ya existe Execution environment con este Name.",
+            "fr": "Un objet Execution environment avec ce champ Name existe déjà.",
+            "hi": "इस Name के साथ एक Execution environment पहले से ही उपस्थित है ।",
+            "ja": "この Name を持った Execution environment が既に存在します。",
+            "ko": "이 Name(을)를 가진 Execution environment이(가) 이미 존재합니다.",
+            "nl": "Er bestaat al een Execution environment met eenzelfde Name."
+        },
+        "Instance group with this Name already exists.": {
+            "ar": "النموذج Instance group والحقل Name موجود مسبقاً.",
+            "es": "Ya existe Instance group con este Name.",
+            "fr": "Un objet Instance group avec ce champ Name existe déjà.",
+            "hi": "इस Name के साथ एक Instance group पहले से ही उपस्थित है ।",
+            "ja": "この Name を持った Instance group が既に存在します。",
+            "ko": "이 Name(을)를 가진 Instance group이(가) 이미 존재합니다.",
+            "nl": "Er bestaat al een Instance group met eenzelfde Name."
+        },
+        "Label with this Name and Organization already exists.": {
+            "ar": "Label بهذا Name و Organization موجود سلفاً.",
+            "es": "Label con este Name y Organization ya existe.",
+            "fr": "Un objet Label avec ces champs Name et Organization existe déjà.",
+            "hi": "Label with this Name और Organization already exists.",
+            "ja": "この Name と Organization を持った Label が既に存在します。",
+            "ko": "이 Name 그리고 Organization(을)를 가진 Label이(가) 이미 존재합니다.",
+            "nl": "Label met deze Name en Organization bestaat al."
+        },
+        "Organization with this Name already exists.": {
+            "ar": "النموذج Organization والحقل Name موجود مسبقاً.",
+            "es": "Ya existe Organization con este Name.",
+            "fr": "Un objet Organization avec ce champ Name existe déjà.",
+            "hi": "इस Name के साथ एक Organization पहले से ही उपस्थित है ।",
+            "ja": "この Name を持った Organization が既に存在します。",
+            "ko": "이 Name(을)를 가진 Organization이(가) 이미 존재합니다.",
+            "nl": "Er bestaat al een Organization met eenzelfde Name."
+        },
+        "Team with this Organization and Name already exists.": {
+            "ar": "Team بهذا Organization و Name موجود سلفاً.",
+            "es": "Team con este Organization y Name ya existe.",
+            "fr": "Un objet Team avec ces champs Organization et Name existe déjà.",
+            "hi": "Team with this Organization और Name already exists.",
+            "ja": "この Organization と Name を持った Team が既に存在します。",
+            "ko": "이 Organization 그리고 Name(을)를 가진 Team이(가) 이미 존재합니다.",
+            "nl": "Team met deze Organization en Name bestaat al."
+        },
+        "instance with this hostname already exists.": {
+            "ar": "النموذج instance والحقل hostname موجود مسبقاً.",
+            "es": "Ya existe instance con este hostname.",
+            "fr": "Un objet instance avec ce champ hostname existe déjà.",
+            "hi": "इस hostname के साथ एक instance पहले से ही उपस्थित है ।",
+            "ja": "この hostname を持った instance が既に存在します。",
+            "ko": "이 hostname(을)를 가진 instance이(가) 이미 존재합니다.",
+            "nl": "Er bestaat al een instance met eenzelfde hostname."
+        }
+    },
+    "formatted": [
+        {
+            "id": "\"$encrypted$\" is a reserved keyword, may not be used for {key}.",
+            "style": "brace"
+        },
+        {
+            "id": "\"%s\" is a reserved field name",
+            "style": "percent"
+        },
+        {
+            "id": "\"{input}\" is not a valid choice.",
+            "style": "brace"
+        },
+        {
+            "id": "\"{input}\" is not a valid path choice.",
+            "style": "brace"
+        },
+        {
+            "id": "\"{input}\" is not a valid string.",
+            "style": "brace"
+        },
+        {
+            "id": "$encrypted$ is a reserved keyword for password question defaults, survey question {idx} is type {survey_item[type]}.",
+            "style": "brace"
+        },
+        {
+            "id": "$encrypted$ is a reserved keyword, may not be used for new default in position {idx}.",
+            "style": "brace"
+        },
+        {
+            "id": "%(ct_name)s objects don’t have a get_absolute_url() method",
+            "style": "percent"
+        },
+        {
+            "id": "%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it may be ambiguous or it may not exist.",
+            "style": "percent"
+        },
+        {
+            "id": "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s.",
+            "style": "percent"
+        },
+        {
+            "id": "%(field_name)s is not a text field and cannot be filtered by case-insensitive search",
+            "style": "percent"
+        },
+        {
+            "id": "%(from)s-%(to)s relationship",
+            "style": "percent"
+        },
+        {
+            "id": "%(from)s-%(to)s relationships",
+            "style": "percent"
+        },
+        {
+            "id": "%(lookup)s is not an allowed field name. Must be ascii encodable.",
+            "style": "percent"
+        },
+        {
+            "id": "%(model)s instance with %(field)s %(value)r is not a valid choice.",
+            "style": "percent"
+        },
+        {
+            "id": "%(model_name)s with this %(field_label)s already exists.",
+            "style": "percent"
+        },
+        {
+            "id": "%(model_name)s with this %(field_labels)s already exists.",
+            "style": "percent"
+        },
+        {
+            "id": "%(name)s object with primary key %(key)r does not exist.",
+            "style": "percent"
+        },
+        {
+            "id": "%(related_model)s is not searchable",
+            "style": "percent"
+        },
+        {
+            "id": "'variable' '%(item)s' duplicated in survey question %(survey)s.",
+            "style": "percent"
+        },
+        {
+            "id": "'{field_name}' in survey question {idx} expected to be {type_label}.",
+            "style": "brace"
+        },
+        {
+            "id": "'{field_name}' missing from survey question {idx}",
+            "style": "brace"
+        },
+        {
+            "id": "'{survey_item[type]}' in survey question {idx} is not one of '{allowed_types}' allowed question types.",
+            "style": "brace"
+        },
+        {
+            "id": "'{value}' is not one of ['{allowed_values}']",
+            "style": "brace"
+        },
+        {
+            "id": "(Hidden field %(name)s) %(error)s",
+            "style": "percent"
+        },
+        {
+            "id": "A {value_type} identifying this {name}.",
+            "style": "brace"
+        },
+        {
+            "id": "An account cannot be found for {0}",
+            "style": "brace"
+        },
+        {
+            "id": "At least %(min_certs)d certificates are required, only %(cert_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "At least %(min_keys)d private keys are required, only %(key_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "Bad launch configuration starting template {template_pk} as part of workflow {workflow_pk}. Errors:\n{error_text}",
+            "style": "brace"
+        },
+        {
+            "id": "Can manage all aspects of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all credentials of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all execution environments of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all inventories of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all job templates of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all notifications of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all projects of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can manage all workflows of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Can use the %s in a job template",
+            "style": "percent"
+        },
+        {
+            "id": "Can view all aspects of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Cannot assign a Credential of kind `{}`",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot assign a Credential of kind `{}`.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot assign multiple {credential_type} credentials.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot assign multiple {} credentials.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot change %s.",
+            "style": "percent"
+        },
+        {
+            "id": "Cannot change field '{}' on a constructed inventory source.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot deprovision a node that runs the pods of these container groups: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot parse as JSON (error: {json_error}) or YAML (error: {yaml_error}).",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot relaunch because previous job had 0 {status_value} hosts.",
+            "style": "brace"
+        },
+        {
+            "id": "Cannot retry on {status_value} hosts, playbook stats not available.",
+            "style": "brace"
+        },
+        {
+            "id": "Change password: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Cloud-based inventory sources (such as %s) require credentials for the matching cloud service.",
+            "style": "percent"
+        },
+        {
+            "id": "Configuration field '{}' incorrect type, expected {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Constraint “%(name)s” is violated.",
+            "style": "percent"
+        },
+        {
+            "id": "Content type %(ct_id)s object %(obj_id)s doesn’t exist",
+            "style": "percent"
+        },
+        {
+            "id": "Content type %(ct_id)s object has no associated model",
+            "style": "percent"
+        },
+        {
+            "id": "Could not join {}: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Credential {} does not exist",
+            "style": "brace"
+        },
+        {
+            "id": "DN must include \"%%(user)s\" placeholder for username: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Data type for this {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Database ID for this {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Date has wrong format. Use one of these formats instead: {format}.",
+            "style": "brace"
+        },
+        {
+            "id": "Datetime has wrong format. Use one of these formats instead: {format}.",
+            "style": "brace"
+        },
+        {
+            "id": "Default value {survey_item[default]} in survey question {idx} expected to be {type_label}.",
+            "style": "brace"
+        },
+        {
+            "id": "Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90% (queue.discardMark), messages start to be discarded, according to LOG_AGGREGATOR_ACTION_QUEUE_DISCARD_SEVERITY. When it is full, every new message, whatever its severity, is dropped if no room frees up within 2 seconds.",
+            "style": "percent"
+        },
+        {
+            "id": "Duplicate entry {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Duration has wrong format. Use one of these formats instead: {format}.",
+            "style": "brace"
+        },
+        {
+            "id": "Encountered unsafe code execution: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure that there are no more than %(max)s decimal place.",
+            "n": "max",
+            "plural": "Ensure that there are no more than %(max)s decimal places.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure that there are no more than %(max)s digit before the decimal point.",
+            "n": "max",
+            "plural": "Ensure that there are no more than %(max)s digits before the decimal point.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure that there are no more than %(max)s digit in total.",
+            "n": "max",
+            "plural": "Ensure that there are no more than %(max)s digits in total.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure that there are no more than {max_decimal_places} decimal places.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure that there are no more than {max_digits} digits in total.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure that there are no more than {max_whole_digits} digits before the decimal point.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this field has at least {min_length} characters.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this field has at least {min_length} elements.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this field has no more than {max_length} characters.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this field has no more than {max_length} elements.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this filename has at most %(max)d character (it has %(length)d).",
+            "n": "max",
+            "plural": "Ensure this filename has at most %(max)d characters (it has %(length)d).",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this filename has at most {max_length} characters (it has {length}).",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this value has at least %(limit_value)d character (it has %(show_value)d).",
+            "n": "limit_value",
+            "plural": "Ensure this value has at least %(limit_value)d characters (it has %(show_value)d).",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value has at most %(limit_value)d character (it has %(show_value)d).",
+            "n": "limit_value",
+            "plural": "Ensure this value has at most %(limit_value)d characters (it has %(show_value)d).",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is %(limit_value)s (it is %(show_value)s).",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is a multiple of step size %(limit_value)s, starting from %(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is a multiple of step size %(limit_value)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is greater than or equal to %(limit_value)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is greater than or equal to {min_value}.",
+            "style": "brace"
+        },
+        {
+            "id": "Ensure this value is less than or equal to %(limit_value)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Ensure this value is less than or equal to {max_value}.",
+            "style": "brace"
+        },
+        {
+            "id": "Enter a valid %(protocol)s address.",
+            "style": "percent"
+        },
+        {
+            "id": "Environment variable {} is not allowed to be used in credentials.",
+            "style": "brace"
+        },
+        {
+            "id": "Environment variable {} may affect Ansible configuration so its use is not allowed in credentials.",
+            "style": "brace"
+        },
+        {
+            "id": "Error converting time {} and/or timeEnd {} to int.",
+            "style": "brace"
+        },
+        {
+            "id": "Error converting time {} or timeEnd {} to int.",
+            "style": "brace"
+        },
+        {
+            "id": "Error resolving room alias {} via Matrix: no room_id in the response",
+            "style": "brace"
+        },
+        {
+            "id": "Error sending notification grafana: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Error sending notification mattermost: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Error sending notification rocket.chat: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Error {} via Matrix: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Event '{}' invalid, must be one of 'started', 'success', 'error', 'changed', or 'workflow_approval'",
+            "style": "brace"
+        },
+        {
+            "id": "Exception connecting to irc server: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Exception sending messages: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Exception sending to irc server: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Expected None, True, False, a string or list of strings but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected a dictionary but got {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected a dictionary of items but got type \"{input_type}\".",
+            "style": "brace"
+        },
+        {
+            "id": "Expected a list of items but got type \"{input_type}\".",
+            "style": "brace"
+        },
+        {
+            "id": "Expected a list of three items but got {length} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected a list of tuples of max length 2 but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected an instance of LDAPGroupType but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected an instance of LDAPSearch but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected an instance of LDAPSearch or LDAPSearchUnion but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected available in {wait} second.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected available in {wait} seconds.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected dict for event '{}', found {}",
+            "style": "brace"
+        },
+        {
+            "id": "Expected dict for workflow approval event '{}', found {}",
+            "style": "brace"
+        },
+        {
+            "id": "Expected list of strings but got {input_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Expected string for '{}', found {}, ",
+            "style": "brace"
+        },
+        {
+            "id": "Expected {} for field '{}', received {} type.",
+            "style": "brace"
+        },
+        {
+            "id": "FROM: {} / TO: {}",
+            "style": "brace"
+        },
+        {
+            "id": "Failed reading {0}: {1}",
+            "style": "brace"
+        },
+        {
+            "id": "Failed to connect to {0}: {1}",
+            "style": "brace"
+        },
+        {
+            "id": "Failed to get 200 response from the issuer: {0}",
+            "style": "brace"
+        },
+        {
+            "id": "Failed to get JWT decryption key from JWT server: ({0}) {1}",
+            "style": "brace"
+        },
+        {
+            "id": "Field '{}' is missing from survey spec.",
+            "style": "brace"
+        },
+        {
+            "id": "Field of type: %(field_type)s",
+            "style": "percent"
+        },
+        {
+            "id": "File extension “%(extension)s” is not allowed. Allowed extensions are: %(allowed_extensions)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Filtering on %(field_name)s is not allowed.",
+            "style": "percent"
+        },
+        {
+            "id": "Filtering on field %(name)s is not allowed.",
+            "style": "percent"
+        },
+        {
+            "id": "Host is required for %s URL",
+            "style": "percent"
+        },
+        {
+            "id": "Incorrect type. Expected URL string, received {data_type}.",
+            "style": "brace"
+        },
+        {
+            "id": "Incorrect type. Expected pk value, received {data_type}.",
+            "style": "brace"
+        },
+        {
+            "id": "Input type `{data_type}` is not a dictionary",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid %(field_name)s id: %(field_id)s",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid %s URL",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid DN: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid ansible id \"{ansible_id}\" - resource does not exist.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid certificate or key: %s...",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid connection option(s): {invalid_options}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid data. Expected a dictionary, but got {datatype}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid datetime for the timezone \"{timezone}\".",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid filter: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid group_type parameters. Expected instance of dict but got {parameters_type} instead.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid key names: {invalid_key_names}",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid key(s): {invalid_keys}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid language code(s) for org info: {invalid_lang_codes}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid operator. Valid choices are: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid pk \"{pk_value}\" - object does not exist.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid port specification: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid private key: unsupported type \"%s\"",
+            "style": "percent"
+        },
+        {
+            "id": "Invalid regular expression: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid syntax. A string HOST-DIR[:CONTAINER-DIR[:OPTIONS]] is expected but got {path}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid trigger. Valid choices are: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid user attribute(s): {invalid_attrs}.",
+            "style": "brace"
+        },
+        {
+            "id": "Invalid user flag: \"{invalid_flag}\".",
+            "style": "brace"
+        },
+        {
+            "id": "Job Template {} is missing or undefined.",
+            "style": "brace"
+        },
+        {
+            "id": "List of hosts to be created, JSON. e.g. [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]",
+            "style": "brace"
+        },
+        {
+            "id": "List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]",
+            "style": "brace"
+        },
+        {
+            "id": "Loops not allowed in filters, detected on field %(field_name)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Make OIDC users superusers (triggers_superuser, is_superuser) or system auditors (triggers_system_auditor, is_system_auditor) by trigger rule, by a list of exact, case-sensitive usernames, or both. With both, the rule goes first and the list can grant users the rule skips. A user who stops matching loses the flag at their next login, unless remove_superusers or remove_system_auditors is false; an explicit deny by a rule always revokes. A flag with neither is left alone, and an empty list is ignored; to revoke from everyone use the rule {\"never\": {}}. Username lists are ignored with a warning while Only Superusers Can Set User Emails and Change Usernames (RESTRICT_USER_IDENTITY_TO_SUPERUSERS) is off, since an organization administrator could otherwise rename or create an account to take a listed name. Prefer a rule on a group or the sub claim where that matters.",
+            "style": "brace"
+        },
+        {
+            "id": "ManagementForm data is missing or has been tampered with. Missing fields: %(field_names)s. You may need to file a bug report if the issue persists.",
+            "style": "percent"
+        },
+        {
+            "id": "May run ad hoc commands on the %s",
+            "style": "percent"
+        },
+        {
+            "id": "May run the %s",
+            "style": "percent"
+        },
+        {
+            "id": "May update the %s",
+            "style": "percent"
+        },
+        {
+            "id": "May view settings for the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Message type '{}' invalid, must be either 'message' or 'body'",
+            "style": "brace"
+        },
+        {
+            "id": "Messages whose syslog severity number is greater than or equal to this value are discarded while the action queue holds 90% or more of LOG_AGGREGATOR_ACTION_QUEUE_SIZE (queue.discardMark). Severity numbers run from 0 (EMERGENCY) to 7 (DEBUG), so a higher value here discards fewer messages, and 8, the rsyslog default, turns this discarding off. Equivalent to the rsyslogd queue.discardSeverity setting on the action. Job events and activity stream entries are logged at INFO (6), so once LOG_AGGREGATOR_LEVEL lets them through, the default of 5 permits every one of them to be discarded. This setting does not apply once the queue is completely full: each new message, whatever its severity, then waits up to 2 seconds (queue.timeoutEnqueue) for room and is dropped if none frees up. So 8 prevents loss only while the queue has room. Neither kind of discard is logged as an error or a warning.",
+            "style": "percent"
+        },
+        {
+            "id": "Method \"{method}\" not allowed.",
+            "style": "brace"
+        },
+        {
+            "id": "Missing required fields for Notification Configuration: {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Missing required parameters in {dependency}.",
+            "style": "brace"
+        },
+        {
+            "id": "More than {count} items...",
+            "style": "brace"
+        },
+        {
+            "id": "Must be 'cloud' or 'net', not %s",
+            "style": "percent"
+        },
+        {
+            "id": "Must be a simple space-separated string with allowed scopes {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Name of this {}.",
+            "style": "brace"
+        },
+        {
+            "id": "No %s matches the given query.",
+            "style": "percent"
+        },
+        {
+            "id": "No argument passed to %s module.",
+            "style": "percent"
+        },
+        {
+            "id": "No error handling path for workflow job node(s) [{node_status}]. Workflow job node(s) missing unified job template and error handling path [{no_ufjt}].",
+            "style": "brace"
+        },
+        {
+            "id": "No more than %(max_certs)d certificates are allowed, %(cert_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "No more than %(max_keys)d private keys are allowed, %(key_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "No related model for field %(model_name)s.",
+            "style": "percent"
+        },
+        {
+            "id": "No values specified for field '{}'",
+            "style": "brace"
+        },
+        {
+            "id": "Node {} did not fail in this workflow job, so there is nothing to force.",
+            "style": "brace"
+        },
+        {
+            "id": "Node {} is an approval, and approvals cannot be forced as successful.",
+            "style": "brace"
+        },
+        {
+            "id": "Node {} is no longer in the workflow job template, or its identifier changed since this run, so the relaunch cannot carry it forward.",
+            "style": "brace"
+        },
+        {
+            "id": "Node {} is not part of this workflow job.",
+            "style": "brace"
+        },
+        {
+            "id": "Notification Templates can only be assigned when source is one of {}.",
+            "style": "brace"
+        },
+        {
+            "id": "OAuth2 Tokens cannot be created by users associated with an external authentication provider ({})",
+            "style": "brace"
+        },
+        {
+            "id": "Object with {slug_name}={value} does not exist.",
+            "style": "brace"
+        },
+        {
+            "id": "One or more job templates depend on branch override behavior for this project (ids: {}).",
+            "style": "brace"
+        },
+        {
+            "id": "Only a superuser can change the %s of a user.",
+            "style": "percent"
+        },
+        {
+            "id": "Only one certificate is allowed, %(cert_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "Only one of {} may be given.",
+            "style": "brace"
+        },
+        {
+            "id": "Only one private key is allowed, %(key_count)d provided.",
+            "style": "percent"
+        },
+        {
+            "id": "Only used when enabled_var is set. Value when the host is considered enabled. For example if enabled_var=\"status.power_state\"and enabled_value=\"powered_on\" with host variables:{   \"status\": {     \"power_state\": \"powered_on\",     \"created\": \"2020-08-04T18:13:04+00:00\",     \"healthy\": true    },    \"name\": \"foobar\",    \"ip_address\": \"192.168.2.1\"}The host would be marked enabled. If power_state where any value other than powered_on then the host would be disabled when imported. If the key is not found then the host will be enabled",
+            "style": "brace"
+        },
+        {
+            "id": "Optional description of this {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Permission error when reading {0}",
+            "style": "brace"
+        },
+        {
+            "id": "Please correct the duplicate data for %(field)s, which must be unique.",
+            "style": "percent"
+        },
+        {
+            "id": "Please correct the duplicate data for %(field)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Please correct the duplicate data for %(field_name)s which must be unique for the %(lookup)s in %(date_field)s.",
+            "style": "percent"
+        },
+        {
+            "id": "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.",
+            "style": "percent"
+        },
+        {
+            "id": "Please submit at least %(num)d form.",
+            "n": "num",
+            "plural": "Please submit at least %(num)d forms.",
+            "style": "percent"
+        },
+        {
+            "id": "Please submit at most %(num)d form.",
+            "n": "num",
+            "plural": "Please submit at most %(num)d forms.",
+            "style": "percent"
+        },
+        {
+            "id": "Provided variable {} has no database value to replace with.",
+            "style": "brace"
+        },
+        {
+            "id": "Related job {} is still processing events.",
+            "style": "brace"
+        },
+        {
+            "id": "Related template already uses {credential_type} credential.",
+            "style": "brace"
+        },
+        {
+            "id": "Related template cannot accept {} on launch.",
+            "style": "brace"
+        },
+        {
+            "id": "Removing {} credential at launch time without replacement is not supported. Provided list lacked credential(s): {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Resource type: %(name)s cannot be managed by Resources.",
+            "style": "percent"
+        },
+        {
+            "id": "Resource type: %(name)s does not exist.",
+            "style": "percent"
+        },
+        {
+            "id": "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified as \"foo.bar\", in which case the lookup will traverse into nested dicts, equivalent to: from_dict.get(\"foo\", {}).get(\"bar\", default)",
+            "style": "brace"
+        },
+        {
+            "id": "Revoked %d access token.",
+            "n": "#0",
+            "plural": "Revoked %d access tokens.",
+            "style": "percent"
+        },
+        {
+            "id": "Revoked %d refresh token.",
+            "n": "#0",
+            "plural": "Revoked %d refresh tokens.",
+            "style": "percent"
+        },
+        {
+            "id": "Schema validation error in relative path {path} ({error})",
+            "style": "brace"
+        },
+        {
+            "id": "Select a valid choice. %(value)s is not one of the available choices.",
+            "style": "percent"
+        },
+        {
+            "id": "Set password: %s",
+            "style": "percent"
+        },
+        {
+            "id": "Setting %(setting_name)s needs to be a string not a %(type)s",
+            "style": "percent"
+        },
+        {
+            "id": "Slug (up to %(max_length)s)",
+            "style": "percent"
+        },
+        {
+            "id": "Standard Output too large to display ({text_size} bytes), only download supported for sizes over {supported_size} bytes.",
+            "style": "brace"
+        },
+        {
+            "id": "String (up to %(max_length)s)",
+            "style": "percent"
+        },
+        {
+            "id": "Surrogate characters are not allowed: U+{code_point:X}.",
+            "style": "brace"
+        },
+        {
+            "id": "Survey question %s is not a json object.",
+            "style": "percent"
+        },
+        {
+            "id": "Syntax error rendering template for {sub_key} inside of {type} ({error_msg})",
+            "style": "brace"
+        },
+        {
+            "id": "Template types {type_names} not allowed in bulk jobs",
+            "style": "brace"
+        },
+        {
+            "id": "The approval node {name} ({pk}) has expired after {timeout} seconds.",
+            "style": "brace"
+        },
+        {
+            "id": "The approval node {name} ({pk}) was automatically approved after {timeout} seconds.",
+            "style": "brace"
+        },
+        {
+            "id": "The fields {field_names} must make a unique set.",
+            "style": "brace"
+        },
+        {
+            "id": "The format of logged messages when an API 4XX error occurs, the following variables will be substituted: \nstatus_code - The HTTP status code of the error\nuser_name - The user name attempting to use the API\nurl_path - The URL path to the API endpoint called\nremote_addr - The remote address seen for the user\nerror - The error set by the api endpoint\nVariables need to be in the format {<variable name>}.",
+            "style": "brace"
+        },
+        {
+            "id": "The number of days must be between {min_days} and {max_days}.",
+            "style": "brace"
+        },
+        {
+            "id": "The password is too similar to the %(verbose_name)s.",
+            "style": "percent"
+        },
+        {
+            "id": "The specified file {0} does not exist",
+            "style": "brace"
+        },
+        {
+            "id": "The specified file {0} is not a file",
+            "style": "brace"
+        },
+        {
+            "id": "The {min_or_max} limit in survey question {idx} expected to be integer.",
+            "style": "brace"
+        },
+        {
+            "id": "The {} role cannot be assigned to a team",
+            "style": "brace"
+        },
+        {
+            "id": "This field must be unique for the \"{date_field}\" date.",
+            "style": "brace"
+        },
+        {
+            "id": "This field must be unique for the \"{date_field}\" month.",
+            "style": "brace"
+        },
+        {
+            "id": "This field must be unique for the \"{date_field}\" year.",
+            "style": "brace"
+        },
+        {
+            "id": "This launch configuration already provides a {credential_type} credential.",
+            "style": "brace"
+        },
+        {
+            "id": "This password is too short. It must contain at least %d character.",
+            "n": "#0",
+            "plural": "This password is too short. It must contain at least %d characters.",
+            "style": "percent"
+        },
+        {
+            "id": "Time has wrong format. Use one of these formats instead: {format}.",
+            "style": "brace"
+        },
+        {
+            "id": "Timed out after {0} secs when connecting to {1}",
+            "style": "brace"
+        },
+        {
+            "id": "Timestamp when this {} was created.",
+            "style": "brace"
+        },
+        {
+            "id": "Timestamp when this {} was last modified.",
+            "style": "brace"
+        },
+        {
+            "id": "URL for this {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Unable to change %s on user managed by LDAP.",
+            "style": "percent"
+        },
+        {
+            "id": "Unable to convert \"%s\" to boolean",
+            "style": "percent"
+        },
+        {
+            "id": "Unable to determine how to handle {0} to get key",
+            "style": "brace"
+        },
+        {
+            "id": "Unknown period \"%s\"",
+            "style": "percent"
+        },
+        {
+            "id": "Unsupported %s URL",
+            "style": "percent"
+        },
+        {
+            "id": "Unsupported PEM object type: \"%s\"",
+            "style": "percent"
+        },
+        {
+            "id": "Unsupported SCM type \"%s\"",
+            "style": "percent"
+        },
+        {
+            "id": "Unsupported host \"%s\" for file:// URL",
+            "style": "percent"
+        },
+        {
+            "id": "Unsupported media type \"{media_type}\" in request.",
+            "style": "brace"
+        },
+        {
+            "id": "User is a member of the %s",
+            "style": "percent"
+        },
+        {
+            "id": "Username must be \"git\" for SSH access to %s.",
+            "style": "percent"
+        },
+        {
+            "id": "Username must be \"git\" or \"x-access-token\" (for github app) for SSH access to %s.",
+            "style": "percent"
+        },
+        {
+            "id": "Value %(value)r is not a valid choice.",
+            "style": "percent"
+        },
+        {
+            "id": "Variables not compatible with JSON standard (error: {json_error})",
+            "style": "brace"
+        },
+        {
+            "id": "Variables {list_of_keys} are not allowed for system jobs.",
+            "style": "brace"
+        },
+        {
+            "id": "Wait until job finishes before retrying on {status_value} hosts.",
+            "style": "brace"
+        },
+        {
+            "id": "Workflow Approval event '{}' invalid, must be one of 'running', 'approved', 'timed_out', or 'denied'",
+            "style": "brace"
+        },
+        {
+            "id": "YAML parse error - %s",
+            "style": "percent"
+        },
+        {
+            "id": "You cannot launch job template {}.",
+            "style": "brace"
+        },
+        {
+            "id": "Your password must contain at least %(min_length)d character.",
+            "n": "min_length",
+            "plural": "Your password must contain at least %(min_length)d characters.",
+            "style": "percent"
+        },
+        {
+            "id": "cannot be set unless \"%s\" is set",
+            "style": "percent"
+        },
+        {
+            "id": "redirect_uris cannot be empty with grant_type {grant_type}",
+            "style": "brace"
+        },
+        {
+            "id": "required for %s",
+            "style": "percent"
+        },
+        {
+            "id": "resolving room alias {}",
+            "style": "brace"
+        },
+        {
+            "id": "rrule parsing failed validation: {}",
+            "style": "brace"
+        },
+        {
+            "id": "secret values must be of type string, not {}",
+            "style": "brace"
+        },
+        {
+            "id": "sending notification to room {}",
+            "style": "brace"
+        },
+        {
+            "id": "{message} Contact your system administrator and reference request ID {request_id}.",
+            "style": "brace"
+        },
+        {
+            "id": "{model_name} {not_allowed} not found or you don't have permissions to access it",
+            "style": "brace"
+        },
+        {
+            "id": "{path} is not a valid path choice.",
+            "style": "brace"
+        },
+        {
+            "id": "{path} is not a valid path choice. You must provide an absolute path.",
+            "style": "brace"
+        },
+        {
+            "id": "{scontext} is not a valid mount option. Allowed types are {mount_types}",
+            "style": "brace"
+        },
+        {
+            "id": "{setting_name} was set but we were unable to import its reference as a function.",
+            "style": "brace"
+        },
+        {
+            "id": "{status_value} is not a valid status option.",
+            "style": "brace"
+        },
+        {
+            "id": "{sub_key} uses an undefined field ({error_msg})",
+            "style": "brace"
+        },
+        {
+            "id": "{type} provided in relative path {path}, expected {expected_type}",
+            "style": "brace"
+        },
+        {
+            "id": "{type} provided, expected {expected_type}",
+            "style": "brace"
+        },
+        {
+            "id": "{} are prohibited from use in ad hoc commands.",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a valid hostname of an existing instance.",
+            "style": "brace"
+        },
+        {
+            "id": "{} is not a {}",
+            "style": "brace"
+        },
+        {
+            "id": "{} lets in users from any directory. Give your own tenant ID or domain.",
+            "style": "brace"
+        },
+        {
+            "id": "“%(pk)s” is not a valid value.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” is not a valid UUID.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” is not a valid binary value.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD format.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] format.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[.uuuuuu] format.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an invalid time.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid date.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be a decimal number.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be a float.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be an integer.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be either None, True or False.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be either True or False.",
+            "style": "percent"
+        },
+        {
+            "id": "“%(value)s” value must be either True, False, or None.",
+            "style": "percent"
+        }
+    ],
+    "untranslated": [
+        "\n",
+        "\"$encrypted$ is a reserved keyword, may not be used for {}.\"",
+        "%s instance group name may not be changed.",
+        "%s instance group policy_instance_percentage may not be changed from the initial value set by the installer.",
+        ", ",
+        "2",
+        "3",
+        "API Token",
+        "Arabic",
+        "Bad data found in related field %s.",
+        "Cannot set %s if not SCM type.",
+        "Cannot use dictionary for %s",
+        "Default choice must be answered from the choices listed.",
+        "Dutch",
+        "English",
+        "Expected dict for 'messages' field, found {}",
+        "Failed to create imagePullSecret: {}. Check that openshift or k8s credential has permission to create a secret.",
+        "Failed to create secret for container group {} because additional service account role rules are needed.  Add get, create and delete role rules for secret resources for your cluster credential.",
+        "Failed to delete secret for container group {} because additional service account role rules are needed.  Add create and delete role rules for secret resources for your cluster credential.",
+        "Field '{}' unavailable",
+        "French",
+        "Hindi",
+        "Input field must be defined on target credential (options are {}).",
+        "JSON parse error - %s\nPossible cause: trailing comma.",
+        "Japanese",
+        "Korean",
+        "Messages cannot contain newlines (found newline in {} event)",
+        "Missing passwords needed to start: {}",
+        "Multiple Choice (Single Select) can only have one default value.",
+        "Only one of 'user', 'team', or 'organization' should be provided, received {} fields.",
+        "Password max length is {}",
+        "Password must be at least {} characters long.",
+        "Password must contain at least {} digits.",
+        "Password must contain at least {} special characters.",
+        "Password must contain at least {} uppercase characters.",
+        "Required related field %s for permission check.",
+        "Security error due to field '{}'",
+        "Spanish",
+        "Survey question {idx} of type {survey_item[type]} must specify choices.",
+        "The original object is already named {}, a copy from it cannot have the same name.",
+        "Unable to render message '{}': {}",
+        "Variables {list_of_keys} provided, but this template cannot accept variables.",
+        "Verify SSL",
+        "You have already reached the maximum number of %s hosts allowed for your organization. Contact your System Administrator for assistance.",
+        "`{}` is a prohibited environment variable",
+        "adding %s credential type",
+        "field IDs must be unique (%s)",
+        "or",
+        "salt",
+        "session",
+        "version",
+        "{0}",
+        "{sub_key} not allowed for {element_type} type ({element_id})",
+        "{} 'id' field is missing."
+    ]
+}

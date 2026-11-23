@@ -1,0 +1,30 @@
+{
+    "name": "Project Playbooks",
+    "description": "# Retrieve Project Playbooks:\n\nMake GET request to this resource to retrieve a list of playbooks available\nfor a project.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "playbooks": {
+                "type": "field",
+                "label": "Playbooks",
+                "help_text": "Array of playbooks available within this project.",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "project"
+    ],
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "update_role",
+        "read_role"
+    ]
+}

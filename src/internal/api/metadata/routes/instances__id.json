@@ -1,0 +1,316 @@
+{
+    "name": "Instance Detail",
+    "description": "# Retrieve an Instance:\n\nMake GET request to this resource to retrieve a single instance\nrecord containing the following fields:\n\n* `id`: Database ID for this instance. (integer)\n* `hostname`:  (string)\n* `type`: Data type for this instance. (choice)\n* `url`: URL for this instance. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `uuid`:  (string)\n* `created`: Timestamp when this instance was created. (datetime)\n* `modified`: Timestamp when this instance was last modified. (datetime)\n* `last_seen`: Last time instance ran its heartbeat task for main cluster nodes. Last known connection to receptor mesh for execution nodes. (datetime)\n* `health_check_started`: The last time a health check was initiated on this instance. (datetime)\n* `health_check_pending`:  (field)\n* `last_health_check`: Last time a health check was ran on this instance to refresh cpu, memory, and capacity. (datetime)\n* `errors`: Any error details from the last health check. (string)\n* `capacity_adjustment`:  (decimal)\n* `version`:  (string)\n* `capacity`:  (integer)\n* `consumed_capacity`:  (field)\n* `percent_capacity_remaining`:  (field)\n* `jobs_running`: Count of jobs in the running or waiting state that are targeted for this instance (integer)\n* `jobs_total`: Count of all jobs that target this instance (integer)\n* `cpu`:  (decimal)\n* `memory`: Total system memory of this instance in bytes. (integer)\n* `cpu_capacity`:  (integer)\n* `mem_capacity`:  (integer)\n* `enabled`:  (boolean)\n* `managed_by_policy`:  (boolean)\n* `node_type`: Role that this node plays in the mesh. (choice)\n    - `control`: Control plane node\n    - `execution`: Execution plane node\n    - `hybrid`: Controller and execution\n    - `hop`: Message-passing node, no execution capability\n* `node_state`: Indicates the current life cycle stage of this instance. (choice)\n    - `provisioning`: Provisioning\n    - `provision-fail`: Provisioning Failure\n    - `installed`: Installed\n    - `ready`: Ready\n    - `unavailable`: Unavailable\n    - `deprovisioning`: De-provisioning\n    - `deprovision-fail`: De-provisioning Failure\n* `managed`: If True, this instance is managed by the control plane. (boolean)\n* `ip_address`:  (string)\n* `peers`: Primary keys of receptor addresses to peer to. (field)\n* `reverse_peers`:  (field)\n* `listener_port`:  (integer)\n* `peers_from_control_nodes`:  (boolean)\n* `protocol`:  (field)\n\n\n\n\n\n# Update an Instance:\n\nMake a PUT or PATCH request to this resource to update this\ninstance.  The following fields may be modified:\n\n\n\n* `hostname`:  (string, required)\n\n\n\n\n\n\n\n\n\n\n\n\n* `capacity_adjustment`:  (decimal, default=`1`)\n\n\n\n\n\n\n\n\n\n\n* `enabled`:  (boolean, default=`True`)\n* `managed_by_policy`:  (boolean, default=`True`)\n* `node_type`: Role that this node plays in the mesh. (choice)\n    - `control`: Control plane node\n    - `execution`: Execution plane node (default)\n    - `hybrid`: Controller and execution\n    - `hop`: Message-passing node, no execution capability\n* `node_state`: Indicates the current life cycle stage of this instance. (choice)\n    - `provisioning`: Provisioning\n    - `provision-fail`: Provisioning Failure\n    - `installed`: Installed (default)\n    - `ready`: Ready\n    - `unavailable`: Unavailable\n    - `deprovisioning`: De-provisioning\n    - `deprovision-fail`: De-provisioning Failure\n\n\n* `peers`: Primary keys of receptor addresses to peer to. (field, default=`None`)\n\n* `listener_port`:  (integer, default=``)\n* `peers_from_control_nodes`:  (boolean, default=``)\n\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "hostname": {
+                "type": "string",
+                "required": true,
+                "label": "Hostname",
+                "max_length": 250,
+                "filterable": true
+            },
+            "capacity_adjustment": {
+                "type": "decimal",
+                "required": false,
+                "label": "Capacity adjustment",
+                "min_value": 0.0,
+                "filterable": true,
+                "default": 1.0
+            },
+            "enabled": {
+                "type": "boolean",
+                "required": false,
+                "label": "Enabled",
+                "filterable": true,
+                "default": true
+            },
+            "managed_by_policy": {
+                "type": "boolean",
+                "required": false,
+                "label": "Managed by policy",
+                "filterable": true,
+                "default": true
+            },
+            "node_type": {
+                "type": "choice",
+                "required": false,
+                "label": "Node type",
+                "help_text": "Role that this node plays in the mesh.",
+                "filterable": true,
+                "default": "execution",
+                "choices": [
+                    ["control", "Control plane node"],
+                    ["execution", "Execution plane node"],
+                    ["hybrid", "Controller and execution"],
+                    ["hop", "Message-passing node, no execution capability"]
+                ]
+            },
+            "node_state": {
+                "type": "choice",
+                "required": false,
+                "label": "Node state",
+                "help_text": "Indicates the current life cycle stage of this instance.",
+                "filterable": true,
+                "default": "installed",
+                "choices": [
+                    ["provisioning", "Provisioning"],
+                    ["provision-fail", "Provisioning Failure"],
+                    ["installed", "Installed"],
+                    ["ready", "Ready"],
+                    ["unavailable", "Unavailable"],
+                    ["deprovisioning", "De-provisioning"],
+                    ["deprovision-fail", "De-provisioning Failure"]
+                ]
+            },
+            "peers": {
+                "type": "field",
+                "required": false,
+                "label": "Peers",
+                "help_text": "Primary keys of receptor addresses to peer to.",
+                "filterable": false
+            },
+            "listener_port": {
+                "type": "integer",
+                "required": false,
+                "label": "Listener port",
+                "filterable": false
+            },
+            "peers_from_control_nodes": {
+                "type": "boolean",
+                "required": false,
+                "label": "Peers from control nodes",
+                "filterable": false
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this instance.",
+                "filterable": true
+            },
+            "hostname": {
+                "type": "string",
+                "label": "Hostname",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this instance.",
+                "choices": [
+                    ["instance", "Instance"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this instance.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "uuid": {
+                "type": "string",
+                "label": "Uuid",
+                "filterable": true
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this instance was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this instance was last modified.",
+                "filterable": true
+            },
+            "last_seen": {
+                "type": "datetime",
+                "label": "Last seen",
+                "help_text": "Last time instance ran its heartbeat task for main cluster nodes. Last known connection to receptor mesh for execution nodes.",
+                "filterable": true
+            },
+            "health_check_started": {
+                "type": "datetime",
+                "label": "Health check started",
+                "help_text": "The last time a health check was initiated on this instance.",
+                "filterable": true
+            },
+            "health_check_pending": {
+                "type": "field",
+                "label": "Health check pending",
+                "filterable": false
+            },
+            "last_health_check": {
+                "type": "datetime",
+                "label": "Last health check",
+                "help_text": "Last time a health check was ran on this instance to refresh cpu, memory, and capacity.",
+                "filterable": true
+            },
+            "errors": {
+                "type": "string",
+                "label": "Errors",
+                "help_text": "Any error details from the last health check.",
+                "filterable": true
+            },
+            "capacity_adjustment": {
+                "type": "decimal",
+                "label": "Capacity adjustment",
+                "min_value": 0.0,
+                "filterable": true
+            },
+            "version": {
+                "type": "string",
+                "label": "Version",
+                "filterable": true
+            },
+            "capacity": {
+                "type": "integer",
+                "label": "Capacity",
+                "min_value": 0,
+                "filterable": true
+            },
+            "consumed_capacity": {
+                "type": "field",
+                "label": "Consumed capacity",
+                "filterable": false
+            },
+            "percent_capacity_remaining": {
+                "type": "field",
+                "label": "Percent capacity remaining",
+                "filterable": false
+            },
+            "jobs_running": {
+                "type": "integer",
+                "label": "Jobs running",
+                "help_text": "Count of jobs in the running or waiting state that are targeted for this instance",
+                "filterable": false
+            },
+            "jobs_total": {
+                "type": "integer",
+                "label": "Jobs total",
+                "help_text": "Count of all jobs that target this instance",
+                "filterable": false
+            },
+            "cpu": {
+                "type": "decimal",
+                "label": "Cpu",
+                "filterable": true
+            },
+            "memory": {
+                "type": "integer",
+                "label": "Memory",
+                "help_text": "Total system memory of this instance in bytes.",
+                "filterable": true
+            },
+            "cpu_capacity": {
+                "type": "integer",
+                "label": "Cpu capacity",
+                "filterable": true
+            },
+            "mem_capacity": {
+                "type": "integer",
+                "label": "Mem capacity",
+                "filterable": true
+            },
+            "enabled": {
+                "type": "boolean",
+                "label": "Enabled",
+                "filterable": true
+            },
+            "managed_by_policy": {
+                "type": "boolean",
+                "label": "Managed by policy",
+                "filterable": true
+            },
+            "node_type": {
+                "type": "choice",
+                "label": "Node type",
+                "help_text": "Role that this node plays in the mesh.",
+                "filterable": true,
+                "choices": [
+                    ["control", "Control plane node"],
+                    ["execution", "Execution plane node"],
+                    ["hybrid", "Controller and execution"],
+                    ["hop", "Message-passing node, no execution capability"]
+                ]
+            },
+            "node_state": {
+                "type": "choice",
+                "label": "Node state",
+                "help_text": "Indicates the current life cycle stage of this instance.",
+                "filterable": true,
+                "choices": [
+                    ["provisioning", "Provisioning"],
+                    ["provision-fail", "Provisioning Failure"],
+                    ["installed", "Installed"],
+                    ["ready", "Ready"],
+                    ["unavailable", "Unavailable"],
+                    ["deprovisioning", "De-provisioning"],
+                    ["deprovision-fail", "De-provisioning Failure"]
+                ]
+            },
+            "managed": {
+                "type": "boolean",
+                "label": "Managed",
+                "help_text": "If True, this instance is managed by the control plane.",
+                "filterable": true
+            },
+            "ip_address": {
+                "type": "string",
+                "label": "Ip address",
+                "filterable": true
+            },
+            "peers": {
+                "type": "field",
+                "label": "Peers",
+                "help_text": "Primary keys of receptor addresses to peer to.",
+                "filterable": false
+            },
+            "reverse_peers": {
+                "type": "field",
+                "label": "Reverse peers",
+                "filterable": false
+            },
+            "listener_port": {
+                "type": "integer",
+                "label": "Listener port",
+                "filterable": false
+            },
+            "peers_from_control_nodes": {
+                "type": "boolean",
+                "label": "Peers from control nodes",
+                "filterable": false
+            },
+            "protocol": {
+                "type": "field",
+                "label": "Protocol",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "instance"
+    ]
+}

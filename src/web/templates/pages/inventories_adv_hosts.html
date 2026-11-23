@@ -1,0 +1,66 @@
+{{define "content"}}
+{{/* AdvancedInventoryHostList: the hosts of a smart, constructed or federated inventory */}}
+{{$inv := .Data.inventory}}
+{{$base := str $inv._base}}
+{{$seg := .Data.segment}}
+{{template "screen_header" (dict "title" (t "Hosts") "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $base) "title" (str $inv.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "hosts" "back" (dict "href" "/inventories" "label" "Back to Inventories") "tabs" .Data.tabs)}}
+		{{template "search_toolbar" (dict "page" . "id" "host-list" "searchKeys" .Data.searchKeys "ns" "host" "kind" "Host" "filters" .Data.filters "runCommand" .Data.adHoc "noDelete" true)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Hosts")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "host-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Recent jobs"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Inventory"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $h := .Data.results}}
+							{{$id := str $h.id}}
+							{{$hi := dig $h "summary_fields" "inventory"}}
+							<tr class="pf-v6-c-table__tr" id="host-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$h.name}}">
+								<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
+									<a href="{{$base}}/hosts/{{$id}}/details"><b>{{$h.name}}</b></a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Recent jobs"}}" class="pf-v6-c-table__td">
+									{{template "sparkline" (dig $h "summary_fields" "recent_jobs")}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Inventory"}}" class="pf-v6-c-table__td">
+									{{if $hi}}
+										<a href="/inventories/{{if eq (str $hi.kind) ""}}inventory{{else}}{{$seg}}{{end}}/{{str $hi.id}}/details">
+											{{$hi.name}}
+										</a>
+									{{end}}
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Hosts")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Hosts")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

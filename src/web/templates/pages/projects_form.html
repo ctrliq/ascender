@@ -1,0 +1,365 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$p := .Data.project}}
+{{if $p}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "project" "crumbs" (list (dict "href" "/projects" "title" (t "Projects")) (dict "href" (printf "/projects/%s/details" (str $p.id)) "title" (str $p.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New Project") "stream" "project" "crumbs" (list (dict "href" "/projects" "title" (t "Projects"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{if $p}}
+			{{$id := str $p.id}}
+			{{template "routed_tabs" (dict "current" "details" "back" (dict "href" "/projects" "label" "Back to Projects") "tabs" (list (dict "key" "details" "href" (printf "/projects/%s/details" $id) "label" "Details") (dict "key" "access" "href" (printf "/projects/%s/access" $id) "label" "Access") (dict "key" "job_templates" "href" (printf "/projects/%s/job_templates" $id) "label" "Job Templates") (dict "key" "notifications" "href" (printf "/projects/%s/notifications" $id) "label" "Notifications") (dict "key" "schedules" "href" (printf "/projects/%s/schedules" $id) "label" "Schedules")))}}
+		{{end}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-project-form data-validate>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_errors" $e}}
+					{{template "form_field" (dict "id" "project-name" "name" "name" "label" (t "Name") "value" $v.name "required" true "errors" (index $e "name"))}}
+					{{template "form_field" (dict "id" "project-description" "name" "description" "label" (t "Description") "value" $v.description "errors" (index $e "description"))}}
+					{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" true "resource" "organizations" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization"))}}
+					{{template "lookup_field" (dict "id" "execution-environments" "name" "default_environment" "label" (t "Execution Environment") "value" $v.default_environment "resource" "execution_environments" "title" (t "Select {0}" "0" (t "Execution Environment")) "help" (t "Select an organization before editing the default execution environment.") "disabled" (not (has $v.organization.id)) "errors" (index $e "default_environment"))}}
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="scm_type">
+								<span class="pf-v6-c-form__label-text">
+									{{t "Source Control Type"}}
+								</span>
+								<span class="pf-v6-c-form__label-required" aria-hidden="true">
+									&nbsp;*
+								</span>
+							</label>
+							&nbsp;&nbsp;
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "scm_type"}} pf-m-error{{end}}">
+								<select id="scm_type" name="scm_type" aria-label="{{t "Select Input"}}" aria-invalid="false" data-scm-type>
+									<option value="" disabled{{if not (has $v.scm_type)}}{{if not $p}}{{if not $v.scm_chosen}} selected{{end}}{{end}}{{end}}>
+										{{t "Choose a Source Control Type"}}
+									</option>
+									{{range .Data.scmTypes}}
+										<option value="{{.value}}"{{if or (eq .value (str $v.scm_type)) (and (eq .value "manual") (eq (str $v.scm_type) "") $p)}} selected{{end}}>
+											{{tChoice .label}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{if index $e "scm_type"}}
+								<div class="pf-v6-c-form__helper-text">
+									<div class="pf-v6-c-helper-text">
+										<div class="pf-v6-c-helper-text__item pf-m-error">
+											<span class="pf-v6-c-helper-text__item-icon">
+												{{icon "exclamation-circle"}}
+											</span>
+											<span class="pf-v6-c-helper-text__item-text">
+												{{join (index $e "scm_type") " "}}
+											</span>
+										</div>
+									</div>
+								</div>
+							{{end}}
+						</div>
+					</div>
+					{{template "lookup_field" (dict "id" "credential" "name" "signature_validation_credential" "label" (t "Content Signature Validation Credential") "value" $v.signature_validation_credential "resource" "credentials" "filter" "credential_type__kind=cryptography" "title" (t "Select {0}" "0" (t "Credential")) "help" (t "Enable content signing to verify that the content has remained secure when a project is synced. If the content has been tampered with, the job will not run.") "errors" (index $e "signature_validation_credential"))}}
+					<div class="ascender-sub-form-layout" data-subform="manual" hidden>
+						<h2 class="pf-v6-c-title pf-m-md">{{t "Type Details"}}</h2>
+						<div class="ascender-form-column-layout">
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="project-base-path">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Project Base Path"}}
+										</span>
+									</label>
+									&nbsp;&nbsp;
+									<span class="pf-v6-c-form__group-label-help">
+										{{template "help_button" (t "Base path used for locating playbooks. Directories found inside this path will be listed in the playbook directory drop-down. Together the base path and selected playbook directory provide the full path used to locate playbooks.")}}
+									</span>
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<span class="pf-v6-c-form-control pf-m-disabled">
+										<input id="project-base-path" type="text" value="{{.Data.project_base_dir}}" disabled>
+									</span>
+								</div>
+							</div>
+							<div class="pf-v6-c-form__group">
+								<div class="pf-v6-c-form__group-label">
+									<label class="pf-v6-c-form__label" for="local_path">
+										<span class="pf-v6-c-form__label-text">
+											{{t "Playbook Directory"}}
+										</span>
+										<span class="pf-v6-c-form__label-required" aria-hidden="true">
+											&nbsp;*
+										</span>
+									</label>
+									&nbsp;&nbsp;
+									<span class="pf-v6-c-form__group-label-help">
+										{{template "help_button" (t "Select from the list of directories found in the Project Base Path. Together the base path and the playbook directory provide the full path used to locate playbooks.")}}
+									</span>
+								</div>
+								<div class="pf-v6-c-form__group-control">
+									<span class="pf-v6-c-form-control{{if index $e "local_path"}} pf-m-error{{end}}">
+										<select id="local_path" name="local_path" aria-label="{{t "Select Input"}}">
+											<option value="">
+												{{t "Choose a Playbook Directory"}}
+											</option>
+											{{if and (has $v.local_path) $p}}
+												<option value="{{$v.local_path}}" selected>
+													{{$v.local_path}}
+												</option>
+											{{end}}
+											{{range .Data.local_paths}}
+												<option value="{{.}}"{{if eq (str .) (str $v.local_path)}} selected{{end}}>
+													{{.}}
+												</option>
+											{{end}}
+										</select>
+										<span class="pf-v6-c-form-control__utilities">
+											<span class="pf-v6-c-form-control__toggle-icon">
+												{{icon "pf-caret-down"}}
+											</span>
+										</span>
+									</span>
+									{{if index $e "local_path"}}
+										<div class="pf-v6-c-form__helper-text">
+											<div class="pf-v6-c-helper-text">
+												<div class="pf-v6-c-helper-text__item pf-m-error">
+													<span class="pf-v6-c-helper-text__item-icon">
+														{{icon "exclamation-circle"}}
+													</span>
+													<span class="pf-v6-c-helper-text__item-text">
+														{{join (index $e "local_path") " "}}
+													</span>
+												</div>
+											</div>
+										</div>
+									{{end}}
+									{{if not .Data.local_paths}}
+										<div class="pf-v6-c-form__helper-text">
+											<div class="pf-v6-c-helper-text">
+												<div class="pf-v6-c-helper-text__item pf-m-warning">
+													<span class="pf-v6-c-helper-text__item-icon">
+														{{icon "exclamation-triangle"}}
+													</span>
+													<span class="pf-v6-c-helper-text__item-text">
+														{{t "WARNING: "}}{{t "There are no available playbook directories in {project_base_dir}. Either that directory is empty, or all of the contents are already assigned to other projects. Create a new directory there and make sure the playbook files can be read by the \"awx\" system user, or have {brandName} directly retrieve your playbooks from source control using the Source Control Type option above." "project_base_dir" .Data.project_base_dir "brandName" "Ascender"}}
+													</span>
+												</div>
+											</div>
+										</div>
+									{{end}}
+								</div>
+							</div>
+						</div>
+					</div>
+					{{range $scm := list "git" "svn" "archive"}}
+						<div class="ascender-sub-form-layout" data-subform="{{$scm}}" hidden>
+							<h2 class="pf-v6-c-title pf-m-md">{{t "Type Details"}}</h2>
+							<div class="ascender-form-column-layout">
+								{{template "form_field" (dict "id" (printf "project-scm-url-%s" $scm) "name" "scm_url" "label" (t "Source Control URL") "value" $v.scm_url "required" true "errors" (index $e "scm_url") "help" (cond (eq $scm "git") (printf "%s https://github.com/ansible/ansible.git, git@github.com:ansible/ansible.git, git://servername.example.com/ansible.git. %s" (t "Example URLs for GIT Source Control include:") (t "Note: When using SSH protocol for GitHub or Bitbucket, enter an SSH key only, do not enter a username (other than git). Additionally, GitHub and Bitbucket do not support password authentication when using SSH. GIT read only protocol (git://) does not use username or password information.")) (cond (eq $scm "svn") (printf "%s https://github.com/ansible/ansible, svn://servername.example.com/path, svn+ssh://servername.example.com/path" (t "Example URLs for Subversion Source Control include:")) (printf "%s https://github.com/username/project/archive/v0.0.1.tar.gz, https://github.com/username/project/archive/v0.0.2.zip" (t "Example URLs for Remote Archive Source Control include:")))))}}
+								{{if ne $scm "archive"}}
+									{{template "form_field" (dict "id" (printf "project-scm-branch-%s" $scm) "name" "scm_branch" "label" (cond (eq $scm "git") (t "Source Control Branch/Tag/Commit") (t "Revision #")) "value" $v.scm_branch "errors" (index $e "scm_branch") "help" (t "Branch to checkout. In addition to branches, you can input tags, commit hashes, and arbitrary refs. Some commit hashes and refs may not be available unless you also provide a custom refspec."))}}
+								{{end}}
+								{{if eq $scm "git"}}
+									{{template "form_field" (dict "id" "project-scm-refspec" "name" "scm_refspec" "label" (t "Source Control Refspec") "value" $v.scm_refspec "errors" (index $e "scm_refspec") "help" (printf "%s %s %s refs/*:refs/remotes/origin/*, refs/pull/62/head:refs/remotes/origin/pull/62/head. %s" (t "A refspec to fetch (passed to the Ansible git module). This parameter allows access to references via the branch field not otherwise available.") (t "Note: This field assumes the remote name is \"origin\".") (t "Examples include:") (t "The first fetches all references. The second fetches the Github pull request number 62, in this example the branch needs to be \"pull/62/head\".")))}}
+								{{end}}
+								{{template "lookup_field" (dict "id" (printf "scm-credential-%s" $scm) "name" "credential" "label" (t "Source Control Credential") "value" $v.credential "resource" "credentials" "filter" "credential_type__kind=scm" "title" (t "Select {0}" "0" (t "Source Control Credential")) "errors" (index $e "credential"))}}
+								<div class="ascender-form-full-width-layout">
+									<div class="pf-v6-c-form__group" id="project-option-checkboxes-{{$scm}}">
+										<div class="pf-v6-c-form__group-label">
+											<label class="pf-v6-c-form__label">
+												<span class="pf-v6-c-form__label-text">
+													{{t "Options"}}
+												</span>
+											</label>
+										</div>
+										<div class="pf-v6-c-form__group-control">
+											<div class="ascender-form-checkbox-layout">
+												{{template "checkbox" (dict "id" (printf "option-scm-clean-%s" $scm) "name" "scm_clean" "label" (t "Clean") "checked" $v.scm_clean "help" (t "Remove any local modifications prior to performing an update."))}}
+												{{template "checkbox" (dict "id" (printf "option-scm-delete-on-update-%s" $scm) "name" "scm_delete_on_update" "label" (t "Delete") "checked" $v.scm_delete_on_update "help" (t "Delete the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update."))}}
+												{{if eq $scm "git"}}
+													{{template "checkbox" (dict "id" "option-scm-track-submodules" "name" "scm_track_submodules" "label" (t "Track submodules") "checked" $v.scm_track_submodules "help" (t "Submodules will track the latest commit on their master branch (or other branch specified in .gitmodules). If no, submodules will be kept at the revision specified by the main project. This is equivalent to specifying the --remote flag to git submodule update."))}}
+												{{end}}
+												{{template "checkbox" (dict "id" (printf "option-scm-update-on-launch-%s" $scm) "name" "scm_update_on_launch" "label" (t "Update Revision on Launch") "checked" $v.scm_update_on_launch "help" (t "Each time a job runs using this project, update the revision of the project prior to starting the job."))}}
+												{{template "checkbox" (dict "id" (printf "option-allow-override-%s" $scm) "name" "allow_override" "label" (t "Allow Branch Override") "checked" $v.allow_override "help" (t "Allow changing the Source Control branch or revision in a job template that uses this project."))}}
+												{{template "checkbox" (dict "id" (printf "option-reuse-requirements-%s" $scm) "name" "reuse_requirements" "label" (t "Reuse Downloaded Requirements") "checked" $v.reuse_requirements "help" (t "Reuse roles and collections downloaded for an earlier revision while the requirements files and Galaxy credentials are unchanged. Syncs that run for a job or workflow, such as Update Revision on Launch, reuse them. Syncs you start, scheduled syncs and relaunches always download fresh copies. Requirements from source control, a URL, a file or a project directory are never reused."))}}
+												<div class="pf-v6-c-check">
+													<input class="pf-v6-c-check__input" type="checkbox" id="option-enable-webhook-{{$scm}}" name="enable_webhook" aria-label="{{t "Enable Webhook"}}"{{if has $v.webhook_service}} checked{{end}} data-enable-webhook>
+													<label class="pf-v6-c-check__label" for="option-enable-webhook-{{$scm}}">
+														<span>
+															{{t "Enable Webhook"}}&nbsp;
+															{{template "help_button" (t "Sync the project when a push happens in the source control repository, so the local copy is always up to date without polling or updating on every job launch.")}}
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="ascender-sub-form-layout" data-option-details hidden>
+										<h2 class="pf-v6-c-title pf-m-md">
+											{{t "Option Details"}}
+										</h2>
+										<div class="ascender-form-column-layout">
+											{{template "form_field" (dict "id" (printf "project-cache-timeout-%s" $scm) "name" "scm_update_cache_timeout" "label" (t "Cache Timeout") "value" $v.scm_update_cache_timeout "type" "number" "errors" (index $e "scm_update_cache_timeout") "help" (t "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."))}}
+										</div>
+									</div>
+									<div class="ascender-sub-form-layout" data-webhook-details hidden>
+										<h2 class="pf-v6-c-title pf-m-md">
+											{{t "Webhook details"}}
+										</h2>
+										<div class="ascender-form-column-layout">
+											<div class="pf-v6-c-form__group">
+												<div class="pf-v6-c-form__group-label">
+													<label class="pf-v6-c-form__label" for="webhook_service-{{$scm}}">
+														<span class="pf-v6-c-form__label-text">
+															{{t "Webhook Service"}}
+														</span>
+													</label>
+													&nbsp;&nbsp;
+													<span class="pf-v6-c-form__group-label-help">
+														{{template "help_button" (t "Service that webhook requests will be accepted from.")}}
+													</span>
+												</div>
+												<div class="pf-v6-c-form__group-control">
+													<span class="pf-v6-c-form-control{{if index $e "webhook_service"}} pf-m-error{{end}}">
+														<select id="webhook_service-{{$scm}}" name="webhook_service" aria-label="{{t "Webhook Service"}}" data-webhook-service>
+															<option value="" disabled{{if not (has $v.webhook_service)}} selected{{end}}>
+																{{t "Choose a Webhook Service"}}
+															</option>
+															<option value="github"{{if eq (str $v.webhook_service) "github"}} selected{{end}}>
+																{{t "GitHub"}}
+															</option>
+															<option value="gitlab"{{if eq (str $v.webhook_service) "gitlab"}} selected{{end}}>
+																{{t "GitLab"}}
+															</option>
+															<option value="bitbucket_dc"{{if eq (str $v.webhook_service) "bitbucket_dc"}} selected{{end}}>
+																{{t "Bitbucket Data Center"}}
+															</option>
+														</select>
+														<span class="pf-v6-c-form-control__utilities">
+															<span class="pf-v6-c-form-control__toggle-icon">
+																{{icon "pf-caret-down"}}
+															</span>
+														</span>
+													</span>
+													{{if index $e "webhook_service"}}
+														<div class="pf-v6-c-form__helper-text">
+															<div class="pf-v6-c-helper-text">
+																<div class="pf-v6-c-helper-text__item pf-m-error">
+																	<span class="pf-v6-c-helper-text__item-text">
+																		{{join (index $e "webhook_service") " "}}
+																	</span>
+																</div>
+															</div>
+														</div>
+													{{end}}
+												</div>
+											</div>
+											{{if $p}}
+												<div class="pf-v6-c-form__group">
+													<div class="pf-v6-c-form__group-label">
+														<label class="pf-v6-c-form__label" for="t-webhookURL-{{$scm}}">
+															<span class="pf-v6-c-form__label-text">
+																{{t "Webhook URL"}}
+															</span>
+														</label>
+														&nbsp;&nbsp;
+														<span class="pf-v6-c-form__group-label-help">
+															{{template "help_button" (t "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync.")}}
+														</span>
+													</div>
+													<div class="pf-v6-c-form__group-control">
+														<span class="pf-v6-c-form-control pf-m-readonly">
+															<input id="t-webhookURL-{{$scm}}" aria-label="{{t "Webhook URL"}}" type="text" readonly value="{{if has $v.webhook_service}}{{$.Data.origin}}/api/v2/projects/{{str $p.id}}/{{$v.webhook_service}}/{{end}}" data-webhook-url data-origin="{{$.Data.origin}}" data-project-id="{{str $p.id}}">
+														</span>
+													</div>
+												</div>
+												<div class="pf-v6-c-form__group">
+													<div class="pf-v6-c-form__group-label">
+														<label class="pf-v6-c-form__label" for="template-webhook_key-{{$scm}}">
+															<span class="pf-v6-c-form__label-text">
+																{{t "Webhook Key"}}
+															</span>
+														</label>
+														&nbsp;&nbsp;
+														<span class="pf-v6-c-form__group-label-help">
+															{{template "help_button" (t "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save.")}}
+														</span>
+													</div>
+													<div class="pf-v6-c-form__group-control">
+														<div class="pf-v6-c-input-group">
+															<div class="pf-v6-c-input-group__item pf-m-fill">
+																<span class="pf-v6-c-form-control">
+																	<input id="template-webhook_key-{{$scm}}" aria-label="{{t "project webhook key"}}" type="text" name="webhook_key" value="{{$v.webhook_key}}" placeholder="{{t "Leave blank to generate a new webhook key on save"}}">
+																</span>
+															</div>
+															<div class="pf-v6-c-input-group__item">
+																<button class="pf-v6-c-button pf-m-control" type="button" aria-label="{{t "Update webhook key"}}" data-webhook-key-refresh="/api/v2/projects/{{str $p.id}}/webhook_key/" title="{{t "Update webhook key"}}">
+																	<span class="pf-v6-c-button__icon">
+																		{{icon "sync-alt"}}
+																	</span>
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											{{else}}
+												<div class="pf-v6-c-form__group">
+													<div class="pf-v6-c-form__group-label">
+														<label class="pf-v6-c-form__label" for="t-webhookURL-{{$scm}}">
+															<span class="pf-v6-c-form__label-text">
+																{{t "Webhook URL"}}
+															</span>
+														</label>
+														&nbsp;&nbsp;
+														<span class="pf-v6-c-form__group-label-help">
+															{{template "help_button" (t "The webhook endpoint of this project. Add it to the webhook configuration of the repository to have pushes trigger a project sync.")}}
+														</span>
+													</div>
+													<div class="pf-v6-c-form__group-control">
+														<span class="pf-v6-c-form-control pf-m-readonly">
+															<input id="t-webhookURL-{{$scm}}" aria-label="{{t "Webhook URL"}}" type="text" readonly value="A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.">
+														</span>
+													</div>
+												</div>
+												<div class="pf-v6-c-form__group">
+													<div class="pf-v6-c-form__group-label">
+														<label class="pf-v6-c-form__label" for="template-webhook_key-{{$scm}}">
+															<span class="pf-v6-c-form__label-text">
+																{{t "Webhook Key"}}
+															</span>
+														</label>
+														&nbsp;&nbsp;
+														<span class="pf-v6-c-form__group-label-help">
+															{{template "help_button" (t "Secret shared with the webhook service. The service uses it to sign its requests, so only your repository can trigger a project sync. Type your own secret to manage it as configuration, or leave the field blank to have one generated on save.")}}
+														</span>
+													</div>
+													<div class="pf-v6-c-form__group-control">
+														<span class="pf-v6-c-form-control">
+															<input id="template-webhook_key-{{$scm}}" aria-label="{{t "project webhook key"}}" type="text" name="webhook_key" value="" placeholder="{{t "Leave blank to generate a new webhook key on save"}}">
+														</span>
+													</div>
+												</div>
+											{{end}}
+											{{template "form_field" (dict "id" (printf "project-webhook-ref-filter-%s" $scm) "name" "webhook_ref_filter" "label" (t "Webhook Ref Filter") "value" $v.webhook_ref_filter "errors" (index $e "webhook_ref_filter") "help" (t "Only sync the project when the pushed ref matches this pattern, for example refs/heads/main or refs/heads/release-*. Leave blank to sync on any push or tag event."))}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{{end}}
+					{{template "form_actions" (cond (has $p) (printf "/projects/%s/details" (str $p.id)) "/projects")}}
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}

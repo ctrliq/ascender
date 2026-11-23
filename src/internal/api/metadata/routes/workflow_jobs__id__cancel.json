@@ -1,0 +1,24 @@
+{
+    "name": "Workflow Job Cancel",
+    "description": "# Cancel Workflow Job\n\nMake a GET request to this resource to determine if the workflow job can be\ncanceled. The response will include the following field:\n\n* `can_cancel`: Indicates whether this workflow job is in a state that can\n  be canceled (boolean, read-only)\n\nMake a POST request to this endpoint to submit a request to cancel a pending\nor running workflow job.  The response status code will be 202 if the\nrequest to cancel was successfully submitted, or 405 if the workflow job\ncannot be canceled.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "can_cancel": {
+                "type": "boolean",
+                "label": "Can cancel",
+                "filterable": false
+            }
+        },
+        "POST": {}
+    },
+    "types": [
+        "workflow_job"
+    ]
+}

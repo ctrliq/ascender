@@ -1,0 +1,36 @@
+{
+    "name": "Group Variable Data",
+    "description": "# Retrieve Group Variable Data:\n\nMake a GET request to this resource to retrieve all variables defined for a\ngroup.\n\n\n\n# Update Group Variable Data:\n\nMake a PUT or PATCH request to this resource to update variables defined for a\ngroup.",
+    "renders": [
+        "application/json",
+        "text/html",
+        "application/yaml"
+    ],
+    "parses": [
+        "application/json",
+        "application/yaml"
+    ],
+    "actions": {
+        "PUT": {
+            "variables": {
+                "type": "json",
+                "required": false,
+                "label": "Variables",
+                "help_text": "Group variables in JSON or YAML format.",
+                "filterable": true,
+                "default": ""
+            }
+        },
+        "GET": {
+            "variables": {
+                "type": "json",
+                "label": "Variables",
+                "help_text": "Group variables in JSON or YAML format.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "group"
+    ]
+}

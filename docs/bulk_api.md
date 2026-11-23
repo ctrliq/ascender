@@ -1,119 +1,280 @@
 # Bulk API Overview
 
-Bulk API endpoints allows to perform bulk operations in single web request. There are currently following bulk api actions:
-- /api/v2/bulk/job_launch
-- /api/v2/bulk/host_create
-- /api/v2/bulk/host_delete
+The bulk endpoints do in one request what would otherwise take many:
 
-Making individual API calls in rapid succession or at high concurrency can overwhelm Ascender's ability to serve web requests. When the application's ability to serve is exhausted, clients often receive 504 timeout errors.
+- `POST /api/v2/bulk/job_launch/` launches many jobs as one workflow job.
+- `POST /api/v2/bulk/host_create/` creates many hosts in an inventory.
+- `POST /api/v2/bulk/host_delete/` deletes many hosts.
 
- Allowing the client combine actions into fewer requests allows for launching more jobs or adding more hosts with fewer requests and less time without exhauhsting Controller's ability to serve requests, making excessive and repetitive database queries, or using excessive database connections (each web request opens a separate database connection).
+Many small requests in rapid succession, or at high concurrency, cost a
+request, a database connection and several queries each; combining them
+lets a client launch more jobs or add more hosts in less time and with less
+load on the server.
+
+The endpoints are `src/internal/api/bulk.go`. `GET /api/v2/bulk/` lists
+them, and a `GET` of each answers a short `detail` text; the `OPTIONS` of
+each describes the fields it takes. All of them need a logged-in user, and a
+`POST` with an OAuth2 token needs the `write` scope. A successful `POST`
+answers `201 Created`.
+
+A request body may be at most 10 MiB; a larger one gets `413` with "Request
+body too large: the limit is 10 MiB." Users other than superusers cannot send
+a stored encrypted value (`$encrypted$...`) anywhere in the body: "Encrypted
+values cannot be submitted; enter the value itself."
+
+The limits are settings in the `bulk` category
+(`/api/v2/settings/bulk/`, see [Settings](settings.md)):
+
+| Setting | Default | Limits |
+|:--------|:--------|:-------|
+| `BULK_JOB_MAX_LAUNCH` | 100 | jobs in one bulk launch |
+| `BULK_HOST_MAX_CREATE` | 100 | hosts in one bulk create |
+| `BULK_HOST_MAX_DELETE` | 250 | hosts in one bulk delete |
+
+Whatever the settings say, no list (`jobs`, or the `hosts` to create or
+delete) may hold more than 100,000 elements, the cap the old serializers
+had.
+
+### Errors
+
+A request that fails validation gets `400`, with the errors of each field
+under its name, as the old serializers reported them:
+
+- A field given as `null` that may not be null: `{"name": ["This field may
+  not be null."]}`. Of the request's fields only `organization` may be
+  null; of a job's, `identifier` and the prompts that are not ids or lists
+  (`limit`, `scm_branch`, `job_type`, `job_tags`, `skip_tags`,
+  `verbosity`, `forks`, `diff_mode`, `job_slice_count`, `timeout`,
+  `all_parents_must_converge`).
+- Text fields must be strings or numbers ("Not a valid string."), are
+  trimmed, and `description`, `limit`, `scm_branch`, `skip_tags` and
+  `job_tags` may not be blank ("This field may not be blank.").
+- A list's items are reported by position, only those that failed:
+  `{"jobs": {"1": {"unified_job_template": ["A valid integer is
+  required."]}}}`, and a job's `credentials`, `labels` and
+  `instance_groups` the same way by their own positions.
+- Errors about the request as a whole go under `__all__` (the old
+  `NON_FIELD_ERRORS_KEY`): `{"__all__": ["Number of requested jobs exceeds
+  system setting BULK_JOB_MAX_LAUNCH"]}`. So do the errors of the `jobs`
+  list itself: `{"jobs": {"__all__": ["Ensure this field has no more than
+  100000 elements."]}}`, or "This list may not be empty.". The `hosts`
+  lists, plain list fields, report theirs as a list: `{"hosts": ["Ensure
+  this field has no more than 100000 elements."]}`.
+
 
 ## Bulk Job Launch
 
-Provides feature in the API that allows a single web request to achieve multiple job launches. It creates a workflow job with individual jobs as nodes within the workflow job. It also supports providing promptable fields like inventory, credential etc.
+A bulk launch creates a workflow job with one node per requested job, and
+starts it; each node then launches its template as a workflow node would.
 
-Following is an example of a post request at the /api/v2/bulk/job_launch
+```
+POST /api/v2/bulk/job_launch/
 
-    {
-        "name": "Bulk Job Launch",
-        "jobs": [
-            {"unified_job_template": 7},
-            {"unified_job_template": 8},
-            {"unified_job_template": 9}
-        ]
-    }
+{
+    "name": "Bulk Job Launch",
+    "jobs": [
+        {"unified_job_template": 7},
+        {"unified_job_template": 8},
+        {"unified_job_template": 9}
+    ]
+}
+```
 
-The above will launch a workflow job with 3 nodes in it. 
+launches a workflow job with three nodes, and answers with the workflow job
+as `GET /api/v2/workflow_jobs/<id>/` shows it (without `user_capabilities`).
+The workflow job has `is_bulk_job: true` and `launch_type: "manual"`.
 
-The maximum number of jobs allowed to be launched in one bulk launch is controlled by the setting `BULK_JOB_MAX_LAUNCH`.
+The request takes:
 
-**Important Note: A bulk job launched by a normal user will not be visible in the jobs section of the UI, although the individual jobs within a bulk job can be seen there.** 
+- `jobs` (required, not empty): the jobs, at most `BULK_JOB_MAX_LAUNCH`
+  ("Number of requested jobs exceeds system setting BULK_JOB_MAX_LAUNCH").
+- `name` (default "Bulk Job Launch") and `description`: the workflow job's.
+- `organization`: the organization the workflow job belongs to (see
+  [below](#who-can-bulk-launch)).
+- `inventory`, `limit`, `scm_branch`, `skip_tags`, `job_tags`: prompts for
+  every job, as a workflow job's own prompts.
+- `extra_vars`: variables, as a JSON object or JSON/YAML text, for every
+  job.
 
-If the job template has fields marked as prompt on launch, those can be provided for each job in the bulk job launch as well:
+Each job takes:
 
-    {
-        "name": "Bulk Job Launch",
-        "jobs": [
-            {"unified_job_template": 11, "limit": "kansas", "credentials": [1], "inventory": 1}
-        ]
-    }
+- `unified_job_template` (required): a job template, workflow job template,
+  project or inventory source. Other kinds fail the whole request ("Template
+  types System Job Template not allowed in bulk jobs").
+- `identifier`: the node's identifier, unique within the request
+  ("Identifier deploy not unique"); a random UUID by default.
+- the prompts `inventory`, `execution_environment`, `credentials`,
+  `labels`, `instance_groups`, `extra_data`, `limit`, `scm_branch`,
+  `job_type`, `job_tags`, `skip_tags`, `verbosity`, `forks`, `diff_mode`,
+  `job_slice_count` and `timeout`, and `all_parents_must_converge`.
 
-In the above example `job template 11` has limit, credentials and inventory marked as prompt on launch and those are provided as parameters to the job.
+Prompts follow the template's "prompt on launch" settings, as for any
+workflow node: a value the template does not prompt for is ignored when the
+job is created. For example:
 
-Prompted field value can also be provided at the top level. For example:
+```
+{
+    "name": "Bulk Job Launch",
+    "jobs": [
+        {"unified_job_template": 11, "limit": "kansas", "credentials": [1]},
+        {"unified_job_template": 12},
+        {"unified_job_template": 13}
+    ],
+    "inventory": 2
+}
+```
 
-    {
-        "name": "Bulk Job Launch",
-        "jobs": [
-            {"unified_job_template": 11, "limit": "kansas", "credentials": [1]},
-            {"unified_job_template": 12},
-            {"unified_job_template": 13}
-        ],
-        "inventory": 2
-    }
+runs template 11 with the limit and credential given for it, if it prompts
+for them, and every template that prompts for an inventory with inventory 2.
+When the request and a job give the same prompt, the request's wins.
 
-In the above example, `inventory: 2` will get used for the job templates (11, 12 and 13) in which inventory is marked as prompt of launch.
+The request's `extra_vars` reach every job, whatever its template prompts
+for. A user other than a superuser may therefore only send variables that
+every template in the request would take at its own launch (through
+"prompt on launch" for variables, or its survey); otherwise the launch fails
+with "Variables region, tier are not accepted at launch by Deploy".
 
-*Note:* The `instance_groups` relationship is not supported for node-level prompts, unlike `"credentials"` in the above example, and will be ignored if provided. See OPTIONS for `/api/v2/bulk/job_launch/` for what fields are accepted at the workflow and node level, as that is the ultimate source of truth to determine what fields the API will accept.
+### Who can bulk launch?
 
-### RBAC For Bulk Job Launch
+Every template, and everything the request names, is checked before
+anything is created. The user needs:
 
-#### Who can bulk launch?
-Anyone who is logged in can view the launch point. In order to launch a unified_job_template, you need to have either `update` or `execute` depending on the type of unified job (job template, project update, etc).
+- execute on each job template and workflow job template, and update on
+  each project and on the inventory of each inventory source;
+- use on each inventory, credential and instance group;
+- read on each label and execution environment.
 
-Launching using the bulk endpoint results in a workflow job being launched. For auditing purposes, in general we require to assign an organization to the resulting workflow. The logic for assigning this organization is as follows:
+A failed check names what is missing, for example "Job Templates {7, 9} not
+found or you don't have permissions to access it" or "Unified Job Templates
+{40} not found or you don't have permissions to access it" for templates
+that do not exist (a `400`; the old view failed on a template that did not
+exist with a `500`).
 
-- Superusers may assign any organization or none. If they do not assign one, they will be the only user able to see the parent workflow.
-- Users that are members of exactly 1 organization do not need to specify an organization, as their single organization will be used to assign to the resulting Workflow
-- Users that are members of multiple organizations must specify the organization to assign to the resulting workflow. If they do not specify, an error will be returned indicating this requirement.
+The workflow job belongs to an organization, for auditing:
 
-Example of specifying the organization:
+- A superuser may name any organization, or none.
+- A user who is a member of exactly one organization need not name one;
+  that organization is used.
+- A user who is a member of several must name one: "User has permission to
+  multiple Organizations, please set one of them in the request". A user in
+  no organization gets "User not part of any organization, please assign an
+  organization to assign to the bulk job".
+- A named organization must be one the user is a member of ("Organization 2
+  not found or you don't have permissions to access it").
 
-    {
-        "name": "Bulk Job Launch with org specified",
-        "jobs": [
-            {"unified_job_template": 12},
-            {"unified_job_template": 13}
-        ],
-        "organization": 2
-    }
+```
+{
+    "name": "Bulk Job Launch with org specified",
+    "jobs": [
+        {"unified_job_template": 12},
+        {"unified_job_template": 13}
+    ],
+    "organization": 2
+}
+```
 
-#### Who can see bulk jobs that have been run?
-System admins and Organization admins will see Bulk Jobs in the workflow jobs list and the unified jobs list. They can additionally see these individual workflow jobs.
+### Who can see bulk jobs?
 
-Regular users can only see the individual workflow jobs that were launched by their bulk job launch. These jobs do not appear in the unified jobs list, nor do they show in the workflow jobs list. This is important because the response to a bulk job launch includes a link to the parent workflow job.
+A bulk workflow job has no workflow job template, so it is visible only to
+superusers, system auditors, and the admins and auditors of its
+organization; it appears in their workflow job and unified job lists. The
+jobs it launched are visible as usual, to everyone who can read their
+templates.
+
+> **Note:** the user who launched a bulk job, if they are not an admin or
+> auditor of its organization, cannot currently open or cancel the workflow
+> job that the response links to.
+
 
 ## Bulk Host Create
 
-Provides feature in the API that allows a single web request to create multiple hosts in an inventory.  
+```
+POST /api/v2/bulk/host_create/
 
-Following is an example of a post request at the /api/v2/bulk/host_create:
+{
+    "inventory": 1,
+    "hosts": [
+        {"name": "host1", "variables": "ansible_connection: local"},
+        {"name": "host2"},
+        {"name": "host3"}
+    ]
+}
+```
 
+adds three hosts to inventory 1. Each host takes `name` (required),
+`enabled` (default true), `instance_id`, `description` and `variables`,
+validated as for `POST /api/v2/hosts/`; errors are reported per host, by its
+position in the list:
 
-    {
-        "inventory": 1,
-        "hosts": [{"name": "host1", "variables": "ansible_connection: local"}, {"name": "host2"}, {"name": "host3"}, {"name": "host4"}, {"name": "host5"}, {"name": "host6"}]
-    }
+```
+{"hosts": {"1": {"name": ["This field is required."]}}}
+```
 
+The request then fails, with nothing created, when:
 
-The above will add 6 hosts in the inventory.
+- the inventory is smart or constructed: "Hosts can only be created in
+  manual inventories (not smart or constructed types).";
+- there are more hosts than `BULK_HOST_MAX_CREATE`: "Number of hosts exceeds
+  system setting BULK_HOST_MAX_CREATE";
+- the user is not an admin of the inventory: "Inventory with id 1 not found
+  or lack permissions to add hosts.";
+- a name is already in the inventory, or given twice: "Hostnames must be
+  unique in an inventory. Duplicates found: ['host1']";
+- the hosts would take the organization past its `max_hosts`: `403` with
+  "You have already reached the maximum number of 10 hosts allowed for your
+  organization. Contact your System Administrator for assistance."
 
-The maximum number of hosts allowed to be added is controlled by the setting `BULK_HOST_MAX_CREATE`. The default is 100 hosts. Additionally, nginx limits the maximum payload size, which is very likely when posting a large number of hosts in one request with variable data associated with them. The maximum payload size is 1MB unless overridden in your nginx config.
+The answer lists the new hosts:
+
+```
+{
+    "url": "/api/v2/inventories/1/",
+    "hosts": [
+        {"name": "host1", "enabled": true, "instance_id": "", "description": "",
+         "variables": "ansible_connection: local", "id": 101,
+         "url": "/api/v2/hosts/101/", "inventory": "/api/v2/inventories/1/"},
+        ...
+    ]
+}
+```
+
+The hosts are created in one transaction, with the inventory's host counts
+brought up to date, and the activity stream records an update of the
+inventory's `total_hosts`.
 
 
 ## Bulk Host Delete
 
-Provides feature in the API that allows a single web request to delete multiple hosts from an inventory.
+```
+POST /api/v2/bulk/host_delete/
 
-Following is an example of a post request at the /api/v2/bulk/host_delete:
+{
+    "hosts": [3, 4, 5, 6, 7, 8, 9, 10]
+}
+```
 
+deletes eight hosts, which may be in different inventories. The request
+fails, with nothing deleted, when:
 
-    {
-        "hosts": [3, 4, 5, 6, 7 ,8, 9, 10]
-    }
+- there are more hosts than `BULK_HOST_MAX_DELETE`:
+  `{"ERROR": "Number of hosts exceeds system setting BULK_HOST_MAX_DELETE",
+  "BULK_HOST_MAX_DELETE": 250, "Hosts_count": 300}`;
+- an id is not a number (or numeric text): `{"hosts": ["Field 'id'
+  expected a number but got 'web1'."]}`, the value shown as Python showed
+  it (a `400`; the old view failed with a `500`);
+- a host does not exist:
+  `{"hosts": {"11": "Hosts do not exist or you lack permission to delete it"}}`;
+- the user is not an admin of one of the inventories: `403` with
+  `{"inventories": {"Production": "Lack permissions to delete hosts from this inventory."}}`;
+- one of the inventories is smart or constructed:
+  `{"inventories": {"Smart": "Hosts can only be deleted from manual inventories."}}`.
 
+Otherwise the hosts are deleted in one transaction, with what depends on
+them, and the answer names each:
 
-The above will delete 8 hosts from the inventory.
+```
+{"hosts": {"3": "The host host1 was deleted", "4": "The host host2 was deleted", ...}}
+```
 
-The maximum number of hosts allowed to be deleted is controlled by the setting `BULK_HOST_MAX_DELETE`. The default is 250 hosts. Additionally, nginx limits the maximum payload size, which is very likely when posting a large number of hosts in one request with variable data associated with them. The maximum payload size is 1MB unless overridden in your nginx config.
+The activity stream records an update of each inventory, listing its
+deleted hosts' ids and names.

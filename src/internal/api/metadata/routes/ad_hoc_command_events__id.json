@@ -1,0 +1,148 @@
+{
+    "name": "Ad Hoc Command Event Detail",
+    "description": "# Retrieve an Ad Hoc Command Event:\n\nMake GET request to this resource to retrieve a single ad hoc command event\nrecord containing the following fields:\n\n* `id`: Database ID for this ad hoc command event. (integer)\n* `type`: Data type for this ad hoc command event. (choice)\n* `url`: URL for this ad hoc command event. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `created`: Timestamp when this ad hoc command event was created. (datetime)\n* `modified`: Timestamp when this ad hoc command event was last modified. (datetime)\n* `ad_hoc_command`:  (id)\n* `event`:  (choice)\n    - `runner_on_failed`: Host Failed\n    - `runner_on_ok`: Host OK\n    - `runner_on_unreachable`: Host Unreachable\n    - `runner_on_skipped`: Host Skipped\n    - `debug`: Debug\n    - `verbose`: Verbose\n    - `deprecated`: Deprecated\n    - `warning`: Warning\n    - `system_warning`: System Warning\n    - `error`: Error\n* `counter`:  (integer)\n* `event_display`:  (string)\n* `event_data`:  (json)\n* `failed`:  (boolean)\n* `changed`:  (boolean)\n* `uuid`:  (string)\n* `host`:  (id)\n* `host_name`:  (string)\n* `stdout`:  (string)\n* `start_line`:  (integer)\n* `end_line`:  (integer)\n* `verbosity`:  (integer)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this ad hoc command event.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this ad hoc command event.",
+                "choices": [
+                    ["ad_hoc_command_event", "Ad Hoc Command Event"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this ad hoc command event.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "created": {
+                "type": "datetime",
+                "label": "Created",
+                "help_text": "Timestamp when this ad hoc command event was created.",
+                "filterable": true
+            },
+            "modified": {
+                "type": "datetime",
+                "label": "Modified",
+                "help_text": "Timestamp when this ad hoc command event was last modified.",
+                "filterable": true
+            },
+            "ad_hoc_command": {
+                "type": "id",
+                "label": "Ad hoc command",
+                "filterable": true
+            },
+            "event": {
+                "type": "choice",
+                "label": "Event",
+                "filterable": true,
+                "choices": [
+                    ["runner_on_failed", "Host Failed"],
+                    ["runner_on_ok", "Host OK"],
+                    ["runner_on_unreachable", "Host Unreachable"],
+                    ["runner_on_skipped", "Host Skipped"],
+                    ["debug", "Debug"],
+                    ["verbose", "Verbose"],
+                    ["deprecated", "Deprecated"],
+                    ["warning", "Warning"],
+                    ["system_warning", "System Warning"],
+                    ["error", "Error"]
+                ]
+            },
+            "counter": {
+                "type": "integer",
+                "label": "Counter",
+                "min_value": 0,
+                "filterable": true
+            },
+            "event_display": {
+                "type": "string",
+                "label": "Event display",
+                "filterable": false
+            },
+            "event_data": {
+                "type": "json",
+                "label": "Event data",
+                "filterable": true
+            },
+            "failed": {
+                "type": "boolean",
+                "label": "Failed",
+                "filterable": true
+            },
+            "changed": {
+                "type": "boolean",
+                "label": "Changed",
+                "filterable": true
+            },
+            "uuid": {
+                "type": "string",
+                "label": "Uuid",
+                "filterable": true
+            },
+            "host": {
+                "type": "id",
+                "label": "Host",
+                "filterable": true
+            },
+            "host_name": {
+                "type": "string",
+                "label": "Host name",
+                "filterable": true
+            },
+            "stdout": {
+                "type": "string",
+                "label": "Stdout",
+                "filterable": true
+            },
+            "start_line": {
+                "type": "integer",
+                "label": "Start line",
+                "min_value": 0,
+                "filterable": true
+            },
+            "end_line": {
+                "type": "integer",
+                "label": "End line",
+                "min_value": 0,
+                "filterable": true
+            },
+            "verbosity": {
+                "type": "integer",
+                "label": "Verbosity",
+                "min_value": 0,
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "ad_hoc_command_event"
+    ]
+}

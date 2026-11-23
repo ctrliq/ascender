@@ -1,0 +1,13 @@
+{
+    "name": "Spectacular Api",
+    "description": "OpenApi3 schema for this API. Format can be selected via content negotiation.\n\n- YAML: application/vnd.oai.openapi\n- JSON: application/vnd.oai.openapi+json",
+    "renders": [
+        "application/vnd.oai.openapi",
+        "application/yaml",
+        "application/vnd.oai.openapi+json",
+        "application/json"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

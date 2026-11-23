@@ -1,0 +1,110 @@
+{{define "content"}}
+{{template "screen_header" (dict "title" (t "Instance Groups") "stream" "instance_group")}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		{{template "search_toolbar" (dict "page" . "id" "instance-group-list" "searchKeys" .Data.searchKeys "ns" "instance-group" "addMenu" .Data.addMenu "kind" "Instance Group" "api" "/api/v2/instance_groups/" "usageKind" "instanceGroup" "usageMessage" "{0, plural, one {This instance group is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}" "filters" .Data.filters)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Instance Groups")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "instance-group-table-sort-name")}}
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Type"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Running Jobs"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Total Jobs"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Instances"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								{{t "Capacity"}}
+							</th>
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+								{{t "Actions"}}
+							</th>
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $g := .Data.results}}
+							{{$id := str $g.id}}
+							{{$caps := dig $g "summary_fields" "user_capabilities"}}
+							{{$seg := cond $g.is_container_group "container_group/" ""}}
+							<tr class="pf-v6-c-table__tr" id="ig-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$g.name}}">
+								<td tabindex="-1" data-label="{{t "Selected"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+									<div class="pf-v6-c-check pf-m-standalone">
+										<input id="select-{{$i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{$i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+									</div>
+								</td>
+								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+									<a href="/instance_groups/{{$seg}}{{$id}}/details">
+										<b>{{$g.name}}</b>
+									</a>
+								</td>
+								<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+									{{if $g.is_container_group}}
+										{{t "Container group"}}
+									{{else}}
+										{{t "Instance group"}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Running jobs"}}" class="pf-v6-c-table__td">
+									{{str $g.jobs_running}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Total jobs"}}" class="pf-v6-c-table__td">
+									{{str $g.jobs_total}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Instances"}}" class="pf-v6-c-table__td">
+									{{str $g.instances}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Capacity"}}" class="pf-v6-c-table__td">
+									{{if not $g.is_container_group}}
+										{{if num $g.capacity}}
+											{{template "used_capacity" (dict "pct" (usedPct $g.percent_capacity_remaining) "id" (printf "ig-%s" $id))}}
+										{{else}}
+											<span class="ascender-instance-group-list-item__unavailable">
+												{{t "Unavailable"}}
+											</span>
+										{{end}}
+									{{end}}
+								</td>
+								<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 40px;">
+									<div class="ascender-actions-td__grid">
+										{{if dig $caps "edit"}}
+											<div>
+												<div style="display: contents;">
+													<div>
+														<a aria-label="{{t "Edit instance group"}}" class="pf-v6-c-button pf-m-plain" href="/instance_groups/{{$seg}}{{$id}}/edit" data-tooltip="{{t "Edit instance group"}}" data-tooltip-pos="top">
+															<span class="pf-v6-c-button__icon">
+																{{icon "pencil-alt"}}
+															</span>
+														</a>
+													</div>
+												</div>
+											</div>
+										{{end}}
+									</div>
+								</td>
+							</tr>
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Instance Groups")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Instance Groups")))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

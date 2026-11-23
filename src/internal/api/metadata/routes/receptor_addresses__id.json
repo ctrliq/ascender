@@ -1,0 +1,89 @@
+{
+    "name": "Receptor Address Detail",
+    "description": "# Retrieve a Receptor Address:\n\nMake GET request to this resource to retrieve a single receptor address\nrecord containing the following fields:\n\n* `id`: Database ID for this receptor address. (integer)\n* `url`: URL for this receptor address. (string)\n* `address`: Routable address for this instance. (string)\n* `port`: Port for the address. (integer)\n* `protocol`: Protocol to use for the Receptor listener, &#x27;tcp&#x27;, &#x27;wss&#x27;, or &#x27;ws&#x27;. (choice)\n    - `tcp`: TCP\n    - `ws`: WS\n    - `wss`: WSS\n* `websocket_path`: Websocket path. (string)\n* `is_internal`: If True, only routable within the Kubernetes cluster. (boolean)\n* `canonical`: If True, this address is the canonical address for the instance. (boolean)\n* `instance`:  (id)\n* `peers_from_control_nodes`: If True, control plane cluster nodes should automatically peer to it. (boolean)\n* `full_address`:  (field)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this receptor address.",
+                "filterable": true
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this receptor address.",
+                "filterable": false
+            },
+            "address": {
+                "type": "string",
+                "label": "Address",
+                "help_text": "Routable address for this instance.",
+                "filterable": true
+            },
+            "port": {
+                "type": "integer",
+                "label": "Port",
+                "help_text": "Port for the address.",
+                "min_value": 0,
+                "max_value": 65535,
+                "filterable": true
+            },
+            "protocol": {
+                "type": "choice",
+                "label": "Protocol",
+                "help_text": "Protocol to use for the Receptor listener, 'tcp', 'wss', or 'ws'.",
+                "filterable": true,
+                "choices": [
+                    ["tcp", "TCP"],
+                    ["ws", "WS"],
+                    ["wss", "WSS"]
+                ]
+            },
+            "websocket_path": {
+                "type": "string",
+                "label": "Websocket path",
+                "help_text": "Websocket path.",
+                "filterable": true
+            },
+            "is_internal": {
+                "type": "boolean",
+                "label": "Is internal",
+                "help_text": "If True, only routable within the Kubernetes cluster.",
+                "filterable": true
+            },
+            "canonical": {
+                "type": "boolean",
+                "label": "Canonical",
+                "help_text": "If True, this address is the canonical address for the instance.",
+                "filterable": true
+            },
+            "instance": {
+                "type": "id",
+                "label": "Instance",
+                "filterable": true
+            },
+            "peers_from_control_nodes": {
+                "type": "boolean",
+                "label": "Peers from control nodes",
+                "help_text": "If True, control plane cluster nodes should automatically peer to it.",
+                "filterable": true
+            },
+            "full_address": {
+                "type": "field",
+                "label": "Full address",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "receptor_address"
+    ]
+}

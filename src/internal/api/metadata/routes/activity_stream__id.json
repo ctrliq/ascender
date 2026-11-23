@@ -1,0 +1,104 @@
+{
+    "name": "Activity Stream Detail",
+    "description": "# Retrieve an Activity Stream:\n\nMake GET request to this resource to retrieve a single activity stream\nrecord containing the following fields:\n\n* `id`: Database ID for this activity stream. (integer)\n* `type`: Data type for this activity stream. (choice)\n* `url`: URL for this activity stream. (string)\n* `related`: Data structure with URLs of related resources. (object)\n* `summary_fields`: Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons. (object)\n* `timestamp`:  (datetime)\n* `operation`: The action taken with respect to the given object(s). (choice)\n    - `create`: Entity Created\n    - `update`: Entity Updated\n    - `delete`: Entity Deleted\n    - `associate`: Entity Associated with another Entity\n    - `disassociate`: Entity was Disassociated with another Entity\n* `changes`: A summary of the new and changed values when an object is created, updated, or deleted (json)\n* `object1`: For create, update, and delete events this is the object type that was affected. For associate and disassociate events this is the object type associated or disassociated with object2. (string)\n* `object2`: Unpopulated for create, update, and delete events. For associate and disassociate events this is the object type that object1 is being associated with. (string)\n* `object_association`: When present, shows the field name of the role or relationship that changed. (field)\n* `action_node`: The cluster node the activity took place on. (string)\n* `object_type`: When present, shows the model on which the role or relationship was defined. (field)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "id": {
+                "type": "integer",
+                "label": "ID",
+                "help_text": "Database ID for this activity stream.",
+                "filterable": true
+            },
+            "type": {
+                "type": "choice",
+                "label": "Type",
+                "help_text": "Data type for this activity stream.",
+                "choices": [
+                    ["activity_stream", "Activity Stream"]
+                ]
+            },
+            "url": {
+                "type": "string",
+                "label": "Url",
+                "help_text": "URL for this activity stream.",
+                "filterable": false
+            },
+            "related": {
+                "type": "object",
+                "label": "Related",
+                "help_text": "Data structure with URLs of related resources.",
+                "filterable": false
+            },
+            "summary_fields": {
+                "type": "object",
+                "label": "Summary fields",
+                "help_text": "Data structure with name/description for related resources.  The output for some objects may be limited for performance reasons.",
+                "filterable": false
+            },
+            "timestamp": {
+                "type": "datetime",
+                "label": "Timestamp",
+                "filterable": true
+            },
+            "operation": {
+                "type": "choice",
+                "label": "Operation",
+                "help_text": "The action taken with respect to the given object(s).",
+                "filterable": true,
+                "choices": [
+                    ["create", "Entity Created"],
+                    ["update", "Entity Updated"],
+                    ["delete", "Entity Deleted"],
+                    ["associate", "Entity Associated with another Entity"],
+                    ["disassociate", "Entity was Disassociated with another Entity"]
+                ]
+            },
+            "changes": {
+                "type": "json",
+                "label": "Changes",
+                "help_text": "A summary of the new and changed values when an object is created, updated, or deleted",
+                "filterable": true
+            },
+            "object1": {
+                "type": "string",
+                "label": "Object1",
+                "help_text": "For create, update, and delete events this is the object type that was affected. For associate and disassociate events this is the object type associated or disassociated with object2.",
+                "filterable": true
+            },
+            "object2": {
+                "type": "string",
+                "label": "Object2",
+                "help_text": "Unpopulated for create, update, and delete events. For associate and disassociate events this is the object type that object1 is being associated with.",
+                "filterable": true
+            },
+            "object_association": {
+                "type": "field",
+                "label": "Object association",
+                "help_text": "When present, shows the field name of the role or relationship that changed.",
+                "filterable": false
+            },
+            "action_node": {
+                "type": "string",
+                "label": "Action node",
+                "help_text": "The cluster node the activity took place on.",
+                "filterable": true
+            },
+            "object_type": {
+                "type": "field",
+                "label": "Object type",
+                "help_text": "When present, shows the model on which the role or relationship was defined.",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "activity_stream"
+    ]
+}

@@ -1,108 +1,132 @@
 # Project Signing and Verification
 
-Project signing and verification allows project maintainers to sign their
-project directory files with GPG and verify them at project-update time in
-Ascender/Controller.
+Project signing and verification lets project maintainers sign the files of
+their project with GPG, and lets Ascender check them every time it updates
+the project.
 
 ## Signing
 
-Signing is provided by a CLI tool and library called
-[`ansible-sign`](https://github.com/ansible/ansible-sign) which makes use of
-`python-gnupg` to ultimately shell out to GPG to do signing. Currently the only
-supported end-user use of this tool is as a CLI utility, but it does provide a
-somewhat clean API as well for internal use, and we use this in our verification
-process in Ascender. More on that below.
+Signing is done with [`ansible-sign`](https://github.com/ansible/ansible-sign),
+a command line tool and library that uses `python-gnupg`, which in turn runs
+`gpg`. Ascender does not sign anything itself; it uses the same library to
+verify (see below).
 
-`ansible-sign` expects a `MANIFEST.in` file (written in valid `distlib.manifest`
-format familiar to most Python project maintainers) which lists the files that
-should be included and excluded from the signing process.
+`ansible-sign` expects a `MANIFEST.in` file, in the `distlib.manifest` format
+familiar to Python project maintainers, which lists the files to include in
+and exclude from the signature.
 
-Internally, there is a concept of "differs", and a differ is what allows us to
-know if files have been added or removed along with which files we should care
-about signing and verifying. Currently only one is shipped and supported and
-that is the `DistlibManifestChecksumFileExistenceDiffer` which uses
-`distlib.manifest` to allow our `MANIFEST.in` machinery to work.
+Internally, a "differ" works out which files were added or removed and which
+files to sign and verify. Only one is shipped:
+`DistlibManifestChecksumFileExistenceDiffer`, which uses `distlib.manifest` to
+read `MANIFEST.in`.
 
-At a broad implementation level, `ansible-sign` works like this when it is asked
-to sign a project:
+When asked to sign a project (`ansible-sign project gpg-sign <directory>`),
+`ansible-sign`:
 
-* First, it will ask `distlib.manifest` to read in the `MANIFEST.in` file and
-  resolve the entries in it to actual file paths. It processes the directives
-  one line at a time. We skip lines starting with `#` along with blank lines. We
-  also always implicitly include `MANIFEST.in` itself.
-* Once all of the `(recursive-)include`-ed files are resolved, it will iterate
-  through all of them and calculate sha256sums for all of them. (It does this by
-  reading chunks of the file at a time, to avoid reading entire potentially
-  large files into memory).
-* Now we have a dictionary of 'file path -> checksum', and we can write it out
-  to a file. We store the file in `.ansible-sign/sha256sum.txt`. This is called
-  the "checksum manifest file" and it has one line per file. It is in standard
-  GNU Coreutils `sha256sum` format.
-* Once the checksum manifest is written, we sign it. Signing is modular-ish
-  (like the "differ" concept) though only GPG is currently supported and
-  implemented. GPG signing uses the `GPGSigner` class which internally uses the
-  `python-gnupg` library, which itself shells out to `gpg` to sign the
-  file. `GPGSigner` takes parameters such as the passphrase, GnuPG home
-  directory, private key to use, and so on. By default `gpg` will use the first
-  available private signing key found in the user's default keyring. It will
-  write out the detached signature to `.ansible-sign/sha256sum.txt.sig`.
-* We do some sanity checking such as ensuring that we get a `0` return code
-  (indicating success) back from `gpg`.
+* Asks `distlib.manifest` to read `MANIFEST.in` and resolve its entries to
+  file paths, one directive at a time. Lines starting with `#` and blank
+  lines are skipped, and `MANIFEST.in` itself is always included.
+* Calculates the SHA-256 checksum of each resolved file, reading the files in
+  chunks.
+* Writes the checksums to `.ansible-sign/sha256sum.txt`, the "checksum
+  manifest", one line per file in GNU Coreutils `sha256sum` format.
+* Signs the checksum manifest. Only GPG is implemented, through the
+  `GPGSigner` class, which takes the passphrase, the GnuPG home directory, the
+  private key to use and so on. By default `gpg` uses the first private
+  signing key in the user's default keyring. The detached signature is
+  written to `.ansible-sign/sha256sum.txt.sig`.
+* Checks that `gpg` returned `0`.
+
+Commit `.ansible-sign/` with the project, so that a project update checks
+out the manifest and the signature with the files.
 
 ## Verifying
 
-On the Ascender side, we have a `GPG Public Key` credential type that ships with
-Ascender. This credential type allows the user to paste in a public GPG key, which
-should correspond to the private key used to sign the content. The validity and
-"realness" of this key is not currently checked.
+### Setting it up
 
-Once a `GPG Public Key` credential has been created, it can be attached to the
-project (this is just a normal FK relationship). If the project has such a
-credential associated with it, content verification will be enabled. Otherwise,
-it will be skipped.
+Ascender ships a managed credential type, `GPG Public Key` (kind
+`cryptography`), whose one input, `gpg_public_key`, holds the public key that
+matches the signing key. The key is not checked when the credential is
+saved.
 
-Project verification happens only during project update, _not_ during Job
-launch. There is an action plugin in
-`ascender/playbooks/action_plugins/verify_project.py` which uses `ansible-sign` as a
-library for doing verification. The implementation is similar to the
-`ansible-sign project gpg-verify` subcommand; they both use the same library
-calls internally. If the API changes, both places will need to be updated.
+A project uses the credential through its `signature_validation_credential`
+field (`src/internal/api/projects.go`). As in the old application, the field
+takes a credential of any kind, but only a `GPG Public Key` credential turns
+on the signature check (see below): with another kind, an update checks the
+checksum manifest alone, and the credential's inputs are used nowhere. When
+the field is empty, the project is not verified.
 
-Verifying reverts the general signing process described above:
+### When verification runs
 
-* First we ensure a few files exist (the signature file, the manifest file, and
-  `MANIFEST.in`).
-* We once again use `python-gnupg` (via our `GPGVerifier` class this time) and
-  ask it to validate the detached signature. It will check it against keys in
-  our public keyring unless we give it another keyring to use instead. (On the
-  CLI we can do this with `--keyring`; on the Ascender/Controller side, we get a
-  fresh keyring every time the EE spawns, so we import the public key from the
-  credential and just let it check against the default keyring).
-* Once the key is imported, we can use it to verify if the signature corresponds
-  to the checksum manifest. `gpg` does this for us (we use `python-gnupg`'s
-  `verify_file` method), but effectively it is checking for:
-  1. Does the key match up with something known/trusted in our keyring?
-  2. Does the signature correspond to the checksum manifest? (In other words,
-     has the checksum manifest been modified?)
-* After `gpg` tells us everything is okay, the checksum manifest can then be
-  used as a "source of truth" for everything else. Our next step is to parse
-  checksum manifest file (this is `ChecksumFile#parse`). We'll ultimately have a
-  dictionary of `file path -> checksum` after this.
-* We then call `ChecksumFile#verify` which internally does a few things:
-  1. It will call the differ to parse `MANIFEST.in` again, via
-     `ChecksumFile#diff`. We inject an implicit `global-include *` at the top so
-     that we catch any files that have been added to the project as
-     well. Ultimately `ChecksumFile#diff` will call the differ's
-     `compare_filelist` method which takes a list of files (those listed in the
-     checksum manifest parsed by `ChecksumFile#parse` a few steps up) and
-     compares them against all the files in the project (captured by
-     `global-include *`). It returns a dict and groups the results into `added`
-     and `removed` keys.
-  2. Check the result from above. If there are any files listed in `added` or
-     `removed`, we throw `ChecksumMismatch` and bail out early.
-  3. Otherwise, no files have been added or removed from the project. In this
-     case, we can iterate all the files in the project and take a new checksum
-     hash of all of them.
-  4. Once we have those, compare those against the parsed manifest file's
-     checksums. If there are checksum mismatches, accumulate a list of them and
-     raise `ChecksumMismatch`.
+Verification runs in project updates, never when a job is launched. A
+project update made with a signature validation credential
+(`NewProjectUpdate` and `InsertProjectUpdate` in `src/internal/models/jobs.go`)
+gets two more job tags besides `update_<scm_type>`, `install_roles` and
+`install_collections`:
+
+* `validation_<namespace>`, from the credential's type: `validation_gpg_public_key`
+  for the managed type;
+* `validation_checksum_manifest`.
+
+The project update runs `project_update.yml`
+(`src/internal/tasks/playbooks/project_update.yml`, which `ascender-task`
+carries in its binary) with `-t` and those tags, in the control plane
+execution environment. Its second play, "Perform project signature/checksum
+verification", has one task per tag, both using the `verify_project` action
+plugin (`src/internal/tasks/playbooks/action_plugins/verify_project.py`):
+
+* "Verify project content using GPG signature" (tag
+  `validation_gpg_public_key`) checks the signature with the key, which
+  `ascender-task` passes as the extra variable `gpg_pubkey` (`writeExtraVars`
+  in `src/internal/tasks/project_update.go`).
+* "Verify project content against checksum manifest" (tag
+  `validation_checksum_manifest`) checks the files against the manifest.
+
+A credential of any other type (a custom `cryptography` type, or a
+credential of another kind) has another namespace, or none
+(`validation_None`), so only the checksum manifest is checked for it.
+
+The syncs a job makes of its project before it runs (see
+[Background Tasks](./tasks.md#project-updates)) are given only the tags they need
+(`update_<scm_type>`, `install_roles`, `install_collections`), so they never
+verify.
+
+The control plane execution environment must provide `ansible-sign`,
+`python-gnupg` and `gpg`.
+
+### What is checked
+
+The plugin reverses the signing process. For the GPG signature:
+
+* It fails with `Expected file not found: <path>` unless both
+  `.ansible-sign/sha256sum.txt.sig` and `.ansible-sign/sha256sum.txt` exist.
+* It imports the public key into a new GnuPG home directory made for the
+  check and asks `ansible-sign`'s `GPGVerifier` (`python-gnupg`'s
+  `verify_file`) whether the detached signature matches the checksum
+  manifest and was made by that key. The task's message is GnuPG's summary,
+  and its `gpg_details` the details GnuPG reported.
+
+For the checksum manifest:
+
+* It fails with `Expected file not found: <path>` when
+  `.ansible-sign/sha256sum.txt` is missing, and with
+  `Invalid line in checksum manifest: ...` when a line cannot be parsed.
+* `ChecksumFile#diff` reads `MANIFEST.in` again, with an implicit
+  `global-include *` added first so that new files are caught, and compares
+  the files of the project against those listed in the manifest. Any file
+  added or removed fails the task (`ChecksumMismatch`).
+* Otherwise every file is hashed again and compared with the manifest; any
+  mismatch fails the task with the list of mismatched files.
+* A valid project reports `Checksum manifest is valid.`
+
+### When verification fails
+
+The task fails, so the project update fails and the project's status becomes
+`failed`. Until an update succeeds, launching a job template that uses the
+project is refused with
+`{"playbook": ["Last project update failed due to signature validation failure."]}`,
+and starting an update of an inventory source that reads the project is
+refused with `["Last project update failed due to signature validation failure."]`,
+unless the project has `scm_update_on_launch` set (`ProjectFailureReason` in
+`src/internal/models/project.go`). A project whose last update failed for
+any other reason gives `Missing a revision to run due to failed project update.`

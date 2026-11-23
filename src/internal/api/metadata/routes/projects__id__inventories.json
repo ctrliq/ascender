@@ -1,0 +1,30 @@
+{
+    "name": "Project Inventories",
+    "description": "# Retrieve a Project:\n\nMake GET request to this resource to retrieve a single project\nrecord containing the following fields:\n\n* `inventory_files`: Array of inventory files and directories available within this project, not comprehensive. (json)",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "inventory_files": {
+                "type": "json",
+                "label": "Inventory files",
+                "help_text": "Array of inventory files and directories available within this project, not comprehensive.",
+                "filterable": true
+            }
+        }
+    },
+    "types": [
+        "project"
+    ],
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "update_role",
+        "read_role"
+    ]
+}

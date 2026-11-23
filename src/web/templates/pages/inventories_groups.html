@@ -1,0 +1,44 @@
+{{define "content"}}
+{{$inv := .Data.inventory}}
+{{$id := str $inv.id}}
+{{$base := str $inv._base}}
+{{$ro := .Data.readonly}}
+{{template "screen_header" (dict "title" (t "Groups") "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $base) "title" (str $inv.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "groups" "back" (dict "href" "/inventories" "label" "Back to Inventories") "tabs" .Data.tabs)}}
+		{{template "search_toolbar" (dict "page" . "id" "group-list" "searchKeys" .Data.searchKeys "ns" "group" "addHref" (cond $ro "" (printf "%s/groups/add" $base)) "kind" "Group" "api" "/api/v2/groups/" "filters" .Data.filters "runCommand" .Data.adHoc "noDelete" $ro "deleteNoProgress" true "groupDelete" $id)}}
+		{{if .Data.results}}
+			<div class="ascender-paginated-table__overflow-auto">
+				<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Groups")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+					<thead class="pf-v6-c-table__thead">
+						<tr class="pf-v6-c-table__tr">
+							<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+								<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+							</th>
+							{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "group-table-sort-name")}}
+							{{if not $ro}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+									{{t "Actions"}}
+								</th>
+							{{end}}
+						</tr>
+					</thead>
+					<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+						{{range $i, $g := .Data.results}}
+							{{template "group_row" (dict "group" $g "i" $i "detail" (printf "%s/groups/%s/details" $base (str $g.id)) "edit" (printf "%s/groups/%s/edit" $base (str $g.id)) "readonly" $ro)}}
+						{{end}}
+					</tbody>
+				</table>
+			</div>
+			{{template "pagination_bottom" (dict "page" .)}}
+		{{else}}
+			{{if .Data.filters}}
+				{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+			{{else}}
+				{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Groups")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Groups")) "addHref" (cond $ro "" (printf "%s/groups/add" $base)))}}
+			{{end}}
+		{{end}}
+	</div>
+</section>
+{{end}}

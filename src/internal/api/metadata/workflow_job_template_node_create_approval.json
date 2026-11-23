@@ -1,0 +1,122 @@
+{
+    "name": "Workflow Job Template Node Create Approval",
+    "description": "# Retrieve a Workflow Job Template Node:\n\nMake GET request to this resource to retrieve a single workflow job template node\nrecord containing the following fields:\n\n* `timeout`: The amount of time (in seconds) before the approval node expires and fails. (integer)\n* `name`: Name of this workflow approval template. (string)\n* `description`: Optional description of this workflow approval template. (string)\n* `context_template`: A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. The result is stored on the approval as context_message and shown to the approver. (string)\n* `required_approvals`: The number of distinct users that must approve before the node is considered approved. A single denial always denies the node. (integer)\n* `on_timeout`: Whether the approval node is automatically approved or denied when the timeout expires. (choice)\n    - `\"\"`: ---------\n    - `deny`: Deny\n    - `approve`: Approve",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "GET": {
+            "timeout": {
+                "type": "integer",
+                "label": "Timeout",
+                "help_text": "The amount of time (in seconds) before the approval node expires and fails.",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "name": {
+                "type": "string",
+                "label": "Name",
+                "help_text": "Name of this workflow approval template.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "label": "Description",
+                "help_text": "Optional description of this workflow approval template.",
+                "filterable": true
+            },
+            "context_template": {
+                "type": "string",
+                "label": "Context template",
+                "help_text": "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. The result is stored on the approval as context_message and shown to the approver.",
+                "filterable": true
+            },
+            "required_approvals": {
+                "type": "integer",
+                "label": "Required approvals",
+                "help_text": "The number of distinct users that must approve before the node is considered approved. A single denial always denies the node.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true
+            },
+            "on_timeout": {
+                "type": "choice",
+                "label": "On timeout",
+                "help_text": "Whether the approval node is automatically approved or denied when the timeout expires.",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["deny", "Deny"],
+                    ["approve", "Approve"]
+                ]
+            }
+        },
+        "POST": {
+            "timeout": {
+                "type": "integer",
+                "required": false,
+                "label": "Timeout",
+                "help_text": "The amount of time (in seconds) before the approval node expires and fails.",
+                "min_value": -2147483648,
+                "max_value": 2147483647,
+                "filterable": true,
+                "default": 0
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "label": "Name",
+                "max_length": 512,
+                "help_text": "Name of this workflow approval template.",
+                "filterable": true
+            },
+            "description": {
+                "type": "string",
+                "required": false,
+                "label": "Description",
+                "help_text": "Optional description of this workflow approval template.",
+                "filterable": true,
+                "default": ""
+            },
+            "context_template": {
+                "type": "string",
+                "required": false,
+                "label": "Context template",
+                "help_text": "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. The result is stored on the approval as context_message and shown to the approver.",
+                "filterable": true,
+                "default": ""
+            },
+            "required_approvals": {
+                "type": "integer",
+                "required": false,
+                "label": "Required approvals",
+                "help_text": "The number of distinct users that must approve before the node is considered approved. A single denial always denies the node.",
+                "min_value": 0,
+                "max_value": 2147483647,
+                "filterable": true,
+                "default": 1
+            },
+            "on_timeout": {
+                "type": "choice",
+                "required": false,
+                "label": "On timeout",
+                "help_text": "Whether the approval node is automatically approved or denied when the timeout expires.",
+                "filterable": true,
+                "default": "deny",
+                "choices": [
+                    ["", "---------"],
+                    ["deny", "Deny"],
+                    ["approve", "Approve"]
+                ]
+            }
+        }
+    },
+    "types": [
+        "workflow_approval_template"
+    ]
+}

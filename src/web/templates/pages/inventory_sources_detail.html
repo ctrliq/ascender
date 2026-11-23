@@ -1,0 +1,250 @@
+{{define "content"}}
+{{$s := .Data.source}}
+{{$inv := .Data.inventory}}
+{{$sid := str $s.id}}
+{{$sf := $s.summary_fields}}
+{{$caps := dig $sf "user_capabilities"}}
+{{$base := .Data.base}}
+{{$invBase := .Data.invBase}}
+{{$h := .Data.help}}
+{{template "screen_header" (dict "title" .Title "stream" "inventory,inventory_source" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" $invBase) "title" (str $inv.name)) (dict "href" (printf "%s/sources" $invBase) "title" (t "Sources")) (dict "href" (printf "%s/details" $base) "title" (str $s.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.tab "back" (dict "href" (printf "%s/sources" $invBase) "label" "Back to Sources") "tabs" .Data.tabs)}}
+		{{if eq .Data.tab "details"}}
+			{{$job := dig $sf "last_job"}}
+			{{$cur := dig $sf "current_update"}}
+			{{if $cur}}{{$job = $cur}}{{end}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list" gutter="sm">
+					<div>
+						<dt class="ascender-detail-name">{{t "Name"}}</dt>
+						<dd class="ascender-detail-value">{{$s.name}}</dd>
+					</div>
+					{{if $job}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Last Job Status"}}</dt>
+							<dd class="ascender-detail-value">
+								<div style="display: contents;">
+									<a href="/jobs/inventory/{{str $job.id}}" data-tooltip data-tooltip-pos="top">
+										{{template "status_label" (str $job.status)}}
+										<template data-tooltip-content>
+											<div>{{t "MOST RECENT SYNC"}}</div>
+											<div>{{t "JOB ID:"}} {{str $job.id}}</div>
+											<div>{{t "STATUS:"}} {{upper (str $job.status)}}</div>
+											{{if has $job.finished}}
+												<div>{{t "FINISHED:"}} {{dt $job.finished}}</div>
+											{{end}}
+										</template>
+									</a>
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $s.description}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Description"}}</dt>
+							<dd class="ascender-detail-value">{{$s.description}}</dd>
+						</div>
+					{{end}}
+					{{with .Data.sourceLabel}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Source"}}</dt>
+							<dd class="ascender-detail-value">{{.}}</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "organization"}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Organization"}}</dt>
+							<dd class="ascender-detail-value">
+								<a href="/organizations/{{str .id}}/details">{{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "execution_environment"}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="execution-environment-detail-label" id="execution-environment-detail">
+								{{t "Execution Environment"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="execution-environment-detail-value">
+								<a href="/execution_environments/{{str .id}}/details">{{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+					{{if .Data.instance_groups}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Instance Groups"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								{{template "label_group" (dict "items" (igLinks .Data.instance_groups) "max" 5 "total" (len .Data.instance_groups) "color" "blue")}}
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "source_project"}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Project"}}</dt>
+							<dd class="ascender-detail-value">
+								<a href="/projects/{{str .id}}/details">{{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+					{{if eq (str $s.source) "scm"}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Inventory file"}}
+								{{template "help_button" $h.sourcePath}}
+							</dt>
+							<dd class="ascender-detail-value">
+								{{if has $s.source_path}}
+									{{$s.source_path}}
+								{{else}}
+									{{t "/ (project root)"}}
+								{{end}}
+							</dd>
+						</div>
+					{{end}}
+					{{if eq (str $s.source) "vmware"}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Collection"}}
+								{{template "help_button" $h.vmwarePlugin}}
+							</dt>
+							<dd class="ascender-detail-value">{{.Data.vmwareCollection}}</dd>
+						</div>
+					{{end}}
+					{{with .Data.verbosity}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Verbosity"}}
+								{{template "help_button" $h.verbosity}}
+							</dt>
+							<dd class="ascender-detail-value">{{.}}</dd>
+						</div>
+					{{end}}
+					{{if has $s.scm_branch}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Source Control Branch"}}
+								{{template "help_button" $h.scmBranch}}
+							</dt>
+							<dd class="ascender-detail-value">{{$s.scm_branch}}</dd>
+						</div>
+					{{end}}
+					<div>
+						<dt class="ascender-detail-name">
+							{{t "Cache timeout"}}
+							{{template "help_button" $h.cacheTimeout}}
+						</dt>
+						<dd class="ascender-detail-value">
+							{{t "{update_cache_timeout, plural, one {# second} other {# seconds}}" "update_cache_timeout" $s.update_cache_timeout}}
+						</dd>
+					</div>
+					{{if has $s.host_filter}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Host Filter"}}
+								{{template "help_button" $h.hostFilter}}
+							</dt>
+							<dd class="ascender-detail-value">{{$s.host_filter}}</dd>
+						</div>
+					{{end}}
+					{{if has $s.enabled_var}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Enabled Variable"}}
+								{{template "help_button" $h.enabledVar}}
+							</dt>
+							<dd class="ascender-detail-value">{{$s.enabled_var}}</dd>
+						</div>
+					{{end}}
+					{{if has $s.enabled_value}}
+						<div>
+							<dt class="ascender-detail-name">
+								{{t "Enabled Value"}}
+								{{template "help_button" $h.enabledValue}}
+							</dt>
+							<dd class="ascender-detail-value">{{$s.enabled_value}}</dd>
+						</div>
+					{{end}}
+					{{with dig $sf "credentials"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name ascender-detail-name--full-width">
+									{{t "Credential"}}
+								</dt>
+								<dd class="ascender-detail-value ascender-detail-value--full-width">
+									{{template "credential_chips" (credLinks .)}}
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if or $s.overwrite $s.overwrite_vars $s.update_on_launch}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Enabled Options"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								<ul data-pf-content="true" class="pf-v6-c-content--ul">
+									{{if $s.overwrite}}
+										<li data-pf-content="true" class="pf-v6-c-content--li">
+											{{t "Overwrite local groups and hosts from remote inventory source"}}
+											{{template "help_button_html" $h.overwrite}}
+										</li>
+									{{end}}
+									{{if $s.overwrite_vars}}
+										<li data-pf-content="true" class="pf-v6-c-content--li">
+											{{t "Overwrite local variables from remote inventory source"}}
+											{{template "help_button_html" $h.overwriteVars}}
+										</li>
+									{{end}}
+									{{if $s.update_on_launch}}
+										<li data-pf-content="true" class="pf-v6-c-content--li">
+											{{t "Update on launch"}}
+											{{template "help_button_html" .Data.updateOnLaunchHelp}}
+										</li>
+									{{end}}
+								</ul>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $s.source_vars}}
+						{{template "variables_detail" (dict "cy" "inventory-source-detail-variables" "label" (t "Source variables") "value" (str $s.source_vars) "rows" 4 "helpHTML" .Data.sourceVarsHelp)}}
+					{{end}}
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $s.created "user" (dig $sf "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last modified") "date" $s.modified "user" (dig $sf "modified_by"))}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$base}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "start"}}
+						{{if and $job (or (eq (str $job.status) "new") (eq (str $job.status) "running") (eq (str $job.status) "pending") (eq (str $job.status) "waiting"))}}
+							<div>
+								<button aria-label="{{t "Cancel Inventory Source Sync"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-cancel-job="/api/v2/inventory_updates/{{str $job.id}}/cancel/" data-name="{{$s.name}}">
+									<span class="pf-v6-c-button__text">{{t "Cancel Sync"}}</span>
+								</button>
+							</div>
+						{{else}}
+							<div style="display: contents;">
+								<button aria-label="{{t "Start sync source"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-source-sync="/api/v2/inventory_sources/{{$sid}}/update/">
+									<span class="pf-v6-c-button__text">{{t "Sync"}}</span>
+								</button>
+							</div>
+						{{end}}
+					{{end}}
+					{{if dig $caps "delete"}}
+						<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-source="/api/v2/inventory_sources/{{$sid}}/" data-name="{{$s.name}}" data-usage-kind="inventorySource" data-usage-id="{{$sid}}" data-usage-one="{{t "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"}}" data-redirect="{{$invBase}}/sources"{{if and $job (eq (str $job.status) "running")}} disabled{{end}}>
+							<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+						</button>
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.tab "notifications"}}
+			{{template "notification_list" (dict "page" . "kinds" (list "started" "success" "error"))}}
+		{{end}}
+	</div>
+</section>
+{{end}}

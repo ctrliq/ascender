@@ -1,0 +1,12 @@
+{{define "content"}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body">
+			{{template "empty_state" (dict "title" (t "Not Found") "body" (t "The page you requested could not be found."))}}
+			<div style="text-align:center;margin-top:1rem;">
+				<a class="pf-v6-c-button pf-m-link" href="/home">{{t "Back to Dashboard"}}</a>
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

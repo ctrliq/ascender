@@ -1,0 +1,14 @@
+{
+    "name": "Notification Template Test",
+    "description": "Test a Notification Template",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {}
+    }
+}

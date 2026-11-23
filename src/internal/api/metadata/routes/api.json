@@ -1,0 +1,11 @@
+{
+    "name": "REST API",
+    "description": "The root of the REST API.\n\nMake a GET request to this resource to obtain information about the available\nAPI versions.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ]
+}

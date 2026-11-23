@@ -1,17 +1,17 @@
 ### Federated Inventory in Ascender
 
-Federated inventory is a separate "kind" of inventory, alongside normal (manual),
-smart, and constructed inventories.
+Federated inventory is a separate kind of inventory (`kind` `federated`),
+alongside regular, smart and constructed inventories.
 
-Its purpose is to solve a specific job routing problem: when multiple source inventories
-are each assigned to different Instance Groups (for example, an "East" instance group
-for the East inventory and a "West" instance group for the West inventory), running a
-job against a combined inventory will execute on only one instance group — ignoring the
-per-source assignments. Federated inventory fixes this by automatically dispatching
-a separate job slice for each source inventory, each running on that inventory's own instance
-groups.
+It solves a job routing problem: when several inventories are each assigned to
+a different instance group (for example an "East" instance group for the East
+inventory and a "West" instance group for the West inventory), a job against
+an inventory that combines them runs on one instance group only, whatever the
+assignments of the inventories it was built from. A federated inventory
+instead runs a separate child job for each input inventory, each on that
+inventory's own instance groups.
 
-#### Demo Problem
+#### Example
 
 Consider two inventories, each pinned to a regional instance group:
 
@@ -20,86 +20,126 @@ Consider two inventories, each pinned to a regional instance group:
 | East      | host1, host2   | ig-east        |
 | West      | host3, host4   | ig-west        |
 
-If you run a job template against a constructed (or plain) inventory that merges both,
-the job runs entirely on whichever instance group is assigned to that combined inventory.
-Hosts in the "East" inventory will not necessarily run on `ig-east`, and vice versa.
+If you run a job template against a constructed (or regular) inventory that
+merges both, the whole job runs on the instance groups of that combined
+inventory. Hosts of the East inventory do not necessarily run on `ig-east`,
+and vice versa.
 
-Federated inventory solves this: a job launched against a federated inventory containing
-both "East" and "West" as input inventories will produce two child jobs — one running
-on `ig-east` against the East inventory, and one running on `ig-west` against the
-West inventory — simultaneously.
+A job launched against a federated inventory with East and West as its input
+inventories produces two child jobs that run at the same time: one against
+the East inventory on `ig-east`, and one against the West inventory on
+`ig-west`.
 
-#### How It Works
+#### How it works
 
-When a job template is launched against a federated inventory, Ascender intercepts
-the launch and creates a **WorkflowJob** (with `is_sliced_job=True`) in place of a
-single job. One `WorkflowJobNode` is created for each input inventory that has
-matching hosts (taking the effective `limit` into account). Each node overrides the
-inventory for its child job to be the corresponding source inventory, so the child
-job naturally inherits that inventory's instance group assignments.
+When a job template is launched against a federated inventory, Ascender
+creates a workflow job (with `is_sliced_job` set) instead of a single job,
+with one node for each input inventory that has hosts the launch targets
+(`createJobFromTemplate` in `src/internal/api/job_launch.go`). The nodes
+follow the order of the input inventories (their `position`, the order they
+were attached in). Each node's job runs against its input inventory in place
+of the federated one (`src/internal/api/workflow_spawn.go`), so it picks up
+that inventory's instance groups.
 
-**Key behaviors:**
+* Child jobs run at the same time (`allow_simultaneous` is set on them).
+* Child jobs are neither sliced nor federated again: a child job is a single
+  job with a `job_slice_count` of 1, whatever the job template's
+  `job_slice_count`. Federation comes before slicing: a job template with a
+  `job_slice_count` above 1 launched against a federated inventory makes one
+  child job per input inventory, not slices.
+* Relaunching a child job makes a single job against the same input
+  inventory.
+* Instance groups are chosen as for any job: the job template's instance
+  groups (or those given at launch) come first, then the input inventory's,
+  then the organization's. For the routing to follow the input inventories,
+  leave the job template without instance groups. The federated inventory
+  itself has no instance groups.
+* The job's `limit` (given at launch, or else the job template's) is passed
+  to each child job and applied by Ansible against that child's inventory.
+  It is also used to leave out input inventories it would match nothing in
+  (see below).
+* The federated inventory holds no hosts or groups of its own. Its hosts,
+  groups and root groups lists (`/api/v2/inventories/N/hosts/` and so on)
+  show those of its input inventories, and so do its Hosts and Groups tabs in
+  the UI.
 
-- Child jobs run **simultaneously** (`allow_simultaneous=True`).
-- Each child job uses the source inventory's instance groups, not the federated
-  inventory's (the federated inventory itself has no instance group assignment).
-- If a `limit` is specified (either on the job template or at launch time), source
-  inventories that contribute no matching hosts or groups are **skipped** — no child
-  job is created for them.
-- A comma-separated limit is a list of patterns, as in Ansible: a source inventory
-  is included if any pattern in the list matches it.
-- A subscripted pattern such as `webservers[0]` or `webservers[0:2]` is matched by
-  its base name; Ansible picks the hosts by position at run time.
-- Complex limit patterns containing `:`, `&`, or `!`, `~` regular expressions, and `@`
-  limit files are passed through to all source inventories and let Ansible resolve them at run time.
-- The federated inventory itself holds no hosts or groups directly. The Hosts and
-  Groups tabs in the UI aggregate data from all input inventories for visibility.
+#### Which input inventories get a child job
 
-#### Creating a Federated Inventory
+An input inventory without hosts never gets a child job. With a `limit`,
+an input inventory gets a child job only when the limit can target some of
+its hosts. The limit is read as a comma-separated list of patterns, as in
+Ansible, and the input inventory is included when any pattern matches:
 
-1. Navigate to **Inventories** and click **Add → Add federated inventory**.
-2. Provide a **Name** and **Organization**.
-3. Under **Input Inventories**, select one or more source inventories.
-   - Smart, constructed, and other federated inventories are excluded from selection.
-   - An inventory cannot be added as an input to itself.
-4. Save. The federated inventory is ready to use as the inventory on a job template.
+* `all` or `*`: any host.
+* A name: a host or a group of that name.
+* A shell-style pattern (`web*`, `db??`, `web[ab]`, `[!x]*`): a host name, or
+  else a group name, matching it (Python's `fnmatch` rules, case-sensitive).
+* `ungrouped`: a host in no group.
+* A subscript (`webservers[0]`, `webservers[0:2]`, `webservers[1:]`,
+  `webservers[0-1]`, `webservers[-1]`): its base pattern (`webservers`);
+  Ansible picks the hosts by position at run time. A trailing numeric
+  bracket is always a subscript (`web0[12]` is `web0`), other brackets are a
+  character class (`web0[a1]`).
+* A pattern Ascender cannot evaluate before the run (one containing `:`, `&`
+  or `!`, a `~` regular expression, or an `@` limit file): every input
+  inventory with hosts is included, and Ansible resolves the limit at run
+  time.
 
-**Note:** Federated inventories have no inventory source and do not require or
-support syncing. There is no `source_vars`, `limit`, `verbosity`, or cache timeout
-field on the federated inventory itself — those are on the job template.
+When no input inventory matches, the workflow job has no nodes and finishes
+as `successful` without running anything.
+
+#### Creating a federated inventory
+
+1. On the **Inventories** list, choose **Add → Add federated inventory**.
+2. Give it a **Name** and an **Organization**.
+3. Under **Input Inventories**, select one or more inventories. Only regular
+   inventories can be selected.
+4. Save. The federated inventory can now be used as the inventory of a job
+   template.
+
+Through the API, `POST /api/v2/federated_inventories/` creates one (it has no
+`host_filter` or `prevent_instance_group_fallback` field), and the inputs are
+attached with `POST /api/v2/inventories/N/input_inventories/` and
+`{"id": <inventory id>}`. An input that is not a regular inventory is refused
+with "Federated inventories only accept plain inventories as input
+inventories." Attaching an input takes admin of the federated inventory and
+`use` of the input inventory.
+
+A federated inventory is not synced: it has no `source_vars`, `limit`,
+`verbosity` or cache timeout. The `limit` is the job template's.
 
 #### Capabilities
 
-- Works with any job template that accepts an inventory.
-- Supports `limit` specified at the job template level or as a launch-time prompt.
-- The resulting WorkflowJob appears in the Jobs list and shows per-source child jobs,
-  exactly like a sliced job.
-- RBAC is enforced normally: the user launching the job needs `use_role` on all
-  involved source inventories (via the job template's inventory permission).
+- Works with any job template that uses an inventory, including one that
+  prompts for the inventory at launch.
+- The workflow job appears in the Jobs list and shows the child jobs, like a
+  sliced job.
+- Launching takes what any launch of the job template takes. The input
+  inventories were checked when they were attached.
 
 #### Limitations
 
-- **No ad hoc commands**: ad hoc commands do not go through `create_unified_job` on
-  the job template, so they run against the federated inventory directly (which has
-  no hosts) and will produce no results. Use a job template instead.
-- **No inventory sync**: the federated inventory has no inventory source. Hosts and
-  group data come entirely from the input inventories.
-- **Constructed/smart inputs not supported**: input inventories must be plain
-  (kind `''`) inventories. Smart and constructed inventories are excluded from the
-  input inventory picker.
-- **Complex limit patterns**: patterns using `:`, `&`, or `!` operators, `~` regular
-  expressions, and `@` limit files are passed through to all input inventories without pre-filtering, since Ansible resolves
-  them at run time. This means child jobs may be created for inventories that end
-  up matching no hosts after Ansible applies the limit.
+- **No ad hoc commands**: an ad hoc command runs against the federated
+  inventory itself, which has no hosts, so it targets nothing. Use a job
+  template instead.
+- **No hosts or groups of its own**: hosts and groups cannot be created in
+  or associated with a federated inventory ("Cannot create or associate
+  hosts directly to a federated inventory.").
+- **Only regular inputs**: smart, constructed and federated inventories
+  cannot be inputs.
+- **Complex limit patterns**: patterns with `:`, `&` or `!`, `~` regular
+  expressions and `@` limit files are not evaluated at launch, so every
+  input inventory with hosts gets a child job, which may then target no
+  hosts once Ansible applies the limit.
 
-#### Comparison with Constructed Inventory
+#### Comparison with constructed inventory
 
-| Feature                        | Constructed Inventory         | Federated Inventory               |
-|-------------------------------|-------------------------------|-----------------------------------|
-| Combines multiple inventories | Yes (via `source_vars` plugin) | Yes (direct input inventory list) |
-| Respects per-source Instance Groups | No — uses combined IG  | Yes — routes each source to its own IG |
-| Requires inventory sync       | Yes (update-on-launch)        | No                                |
-| Supports host/group filtering | Yes (`limit`, `host_filter`)  | Via job template `limit` only     |
-| Supports hostvars composition | Yes (`compose`, `groups`)     | No                                |
-| Job output                    | Single job                    | WorkflowJob with per-source nodes |
-| Use case                      | Dynamic filtering/grouping    | Multi-region IG routing           |
+| Feature                             | Constructed inventory              | Federated inventory                     |
+|-------------------------------------|------------------------------------|-----------------------------------------|
+| Combines several inventories        | Yes (input inventories, read by the `constructed` plugin) | Yes (input inventories) |
+| Follows each input's instance groups | No: uses the constructed inventory's | Yes: each input runs on its own        |
+| Needs an inventory sync             | Yes (updates on launch)            | No                                      |
+| Host and group filtering            | Yes (`limit`, `groups` in `source_vars`) | Through the job template's `limit` only |
+| Composes host variables             | Yes (`compose`, `groups`, `keyed_groups`) | No                                |
+| Job output                          | One job                            | A workflow job with one child job per input |
+| Use case                            | Filtering and grouping             | Routing jobs to each region's instance groups |

@@ -1,0 +1,200 @@
+{{define "content"}}
+{{$a := .Data.approval}}
+{{$id := str $a.id}}
+{{$sf := $a.summary_fields}}
+{{$wj := dig $sf "source_workflow_job"}}
+{{$job := .Data.workflow_job}}
+{{template "screen_header" (dict "title" (t "Details") "stream" "workflow_approval" "crumbs" (list (dict "href" "/workflow_approvals" "title" (t "Workflow Approvals")) (dict "href" (printf "/workflow_approvals/%s" $id) "title" (str $a.name))))}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" "details" "back" (dict "href" "/workflow_approvals" "label" "Back to Workflow Approvals") "tabs" (list (dict "key" "details" "href" (printf "/workflow_approvals/%s/details" $id) "label" "Details")))}}
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<dl class="ascender-detail-list" gutter="sm">
+				{{template "detail" (dict "label" (t "Name") "value" (str $a.name) "cy" "wa-detail-name")}}
+				{{if has $a.description}}
+					{{template "detail" (dict "label" (t "Description") "value" (str $a.description) "cy" "wa-detail-description")}}
+				{{end}}
+				{{if eq (str $a.status) "pending"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="wa-detail-expires-label">
+							{{t "Expires"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="wa-detail-expires-value">
+							{{template "status_label_text" (dict "status" "pending" "text" (pick (has $a.approval_expiration) (dt $a.approval_expiration) (t "Never")))}}
+						</dd>
+					</div>
+				{{else}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="wa-detail-status-label">
+							{{t "Status"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="wa-detail-status-value">
+							{{template "status_label" $a._status}}
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "approved_or_denied_by"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="wa-detail-actor-label">
+							{{t "Actor"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="wa-detail-actor-value">
+							<a href="/users/{{str .id}}">{{.username}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{if gt (num $a.required_approvals) 1}}
+					{{template "detail" (dict "label" (t "Approvals") "value" (printf "%s/%s" (str $a.approvals_received) (str $a.required_approvals)) "cy" "wa-detail-approvals")}}
+				{{end}}
+				{{if gt (num $a.timeout) 0}}
+					{{template "detail" (dict "label" (t "On Timeout") "value" (cond (eq (str $a.on_timeout) "approve") (t "Approve") (t "Deny")) "cy" "wa-detail-on-timeout")}}
+				{{end}}
+				{{if .Data.votes}}
+					<div>
+						<dt class="ascender-detail-name ascender-detail-name--full-width" data-cy="wa-detail-votes-label">
+							{{t "Votes"}}
+						</dt>
+						<dd class="ascender-detail-value ascender-detail-value--full-width" data-cy="wa-detail-votes-value">
+							{{range .Data.votes}}
+								<div>
+									{{with dig . "summary_fields" "user" "username"}}
+										{{.}}
+									{{else}}
+										{{.user_name}}
+									{{end}} {{if eq (str .vote) "approve"}}
+										{{t "approved"}}
+									{{else}}
+										{{t "denied"}}
+									{{end}} {{dt .created}}
+									{{if has .comment}}: {{.comment}}{{end}}
+								</div>
+							{{end}}
+						</dd>
+					</div>
+				{{end}}
+				{{if has $a.context_message}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="wa-detail-context-label">
+							{{t "Context"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="wa-detail-context-value">
+							<pre style="white-space: pre-wrap; margin: 0px;">{{$a.context_message}}</pre>
+						</dd>
+					</div>
+				{{end}}
+				{{if has $a.job_explanation}}
+					{{template "detail" (dict "label" (t "Explanation") "value" (str $a.job_explanation) "cy" "wa-detail-explanation")}}
+				{{end}}
+				{{with dig $sf "workflow_job_template"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="wa-detail-source-workflow-label">
+							{{t "Workflow Job Template"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="wa-detail-source-workflow-value">
+							<a href="/templates/workflow_job_template/{{str .id}}">{{.name}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{template "user_date_detail" (dict "label" (t "Created") "date" $a.created "user" (dig $sf "created_by"))}}
+				{{if has $a.modified}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Last Modified"}}</dt>
+						<dd class="ascender-detail-value">{{dt $a.modified}}</dd>
+					</div>
+				{{end}}
+				{{if has $a.finished}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Finished"}}</dt>
+						<dd class="ascender-detail-value">{{dt $a.finished}}</dd>
+					</div>
+				{{end}}
+				{{if has $a.canceled_on}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Canceled"}}</dt>
+						<dd class="ascender-detail-value">{{dt $a.canceled_on}}</dd>
+					</div>
+				{{end}}
+				<div>
+					<dt class="ascender-detail-name">{{t "Elapsed"}}</dt>
+					<dd class="ascender-detail-value">{{.Data.elapsed}}</dd>
+				</div>
+			</dl>
+			<h2 class="pf-v6-c-title pf-m-h2 ascender-workflow-approval-detail__title">
+				{{t "Workflow job details"}}
+			</h2>
+			<hr class="pf-v6-c-divider ascender-workflow-approval-detail__divider">
+			<dl class="ascender-detail-list ascender-workflow-approval-detail__wf-detail-list" gutter="sm">
+				<div>
+					<dt class="ascender-detail-name" data-cy="wa-detail-source-job-label">
+						{{t "Workflow Job"}}
+					</dt>
+					<dd class="ascender-detail-value" data-cy="wa-detail-source-job-value">
+						{{if has (dig $wj "id")}}
+							<a href="/jobs/workflow/{{str $wj.id}}">
+								{{str $wj.id}} - {{$wj.name}}
+							</a>
+						{{else}}
+							{{t "Deleted"}}
+						{{end}}
+					</dd>
+				</div>
+				{{if $job}}
+					{{if has $job.limit}}
+						{{template "detail" (dict "label" (t "Limit") "value" (str $job.limit) "cy" "wa-detail-source-job-limit")}}
+					{{end}}
+					{{if has $job.scm_branch}}
+						{{template "detail" (dict "label" (t "Source Control Branch") "value" (str $job.scm_branch) "cy" "wa-detail-source-job-scm")}}
+					{{end}}
+					{{with dig $job "summary_fields" "inventory"}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="wa-detail-inventory-label">
+								{{t "Inventory"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="wa-detail-inventory-value">
+								<a href="/inventories/{{if eq (str .kind) "smart"}}smart_inventory{{else}}inventory{{end}}/{{str .id}}/details">
+									{{.name}}
+								</a>
+							</dd>
+						</div>
+					{{end}}
+					{{with dig $job "summary_fields" "labels" "results"}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Labels"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								<div>
+									{{template "label_group" (dict "items" . "max" 5 "total" (len .))}}
+								</div>
+							</dd>
+						</div>
+					{{end}}
+					{{if has $job.extra_vars}}
+						{{template "variables_detail" (dict "cy" "wa-detail-variables" "label" (t "Variables") "value" (str $job.extra_vars) "rows" 4)}}
+					{{end}}
+				{{end}}
+			</dl>
+			<div class="ascender-card-actions-row__wrapper">
+				{{if and (eq (str $a.status) "pending") $a.can_approve_or_deny}}
+					<button aria-label="{{if $a._vote_done}}{{t "This workflow has already been acted on"}}{{else}}{{t "Approve"}}{{end}}" class="pf-v6-c-button pf-m-primary"{{if $a._vote_done}} disabled{{end}} type="button" data-approval-vote="approve" data-api="/api/v2/workflow_approvals/{{$id}}/" data-name="{{$a.name}}">
+						<span class="pf-v6-c-button__text">{{t "Approve"}}</span>
+					</button>
+					<button aria-label="{{if $a._vote_done}}{{t "This workflow has already been acted on"}}{{else}}{{t "Deny"}}{{end}}" class="pf-v6-c-button pf-m-secondary"{{if $a._vote_done}} disabled{{end}} type="button" data-approval-vote="deny" data-api="/api/v2/workflow_approvals/{{$id}}/" data-name="{{$a.name}}">
+						<span class="pf-v6-c-button__text">{{t "Deny"}}</span>
+					</button>
+					<div>
+						<button aria-label="{{t "Cancel Workflow"}}" class="pf-v6-c-button pf-m-secondary" type="button" data-cancel-workflow="/api/v2/workflow_jobs/{{str $wj.id}}/cancel/" data-message="{{t "This will cancel all subsequent nodes in this workflow."}}" data-toast="{{t "Workflow Cancelled "}}">
+							<span class="pf-v6-c-button__text">{{t "Cancel Workflow"}}</span>
+						</button>
+					</div>
+				{{end}}
+				{{if and (ne (str $a.status) "pending") (dig $sf "user_capabilities" "delete")}}
+					<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="Workflow Approval" data-api="/api/v2/workflow_approvals/{{$id}}/" data-name="{{$a.name}}" data-redirect="/workflow_approvals">
+						<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+					</button>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</section>
+{{end}}

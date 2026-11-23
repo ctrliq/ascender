@@ -1,0 +1,110 @@
+{{define "content"}}
+{{$h := .Data.host}}
+{{$id := str $h.id}}
+{{$inv := .Data.inventory}}
+{{$hb := .Data.hostBase}}
+{{$caps := dig $h "summary_fields" "user_capabilities"}}
+{{if $inv}}
+	{{template "screen_header" (dict "title" .Title "stream" "inventory" "crumbs" (list (dict "href" "/inventories" "title" (t "Inventories")) (dict "href" (printf "%s/details" (str $inv._base)) "title" (str $inv.name)) (dict "href" (printf "%s/hosts" (str $inv._base)) "title" (t "Hosts")) (dict "href" (printf "%s/details" $hb) "title" (str $h.name))))}}
+{{else}}
+	{{template "screen_header" (dict "title" .Title "stream" "host" "crumbs" (list (dict "href" "/hosts" "title" (t "Hosts")) (dict "href" (printf "%s/details" $hb) "title" (str $h.name))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div class="pf-v6-c-card">
+		{{template "routed_tabs" (dict "current" .Data.hostTab "back" (dict "href" (cond (has $inv) (printf "%s/hosts" (str $inv._base)) "/hosts") "label" "Back to Hosts") "tabs" (list (dict "key" "details" "href" (printf "%s/details" $hb) "label" "Details") (dict "key" "facts" "href" (printf "%s/facts" $hb) "label" "Facts") (dict "key" "groups" "href" (printf "%s/groups" $hb) "label" "Groups") (dict "key" "jobs" "href" (printf "%s/jobs" $hb) "label" "Jobs")))}}
+		{{if eq .Data.hostTab "details"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				{{template "host_toggle" (dict "host" $h "class" (cond (has $inv) "ascender-inventory-host-detail__padding-bottom-40" "ascender-host-detail__padding-bottom-40"))}}
+				<dl class="ascender-detail-list" gutter="sm">
+					{{template "detail" (dict "label" (t "Name") "value" (str $h.name) "cy" "host-name")}}
+					{{with dig $h "summary_fields" "recent_jobs"}}
+						{{if .}}
+							<div>
+								<dt class="ascender-detail-name">{{t "Activity"}}</dt>
+								<dd class="ascender-detail-value">{{template "sparkline" .}}</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{if has $h.description}}
+						{{template "detail" (dict "label" (t "Description") "value" (str $h.description))}}
+					{{end}}
+					{{if not $inv}}
+						{{with dig $h "summary_fields" "inventory"}}
+							<div>
+								<dt class="ascender-detail-name" data-cy="host-inventory-label" id="host-inventory">
+									{{t "Inventory"}}
+									{{template "help_button" (t "The inventory that this host belongs to.")}}
+								</dt>
+								<dd class="ascender-detail-value" data-cy="host-inventory-value">
+									<a href="/inventories/inventory/{{str .id}}/details">
+										{{.name}}
+									</a>
+								</dd>
+							</div>
+						{{end}}
+					{{end}}
+					{{template "user_date_detail" (dict "label" (t "Created") "date" $h.created "user" (dig $h "summary_fields" "created_by"))}}
+					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $h.modified "user" (dig $h "summary_fields" "modified_by"))}}
+					{{template "variables_detail" (dict "cy" (cond (has $inv) "inventory-host-detail-variables" "host-detail-variables") "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
+				</dl>
+				<div class="ascender-card-actions-row__wrapper">
+					{{if dig $caps "edit"}}
+						<a aria-label="{{t "edit"}}" class="pf-v6-c-button pf-m-primary" href="{{$hb}}/edit">
+							<span class="pf-v6-c-button__text">{{t "Edit"}}</span>
+						</a>
+					{{end}}
+					{{if dig $caps "delete"}}
+						<button aria-label="{{t "Delete"}}" class="pf-v6-c-button pf-m-secondary pf-m-progress" type="button" data-delete-one data-delete-kind="Host" data-api="/api/v2/hosts/{{$id}}/" data-name="{{$h.name}}" data-redirect="{{cond (has $inv) (printf "%s/hosts" (str $inv._base)) "/hosts"}}">
+							<span class="pf-v6-c-button__text">{{t "Delete"}}</span>
+						</button>
+					{{end}}
+				</div>
+			</div>
+		{{else if eq .Data.hostTab "facts"}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				<dl class="ascender-detail-list" gutter="sm">
+					{{template "variables_detail" (dict "cy" "host-facts-detail" "label" (t "Facts") "value" (str .Data.facts) "rows" "auto")}}
+				</dl>
+			</div>
+		{{else if eq .Data.hostTab "groups"}}
+			{{$invID := str $h.inventory}}
+			{{template "search_toolbar" (dict "page" . "id" "host-groups-list" "searchKeys" .Data.searchKeys "ns" "group" "kind" "Group" "disassociate" (printf "/api/v2/hosts/%s/groups/" $id) "filters" .Data.filters "actionsBefore" (safe (printf `<div class="pf-v6-c-toolbar__item"><div style="display: contents;"><button class="pf-v6-c-button pf-m-primary" type="button" data-associate data-resource="inventories/%s/groups" data-filter="not__hosts__id=%s" data-title="%s" data-api="/api/v2/hosts/%s/groups/"><span class="pf-v6-c-button__text">%s</span></button></div></div>` $invID $id (esc (t "Select Groups")) $id (esc (t "Add")))) "runCommand" .Data.adHoc)}}
+			{{if .Data.results}}
+				<div class="ascender-paginated-table__overflow-auto">
+					<table aria-label="{{t "{pluralizedItemName} List" "pluralizedItemName" (t "Items")}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+						<thead class="pf-v6-c-table__thead">
+							<tr class="pf-v6-c-table__tr">
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+									<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+								</th>
+								{{template "sort_th" (dict "page" . "key" "name" "label" (t "Name") "id" "group-table-sort-name")}}
+								<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+									{{t "Actions"}}
+								</th>
+							</tr>
+						</thead>
+						<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+							{{range $i, $g := .Data.results}}
+								{{template "group_row" (dict "group" $g "i" $i "detail" (printf "/inventories/inventory/%s/groups/%s/details" $invID (str $g.id)) "edit" (printf "/inventories/inventory/%s/groups/%s/edit" $invID (str $g.id)))}}
+							{{end}}
+						</tbody>
+					</table>
+				</div>
+				{{template "pagination_bottom" (dict "page" .)}}
+			{{else}}
+				{{if .Data.filters}}
+					{{template "empty_state" (dict "title" (t "No results found") "body" (t "No results match the search criteria. Try changing your search."))}}
+				{{else}}
+					{{template "empty_state" (dict "title" (t "No {pluralizedItemName} Found" "pluralizedItemName" (t "Items")) "body" (t "Please add {pluralizedItemName} to populate this list" "pluralizedItemName" (t "Items")))}}
+				{{end}}
+			{{end}}
+		{{else if eq .Data.hostTab "jobs"}}
+			{{template "related_jobs" (dict "page" .)}}
+		{{else}}
+			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+				{{template "empty_state" (dict "title" (t "{0} not available yet" "0" .Title) "body" (t "This tab will be available once jobs are ported."))}}
+			</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

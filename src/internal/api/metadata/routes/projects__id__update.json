@@ -1,0 +1,30 @@
+{
+    "name": "Project Update",
+    "description": "# Update Project\n\nMake a GET request to this resource to determine if the project can be updated\nfrom its SCM source.  The response will include the following field:\n\n* `can_update`: Flag indicating if this project can be updated (boolean,\n  read-only)\n\nMake a POST request to this resource to update the project.  If the project\ncannot be updated, a 405 status code will be returned.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "POST": {},
+        "GET": {
+            "can_update": {
+                "type": "boolean",
+                "label": "Can update",
+                "filterable": false
+            }
+        }
+    },
+    "types": [
+        "project"
+    ],
+    "object_roles": [
+        "admin_role",
+        "use_role",
+        "update_role",
+        "read_role"
+    ]
+}

@@ -1,0 +1,397 @@
+{{define "credential_chips"}}
+{{/* list of credential summaries; .links */}}
+<div class="pf-v6-c-label-group">
+	<div class="pf-v6-c-label-group__main">
+		<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
+			{{range .}}
+				<li class="pf-v6-c-label-group__list-item">
+					{{if ._href}}<a href="{{._href}}">{{end}}
+					<span class="pf-v6-c-label pf-m-outline">
+						<span class="pf-v6-c-label__content">
+							<span class="pf-v6-c-label__text">
+								<strong>
+									{{$k := credKindLabel .}}
+									{{if or (eq $k "Cloud") (eq $k "GPG Public Key")}}
+										{{t $k}}
+									{{else}}
+										{{$k}}
+									{{end}}
+									: </strong>
+								{{.name}}
+							</span>
+						</span>
+					</span>
+					{{if ._href}}</a>{{end}}
+				</li>
+			{{end}}
+		</ul>
+	</div>
+</div>
+{{end}}
+{{define "relaunch_action"}}
+{{/* .job .coll .seg .primary */}}
+{{$j := .job}}
+{{$id := str $j.id}}
+{{$api := printf "/api/v2/%s/%s/relaunch/" .coll $id}}
+{{$failedHosts := and (eq (str $j.type) "job") (eq (str $j.status) "failed")}}
+{{$failedWF := and (eq (str $j.type) "workflow_job") (or (eq (str $j.status) "failed") (eq (str $j.status) "error") (eq (str $j.status) "canceled"))}}
+{{if and $failedWF (not .primary)}}
+	{{template "workflow_relaunch_dropdown" (dict "job" $j "id" (printf "relaunch-workflow-%s" $id))}}
+{{else if $failedHosts}}
+	<div class="ascender-dropdown{{if .primary}} ascender-dropdown--up{{end}}" data-dropdown>
+		{{if .primary}}
+			<button class="pf-v6-c-menu-toggle pf-m-primary" type="button" aria-label="{{t "relaunch jobs"}}" id="relaunch-job" aria-expanded="false" data-dropdown-toggle>
+				<span class="pf-v6-c-menu-toggle__text">{{t "Relaunch"}}</span>
+				<span class="pf-v6-c-menu-toggle__controls">
+					<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+				</span>
+			</button>
+		{{else}}
+			<button class="pf-v6-c-button pf-m-plain" type="button" aria-label="{{t "relaunch jobs"}}" id="relaunch-job-{{$id}}" aria-expanded="false" data-tooltip="{{t "Relaunch using host parameters"}}" data-tooltip-pos="top" data-dropdown-toggle>
+				<span class="pf-v6-c-button__icon">{{icon "rocket"}}</span>
+			</button>
+		{{end}}
+		<div class="pf-v6-c-menu ascender-dropdown__menu pf-m-align-right" hidden data-dropdown-menu>
+			<div class="pf-v6-c-menu__content">
+				<ul class="pf-v6-c-menu__list" role="menu">
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item pf-m-aria-disabled" type="button" role="menuitem" aria-disabled="true" aria-label="{{t "Relaunch on"}}">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">{{t "Relaunch on"}}</span>
+							</span>
+						</button>
+					</li>
+					<li class="pf-v6-c-divider" role="separator"></li>
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{t "Relaunch all hosts"}}" data-relaunch="{{$api}}" data-relaunch-seg="{{.seg}}" data-relaunch-hosts="all">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">{{t "All"}}</span>
+							</span>
+						</button>
+					</li>
+					<li class="pf-v6-c-menu__list-item" role="none">
+						<button class="pf-v6-c-menu__item" type="button" role="menuitem" aria-label="{{t "Relaunch failed hosts"}}" data-relaunch="{{$api}}" data-relaunch-seg="{{.seg}}" data-relaunch-hosts="failed">
+							<span class="pf-v6-c-menu__item-main">
+								<span class="pf-v6-c-menu__item-text">{{t "Failed hosts"}}</span>
+							</span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{{else if .primary}}
+	<button class="pf-v6-c-button pf-m-primary" type="button" aria-label="{{t "Relaunch"}}" data-relaunch="{{$api}}" data-relaunch-seg="{{.seg}}">
+		<span class="pf-v6-c-button__text">{{t "Relaunch"}}</span>
+	</button>
+{{else}}
+	<button aria-label="{{t "Relaunch"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Relaunch Job"}}" data-tooltip-pos="top" data-relaunch="{{$api}}" data-relaunch-seg="{{.seg}}">
+		<span class="pf-v6-c-button__icon">{{icon "rocket"}}</span>
+	</button>
+{{end}}
+{{end}}
+{{define "job_row"}}
+{{/* .job .i .showType */}}
+{{$j := .job}}
+{{$id := str $j.id}}
+{{$seg := jobSegment (str $j.type)}}
+{{$coll := jobCollection (str $j.type)}}
+{{$caps := dig $j "summary_fields" "user_capabilities"}}
+{{$sf := $j.summary_fields}}
+{{$active := or (eq (str $j.status) "pending") (eq (str $j.status) "waiting") (eq (str $j.status) "running")}}
+<tr class="pf-v6-c-table__tr" id="job-row-{{$id}}" data-row data-id="{{$id}}" data-name="{{$j.name}}" data-api="/api/v2/{{$coll}}/{{$id}}/"{{if $active}} data-cancelable{{end}}>
+	<td tabindex="-1" class="pf-v6-c-table__td pf-v6-c-table__toggle">
+		<button aria-expanded="false" aria-labelledby="simple-node{{$id}} expand-toggle{{$id}}" id="expand-toggle{{$id}}" aria-label="{{t "Details"}}" class="pf-v6-c-button pf-m-plain pf-m-small" type="button" data-expand-row>
+			<span class="pf-v6-c-button__icon">
+				<div class="pf-v6-c-table__toggle-icon">{{icon "pf-angle-down"}}</div>
+			</span>
+		</button>
+	</td>
+	<td tabindex="-1" data-label="{{t "Select"}}" class="pf-v6-c-table__td pf-v6-c-table__check">
+		<div class="pf-v6-c-check pf-m-standalone">
+			<input id="select-{{.i}}" class="pf-v6-c-check__input" aria-invalid="false" aria-label="Select row {{.i}}" type="checkbox" data-select-row{{if not (dig $caps "delete")}} data-no-delete{{end}}>
+		</div>
+	</td>
+	<td tabindex="-1" data-label="{{t "ID"}}" class="pf-v6-c-table__td pf-m-fit-content">
+		{{$id}}
+	</td>
+	<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
+		<span>
+			<a href="/jobs/{{$seg}}/{{$id}}">
+				<b>{{if has $j.name}}{{$j.name}}{{else}}{{$id}}{{end}}</b>
+			</a>
+		</span>
+	</td>
+	<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+		{{if has $j.status}}{{template "status_label" (str $j.status)}}{{end}}
+	</td>
+	{{if .showType}}
+		<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
+			{{t (jobTypeLabel $j)}}
+		</td>
+	{{end}}
+	<td tabindex="-1" data-label="{{t "Start Time"}}" class="pf-v6-c-table__td">
+		{{if has $j.started}}{{dt $j.started}}{{end}}
+	</td>
+	<td tabindex="-1" data-label="{{t "Finish Time"}}" class="pf-v6-c-table__td">
+		{{if has $j.finished}}{{dt $j.finished}}{{end}}
+	</td>
+	<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+		<div class="ascender-actions-td__grid">
+			{{if $active}}
+				<div>
+					<div style="display: contents;">
+						<div>
+							<button aria-label="{{t "Cancel"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Cancel {0}" "0" $j.name}}" data-tooltip-pos="top" data-cancel-job="/api/v2/{{$coll}}/{{$id}}/cancel/" data-name="{{$j.name}}">
+								<span class="pf-v6-c-button__icon">{{icon "minus-circle"}}</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			{{end}}
+			{{if and (dig $caps "start") (ne (str $j.type) "system_job")}}
+				<div>
+					<div style="display: contents;">
+						<div>
+							{{template "relaunch_action" (dict "job" $j "coll" $coll "seg" $seg)}}
+						</div>
+					</div>
+				</div>
+			{{end}}
+		</div>
+	</td>
+</tr>
+<tr class="pf-v6-c-table__tr pf-v6-c-table__expandable-row" hidden id="expanded-job-row-{{$id}}" data-expanded-row>
+	<td tabindex="-1" class="pf-v6-c-table__td" colspan="2"></td>
+	<td tabindex="-1" class="pf-v6-c-table__td" colspan="{{if .showType}}7{{else}}6{{end}}">
+		<div class="pf-v6-c-table__expandable-row-content">
+			<dl class="ascender-detail-list">
+				{{with $j.launched_by}}
+					{{if has .name}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Launched By"}}</dt>
+							<dd class="ascender-detail-value">
+								{{if has .url}}
+									<a href="{{launchedByHref .}}">{{.name}}</a>
+								{{else}}
+									{{.name}}
+								{{end}}
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+				{{if eq (str $j.launch_type) "scheduled"}}
+					{{with dig $sf "schedule"}}
+						<div>
+							<dt class="ascender-detail-name" data-cy="job-schedule-label">
+								{{t "Schedule"}}
+							</dt>
+							<dd class="ascender-detail-value" data-cy="job-schedule-value">
+								<a href="/schedules/{{str .id}}/details">{{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+				{{with dig $sf "job_template"}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Job Template"}}</dt>
+						<dd class="ascender-detail-value">
+							<a href="/templates/job_template/{{str .id}}">{{.name}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "workflow_job_template"}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Workflow Job Template"}}</dt>
+						<dd class="ascender-detail-value">
+							<a href="/templates/workflow_job_template/{{str .id}}">{{.name}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "source_workflow_job"}}
+					{{if has .id}}
+						<div>
+							<dt class="ascender-detail-name">{{t "Source Workflow Job"}}</dt>
+							<dd class="ascender-detail-value">
+								<a href="/jobs/workflow/{{str .id}}">{{str .id}} - {{.name}}</a>
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+				{{with dig $sf "inventory"}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Inventory"}}</dt>
+						<dd class="ascender-detail-value">
+							<a href="/inventories/{{if eq (str .kind) "smart"}}smart_inventory{{else}}inventory{{end}}/{{str .id}}">
+								{{.name}}
+							</a>
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "project"}}
+					<div>
+						<dt class="ascender-detail-name" data-cy="job-{{$id}}-project-label" id="job-{{$id}}-project">
+							{{t "Project"}}
+						</dt>
+						<dd class="ascender-detail-value" data-cy="job-{{$id}}-project-value">
+							<a href="/projects/{{str .id}}/details">{{.name}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "execution_environment"}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Execution Environment"}}</dt>
+						<dd class="ascender-detail-value">
+							<a href="/execution_environments/{{str .id}}/details">{{.name}}</a>
+						</dd>
+					</div>
+				{{end}}
+				{{if and (has $j.job_slice_number) (has $j.job_slice_count)}}
+					<div>
+						<dt class="ascender-detail-name">{{t "Job Slice"}}</dt>
+						<dd class="ascender-detail-value">
+							{{str $j.job_slice_number}}/{{str $j.job_slice_count}}
+						</dd>
+					</div>
+				{{end}}
+				{{with dig $sf "credentials"}}
+					{{if .}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Credentials"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								{{template "credential_chips" .}}
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+				{{with dig $sf "labels"}}
+					{{if .results}}
+						<div>
+							<dt class="ascender-detail-name ascender-detail-name--full-width">
+								{{t "Labels"}}
+							</dt>
+							<dd class="ascender-detail-value ascender-detail-value--full-width">
+								{{template "label_group" (dict "items" .results "max" 5 "total" (num .count))}}
+							</dd>
+						</div>
+					{{end}}
+				{{end}}
+			</dl>
+		</div>
+	</td>
+</tr>
+{{end}}
+{{define "jobs_table"}}
+{{/* .page .showType .aria */}}
+{{$showType := .showType}}
+<div class="ascender-paginated-table__overflow-auto">
+	<table aria-label="{{.aria}}" role="grid" class="pf-v6-c-table pf-m-grid-md pf-m-compact" data-list-table>
+		<thead class="pf-v6-c-table__thead">
+			<tr class="pf-v6-c-table__tr">
+				<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+					<span class="pf-v6-u-screen-reader">{{t "Expand"}}</span>
+				</th>
+				<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+					<span class="pf-v6-u-screen-reader">{{t "Row select"}}</span>
+				</th>
+				{{template "sort_th" (dict "page" .page "key" "id" "label" (t "ID") "id" "job-table-sort-id")}}
+				{{template "sort_th" (dict "page" .page "key" "name" "label" (t "Name") "id" "job-table-sort-name")}}
+				{{template "sort_th" (dict "page" .page "key" "status" "label" (t "Status") "id" "job-table-sort-status")}}
+				{{if $showType}}
+					<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th">
+						{{t "Type"}}
+					</th>
+				{{end}}
+				{{template "sort_th" (dict "page" .page "key" "started" "label" (t "Start Time") "id" "job-table-sort-started")}}
+				{{template "sort_th" (dict "page" .page "key" "finished" "label" (t "Finish Time") "id" "job-table-sort-finished")}}
+				<th tabindex="-1" scope="col" class="pf-v6-c-table__th ascender-header-row__th ascender-header-row__th--align-right">
+					{{t "Actions"}}
+				</th>
+			</tr>
+		</thead>
+		<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+			{{range $i, $j := .page.Data.results}}
+				{{template "job_row" (dict "job" $j "i" $i "showType" $showType)}}
+			{{end}}
+		</tbody>
+	</table>
+</div>
+{{template "pagination_bottom" (dict "page" .page)}}
+{{end}}
+{{define "workflow_nav"}}
+{{with .}}
+	<div class="ascender-routed-tabs__tab-bar-control">
+		<div class="ascender-workflow-output-navigation" data-wf-nav>
+			<button class="pf-v6-c-menu-toggle ascender-workflow-output-navigation__menu-toggle" type="button" aria-expanded="false" data-wf-nav-toggle>
+				<span class="pf-v6-c-menu-toggle__text" data-wf-nav-text>{{.Label}}</span>
+				<span class="pf-v6-c-menu-toggle__controls">
+					<span class="pf-v6-c-menu-toggle__toggle-icon">{{icon "pf-caret-down"}}</span>
+				</span>
+			</button>
+			<div class="pf-v6-c-menu ascender-workflow-output-navigation__menu" hidden data-wf-nav-menu>
+				<div class="pf-v6-c-menu__content">
+					<div class="pf-v6-c-menu__search">
+						<div class="pf-v6-c-text-input-group">
+							<div class="pf-v6-c-text-input-group__main">
+								<span class="pf-v6-c-text-input-group__text">
+									<input class="pf-v6-c-text-input-group__text-input" type="text" placeholder="{{t "Filter..."}}" aria-label="{{t "Filter"}}" autocomplete="off" data-wf-nav-filter>
+								</span>
+							</div>
+						</div>
+					</div>
+					<section class="pf-v6-c-menu__group">
+						<h1 class="pf-v6-c-menu__group-title">{{t "Workflow Statuses"}}</h1>
+						<ul class="pf-v6-c-menu__list" role="listbox">
+							<li class="pf-v6-c-menu__list-item" role="none">
+								<button class="pf-v6-c-menu__item" type="button" role="option" data-wf-nav-status="failed">
+									<span class="pf-v6-c-menu__item-main">
+										<span class="pf-v6-c-menu__item-text">
+											{{t "Failed"}} ({{.Failed}})
+										</span>
+									</span>
+									<span class="pf-v6-c-menu__item-description">
+										{{t "Filter by failed jobs"}}
+									</span>
+								</button>
+							</li>
+							<li class="pf-v6-c-menu__list-item" role="none">
+								<button class="pf-v6-c-menu__item" type="button" role="option" data-wf-nav-status="successful">
+									<span class="pf-v6-c-menu__item-main">
+										<span class="pf-v6-c-menu__item-text">
+											{{t "Successful"}} ({{.Successful}})
+										</span>
+									</span>
+									<span class="pf-v6-c-menu__item-description">
+										{{t "Filter by successful jobs"}}
+									</span>
+								</button>
+							</li>
+						</ul>
+					</section>
+					<section class="pf-v6-c-menu__group">
+						<h1 class="pf-v6-c-menu__group-title">{{t "Workflow Nodes"}}</h1>
+						<ul class="pf-v6-c-menu__list" role="listbox">
+							{{range .Nodes}}
+								<li class="pf-v6-c-menu__list-item" role="none" data-wf-nav-node data-status="{{.Status}}" data-label="{{.Label}}">
+									<a class="pf-v6-c-menu__item{{if .Current}} pf-m-selected{{end}}" role="option" href="{{.Href}}"{{if .Current}} aria-selected="true"{{end}}>
+										<span class="pf-v6-c-menu__item-main">
+											<span class="pf-v6-c-menu__item-text">{{.Label}}</span>
+											{{if .Current}}
+												<span class="pf-v6-c-menu__item-select-icon">
+													{{icon "check"}}
+												</span>
+											{{end}}
+										</span>
+									</a>
+								</li>
+							{{end}}
+						</ul>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+{{end}}
+{{end}}

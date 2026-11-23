@@ -1,16 +1,73 @@
-# Transition to Ansible Inventory Plugins
+# Inventory Plugins
 
-For cloud inventory sources (such as ec2, gce, etc.) inventory updates changed from using deprecated inventory scripts, to using YAML files which are parsed by their respective inventory plugin.
+Every inventory update runs `ansible-inventory` in an execution environment and
+imports the JSON it prints (`runInventoryUpdate` in
+`src/internal/tasks/inventory_update.go`, then `performUpdate` in
+`src/internal/tasks/inventory_import.go`). Ascender keeps no source-specific
+parsing of its own: Ansible's inventory plugins read the cloud or the files,
+and `ansible-inventory` gives the same JSON structure for all of them.
 
-Regardless of whether Ansible 2.9 or later is used, Ascender should use the inventory plugin from the collection inside of the execution environment where the inventory update runs. The needed collections are in the Ascender default execution environment:
+## Cloud sources
+
+For a cloud source, Ascender writes the source's `source_vars` as the plugin's
+YAML configuration file, with `plugin` set for the source type, and passes it
+to `ansible-inventory -i`:
+
+| `source` | `plugin` written | Collection |
+|----------|------------------|------------|
+| `ec2` | `aws_ec2` | `amazon.aws` |
+| `gce` | `gcp_compute` | `google.cloud` |
+| `azure_rm` | `azure_rm` | `azure.azcollection` |
+| `vmware` | `community.vmware.vmware_vm_inventory` (or `vmware.vmware.vms` when `source_vars` selects it) | `community.vmware`, `vmware.vmware` |
+| `openstack` | `openstack` | `openstack.cloud` |
+| `satellite6` | `theforeman.foreman.foreman` | `theforeman.foreman` |
+| `terraform` | `cloud.terraform.terraform_state` | `cloud.terraform` |
+| `ascender` | `ctrliq.ascender.controller` | `ctrliq.ascender` |
+
+The plugin comes from the collection installed in the execution environment the
+update runs in; short names are resolved by Ansible's plugin routing. The
+needed collections are in the Ascender default execution environment:
 
 https://github.com/ctrliq/ascender-ee
-### Switch to Ansible Inventory
 
-The CLI entry point `ansible-inventory` was introduced in Ansible 2.4. Inventory imports run this command as an intermediary between the inventory and the import's logic to save content to the database. Using `ansible-inventory` eliminates the need to maintain source-specific logic, relying on Ansible's code instead. This also enables consistent data structure output from `ansible-inventory`.
+The source's cloud credential is given to the plugin through environment
+variables, and files named by them where the plugin wants a file (a GCE
+service account file, an OpenStack `clouds.yaml`). The other options of the
+source, `overwrite`, `overwrite_vars`, `enabled_var`, `enabled_value` and
+`host_filter`, apply when the output is imported.
+
+`host_filter` is a Python regular expression (Python's `re` syntax, with
+lookarounds and backreferences), matched at the start of each host name as
+`re.match` does: only the hosts it matches are imported. It is not checked
+when the source is saved; an expression Python cannot compile fails the
+update with "invalid regular expression for --host-filter". Without a
+`host_filter`, the filter is `^.+$`, as it is always for group names: a
+name that is empty or has a line break before its last character is not
+imported.
+
+## The `ansible-inventory` command
+
+The update runs:
+
+```
+ansible-inventory --list --export -i <inventory> [--limit <limit>] --output <file> --playbook-dir <dir> [-vvv]
+```
+
+with `ANSIBLE_INVENTORY_UNPARSED_FAILED`, `ANSIBLE_INVENTORY_EXPORT` and
+`ANSIBLE_HOST_PATTERN_MISMATCH=error` set, so an inventory that does not parse,
+or a `limit` that matches nothing, fails the update instead of importing
+nothing. A source `verbosity` of 1 adds `-vvv` and 2 adds `-vvvvv`.
 
 ## Writing Your Own Inventory File
 
-You can add an SCM inventory source that points to your own yaml file which specifies an inventory plugin. You can also apply a credential of a `managed` type to that inventory source that matches the credential you are using. For example, you could have an inventory file for the `amazon.aws.aws_ec2` plugin and use the built-in `aws` credential type.
+You can add an [SCM inventory source](./scm_inventory.md) that points to your
+own YAML file which names an inventory plugin. You can also attach a credential
+of a built-in cloud type to that source: most of them inject the same
+environment variables they would for their own source type. For example, an
+inventory file for the `amazon.aws.aws_ec2` plugin can use the built-in Amazon
+Web Services credential, which sets `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY`.
 
-All built-in sources provide _secrets_ via environment variables.  These can be re-used for SCM-based inventory, and your inventory file can be used to specify non-sensitive configuration details such as the `keyed_groups` (to provide) or `hostvars` (to construct).
+The secrets come from the credential, so your inventory file only needs the
+non-sensitive configuration, such as `keyed_groups` (to make groups) or
+`compose` (to build host variables).

@@ -1,0 +1,155 @@
+{{define "content"}}
+{{$v := .Data.values}}
+{{$e := .Errors}}
+{{$u := .Data.user}}
+{{if $u}}
+	{{template "screen_header" (dict "title" (t "Edit Details") "stream" "user" "crumbs" (list (dict "href" "/users" "title" (t "Users")) (dict "href" (printf "/users/%s/details" (str $u.id)) "title" (str $u.username))))}}
+{{else}}
+	{{template "screen_header" (dict "title" (t "Create New User") "stream" "user" "crumbs" (list (dict "href" "/users" "title" (t "Users"))))}}
+{{end}}
+<section class="pf-v6-c-page__main-section">
+	<div id="" class="pf-v6-c-card">
+		<div class="pf-v6-c-card__body ascender-card-body__tabbed">
+			<form novalidate autocomplete="off" class="pf-v6-c-form" method="post" data-validate data-user-form>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{.CSRF}}">
+				<div class="ascender-form-column-layout">
+					{{template "form_field" (dict "id" "user-first-name" "name" "first_name" "label" (t "First Name") "value" $v.first_name "errors" (index $e "first_name"))}}
+					{{template "form_field" (dict "id" "user-last-name" "name" "last_name" "label" (t "Last Name") "value" $v.last_name "errors" (index $e "last_name"))}}
+					{{template "form_field" (dict "id" "user-email" "name" "email" "label" (t "Email") "value" $v.email "errors" (index $e "email"))}}
+					{{template "form_field" (dict "id" "user-username" "name" "username" "label" (t "Username") "value" $v.username "required" (not (or $v.ldap $v.external)) "errors" (index $e "username"))}}
+					{{if not $v.ldap}}
+						{{template "user_password" (dict "id" "user-password" "name" "password" "label" (t "Password") "required" (not $u) "errors" (index $e "password"))}}
+						{{template "user_password" (dict "id" "user-confirm-password" "name" "confirm_password" "label" (t "Confirm Password") "required" (not $u) "errors" (index $e "confirm_password"))}}
+					{{end}}
+					{{if .UC.User.IsSuperuser}}
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="user-type">
+									<span class="pf-v6-c-form__label-text">{{t "User Type"}}</span>
+									<span class="pf-v6-c-form__label-required" aria-hidden="true">
+										&nbsp;*
+									</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control">
+									<select id="user-type" name="user_type" aria-label="{{t "Select Input"}}" aria-invalid="false">
+										{{range list (list "normal" "Normal User") (list "auditor" "System Auditor") (list "administrator" "System Administrator")}}
+											<option class="" value="{{index . 0}}"{{if eq (index . 0) (str $v.user_type)}} selected{{end}}>
+												{{t (index . 1)}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+							</div>
+						</div>
+					{{end}}
+					<div class="pf-v6-c-form__group">
+						<div class="pf-v6-c-form__group-label">
+							<label class="pf-v6-c-form__label" for="user-preferred-language">
+								<span class="pf-v6-c-form__label-text">
+									{{t "Preferred Language"}}
+								</span>
+							</label>
+							&nbsp;&nbsp;
+						</div>
+						<div class="pf-v6-c-form__group-control">
+							<span class="pf-v6-c-form-control{{if index $e "preferred_language"}} pf-m-error{{end}}">
+								<select id="user-preferred-language" name="preferred_language" aria-label="{{t "Select Input"}}" aria-invalid="false">
+									<option class="" value="">{{t "Use browser default"}}</option>
+									{{range .Data.languages}}
+										<option class="" value="{{index . 0}}"{{if eq (index . 0) (str $v.preferred_language)}} selected{{end}}>
+											{{index . 1}}
+										</option>
+									{{end}}
+								</select>
+								<span class="pf-v6-c-form-control__utilities">
+									<span class="pf-v6-c-form-control__toggle-icon">
+										{{icon "pf-caret-down"}}
+									</span>
+								</span>
+							</span>
+							{{template "field_error" (index $e "preferred_language")}}
+						</div>
+					</div>
+					{{if .Data.isMe}}
+						<div class="pf-v6-c-form__group">
+							<div class="pf-v6-c-form__group-label">
+								<label class="pf-v6-c-form__label" for="user-preferred-theme">
+									<span class="pf-v6-c-form__label-text">
+										{{t "Preferred Theme"}}
+									</span>
+								</label>
+								&nbsp;&nbsp;
+							</div>
+							<div class="pf-v6-c-form__group-control">
+								<span class="pf-v6-c-form-control">
+									<select id="user-preferred-theme" name="preferred_theme" aria-label="{{t "Select Input"}}" aria-invalid="false" data-theme-preview>
+										{{$cur := cond (has $v.preferred_theme) (str $v.preferred_theme) .UC.Theme}}
+										{{range .Data.themes}}
+											<option class="" value="{{.ID}}"{{if eq .ID $cur}} selected{{end}}>
+												{{.Name}}
+											</option>
+										{{end}}
+									</select>
+									<span class="pf-v6-c-form-control__utilities">
+										<span class="pf-v6-c-form-control__toggle-icon">
+											{{icon "pf-caret-down"}}
+										</span>
+									</span>
+								</span>
+							</div>
+						</div>
+					{{end}}
+					{{if not $u}}
+						{{template "lookup_field" (dict "id" "organization" "name" "organization" "label" (t "Organization") "value" $v.organization "required" true "resource" "organizations" "filter" "role_level=admin_role" "title" (t "Select {0}" "0" (t "Organization")) "errors" (index $e "organization"))}}
+					{{end}}
+				</div>
+				{{with index $e "__all__"}}
+					<div class="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+						{{range .}}<p>{{.}}</p>{{end}}
+					</div>
+				{{end}}
+				{{template "form_actions" (cond (has $u) (printf "/users/%s/details" (str $u.id)) "/users")}}
+			</form>
+		</div>
+	</div>
+</section>
+{{end}}
+{{define "user_password"}}
+<div class="pf-v6-c-form__group">
+	<div class="pf-v6-c-form__group-label">
+		<label class="pf-v6-c-form__label" for="{{.id}}">
+			<span class="pf-v6-c-form__label-text">{{.label}}</span>
+			{{if .required}}
+				<span class="pf-v6-c-form__label-required" aria-hidden="true">&nbsp;*</span>
+			{{end}}
+		</label>
+		&nbsp;&nbsp;
+	</div>
+	<div class="pf-v6-c-form__group-control">
+		<div class="pf-v6-c-input-group" data-secret-group>
+			<div class="pf-v6-c-input-group__item pf-m-fill">
+				<div style="display: contents;">
+					<button aria-label="{{t "Toggle Password"}}" class="pf-v6-c-button pf-m-control" type="button" data-tooltip="{{t "Show"}}" data-tooltip-pos="top" data-toggle-password>
+						<span class="pf-v6-c-button__text">
+							<span data-icon-show>{{icon "eye-slash"}}</span>
+							<span data-icon-hide hidden>{{icon "eye"}}</span>
+						</span>
+					</button>
+				</div>
+				<span class="pf-v6-c-form-control{{if .errors}} pf-m-error{{end}}">
+					<input autocomplete="new-password" id="{{.id}}" aria-invalid="{{if .errors}}true{{else}}false{{end}}" type="password" value="" name="{{.name}}"{{if .required}} required{{end}} data-secret-input>
+				</span>
+			</div>
+		</div>
+		{{template "field_error" .errors}}
+	</div>
+</div>
+{{end}}

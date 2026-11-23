@@ -1,0 +1,347 @@
+{
+    "name": "Setting Detail",
+    "description": "# Retrieve a Setting:\n\nMake GET request to this resource to retrieve a single setting\nrecord containing the following fields:\n\n* `ACTIVITY_STREAM_ENABLED`: Enable capturing activity for the activity stream. (boolean)\n* `ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC`: Enable capturing activity for the activity stream when running inventory sync. (boolean)\n* `ORG_ADMINS_CAN_SEE_ALL_USERS`: Controls whether any Organization Admin can view all users and teams, even those not associated with their Organization. (boolean)\n* `MANAGE_ORGANIZATION_AUTH`: Controls whether any Organization Admin has the privileges to create and manage users and teams. You may want to disable this ability if you are using an LDAP or SAML integration. (boolean)\n* `RESTRICT_USER_IDENTITY_TO_SUPERUSERS`: When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off. (boolean)\n* `ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS`: When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants). (boolean)\n* `AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS`: When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity&#x27;s Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected. (boolean)\n* `ASCENDER_URL_BASE`: This setting is used by services like notifications to render a valid url to the service. (string)\n* `WORKLOAD_IDENTITY_ENABLED`: Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o. (boolean)\n* `WORKLOAD_IDENTITY_DEFAULT_TTL`: How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift. (integer)\n* `REMOTE_HOST_HEADERS`: HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as &quot;HTTP_X_FORWARDED_FOR&quot;, if behind a reverse proxy. See the &quot;Proxy Support&quot; section of the AAP Installation guide for more details. (list)\n* `PROXY_IP_ALLOWED_LIST`: If the service is behind a reverse proxy/load balancer, use this setting to configure the proxy IP addresses from which the service should trust custom REMOTE_HOST_HEADERS header values. If this setting is an empty list (the default), the headers specified by REMOTE_HOST_HEADERS will be trusted unconditionally&#x27;) (list)\n* `CSRF_TRUSTED_ORIGINS`: If the service is behind a reverse proxy/load balancer, use this setting to configure the schema://addresses from which the service should trust Origin header values.  (list)\n* `INSTALL_UUID`:  (string)\n* `DEFAULT_CONTROL_PLANE_QUEUE_NAME`:  (string)\n* `DEFAULT_EXECUTION_QUEUE_NAME`:  (string)\n* `DEFAULT_EXECUTION_ENVIRONMENT`: The Execution Environment to be used when one has not been configured for a job template. (field)\n* `IS_K8S`: Indicates whether the instance is part of a kubernetes-based deployment. (boolean)\n* `CLEANUP_HOST_METRICS_LAST_TS`:  (datetime)\n* `HOST_METRIC_SUMMARY_TASK_LAST_TS`:  (datetime)\n\n\n\n\n\n# Update a Setting:\n\nMake a PUT or PATCH request to this resource to update this\nsetting.  The following fields may be modified:\n\n\n* `ACTIVITY_STREAM_ENABLED`: Enable capturing activity for the activity stream. (boolean, required)\n* `ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC`: Enable capturing activity for the activity stream when running inventory sync. (boolean, required)\n* `ORG_ADMINS_CAN_SEE_ALL_USERS`: Controls whether any Organization Admin can view all users and teams, even those not associated with their Organization. (boolean, required)\n* `MANAGE_ORGANIZATION_AUTH`: Controls whether any Organization Admin has the privileges to create and manage users and teams. You may want to disable this ability if you are using an LDAP or SAML integration. (boolean, required)\n* `RESTRICT_USER_IDENTITY_TO_SUPERUSERS`: When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off. (boolean, default=`False`)\n* `ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS`: When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants). (boolean, default=`False`)\n* `AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS`: When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity&#x27;s Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected. (boolean, default=`False`)\n* `ASCENDER_URL_BASE`: This setting is used by services like notifications to render a valid url to the service. (string, required)\n* `WORKLOAD_IDENTITY_ENABLED`: Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o. (boolean, required)\n* `WORKLOAD_IDENTITY_DEFAULT_TTL`: How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift. (integer, default=`300`)\n* `REMOTE_HOST_HEADERS`: HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as &quot;HTTP_X_FORWARDED_FOR&quot;, if behind a reverse proxy. See the &quot;Proxy Support&quot; section of the AAP Installation guide for more details. (list, required)\n* `PROXY_IP_ALLOWED_LIST`: If the service is behind a reverse proxy/load balancer, use this setting to configure the proxy IP addresses from which the service should trust custom REMOTE_HOST_HEADERS header values. If this setting is an empty list (the default), the headers specified by REMOTE_HOST_HEADERS will be trusted unconditionally&#x27;) (list, required)\n* `CSRF_TRUSTED_ORIGINS`: If the service is behind a reverse proxy/load balancer, use this setting to configure the schema://addresses from which the service should trust Origin header values.  (list, default=`[]`)\n\n\n\n* `DEFAULT_EXECUTION_ENVIRONMENT`: The Execution Environment to be used when one has not been configured for a job template. (field, default=`None`)\n\n* `CLEANUP_HOST_METRICS_LAST_TS`:  (datetime, required)\n* `HOST_METRIC_SUMMARY_TASK_LAST_TS`:  (datetime, required)\n\n\n\n\n\n\nFor a PUT request, include **all** fields in the request.\n\n\n\nFor a PATCH request, include only the fields that are being modified.\n\n\n\n# Delete a Setting:\n\nMake a DELETE request to this resource to delete this setting.",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json"
+    ],
+    "actions": {
+        "PUT": {
+            "ACTIVITY_STREAM_ENABLED": {
+                "type": "boolean",
+                "required": true,
+                "label": "Enable Activity Stream",
+                "help_text": "Enable capturing activity for the activity stream.",
+                "category": "System",
+                "category_slug": "system",
+                "default": true
+            },
+            "ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC": {
+                "type": "boolean",
+                "required": true,
+                "label": "Enable Activity Stream for Inventory Sync",
+                "help_text": "Enable capturing activity for the activity stream when running inventory sync.",
+                "category": "System",
+                "category_slug": "system",
+                "default": false
+            },
+            "ORG_ADMINS_CAN_SEE_ALL_USERS": {
+                "type": "boolean",
+                "required": true,
+                "label": "All Users Visible to Organization Admins",
+                "help_text": "Controls whether any Organization Admin can view all users and teams, even those not associated with their Organization.",
+                "category": "System",
+                "category_slug": "system",
+                "default": true
+            },
+            "MANAGE_ORGANIZATION_AUTH": {
+                "type": "boolean",
+                "required": true,
+                "label": "Organization Admins Can Manage Users and Teams",
+                "help_text": "Controls whether any Organization Admin has the privileges to create and manage users and teams. You may want to disable this ability if you are using an LDAP or SAML integration.",
+                "category": "System",
+                "category_slug": "system",
+                "default": true
+            },
+            "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Only Superusers Can Set User Emails and Change Usernames",
+                "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.",
+                "category": "System",
+                "category_slug": "system",
+                "default": false
+            },
+            "ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Hide System Roles from Access Lists",
+                "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
+                "category": "System",
+                "category_slug": "system",
+                "default": false
+            },
+            "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+                "type": "boolean",
+                "required": false,
+                "label": "Allow AWS Secrets Manager Lookups Without Keys",
+                "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
+                "category": "System",
+                "category_slug": "system",
+                "default": false
+            },
+            "ASCENDER_URL_BASE": {
+                "type": "string",
+                "required": true,
+                "label": "Base URL of the service",
+                "help_text": "This setting is used by services like notifications to render a valid url to the service.",
+                "category": "System",
+                "category_slug": "system",
+                "default": "https://ascenderhost"
+            },
+            "WORKLOAD_IDENTITY_ENABLED": {
+                "type": "boolean",
+                "required": true,
+                "label": "Enable Workload Identity",
+                "help_text": "Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.",
+                "category": "System",
+                "category_slug": "system",
+                "default": false
+            },
+            "WORKLOAD_IDENTITY_DEFAULT_TTL": {
+                "type": "integer",
+                "required": false,
+                "label": "Workload Identity Token Lifetime",
+                "help_text": "How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.",
+                "min_value": 1,
+                "max_value": 86400,
+                "category": "System",
+                "category_slug": "system",
+                "unit": "seconds",
+                "default": 300
+            },
+            "REMOTE_HOST_HEADERS": {
+                "type": "list",
+                "required": true,
+                "label": "Remote Host Headers",
+                "help_text": "HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as \"HTTP_X_FORWARDED_FOR\", if behind a reverse proxy. See the \"Proxy Support\" section of the AAP Installation guide for more details.",
+                "category": "System",
+                "category_slug": "system",
+                "default": [
+                    "REMOTE_ADDR",
+                    "REMOTE_HOST"
+                ],
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "PROXY_IP_ALLOWED_LIST": {
+                "type": "list",
+                "required": true,
+                "label": "Proxy IP Allowed List",
+                "help_text": "If the service is behind a reverse proxy/load balancer, use this setting to configure the proxy IP addresses from which the service should trust custom REMOTE_HOST_HEADERS header values. If this setting is an empty list (the default), the headers specified by REMOTE_HOST_HEADERS will be trusted unconditionally')",
+                "category": "System",
+                "category_slug": "system",
+                "default": [],
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "CSRF_TRUSTED_ORIGINS": {
+                "type": "list",
+                "required": false,
+                "label": "CSRF Trusted Origins List",
+                "help_text": "If the service is behind a reverse proxy/load balancer, use this setting to configure the schema://addresses from which the service should trust Origin header values. ",
+                "category": "System",
+                "category_slug": "system",
+                "default": [],
+                "child": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false
+                }
+            },
+            "DEFAULT_EXECUTION_ENVIRONMENT": {
+                "type": "field",
+                "required": false,
+                "label": "Global default execution environment",
+                "help_text": "The Execution Environment to be used when one has not been configured for a job template.",
+                "category": "System",
+                "category_slug": "system",
+                "default": null
+            },
+            "CLEANUP_HOST_METRICS_LAST_TS": {
+                "type": "datetime",
+                "required": true,
+                "label": "Last cleanup date for HostMetrics",
+                "category": "System",
+                "category_slug": "system",
+                "default": null
+            },
+            "HOST_METRIC_SUMMARY_TASK_LAST_TS": {
+                "type": "datetime",
+                "required": true,
+                "label": "Last computing date of HostMetricSummaryMonthly",
+                "category": "System",
+                "category_slug": "system",
+                "default": null
+            }
+        },
+        "GET": {
+            "ACTIVITY_STREAM_ENABLED": {
+                "type": "boolean",
+                "label": "Enable Activity Stream",
+                "help_text": "Enable capturing activity for the activity stream.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC": {
+                "type": "boolean",
+                "label": "Enable Activity Stream for Inventory Sync",
+                "help_text": "Enable capturing activity for the activity stream when running inventory sync.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "ORG_ADMINS_CAN_SEE_ALL_USERS": {
+                "type": "boolean",
+                "label": "All Users Visible to Organization Admins",
+                "help_text": "Controls whether any Organization Admin can view all users and teams, even those not associated with their Organization.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "MANAGE_ORGANIZATION_AUTH": {
+                "type": "boolean",
+                "label": "Organization Admins Can Manage Users and Teams",
+                "help_text": "Controls whether any Organization Admin has the privileges to create and manage users and teams. You may want to disable this ability if you are using an LDAP or SAML integration.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "RESTRICT_USER_IDENTITY_TO_SUPERUSERS": {
+                "type": "boolean",
+                "label": "Only Superusers Can Set User Emails and Change Usernames",
+                "help_text": "When enabled, only superusers can set the email of a new user or change the email or username of any user, themselves included. This keeps others, organization administrators included, from creating or editing accounts to match an identity provider user, an organization or team map entry, or a username list. The OIDC and Entra ID user flags ignore their username lists while this is off.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS": {
+                "type": "boolean",
+                "label": "Hide System Roles from Access Lists",
+                "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "AWS_SECRETS_MANAGER_ALLOW_DEFAULT_CREDENTIALS": {
+                "type": "boolean",
+                "label": "Allow AWS Secrets Manager Lookups Without Keys",
+                "help_text": "When enabled, an AWS Secrets Manager lookup saved without an access key and secret key authenticates as the AWS identity of the Ascender controller: AWS_* environment variables, including those in Extra Environment Variables, a web identity token (IRSA on EKS), or the container or EC2 instance role. Every user can create such a lookup and use it in their own credentials and jobs, so enabling this gives all of them that identity's Secrets Manager permissions, both to read secret values and to probe which secret names exist. The setting is a single switch: Ascender cannot limit it to some users or some secrets, so scope that identity to only the secrets meant to be shared this way. When disabled, a lookup without keys fails without contacting AWS. Lookups with both keys are not affected.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "ASCENDER_URL_BASE": {
+                "type": "string",
+                "label": "Base URL of the service",
+                "help_text": "This setting is used by services like notifications to render a valid url to the service.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "WORKLOAD_IDENTITY_ENABLED": {
+                "type": "boolean",
+                "label": "Enable Workload Identity",
+                "help_text": "Sign a short lived token for each job that uses a workload identity credential, and publish the keys that verify it so that an external system such as HashiCorp Vault can trust the job without a stored secret. The issuer is the Base URL of the service followed by /api/o.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "WORKLOAD_IDENTITY_DEFAULT_TTL": {
+                "type": "integer",
+                "label": "Workload Identity Token Lifetime",
+                "help_text": "How long the token of a lookup that logs in as the job lasts. The token handed to a playbook lasts as long as the job timeout instead, or this long when the job has none. No token lasts more than a day, and a minute is always added to allow for clock drift.",
+                "min_value": 1,
+                "max_value": 86400,
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false,
+                "unit": "seconds"
+            },
+            "REMOTE_HOST_HEADERS": {
+                "type": "list",
+                "label": "Remote Host Headers",
+                "help_text": "HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as \"HTTP_X_FORWARDED_FOR\", if behind a reverse proxy. See the \"Proxy Support\" section of the AAP Installation guide for more details.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "PROXY_IP_ALLOWED_LIST": {
+                "type": "list",
+                "label": "Proxy IP Allowed List",
+                "help_text": "If the service is behind a reverse proxy/load balancer, use this setting to configure the proxy IP addresses from which the service should trust custom REMOTE_HOST_HEADERS header values. If this setting is an empty list (the default), the headers specified by REMOTE_HOST_HEADERS will be trusted unconditionally')",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "CSRF_TRUSTED_ORIGINS": {
+                "type": "list",
+                "label": "CSRF Trusted Origins List",
+                "help_text": "If the service is behind a reverse proxy/load balancer, use this setting to configure the schema://addresses from which the service should trust Origin header values. ",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false,
+                "child": {
+                    "type": "string"
+                }
+            },
+            "INSTALL_UUID": {
+                "type": "string",
+                "label": "Unique identifier for an installation",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "DEFAULT_CONTROL_PLANE_QUEUE_NAME": {
+                "type": "string",
+                "label": "The instance group where control plane tasks run",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "DEFAULT_EXECUTION_QUEUE_NAME": {
+                "type": "string",
+                "label": "The instance group where user jobs run (currently only on non-VM installs)",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "DEFAULT_EXECUTION_ENVIRONMENT": {
+                "type": "field",
+                "label": "Global default execution environment",
+                "help_text": "The Execution Environment to be used when one has not been configured for a job template.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "IS_K8S": {
+                "type": "boolean",
+                "label": "Is k8s",
+                "help_text": "Indicates whether the instance is part of a kubernetes-based deployment.",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "CLEANUP_HOST_METRICS_LAST_TS": {
+                "type": "datetime",
+                "label": "Last cleanup date for HostMetrics",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            },
+            "HOST_METRIC_SUMMARY_TASK_LAST_TS": {
+                "type": "datetime",
+                "label": "Last computing date of HostMetricSummaryMonthly",
+                "category": "System",
+                "category_slug": "system",
+                "defined_in_file": false
+            }
+        }
+    }
+}

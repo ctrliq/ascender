@@ -1,0 +1,144 @@
+{
+    "execution_environments": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": []
+    },
+    "organizations": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": []
+    },
+    "teams": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "credential_types": {
+        "fields": [
+            "name",
+            "kind"
+        ],
+        "adj_list": []
+    },
+    "credentials": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["credential_type", "credential_types"],
+            ["organization", "organizations"]
+        ]
+    },
+    "notification_templates": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "job_templates": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "projects": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "inventories": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "hosts": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["inventory", "inventories"]
+        ]
+    },
+    "groups": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["inventory", "inventories"]
+        ]
+    },
+    "inventory_sources": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["inventory", "inventories"]
+        ]
+    },
+    "instance_groups": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": []
+    },
+    "workflow_job_templates": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "workflow_job_template_nodes": {
+        "fields": [
+            "identifier"
+        ],
+        "adj_list": [
+            ["workflow_job_template", "workflow_job_templates"]
+        ]
+    },
+    "labels": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "applications": {
+        "fields": [
+            "name"
+        ],
+        "adj_list": [
+            ["organization", "organizations"]
+        ]
+    },
+    "users": {
+        "fields": [
+            "username"
+        ],
+        "adj_list": []
+    },
+    "instances": {
+        "fields": [
+            "hostname"
+        ],
+        "adj_list": []
+    }
+}
