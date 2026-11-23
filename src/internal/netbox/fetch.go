@@ -37,9 +37,10 @@ type Result struct {
 
 // Sync fetches from NetBox and builds the inventory. out receives the
 // progress lines an operator reads in the job output; previousFailed is
-// whether the source's last update did not succeed. An error is one line
-// for that output, not a traceback.
-func Sync(ctx context.Context, client *Client, cfg Config, state SyncState, previousFailed bool, out func(format string, args ...any)) (*Result, error) {
+// whether the source's last update did not succeed; fingerprint is
+// Fingerprint over the settings this run has, for the incremental gate. An
+// error is one line for that output, not a traceback.
+func Sync(ctx context.Context, client *Client, cfg Config, state SyncState, previousFailed bool, fingerprint string, out func(format string, args ...any)) (*Result, error) {
 	if out == nil {
 		out = func(string, ...any) {}
 	}
@@ -70,13 +71,13 @@ func Sync(ctx context.Context, client *Client, cfg Config, state SyncState, prev
 
 	res := &Result{}
 	if cfg.Incremental {
-		d, err := Decide(ctx, client, state, cfg, previousFailed)
+		d, err := Decide(ctx, client, state, cfg, previousFailed, fingerprint)
 		if err != nil {
 			return nil, err
 		}
 		out("Incremental check: %s", d.Reason)
 		res.Decision = &d
-		next := NextState(client, d, state.Skips)
+		next := NextState(client, d, state.Skips, fingerprint)
 		res.Next = &next
 		if !d.Fetch {
 			res.Skipped = true
@@ -97,7 +98,7 @@ func Sync(ctx context.Context, client *Client, cfg Config, state SyncState, prev
 	if err != nil {
 		return nil, err
 	}
-	res.Inventory = BuildInventory(devices, vms, cfg, sites, out)
+	res.Inventory = BuildInventory(devices, vms, client.Instance(), cfg, sites, out)
 	out("Built %d host(s) in %d group(s)", res.Inventory.Hosts(), res.Inventory.Groups())
 	return res, nil
 }

@@ -161,7 +161,10 @@ func netboxSignatureValid(key string, body []byte, header string) bool {
 // scheduler pass. A source with an update already pending or running is
 // left dirty and reconsidered next pass rather than having a second update
 // queued behind the first: that update may have started before the change
-// landed, so the burst is not cleared until a sync is launched for it.
+// landed, so the burst is not cleared until a sync is launched for it. For
+// the same reason only the burst this pass looked at is cleared: a
+// delivery that lands between the look and the clear stays recorded, and
+// the next pass launches again once the update just started has finished.
 func (s *Server) LaunchSettledNetBoxSyncs(ctx context.Context, now time.Time) ([]int64, error) {
 	type candidate struct {
 		id    int64
@@ -216,11 +219,13 @@ func (s *Server) LaunchSettledNetBoxSyncs(ctx context.Context, now time.Time) ([
 			continue
 		}
 		// The burst is dropped once a sync is launched for it, and nothing
-		// else in the state (the changelog position) is touched.
+		// else in the state (the changelog position) is touched. A burst
+		// that grew since it was read is left: the sync just launched may
+		// have fetched before the change behind the new delivery landed.
 		err = s.DB.Tx(ctx, func(tx pgx.Tx) error {
 			return models.UpdateInventorySourceSyncState(ctx, tx, c.id, func(stored json.RawMessage) (json.RawMessage, error) {
 				st, err := netbox.ParseSyncState(stored)
-				if err != nil {
+				if err != nil || !st.Webhook.Same(state.Webhook) {
 					return stored, nil
 				}
 				st.Webhook = nil

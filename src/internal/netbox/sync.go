@@ -371,8 +371,10 @@ func ansibleHostFor(obj map[string]any) string {
 }
 
 // BuildHostvars flattens one NetBox device or virtual machine into Ansible
-// host variables. kind is "devices" or "virtual_machines".
-func BuildHostvars(obj map[string]any, kind string, cfg Config, sites SiteLookup) *Object {
+// host variables. kind is "devices" or "virtual_machines"; instance is
+// Client.Instance, the NetBox the object came from, or "" when there is
+// only ever one.
+func BuildHostvars(obj map[string]any, kind, instance string, cfg Config, sites SiteLookup) *Object {
 	hv := NewObject()
 	hv.Set("netbox_object_type", kind)
 
@@ -381,9 +383,16 @@ func BuildHostvars(obj map[string]any, kind string, cfg Config, sites SiteLookup
 	// exist. The id alone is therefore unusable as the inventory instance
 	// id, and this qualified form is what the import's instance id variable
 	// points at. It is stable across renames, which is the point of an
-	// instance id.
+	// instance id. The NetBox is named too, because the importer matches
+	// instance ids across the whole inventory, not per source: two NetBox
+	// installs both have a device 7, and without the name the second
+	// source's device 7 would take over the first's host.
 	if obj["id"] != nil {
-		hv.Set("netbox_instance_id", kind+":"+idKey(obj["id"]))
+		id := kind + ":" + idKey(obj["id"])
+		if instance != "" {
+			id += "@" + instance
+		}
+		hv.Set("netbox_instance_id", id)
 	}
 	for _, field := range baseFields {
 		if v, ok := obj[field]; ok {
@@ -649,9 +658,10 @@ func (inv *Inventory) MarshalJSON() ([]byte, error) {
 }
 
 // BuildInventory assembles the full inventory from NetBox devices and
-// virtual machines. sites is BuildSiteLookup's result, or nil. warn
-// receives the objects left out and why; nil discards them.
-func BuildInventory(devices, virtualMachines []map[string]any, cfg Config, sites SiteLookup, warn func(format string, args ...any)) *Inventory {
+// virtual machines. instance names the NetBox they came from, as for
+// BuildHostvars. sites is BuildSiteLookup's result, or nil. warn receives
+// the objects left out and why; nil discards them.
+func BuildInventory(devices, virtualMachines []map[string]any, instance string, cfg Config, sites SiteLookup, warn func(format string, args ...any)) *Inventory {
 	if warn == nil {
 		warn = func(string, ...any) {}
 	}
@@ -673,7 +683,7 @@ func BuildInventory(devices, virtualMachines []map[string]any, cfg Config, sites
 				warn("Duplicate host name %q from NetBox %s id=%s, keeping the first", name, batch.kind, idKey(obj["id"]))
 				continue
 			}
-			inv.hostvars.Set(name, BuildHostvars(obj, batch.kind, cfg, sites))
+			inv.hostvars.Set(name, BuildHostvars(obj, batch.kind, instance, cfg, sites))
 			all = append(all, name)
 			for _, link := range GroupsFor(obj, batch.kind, cfg, sites) {
 				g := inv.ensure(link.name)

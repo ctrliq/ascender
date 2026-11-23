@@ -251,8 +251,8 @@ Credentials are injected as environment variables and files, and the
 plugin's configuration is written as a YAML file. An update from a project
 (source `scm`) runs that project's update first when the project updates on
 launch. The `netbox` source is fetched by the task process itself, with no
-execution environment, and only the import is shared
-(`src/internal/tasks/inventory_native.go`).
+execution environment, placed on the control plane like a project update,
+and only the import is shared (`src/internal/tasks/inventory_native.go`).
 
 To read more, see the [Inventories documentation](./inventory/README.md).
 

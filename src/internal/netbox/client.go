@@ -163,17 +163,35 @@ func sleepContext(ctx context.Context, d time.Duration) error {
 // BaseURL is the normalised URL, with a trailing slash.
 func (c *Client) BaseURL() string { return c.base.String() }
 
+// Instance names the NetBox this client talks to, for qualifying ids that
+// are unique within one NetBox and no further: the host, with the port when
+// one was given, and the path of an install under a prefix.
+func (c *Client) Instance() string {
+	name := strings.ToLower(c.base.Host)
+	if c.base.Path != "/" {
+		name += strings.TrimSuffix(c.base.Path, "/")
+	}
+	return name
+}
+
 func (c *Client) logf(format string, args ...any) {
 	if c.Logf != nil {
 		c.Logf(format, args...)
 	}
 }
 
-// resolve joins a path, which may carry a query, onto the base URL.
+// resolve joins a path, which may carry a query, onto the base URL. Only
+// a path: "/https://elsewhere/x" is what pinToBase makes of a `next` link
+// whose path holds an address, and read as a reference it would resolve to
+// that address with the token, so anything with a scheme or host is
+// refused.
 func (c *Client) resolve(path string) (*url.URL, error) {
 	ref, err := url.Parse(strings.TrimLeft(path, "/"))
 	if err != nil {
 		return nil, errorf("NetBox path %q could not be read.", path)
+	}
+	if ref.Scheme != "" || ref.Host != "" || ref.Opaque != "" || ref.User != nil {
+		return nil, errorf("NetBox path %q names another address, which this client does not follow.", path)
 	}
 	return c.base.ResolveReference(ref), nil
 }
@@ -345,8 +363,10 @@ func (c *Client) Get(ctx context.Context, path string, params url.Values) (map[s
 // Paginate fetches every result of a list endpoint across NetBox's offset
 // pagination. The `next` link's path and query are followed, so the offset
 // and the filters stay applied, but the origin always comes from the
-// credential (pinToBase). A detail endpoint, which has no results list, is
-// returned as its one object.
+// credential (pinToBase). A response without the list envelope is an
+// error, not an empty list: every path this is called with is a list
+// endpoint, and an empty list from a malformed answer would import as an
+// empty inventory, which with overwrite set deletes the source's hosts.
 func (c *Client) Paginate(ctx context.Context, path string, params url.Values) ([]map[string]any, error) {
 	q := url.Values{}
 	for k, v := range params {
@@ -364,10 +384,7 @@ func (c *Client) Paginate(ctx context.Context, path string, params url.Values) (
 		}
 		results, ok := payload["results"].([]any)
 		if !ok {
-			if payload["results"] == nil {
-				return []map[string]any{payload}, nil
-			}
-			return nil, errorf("NetBox returned an unexpected results list for GET %s.", path)
+			return nil, errorf("NetBox returned no results list for GET %s, which should be a list endpoint.", path)
 		}
 		for _, r := range results {
 			if m, ok := r.(map[string]any); ok {

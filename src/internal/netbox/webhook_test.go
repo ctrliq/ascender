@@ -92,6 +92,26 @@ func TestAStampFromTheOldApplicationParses(t *testing.T) {
 	}
 }
 
+// The launch clears the burst it looked at and no other: one that grew in
+// the meantime holds a delivery the launched sync may have missed.
+func TestABurstThatGrewSinceItWasLookedAtIsNotTheSame(t *testing.T) {
+	now := time.Date(2026, 11, 23, 10, 0, 0, 0, time.UTC)
+	looked := &Burst{}
+	looked.Record(now, "dcim.device", nil)
+	stored := *looked
+	if !stored.Same(looked) {
+		t.Fatal("an untouched burst is not the same as itself")
+	}
+	stored.Record(now.Add(time.Second), "dcim.site", nil)
+	if stored.Same(looked) {
+		t.Fatal("a burst with one more delivery is the same")
+	}
+	var none *Burst
+	if none.Same(looked) || looked.Same(none) || !none.Same(nil) {
+		t.Fatal("nil handling")
+	}
+}
+
 func TestRecordFoldsAWebhookIntoTheBurst(t *testing.T) {
 	now := time.Date(2026, 11, 23, 10, 0, 0, 0, time.UTC)
 	b := &Burst{}

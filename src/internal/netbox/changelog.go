@@ -2,6 +2,8 @@ package netbox
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -49,7 +51,26 @@ type SyncState struct {
 	ChangelogID *int64 `json:"changelog_id,omitempty"`
 	Skips       int    `json:"skips,omitempty"`
 	NetBoxURL   string `json:"netbox_url,omitempty"`
+	// Fingerprint is Fingerprint's digest of the settings the last sync ran
+	// with, so a change to them is noticed although NetBox saw nothing.
+	Fingerprint string `json:"fingerprint,omitempty"`
 	Webhook     *Burst `json:"webhook,omitempty"`
+}
+
+// Fingerprint digests the settings that shape what a sync imports and that
+// the changelog cannot see change: the source variables, the credential
+// and the import options. A run whose fingerprint differs from the one the
+// last sync recorded fetches, where it might otherwise have skipped and
+// left an inventory built under the old settings in place. The parts are
+// hashed in order and a token among them is not recoverable from the
+// result.
+func Fingerprint(parts ...string) string {
+	h := sha256.New()
+	for _, p := range parts {
+		h.Write([]byte(p))
+		h.Write([]byte{0})
+	}
+	return hex.EncodeToString(h.Sum(nil))[:16]
 }
 
 // ParseSyncState reads the column; empty or null is the zero state.
@@ -177,8 +198,9 @@ func ChangesSince(ctx context.Context, api API, watermark int64, types []string)
 // record afterwards. state is the bookkeeping the last run of this source
 // left behind; previousFailed is whether that run did not succeed, in which
 // case its position cannot be trusted: it was recorded before the import
-// ran, so trusting it would skip past work that never landed.
-func Decide(ctx context.Context, api API, state SyncState, cfg Config, previousFailed bool) (Decision, error) {
+// ran, so trusting it would skip past work that never landed. fingerprint
+// is Fingerprint over this run's settings, compared with the one recorded.
+func Decide(ctx context.Context, api API, state SyncState, cfg Config, previousFailed bool, fingerprint string) (Decision, error) {
 	fetch := func(reason string, watermark *int64) Decision {
 		return Decision{Fetch: true, Reason: reason, Watermark: watermark}
 	}
@@ -204,8 +226,18 @@ func Decide(ctx context.Context, api API, state SyncState, cfg Config, previousF
 	if state.NetBoxURL != "" && state.NetBoxURL != api.BaseURL() {
 		return fetch("the NetBox URL changed since the last sync", latest), nil
 	}
+	if state.Fingerprint != "" && fingerprint != "" && state.Fingerprint != fingerprint {
+		return fetch("the source's settings or credential changed since the last sync", latest), nil
+	}
 	if cfg.IncrementalMaxSkips > 0 && state.Skips >= cfg.IncrementalMaxSkips {
 		return fetch(fmt.Sprintf("the ceiling of %d skipped runs in a row was reached", cfg.IncrementalMaxSkips), latest), nil
+	}
+	// A latest id below the position means this is not the changelog the
+	// position was read from: NetBox was restored from a backup or
+	// replaced. Changes it records from here on sit below the position
+	// until the sequence catches up, which with no skip ceiling is never.
+	if *latest < watermark {
+		return fetch(fmt.Sprintf("the NetBox changelog went backwards, from position %d to %d, so NetBox was restored or replaced", watermark, *latest), latest), nil
 	}
 
 	oldest, err := OldestChangeID(ctx, api)
@@ -218,7 +250,7 @@ func Decide(ctx context.Context, api API, state SyncState, cfg Config, previousF
 	if oldest == nil || *oldest > watermark+1 {
 		return fetch(fmt.Sprintf("changelog entries after position %d have been pruned, so the gap cannot be read", watermark), latest), nil
 	}
-	if *latest <= watermark {
+	if *latest == watermark {
 		return Decision{Fetch: false, Reason: fmt.Sprintf("no NetBox changes at all since position %d", watermark), Watermark: &watermark}, nil
 	}
 
@@ -253,12 +285,12 @@ func Decide(ctx context.Context, api API, state SyncState, cfg Config, previousF
 // merged into the source's state (the webhook burst in it is left alone).
 // A skipped run carries the streak forward so the ceiling can be reached; a
 // run that fetched resets it.
-func NextState(api API, d Decision, previousSkips int) SyncState {
+func NextState(api API, d Decision, previousSkips int, fingerprint string) SyncState {
 	skips := 0
 	if !d.Fetch {
 		skips = previousSkips + 1
 	}
-	return SyncState{ChangelogID: d.Watermark, Skips: skips, NetBoxURL: api.BaseURL()}
+	return SyncState{ChangelogID: d.Watermark, Skips: skips, NetBoxURL: api.BaseURL(), Fingerprint: fingerprint}
 }
 
 // Merge applies the incremental fields of next onto s, keeping the webhook
@@ -268,5 +300,6 @@ func (s SyncState) Merge(next SyncState) SyncState {
 	s.ChangelogID = next.ChangelogID
 	s.Skips = next.Skips
 	s.NetBoxURL = next.NetBoxURL
+	s.Fingerprint = next.Fingerprint
 	return s
 }

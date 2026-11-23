@@ -22,8 +22,8 @@ import (
 // inventory source injectors (InventorySourceOptions.injectors in
 // main/models/inventory.py): ansible-inventory runs in the execution
 // environment and its JSON output is imported into the database. A native
-// source (nativeSources, inventory_native.go) is fetched in this process
-// instead, and only the import is shared.
+// source (models.NativeInventorySources, inventory_native.go) is fetched
+// in this process instead, and only the import is shared.
 
 // standardInventoryUpdateEnv is STANDARD_INVENTORY_UPDATE_ENV.
 var standardInventoryUpdateEnv = map[string]string{
@@ -100,9 +100,16 @@ func (d *Dispatcher) runInventoryUpdate(jobCtx, bg context.Context, id int64) (e
 	if iu.InventoryID != nil {
 		r.inventory, _ = models.GetInventory(bg, d.DB.Pool, *iu.InventoryID)
 	}
-	// A native source is fetched in this process and needs no execution
-	// environment, so none is resolved or recorded for it.
-	if !nativeSources[iu.Source] {
+	steps := runSteps{what: "inventory update", group: d.jobInstanceGroup(bg, id), template: iu.UnifiedJobTemplateID,
+		dependencies: r.runDependencies, place: r.placeOnGroup, execute: r.execute, finish: r.finish,
+		tracebackFor: func(_, msg string) bool { return msg == "" }}
+	if models.NativeInventorySources[iu.Source] {
+		// A native source is fetched in this process: no execution
+		// environment is resolved or recorded, and no container group or
+		// execution node is chosen, as for a project update. The task
+		// manager placed it on the control plane (placeTask).
+		steps.place = nil
+	} else {
 		r.executionEnvironment(&iu.ExecutionEnvironmentID, func() *int64 {
 			if r.src == nil {
 				return nil
@@ -114,9 +121,7 @@ func (d *Dispatcher) runInventoryUpdate(jobCtx, bg context.Context, id int64) (e
 			return d.API.ResolveSourceEnvironment(bg, r.src, kind)
 		})
 	}
-	return r.runTask(jobCtx, runSteps{what: "inventory update", group: d.jobInstanceGroup(bg, id), template: iu.UnifiedJobTemplateID,
-		dependencies: r.runDependencies, place: r.placeOnGroup, execute: r.execute, finish: r.finish,
-		tracebackFor: func(_, msg string) bool { return msg == "" }})
+	return r.runTask(jobCtx, steps)
 }
 
 // runDependencies is gen_dep_for_inventory_update: an update from a project
@@ -177,7 +182,7 @@ func (r *invUpdateRun) execute(jobCtx context.Context) (string, error) {
 	if r.inventory == nil {
 		return "error", fmt.Errorf("Inventory Source is not associated with an Inventory.")
 	}
-	if nativeSources[iu.Source] {
+	if models.NativeInventorySources[iu.Source] {
 		return r.executeNative(jobCtx)
 	}
 	if r.ee == nil {

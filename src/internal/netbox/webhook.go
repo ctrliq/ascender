@@ -74,6 +74,17 @@ func (b *Burst) Record(now time.Time, objectType string, changeIDs []int64) {
 	}
 }
 
+// Same is whether o holds the deliveries b holds, no more and no fewer.
+// The launch clears only the burst it looked at: a delivery can land
+// between the look and the clear, and dropping it with the rest would lose
+// a change the sync just launched may have fetched before it was made.
+func (b *Burst) Same(o *Burst) bool {
+	if b == nil || o == nil {
+		return b == nil && o == nil
+	}
+	return b.Events == o.Events && b.LastEventAt == o.LastEventAt && b.DirtySince == o.DirtySince
+}
+
 // Settled is whether the burst has been quiet for the debounce window.
 // Unreadable state still syncs rather than wedging the source.
 func (b *Burst) Settled(now time.Time, cfg Config) bool {

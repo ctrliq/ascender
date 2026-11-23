@@ -23,7 +23,7 @@ func positioned(id int64, url string) SyncState {
 func decide(t *testing.T, f *fakeAPI, state SyncState, cfg Config, previousFailed bool) Decision {
 	t.Helper()
 	resetCaches()
-	d, err := Decide(ctx, f, state, cfg, previousFailed)
+	d, err := Decide(ctx, f, state, cfg, previousFailed, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -118,6 +118,73 @@ func TestFetchesWhenTheNetBoxURLChanged(t *testing.T) {
 	}
 }
 
+// The changelog records what changed in NetBox and nothing about the
+// source: new filters, a different grouping option, another credential or
+// overwrite turned on all leave it silent, and would otherwise leave the
+// inventory as the old settings built it, with the job green.
+func TestFetchesWhenTheSourceSettingsChanged(t *testing.T) {
+	f := changelogAPI(change(10, "dcim.device"))
+	state := positioned(10, f.base)
+	state.Fingerprint = Fingerprint("filters: {site: syd}", "token-1")
+	resetCaches()
+	d, err := Decide(ctx, f, state, defaults(), false, Fingerprint("filters: {site: syd}", "token-2"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !d.Fetch || !strings.Contains(d.Reason, "settings or credential changed") {
+		t.Fatalf("%+v", d)
+	}
+	wantWatermark(t, d, 10)
+	// The same settings skip as before.
+	resetCaches()
+	d, err = Decide(ctx, f, state, defaults(), false, Fingerprint("filters: {site: syd}", "token-1"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Fetch {
+		t.Fatal(d.Reason)
+	}
+}
+
+// A position recorded by an older release has no fingerprint; that is not
+// a change of settings, and the next run records one.
+func TestAPositionWithoutAFingerprintIsNotAChange(t *testing.T) {
+	f := changelogAPI(change(10, "dcim.device"))
+	resetCaches()
+	d, err := Decide(ctx, f, positioned(10, f.base), defaults(), false, Fingerprint("anything"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Fetch {
+		t.Fatal(d.Reason)
+	}
+}
+
+func TestFingerprintTellsItsPartsApart(t *testing.T) {
+	a, b := Fingerprint("x", "y"), Fingerprint("x", "z")
+	if a == b || a != Fingerprint("x", "y") || len(a) != 16 {
+		t.Fatalf("%s %s", a, b)
+	}
+	// Part boundaries count: "xy","" is not "x","y".
+	if Fingerprint("xy", "") == Fingerprint("x", "y") {
+		t.Fatal("boundaries lost")
+	}
+}
+
+// A NetBox restored from a backup, or replaced, hands out change ids from
+// below the recorded position. Treating that as "nothing since" would
+// ignore every change until the sequence climbed past the position, which
+// with no skip ceiling is never.
+func TestFetchesWhenTheChangelogWentBackwards(t *testing.T) {
+	f := changelogAPI(change(80, "dcim.device"))
+	d := decide(t, f, positioned(100, f.base), defaults(), false)
+	if !d.Fetch || !strings.Contains(d.Reason, "went backwards") {
+		t.Fatalf("%+v", d)
+	}
+	// The position is reset to what this changelog holds.
+	wantWatermark(t, d, 80)
+}
+
 // Retention defaults to 90 days, so a quiet source's position can outlive
 // the entries it would need to read.
 func TestFetchesWhenThePositionHasBeenPruned(t *testing.T) {
@@ -192,19 +259,27 @@ func TestFetchesWhenAWatchedObjectTypeIsUnknownToThisNetBox(t *testing.T) {
 func TestASkipExtendsTheStreakAndAFetchResetsIt(t *testing.T) {
 	f := newFakeAPI()
 	ten := int64(10)
-	if NextState(f, Decision{Fetch: false, Watermark: &ten}, 3).Skips != 4 {
+	if NextState(f, Decision{Fetch: false, Watermark: &ten}, 3, "").Skips != 4 {
 		t.Fatal("skip did not extend the streak")
 	}
-	if NextState(f, Decision{Fetch: true, Watermark: &ten}, 3).Skips != 0 {
+	if NextState(f, Decision{Fetch: true, Watermark: &ten}, 3, "").Skips != 0 {
 		t.Fatal("fetch did not reset the streak")
 	}
 }
 
-func TestTheStateRecordsTheURLItCameFrom(t *testing.T) {
+func TestTheStateRecordsTheURLAndSettingsItCameFrom(t *testing.T) {
 	f := newFakeAPI()
 	ten := int64(10)
-	if NextState(f, Decision{Fetch: true, Watermark: &ten}, 0).NetBoxURL != f.base {
+	next := NextState(f, Decision{Fetch: true, Watermark: &ten}, 0, "abc")
+	if next.NetBoxURL != f.base {
 		t.Fatal("url not recorded")
+	}
+	if next.Fingerprint != "abc" {
+		t.Fatal("fingerprint not recorded")
+	}
+	merged := SyncState{Fingerprint: "old", Webhook: &Burst{Events: 1}}.Merge(next)
+	if merged.Fingerprint != "abc" || merged.Webhook == nil || merged.Webhook.Events != 1 {
+		t.Fatalf("%+v", merged)
 	}
 }
 

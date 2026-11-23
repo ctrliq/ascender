@@ -38,10 +38,6 @@ import (
 // control plane's egress rules and who holds add on inventories and
 // credentials. docs/inventory/netbox_inventory.md says so.
 
-// nativeSources are the sources fetched in this process (the old
-// NATIVE_INVENTORY_SOURCES).
-var nativeSources = map[string]bool{"netbox": true}
-
 // executeNative runs an inventory update of a native source and returns
 // its final status. It replaces execute's runner from the inventory check
 // on: no private data directory, no execution environment.
@@ -148,7 +144,7 @@ func (r *invUpdateRun) runNetBox(jobCtx context.Context, sink *invEventSink, out
 		defer cancel()
 	}
 	started := time.Now()
-	res, err := netbox.Sync(fetchCtx, client, cfg, state, r.src.LastJobFailed, out)
+	res, err := netbox.Sync(fetchCtx, client, cfg, state, r.src.LastJobFailed, syncFingerprint(iu, cloud), out)
 	if err != nil {
 		switch {
 		case jobCtx.Err() != nil:
@@ -205,11 +201,24 @@ func (r *invUpdateRun) storeSyncState(next netbox.SyncState) error {
 	})
 }
 
+// syncFingerprint is netbox.Fingerprint over what shapes this update's
+// import other than NetBox's data: the source variables, the credential
+// and the import options copied from the source. The incremental gate
+// fetches when it differs from the last sync's, since the changelog sees
+// none of these change.
+func syncFingerprint(iu *models.InventoryUpdate, cloud *credentialData) string {
+	return netbox.Fingerprint(iu.SourceVars, cloud.get("host"), cloud.get("token"), cloud.get("verify_ssl"),
+		fmt.Sprint(iu.Overwrite), fmt.Sprint(iu.OverwriteVars), iu.EnabledVar, iu.EnabledValue, iu.HostFilter, iu.Limit)
+}
+
 // proxyFromTaskEnv is the proxy ASCENDER_TASK_ENV sets for a run
 // (HTTP_PROXY, HTTPS_PROXY and NO_PROXY, in either case), which the old
-// application passed into the environment of the process that fetched. Nil
-// when it sets none, which leaves the task process's own environment to
-// apply.
+// application passed into the environment of the process that fetched,
+// over the task process's own. Nil when it sets none, which leaves the
+// process environment to apply as it does to every other request. One
+// variable set there overrides that one only: a task-level NO_PROXY
+// exemption keeps the process's HTTPS_PROXY, as it did when both were in
+// the one environment.
 func proxyFromTaskEnv(env map[string]string) func(*http.Request) (*url.URL, error) {
 	pick := func(name string) string {
 		if v := env[name]; v != "" {
@@ -217,9 +226,19 @@ func proxyFromTaskEnv(env map[string]string) func(*http.Request) (*url.URL, erro
 		}
 		return env[strings.ToLower(name)]
 	}
-	cfg := httpproxy.Config{HTTPProxy: pick("HTTP_PROXY"), HTTPSProxy: pick("HTTPS_PROXY"), NoProxy: pick("NO_PROXY")}
-	if cfg.HTTPProxy == "" && cfg.HTTPSProxy == "" && cfg.NoProxy == "" {
+	httpProxy, httpsProxy, noProxy := pick("HTTP_PROXY"), pick("HTTPS_PROXY"), pick("NO_PROXY")
+	if httpProxy == "" && httpsProxy == "" && noProxy == "" {
 		return nil
+	}
+	cfg := httpproxy.FromEnvironment()
+	if httpProxy != "" {
+		cfg.HTTPProxy = httpProxy
+	}
+	if httpsProxy != "" {
+		cfg.HTTPSProxy = httpsProxy
+	}
+	if noProxy != "" {
+		cfg.NoProxy = noProxy
 	}
 	proxy := cfg.ProxyFunc()
 	return func(r *http.Request) (*url.URL, error) { return proxy(r.URL) }

@@ -52,7 +52,7 @@ func defaults() Config { return ParseConfig(nil) }
 
 func hostvars(t *testing.T, obj map[string]any, kind string, cfg Config, s SiteLookup) *Object {
 	t.Helper()
-	return BuildHostvars(obj, kind, cfg, s)
+	return BuildHostvars(obj, kind, "", cfg, s)
 }
 
 // --- fields= -----------------------------------------------------------------------
@@ -103,7 +103,7 @@ func TestSiteLookupSurvivesACycle(t *testing.T) {
 }
 
 func TestRegionGroupsChainParentToChildWithTheSiteUnderneath(t *testing.T) {
-	inv := BuildInventory([]map[string]any{device(nil)}, nil, defaults(), sites(), nil)
+	inv := BuildInventory([]map[string]any{device(nil)}, nil, "", defaults(), sites(), nil)
 	equalStrings(t, inv.Group("region_apac").Children, []string{"region_australia"})
 	equalStrings(t, inv.Group("region_australia").Children, []string{"site_sydney_hq"})
 	equalStrings(t, inv.Group("site_sydney_hq").Hosts, []string{"syd-db-01"})
@@ -112,7 +112,7 @@ func TestRegionGroupsChainParentToChildWithTheSiteUnderneath(t *testing.T) {
 
 // The device payload alone cannot produce them, which is the bug this fixes.
 func TestNoRegionGroupsWithoutTheLookup(t *testing.T) {
-	inv := BuildInventory([]map[string]any{device(nil)}, nil, defaults(), nil, nil)
+	inv := BuildInventory([]map[string]any{device(nil)}, nil, "", defaults(), nil, nil)
 	for _, g := range inv.GroupNames() {
 		if strings.HasPrefix(g, "region") {
 			t.Errorf("group %s made without a site lookup", g)
@@ -199,6 +199,15 @@ func TestInstanceIDIsQualifiedBecauseDeviceAndVMIDsCollide(t *testing.T) {
 	jsonEq(t, mustGet(t, hostvars(t, device(nil), "virtual_machines", defaults(), nil), "netbox_instance_id"), "virtual_machines:7")
 }
 
+// The importer matches instance ids across the whole inventory, so two
+// NetBox installs feeding one inventory need their ids kept apart.
+func TestInstanceIDNamesTheNetBoxItCameFrom(t *testing.T) {
+	jsonEq(t, mustGet(t, BuildHostvars(device(nil), "devices", "netbox.example.com", defaults(), nil), "netbox_instance_id"), "devices:7@netbox.example.com")
+	inv := BuildInventory([]map[string]any{device(nil)}, nil, "netbox.example.com:8443/netbox", defaults(), nil, nil)
+	hv, _ := inv.hostvars.Get("syd-db-01")
+	jsonEq(t, mustGet(t, hv.(*Object), "netbox_instance_id"), "devices:7@netbox.example.com:8443/netbox")
+}
+
 func TestInstanceIDKeepsTheIDADecoderProduced(t *testing.T) {
 	jsonEq(t, mustGet(t, hostvars(t, device(map[string]any{"id": json.Number("2013")}), "devices", defaults(), nil), "netbox_instance_id"), "devices:2013")
 	jsonEq(t, mustGet(t, hostvars(t, device(map[string]any{"id": float64(2013)}), "devices", defaults(), nil), "netbox_instance_id"), "devices:2013")
@@ -234,7 +243,7 @@ func TestAnUnnamedDeviceIsSkippedRatherThanNamedAfterItsDisplay(t *testing.T) {
 	unnamed := map[string]any{"id": 2013, "name": nil, "display": "Arista DCS-7050SX3-48YC8 (2013)", "status": map[string]any{"value": "active"}}
 	named := map[string]any{"id": 8, "name": "dc1-db-01", "display": "dc1-db-01", "status": map[string]any{"value": "active"}}
 	var warned []string
-	inv := BuildInventory([]map[string]any{unnamed, named}, nil, defaults(), nil, func(f string, a ...any) { warned = append(warned, f) })
+	inv := BuildInventory([]map[string]any{unnamed, named}, nil, "", defaults(), nil, func(f string, a ...any) { warned = append(warned, f) })
 	equalStrings(t, inv.hostvars.Keys(), []string{"dc1-db-01"})
 	if len(warned) != 1 || !strings.Contains(warned[0], "unnamed") {
 		t.Fatalf("warnings: %v", warned)
@@ -244,7 +253,7 @@ func TestAnUnnamedDeviceIsSkippedRatherThanNamedAfterItsDisplay(t *testing.T) {
 func TestTwoUnnamedDevicesDoNotCollideBecauseNeitherIsImported(t *testing.T) {
 	a := map[string]any{"id": 1, "name": nil, "display": "Model (1)"}
 	b := map[string]any{"id": 2, "name": "", "display": "Model (2)"}
-	inv := BuildInventory([]map[string]any{a, b}, nil, defaults(), nil, nil)
+	inv := BuildInventory([]map[string]any{a, b}, nil, "", defaults(), nil, nil)
 	if inv.Hosts() != 0 {
 		t.Fatalf("%d hosts imported", inv.Hosts())
 	}
@@ -253,7 +262,7 @@ func TestTwoUnnamedDevicesDoNotCollideBecauseNeitherIsImported(t *testing.T) {
 func TestADuplicateHostNameKeepsTheFirst(t *testing.T) {
 	first := device(map[string]any{"id": 1, "serial": "first"})
 	second := device(map[string]any{"id": 2, "serial": "second"})
-	inv := BuildInventory([]map[string]any{first, second}, nil, defaults(), nil, nil)
+	inv := BuildInventory([]map[string]any{first, second}, nil, "", defaults(), nil, nil)
 	jsonEq(t, mustGet(t, inv.Hostvars("syd-db-01"), "netbox_serial"), "first")
 }
 
@@ -262,7 +271,7 @@ func TestADuplicateHostNameKeepsTheFirst(t *testing.T) {
 func TestInventoryHasTheShapeAnsibleInventoryPrints(t *testing.T) {
 	vm := map[string]any{"id": 7, "name": "syd-web-01", "status": map[string]any{"value": "offline", "label": "Offline"},
 		"cluster": map[string]any{"id": 1, "name": "syd-vmw-prod"}, "vcpus": 4, "memory": 8192, "disk": 40, "tags": []any{}}
-	inv := BuildInventory([]map[string]any{device(nil)}, []map[string]any{vm}, defaults(), sites(), nil)
+	inv := BuildInventory([]map[string]any{device(nil)}, []map[string]any{vm}, "", defaults(), sites(), nil)
 	raw, err := json.Marshal(inv)
 	if err != nil {
 		t.Fatal(err)

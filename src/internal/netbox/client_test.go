@@ -397,11 +397,55 @@ func TestARedirectIsRefusedRatherThanFollowed(t *testing.T) {
 	}
 }
 
-func TestADetailEndpointComesBackAsOneObject(t *testing.T) {
-	f := newFakeNetBox(t, reply{body: `{"id": 9, "name": "x"}`})
-	objects, err := f.client(t, 1, nil).Paginate(ctx, "/api/dcim/devices/9/", nil)
-	if err != nil || len(objects) != 1 || idKey(objects[0]["id"]) != "9" {
-		t.Fatalf("%v %v", objects, err)
+// Every path Paginate is given is a list endpoint. A reply without the
+// list envelope, from a proxy or a NetBox mid-upgrade, must not pass as
+// an empty list: imported with overwrite set, an empty list deletes the
+// source's hosts.
+func TestAReplyWithoutAResultsListIsAnErrorNotAnEmptyList(t *testing.T) {
+	for _, body := range []string{`{"id": 9, "name": "x"}`, `{"results": null}`, `{}`, `{"results": {"id": 1}}`} {
+		f := newFakeNetBox(t, reply{body: body})
+		objects, err := f.client(t, 1, nil).Paginate(ctx, "/api/dcim/devices/", nil)
+		if err == nil || !strings.Contains(err.Error(), "no results list") {
+			t.Fatalf("%s: %v %v", body, objects, err)
+		}
+	}
+}
+
+// pinToBase keeps the path of a `next` link, and a path can hold an
+// address: "/https://attacker.example/collect" is a path. Read as a URL
+// reference once the leading slash is gone, it would send the next page
+// request, token and all, to that address.
+func TestAnAddressSmuggledIntoTheNextPathIsRefused(t *testing.T) {
+	for _, path := range []string{"/https://attacker.example/collect", "https://attacker.example/collect", "/mailto:x@attacker.example", "/https://attacker.example/collect?offset=1"} {
+		c, _ := NewClient("https://netbox.example/", "", true)
+		if u, err := c.resolve(path); err == nil || !strings.Contains(err.Error(), "another address") {
+			t.Errorf("%s -> %v %v", path, u, err)
+		}
+	}
+	f := newFakeNetBox(t, reply{})
+	f.replies = []reply{page(`{"id": 1}`, f.srv.URL+"/https://attacker.example/collect"), page(`{"id": 2}`, "")}
+	_, err := f.client(t, 1, nil).Paginate(ctx, "/api/dcim/devices/", nil)
+	if err == nil || !strings.Contains(err.Error(), "another address") {
+		t.Fatalf("%v", err)
+	}
+	if n := len(f.calls()); n != 1 {
+		t.Fatalf("%d requests, the smuggled address was followed", n)
+	}
+}
+
+func TestInstanceNamesTheHostPortAndPrefix(t *testing.T) {
+	for raw, want := range map[string]string{
+		"https://NetBox.Example.com":       "netbox.example.com",
+		"https://netbox.example.com:8443/": "netbox.example.com:8443",
+		"http://netbox:8080/netbox/":       "netbox:8080/netbox",
+	} {
+		c, err := NewClient(raw, "", true)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := c.Instance(); got != want {
+			t.Errorf("%s: %q, want %q", raw, got, want)
+		}
 	}
 }
 

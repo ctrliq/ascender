@@ -228,6 +228,22 @@ func (d *Dispatcher) largestIdle(g *tmGroup, capacityType string) *tmInstance {
 	return largest
 }
 
+// nativeInventoryUpdate is whether a task is an inventory update of a
+// source the task process fetches itself (models.NativeInventorySources).
+// It takes control capacity, like a project update: it needs no execution
+// node, and waiting on one when the execution group is full would hold up
+// a fetch the control plane can do now.
+func (d *Dispatcher) nativeInventoryUpdate(ctx context.Context, id, ctype int64) bool {
+	if ctype != d.CT.ID("main.inventoryupdate") {
+		return false
+	}
+	var source string
+	if err := d.DB.Pool.QueryRow(ctx, `SELECT source FROM main_inventoryupdate WHERE unifiedjob_ptr_id = $1`, id).Scan(&source); err != nil {
+		return false
+	}
+	return models.NativeInventorySources[source]
+}
+
 // placeTask chooses where a claimed task runs and records the instance
 // group, execution node and controller node, as start_task did. false
 // leaves the task pending.
@@ -244,7 +260,7 @@ func (d *Dispatcher) placeTask(ctx context.Context, id, ctype int64) (bool, erro
 		return false, err
 	}
 	capacityType := "execution"
-	if ctype == d.CT.ID("main.projectupdate") || ctype == d.CT.ID("main.systemjob") {
+	if ctype == d.CT.ID("main.projectupdate") || ctype == d.CT.ID("main.systemjob") || d.nativeInventoryUpdate(ctx, id, ctype) {
 		capacityType = "control"
 	}
 	needsCapacity := func() (bool, error) {

@@ -625,7 +625,13 @@ func (s *Server) CreateInventoryUpdate(ctx context.Context, src *models.Inventor
 	if src.InventoryID != nil {
 		_ = db.Tolerant(s.Q()).QueryRow(ctx, `SELECT name, kind FROM main_inventory WHERE id = $1`, *src.InventoryID).Scan(&invName, &kind)
 	}
-	iu := models.NewInventoryUpdate(src, invName, launchType, userID, s.ResolveSourceEnvironment(ctx, src, kind))
+	// A native source is fetched by the task process, which uses no
+	// execution environment, so none is recorded on the update either.
+	var ee *int64
+	if !models.NativeInventorySources[src.Source] {
+		ee = s.ResolveSourceEnvironment(ctx, src, kind)
+	}
+	iu := models.NewInventoryUpdate(src, invName, launchType, userID, ee)
 	srcID := src.ID
 	if igs, err := models.InventoryUpdatePreferredInstanceGroups(ctx, s.Q(), &srcID, src.InventoryID, s.GlobalInstanceGroupNames(ctx)); err == nil {
 		iu.PreferredInstanceGroups = igs

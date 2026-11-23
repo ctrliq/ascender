@@ -10,6 +10,12 @@ import (
 	"github.com/ctrliq/ascender/internal/db"
 )
 
+// NativeInventorySources are the sources the task process fetches itself,
+// on the control plane, instead of running ansible-inventory in an
+// execution environment: an update of one takes control capacity, runs on
+// the node that claimed it and has no execution environment.
+var NativeInventorySources = map[string]bool{"netbox": true}
+
 // InventorySource is a main_inventorysource row with its unified job
 // template parent.
 type InventorySource struct {

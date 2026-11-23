@@ -73,9 +73,16 @@ NetBox proxied and another not can separate them with `NO_PROXY`.
 ## What you get
 
 Every device and virtual machine becomes a host, named after the NetBox
-object. Hosts are matched on `netbox_instance_id`, which is the object type
-and the NetBox primary key, so renaming a device in NetBox updates the
-existing host rather than orphaning it and creating a second one.
+object. Hosts are matched on `netbox_instance_id`, which is the object type,
+the NetBox primary key and the NetBox it came from
+(`devices:7@netbox.example.com`), so renaming a device in NetBox updates the
+existing host rather than orphaning it and creating a second one. The NetBox
+is named because the importer matches instance ids across the whole
+inventory, not per source: two NetBox installs both have a device 7, and
+without the name the second source's device 7 would take over the first's
+host. The name is the host and port of the credential URL, plus the path of
+an install under a prefix. Changing the URL changes every id; the hosts are
+matched by name once and carry the new id from there.
 
 Objects whose status is not active are imported **disabled** rather than
 dropped, which is what the `ec2` and `vmware` sources do. They stay visible in
@@ -276,13 +283,22 @@ would rather not maintain that judgement.
 The importer performs a full reconcile, so the gate skips whole runs rather
 than applying deltas: a payload built from changelog entries would delete
 every host it did not mention. Every uncertainty resolves towards fetching.
-Three things force a full sync regardless:
+Several things force a full sync regardless:
 
 - `incremental_max_skips` consecutive skips, 24 by default.
 - The previous run failed.
+- The source's settings changed: its variables, its credential (URL, token or
+  `verify_ssl`), `overwrite`, `overwrite_vars`, `enabled_var`,
+  `enabled_value`, `host_filter` or `limit`. The changelog records what
+  changed in NetBox and nothing about the source, so the position carries a
+  digest of these settings and a run whose digest differs fetches. Without
+  this, new filters would not take effect until something in NetBox changed.
 - The recorded changelog position is older than NetBox still holds.
   `CHANGELOG_RETENTION` defaults to 90 days, and a position that has aged out
   cannot be reasoned about.
+- The latest change id is below the recorded position, which means NetBox
+  was restored from a backup or replaced. Reading that as "nothing since"
+  would ignore every change until the sequence climbed past the position.
 
 The position is a change id, read before the fetch so a change landing
 mid-fetch is picked up by the next run, and recorded on the inventory source
@@ -335,7 +351,10 @@ up to one scheduler tick. Raise it if NetBox changes arrive in long bursts.
 The pending burst lives in the source's `source_sync_state` beside the
 incremental position; both writers merge under the source's row lock, so a
 webhook landing while a sync records its position is not lost, and a launch
-clears the burst without touching the position.
+clears the burst without touching the position. The launch clears only the
+burst it looked at: a delivery landing between the look and the clear stays
+recorded, because the sync just launched may have fetched before the change
+behind it was made, and the next pass launches again once that sync is done.
 
 ## Why this runs on the control plane
 
@@ -345,7 +364,10 @@ builds that JSON itself (`executeNative` in
 `src/internal/tasks/inventory_native.go`) and hands it to the same importer.
 Host matching, group reconciliation, `overwrite`, host filters and
 `enabled_var` are the existing code paths, not reimplementations. No
-execution environment is resolved or recorded for the update.
+execution environment is resolved or recorded for the update, and the task
+manager places it as it places a project update: it takes control capacity
+and runs on the node that claimed it, rather than waiting for room on an
+execution node it would not use.
 
 System jobs set the precedent for running in the task process. A NetBox sync
 of a few thousand objects is a handful of HTTPS requests; through an execution
