@@ -3,7 +3,8 @@
 This folder documents how Ascender handles inventories. The API is in
 `src/internal/api` (`inventories.go`, `hosts.go`, `groups.go`,
 `inventory_sources.go`, `inventory_source_write.go`), and inventory updates run
-in `ascender-task` (`src/internal/tasks/inventory_update.go` and
+in `ascender-task` (`src/internal/tasks/inventory_update.go`,
+`src/internal/tasks/inventory_native.go` and
 `src/internal/tasks/inventory_import.go`).
 
 | Document | What it covers |
@@ -12,6 +13,7 @@ in `ascender-task` (`src/internal/tasks/inventory_update.go` and
 | [Federated inventory](./federated_inventory.md) | An inventory that runs one child job per input inventory, each on that inventory's instance groups. |
 | [SCM inventory](./scm_inventory.md) | Inventory sources that read an inventory file, directory or script from a project. |
 | [Inventory plugins](./inventory_plugins.md) | How cloud sources map to inventory plugins, and writing your own plugin configuration. |
+| [NetBox inventory](./netbox_inventory.md) | The `netbox` source: Ascender reads the NetBox REST API itself, on the control plane, with no inventory plugin or execution environment. |
 | [Allow jobs while syncing](./allow_jobs_while_syncing.md) | The `allow_jobs_while_syncing` flag: letting jobs start while the inventory syncs. |
 | [Allow deletes while in use](./allow_deletes_while_in_use.md) | The `allow_deletes_while_in_use` flag, and what blocks deleting a host or an inventory. |
 

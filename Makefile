@@ -30,6 +30,13 @@ COMPOSE   = $(if $(strip $(COMPOSE_CMD)),$(COMPOSE_CMD),$(error neither podman c
 # Compose checks the file's required variables on every command; commands
 # that start nothing get a placeholder password.
 COMPOSE_ANY = ASCENDER_DB_PASSWORD="$${ASCENDER_DB_PASSWORD:-unused}" $(COMPOSE)
+# NETBOX=true adds a NetBox to the compose targets (the netbox profile of
+# deploy/docker-compose.yml), for the netbox inventory source. Give it to
+# make stop as well, or its containers stay up.
+NETBOX ?= false
+ifeq ($(NETBOX),true)
+export COMPOSE_PROFILES := netbox
+endif
 
 # Per-machine settings (ASCENDER_MODE, ports, cookie names, host
 # directories) go in .env at the repository root, as plain KEY=value lines
@@ -295,6 +302,10 @@ logs: ## Follow the containers' logs
 .PHONY: ps
 ps: ## Show the containers' status
 	$(COMPOSE_ANY) ps
+
+.PHONY: seed-netbox
+seed-netbox: ## Fill the development NetBox (make start NETBOX=true) with an estate to sync (scripts/netbox-seed.py; SEED_ARGS=--scale 2000)
+	python3 -I scripts/netbox-seed.py --url 'http://localhost:$(or $(NETBOX_PORT),8000)' $(SEED_ARGS)
 
 .PHONY: require-db-password
 require-db-password:

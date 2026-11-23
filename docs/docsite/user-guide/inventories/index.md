@@ -477,6 +477,9 @@ Inventory updates use dynamically generated YAML files which are parsed by their
 - [CIQ Ascender Automation Platform](#ciq-ascender-automation-platform)
 - [Terraform State](#terraform-state)
 
+[NetBox](#netbox) is not an inventory plugin: Ascender reads the NetBox API
+itself, and its source variables are its own.
+
 Newly created configurations for inventory sources contain the default plugin configuration values. If you want your newly created inventory sources to match the output of legacy sources, you must apply a specific set of configuration values for that source. To ensure backward compatibility, Ascender uses "templates" for each of these sources to force the output of inventory plugins into the legacy format. Refer to [Supported Inventory Plugin Templates](../inventory-plugin-templates) for each source and their respective templates to help you migrate to the new style inventory plugin output.
 
 At run time, the top-level `plugin` key of `source_vars` is set to the inventory plugin of the `InventorySource` source. For VMware vCenter, Red Hat Satellite 6, Terraform State and CIQ Ascender Automation Platform the name is fully qualified: for example, if satellite6 is selected for the `InventorySource` then plugin is set to `theforeman.foreman.foreman`. The other sources use the plugin's short name: if ec2 is selected, plugin is set to `aws_ec2`. For VMware vCenter, a `source_vars` that selects `vmware.vmware.vms` keeps that plugin.
@@ -930,6 +933,42 @@ This inventory source uses the [terraform_state](https://github.com/ansible-coll
    ![Example Terraform State inventory source](/assets/images/inventories-create-source-terraform-example.webp)
 
 6. To add hosts for AWS EC2, GCE, and Azure instances, the Terraform state file in the backend must contain state for resources already deployed to EC2, GCE, or Azure. Refer to each of the Terraform providers' respective documentation to provision instances.
+
+#### NetBox
+
+NetBox is a native inventory source: Ascender reads the NetBox REST API itself, from the control plane, and needs no inventory plugin, collection or execution environment. Devices and virtual machines become hosts, the objects they relate to become groups, and NetBox config context becomes host variables. NetBox 4.6 or newer is required.
+
+1. To configure this type of sourced inventory, select **NetBox** from the **Source** field.
+
+2. The **Create new source** window expands with the required **Credential** field. Choose from an existing NetBox credential. For more information, refer to [NetBox](../credentials#netbox).
+
+3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for [adding a source](#add-source). Objects whose NetBox status is not active are imported disabled rather than dropped: the enabled variable defaults to `netbox_status` and the enabled value to `active`.
+
+4. Use the **Source Variables** field to shape what is fetched and how. All of them are optional. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two.
+
+   | Variable | Default | Effect |
+   | --- | --- | --- |
+   | `filters` | none | NetBox query parameters for both devices and virtual machines, such as `tag: ansible-managed` or `cf_owner_team: platform` |
+   | `device_filters`, `vm_filters` | none | Query parameters for one object type only; the two endpoints do not accept the same filters |
+   | `exclude_offline` | `false` | Fetch only active objects instead of importing the others disabled |
+   | `config_context` | `true` | Fetch config context; turning it off makes a large sync much cheaper |
+   | `merge_config_context` | `true` | Merge the rendered config context flat into the host variables |
+   | `flatten_custom_fields` | `false` | Also merge custom fields flat into the host variables |
+   | `group_by_status`, `group_by_tag` | `true` | Create `status_*` and `tag_*` groups |
+   | `oob_ip_as_primary_ip` | `false` | Connect to the out-of-band address (iDRAC, iLO, BMC) rather than the primary IP |
+   | `use_fqdn` | `false` | Name hosts by the primary IP's DNS name where NetBox has one |
+   | `include_raw` | `false` | Keep the whole NetBox object as `netbox_raw` |
+   | `incremental` | `false` | Ask the NetBox changelog whether anything relevant changed and skip the fetch when nothing has |
+   | `incremental_max_skips` | `24` | Force a full fetch after this many skipped runs in a row |
+   | `changelog_watch_all` | `false` | Treat any NetBox change as relevant rather than only the watched object types |
+
+   Filter names are checked against the NetBox API schema before anything is fetched, and a name NetBox does not know fails the sync with a suggestion. NetBox would otherwise ignore it and return every object.
+
+5. Each host arrives with its NetBox attributes as `netbox_*` host variables (`netbox_site`, `netbox_rack`, `netbox_role`, `netbox_manufacturer`, `netbox_oob_ip`, `netbox_tags`, `netbox_regions` among them), its config context merged flat, and `ansible_host` set from config context, the out-of-band address when asked for, or the primary IP. Groups are made for each site, region, site group, location, rack, tenant, platform, cluster, device type, role, manufacturer, status and tag, each under a parent group of its kind (`sites`, `racks`, `roles` and so on), as well as `devices` and `virtual_machines`. Hosts are matched on `netbox_instance_id`, so a device renamed in NetBox updates the existing host.
+
+   The fetch leaves from the control plane, so a proxy for it is set in **Settings > Jobs > Extra Environment Variables** (`HTTPS_PROXY`, `NO_PROXY`), as for any inventory update.
+
+The developer documentation ([NetBox inventory](https://github.com/ctrliq/ascender/blob/main/docs/inventory/netbox_inventory.md)) lists every host variable and group, and explains the incremental sync and what running on the control plane means.
 
 ### Export old inventory scripts
 

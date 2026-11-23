@@ -6,3 +6,6 @@
 bin/
 # User level pre-commit hooks (pre-commit.sh runs them)
 pre-commit-user
+
+# Python byte code from the helper scripts.
+__pycache__/

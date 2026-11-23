@@ -21,7 +21,9 @@ import (
 // This file is the port of RunInventoryUpdate (main/tasks/jobs.py) and the
 // inventory source injectors (InventorySourceOptions.injectors in
 // main/models/inventory.py): ansible-inventory runs in the execution
-// environment and its JSON output is imported into the database.
+// environment and its JSON output is imported into the database. A native
+// source (nativeSources, inventory_native.go) is fetched in this process
+// instead, and only the import is shared.
 
 // standardInventoryUpdateEnv is STANDARD_INVENTORY_UPDATE_ENV.
 var standardInventoryUpdateEnv = map[string]string{
@@ -98,16 +100,20 @@ func (d *Dispatcher) runInventoryUpdate(jobCtx, bg context.Context, id int64) (e
 	if iu.InventoryID != nil {
 		r.inventory, _ = models.GetInventory(bg, d.DB.Pool, *iu.InventoryID)
 	}
-	r.executionEnvironment(&iu.ExecutionEnvironmentID, func() *int64 {
-		if r.src == nil {
-			return nil
-		}
-		kind := ""
-		if r.inventory != nil {
-			kind = r.inventory.Kind
-		}
-		return d.API.ResolveSourceEnvironment(bg, r.src, kind)
-	})
+	// A native source is fetched in this process and needs no execution
+	// environment, so none is resolved or recorded for it.
+	if !nativeSources[iu.Source] {
+		r.executionEnvironment(&iu.ExecutionEnvironmentID, func() *int64 {
+			if r.src == nil {
+				return nil
+			}
+			kind := ""
+			if r.inventory != nil {
+				kind = r.inventory.Kind
+			}
+			return d.API.ResolveSourceEnvironment(bg, r.src, kind)
+		})
+	}
 	return r.runTask(jobCtx, runSteps{what: "inventory update", group: d.jobInstanceGroup(bg, id), template: iu.UnifiedJobTemplateID,
 		dependencies: r.runDependencies, place: r.placeOnGroup, execute: r.execute, finish: r.finish,
 		tracebackFor: func(_, msg string) bool { return msg == "" }})
@@ -161,7 +167,7 @@ func (r *invUpdateRun) cloudCredential(creds []*credentialData) (cloud *credenti
 	return cloud, extra
 }
 
-var cloudProvidersRun = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true}
+var cloudProvidersRun = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true, "netbox": true}
 
 // execute runs the update and returns its final status.
 func (r *invUpdateRun) execute(jobCtx context.Context) (string, error) {
@@ -170,6 +176,9 @@ func (r *invUpdateRun) execute(jobCtx context.Context) (string, error) {
 	d.lifecycle(ctx, iu.ID, "pre_run")
 	if r.inventory == nil {
 		return "error", fmt.Errorf("Inventory Source is not associated with an Inventory.")
+	}
+	if nativeSources[iu.Source] {
+		return r.executeNative(jobCtx)
 	}
 	if r.ee == nil {
 		r.explain("Job could not start because no Execution Environment could be found.")
@@ -450,13 +459,20 @@ func (r *invUpdateRun) execute(jobCtx context.Context) (string, error) {
 // importOutput reads output.json and runs perform_update with the options
 // RunInventoryUpdate.post_run_hook built, logging into the job output.
 func (r *invUpdateRun) importOutput(sink *invEventSink) (string, error) {
-	iu := r.iu
 	raw, err := readJobFile(r.pdd, filepath.Join(r.artifactDir(), "output.json"), maxInventoryOutput)
 	if err != nil {
 		r.explain("Error occured while saving inventory data, see traceback or server logs")
 		r.traceback = err.Error()
 		return "error", err
 	}
+	return r.importRaw(sink, raw)
+}
+
+// importRaw runs perform_update on the inventory JSON ansible-inventory
+// prints (or a native source built), with the options
+// RunInventoryUpdate.post_run_hook built, logging into the job output.
+func (r *invUpdateRun) importRaw(sink *invEventSink, raw []byte) (string, error) {
+	iu := r.iu
 	opts := importOptions{overwrite: iu.Overwrite, overwriteVars: iu.OverwriteVars, hostFilter: iu.HostFilter}
 	defaults := sourceImportSettings[iu.Source]
 	if iu.EnabledVar != "" {

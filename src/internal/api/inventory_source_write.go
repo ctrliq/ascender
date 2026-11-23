@@ -24,11 +24,13 @@ import (
 var inventorySourceChoices = [][2]string{
 	{"file", "File, Directory or Script"}, {"constructed", "Template additional groups and hostvars at runtime"}, {"scm", "Sourced from a Project"},
 	{"ec2", "Amazon EC2"}, {"gce", "Google Compute Engine"}, {"azure_rm", "Microsoft Azure Resource Manager"}, {"vmware", "VMware vCenter"},
-	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"ascender", "CIQ Ascender Automation Platform"},
+	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"netbox", "NetBox"}, {"ascender", "CIQ Ascender Automation Platform"},
 }
 
-// cloudProviders are CLOUD_PROVIDERS.
-var cloudProviders = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true}
+// cloudProviders are CLOUD_PROVIDERS: the sources that take a credential of
+// their own namespace. netbox is one, though it runs no inventory plugin:
+// the task process fetches from NetBox itself (internal/netbox).
+var cloudProviders = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true, "netbox": true}
 
 // invEnvVariableBlocked is INV_ENV_VARIABLE_BLOCKED.
 var invEnvVariableBlocked = map[string]bool{"HOME": true, "USER": true, "_": true, "TERM": true, "PATH": true}

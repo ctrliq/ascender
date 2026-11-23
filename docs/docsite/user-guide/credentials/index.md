@@ -354,6 +354,18 @@ password
 subscription_id
 ```
 
+### NetBox
+
+Select this credential type to let the [NetBox inventory source](../inventories#netbox) read a NetBox instance. Ascender talks to the NetBox REST API itself; no collection or execution environment is involved.
+
+Enter the following details:
+
+- **NetBox URL**: the base URL of the NetBox instance, for example `https://netbox.example.org`. No trailing `/api`.
+- **API Token**: a NetBox API token with read access to the objects the inventory should see: devices, virtual machines, sites, regions and site groups, the API schema and, for the incremental sync, the object change log and object types. Leave it blank only if the instance allows anonymous reads.
+- **Verify SSL**: on by default. Turn it off for a NetBox whose certificate Ascender does not trust.
+
+Attached to a job template, the credential also sets `NETBOX_API` and `NETBOX_TOKEN` in the playbook's environment, which the `netbox.netbox` modules and lookup plugins read.
+
 ### Network
 
 Select the Network credential type **only** if you are using a `local` connection with `provider` to use Ansible networking modules to connect to and manage networking devices. When connecting to network devices, the credential type must match the connection type:

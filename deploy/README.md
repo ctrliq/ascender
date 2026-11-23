@@ -142,6 +142,27 @@ context is the repository root.
 
 The UI is then at http://localhost:8070/ and the API at http://localhost:8070/api/v2/.
 
+### NetBox
+
+The `netbox` inventory source talks to a real NetBox, so developing or
+reviewing it means having one. `make start NETBOX=true` brings one up with
+the rest of the stack (the `netbox` profile of the compose file): NetBox,
+its own PostgreSQL, a Valkey and an RQ worker, which NetBox delivers
+webhooks through. It is off unless asked for. NetBox answers on
+http://localhost:8000 (`NETBOX_PORT` and `NETBOX_BIND` in `.env` move it),
+and on `http://netbox:8080` from the other containers, which is what goes in
+the credential. The login is `admin` / `admin` and the API token is the
+fixed development value `scripts/netbox-seed.py` carries; the instance holds
+nothing worth protecting.
+
+`make seed-netbox` fills it with an estate: two region trees, three sites,
+racks, tenants, clusters, twelve devices and eleven virtual machines,
+out-of-band addresses on the hardware, four config contexts that overlap so
+the merge order is visible, and three objects left offline so the disabled
+import can be seen. It is safe to re-run; `SEED_ARGS=--scale 2000` adds
+2000 plain devices for timing. Pass `NETBOX=true` to `make stop` too, or
+the NetBox containers stay up.
+
 ## Running the binaries directly
 
 `make run-web` and `make run-task` do this with the defaults below and the

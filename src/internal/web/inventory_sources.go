@@ -28,7 +28,7 @@ func (u *UI) registerInventorySources(mux *http.ServeMux) {
 var sourceChoiceList = [][2]string{
 	{"constructed", "Template additional groups and hostvars at runtime"}, {"scm", "Sourced from a Project"}, {"ec2", "Amazon EC2"},
 	{"gce", "Google Compute Engine"}, {"azure_rm", "Microsoft Azure Resource Manager"}, {"vmware", "VMware vCenter"},
-	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"ascender", "CIQ Ascender Automation Platform"},
+	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"netbox", "NetBox"}, {"ascender", "CIQ Ascender Automation Platform"},
 }
 
 var sourceChoiceLabels = func() map[string]string {
@@ -47,6 +47,7 @@ var sourceCredentialNamespace = map[string]struct {
 }{
 	"ec2": {"aws", false}, "azure_rm": {"azure_rm", true}, "gce": {"gce", true}, "openstack": {"openstack", true},
 	"satellite6": {"satellite6", true}, "ascender": {"ascender", true}, "terraform": {"terraform", true}, "vmware": {"vmware", true},
+	"netbox": {"netbox", true},
 }
 
 const vmwareDefaultPlugin = "community.vmware.vmware_vm_inventory"
@@ -470,6 +471,9 @@ var ansibleDocURLs = map[string]string{
 	"vmware":      "https://docs.ansible.com/ansible/latest/collections/community/vmware/vmware_vm_inventory_inventory.html",
 	"constructed": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html",
 	"terraform":   "https://github.com/ansible-collections/cloud.terraform/blob/stable-statefile-inventory/plugins/inventory/terraform_state.py",
+	// netbox is a native source, not an inventory plugin; its variables are
+	// Ascender's own, documented in the user guide (netboxSourceVarsHelp).
+	"netbox": "/docs/user-guide/inventories/#netbox",
 }
 
 // textHTML escapes translated text placed in help HTML. Quotes are left as
@@ -494,6 +498,9 @@ func variablesHelp(loc *i18n.Locale) string {
 
 // sourceVarsHelp is helpText.sourceVars followed by the variables help.
 func sourceVarsHelp(loc *i18n.Locale, source string) string {
+	if source == "netbox" {
+		return netboxSourceVarsHelp(loc) + variablesHelp(loc)
+	}
 	h := ""
 	if source != "openstack" && source != "ascender" {
 		docs := "/docs/user-guide/inventories/#inventory-plugins"
@@ -507,6 +514,29 @@ func sourceVarsHelp(loc *i18n.Locale, source string) string {
 		h = textHTML(loc.T("Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see")) + ` <a href="` + docs + `" target="_blank" rel="noopener noreferrer">` + textHTML(loc.T("Inventory Plugins")) + `</a> ` + textHTML(loc.T("in the documentation and the")) + ` <a href="` + ansibleDocURLs[source] + `" target="_blank" rel="noopener noreferrer">` + sourceType + `</a> ` + textHTML(loc.T("plugin configuration guide.")) + `<br><br>`
 	}
 	return h + variablesHelp(loc)
+}
+
+// netboxSourceVarsHelp is the source variables help of the netbox source,
+// which is a native integration rather than an inventory plugin: the
+// variables are Ascender's own.
+func netboxSourceVarsHelp(loc *i18n.Locale) string {
+	item := func(name, text string) string {
+		return `<li><code>` + name + `</code>: ` + textHTML(loc.T(text)) + `</li>`
+	}
+	return textHTML(loc.T("Variables that configure what this source pulls from NetBox and how it is shaped. NetBox is a native integration, so these are Ascender's own options rather than an Ansible inventory plugin's. All are optional.")) +
+		` <a href="` + ansibleDocURLs["netbox"] + `" target="_blank" rel="noopener noreferrer">` + textHTML(loc.T("NetBox inventory source")) + `</a> ` + textHTML(loc.T("in the documentation describes each one.")) +
+		`<ul>` +
+		item("filters", "NetBox query filters for both devices and virtual machines. device_filters and vm_filters add to it for one object type only; the two endpoints do not accept the same filters. Names are checked against the NetBox API schema before anything is fetched.") +
+		item("exclude_offline", "Fetch only objects whose status is active. Off by default: non-active objects are imported disabled rather than dropped.") +
+		item("config_context", "Fetch NetBox config context. On by default. Turning it off makes a large sync noticeably cheaper.") +
+		item("merge_config_context", "Also place each config context key at the top level as a host variable. On by default. The rendered mapping is always netbox_config_context.") +
+		item("flatten_custom_fields", "Place custom fields at the top level as well as in netbox_custom_fields.") +
+		item("group_by_status, group_by_tag", "Create status_* and tag_* groups. Both on by default.") +
+		item("oob_ip_as_primary_ip", "Connect to the out-of-band address (iDRAC, iLO, BMC) instead of the primary IP. A value from config context still wins.") +
+		item("use_fqdn", "Name each host after its primary IP's DNS name when NetBox has one.") +
+		item("include_raw", "Attach the whole NetBox object as netbox_raw.") +
+		item("incremental", "Ask the NetBox changelog whether anything relevant changed before fetching, and skip the fetch when nothing has. Off by default. incremental_max_skips (24) forces a full fetch after that many skips; changelog_watch_all fetches on any change at all.") +
+		`</ul><br>`
 }
 
 // sourceHelp is the inventory source help texts (overwrite and

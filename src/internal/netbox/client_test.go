@@ -118,7 +118,7 @@ func TestVersionIsReadOnce(t *testing.T) {
 func TestARejectedTokenSurfacesRatherThanBeingSwallowed(t *testing.T) {
 	c := newFakeNetBox(t, reply{status: 403}).client(t, 1, nil)
 	_, err := c.Version(ctx)
-	if !IsAuthError(err) || !strings.Contains(err.Error(), "rejected the credentials") {
+	if !isAuthError(err) || !strings.Contains(err.Error(), "rejected the credentials") {
 		t.Fatalf("%v", err)
 	}
 }
@@ -220,7 +220,7 @@ func TestServerErrorsAreRetried(t *testing.T) {
 
 func TestARejectedTokenIsNotRetried(t *testing.T) {
 	f := newFakeNetBox(t, reply{status: 403})
-	if _, err := f.client(t, 3, nil).Version(ctx); !IsAuthError(err) {
+	if _, err := f.client(t, 3, nil).Version(ctx); !isAuthError(err) {
 		t.Fatalf("%v", err)
 	}
 	if n := len(f.calls()); n != 1 {

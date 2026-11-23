@@ -47,13 +47,17 @@ type InventorySource struct {
 	SCMBranch                 string
 	Limit                     string
 	ManagedInventoryVariables json.RawMessage
+	// SourceSyncState is the bookkeeping of a source Ascender syncs itself
+	// (the netbox source): its changelog position, skip streak and pending
+	// webhook burst, written by the task process alone.
+	SourceSyncState json.RawMessage
 }
 
 // InventorySourceColumns selects with aliases ujt and src.
 const InventorySourceColumns = `ujt.id, ujt.created, ujt.modified, ujt.name, ujt.description, ujt.last_job_failed, ujt.last_job_run, ujt.next_job_run, ujt.status,
 	ujt.created_by_id, ujt.modified_by_id, ujt.current_job_id, ujt.last_job_id, ujt.next_schedule_id, ujt.organization_id, ujt.execution_environment_id,
 	src.source, src.source_path, src.source_vars, src.overwrite, src.overwrite_vars, src.update_on_launch, src.update_cache_timeout, src.inventory_id, src.timeout,
-	src.source_project_id, src.verbosity, src.enabled_value, src.enabled_var, src.host_filter, src.scm_branch, src."limit", src.managed_inventory_variables`
+	src.source_project_id, src.verbosity, src.enabled_value, src.enabled_var, src.host_filter, src.scm_branch, src."limit", src.managed_inventory_variables, src.source_sync_state`
 
 // InventorySourceFrom is the FROM clause matching InventorySourceColumns.
 const InventorySourceFrom = `main_inventorysource src JOIN main_unifiedjobtemplate ujt ON ujt.id = src.unifiedjobtemplate_ptr_id`
@@ -64,7 +68,7 @@ func ScanInventorySource(r pgx.Row) (*InventorySource, error) {
 	err := r.Scan(&s.ID, &s.Created, &s.Modified, &s.Name, &s.Description, &s.LastJobFailed, &s.LastJobRun, &s.NextJobRun, &s.Status,
 		&s.CreatedByID, &s.ModifiedByID, &s.CurrentJobID, &s.LastJobID, &s.NextScheduleID, &s.OrganizationID, &s.ExecutionEnvironmentID,
 		&s.Source, &s.SourcePath, &s.SourceVars, &s.Overwrite, &s.OverwriteVars, &s.UpdateOnLaunch, &s.UpdateCacheTimeout, &s.InventoryID, &s.Timeout,
-		&s.SourceProjectID, &s.Verbosity, &s.EnabledValue, &s.EnabledVar, &s.HostFilter, &s.SCMBranch, &s.Limit, &s.ManagedInventoryVariables)
+		&s.SourceProjectID, &s.Verbosity, &s.EnabledValue, &s.EnabledVar, &s.HostFilter, &s.SCMBranch, &s.Limit, &s.ManagedInventoryVariables, &s.SourceSyncState)
 	if err != nil {
 		return nil, err
 	}
@@ -140,4 +144,25 @@ func EnsureConstructedSource(ctx context.Context, tx pgx.Tx, inv *Inventory, cts
 	src := &InventorySource{Name: ConstructedSourceName(inv.Name), Source: "constructed", Overwrite: true, OverwriteVars: true, UpdateOnLaunch: true,
 		InventoryID: &inv.ID, OrganizationID: inv.OrganizationID, Verbosity: 1}
 	return src, InsertInventorySource(ctx, tx, src, cts)
+}
+
+// UpdateInventorySourceSyncState rewrites a source's sync state under its
+// row lock: fn is given what is stored and returns what to store, so two
+// writers (a webhook landing while a sync records its position) merge
+// rather than overwrite each other. Written directly, outside the activity
+// stream and without touching modified, as managed_inventory_variables is.
+func UpdateInventorySourceSyncState(ctx context.Context, tx pgx.Tx, id int64, fn func(stored json.RawMessage) (json.RawMessage, error)) error {
+	var stored []byte
+	if err := tx.QueryRow(ctx, `SELECT source_sync_state FROM main_inventorysource WHERE unifiedjobtemplate_ptr_id = $1 FOR UPDATE`, id).Scan(&stored); err != nil {
+		return err
+	}
+	next, err := fn(stored)
+	if err != nil {
+		return err
+	}
+	if len(next) == 0 {
+		next = json.RawMessage("{}")
+	}
+	_, err = tx.Exec(ctx, `UPDATE main_inventorysource SET source_sync_state = $2::jsonb WHERE unifiedjobtemplate_ptr_id = $1`, id, string(next))
+	return err
 }

@@ -1,11 +1,13 @@
 # Inventory Plugins
 
-Every inventory update runs `ansible-inventory` in an execution environment and
-imports the JSON it prints (`runInventoryUpdate` in
+Every inventory update but one runs `ansible-inventory` in an execution
+environment and imports the JSON it prints (`runInventoryUpdate` in
 `src/internal/tasks/inventory_update.go`, then `performUpdate` in
 `src/internal/tasks/inventory_import.go`). Ascender keeps no source-specific
 parsing of its own: Ansible's inventory plugins read the cloud or the files,
-and `ansible-inventory` gives the same JSON structure for all of them.
+and `ansible-inventory` gives the same JSON structure for all of them. The
+exception is the `netbox` source, which the task process fetches itself and
+feeds to the same importer; see [NetBox inventory](./netbox_inventory.md).
 
 ## Cloud sources
 

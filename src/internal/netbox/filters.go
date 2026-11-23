@@ -73,12 +73,6 @@ func (c *namesCache) set(key string, names []string) {
 	c.entries[key] = namesEntry{names: names, expires: time.Now().Add(cacheTTL)}
 }
 
-func (c *namesCache) reset() {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	c.entries = nil
-}
-
 var filterNames = &namesCache{}
 
 // cacheKey names a NetBox and its version, with what is cached.

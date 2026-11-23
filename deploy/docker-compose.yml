@@ -114,9 +114,78 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # NetBox, for developing against the netbox inventory source
+  # (docs/inventory/netbox_inventory.md). Off unless asked for: NETBOX=true
+  # on make start (COMPOSE_PROFILES=netbox), so nobody who is not working on
+  # it pays for four more containers. The worker is there because NetBox
+  # delivers webhooks through it; without one an event rule fires and
+  # nothing arrives. NetBox answers on localhost:${NETBOX_PORT:-8000}, and on
+  # http://netbox:8080 from the other containers, which is what goes in the
+  # credential. The login (admin / admin), the API token and the keys are
+  # fixed development values; the instance holds nothing worth protecting.
+  netbox:
+    image: docker.io/netboxcommunity/netbox:v4.7-5.1.2
+    container_name: ascender_netbox
+    hostname: netbox
+    profiles: ["netbox"]
+    depends_on:
+      - netbox-postgres
+      - netbox-redis
+    environment: &netbox_env
+      DB_HOST: netbox-postgres
+      DB_NAME: netbox
+      DB_USER: netbox
+      DB_PASSWORD: netbox
+      REDIS_HOST: netbox-redis
+      REDIS_PORT: "6379"
+      REDIS_DATABASE: "0"
+      REDIS_CACHE_HOST: netbox-redis
+      REDIS_CACHE_PORT: "6379"
+      REDIS_CACHE_DATABASE: "1"
+      SECRET_KEY: dev-only-netbox-secret-key-not-for-any-real-deployment
+      API_TOKEN_PEPPER_1: dev-only-netbox-token-pepper-not-for-any-real-deploy
+      ALLOWED_HOSTS: "*"
+      SKIP_SUPERUSER: "false"
+      SUPERUSER_NAME: admin
+      SUPERUSER_EMAIL: admin@example.com
+      SUPERUSER_PASSWORD: admin
+      # The token is nbt_<key>.<token>, which scripts/netbox-seed.py knows.
+      SUPERUSER_API_KEY: abcdefghijkl
+      SUPERUSER_API_TOKEN: 0123456789abcdef0123456789abcdef01234567
+      WEBHOOKS_ENABLED: "true"
+    ports:
+      - "${NETBOX_BIND:-127.0.0.1}:${NETBOX_PORT:-8000}:8080"
+    restart: unless-stopped
+  netbox-worker:
+    image: docker.io/netboxcommunity/netbox:v4.7-5.1.2
+    container_name: ascender_netbox_worker
+    profiles: ["netbox"]
+    depends_on:
+      - netbox
+    command: /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
+    environment: *netbox_env
+    restart: unless-stopped
+  netbox-postgres:
+    image: quay.io/sclorg/postgresql-15-c9s
+    container_name: ascender_netbox_postgres
+    profiles: ["netbox"]
+    environment:
+      POSTGRESQL_USER: netbox
+      POSTGRESQL_DATABASE: netbox
+      POSTGRESQL_PASSWORD: netbox
+    volumes:
+      - netbox_data:/var/lib/pgsql/data
+    restart: unless-stopped
+  netbox-redis:
+    image: ghcr.io/valkey-io/valkey:9-alpine
+    container_name: ascender_netbox_redis
+    profiles: ["netbox"]
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   job_status:
   podman_storage:
   log_spool_web:
   log_spool_task:
+  netbox_data:

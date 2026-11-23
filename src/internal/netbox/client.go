@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -72,10 +71,11 @@ type API interface {
 
 // Client talks to one NetBox over its REST API.
 type Client struct {
-	base    *url.URL
-	token   string
-	http    *http.Client
-	retries int
+	base      *url.URL
+	token     string
+	http      *http.Client
+	transport *http.Transport
+	retries   int
 	// Logf receives the warnings an operator should see in the job output:
 	// a retry, a pagination link pointing elsewhere, an unreadable
 	// version. Nil discards them.
@@ -107,8 +107,16 @@ func NewClient(rawURL, token string, verifySSL bool) (*Client, error) {
 	}
 	base := &url.URL{Scheme: u.Scheme, Host: u.Host, Path: strings.TrimRight(u.Path, "/") + "/"}
 	c := &Client{base: base, token: token, retries: DefaultRetries, sleep: sleepContext}
-	c.http = newHTTPClient(verifySSL, DefaultTimeout)
+	c.transport, c.http = newHTTPClient(verifySSL, DefaultTimeout)
 	return c, nil
+}
+
+// SetProxy replaces how a request's proxy is chosen, which defaults to the
+// process environment (HTTP_PROXY, HTTPS_PROXY, NO_PROXY). The task process
+// passes the proxy ASCENDER_TASK_ENV sets. The metadata check on the target
+// stays in place either way.
+func (c *Client) SetProxy(proxy func(*http.Request) (*url.URL, error)) {
+	c.transport.Proxy = guardedProxy(proxy)
 }
 
 // newHTTPClient is the transport of an outbound request a credential admin
@@ -118,22 +126,27 @@ func NewClient(rawURL, token string, verifySSL bool) (*Client, error) {
 // redirects followed. A redirect is the other way the far end chooses the
 // next address, so the caller is told where it pointed and puts that in
 // the credential instead.
-func newHTTPClient(verifySSL bool, timeout time.Duration) *http.Client {
+func newHTTPClient(verifySSL bool, timeout time.Duration) (*http.Transport, *http.Client) {
 	tr := http.DefaultTransport.(*http.Transport).Clone()
 	tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: !verifySSL} //nolint:gosec // the credential's verify_ssl, off by choice
-	tr.Proxy = func(r *http.Request) (*url.URL, error) {
-		p, err := http.ProxyFromEnvironment(r)
+	tr.Proxy = guardedProxy(http.ProxyFromEnvironment)
+	tr.DialContext = netguard.Dialer(timeout).DialContext
+	return tr, &http.Client{Transport: tr, Timeout: timeout, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
+}
+
+// guardedProxy is a proxy chooser with the metadata check on the target:
+// through a proxy the dial guard only ever sees the proxy's address.
+func guardedProxy(proxy func(*http.Request) (*url.URL, error)) func(*http.Request) (*url.URL, error) {
+	return func(r *http.Request) (*url.URL, error) {
+		p, err := proxy(r)
 		if err != nil || p == nil {
 			return p, err
 		}
-		// Through a proxy the dial guard only ever sees the proxy's address.
 		if err := netguard.CheckHost(r.Context(), r.URL.Hostname()); err != nil {
 			return nil, err
 		}
 		return p, nil
 	}
-	tr.DialContext = netguard.Dialer(timeout).DialContext
-	return &http.Client{Transport: tr, Timeout: timeout, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
 }
 
 func sleepContext(ctx context.Context, d time.Duration) error {
@@ -434,10 +447,4 @@ func (c *Client) RequireSupportedVersion(ctx context.Context) (string, error) {
 		c.logf("Could not determine the NetBox version; continuing and assuming %d.%d or newer.", MinimumVersion[0], MinimumVersion[1])
 	}
 	return v, nil
-}
-
-// IsAuthError reports whether err is NetBox rejecting the credentials.
-func IsAuthError(err error) bool {
-	var ae *AuthError
-	return errors.As(err, &ae)
 }

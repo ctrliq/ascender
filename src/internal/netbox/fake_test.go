@@ -3,6 +3,7 @@ package netbox
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/url"
 	"reflect"
 	"sort"
@@ -114,10 +115,22 @@ func change(id int, objectType string) map[string]any {
 	return map[string]any{"id": id, "changed_object_type": objectType}
 }
 
+func (c *namesCache) reset() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.entries = nil
+}
+
 // resetCaches clears the per-process caches between tests.
 func resetCaches() {
 	filterNames.reset()
 	objectTypes.reset()
+}
+
+// isAuthError reports whether err is NetBox rejecting the credentials.
+func isAuthError(err error) bool {
+	var ae *AuthError
+	return errors.As(err, &ae)
 }
 
 // jsonEq compares two values by their JSON, so a []any from a payload and
