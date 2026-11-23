@@ -375,6 +375,37 @@ the request somewhere nobody configured: pagination keeps the path and query
 and takes the origin from the credential, and a redirect is refused with the
 address it pointed at in the job output.
 
+## Scale
+
+Measured on the development stack, with the seeded estate plus 2000 plain
+devices (`make seed-netbox SEED_ARGS="--scale 2000"`): 2012 devices and 11
+virtual machines, 2023 hosts in 60 groups.
+
+```
+Fetched 2012 devices
+Fetched 11 virtual machines
+Built 2023 host(s) in 61 group(s)
+Built the inventory in 2.2s
+    2.250 INFO     Loaded 60 groups, 2023 hosts
+    4.122 INFO     Inventory import completed for netbox in 1.8s
+```
+
+Between 3.6 and 4.1 seconds end to end on a steady-state run, over three
+runs: about two seconds fetching and transforming, 1.8 seconds in the
+importer every source shares. The same estate took 9.7 seconds in the Python
+implementation this was ported from, 2.6 of them in the fetch. An incremental
+run that finds nothing changed takes 0.04 seconds at this size, and that
+figure does not move with the estate.
+
+Config context is the expensive half of the NetBox side. Turning it off with
+`config_context: false` on an estate that does not use it is the largest
+saving available.
+
+A bulk edit of twelve devices in NetBox reached the source as twelve
+webhooks within a second of the request, and the one sync they triggered
+started 35 seconds after the edit: the 15 second debounce plus up to one 30
+second scheduler tick.
+
 ## Development environment
 
 `make start NETBOX=true` brings up a NetBox alongside the development stack
