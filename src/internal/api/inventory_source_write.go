@@ -47,6 +47,10 @@ func (s *Server) registerInventorySourceWrites(mux *http.ServeMux) {
 	s.route(mux, "/api/v2/inventory_sources/{id}/inventory_updates/{$}", methodMap{"GET": s.inventorySourceUpdates}, s.optionsFor("inventory_updates"))
 	s.route(mux, "/api/v2/inventory_sources/{id}/credentials/{$}", methodMap{"GET": s.inventorySourceCredentials, "POST": s.inventorySourceCredentialsAttach}, s.optionsFor("credentials"))
 	s.route(mux, "/api/v2/inventory_sources/{id}/instance_groups/{$}", methodMap{"GET": s.inventorySourceInstanceGroups, "POST": s.inventorySourceInstanceGroupsAttach}, nil)
+	// Only the NetBox receiver: an inventory source can accept nothing else,
+	// so github/, gitlab/ and bitbucket_dc/ are not advertised on it.
+	s.route(mux, "/api/v2/inventory_sources/{id}/webhook_key/{$}", methodMap{"GET": s.inventorySourceWebhookKey, "POST": s.inventorySourceWebhookKey}, nil)
+	s.route(mux, "/api/v2/inventory_sources/{id}/netbox/{$}", methodMap{"POST": s.inventorySourceWebhookReceive}, nil)
 	s.route(mux, "/api/v2/inventory_sources/{id}/hosts/{$}", methodMap{"GET": s.inventorySourceHosts, "DELETE": s.inventorySourceHostsDelete}, s.optionsFor("hosts"))
 	s.route(mux, "/api/v2/inventory_sources/{id}/groups/{$}", methodMap{"GET": s.inventorySourceGroups, "DELETE": s.inventorySourceGroupsDelete}, s.optionsFor("groups"))
 	for _, kind := range []string{"started", "success", "error"} {
@@ -178,7 +182,7 @@ func (s *Server) inventorySourceChanges(src *models.InventorySource) map[string]
 	return map[string]any{"name": src.Name, "description": src.Description, "source": src.Source, "source_path": src.SourcePath, "source_vars": src.SourceVars,
 		"overwrite": src.Overwrite, "overwrite_vars": src.OverwriteVars, "update_on_launch": src.UpdateOnLaunch, "update_cache_timeout": src.UpdateCacheTimeout,
 		"timeout": src.Timeout, "verbosity": src.Verbosity, "enabled_var": src.EnabledVar, "enabled_value": src.EnabledValue, "host_filter": src.HostFilter,
-		"scm_branch": src.SCMBranch, "limit": src.Limit, "id": src.ID}
+		"scm_branch": src.SCMBranch, "limit": src.Limit, "webhook_service": src.WebhookService, "id": src.ID}
 }
 
 // inventorySourceFromForm applies the serializer fields and validation.
@@ -224,6 +228,10 @@ func (s *Server) inventorySourceFromForm(r *http.Request, f *Form, src *models.I
 		}
 	}
 	src.Limit = f.String("limit", false, 0, src.Limit)
+	src.WebhookService = f.Choice("webhook_service", src.WebhookService, inventorySourceWebhookChoices, false)
+	if f.Has("webhook_key") {
+		src.WebhookKey = f.String("webhook_key", false, 64, src.WebhookKey)
+	}
 	src.UpdateOnLaunch = f.Bool("update_on_launch", src.UpdateOnLaunch)
 	zero := int64(0)
 	src.UpdateCacheTimeout = f.Int("update_cache_timeout", src.UpdateCacheTimeout, &zero, nil)
@@ -296,6 +304,16 @@ func (s *Server) validateInventorySource(r *http.Request, f *Form, src *models.I
 	}
 	if src.SCMBranch != "" && (project == nil || !project.AllowOverride) {
 		f.Errs.Add("scm_branch", "Project does not allow overriding branch.")
+	}
+	// A webhook service only means something on a source that knows how to
+	// act on one. The receiver is chosen by webhook_service alone, so
+	// without this an ec2 or scm source would accept every delivery, answer
+	// 202 and record a burst that nothing ever launches or clears.
+	if src.WebhookService != "" && src.Source != src.WebhookService {
+		f.Errs.Add("webhook_service", fmt.Sprintf("Webhooks are only supported on a %s inventory source.", src.WebhookService))
+	}
+	if f.Has("webhook_key") && src.WebhookKey != "" && src.WebhookService == "" {
+		f.Errs.Add("webhook_key", "Cannot set a webhook key without a webhook service.")
 	}
 }
 
@@ -434,6 +452,7 @@ func (s *Server) inventorySourceCreate(w http.ResponseWriter, r *http.Request) e
 	} else if v {
 		return FieldErrors{"__all__": {"InventorySource with this (name, inventory) combination already exists."}}.Err()
 	}
+	src.WebhookKey = webhookKeyOnSave(true, "", "", src.WebhookService, src.WebhookKey)
 	err = s.DB.Tx(ctx, func(tx pgx.Tx) error {
 		if err := models.InsertInventorySource(ctx, tx, src, s.CT); err != nil {
 			return err
@@ -505,6 +524,7 @@ func (s *Server) inventorySourceUpdate(w http.ResponseWriter, r *http.Request) e
 		return FieldErrors{"__all__": {"InventorySource with this (name, inventory) combination already exists."}}.Err()
 	}
 	src.ModifiedByID = &u.ID
+	src.WebhookKey = webhookKeyOnSave(false, prev.WebhookService, prev.WebhookKey, src.WebhookService, src.WebhookKey)
 	err = s.DB.Tx(ctx, func(tx pgx.Tx) error {
 		if err := models.UpdateInventorySource(ctx, tx, src); err != nil {
 			return err

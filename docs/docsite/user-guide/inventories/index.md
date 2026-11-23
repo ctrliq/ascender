@@ -968,6 +968,8 @@ NetBox is a native inventory source: Ascender reads the NetBox REST API itself, 
 
    The fetch leaves from the control plane, so a proxy for it is set in **Settings > Jobs > Extra Environment Variables** (`HTTPS_PROXY`, `NO_PROXY`), as for any inventory update.
 
+6. A NetBox event rule can trigger the sync, so a change reaches the inventory within seconds instead of at the next schedule. Through the API, set `webhook_service` to `netbox` on the source, read the generated secret at `/api/v2/inventory_sources/<id>/webhook_key/`, and create a NetBox webhook with that secret pointed at `/api/v2/inventory_sources/<id>/netbox/`, attached to an event rule for devices, virtual machines and whatever else the inventory reads. Deliveries are signed, never carry inventory data, and are collapsed: however many arrive from a bulk edit, one sync runs once they have stopped for `webhook_debounce_seconds` (15 by default).
+
 The developer documentation ([NetBox inventory](https://github.com/ctrliq/ascender/blob/main/docs/inventory/netbox_inventory.md)) lists every host variable and group, and explains the incremental sync and what running on the control plane means.
 
 ### Export old inventory scripts

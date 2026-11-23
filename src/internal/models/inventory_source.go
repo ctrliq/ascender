@@ -51,13 +51,18 @@ type InventorySource struct {
 	// (the netbox source): its changelog position, skip streak and pending
 	// webhook burst, written by the task process alone.
 	SourceSyncState json.RawMessage
+	// WebhookService and WebhookKey are the WebhookKeyTemplateMixin fields
+	// of the netbox source: the one service that posts to an inventory
+	// source, and the secret it signs its deliveries with.
+	WebhookService string
+	WebhookKey     string
 }
 
 // InventorySourceColumns selects with aliases ujt and src.
 const InventorySourceColumns = `ujt.id, ujt.created, ujt.modified, ujt.name, ujt.description, ujt.last_job_failed, ujt.last_job_run, ujt.next_job_run, ujt.status,
 	ujt.created_by_id, ujt.modified_by_id, ujt.current_job_id, ujt.last_job_id, ujt.next_schedule_id, ujt.organization_id, ujt.execution_environment_id,
 	src.source, src.source_path, src.source_vars, src.overwrite, src.overwrite_vars, src.update_on_launch, src.update_cache_timeout, src.inventory_id, src.timeout,
-	src.source_project_id, src.verbosity, src.enabled_value, src.enabled_var, src.host_filter, src.scm_branch, src."limit", src.managed_inventory_variables, src.source_sync_state`
+	src.source_project_id, src.verbosity, src.enabled_value, src.enabled_var, src.host_filter, src.scm_branch, src."limit", src.managed_inventory_variables, src.source_sync_state, src.webhook_service, src.webhook_key`
 
 // InventorySourceFrom is the FROM clause matching InventorySourceColumns.
 const InventorySourceFrom = `main_inventorysource src JOIN main_unifiedjobtemplate ujt ON ujt.id = src.unifiedjobtemplate_ptr_id`
@@ -68,7 +73,7 @@ func ScanInventorySource(r pgx.Row) (*InventorySource, error) {
 	err := r.Scan(&s.ID, &s.Created, &s.Modified, &s.Name, &s.Description, &s.LastJobFailed, &s.LastJobRun, &s.NextJobRun, &s.Status,
 		&s.CreatedByID, &s.ModifiedByID, &s.CurrentJobID, &s.LastJobID, &s.NextScheduleID, &s.OrganizationID, &s.ExecutionEnvironmentID,
 		&s.Source, &s.SourcePath, &s.SourceVars, &s.Overwrite, &s.OverwriteVars, &s.UpdateOnLaunch, &s.UpdateCacheTimeout, &s.InventoryID, &s.Timeout,
-		&s.SourceProjectID, &s.Verbosity, &s.EnabledValue, &s.EnabledVar, &s.HostFilter, &s.SCMBranch, &s.Limit, &s.ManagedInventoryVariables, &s.SourceSyncState)
+		&s.SourceProjectID, &s.Verbosity, &s.EnabledValue, &s.EnabledVar, &s.HostFilter, &s.SCMBranch, &s.Limit, &s.ManagedInventoryVariables, &s.SourceSyncState, &s.WebhookService, &s.WebhookKey)
 	if err != nil {
 		return nil, err
 	}
@@ -102,10 +107,10 @@ func InsertInventorySource(ctx context.Context, tx pgx.Tx, s *InventorySource, c
 		return err
 	}
 	_, err = tx.Exec(ctx, `INSERT INTO main_inventorysource (unifiedjobtemplate_ptr_id, source, source_path, source_vars, overwrite, overwrite_vars, update_on_launch, update_cache_timeout,
-		inventory_id, timeout, source_project_id, verbosity, enabled_value, enabled_var, host_filter, scm_branch, "limit", managed_inventory_variables)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18::jsonb)`,
+		inventory_id, timeout, source_project_id, verbosity, enabled_value, enabled_var, host_filter, scm_branch, "limit", managed_inventory_variables, webhook_service, webhook_key)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18::jsonb, $19, $20)`,
 		s.ID, s.Source, s.SourcePath, s.SourceVars, s.Overwrite, s.OverwriteVars, s.UpdateOnLaunch, s.UpdateCacheTimeout,
-		s.InventoryID, s.Timeout, s.SourceProjectID, s.Verbosity, s.EnabledValue, s.EnabledVar, s.HostFilter, s.SCMBranch, s.Limit, string(s.ManagedInventoryVariables))
+		s.InventoryID, s.Timeout, s.SourceProjectID, s.Verbosity, s.EnabledValue, s.EnabledVar, s.HostFilter, s.SCMBranch, s.Limit, string(s.ManagedInventoryVariables), s.WebhookService, s.WebhookKey)
 	return err
 }
 
@@ -117,10 +122,11 @@ func UpdateInventorySource(ctx context.Context, tx pgx.Tx, s *InventorySource) e
 		return err
 	}
 	_, err = tx.Exec(ctx, `UPDATE main_inventorysource SET source = $2, source_path = $3, source_vars = $4, overwrite = $5, overwrite_vars = $6, update_on_launch = $7,
-		update_cache_timeout = $8, timeout = $9, source_project_id = $10, verbosity = $11, enabled_value = $12, enabled_var = $13, host_filter = $14, scm_branch = $15, "limit" = $16
+		update_cache_timeout = $8, timeout = $9, source_project_id = $10, verbosity = $11, enabled_value = $12, enabled_var = $13, host_filter = $14, scm_branch = $15, "limit" = $16,
+		webhook_service = $17, webhook_key = $18
 		WHERE unifiedjobtemplate_ptr_id = $1`,
 		s.ID, s.Source, s.SourcePath, s.SourceVars, s.Overwrite, s.OverwriteVars, s.UpdateOnLaunch, s.UpdateCacheTimeout,
-		s.Timeout, s.SourceProjectID, s.Verbosity, s.EnabledValue, s.EnabledVar, s.HostFilter, s.SCMBranch, s.Limit)
+		s.Timeout, s.SourceProjectID, s.Verbosity, s.EnabledValue, s.EnabledVar, s.HostFilter, s.SCMBranch, s.Limit, s.WebhookService, s.WebhookKey)
 	return err
 }
 

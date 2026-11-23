@@ -756,6 +756,16 @@ func (d *Dispatcher) background(fn func(ctx context.Context)) {
 // schedulerPass runs one pass while holding the scheduler lock.
 func (d *Dispatcher) schedulerPass(ctx context.Context) {
 	d.withAdvisoryLock(ctx, schedulerLockID, "scheduler", func() {
+		// Inventory sources whose NetBox webhooks have stopped arriving. This
+		// borrows the scheduler's tick because it is the same decision, that
+		// it is time to launch something, and it launches at most one sync
+		// per source however many webhooks arrived. Not under
+		// DISABLE_ALL_SCHEDULES, which SchedulerPass honours: a webhook is
+		// not a schedule, and the job template and project webhooks launch
+		// straight from their endpoints regardless of it.
+		if _, err := d.API.LaunchSettledNetBoxSyncs(ctx, time.Now()); err != nil {
+			d.Log.ErrorContext(ctx, "netbox webhook syncs", "err", err)
+		}
 		if err := d.API.SchedulerPass(ctx, time.Now()); err != nil {
 			d.Log.ErrorContext(ctx, "scheduler", "err", err)
 		}

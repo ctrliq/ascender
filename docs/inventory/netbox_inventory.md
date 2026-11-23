@@ -241,6 +241,7 @@ All of these are optional and go in the source variables field.
 | `incremental` | `false` | Skip a sync when nothing relevant changed |
 | `incremental_max_skips` | `24` | Force a full sync after this many skips (`0` for no ceiling) |
 | `changelog_watch_all` | `false` | Treat any change as relevant, not just the watched types |
+| `webhook_debounce_seconds` | `15` | Quiet period before a webhook triggers a sync |
 
 The flags are read the way the old application read its source variables
 dict: `false`, `0`, an empty string and an empty list are off, anything else
@@ -287,6 +288,54 @@ The position is a change id, read before the fetch so a change landing
 mid-fetch is picked up by the next run, and recorded on the inventory source
 (`source_sync_state`) once the import has landed. Turning the option on and
 off is safe at any time.
+
+## Webhooks
+
+A NetBox event rule can trigger a sync, so a change reaches the inventory in
+seconds rather than at the next schedule.
+
+Each inventory source has its own receiver and key. Set `webhook_service` to
+`netbox` on the source (through the API; `PATCH` the source with
+`{"webhook_service": "netbox"}`), which generates the key:
+
+```
+/api/v2/inventory_sources/<id>/netbox/       the URL NetBox posts to
+/api/v2/inventory_sources/<id>/webhook_key/  the shared secret, GET to read, POST to rotate
+```
+
+Point a NetBox webhook at the first, set its secret to the value of the
+second, and attach it to an event rule for the object types you care about.
+Signatures are verified as HMAC-SHA512 over the request body, which is what
+NetBox sends in `X-Hook-Signature`. A request with no valid signature is
+rejected, and `webhook_service` is only accepted on a `netbox` source, since
+nothing else knows what to do with a delivery.
+
+NetBox delivers webhooks through its RQ worker. If no worker is running, the
+event rule fires and nothing arrives.
+
+A webhook does not carry inventory data, and nothing in the payload is used
+beyond the object type and the change ids. An object type that cannot change
+the inventory (the watch list of the incremental sync) is acknowledged with
+200 and dropped; anything else marks the source as needing a sync, with 202.
+The task process's scheduler pass, every 30 seconds, then launches at most
+one sync per source once the burst has settled, and only when that source has
+no update already pending or running. A source with one in flight is left
+marked and reconsidered next pass, because that update may have started
+before the change landed. The launched sync is an ordinary run (an
+incremental one if the source is incremental), so there is one way the
+inventory gets built.
+
+The debounce matters. A bulk edit or a scripted import in NetBox can fire
+hundreds of webhooks in a few seconds: one PATCH of twelve devices through a
+single API call produced twelve deliveries when measured. One sync per
+webhook would flatten the control plane. `webhook_debounce_seconds` is the
+quiet period a source waits for before it syncs, 15 seconds by default, plus
+up to one scheduler tick. Raise it if NetBox changes arrive in long bursts.
+
+The pending burst lives in the source's `source_sync_state` beside the
+incremental position; both writers merge under the source's row lock, so a
+webhook landing while a sync records its position is not lost, and a launch
+clears the burst without touching the position.
 
 ## Why this runs on the control plane
 

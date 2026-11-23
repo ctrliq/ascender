@@ -21,6 +21,7 @@ func inventorySourceFieldSet(ujt, src string) *FieldSet {
 			"update_on_launch": {SQL: src + ".update_on_launch", Kind: KindBool}, "update_cache_timeout": {SQL: src + ".update_cache_timeout", Kind: KindInt},
 			"timeout": {SQL: src + ".timeout", Kind: KindInt}, "verbosity": {SQL: src + ".verbosity", Kind: KindInt}, "enabled_var": {SQL: src + ".enabled_var"},
 			"enabled_value": {SQL: src + ".enabled_value"}, "host_filter": {SQL: src + ".host_filter"}, "scm_branch": {SQL: src + ".scm_branch"}, "limit": {SQL: src + `."limit"`},
+			"webhook_service": {SQL: src + ".webhook_service"}, "webhook_key": {SQL: src + ".webhook_key", NoFilter: true},
 			"inventory":             {SQL: src + ".inventory_id", Kind: KindFK, Rel: &Relation{Alias: src + "i", Join: "LEFT JOIN main_inventory " + src + "i ON " + src + "i.id = " + src + ".inventory_id", Target: func() *FieldSet { return inventoryFieldSet(src + "i") }}},
 			"source_project":        {SQL: src + ".source_project_id", Kind: KindFK},
 			"created_by":            {SQL: ujt + ".created_by_id", Kind: KindFK, Rel: &Relation{Alias: src + "cb", Join: "LEFT JOIN auth_user " + src + "cb ON " + src + "cb.id = " + ujt + ".created_by_id", Target: func() *FieldSet { return userFieldsAlias(src + "cb") }}},
@@ -149,6 +150,12 @@ func (s *Server) serializeInventorySource(c *SerCtx, src *models.InventorySource
 	for _, sub := range []string{"update", "inventory_updates", "schedules", "activity_stream", "hosts", "groups", "instance_groups", "notification_templates_started", "notification_templates_success", "notification_templates_error"} {
 		related.Set(sub, SubURL("inventory_sources", src.ID, sub))
 	}
+	related.Set("webhook_key", SubURL("inventory_sources", src.ID, "webhook_key"))
+	if src.WebhookService != "" {
+		related.Set("webhook_receiver", "/api/v2/inventory_sources/"+itoa(src.ID)+"/"+src.WebhookService+"/")
+	} else {
+		related.Set("webhook_receiver", "")
+	}
 	setURL(related, "inventory", "inventories", src.InventoryID)
 	setURL(related, "source_project", "projects", src.SourceProjectID)
 	setURL(related, "current_update", "inventory_updates", src.CurrentJobID)
@@ -238,6 +245,7 @@ func (s *Server) serializeInventorySource(c *SerCtx, src *models.InventorySource
 	o.Set("last_job_run", models.FormatTimePtr(src.LastJobRun)).Set("last_job_failed", src.LastJobFailed).Set("next_job_run", models.FormatTimePtr(src.NextJobRun)).Set("status", src.Status)
 	o.Set("execution_environment", models.NullableID(src.ExecutionEnvironmentID)).Set("inventory", models.NullableID(src.InventoryID))
 	o.Set("update_on_launch", src.UpdateOnLaunch).Set("update_cache_timeout", src.UpdateCacheTimeout).Set("source_project", models.NullableID(src.SourceProjectID))
+	o.Set("webhook_service", src.WebhookService)
 	o.Set("last_update_failed", src.LastJobFailed).Set("last_updated", models.FormatTimePtr(src.LastJobRun))
 	return o
 }

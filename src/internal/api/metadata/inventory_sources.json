@@ -225,6 +225,16 @@
                 "help_text": "Project containing inventory file used as source.",
                 "filterable": true
             },
+            "webhook_service": {
+                "type": "choice",
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["netbox", "NetBox"]
+                ]
+            },
             "last_update_failed": {
                 "type": "boolean",
                 "label": "Last update failed",
@@ -413,6 +423,26 @@
                 "label": "Source project",
                 "help_text": "Project containing inventory file used as source.",
                 "filterable": true
+            },
+            "webhook_service": {
+                "type": "choice",
+                "required": false,
+                "label": "Webhook service",
+                "help_text": "Service that webhook requests will be accepted from",
+                "filterable": true,
+                "choices": [
+                    ["", "---------"],
+                    ["netbox", "NetBox"]
+                ]
+            },
+            "webhook_key": {
+                "type": "string",
+                "required": false,
+                "label": "Webhook key",
+                "help_text": "Shared secret that the webhook service will use to sign requests. Leave blank to generate a new one when the webhook service is set.",
+                "max_length": 64,
+                "filterable": true,
+                "write_only": true
             }
         }
     },

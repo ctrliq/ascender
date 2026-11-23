@@ -17,8 +17,8 @@ import (
 // inventory. It folds into the source's pending Burst, and the task
 // process's periodic pass launches at most one sync per source once the
 // burst has settled, and only when that source has no update already in
-// flight. The receiver, the row lock and the launch live in the api and
-// tasks packages; this file is the rules.
+// flight. The receiver, the row lock and the launch live in
+// internal/api/inventory_source_webhooks.go; this file is the rules.
 
 // DefaultDebounceSeconds is how long after the last webhook of a burst to
 // wait before syncing. Bounded below by the period of the pass that drains
