@@ -1,0 +1,37 @@
+---
+# Patch the web servers at one site, a few at a time. The hosts line is a
+# pattern over the groups NetBox produced: every host in site_dc2 that is
+# also in role_web_server. Hosts whose NetBox status is not active never
+# reach a play, so there is no need to exclude them here.
+#
+# In Ascender, the same pattern goes in the job template's Limit field
+# against an inventory of the whole estate, or the inventory source is
+# filtered down to the site in the first place (see the worked examples).
+- name: Patch the web servers at DC2
+  hosts: site_dc2:&role_web_server
+  become: true
+  serial: 2
+  max_fail_percentage: 0
+  pre_tasks:
+    - name: Refuse to touch a host outside its patch window
+      ansible.builtin.assert:
+        that: netbox_custom_fields.patch_window is defined
+        fail_msg: "{{ inventory_hostname }} has no patch_window custom field in NetBox"
+  tasks:
+    - name: Update every package
+      ansible.builtin.package:
+        name: "*"
+        state: latest
+      notify: Reboot if required
+
+    - name: Check whether a reboot is required (Debian and Ubuntu)
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+      when: netbox_platform is search('Ubuntu')
+
+  handlers:
+    - name: Reboot if required
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+      when: reboot_required.stat.exists | default(false)

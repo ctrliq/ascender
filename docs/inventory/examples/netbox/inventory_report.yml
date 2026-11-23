@@ -1,0 +1,27 @@
+---
+# A report over the groups NetBox produced: how many hosts each site, role
+# and tag holds. Runs on the controller only. Useful after changing filters
+# or grouping options on the source, to see what the inventory now looks
+# like before a play uses it.
+- name: Report the NetBox inventory by site, role and tag
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Count hosts per group of each kind
+      ansible.builtin.set_fact:
+        report: "{{ report | default({}) | combine({item: counts}) }}"
+      vars:
+        # The groups of one kind share a prefix: site_dc1, site_dc2. Site
+        # groups (site_group_corporate) share it too and are left out.
+        members: "{{ groups | dict2items | selectattr('key', 'match', '^' ~ item ~ '_') | rejectattr('key', 'match', '^site_group') }}"
+        counts: "{{ dict(members | map(attribute='key') | zip(members | map(attribute='value') | map('length'))) }}"
+      loop: [site, role, tag, platform, cluster]
+
+    - name: Show the report
+      ansible.builtin.debug:
+        var: report
+
+    - name: Hosts in PCI scope and the site each is at
+      ansible.builtin.debug:
+        msg: "{{ item }} at {{ hostvars[item].netbox_site }}"
+      loop: "{{ groups['tag_pci_scope'] | default([]) }}"

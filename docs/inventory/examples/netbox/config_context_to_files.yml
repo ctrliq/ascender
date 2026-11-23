@@ -1,0 +1,35 @@
+---
+# Config context as configuration. NetBox renders the context per object,
+# so the dns_servers and ntp_servers below already reflect the site,
+# platform and tag contexts that apply to this host, in weight order.
+#
+# Written to a directory on the controller so the example runs without
+# reaching the hosts. In a real play the chrony task drops delegate_to and
+# writes /etc/chrony.conf on the host.
+- name: Render configuration from NetBox config context
+  hosts: all
+  gather_facts: false
+  connection: local
+  vars:
+    output_dir: "{{ lookup('env', 'NETBOX_CONTEXT_DIR') | default('/tmp/netbox-context', true) }}"
+  tasks:
+    - name: Keep the rendered context for review
+      ansible.builtin.copy:
+        content: "{{ netbox_config_context | to_nice_yaml }}"
+        dest: "{{ output_dir }}/{{ inventory_hostname }}.context.yml"
+        mode: "0644"
+      delegate_to: localhost
+
+    - name: Render chrony.conf from ntp_servers
+      ansible.builtin.copy:
+        content: |
+          # Managed by Ascender from NetBox config context
+          {% for server in ntp_servers %}
+          server {{ server }} iburst
+          {% endfor %}
+          driftfile /var/lib/chrony/drift
+          makestep 1.0 3
+        dest: "{{ output_dir }}/{{ inventory_hostname }}.chrony.conf"
+        mode: "0644"
+      delegate_to: localhost
+      when: ntp_servers is defined

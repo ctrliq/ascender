@@ -190,6 +190,51 @@ address a play needs.
 Set `use_fqdn: true` to name hosts after the NetBox primary IP's DNS name
 where one exists.
 
+## Using the inventory in playbooks
+
+The groups exist to be host patterns and the host variables to be read, so a
+play needs no NetBox lookups of its own.
+
+- Intersections and exclusions over the generated groups select hosts the
+  way NetBox describes them: `site_dc2:&role_web_server` is the web servers
+  at DC2, `tag_pci_scope:!platform_windows_server_2022` the Linux side of
+  PCI scope, `cluster_dc1_vmw_prod` a cluster's hypervisors and guests. In
+  Ascender the same pattern goes in a job template's **Limit**. Filtering
+  the source itself (below) is the other half of the same choice, and the
+  better one when the subset is all a team should ever see.
+- A host whose NetBox status is not active is imported disabled, and a
+  disabled host never reaches a play, so a pattern does not need to exclude
+  `status_offline`.
+- Config context arrives as plain host variables (`cis_profile`,
+  `ntp_servers`, `ansible_user`), and so does anything NetBox was told under
+  `ansible_*`. Custom fields are under `netbox_custom_fields`; a selection
+  field is a `label` and `value` pair there, a text field a string.
+- `netbox_oob_ip` is the address for iDRAC, iLO and BMC work whether or not
+  `oob_ip_as_primary_ip` is set, so one play can reach a host on its primary
+  address and its management controller on the out-of-band one.
+
+[`examples/netbox/`](examples/netbox/) holds five playbooks written against
+the development estate:
+
+| Playbook | Shows |
+|---|---|
+| `show_netbox_facts.yml` | What NetBox put on each host: groups, address, tags, config context. Reaches nothing |
+| `inventory_report.yml` | Host counts per site, role, tag, platform and cluster, and who is in PCI scope. Controller only |
+| `config_context_to_files.yml` | Config context driving configuration: a chrony.conf rendered from `ntp_servers` |
+| `patch_web_servers.yml` | A pattern over the generated groups, serial batches, a custom field as a guard |
+| `oob_health.yml` | Redfish through `netbox_oob_ip` from the controller, for Dell hardware |
+
+In Ascender they are a project and a job template each. To run one by hand
+against an inventory Ascender built, export it in the inventory script
+format the API serves and point `ansible-playbook` at a script that prints
+it:
+
+```console
+$ curl -s -u admin https://ascender.example.com/api/v2/inventories/42/script/?hostvars=1 > inventory.json
+$ printf '#!/bin/sh\ncat %s\n' "$PWD/inventory.json" > inventory.sh && chmod +x inventory.sh
+$ ansible-playbook -i inventory.sh show_netbox_facts.yml
+```
+
 ## Filtering
 
 Filters are passed to NetBox as query parameters, so anything the NetBox API
@@ -226,6 +271,47 @@ version, and it is only fetched for a source that sets filters.
 
 `exclude_offline: true` adds `status=active`, which drops non-active objects
 instead of importing them disabled.
+
+### Worked examples
+
+Each of these was run against the estate `make seed-netbox` creates: twelve
+devices and eleven virtual machines over three sites in two region trees,
+two clusters and two tenants. The result is what the inventory holds
+afterwards; an offline object is in it disabled unless the example drops it.
+
+| Restrict to | Source variables | Result |
+|---|---|---|
+| One site | `filters: {site: dc2}` | 9 hosts: 3 devices and 6 virtual machines, one of them disabled |
+| A region, child regions included | `filters: {region: uk}` | the same 9, DC2 being the only site in the UK region |
+| One cluster, hypervisors and guests | `filters: {cluster_id: 1}` | 7 hosts: the two ESX hosts in dc1-vmw-prod and its five virtual machines |
+| One tenant | `filters: {tenant: internal}` | 7 devices and no virtual machines, since none carries a tenant |
+| A tag | `filters: {tag: production}` | 9 hosts across both sites |
+| Two filters, ANDed | `filters: {site: dc2, role: web-server}` | 6 hosts: one device and five virtual machines |
+| Offline objects left out | `filters: {site: dc2}` and `exclude_offline: true` | 8 hosts; dc2-lab-old is absent rather than disabled |
+| A custom field | `filters: {cf_backup_policy: daily}` | 5 hosts: the database servers and the backup host |
+| The host name instead | no filters, host filter `^dc2-` | the same 9 DC2 hosts, after fetching and building all 23 |
+| A typo | `filters: {cluster: dc1-vmw-prod}` | fails before fetching: `NetBox has no device filter named 'cluster' (did you mean 'cluster_id' ...)` |
+
+The rules the examples lean on:
+
+- `cluster` by name is a virtual machine filter; `cluster_id` exists on both
+  endpoints, which is why the shared form uses the id (the number at the end
+  of the cluster's URL in NetBox). `vm_filters: {cluster: dc1-vmw-prod}` with
+  `device_filters: {cluster_id: 1}` is the same thing spelled by name where
+  NetBox allows it.
+- A list value repeats the parameter. For `site`, `role`, `status` and most
+  filters NetBox reads that as any of the values; for `tag` it reads all of
+  them, so `tag: [production, pci-scope]` is the objects carrying both.
+- `region` and `site_group` include their children, so one filter covers a
+  tree.
+- Any custom field works with the `cf_` prefix. `name__isw` and `name__ic`
+  filter on the name itself, for the cases the host filter used to cover.
+- The host filter is applied by the importer after the fetch, so it costs
+  the whole estate every run (2.2 seconds against 0.4 with the 2000 scale
+  devices loaded) and only knows the name. Use it when the thing you want is
+  only in the name; use a NetBox filter when NetBox already knows it.
+- The first filtered run after the task process starts fetches the NetBox API
+  schema for the name check, about three seconds; later runs reuse it.
 
 ## Source variables
 
@@ -434,9 +520,10 @@ second scheduler tick.
 (see `deploy/README.md`), reachable at <http://localhost:8000> and at
 `http://netbox:8080` from inside the compose network. `make seed-netbox`
 fills it with an estate: two region trees, three sites, racks, tenants,
-clusters, twelve devices and eleven virtual machines, out-of-band addresses
-on the hardware, four config contexts that overlap so the merge order is
-visible, and three objects left offline so the disabled import can be seen.
+clusters with their hypervisors in them, twelve devices and eleven virtual
+machines, out-of-band addresses on the hardware, four config contexts that
+overlap so the merge order is visible, and three objects left offline so the
+disabled import can be seen.
 The script (`scripts/netbox-seed.py`) uses the standard library only and is
 safe to re-run.
 

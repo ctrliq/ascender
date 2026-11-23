@@ -557,6 +557,10 @@ def seed_devices(nb: NetBox, org: dict, cat: dict) -> None:
             payload['platform'] = cat['platform'][platform]['id']
         if rack:
             payload['rack'] = org['rack'][rack]['id']
+        if role == 'hypervisor':
+            # A hypervisor belongs to the cluster at its site, so a cluster
+            # filter finds the hosts as well as the guests.
+            payload['cluster'] = next(cat['cluster'][cluster]['id'] for cluster, _, cluster_site in CLUSTERS if cluster_site == site)
         device = nb.ensure('/dcim/devices/', {'name': name}, payload)
 
         update = {}

@@ -1,0 +1,23 @@
+---
+# What NetBox put on each host. Nothing here reaches a host, so it is the
+# first thing to run against a new NetBox inventory: it shows the groups a
+# host landed in, the address a play would use, and the config context
+# values that arrived flat.
+- name: Show what NetBox put on each host
+  hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Where it is, what it is and how it would be reached
+      ansible.builtin.debug:
+        msg:
+          site: "{{ netbox_site | default('') }}"
+          role: "{{ netbox_role | default('') }}"
+          platform: "{{ netbox_platform | default('') }}"
+          status: "{{ netbox_status }}"
+          address: "{{ ansible_host }}"
+          out_of_band: "{{ netbox_oob_ip | default('none') }}"
+          tags: "{{ netbox_tags }}"
+          cis_profile: "{{ cis_profile | default('not set') }}"
+          patch_window: "{{ netbox_custom_fields.patch_window | default('not set') }}"
+          groups: "{{ group_names }}"

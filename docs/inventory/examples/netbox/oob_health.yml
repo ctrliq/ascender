@@ -1,0 +1,28 @@
+---
+# Ask every Dell server's iDRAC how the hardware is, through the out-of-band
+# address NetBox holds for it. The play never logs in to the host itself:
+# the Redfish call is made from the controller with the address in
+# netbox_oob_ip. Devices without an out-of-band address are skipped.
+#
+# idrac_user and idrac_password come from a vault file or a credential
+# injected by the job template.
+- name: Hardware health through the out-of-band address
+  hosts: devices:&manufacturer_dell
+  gather_facts: false
+  tasks:
+    - name: Read the system resource from Redfish
+      ansible.builtin.uri:
+        url: "https://{{ netbox_oob_ip }}/redfish/v1/Systems/System.Embedded.1"
+        url_username: "{{ idrac_user }}"
+        url_password: "{{ idrac_password }}"
+        force_basic_auth: true
+        validate_certs: false
+        return_content: true
+      delegate_to: localhost
+      register: redfish
+      when: netbox_oob_ip is defined
+
+    - name: Report the health rollup
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} ({{ netbox_oob_ip }}): {{ redfish.json.Status.HealthRollup | default('unknown') }}"
+      when: redfish is not skipped

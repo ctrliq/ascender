@@ -970,7 +970,36 @@ NetBox is a native inventory source: Ascender reads the NetBox REST API itself, 
 
 6. A NetBox event rule can trigger the sync, so a change reaches the inventory within seconds instead of at the next schedule. Through the API, set `webhook_service` to `netbox` on the source, read the generated secret at `/api/v2/inventory_sources/<id>/webhook_key/`, and create a NetBox webhook with that secret pointed at `/api/v2/inventory_sources/<id>/netbox/`, attached to an event rule for devices, virtual machines and whatever else the inventory reads. Deliveries are signed, never carry inventory data, and are collapsed: however many arrive from a bulk edit, one sync runs once they have stopped for `webhook_debounce_seconds` (15 by default).
 
-The developer documentation ([NetBox inventory](https://github.com/ctrliq/ascender/blob/main/docs/inventory/netbox_inventory.md)) lists every host variable and group, and explains the incremental sync and what running on the control plane means.
+7. To restrict the source to part of the estate, use NetBox's own filters in the source variables rather than a host name pattern: they go to NetBox as query parameters, so only the subset is fetched. Values are NetBox slugs (the last part of the object's page URL), several filters AND together, and a list of tags means all of them.
+
+   | To get | Source variables |
+   | --- | --- |
+   | The hosts at one site | `filters: {site: dc2}` |
+   | Every site in a region | `filters: {region: uk}` |
+   | One cluster, its hypervisors and its virtual machines | `filters: {cluster_id: 1}` |
+   | One tenant's objects | `filters: {tenant: internal}` |
+   | Everything tagged production | `filters: {tag: production}` |
+   | The web servers at one site | `filters: {site: dc2, role: web-server}` |
+   | Active objects only | `exclude_offline: true` |
+   | A custom field value | `filters: {cf_backup_policy: daily}` |
+   | Virtual machines of one cluster, by name | `vm_filters: {cluster: dc1-vmw-prod}` |
+
+   A filter name NetBox does not know fails the sync with a suggestion, since NetBox would otherwise ignore it and return everything. The **Host Filter** field also narrows the inventory, as a regular expression over host names applied after the fetch, which costs the whole estate every run; prefer a NetBox filter whenever NetBox knows the attribute.
+
+8. In a playbook, the generated groups are host patterns and the `netbox_*` variables are facts. `site_dc2:&role_web_server` targets the web servers at DC2, in a play or in a job template's **Limit**; a host whose NetBox status is not active is disabled and never reaches a play. Config context arrives as plain variables, so a play reads `cis_profile` or `ntp_servers` directly, and `netbox_oob_ip` reaches the management controller.
+
+   ```yaml
+   - name: Show what NetBox put on each host
+     hosts: site_dc2:&role_web_server
+     gather_facts: false
+     tasks:
+       - ansible.builtin.debug:
+           msg: "{{ netbox_role }} at {{ netbox_site }}, {{ ansible_host }}, oob {{ netbox_oob_ip | default('none') }}, CIS {{ cis_profile | default('n/a') }}"
+   ```
+
+   Five example playbooks, including a patch run over a site, a Redfish hardware check through the out-of-band address and a chrony.conf rendered from config context, are in the repository under [docs/inventory/examples/netbox](https://github.com/ctrliq/ascender/tree/main/docs/inventory/examples/netbox).
+
+The developer documentation ([NetBox inventory](https://github.com/ctrliq/ascender/blob/main/docs/inventory/netbox_inventory.md)) lists every host variable and group, the worked filter examples, and explains the incremental sync and what running on the control plane means.
 
 ### Export old inventory scripts
 
