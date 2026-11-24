@@ -176,7 +176,11 @@ SHA = '669c8f6ffc0d162a18c8448e0cda1e06363d3316'
         ('roles/requirements.yml', f'- src: https://git.example.com/ns/role.git\n  scm: git\n  version: {SHA}\n', False),
         ('roles/requirements.yml', f'- git+https://git.example.com/ns/role.git,{SHA}\n', False),
         ('roles/requirements.yml', '- git+https://git.example.com/ns/role.git,main\n', True),
-        ('roles/requirements.yml', '- src: git@git.example.com:ns/role.git\n', True),
+        ('roles/requirements.yml', '- src: git@git.example.com:ns/role.git\n  scm: git\n', True),
+        ('roles/requirements.yml', '- geerlingguy.git\n', False),
+        ('roles/requirements.yml', '- src: geerlingguy.git\n  version: 1.0.0\n', False),
+        ('collections/requirements.yml', f'- name: git+https://git.example.com/ns/coll.git,main\n  version: {SHA}\n', True),
+        ('collections/requirements.yml', f'- name: git+https://git.example.com/ns/coll.git,{SHA}\n  version: main\n', False),
         # an included file is not read, so it may hold a git requirement on a branch
         ('roles/requirements.yml', '- include: more.yml\n', True),
     ],

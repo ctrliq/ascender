@@ -258,7 +258,8 @@
             - name: Set requirements cache hit
               ansible.builtin.set_fact:
                 requirements_cache_hit: >-
-                  {{ requirements_key.cacheable and not (requirements_cache_refresh | default(false) | bool)
+                  {{ requirements_key.cacheable and requirements_key.mutable_reason is not defined
+                     and not (requirements_cache_refresh | default(false) | bool)
                      and (reqcache_stat.stat.exists | default(false)) }}
 
     - block:

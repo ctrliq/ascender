@@ -137,8 +137,11 @@ def mutable_entry_reason(entries, kind, project_path='.'):
             return f'{kind} requirements include {entry["include"]!r}, which is not inspected'
         source = str(entry.get('src') or entry.get('name') or entry.get('role') or '').strip()
         version = entry.get('version')
-        if version is None:  # the 'source,version' shorthand
-            source, _, version = source.partition(',')
+        source, sep, inline_version = source.partition(',')
+        if sep:
+            version = inline_version  # an inline ref takes precedence, as in ansible-galaxy
+        if kind == 'role' and non_galaxy_reason([raw], 'role', project_path) is None:
+            continue  # a Galaxy role, picked up by a refresh like any other
         from_scm = bool(entry.get('scm')) or entry.get('type') == 'git' or source.startswith('git+') or source.endswith('.git')
         if kind == 'collection':
             if _is_galaxy_collection(raw):
