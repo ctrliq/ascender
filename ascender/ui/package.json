@@ -32,12 +32,12 @@
     "luxon": "^3.7.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "react-error-boundary": "^6.1.2",
+    "react-error-boundary": "^6.1.6",
     "react-router": "^8.3.0",
     "rrule": "2.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.1",
+    "@babel/core": "^8.1.2",
     "@babel/eslint-parser": "^8.0.1",
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.7",
@@ -49,7 +49,7 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "14.6.7",
+    "@testing-library/user-event": "14.6.10",
     "@types/d3": "7.4.3",
     "@types/luxon": "^3.7.6",
     "@types/react-dom": "19.3.0",
@@ -68,7 +68,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.3.5",
-    "vitest": "^5.0.3",
+    "vitest": "^5.1.1",
     "vitest-websocket-mock": "^0.7.0"
   },
   "overrides": {
