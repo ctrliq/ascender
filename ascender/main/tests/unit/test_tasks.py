@@ -3019,6 +3019,49 @@ def test_project_update_post_run_hook_requirements_cache_refresh(tmp_path, launc
         projects.filter.assert_not_called()
 
 
+@pytest.mark.parametrize(
+    'launch_type,job_type,mutable,refresh',
+    [
+        # an update that fetched the project and installed a git requirement on a branch
+        ('dependency', 'check', True, True),
+        # already a refresh, keyed by itself as before
+        ('manual', 'check', True, True),
+        # pinned requirements: the project revision still decides the content
+        ('dependency', 'check', False, False),
+        # a job's local sync installs for a revision another update published, so it must not invalidate other nodes
+        ('sync', 'run', True, False),
+    ],
+)
+def test_project_update_post_run_hook_mutable_requirements_refresh(tmp_path, launch_type, job_type, mutable, refresh, mock_me):
+    """A git requirement on a branch changes without the project revision, the cache key of every node"""
+    task = jobs.RunProjectUpdate()
+    task.runner_callback = mock.Mock(playbook_new_revision=None)
+    task.job_private_data_dir = None
+    task.lock_fd = 3
+    task.release_lock = lambda project: None
+    task.requirements_generation = 42 if launch_type in jobs.REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES else 30
+    instance = mock.Mock(
+        launch_type=launch_type, job_type=job_type, job_tags='update_git,install_roles,install_collections', branch_override=False, cache_id='rev1'
+    )
+    instance.get_cache_path.return_value = str(tmp_path)
+    instance.pk = 42
+    instance.project_id = 7
+    (tmp_path / 'stage').mkdir()
+    if mutable:
+        (tmp_path / 'stage' / '.requirements_mutable').write_text('git requirement')
+
+    with mock.patch.object(jobs.RunProjectUpdate, 'sync_requirements_cache') as sync, mock.patch.object(jobs.Project, 'objects') as projects:
+        task.post_run_hook(instance, 'successful')
+
+    sync.assert_called_once_with(str(tmp_path), str(tmp_path / 'rev1'), refresh=refresh)
+    if refresh:
+        projects.filter.assert_called_once_with(pk=7, requirements_generation__lt=42)
+        assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == 42
+    else:
+        projects.filter.assert_not_called()
+        assert jobs.RunProjectUpdate.read_requirements_generation(str(tmp_path / 'rev1')) == 30
+
+
 @pytest.mark.parametrize('enabled', [True, False])
 def test_project_update_post_run_hook_drops_reqcaches_when_reuse_disabled(tmp_path, enabled, mock_me):
     """Turning reuse off leaves only the requirements cache the kept revision still relies on"""
