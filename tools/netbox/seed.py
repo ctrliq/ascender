@@ -419,15 +419,18 @@ def seed_catalogue(nb: NetBox) -> dict:
 
 def seed_clusters(nb: NetBox, org: dict, cat: dict) -> None:
     for name, cluster_type, site in CLUSTERS:
-        cat['cluster'][name] = nb.ensure(
+        # A cluster belongs to a site through its scope (NetBox 4.2 replaced
+        # the site field with scope_type and scope_id).
+        scope = {'scope_type': 'dcim.site', 'scope_id': org['site'][site]['id']}
+        cluster = nb.ensure(
             '/virtualization/clusters/',
             {'name': name},
-            {
-                'type': cat['cluster_type'][cluster_type]['id'],
-                'site': org['site'][site]['id'],
-                'status': 'active',
-            },
+            {'type': cat['cluster_type'][cluster_type]['id'], 'status': 'active', **scope},
         )
+        # Clusters an earlier version of this script made have no scope.
+        if not cluster.get('scope_type'):
+            cluster = nb.patch(f"/virtualization/clusters/{cluster['id']}/", scope)
+        cat['cluster'][name] = cluster
 
 
 def seed_custom_fields(nb: NetBox) -> None:
