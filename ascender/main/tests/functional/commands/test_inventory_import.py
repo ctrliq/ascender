@@ -452,6 +452,105 @@ class TestInventoryVariablesOverwrite:
 
 
 @pytest.mark.django_db
+@mock.patch.object(inventory_import.Command, 'set_logging_level', mock_logging)
+class TestInventoryVariablesFromSourcesOnly:
+    @pytest.fixture
+    def inventory(self, inventory):
+        inventory.variables_from_sources_only = True
+        inventory.save()
+        return inventory
+
+    def sync(self, inv_src, variables, overwrite_vars=True):
+        inventory_import.Command().perform_update(dict(overwrite_vars=overwrite_vars), all_vars_data(variables), inv_src.create_unified_job())
+        inv_src.inventory.refresh_from_db()
+        return inv_src.inventory.variables_dict
+
+    def test_untracked_variables_removed(self, inventory):
+        # Keys left by syncs from before the source tracked its variables, or added by hand.
+        inventory.variables = '{"legacy": 1, "mine": "x"}'
+        inventory.save()
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2', overwrite_vars=True)
+        assert self.sync(inv_src, {'a': 1}) == {'a': 1}
+
+    def test_untracked_variables_kept_when_disabled(self, inventory):
+        inventory.variables = '{"legacy": 1}'
+        inventory.variables_from_sources_only = False
+        inventory.save()
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2', overwrite_vars=True)
+        assert self.sync(inv_src, {'a': 1}) == {'legacy': 1, 'a': 1}
+
+    def test_removed_variable_deleted_even_if_edited(self, inventory):
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2', overwrite_vars=True)
+        self.sync(inv_src, {'a': 1, 'b': 2})
+        inventory.variables = '{"a": 1, "b": "edited"}'
+        inventory.save()
+        assert self.sync(inv_src, {'a': 1}) == {'a': 1}
+
+    def test_edited_variable_still_provided_is_overwritten(self, inventory):
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2', overwrite_vars=True)
+        self.sync(inv_src, {'a': 1})
+        inventory.variables = '{"a": "edited"}'
+        inventory.save()
+        assert self.sync(inv_src, {'a': 1}) == {'a': 1}
+
+    def test_applies_without_overwrite_vars(self, inventory):
+        inventory.variables = '{"legacy": 1}'
+        inventory.save()
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2')
+        assert self.sync(inv_src, {'a': 1, 'b': 2}, overwrite_vars=False) == {'a': 1, 'b': 2}
+        assert self.sync(inv_src, {'a': 1}, overwrite_vars=False) == {'a': 1}
+
+    def test_variables_of_other_sources_are_kept(self, inventory):
+        src_a = InventorySource.objects.create(inventory=inventory, name='a', source='ec2', overwrite_vars=True)
+        src_b = InventorySource.objects.create(inventory=inventory, name='b', source='ec2', overwrite_vars=True)
+        self.sync(src_a, {'only_a': 1, 'shared': 1})
+        self.sync(src_b, {'only_b': 2, 'shared': 2})
+        inventory.variables = '{"only_a": 1, "only_b": 2, "shared": 2, "mine": "x"}'
+        inventory.save()
+        assert self.sync(src_a, {'shared': 1}) == {'only_b': 2, 'shared': 1}
+
+    def test_nothing_removed_until_every_source_has_synced(self, inventory):
+        inventory.variables = '{"legacy": 1}'
+        inventory.save()
+        src_a = InventorySource.objects.create(inventory=inventory, name='a', source='ec2', overwrite_vars=True)
+        src_b = InventorySource.objects.create(inventory=inventory, name='b', source='ec2', overwrite_vars=True)
+        # b has not recorded its variables yet, so "legacy" could be one of them.
+        assert self.sync(src_a, {'a': 1}) == {'legacy': 1, 'a': 1}
+        assert self.sync(src_b, {'b': 2}) == {'a': 1, 'b': 2}
+
+    def test_source_without_variables_counts_as_synced(self, inventory):
+        src_a = InventorySource.objects.create(inventory=inventory, name='a', source='ec2', overwrite_vars=True)
+        src_b = InventorySource.objects.create(inventory=inventory, name='b', source='ec2', overwrite_vars=True)
+        self.sync(src_b, {})
+        src_b.refresh_from_db()
+        assert src_b.managed_inventory_variables == {}
+        assert src_b.managed_inventory_variables_recorded is True
+        inventory.variables = '{"legacy": 1}'
+        inventory.save()
+        assert self.sync(src_a, {'a': 1}) == {'a': 1}
+
+    def test_variables_of_deleted_source_removed_on_next_sync(self, inventory):
+        src_a = InventorySource.objects.create(inventory=inventory, name='a', source='ec2', overwrite_vars=True)
+        src_b = InventorySource.objects.create(inventory=inventory, name='b', source='ec2', overwrite_vars=True)
+        self.sync(src_a, {'a': 1})
+        self.sync(src_b, {'b': 2})
+        src_b.delete()
+        assert self.sync(src_a, {'a': 1}) == {'a': 1}
+
+    def test_failed_sync_keeps_variables(self, inventory):
+        inventory.variables = '{"legacy": 1}'
+        inventory.save()
+        inv_src = InventorySource.objects.create(inventory=inventory, source='ec2', overwrite_vars=True)
+        with mock.patch.object(inventory_import.Command, '_create_update_groups', side_effect=RuntimeError):
+            with pytest.raises(RuntimeError):
+                self.sync(inv_src, {'a': 1})
+        inventory.refresh_from_db()
+        assert inventory.variables_dict == {'legacy': 1}
+        inv_src.refresh_from_db()
+        assert inv_src.managed_inventory_variables_recorded is False
+
+
+@pytest.mark.django_db
 @pytest.mark.inventory_import
 class TestEnabledVar:
     """

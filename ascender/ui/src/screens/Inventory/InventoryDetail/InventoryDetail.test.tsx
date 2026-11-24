@@ -125,6 +125,22 @@ describe('<InventoryDetail />', () => {
     expect(screen.getByText('Allow Jobs While Syncing')).toBeInTheDocument();
   });
 
+  test('should list variables from sources only among the enabled options', async () => {
+    vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
+      data: { results: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
+
+    renderWithContexts(
+      <InventoryDetail
+        inventory={{ ...mockInventory, variables_from_sources_only: true }}
+      />
+    );
+
+    await screen.findByText('Inv no hosts');
+    expect(screen.getByText('Enabled Options')).toBeInTheDocument();
+    expect(screen.getByText('Variables From Sources Only')).toBeInTheDocument();
+  });
+
   test('should load instance groups', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: {

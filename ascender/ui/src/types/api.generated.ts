@@ -7891,6 +7891,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, each sync of an inventory source removes the inventory variables that no source of this inventory provides, including variables added by hand or left over from older syncs. Nothing is removed until every source of the inventory has synced at least once.
+       * @default false
+       */
+      variables_from_sources_only: boolean | null;
     };
     InventoryRequest: {
       name: string | null;
@@ -7936,6 +7941,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, each sync of an inventory source removes the inventory variables that no source of this inventory provides, including variables added by hand or left over from older syncs. Nothing is removed until every source of the inventory has synced at least once.
+       * @default false
+       */
+      variables_from_sources_only: boolean | null;
     };
     InventorySource: {
       readonly id: number;
@@ -10795,6 +10805,11 @@ export interface components {
        * @default false
        */
       allow_jobs_while_syncing: boolean | null;
+      /**
+       * @description If enabled, each sync of an inventory source removes the inventory variables that no source of this inventory provides, including variables added by hand or left over from older syncs. Nothing is removed until every source of the inventory has synced at least once.
+       * @default false
+       */
+      variables_from_sources_only: boolean | null;
     };
     PatchedInventorySourceRequest: {
       name?: string | null;
