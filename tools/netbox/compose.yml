@@ -1,0 +1,81 @@
+# A NetBox for developing and testing the netbox inventory source, beside
+# the development stack. Driven from tools/ (README.md in this directory):
+#
+#   make netbox-start     # after make start at the top level
+#   make netbox-seed      # fill it with an estate to sync
+#   make netbox-stop
+#
+# It is a compose project of its own (ascender-netbox), so starting and
+# stopping it never touches the development stack, but its containers join
+# that stack's network (ascender; ASCENDER_NETWORK overrides it), which must
+# therefore exist first. NetBox answers on http://netbox:8080 from the task
+# container, which is the URL that goes in the NetBox credential, and on
+# localhost:${NETBOX_PORT:-8000} from the host. The worker delivers NetBox's
+# webhooks and event rules; without it they queue and nothing is sent.
+#
+# The login (admin / admin), the API token and the keys are fixed
+# development values; the instance holds nothing worth protecting.
+name: ascender-netbox
+
+services:
+  netbox:
+    image: docker.io/netboxcommunity/netbox:v4.7-5.1.2
+    container_name: ascender_netbox
+    hostname: netbox
+    depends_on:
+      - netbox-postgres
+      - netbox-redis
+    environment: &netbox_env
+      DB_HOST: netbox-postgres
+      DB_NAME: netbox
+      DB_USER: netbox
+      DB_PASSWORD: netbox
+      REDIS_HOST: netbox-redis
+      REDIS_PORT: "6379"
+      REDIS_DATABASE: "0"
+      REDIS_CACHE_HOST: netbox-redis
+      REDIS_CACHE_PORT: "6379"
+      REDIS_CACHE_DATABASE: "1"
+      SECRET_KEY: dev-only-netbox-secret-key-not-for-any-real-deployment
+      API_TOKEN_PEPPER_1: dev-only-netbox-token-pepper-not-for-any-real-deploy
+      ALLOWED_HOSTS: "*"
+      SKIP_SUPERUSER: "false"
+      SUPERUSER_NAME: admin
+      SUPERUSER_EMAIL: admin@example.com
+      SUPERUSER_PASSWORD: admin
+      # The API token is nbt_<key>.<token>, which seed.py uses: nbt_abcdefghijkl.0123456789abcdef0123456789abcdef01234567
+      SUPERUSER_API_KEY: abcdefghijkl
+      SUPERUSER_API_TOKEN: 0123456789abcdef0123456789abcdef01234567
+    ports:
+      - "${NETBOX_BIND:-127.0.0.1}:${NETBOX_PORT:-8000}:8080"
+    restart: unless-stopped
+  netbox-worker:
+    image: docker.io/netboxcommunity/netbox:v4.7-5.1.2
+    container_name: ascender_netbox_worker
+    depends_on:
+      - netbox
+    command: /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
+    environment: *netbox_env
+    restart: unless-stopped
+  netbox-postgres:
+    image: quay.io/sclorg/postgresql-15-c9s:latest
+    container_name: ascender_netbox_postgres
+    environment:
+      POSTGRESQL_USER: netbox
+      POSTGRESQL_DATABASE: netbox
+      POSTGRESQL_PASSWORD: netbox
+    volumes:
+      - netbox_data:/var/lib/pgsql/data
+    restart: unless-stopped
+  netbox-redis:
+    image: ghcr.io/valkey-io/valkey:9-alpine
+    container_name: ascender_netbox_redis
+    restart: unless-stopped
+
+networks:
+  default:
+    name: ${ASCENDER_NETWORK:-ascender}
+    external: true
+
+volumes:
+  netbox_data:

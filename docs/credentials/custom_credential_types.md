@@ -95,6 +95,11 @@ deleted (`Credential types that are in use cannot be deleted`); its name,
 description and injectors still can. Creating, changing and deleting a type is
 recorded in the activity stream.
 
+A managed type added in a later release takes its name even when a custom type
+already has it. The upgrade renames the custom type `<name> (custom <id>)`,
+leaving its fields, injectors and credentials as they were: the NetBox type
+(kind `cloud`) did this to a custom `cloud` type called NetBox.
+
 ## Inputs
 
 The `inputs` of a type are an ordered list of fields and the list of those

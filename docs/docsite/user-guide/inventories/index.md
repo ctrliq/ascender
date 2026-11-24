@@ -476,10 +476,11 @@ Inventory updates use dynamically generated YAML files which are parsed by their
 - [OpenStack](#openstack)
 - [CIQ Ascender Automation Platform](#ciq-ascender-automation-platform)
 - [Terraform State](#terraform-state)
+- [NetBox](#netbox)
 
 Newly created configurations for inventory sources contain the default plugin configuration values. If you want your newly created inventory sources to match the output of legacy sources, you must apply a specific set of configuration values for that source. To ensure backward compatibility, Ascender uses "templates" for each of these sources to force the output of inventory plugins into the legacy format. Refer to [Supported Inventory Plugin Templates](../inventory-plugin-templates) for each source and their respective templates to help you migrate to the new style inventory plugin output.
 
-At run time, the top-level `plugin` key of `source_vars` is set to the inventory plugin of the `InventorySource` source. For VMware vCenter, Red Hat Satellite 6, Terraform State and CIQ Ascender Automation Platform the name is fully qualified: for example, if satellite6 is selected for the `InventorySource` then plugin is set to `theforeman.foreman.foreman`. The other sources use the plugin's short name: if ec2 is selected, plugin is set to `aws_ec2`. For VMware vCenter, a `source_vars` that selects `vmware.vmware.vms` keeps that plugin.
+At run time, the top-level `plugin` key of `source_vars` is set to the inventory plugin of the `InventorySource` source. For VMware vCenter, Red Hat Satellite 6, Terraform State, NetBox and CIQ Ascender Automation Platform the name is fully qualified: for example, if satellite6 is selected for the `InventorySource` then plugin is set to `theforeman.foreman.foreman`. The other sources use the plugin's short name: if ec2 is selected, plugin is set to `aws_ec2`. For VMware vCenter, a `source_vars` that selects `vmware.vmware.vms` keeps that plugin.
 
 ## Add a new inventory
 
@@ -930,6 +931,27 @@ This inventory source uses the [terraform_state](https://github.com/ansible-coll
    ![Example Terraform State inventory source](/assets/images/inventories-create-source-terraform-example.webp)
 
 6. To add hosts for AWS EC2, GCE, and Azure instances, the Terraform state file in the backend must contain state for resources already deployed to EC2, GCE, or Azure. Refer to each of the Terraform providers' respective documentation to provision instances.
+
+#### NetBox
+
+This inventory source uses the [nb_inventory](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html) inventory plugin from the [netbox.netbox](https://github.com/netbox-community/ansible_modules) collection. It adds the devices and virtual machines in NetBox as hosts.
+
+1. To configure this type of sourced inventory, select **NetBox** from the **Source** field.
+
+2. The **Create Source** window expands with the required **Credential** field. Choose from an existing NetBox credential. For more information, refer to [NetBox](../credentials#netbox).
+
+3. Enter an execution environment in the **Execution Environment** field that contains the `netbox.netbox` collection. The default execution environment does not include it.
+
+4. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for [adding a source](#add-source). Unless you set an enabled variable, a host is enabled when its NetBox status is **Active** (`status.value` is `active`), so offline, planned and decommissioning devices are imported disabled.
+
+5. Use the **Source Variables** field to override variables used by the `nb_inventory` inventory plugin. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two. For a detailed description of these variables, view the [nb_inventory](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html) plugin documentation. The NetBox URL and API token come from the credential; do not put the token in the source variables. The credential's **Verify SSL** setting becomes the plugin's `validate_certs` unless the source variables set it. For example, to group hosts by site and device role and include config context:
+
+   ```yaml
+   group_by:
+     - sites
+     - device_roles
+   config_context: true
+   ```
 
 ### Export old inventory scripts
 

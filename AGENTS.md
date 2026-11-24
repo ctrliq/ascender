@@ -63,7 +63,10 @@ drives everything (`make help`); binaries go to `bin/`.
   `make licenses`, which writes `licenses/go/` for the images; `init.sh` and
   `init-secrets.sh`, behind `make init`: compose, Go, a new installation's
   secrets and `.env`). `pre-commit.sh` at the top level is the git
-  pre-commit hook's checks (`make hooks`).
+  pre-commit hook's checks (`make hooks`). `tools/` — services to develop and
+  test integrations against (a NetBox, so far), each a compose project of
+  its own beside the development stack, driven by `tools/Makefile` with its
+  own `tools/.env` (see `tools/README.md`).
 
 ## Working rules
 

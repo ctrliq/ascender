@@ -142,6 +142,10 @@ context is the repository root.
 
 The UI is then at http://localhost:8070/ and the API at http://localhost:8070/api/v2/.
 
+Services to develop integrations against (a NetBox for the `netbox`
+inventory source) run beside these containers from `tools/`, which has its own
+Makefile and `.env`: see `tools/README.md`.
+
 ## Running the binaries directly
 
 `make run-web` and `make run-task` do this with the defaults below and the

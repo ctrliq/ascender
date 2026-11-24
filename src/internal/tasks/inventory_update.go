@@ -51,6 +51,7 @@ var sourceInjectors = map[string]sourceInjector{
 	"satellite6":  {plugin: "foreman", namespace: "theforeman", collection: "foreman", useFQCN: true},
 	"terraform":   {plugin: "terraform_state", baseInjector: "managed", namespace: "cloud", collection: "terraform", useFQCN: true},
 	"ascender":    {plugin: "controller", baseInjector: "template", namespace: "ctrliq", collection: "ascender", useFQCN: true},
+	"netbox":      {plugin: "nb_inventory", baseInjector: "template", namespace: "netbox", collection: "netbox", useFQCN: true},
 	"constructed": {plugin: "constructed", namespace: "ansible", collection: "builtin"},
 }
 
@@ -161,7 +162,7 @@ func (r *invUpdateRun) cloudCredential(creds []*credentialData) (cloud *credenti
 	return cloud, extra
 }
 
-var cloudProvidersRun = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true}
+var cloudProvidersRun = map[string]bool{"azure_rm": true, "ec2": true, "gce": true, "vmware": true, "openstack": true, "satellite6": true, "ascender": true, "terraform": true, "netbox": true}
 
 // execute runs the update and returns its final status.
 func (r *invUpdateRun) execute(jobCtx context.Context) (string, error) {
@@ -620,6 +621,18 @@ func (r *invUpdateRun) inventoryAsDict(inj sourceInjector, cloud *credentialData
 		}
 	case "terraform":
 		out["backend_config_files"] = env["TF_BACKEND_CONFIG_FILE"]
+	case "netbox":
+		// nb_inventory reads its endpoint and token from NETBOX_API and
+		// NETBOX_TOKEN (the credential type's env injectors), but
+		// validate_certs only from the inventory file: the credential's
+		// Verify SSL goes there unless the source variables set it.
+		if _, ok := out["validate_certs"]; !ok && cloud != nil {
+			verify := true
+			if _, ok := cloud.inputs["verify_ssl"]; ok {
+				verify = cloud.getBool("verify_ssl")
+			}
+			out["validate_certs"] = verify
+		}
 	}
 	return out
 }

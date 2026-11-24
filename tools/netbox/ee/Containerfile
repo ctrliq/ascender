@@ -1,0 +1,15 @@
+# An execution environment for testing the netbox inventory source before
+# the published one ships the collection: ascender-ee with netbox.netbox,
+# whose nb_inventory plugin the source runs. `make netbox-ee` (in tools/)
+# builds it and loads it into the task container's podman. The plugin itself
+# needs only pytz and packaging, which ascender-ee already has; pynetbox is
+# for the collection's modules, which a playbook may want next to the
+# inventory.
+ARG BASE_IMAGE=ghcr.io/ctrliq/ascender-ee:latest
+FROM ${BASE_IMAGE}
+ARG NETBOX_COLLECTION_VERSION=3.24.0
+USER root
+RUN ansible-galaxy collection install --no-cache -p /usr/share/ansible/collections \
+        "netbox.netbox:==${NETBOX_COLLECTION_VERSION}" \
+    && python3 -m pip install --no-cache-dir pynetbox
+USER 1000

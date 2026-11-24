@@ -22,18 +22,27 @@ to `ansible-inventory -i`:
 | `openstack` | `openstack` | `openstack.cloud` |
 | `satellite6` | `theforeman.foreman.foreman` | `theforeman.foreman` |
 | `terraform` | `cloud.terraform.terraform_state` | `cloud.terraform` |
+| `netbox` | `netbox.netbox.nb_inventory` | `netbox.netbox` |
 | `ascender` | `ctrliq.ascender.controller` | `ctrliq.ascender` |
 
 The plugin comes from the collection installed in the execution environment the
 update runs in; short names are resolved by Ansible's plugin routing. The
-needed collections are in the Ascender default execution environment:
+needed collections are in the Ascender default execution environment,
+except `netbox.netbox`: a `netbox` source needs an execution environment that
+has it.
 
 https://github.com/ctrliq/ascender-ee
 
+For development, `tools/netbox/` has a NetBox to sync from and an execution
+environment with `netbox.netbox` added (see `tools/netbox/README.md`).
+
 The source's cloud credential is given to the plugin through environment
 variables, and files named by them where the plugin wants a file (a GCE
-service account file, an OpenStack `clouds.yaml`). The other options of the
-source, `overwrite`, `overwrite_vars`, `enabled_var`, `enabled_value` and
+service account file, an OpenStack `clouds.yaml`). A NetBox credential's
+Verify SSL is the one setting that goes in the configuration file instead,
+as `validate_certs`, because `nb_inventory` reads it from nowhere else; the
+source's `source_vars` override it. The other options of the source,
+`overwrite`, `overwrite_vars`, `enabled_var`, `enabled_value` and
 `host_filter`, apply when the output is imported.
 
 `host_filter` is a Python regular expression (Python's `re` syntax, with

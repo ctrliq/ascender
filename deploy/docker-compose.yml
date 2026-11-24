@@ -114,6 +114,12 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+# Named, so the development tools in tools/ (a NetBox, and so on), which are
+# compose projects of their own, can join it whatever this project is called.
+networks:
+  default:
+    name: ascender
+
 volumes:
   postgres_data:
   job_status:

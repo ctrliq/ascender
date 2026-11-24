@@ -178,6 +178,21 @@ names a directory seeded with `src/internal/sso/testdata/zz-seed.ldif`,
 whose header gives the server image and the `ldapadd` command.
 
 
+## Development tools
+
+`tools/` at the top level holds services to develop and test integrations
+against, each run beside the development stack as a compose project of its
+own and driven by `tools/Makefile` (run from `tools/`; `make help` there
+lists the targets). There is one so far:
+
+- **NetBox**, for the `netbox` inventory source: a NetBox with an estate to
+  sync, and an execution environment that has the `netbox.netbox`
+  collection.
+
+See [the tools' README](../../tools/README.md), which links to each tool's
+own.
+
+
 ## Golden test data
 
 Several packages port the behaviour of Python libraries Ascender used, and
@@ -235,7 +250,8 @@ Paths are under `src/`:
 
 Outside `src/`: `deploy/` has the Dockerfiles and the compose file (see
 [Building the Ascender Images](../build_images.md)), `docs/docsite/` the
-documentation site, and `scripts/` the helper scripts the Makefile runs.
+documentation site, `scripts/` the helper scripts the Makefile runs, and
+`tools/` the [development tools](#development-tools).
 
 
 ## The documentation site

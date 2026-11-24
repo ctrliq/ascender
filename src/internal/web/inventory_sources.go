@@ -28,7 +28,7 @@ func (u *UI) registerInventorySources(mux *http.ServeMux) {
 var sourceChoiceList = [][2]string{
 	{"constructed", "Template additional groups and hostvars at runtime"}, {"scm", "Sourced from a Project"}, {"ec2", "Amazon EC2"},
 	{"gce", "Google Compute Engine"}, {"azure_rm", "Microsoft Azure Resource Manager"}, {"vmware", "VMware vCenter"},
-	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"ascender", "CIQ Ascender Automation Platform"},
+	{"satellite6", "Red Hat Satellite 6"}, {"openstack", "OpenStack"}, {"terraform", "Terraform State"}, {"netbox", "NetBox"}, {"ascender", "CIQ Ascender Automation Platform"},
 }
 
 var sourceChoiceLabels = func() map[string]string {
@@ -47,6 +47,7 @@ var sourceCredentialNamespace = map[string]struct {
 }{
 	"ec2": {"aws", false}, "azure_rm": {"azure_rm", true}, "gce": {"gce", true}, "openstack": {"openstack", true},
 	"satellite6": {"satellite6", true}, "ascender": {"ascender", true}, "terraform": {"terraform", true}, "vmware": {"vmware", true},
+	"netbox": {"netbox", true},
 }
 
 const vmwareDefaultPlugin = "community.vmware.vmware_vm_inventory"
@@ -470,6 +471,7 @@ var ansibleDocURLs = map[string]string{
 	"vmware":      "https://docs.ansible.com/ansible/latest/collections/community/vmware/vmware_vm_inventory_inventory.html",
 	"constructed": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html",
 	"terraform":   "https://github.com/ansible-collections/cloud.terraform/blob/stable-statefile-inventory/plugins/inventory/terraform_state.py",
+	"netbox":      "https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html",
 }
 
 // textHTML escapes translated text placed in help HTML. Quotes are left as
