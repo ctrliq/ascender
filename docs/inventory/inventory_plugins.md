@@ -41,7 +41,12 @@ variables, and files named by them where the plugin wants a file (a GCE
 service account file, an OpenStack `clouds.yaml`). A NetBox credential's
 Verify SSL is the one setting that goes in the configuration file instead,
 as `validate_certs`, because `nb_inventory` reads it from nowhere else; the
-source's `source_vars` override it. The other options of the source,
+source's `source_vars` override it. A `netbox` source also adds
+`netbox_instance_id` to the plugin's `compose`, unless `source_vars` set it:
+`device:<id>` or `vm:<id>`, then `@` and the host, port and path of the
+credential's URL. It is the source's instance id variable, so a host renamed
+in NetBox keeps its host here (`src/internal/tasks/inventory_netbox.go`). The
+other options of the source,
 `overwrite`, `overwrite_vars`, `enabled_var`, `enabled_value` and
 `host_filter`, apply when the output is imported.
 
