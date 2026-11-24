@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/ctrliq/ascender/internal/config"
+	"github.com/ctrliq/ascender/internal/models"
 )
 
 func TestRequirementsCacheTarRoundTrip(t *testing.T) {
@@ -93,5 +94,35 @@ func TestClearProjectCache(t *testing.T) {
 	want := strings.Join([]string{"reqcache_" + hashOf('a'), "reqcache_" + hashOf('c'), "rev1", "stage"}, ",")
 	if got != want {
 		t.Fatalf("got  %s\nwant %s", got, want)
+	}
+}
+
+func TestRequirementsMutableRefresh(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		jobType string
+		mutable bool
+		want    bool
+	}{
+		// an update that fetched the project and installed a git requirement on a branch
+		{"check, mutable", "check", true, true},
+		// pinned requirements: the project revision still decides the content
+		{"check, pinned", "check", false, false},
+		// a job's local sync installs for a revision another update published
+		{"run, mutable", "run", true, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			dir := t.TempDir()
+			if tc.mutable {
+				if err := os.WriteFile(filepath.Join(dir, ".requirements_mutable"), []byte("git requirement"), 0o644); err != nil {
+					t.Fatal(err)
+				}
+			}
+			pu := &models.ProjectUpdate{}
+			pu.JobType = tc.jobType
+			if got := requirementsMutableRefresh(pu, dir); got != tc.want {
+				t.Fatalf("requirementsMutableRefresh = %v, want %v", got, tc.want)
+			}
+		})
 	}
 }

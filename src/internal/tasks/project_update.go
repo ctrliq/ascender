@@ -624,10 +624,18 @@ func (r *puRun) postRun(status string) {
 				d.Log.Error("could not save project cache", "path", cachePath, "err", err)
 			} else {
 				refresh := requirementsRefreshLaunchTypes[pu.LaunchType]
+				if !refresh && requirementsMutableRefresh(pu, cachePath) {
+					refresh = true
+					gen := pu.ID
+					r.requirementsGeneration = &gen
+					d.Log.Info("installed requirements that can change without the project, refreshing them on every node", "project_update", pu.ID)
+				}
 				d.syncRequirementsCache(base, cachePath, refresh)
 				if refresh {
 					_, _ = d.DB.Pool.Exec(ctx, `UPDATE main_project SET requirements_generation = $2 WHERE unifiedjobtemplate_ptr_id = $1 AND requirements_generation < $2`, project.ID, pu.ID)
 				}
+				// An older refresh finishing after a newer one writes its own
+				// generation, costing one extra reinstall.
 				if r.requirementsGeneration != nil {
 					if err := writeJobFile(cachePath, filepath.Join(cachePath, ".requirements_generation"), []byte(fmt.Sprint(*r.requirementsGeneration)), 0o644); err != nil {
 						d.Log.Warn("could not record the requirements generation", "path", cachePath)

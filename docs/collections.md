@@ -161,6 +161,16 @@ freshly installed content is published there after a successful update.
   `namespace.collection` name and any role whose source is a file in the
   project. The update says why: "Requirements are not reused between
   revisions: ...".
+- A requirement that can change while the project revision does not, such as
+  a git repository on a branch or tag, a URL or an `include:`, makes every
+  update that fetches the project a refresh: every node reinstalls on its
+  next job instead of running what it installed before. With update on
+  launch, that is every launch. Pin git requirements to a full commit id to
+  avoid it; the project revision then decides the content. A job's own
+  project sync does not refresh other nodes, and nodes only refresh when the
+  project is updated, so a project that is never updated keeps what each
+  node installed last. Requirements from Galaxy and from the project itself
+  do not count.
 - Up to 10 requirements caches are kept per project. The least recently used
   are evicted, except one that a kept revision still relies on. A revision
   whose requirements cache is gone is treated as uncached, so the next job

@@ -33,6 +33,18 @@ var requirementsHashRe = regexp.MustCompile(`^[0-9a-f]{64}$`)
 // reusing a requirements cache (REQUIREMENTS_CACHE_REFRESH_LAUNCH_TYPES).
 var requirementsRefreshLaunchTypes = map[string]bool{"manual": true, "scheduled": true, "relaunch": true}
 
+// requirementsMutableRefresh reports whether a successful update must
+// refresh every node's requirements although its launch type does not: it
+// installed a requirement that can change while the project revision, the
+// key other nodes cache by, does not (a git repository on a branch, a URL,
+// an include; the playbook writes .requirements_mutable). Only an update
+// that fetched the project ("check") counts: a job's own local sync ("run")
+// follows the generation another update published, or nodes would keep
+// invalidating each other.
+func requirementsMutableRefresh(pu *models.ProjectUpdate, cachePath string) bool {
+	return pu.JobType == "check" && pathExists(filepath.Join(cachePath, ".requirements_mutable"))
+}
+
 // projectPathFor is get_project_path(check_if_exists=False).
 func (d *Dispatcher) projectPathFor(localPath string) string {
 	base := filepath.Base(localPath)
