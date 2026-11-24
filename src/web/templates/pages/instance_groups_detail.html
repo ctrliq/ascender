@@ -164,7 +164,7 @@
 						</dd>
 					</div>
 					{{if and $cg (has $g.pod_spec_override)}}
-						{{template "variables_detail" (dict "cy" "container-group-detail-pod-spec-override" "label" (t "Pod spec override") "value" (str $g.pod_spec_override) "help" (t "Custom Kubernetes or OpenShift Pod specification.") "rows" 6)}}
+						{{template "variables_detail" (dict "cy" "container-group-detail-pod-spec-override" "name" "pod_spec_override" "label" (t "Pod spec override") "value" (str $g.pod_spec_override) "help" (t "Custom Kubernetes or OpenShift Pod specification.") "rows" 6)}}
 					{{end}}
 				</dl>
 				<div class="ascender-card-actions-row__wrapper">

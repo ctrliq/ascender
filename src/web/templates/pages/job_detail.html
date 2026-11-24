@@ -326,10 +326,10 @@
 					{{template "user_date_detail" (dict "label" (t "Created") "date" $j.created "user" (dig $sf "created_by"))}}
 					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $j.modified "user" (dig $sf "modified_by"))}}
 					{{if has $j.extra_vars}}
-						{{template "variables_detail" (dict "cy" "job-detail-extra-variables" "label" (t "Variables") "value" (str $j.extra_vars) "rows" 4 "help" (t "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook."))}}
+						{{template "variables_detail" (dict "cy" "job-detail-extra-variables" "name" "extra_vars" "label" (t "Variables") "value" (str $j.extra_vars) "rows" 4 "help" (t "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook."))}}
 					{{end}}
 					{{if eq $type "job"}}
-						{{template "variables_detail" (dict "cy" "job-detail-artifacts" "label" (t "Artifacts") "value" (json $j.artifacts) "rows" 4)}}
+						{{template "variables_detail" (dict "cy" "job-detail-artifacts" "name" "artifacts" "label" (t "Artifacts") "value" (json $j.artifacts) "rows" 4)}}
 					{{end}}
 				</dl>
 				<div class="ascender-card-actions-row__wrapper">

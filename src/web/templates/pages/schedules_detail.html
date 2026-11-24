@@ -95,7 +95,7 @@
 				<dl class="ascender-detail-list ascender-schedule-detail__prompt-detail-list">
 					{{range .Data.prompts}}
 						{{if .Variables}}
-							{{template "variables_detail" (dict "cy" "schedule-detail-variables" "label" (t "Variables") "value" .Variables "rows" 4)}}
+							{{template "variables_detail" (dict "cy" "schedule-detail-variables" "name" "extra_vars" "label" (t "Variables") "value" .Variables "rows" 4)}}
 						{{else if .Chips}}
 							<div>
 								<dt class="ascender-detail-name ascender-detail-name--full-width"{{if .Cy}} data-cy="{{.Cy}}-label"{{end}}>

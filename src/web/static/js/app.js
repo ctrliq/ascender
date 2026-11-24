@@ -1493,6 +1493,26 @@
       if (rows === 'auto') return CM.EditorView.theme({ '&': { minHeight: ((minRows || 1) * LINE + PAD) + 'px', maxHeight: (MAX_ROWS * LINE + PAD) + 'px' }, '.cm-scroller': { overflow: 'auto' } });
       return CM.EditorView.theme({ '&': { height: (rows * LINE + PAD) + 'px' }, '.cm-scroller': { overflow: 'auto' } });
     }
+    // A drag handle on the height (PatternFly's pf-m-resize-vertical): on
+    // editable editors, and on read-only ones that ask with data-resizable.
+    // A dragged height replaces the rows sizing, the editor fills it and
+    // scrolls inside it, and it is remembered in localStorage under the
+    // field's key (data-height-key, else data-editor-id), so every box for
+    // that field opens at it. A double click on the handle forgets it.
+    var HANDLE = 16, FILL = CM.EditorView.theme({ '&': { height: '100%', minHeight: 0 }, '.cm-scroller': { height: '100%', overflow: 'auto' } });
+    // Storage can throw (private windows, blocked site data); then nothing is kept.
+    function savedHeight(key) { try { return key ? localStorage.getItem(key) : null; } catch (e) { return null; } }
+    function saveHeight(key, h) { try { if (!key) return; if (h) localStorage.setItem(key, h); else localStorage.removeItem(key); } catch (e) {} }
+    function makeResizable(wrap, view, comp, base, key) {
+      var resized = !!wrap.style.height;
+      function set(on) { if (on === resized) return; resized = on; wrap.classList.toggle('ascender-code-editor__wrapper--resized', on); view.dispatch({ effects: comp.reconfigure(on ? FILL : base) }); }
+      if (window.ResizeObserver) new ResizeObserver(function () { if (wrap.style.height) { set(true); saveHeight(key, wrap.style.height); } }).observe(wrap);
+      wrap.addEventListener('dblclick', function (e) {
+        var box = wrap.getBoundingClientRect();
+        if (!resized || box.right - e.clientX > HANDLE || box.bottom - e.clientY > HANDLE) return;
+        wrap.style.height = ''; saveHeight(key, null); set(false);
+      });
+    }
     function yamlToJson(src) { if (!src || !src.trim()) return '{}'; var v = CM.jsyaml.load(src); if (!v) return '{}'; if (typeof v !== 'object') throw new Error('yaml is not in object format'); return JSON.stringify(v, null, 2); }
     function jsonToYaml(src) { if (src.trim() === '') return '---\n'; var v = JSON.parse(src); if (Object.keys(v).length === 0) return '---\n'; return CM.jsyaml.dump(v); }
     function language(mode) { if (mode === 'jinja2') return CM.StreamLanguage.define(CM.jinja2); return (mode === 'javascript' || mode === 'json') ? CM.json() : CM.yaml(); }
@@ -1512,17 +1532,28 @@
       var value = ta.value;
       if (mode === 'javascript') { try { value = JSON.stringify(JSON.parse(value), null, 2); } catch (e) {} }
       if (wrap.getAttribute('data-source') === 'json' && mode === 'yaml') { try { value = jsonToYaml(value); } catch (e) {} }
-      var lang = new CM.Compartment();
+      var lang = new CM.Compartment(), size = new CM.Compartment();
+      var baseHeight = heightTheme(rows, parseInt(wrap.getAttribute('data-min-rows') || '1', 10));
+      var resizable = !readOnly || wrap.hasAttribute('data-resizable'), heightKey = null;
+      if (resizable) {
+        var k = wrap.getAttribute('data-height-key') || wrap.getAttribute('data-editor-id');
+        heightKey = k ? 'codeEditorHeight:' + k : null;
+        wrap.classList.add('ascender-code-editor__wrapper--resizable', 'pf-m-resize-vertical');
+        // set before the editor is built, so a remembered height does not flash the default first
+        var saved = savedHeight(heightKey);
+        if (saved) { wrap.style.height = saved; wrap.classList.add('ascender-code-editor__wrapper--resized'); }
+      }
       var lastYaml = mode === 'yaml' ? value : null, jsonEdited = false;
       var view = new CM.EditorView({ parent: wrap, state: CM.EditorState.create({ doc: value, selection: { anchor: openingAnchor(value, mode) }, extensions: [
         CM.lineNumbers(), CM.highlightSpecialChars(), CM.history(), CM.drawSelection(), CM.indentOnInput(), CM.bracketMatching(), CM.highlightSelectionMatches(), CM.search({ top: true }),
         CM.keymap.of([].concat(CM.defaultKeymap, CM.historyKeymap, CM.searchKeymap)), theme, CM.syntaxHighlighting(highlight), lang.of(language(mode)),
         // Only editable editors highlight the active line, as CodeEditor did.
         readOnly ? [CM.EditorView.editable.of(false), CM.EditorState.readOnly.of(true)] : [CM.EditorView.editable.of(true), CM.EditorState.readOnly.of(false), CM.highlightActiveLine(), CM.highlightActiveLineGutter()],
-        heightTheme(rows, parseInt(wrap.getAttribute('data-min-rows') || '1', 10)),
+        size.of(wrap.style.height ? FILL : baseHeight),
         CM.EditorView.updateListener.of(function (u) { if (u.docChanged) { var doc = u.state.doc.toString(); ta.value = doc; if (mode === 'javascript') jsonEdited = true; else { lastYaml = doc; jsonEdited = false; } if (!wrap.silent) ta.dispatchEvent(new Event('input', { bubbles: true })); } })
       ] }) });
       ta.value = value; wrap.cmView = view;
+      if (resizable) makeResizable(wrap, view, size, baseHeight, heightKey);
       var content = view.contentDOM; content.tabIndex = readOnly ? 0 : -1; content.setAttribute('data-language', mode);
       var id = wrap.getAttribute('data-editor-id');
       if (id) { content.id = id; var label = document.querySelector('label[for="' + id + '"]'); if (label) { if (!label.id) label.id = id + '-label'; content.setAttribute('aria-labelledby', label.id); } }

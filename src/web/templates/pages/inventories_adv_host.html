@@ -58,7 +58,7 @@
 					</div>
 					{{template "user_date_detail" (dict "label" (t "Created") "date" $h.created "user" (dig $h "summary_fields" "created_by"))}}
 					{{template "user_date_detail" (dict "label" (t "Last modified") "date" $h.modified "user" (dig $h "summary_fields" "modified_by"))}}
-					{{template "variables_detail" (dict "cy" "smart-inventory-host-detail-variables" "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
+					{{template "variables_detail" (dict "cy" "smart-inventory-host-detail-variables" "name" "variables" "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
 				</dl>
 			</div>
 		{{else}}

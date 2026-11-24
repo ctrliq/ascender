@@ -25,7 +25,7 @@
 						{{if has $g.description}}
 							{{template "detail" (dict "label" (t "Description") "value" (str $g.description))}}
 						{{end}}
-						{{template "variables_detail" (dict "cy" "inventory-group-detail-variables" "label" (t "Variables") "value" (str $g.variables) "rows" 4)}}
+						{{template "variables_detail" (dict "cy" "inventory-group-detail-variables" "name" "variables" "label" (t "Variables") "value" (str $g.variables) "rows" 4)}}
 						{{template "user_date_detail" (dict "label" (t "Created") "date" $g.created "user" (dig $g "summary_fields" "created_by"))}}
 						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $g.modified "user" (dig $g "summary_fields" "modified_by"))}}
 					</dl>

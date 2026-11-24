@@ -45,7 +45,7 @@
 								</dd>
 							</div>
 						{{end}}
-						{{template "variables_detail" (dict "cy" "smart-inventory-detail-variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4)}}
+						{{template "variables_detail" (dict "cy" "smart-inventory-detail-variables" "name" "variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4)}}
 						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
 						{{template "user_date_detail" (dict "label" (t "Last modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
 					{{else if eq $kind "constructed"}}
@@ -132,7 +132,7 @@
 								</dd>
 							</div>
 						{{end}}
-						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "label" (t "Source vars") "value" (str $inv.source_vars) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
+						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "name" "source_vars" "label" (t "Source vars") "value" (str $inv.source_vars) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
 						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
 						{{template "user_date_detail" (dict "label" (t "Modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
 					{{else if eq $kind "federated"}}
@@ -230,7 +230,7 @@
 								</div>
 							{{end}}
 						{{end}}
-						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
+						{{template "variables_detail" (dict "cy" "inventory-detail-variables" "name" "variables" "label" (t "Variables") "value" (str $inv.variables) "rows" 4 "help" (t "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."))}}
 						{{template "user_date_detail" (dict "label" (t "Created") "date" $inv.created "user" (dig $inv "summary_fields" "created_by"))}}
 						{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $inv.modified "user" (dig $inv "summary_fields" "modified_by"))}}
 					{{end}}

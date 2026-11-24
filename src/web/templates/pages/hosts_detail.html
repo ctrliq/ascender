@@ -45,7 +45,7 @@
 					{{end}}
 					{{template "user_date_detail" (dict "label" (t "Created") "date" $h.created "user" (dig $h "summary_fields" "created_by"))}}
 					{{template "user_date_detail" (dict "label" (t "Last Modified") "date" $h.modified "user" (dig $h "summary_fields" "modified_by"))}}
-					{{template "variables_detail" (dict "cy" (cond (has $inv) "inventory-host-detail-variables" "host-detail-variables") "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
+					{{template "variables_detail" (dict "cy" (cond (has $inv) "inventory-host-detail-variables" "host-detail-variables") "name" "variables" "label" (t "Variables") "value" (str $h.variables) "rows" 4)}}
 				</dl>
 				<div class="ascender-card-actions-row__wrapper">
 					{{if dig $caps "edit"}}
@@ -63,7 +63,7 @@
 		{{else if eq .Data.hostTab "facts"}}
 			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
 				<dl class="ascender-detail-list" gutter="sm">
-					{{template "variables_detail" (dict "cy" "host-facts-detail" "label" (t "Facts") "value" (str .Data.facts) "rows" "auto")}}
+					{{template "variables_detail" (dict "cy" "host-facts-detail" "name" "facts" "label" (t "Facts") "value" (str .Data.facts) "rows" "auto")}}
 				</dl>
 			</div>
 		{{else if eq .Data.hostTab "groups"}}

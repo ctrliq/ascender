@@ -47,7 +47,7 @@
 </div>
 {{end}}
 {{define "variables_detail"}}
-{{/* .cy .label .value .help .rows .source */}}
+{{/* .cy .name (the field, which keys a dragged height) .label .value .help .rows .source */}}
 {{$json := and (not .source) (isJSON .value)}}
 <div class="ascender-variables-detail__wrapper" data-editor-group>
 	<div class="ascender-variables-detail__label" data-cy="{{.cy}}-label" id="{{.cy}}">
@@ -74,7 +74,7 @@
 	</div>
 	<div class="ascender-variables-detail__editor-wrapper" data-cy="{{.cy}}-value">
 		<div class="ascender-code-editor__focus-wrapper" tabindex="-1">
-			<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="{{.cy}}-preview" data-rows="{{if .rows}}{{.rows}}{{else}}4{{end}}" data-mode="{{if $json}}javascript{{else}}yaml{{end}}"{{if .source}} data-source="{{.source}}"{{end}}>
+			<div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-resizable{{if .name}} data-height-key="detail-{{.name}}"{{end}} data-editor-id="{{.cy}}-preview" data-rows="{{if .rows}}{{.rows}}{{else}}4{{end}}" data-mode="{{if $json}}javascript{{else}}yaml{{end}}"{{if .source}} data-source="{{.source}}"{{end}}>
 				<textarea hidden data-code-editor-value>{{.value}}</textarea>
 			</div>
 		</div>

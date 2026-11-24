@@ -209,7 +209,7 @@
 						</div>
 					{{end}}
 					{{if has $s.source_vars}}
-						{{template "variables_detail" (dict "cy" "inventory-source-detail-variables" "label" (t "Source variables") "value" (str $s.source_vars) "rows" 4 "helpHTML" .Data.sourceVarsHelp)}}
+						{{template "variables_detail" (dict "cy" "inventory-source-detail-variables" "name" "source_vars" "label" (t "Source variables") "value" (str $s.source_vars) "rows" 4 "helpHTML" .Data.sourceVarsHelp)}}
 					{{end}}
 					{{template "user_date_detail" (dict "label" (t "Created") "date" $s.created "user" (dig $sf "created_by"))}}
 					{{template "user_date_detail" (dict "label" (t "Last modified") "date" $s.modified "user" (dig $sf "modified_by"))}}

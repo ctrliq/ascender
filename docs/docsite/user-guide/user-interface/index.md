@@ -125,6 +125,12 @@ To enter the Settings window for Ascender, click **Settings** from the left navi
 
 For more information on configuring these settings, refer to the [Configuration](/admin-guide/configuration) section of the [Ascender Administration Guide](/admin-guide).
 
+## Code and Variables Editors
+
+Fields that hold YAML, JSON, or templates, such as **Variables**, open in a code editor. When you edit one, it grows to fit its content, up to 50 lines, and scrolls after that.
+
+You can drag the handle in an editor's bottom-right corner to set its height yourself. Every editor you can type in has the handle. Of the read-only views, only the **Variables**, **Facts**, and other variables displays on detail pages have it. Once you drag it, the editor keeps that height and scrolls inside it instead of growing. Your browser remembers the height for that field, so every editor for the same field, on any record, opens at that height. Double-click the handle to go back to the default size and forget the saved height.
+
 ## Search
 
 Every list has a search toolbar for filtering what it shows. It has a key drop-down, which starts on the list's first key (usually **Name**), and a text box beside it. Choose a key, enter a value, and press Enter or click the search button. Keys with fixed choices, such as **Job Type** and **Status** on the Jobs list, show a **Filter By** list instead of a text box, where you check one or more values. The last entry in the key drop-down, **Advanced**, replaces the text box with the advanced search, which can filter on any field the API allows.

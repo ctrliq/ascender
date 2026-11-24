@@ -55,11 +55,11 @@
       return '<div style="display: contents;"><a class="ascender-sparkline__link" aria-label="' + esc(t('View job {0}', { 0: j.id })) + '" href="/jobs/' + (SEGMENTS[typ] || 'playbook') + '/' + j.id + '" data-tooltip data-tooltip-pos="top">' + (STATUS[j.status] || '') + '<template data-tooltip-content><div>' + esc(t('JOB ID:')) + ' ' + j.id + '</div><div>' + esc(t('STATUS:')) + ' ' + esc(String(j.status || '').toUpperCase()) + '</div>' + (j.finished ? '<div>' + esc(t('FINISHED:')) + ' <span class="ascender-datetime" data-datetime="' + esc(j.finished) + '">' + esc(j.finished) + '</span></div>' : '') + '</template></a></div>';
     }).join('') + '</div>';
   }
-  function pdVariables(label, value, cy) {
+  function pdVariables(label, value, cy, name) {
     if (!filled(value)) return '';
     var json = false;
     try { json = typeof JSON.parse(value) === 'object'; } catch (e) { json = false; }
-    return '<div class="ascender-variables-detail__wrapper" data-editor-group><div class="ascender-variables-detail__label" data-cy="' + cy + '-label" id="' + cy + '"><div class="pf-v6-l-split pf-m-gutter"><div class="pf-v6-l-split__item pf-m-fill"><div class="pf-v6-l-split pf-m-gutter" style="align-items: baseline;"><div class="pf-v6-l-split__item"><label class="pf-v6-c-form__label" for="' + cy + '-preview" id="' + cy + '-preview-label"><span class="pf-v6-c-form__label-text" style="font-weight: var(--pf-t--global--font--weight--heading--bold);">' + esc(label) + '</span></label></div><div class="pf-v6-l-split__item"><div class="ascender-button-group__group"><button aria-label="YAML" class="pf-v6-c-button ' + (json ? 'pf-m-secondary' : 'pf-m-primary') + ' ascender-multi-button-toggle__small-button toggle-button-yaml" type="button" data-editor-mode="yaml"><span class="pf-v6-c-button__text">YAML</span></button><button aria-label="JSON" class="pf-v6-c-button ' + (json ? 'pf-m-primary' : 'pf-m-secondary') + ' ascender-multi-button-toggle__small-button toggle-button-javascript" type="button" data-editor-mode="javascript"><span class="pf-v6-c-button__text">JSON</span></button></div></div></div></div></div></div><div class="ascender-variables-detail__editor-wrapper" data-cy="' + cy + '-value"><div class="ascender-code-editor__focus-wrapper" tabindex="-1"><div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-editor-id="' + cy + '-preview" data-rows="4" data-mode="' + (json ? 'javascript' : 'yaml') + '"><textarea hidden data-code-editor-value>' + esc(value) + '</textarea></div></div></div></div>';
+    return '<div class="ascender-variables-detail__wrapper" data-editor-group><div class="ascender-variables-detail__label" data-cy="' + cy + '-label" id="' + cy + '"><div class="pf-v6-l-split pf-m-gutter"><div class="pf-v6-l-split__item pf-m-fill"><div class="pf-v6-l-split pf-m-gutter" style="align-items: baseline;"><div class="pf-v6-l-split__item"><label class="pf-v6-c-form__label" for="' + cy + '-preview" id="' + cy + '-preview-label"><span class="pf-v6-c-form__label-text" style="font-weight: var(--pf-t--global--font--weight--heading--bold);">' + esc(label) + '</span></label></div><div class="pf-v6-l-split__item"><div class="ascender-button-group__group"><button aria-label="YAML" class="pf-v6-c-button ' + (json ? 'pf-m-secondary' : 'pf-m-primary') + ' ascender-multi-button-toggle__small-button toggle-button-yaml" type="button" data-editor-mode="yaml"><span class="pf-v6-c-button__text">YAML</span></button><button aria-label="JSON" class="pf-v6-c-button ' + (json ? 'pf-m-primary' : 'pf-m-secondary') + ' ascender-multi-button-toggle__small-button toggle-button-javascript" type="button" data-editor-mode="javascript"><span class="pf-v6-c-button__text">JSON</span></button></div></div></div></div></div></div><div class="ascender-variables-detail__editor-wrapper" data-cy="' + cy + '-value"><div class="ascender-code-editor__focus-wrapper" tabindex="-1"><div data-cy="code-editor" class="ascender-code-editor__wrapper ascender-code-editor__wrapper--read-only pf-v6-c-form-control" data-code-editor data-readonly data-resizable data-height-key="detail-' + name + '" data-editor-id="' + cy + '-preview" data-rows="4" data-mode="' + (json ? 'javascript' : 'yaml') + '"><textarea hidden data-code-editor-value>' + esc(value) + '</textarea></div></div></div></div>';
   }
   function pdOptions(items) { return items.length ? '<ul data-pf-content="true" class="pf-v6-c-content--ul">' + items.map(function (i) { return '<li data-pf-content="true" class="pf-v6-c-content--li">' + esc(i) + '</li>'; }).join('') + '</ul>' : ''; }
   function pdTimeout(secs) {
@@ -106,7 +106,7 @@
     h += pdDetail(t('Instance Groups'), pdLabels(igs.map(function (g) { return g.name; })), { html: true, fullWidth: true, isEmpty: igs.length === 0 });
     if (r.job_tags) h += pdDetail(t('Job Tags'), pdLabels(r.job_tags.split(',')), { html: true, fullWidth: true });
     if (r.skip_tags) h += pdDetail(t('Skip Tags'), pdLabels(r.skip_tags.split(',')), { html: true, fullWidth: true });
-    if (r.extra_vars) h += pdVariables(t('Variables'), r.extra_vars, 'prompt-jt-detail-extra-vars');
+    if (r.extra_vars) h += pdVariables(t('Variables'), r.extra_vars, 'prompt-jt-detail-extra-vars', 'extra_vars');
     return h;
   }
   function promptWorkflowTemplate(r) {
@@ -125,7 +125,7 @@
     if (opts.length) h += pdDetail(t('Enabled Options'), pdOptions(opts), { html: true });
     if (sf.webhook_credential) h += pdDetail(t('Webhook Credential'), pdCredChips([sf.webhook_credential]), { html: true, fullWidth: true });
     if (sf.labels && sf.labels.results) h += pdDetail(t('Labels'), pdLabels(sf.labels.results.map(function (l) { return l.name; })), { html: true, fullWidth: true, isEmpty: sf.labels.results.length === 0 });
-    if (r.extra_vars) h += pdVariables(t('Variables'), r.extra_vars, 'prompt-wf-jt-detail-variables');
+    if (r.extra_vars) h += pdVariables(t('Variables'), r.extra_vars, 'prompt-wf-jt-detail-variables', 'extra_vars');
     return h;
   }
   function promptProject(r) {
@@ -165,7 +165,7 @@
     h += pdDetail(t('Cache Timeout'), (r.update_cache_timeout === 1 ? t('{0} second', { 0: r.update_cache_timeout }) : t('{0} seconds', { 0: r.update_cache_timeout })));
     h += pdDetail(t('Credential'), pdCredChips(sf.credentials || []), { html: true, fullWidth: true, isEmpty: !sf.credentials || sf.credentials.length === 0 });
     if (opts.length) h += pdDetail(t('Enabled Options'), pdOptions(opts), { html: true, fullWidth: true });
-    if (r.source_vars) h += pdVariables(t('Source Variables'), r.source_vars, 'prompt-inventory-source-detail-source-variables');
+    if (r.source_vars) h += pdVariables(t('Source Variables'), r.source_vars, 'prompt-inventory-source-detail-source-variables', 'source_vars');
     return h;
   }
   var RESOURCE_LINKS = { job_template: function (r) { return '/templates/job_template/' + r.id + '/details'; }, project: function (r) { return '/projects/' + r.id + '/details'; },
@@ -197,7 +197,7 @@
     var sf = details.summary_fields || {};
     if (details.created) h += '<div><dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label">' + esc(t('Created')) + '</dt><dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">' + userDate(details.created, sf.created_by) + '</dd></div>';
     if (details.modified) h += '<div><dt class="ascender-detail-name ascender-detail--break-word" data-cy="user-date-detail-label">' + esc(t('Last Modified')) + '</dt><dd class="ascender-detail-value ascender-detail--break-word" data-cy="user-date-detail-value">' + userDate(details.modified, sf.modified_by) + '</dd></div>';
-    if (details.type === 'system_job_template') h += pdVariables(t('Variables'), overrides.extra_vars, 'prompt-detail-variables');
+    if (details.type === 'system_job_template') h += pdVariables(t('Variables'), overrides.extra_vars, 'prompt-detail-variables', 'extra_vars');
     h += '</dl>';
     if (details.type !== 'system_job_template' && hasPromptData(launch) && Object.keys(overrides).length > 0) {
       var o = overrides, p = '';
@@ -216,7 +216,7 @@
       if (launch.ask_job_slice_count_on_launch) p += pdDetail(t('Job Slicing'), o.job_slice_count);
       if (launch.ask_timeout_on_launch) p += pdDetail(t('Timeout'), pdTimeout(o.timeout));
       if (launch.ask_diff_mode_on_launch) p += pdDetail(t('Show Changes'), o.diff_mode === true ? t('On') : t('Off'));
-      if (launch.survey_enabled || launch.ask_variables_on_launch) p += pdVariables(t('Variables'), o.extra_vars, 'prompt-detail-variables');
+      if (launch.survey_enabled || launch.ask_variables_on_launch) p += pdVariables(t('Variables'), o.extra_vars, 'prompt-detail-variables', 'extra_vars');
       h += '<h2 class="pf-v6-c-title pf-m-h2 ascender-prompt-detail__title">' + esc(t('Prompted Values')) + '</h2><hr class="pf-v6-c-divider ascender-prompt-detail__divider"><dl class="ascender-detail-list ascender-prompt-detail__list" aria-label="' + esc(t('Prompt Overrides')) + '">' + p + '</dl>';
     }
     return h;

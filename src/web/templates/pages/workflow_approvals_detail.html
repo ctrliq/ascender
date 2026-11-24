@@ -170,7 +170,7 @@
 						</div>
 					{{end}}
 					{{if has $job.extra_vars}}
-						{{template "variables_detail" (dict "cy" "wa-detail-variables" "label" (t "Variables") "value" (str $job.extra_vars) "rows" 4)}}
+						{{template "variables_detail" (dict "cy" "wa-detail-variables" "name" "extra_vars" "label" (t "Variables") "value" (str $job.extra_vars) "rows" 4)}}
 					{{end}}
 				{{end}}
 			</dl>
