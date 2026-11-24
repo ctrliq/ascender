@@ -17,7 +17,7 @@ const netboxInstanceIDVar = "netbox_instance_id"
 // netboxCompose returns the source's compose option (variable name to Jinja
 // expression) with netbox_instance_id added, unless the source variables
 // set it. A compose that is not a map is left for the plugin to reject.
-// host is the credential's NetBox URL.
+// host is the URL of the NetBox the plugin reads.
 func netboxCompose(compose any, host string) any {
 	m := map[string]any{}
 	switch c := compose.(type) {
@@ -38,7 +38,7 @@ func netboxCompose(compose any, host string) any {
 // netboxInstanceIDExpr is the expression for a host's instance id:
 // device:7@netbox.example.org, or vm:7@..., since devices and virtual
 // machines are numbered separately, with the NetBox named by the host, port
-// and path of the credential's URL, so that two NetBox sources in one
+// and path of its URL, so that two NetBox sources in one
 // inventory never share an id.
 func netboxInstanceIDExpr(host string) string {
 	expr := "('vm:' if is_virtual else 'device:') ~ id"

@@ -44,6 +44,7 @@ as `validate_certs`, because `nb_inventory` reads it from nowhere else; the
 source's `source_vars` override it. A `netbox` source also adds
 `netbox_instance_id` to the plugin's `compose`, unless `source_vars` set it:
 `device:<id>` or `vm:<id>`, then `@` and the host, port and path of the
+NetBox the plugin reads: `api_endpoint` in `source_vars`, or else the
 credential's URL. It is the source's instance id variable, so a host renamed
 in NetBox keeps its host here (`src/internal/tasks/inventory_netbox.go`). The
 other options of the source,

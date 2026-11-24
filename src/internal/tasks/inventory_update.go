@@ -634,9 +634,12 @@ func (r *invUpdateRun) inventoryAsDict(inj sourceInjector, cloud *credentialData
 			out["validate_certs"] = verify
 		}
 		// Each host's NetBox identity, for the importer to match hosts by
-		// (netboxInstanceIDVar).
+		// (netboxInstanceIDVar), named after the NetBox the plugin reads:
+		// api_endpoint in the source variables wins over NETBOX_API.
 		host := ""
-		if cloud != nil {
+		if ep, ok := out["api_endpoint"].(string); ok && strings.TrimSpace(ep) != "" {
+			host = ep
+		} else if cloud != nil {
 			host = cloud.get("host")
 		}
 		out["compose"] = netboxCompose(out["compose"], host)

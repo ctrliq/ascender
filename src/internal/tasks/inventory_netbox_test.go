@@ -122,6 +122,12 @@ func TestNetBoxInstanceID(t *testing.T) {
 	if file = r.inventoryAsDict(inj, cred, map[string]any{"compose": "id"}, env); file["compose"] != "id" {
 		t.Errorf("compose = %v, want the string left for the plugin", file["compose"])
 	}
+	// api_endpoint in the source variables is the NetBox the plugin reads,
+	// so it names the NetBox instead of the credential's URL.
+	file = r.inventoryAsDict(inj, cred, map[string]any{"api_endpoint": "http://Other.example.org/"}, env)
+	if got := composed(file)[netboxInstanceIDVar]; got != "('vm:' if is_virtual else 'device:') ~ id ~ '@other.example.org'" {
+		t.Errorf("%s = %v, want the source's api_endpoint", netboxInstanceIDVar, got)
+	}
 	// A credential whose URL has no host still gets the type and id.
 	plain := netboxCred(t, g, map[string]any{"host": "netbox"})
 	file = r.inventoryAsDict(inj, plain, map[string]any{}, env)
