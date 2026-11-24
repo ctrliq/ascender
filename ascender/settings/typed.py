@@ -241,6 +241,7 @@ class AscenderSettings(Protocol):
     CUSTOM_TITLE: str
     DATABASES: dict[str, Any]
     DATABASE_CONN_MAX_AGE: Any
+    DATABASE_POOL: Any
     DATABASE_ROUTERS: list[Any]
     DATABASE_STATEMENT_TIMEOUT: Any
     DATA_UPLOAD_MAX_MEMORY_SIZE: int

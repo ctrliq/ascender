@@ -76,10 +76,13 @@ JOB_EVENT_RETENTION_DAYS = 0
 JOB_EVENT_ARCHIVE_DIR = None
 
 # Optional manual override for how long a database connection is kept and
-# reused, in seconds. Unset, a web process reuses one for a minute and every
-# other process opens one per request, which is Django's default. 0 turns
-# reuse off everywhere.
+# reused, in seconds. Unset or 0, a web process takes its connections from the
+# pool below and every other process opens one per request, which is Django's
+# default. Above 0, a web process does not pool.
 DATABASE_CONN_MAX_AGE = None
+
+# Pool options for web processes, passed to psycopg_pool. False turns it off.
+DATABASE_POOL = None
 
 # Special database overrides for dispatcher connections listening to pg_notify
 LISTENER_DATABASES = {

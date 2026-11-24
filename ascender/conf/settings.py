@@ -225,6 +225,17 @@ def get_settings_to_cache(registry):
     return dict([(key, SETTING_CACHE_NOTSET) for key in get_writeable_settings(registry)])
 
 
+def _connect_outside_the_pool():
+    """Give this thread its own connection rather than one from the pool.
+
+    The caller blocks the event loop until this thread answers, and requests
+    return their connections to the pool from that loop.
+    """
+    options = connection.settings_dict.get('OPTIONS') or {}
+    if options.get('pool'):
+        connection.settings_dict = {**connection.settings_dict, 'OPTIONS': {k: v for k, v in options.items() if k != 'pool'}}
+
+
 def _read_from_db(query):
     """Run a settings query, on another thread if this one runs an event loop.
 
@@ -249,6 +260,7 @@ def _read_from_db(query):
     except SynchronousOnlyOperation:
 
         def run():
+            _connect_outside_the_pool()
             try:
                 return query()
             finally:
