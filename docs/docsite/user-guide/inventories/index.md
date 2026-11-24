@@ -976,6 +976,17 @@ This inventory source uses the [nb_inventory](https://docs.ansible.com/ansible/l
 
    A filter that devices or virtual machines do not have is dropped from their request with a warning in the sync output, and when it leaves none of their filters, that kind is not fetched at all: `query_filters: [{cluster: dc1-vmw-prod}]` syncs that cluster's virtual machines and no devices, since devices are filtered by `cluster_id`, not by cluster name. So a misspelt filter name fetches nothing, and the sync still succeeds: with **Overwrite** on, it deletes the source's hosts. Check the sync output for `not in` warnings after changing filters. A value that does not exist, such as a site slug no site has, fails the sync instead. Unlike these filters, the **Host Filter** field is a regular expression over host names, applied after every object has been fetched.
 
+7. In a playbook, the groups `group_by` makes are host patterns: with the example in step 5, `sites_dc1:&device_roles_database-server` targets the database servers at DC1, in a play's `hosts` or a job template's **Limit**. Hosts that are disabled, such as those whose NetBox status is not **Active**, are left out of the inventory a job runs against. Config context arrives as one `config_context` variable holding a list; with `flatten_config_context: true` in the source variables, its keys become variables of their own, so a play reads `ntp_servers` directly. Custom fields are in `custom_fields`, and a selection field holds its value and label, so a play reads `custom_fields.backup_policy.value`.
+
+   ```yaml
+   - name: Show what NetBox says about the DC1 database servers
+     hosts: sites_dc1:&device_roles_database-server
+     gather_facts: false
+     tasks:
+       - ansible.builtin.debug:
+           msg: "{{ inventory_hostname }}: NTP {{ ntp_servers | join(', ') }}, backups {{ custom_fields.backup_policy.value }}"
+   ```
+
 ### Export old inventory scripts
 
 Ascender has no custom inventory scripts API, but the scripts saved by earlier versions are still kept in the database, in the `main_custominventoryscript` table (the `name` column holds each script's name and the `script` column its contents). Ascender has no command to export them; read them from the database with `psql` and check them into source control.
