@@ -624,9 +624,19 @@ def seed_scale(nb: NetBox, org: dict, cat: dict, count: int, batch: int = 200) -
     the per-object cost on the NetBox side, not the realism of the cabling.
     """
     print(f'Scale devices ({count})')
-    existing = nb.get('/dcim/devices/', limit=1, name__isw='scale-')['count']
-    if existing >= count:
-        print(f'  = {existing} already present')
+    # The names already there, so a device deleted since the last run is
+    # made again and none is made twice.
+    existing = set()
+    offset = 0
+    while True:
+        page = nb.get('/dcim/devices/', brief=1, name__isw='scale-', limit=1000, offset=offset)
+        existing.update(device['name'] for device in page['results'])
+        offset += len(page['results'])
+        if not page.get('next') or not page['results']:
+            break
+    missing = [index for index in range(count) if f'scale-{index:06d}' not in existing]
+    if not missing:
+        print(f'  = {count} already present')
         return
 
     site = org['site']['dc1']['id']
@@ -639,7 +649,7 @@ def seed_scale(nb: NetBox, org: dict, cat: dict, count: int, batch: int = 200) -
 
     started = time.monotonic()
     pending = []
-    for index in range(existing, count):
+    for done, index in enumerate(missing, 1):
         pending.append(
             {
                 'name': f'scale-{index:06d}',
@@ -654,7 +664,7 @@ def seed_scale(nb: NetBox, org: dict, cat: dict, count: int, batch: int = 200) -
         )
         if len(pending) >= batch:
             nb.post('/dcim/devices/', pending)
-            print(f'  + {index + 1}/{count}')
+            print(f'  + {done}/{len(missing)}')
             pending = []
     if pending:
         nb.post('/dcim/devices/', pending)
