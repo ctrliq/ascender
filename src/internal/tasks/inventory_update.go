@@ -633,6 +633,13 @@ func (r *invUpdateRun) inventoryAsDict(inj sourceInjector, cloud *credentialData
 			}
 			out["validate_certs"] = verify
 		}
+		// Each host's NetBox identity, for the importer to match hosts by
+		// (netboxInstanceIDVar).
+		host := ""
+		if cloud != nil {
+			host = cloud.get("host")
+		}
+		out["compose"] = netboxCompose(out["compose"], host)
 	}
 	return out
 }

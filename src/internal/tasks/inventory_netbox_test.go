@@ -79,3 +79,57 @@ func TestNetBoxInventorySource(t *testing.T) {
 		t.Errorf("import settings = %+v, want enabled when status.value is active", s)
 	}
 }
+
+// The source composes each host's NetBox identity into netbox_instance_id,
+// the variable the importer matches hosts by, unless the source variables
+// set it themselves.
+func TestNetBoxInstanceID(t *testing.T) {
+	g := newInjectRig(t)
+	inj := sourceInjectors["netbox"]
+	cred := netboxCred(t, g, map[string]any{"host": "https://NetBox.example.org:8443/netbox/", "token": "0123456789abcdef"})
+	r := &invUpdateRun{iu: &models.InventoryUpdate{ID: 7, Source: "netbox"}}
+	r.pdd = g.pdd
+	env := map[string]string{}
+	want := "('vm:' if is_virtual else 'device:') ~ id ~ '@netbox.example.org:8443/netbox'"
+	composed := func(file map[string]any) map[string]any {
+		t.Helper()
+		m, ok := file["compose"].(map[string]any)
+		if !ok {
+			t.Fatalf("compose = %#v, want a map", file["compose"])
+		}
+		return m
+	}
+
+	file := r.inventoryAsDict(inj, cred, map[string]any{}, env)
+	if got := composed(file)[netboxInstanceIDVar]; got != want {
+		t.Errorf("%s = %v, want %s", netboxInstanceIDVar, got, want)
+	}
+
+	// Other composed variables are kept, and the source's own expression wins.
+	vars := map[string]any{"compose": map[string]any{"rack_name": "rack.name"}}
+	file = r.inventoryAsDict(inj, cred, vars, env)
+	if m := composed(file); m["rack_name"] != "rack.name" || m[netboxInstanceIDVar] != want {
+		t.Errorf("compose = %v, want rack_name kept and %s added", m, netboxInstanceIDVar)
+	}
+	if _, ok := vars["compose"].(map[string]any)[netboxInstanceIDVar]; ok {
+		t.Error("the source variables were changed")
+	}
+	file = r.inventoryAsDict(inj, cred, map[string]any{"compose": map[string]any{netboxInstanceIDVar: "serial"}}, env)
+	if got := composed(file)[netboxInstanceIDVar]; got != "serial" {
+		t.Errorf("%s = %v, want the source's serial", netboxInstanceIDVar, got)
+	}
+	// A compose the plugin will reject is left alone.
+	if file = r.inventoryAsDict(inj, cred, map[string]any{"compose": "id"}, env); file["compose"] != "id" {
+		t.Errorf("compose = %v, want the string left for the plugin", file["compose"])
+	}
+	// A credential whose URL has no host still gets the type and id.
+	plain := netboxCred(t, g, map[string]any{"host": "netbox"})
+	file = r.inventoryAsDict(inj, plain, map[string]any{}, env)
+	if got := composed(file)[netboxInstanceIDVar]; got != "('vm:' if is_virtual else 'device:') ~ id" {
+		t.Errorf("%s = %v, want no NetBox suffix", netboxInstanceIDVar, got)
+	}
+
+	if s := sourceImportSettings["netbox"]; s.instanceIDVar != netboxInstanceIDVar {
+		t.Errorf("instance id var = %q, want %s", s.instanceIDVar, netboxInstanceIDVar)
+	}
+}

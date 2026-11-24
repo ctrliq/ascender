@@ -568,7 +568,7 @@ var sourceImportSettings = map[string]struct {
 	"ascender":    {"remote_tower_enabled", "true", true, "remote_tower_id"},
 	"satellite6":  {"foreman_enabled,foreman.enabled", "True", true, "foreman_id,foreman.id"},
 	"terraform":   {"", "", true, "id"},
-	"netbox":      {"status.value", "active", true, ""},
+	"netbox":      {"status.value", "active", true, netboxInstanceIDVar},
 	"custom":      {"", "", false, ""},
 	"scm":         {"", "", false, ""},
 	"constructed": {"", "", false, "remote_tower_id"},
