@@ -177,4 +177,25 @@ describe('CodeEditor', () => {
       expect(scroller().maxHeight).toBe('296px');
     });
   });
+
+  describe('resize handle', () => {
+    const host = () =>
+      document.querySelector('[data-cy="code-editor"]') as HTMLElement;
+
+    it('should have one where it can be edited', () => {
+      renderWithContexts(<CodeEditor id="code" value="---" mode="yaml" />);
+      expect(host()).toHaveClass('pf-m-resize-vertical');
+    });
+
+    it('should have none when read only, unless asked for one', () => {
+      const { rerender } = renderWithContexts(
+        <CodeEditor id="code" value="---" mode="yaml" readOnly />
+      );
+      expect(host()).not.toHaveClass('pf-m-resize-vertical');
+      rerender(
+        <CodeEditor id="code" value="---" mode="yaml" readOnly resizable />
+      );
+      expect(host()).toHaveClass('pf-m-resize-vertical');
+    });
+  });
 });
