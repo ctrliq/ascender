@@ -953,6 +953,29 @@ This inventory source uses the [nb_inventory](https://docs.ansible.com/ansible/l
    config_context: true
    ```
 
+6. To sync only part of NetBox, set NetBox filters in the source variables: `query_filters` applies to devices and virtual machines, `device_query_filters` to devices only and `vm_query_filters` to virtual machines only. Each is a list of filters, which NetBox applies when it is asked, so only the matching objects are fetched. Values are slugs, the last part of an object's page URL, or IDs for the filters that end in `_id`. Different filters must all match; a filter given twice matches either value, except `tag`, where an object must have every tag listed. For example, the database servers at one site:
+
+   ```yaml
+   query_filters:
+     - site: dc1
+     - role: database-server
+   ```
+
+   | To sync | Source variables |
+   | --- | --- |
+   | One site | `query_filters: [{site: dc2}]` |
+   | Either of two sites | `query_filters: [{site: dc2}, {site: branch1}]` |
+   | A region, its child regions included | `query_filters: [{region: amer}]` |
+   | One tenant | `query_filters: [{tenant: internal}]` |
+   | Everything tagged production | `query_filters: [{tag: production}]` |
+   | Everything with both tags | `query_filters: [{tag: production}, {tag: pci-scope}]` |
+   | Active objects only | `query_filters: [{status: active}]` |
+   | A custom field value | `query_filters: [{cf_backup_policy: daily}]` |
+   | One cluster: its hypervisors and its virtual machines | `query_filters: [{cluster_id: 1}]` |
+   | Every device, and only one cluster's virtual machines | `vm_query_filters: [{cluster: dc1-vmw-prod}]` |
+
+   A filter that devices or virtual machines do not have is dropped from their request with a warning in the sync output, and when it leaves none of their filters, that kind is not fetched at all: `query_filters: [{cluster: dc1-vmw-prod}]` syncs that cluster's virtual machines and no devices, since devices are filtered by `cluster_id`, not by cluster name. So a misspelt filter name fetches nothing, and the sync still succeeds: with **Overwrite** on, it deletes the source's hosts. Check the sync output for `not in` warnings after changing filters. A value that does not exist, such as a site slug no site has, fails the sync instead. Unlike these filters, the **Host Filter** field is a regular expression over host names, applied after every object has been fetched.
+
 ### Export old inventory scripts
 
 Ascender has no custom inventory scripts API, but the scripts saved by earlier versions are still kept in the database, in the `main_custominventoryscript` table (the `name` column holds each script's name and the `script` column its contents). Ascender has no command to export them; read them from the database with `psql` and check them into source control.
