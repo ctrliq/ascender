@@ -576,9 +576,19 @@ def seed_devices(nb: NetBox, org: dict, cat: dict) -> None:
             payload['platform'] = cat['platform'][platform]['id']
         if rack:
             payload['rack'] = org['rack'][rack]['id']
+        cluster = None
+        if role == 'hypervisor':
+            # A hypervisor belongs to the cluster at its site, so a cluster
+            # filter finds the hypervisors as well as their virtual machines.
+            cluster = next((cat['cluster'][c]['id'] for c, _, c_site in CLUSTERS if c_site == site), None)
+            if cluster:
+                payload['cluster'] = cluster
         device = nb.ensure('/dcim/devices/', {'name': name}, payload)
 
         update = {}
+        if cluster and not device.get('cluster'):
+            # Made by an earlier run, before hypervisors were put in a cluster.
+            update['cluster'] = cluster
         if mgmt_ip:
             address = attach_address(nb, mgmt_ip, 'device', device['id'], 'mgmt0')
             if not device.get('primary_ip4'):
