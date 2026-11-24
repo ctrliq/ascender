@@ -28,7 +28,8 @@ make netbox-stop    # its database volume is kept
 The first start of a new NetBox spends several minutes on its database
 migrations before it answers; `make netbox-seed` waits for it.
 `SEED_ARGS=--scale 2000` adds that many plain devices, for timing a sync
-against a large estate.
+against a large estate. The seed does not follow redirects, so the token is
+only sent to `NETBOX_URL`: point it at the address NetBox answers on.
 
 To sync it into Ascender:
 

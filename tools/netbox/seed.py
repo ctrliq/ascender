@@ -37,6 +37,17 @@ class NetBoxError(RuntimeError):
     pass
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Refuse redirects: urllib would send the Authorization header on to
+    whatever host the redirect names, and turn a POST into a GET."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_opener = urllib.request.build_opener(_NoRedirect)
+
+
 class NetBox:
     def __init__(self, url: str, token: str, verbose: bool = False) -> None:
         self.url = url.rstrip('/')
@@ -54,10 +65,17 @@ class NetBox:
         if data:
             req.add_header('Content-Type', 'application/json')
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with _opener.open(req, timeout=120) as resp:
                 raw = resp.read()
                 return json.loads(raw) if raw else None
         except urllib.error.HTTPError as exc:
+            if 300 <= exc.code < 400:
+                location = exc.headers.get('Location', '')
+                raise NetBoxError(
+                    f'{method} {path} was redirected ({exc.code}) to {location}: '
+                    'not followed, so the token stays with --url; '
+                    'pass the address NetBox answers on'
+                ) from None
             detail = exc.read().decode('utf-8', 'replace')[:2000]
             raise NetBoxError(f'{method} {path} returned {exc.code}\n{detail}') from None
         except urllib.error.URLError as exc:
