@@ -33,7 +33,7 @@
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-error-boundary": "^6.1.6",
-    "react-router": "^8.3.0",
+    "react-router": "^8.5.2",
     "rrule": "2.8.1"
   },
   "devDependencies": {
