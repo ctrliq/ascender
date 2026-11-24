@@ -354,6 +354,23 @@ password
 subscription_id
 ```
 
+### NetBox
+
+Selecting this credential type enables synchronization of cloud inventory with [NetBox](https://netbox.dev). NetBox credentials have the following inputs:
+
+- **NetBox URL** (required): The URL of the NetBox server, for example `https://netbox.example.org`. It must be reachable from where the inventory update runs, the execution node or container group, not from your browser.
+- **API Token**: A NetBox API token with read access to the devices, virtual machines and other objects the inventory reads. Both the older 40-character tokens and the `nbt_` tokens of NetBox 4.5 and later work.
+- **Verify SSL**: Whether to check the NetBox server's certificate. On by default.
+
+When an inventory source syncs from NetBox, and when a job template uses the credential, Ascender passes it in the following environment variables, which the `netbox.netbox` collection's inventory plugin and lookup read:
+
+```text
+NETBOX_API
+NETBOX_TOKEN
+```
+
+For an inventory source, **Verify SSL** is given to the inventory plugin as its `validate_certs` option. For more information, refer to [NetBox](../inventories#netbox) in the inventories section.
+
 ### Network
 
 Select the Network credential type **only** if you are using a `local` connection with `provider` to use Ansible networking modules to connect to and manage networking devices. When connecting to network devices, the credential type must match the connection type:

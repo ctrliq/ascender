@@ -476,10 +476,11 @@ Inventory updates use dynamically generated YAML files which are parsed by their
 - [OpenStack](#openstack)
 - [CIQ Ascender Automation Platform](#ciq-ascender-automation-platform)
 - [Terraform State](#terraform-state)
+- [NetBox](#netbox)
 
 Newly created configurations for inventory sources contain the default plugin configuration values. If you want your newly created inventory sources to match the output of legacy sources, you must apply a specific set of configuration values for that source. To ensure backward compatibility, Ascender uses "templates" for each of these sources to force the output of inventory plugins into the legacy format. Refer to [Supported Inventory Plugin Templates](../inventory-plugin-templates) for each source and their respective templates to help you migrate to the new style inventory plugin output.
 
-At run time, the top-level `plugin` key of `source_vars` is set to the inventory plugin of the `InventorySource` source. For VMware vCenter, Red Hat Satellite 6, Terraform State and CIQ Ascender Automation Platform the name is fully qualified: for example, if satellite6 is selected for the `InventorySource` then plugin is set to `theforeman.foreman.foreman`. The other sources use the plugin's short name: if ec2 is selected, plugin is set to `aws_ec2`. For VMware vCenter, a `source_vars` that selects `vmware.vmware.vms` keeps that plugin.
+At run time, the top-level `plugin` key of `source_vars` is set to the inventory plugin of the `InventorySource` source. For VMware vCenter, Red Hat Satellite 6, Terraform State, NetBox and CIQ Ascender Automation Platform the name is fully qualified: for example, if satellite6 is selected for the `InventorySource` then plugin is set to `theforeman.foreman.foreman`. The other sources use the plugin's short name: if ec2 is selected, plugin is set to `aws_ec2`. For VMware vCenter, a `source_vars` that selects `vmware.vmware.vms` keeps that plugin.
 
 ## Add a new inventory
 
@@ -930,6 +931,61 @@ This inventory source uses the [terraform_state](https://github.com/ansible-coll
    ![Example Terraform State inventory source](/assets/images/inventories-create-source-terraform-example.webp)
 
 6. To add hosts for AWS EC2, GCE, and Azure instances, the Terraform state file in the backend must contain state for resources already deployed to EC2, GCE, or Azure. Refer to each of the Terraform providers' respective documentation to provision instances.
+
+#### NetBox
+
+This inventory source uses the [nb_inventory](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html) inventory plugin from the [netbox.netbox](https://github.com/netbox-community/ansible_modules) collection. It adds the devices and virtual machines in NetBox as hosts.
+
+1. To configure this type of sourced inventory, select **NetBox** from the **Source** field.
+
+2. The **Create Source** window expands with the required **Credential** field. Choose from an existing NetBox credential. For more information, refer to [NetBox](../credentials#netbox).
+
+3. Enter an execution environment in the **Execution Environment** field that contains the `netbox.netbox` collection. The default execution environment does not include it.
+
+4. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for [adding a source](#add-source). Unless you set an enabled variable, a host is enabled when its NetBox status is **Active** (`status.value` is `active`), so offline, planned and decommissioning devices are imported disabled. From one sync to the next, hosts are matched by `netbox_instance_id`, a variable the source composes from the object's type and NetBox ID and the NetBox it came from (for example `device:7@netbox.example.org`), so a device or virtual machine renamed in NetBox is renamed here too. Setting `netbox_instance_id` under `compose` in the source variables replaces that expression.
+
+5. Use the **Source Variables** field to override variables used by the `nb_inventory` inventory plugin. Enter variables using either JSON or YAML syntax. Use the radio button to toggle between the two. For a detailed description of these variables, view the [nb_inventory](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html) plugin documentation. The NetBox URL and API token come from the credential; do not put the token in the source variables. The credential's **Verify SSL** setting becomes the plugin's `validate_certs` unless the source variables set it. For example, to group hosts by site and device role and include config context:
+
+   ```yaml
+   group_by:
+     - sites
+     - device_roles
+   config_context: true
+   ```
+
+6. To sync only part of NetBox, set NetBox filters in the source variables: `query_filters` applies to devices and virtual machines, `device_query_filters` to devices only and `vm_query_filters` to virtual machines only. Each is a list of filters, which NetBox applies when it is asked, so only the matching objects are fetched. Values are slugs, the last part of an object's page URL, or IDs for the filters that end in `_id`. Different filters must all match; a filter given twice matches either value, except `tag`, where an object must have every tag listed. For example, the database servers at one site:
+
+   ```yaml
+   query_filters:
+     - site: dc1
+     - role: database-server
+   ```
+
+   | To sync | Source variables |
+   | --- | --- |
+   | One site | `query_filters: [{site: dc2}]` |
+   | Either of two sites | `query_filters: [{site: dc2}, {site: branch1}]` |
+   | A region, its child regions included | `query_filters: [{region: amer}]` |
+   | One tenant | `query_filters: [{tenant: internal}]` |
+   | Everything tagged production | `query_filters: [{tag: production}]` |
+   | Everything with both tags | `query_filters: [{tag: production}, {tag: pci-scope}]` |
+   | Active objects only | `query_filters: [{status: active}]` |
+   | A custom field value | `query_filters: [{cf_backup_policy: daily}]` |
+   | One cluster: its hypervisors and its virtual machines | `query_filters: [{cluster_id: 1}]` |
+   | Every device, and only one cluster's virtual machines | `vm_query_filters: [{cluster: dc1-vmw-prod}]` |
+
+   A filter that devices or virtual machines do not have is dropped from their request with a warning in the sync output, and when it leaves none of their filters, that kind is not fetched at all: `query_filters: [{cluster: dc1-vmw-prod}]` syncs that cluster's virtual machines and no devices, since devices are filtered by `cluster_id`, not by cluster name. So a misspelt filter name fetches nothing, and the sync still succeeds: with **Overwrite** on, it deletes the source's hosts. Check the sync output for `not in` warnings after changing filters. A value that does not exist, such as a site slug no site has, fails the sync instead. Unlike these filters, the **Host Filter** field is a regular expression over host names, applied after every object has been fetched.
+
+7. In a playbook, the groups `group_by` makes are host patterns: with the example in step 5, `sites_dc1:&device_roles_database-server` targets the database servers at DC1, in a play's `hosts` or a job template's **Limit**. Hosts that are disabled, such as those whose NetBox status is not **Active**, are left out of the inventory a job runs against. Config context arrives as one `config_context` variable holding a list; with `flatten_config_context: true` in the source variables, its keys become variables of their own, so a play reads `ntp_servers` directly. Custom fields are in `custom_fields`, and a selection field holds its value and label, so a play reads `custom_fields.backup_policy.value`.
+
+   ```yaml
+   - name: Show what NetBox says about the DC1 database servers
+     hosts: sites_dc1:&device_roles_database-server
+     gather_facts: false
+     tasks:
+       - ansible.builtin.debug:
+           msg: "{{ inventory_hostname }}: NTP {{ ntp_servers | join(', ') }}, backups {{ custom_fields.backup_policy.value }}"
+   ```
 
 ### Export old inventory scripts
 

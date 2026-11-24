@@ -1148,8 +1148,16 @@ func (s *Server) createSchedule(w http.ResponseWriter, r *http.Request, parent *
 }
 
 // cloudInventorySources are the sources a schedule may update
-// (CLOUD_INVENTORY_SOURCES).
-var cloudInventorySources = map[string]bool{"ec2": true, "gce": true, "azure_rm": true, "vmware": true, "satellite6": true, "openstack": true, "rhv": true, "controller": true, "insights": true, "terraform": true, "openshift_virtualization": true, "scm": true, "constructed": true}
+// (CLOUD_INVENTORY_SOURCES): the cloud providers, so a source added there
+// can be scheduled too, and the sources synced from a project and from
+// other inventories.
+var cloudInventorySources = func() map[string]bool {
+	out := map[string]bool{"scm": true, "constructed": true}
+	for source := range cloudProviders {
+		out[source] = true
+	}
+	return out
+}()
 
 // scheduleChanges renders a schedule for the activity stream.
 func (s *Server) scheduleChanges(ctx context.Context, q db.Querier, sc *schedule, t *scheduleTemplate) map[string]any {

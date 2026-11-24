@@ -1,0 +1,11 @@
+# The images build with the repository root as their context
+# (deploy/docker-compose.yml), so everything not listed here stays out of
+# it: .secrets/, .env, .git, bin/, tools/ and the rest. Add a path here when
+# a Dockerfile starts copying it.
+*
+!src/
+!LICENSE
+!NOTICE.txt
+!licenses/
+!docs/docsite/
+!deploy/podman/containers.conf
