@@ -117,6 +117,12 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
               label={t`Allow Jobs While Syncing`}
               tooltip={helpText.allowJobsWhileSyncing}
             />
+            <CheckboxField
+              id="option-allow-jobs-while-ad-hoc"
+              name="allow_jobs_while_ad_hoc"
+              label={t`Allow Jobs While Ad Hoc Commands Run`}
+              tooltip={helpText.allowJobsWhileAdHoc}
+            />
           </FormCheckboxLayout>
         </FormGroup>
         <VariablesField
@@ -141,6 +147,7 @@ export interface InventoryFormValues {
   prevent_instance_group_fallback: boolean;
   allow_deletes_while_in_use: boolean;
   allow_jobs_while_syncing: boolean;
+  allow_jobs_while_ad_hoc: boolean;
 }
 
 export interface InventoryFormProps {
@@ -175,6 +182,7 @@ function InventoryForm({
       inventory.prevent_instance_group_fallback || false,
     allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
     allow_jobs_while_syncing: inventory.allow_jobs_while_syncing || false,
+    allow_jobs_while_ad_hoc: inventory.allow_jobs_while_ad_hoc || false,
   };
   return (
     <FormRoot

@@ -987,3 +987,120 @@ class TestAllowJobsWhileSyncing:
         for _ in range(3):
             create_job(objects.job_template)
         assert run_and_count() == 1
+
+
+@pytest.mark.django_db
+class TestAllowJobsWhileAdHoc:
+    """A running ad hoc command blocks jobs and ad hoc commands on its inventory unless the inventory sets allow_jobs_while_ad_hoc."""
+
+    @pytest.fixture
+    def objects(self, job_template_factory):
+        return job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred')
+
+    @staticmethod
+    def ad_hoc(inventory, status):
+        return AdHocCommand.objects.create(inventory=inventory, status=status, dependencies_processed=True)
+
+    @staticmethod
+    def allow(inventory, **flags):
+        flags = flags or {'allow_jobs_while_ad_hoc': True}
+        for name, value in flags.items():
+            setattr(inventory, name, value)
+        inventory.save(update_fields=list(flags))
+
+    @staticmethod
+    def started():
+        with mock.patch.object(TaskManager, 'start_task') as mock_start:
+            TaskManager().schedule()
+        return [call.args[0] for call in mock_start.call_args_list]
+
+    @staticmethod
+    def sync(inventory, status):
+        inv_source = InventorySource.objects.create(name='src', inventory=inventory, source='ec2')
+        update = inv_source.create_inventory_update()
+        update.status = status
+        update.dependencies_processed = True
+        update.save()
+        return update
+
+    def test_ad_hoc_command_blocks_job_by_default(self, controlplane_instance_group, objects):
+        running = self.ad_hoc(objects.inventory, 'running')
+        job = create_job(objects.job_template)
+        # the reason is only written on jobs that have been waiting a while
+        Job.objects.filter(pk=job.pk).update(created=job.created - timedelta(minutes=1))
+
+        assert self.started() == []
+        job.refresh_from_db()
+        assert job.job_explanation == f'waiting for adhoccommand-{running.id} to finish'
+
+    def test_ad_hoc_command_blocks_ad_hoc_command_by_default(self, controlplane_instance_group, objects):
+        self.ad_hoc(objects.inventory, 'running')
+        self.ad_hoc(objects.inventory, 'pending')
+
+        assert self.started() == []
+
+    def test_job_and_ad_hoc_command_start_when_allowed(self, controlplane_instance_group, objects):
+        self.allow(objects.inventory)
+        self.ad_hoc(objects.inventory, 'running')
+        job = create_job(objects.job_template)
+        pending_ad_hoc = self.ad_hoc(objects.inventory, 'pending')
+
+        assert set(self.started()) == {job, pending_ad_hoc}
+
+    def test_flag_only_applies_to_its_own_inventory(self, controlplane_instance_group, objects):
+        other = Inventory.objects.create(name='other', organization=objects.inventory.organization)
+        self.allow(other)
+        self.ad_hoc(objects.inventory, 'running')
+        create_job(objects.job_template)
+
+        assert self.started() == []
+
+    @pytest.mark.parametrize('allowed', [False, True])
+    def test_sync_is_not_held_back_by_ad_hoc_command(self, controlplane_instance_group, objects, allowed):
+        if allowed:
+            self.allow(objects.inventory)
+        self.ad_hoc(objects.inventory, 'running')
+        update = self.sync(objects.inventory, 'pending')
+
+        assert self.started() == [update]
+
+    def test_sync_still_blocks_without_allow_jobs_while_syncing(self, controlplane_instance_group, objects):
+        self.allow(objects.inventory)
+        update = self.sync(objects.inventory, 'running')
+        job = create_job(objects.job_template)
+        ad_hoc = self.ad_hoc(objects.inventory, 'pending')
+        Job.objects.filter(pk=job.pk).update(created=job.created - timedelta(minutes=1))
+
+        assert self.started() == []
+        job.refresh_from_db()
+        assert job.job_explanation == f'waiting for inventoryupdate-{update.id} to finish'
+
+        self.allow(objects.inventory, allow_jobs_while_syncing=True)
+        assert set(self.started()) == {job, ad_hoc}
+
+    def test_ad_hoc_command_still_blocks_with_only_allow_jobs_while_syncing(self, controlplane_instance_group, objects):
+        self.allow(objects.inventory, allow_jobs_while_syncing=True)
+        self.ad_hoc(objects.inventory, 'running')
+        create_job(objects.job_template)
+
+        assert self.started() == []
+
+    def test_flags_are_read_once_per_cycle(self, controlplane_instance_group, objects):
+        """Looking the flags up must not cost a query per blocked task, even with a sync and an ad hoc command at once."""
+        self.ad_hoc(objects.inventory, 'running')
+        self.sync(objects.inventory, 'running')
+        objects.job_template.allow_simultaneous = True
+        objects.job_template.save()
+
+        def run_and_count():
+            with mock.patch.object(TaskManager, 'start_task'):
+                with CaptureQueriesContext(connection) as ctx:
+                    TaskManager().schedule()
+            return len([q for q in ctx.captured_queries if 'allow_jobs_while_ad_hoc' in q['sql']])
+
+        create_job(objects.job_template)
+        assert run_and_count() == 1
+        for _ in range(3):
+            create_job(objects.job_template)
+            self.ad_hoc(objects.inventory, 'pending')
+        assert run_and_count() == 1

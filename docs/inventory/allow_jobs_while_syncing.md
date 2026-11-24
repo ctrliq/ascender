@@ -64,8 +64,9 @@ sources that are set to update on launch.
 Besides the cases above, the flag does not change:
 
 * **Ad hoc commands.** A running ad hoc command still blocks jobs and other ad hoc
-  commands on the same inventory, with or without the flag. Ad hoc commands themselves
-  do follow the flag when what is running is a sync.
+  commands on the same inventory, with or without the flag. That block has its own flag,
+  `allow_jobs_while_ad_hoc` (see `allow_jobs_while_ad_hoc.md`). Ad hoc commands themselves
+  do follow this flag when what is running is a sync.
 * **The sync itself.** A sync still waits for another sync of the same source, and jobs
   never block a sync.
 

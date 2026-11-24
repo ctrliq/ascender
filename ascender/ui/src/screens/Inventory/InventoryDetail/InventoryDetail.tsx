@@ -67,6 +67,7 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
     prevent_instance_group_fallback,
     allow_deletes_while_in_use,
     allow_jobs_while_syncing,
+    allow_jobs_while_ad_hoc,
   } = inventory;
 
   const deleteDetailsRequests =
@@ -75,7 +76,8 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
   const renderOptionsField =
     prevent_instance_group_fallback ||
     allow_deletes_while_in_use ||
-    allow_jobs_while_syncing;
+    allow_jobs_while_syncing ||
+    allow_jobs_while_ad_hoc;
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
@@ -92,6 +94,11 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
       {allow_jobs_while_syncing && (
         <Content component={ContentVariants.li}>
           {t`Allow Jobs While Syncing`}
+        </Content>
+      )}
+      {allow_jobs_while_ad_hoc && (
+        <Content component={ContentVariants.li}>
+          {t`Allow Jobs While Ad Hoc Commands Run`}
         </Content>
       )}
     </Content>

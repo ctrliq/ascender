@@ -37,15 +37,16 @@ class DependencyGraph(object):
         # INVENTORY_SOURCE_UPDATES.
         self.data[self.INVENTORY_UPDATES] = {}
         # Ad hoc commands block jobs and other ad hoc commands on their inventory just like a sync
-        # does, but they are kept apart so that allow_jobs_while_syncing can let a job past a sync
-        # without also letting it past an ad hoc command.
+        # does, but they are kept apart because each one has its own flag on the inventory
+        # (allow_jobs_while_syncing and allow_jobs_while_ad_hoc) to let tasks past it.
         self.data[self.INVENTORY_AD_HOC_COMMANDS] = {}
         self.data[self.INVENTORY_SOURCE_UPDATES] = {}
         self.data[self.JOB_TEMPLATE_JOBS] = {}
         self.data[self.SYSTEM_JOB] = {}
         self.data[self.WORKFLOW_JOB_TEMPLATES_JOBS] = {}
-        # inventory id -> allow_jobs_while_syncing, looked up only for inventories that are syncing
-        self._allow_jobs_while_syncing = {}
+        # inventory id -> (allow_jobs_while_syncing, allow_jobs_while_ad_hoc), looked up only for
+        # inventories that are busy with a sync or an ad hoc command
+        self._inventory_flags = {}
 
     def mark_if_no_key(self, job_type, id, job):
         if id is None:
@@ -96,21 +97,29 @@ class DependencyGraph(object):
     def inventory_update_blocked_by(self, job):
         return self.get_item(self.INVENTORY_SOURCE_UPDATES, job.inventory_source_id)
 
+    def _flags_for(self, inventory_id):
+        if inventory_id not in self._inventory_flags:
+            flags = Inventory.objects.filter(pk=inventory_id).values_list('allow_jobs_while_syncing', 'allow_jobs_while_ad_hoc').first()
+            self._inventory_flags[inventory_id] = flags or (False, False)
+        return self._inventory_flags[inventory_id]
+
     def allows_jobs_while_syncing(self, inventory_id):
-        if inventory_id not in self._allow_jobs_while_syncing:
-            self._allow_jobs_while_syncing[inventory_id] = Inventory.objects.filter(pk=inventory_id, allow_jobs_while_syncing=True).exists()
-        return self._allow_jobs_while_syncing[inventory_id]
+        return self._flags_for(inventory_id)[0]
+
+    def allows_jobs_while_ad_hoc(self, inventory_id):
+        return self._flags_for(inventory_id)[1]
 
     def inventory_blocked_by(self, job):
         """What keeps a job or ad hoc command from running against its inventory right now.
 
+        A running ad hoc command blocks it unless the inventory has allow_jobs_while_ad_hoc set.
         A sync of the inventory blocks it unless the inventory has allow_jobs_while_syncing set,
         in which case the task runs on the hosts as they were before the sync. A sync the task
         itself depends on (update on launch) is not affected: the task manager waits for
         dependent_jobs on its own, outside of this graph.
         """
         ad_hoc_block = self.get_item(self.INVENTORY_AD_HOC_COMMANDS, job.inventory_id)
-        if ad_hoc_block:
+        if ad_hoc_block and not self.allows_jobs_while_ad_hoc(job.inventory_id):
             return ad_hoc_block
         sync_block = self.get_item(self.INVENTORY_UPDATES, job.inventory_id)
         if sync_block and self.allows_jobs_while_syncing(job.inventory_id):

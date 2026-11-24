@@ -85,6 +85,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         'prevent_instance_group_fallback',
         'allow_deletes_while_in_use',
         'allow_jobs_while_syncing',
+        'allow_jobs_while_ad_hoc',
     ]
     KIND_CHOICES = [
         ('', _('Hosts have a direct link to this inventory.')),
@@ -231,6 +232,13 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             'using the hosts it had before the sync. By default they wait for the sync to finish. '
             'With update on launch, a job still waits for a sync started for it, '
             'and for a running one when that source has never synced successfully.'
+        ),
+    )
+    allow_jobs_while_ad_hoc = models.BooleanField(
+        default=False,
+        help_text=_(
+            'If enabled, a running ad hoc command does not hold back jobs or other ad hoc commands '
+            'against this inventory. By default they wait for it to finish. Syncs are not affected.'
         ),
     )
 
