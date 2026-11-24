@@ -97,8 +97,9 @@ recorded in the activity stream.
 
 A managed type added in a later release takes its name even when a custom type
 already has it. The upgrade renames the custom type `<name> (custom <id>)`,
-leaving its fields, injectors and credentials as they were: the NetBox type
-(kind `cloud`) did this to a custom `cloud` type called NetBox.
+or `<name> (custom <id>, 2)` and so on when another type of its kind has that
+name, leaving its fields, injectors and credentials as they were: the NetBox
+type (kind `cloud`) did this to a custom `cloud` type called NetBox.
 
 ## Inputs
 
