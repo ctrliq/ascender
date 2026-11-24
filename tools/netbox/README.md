@@ -49,4 +49,5 @@ In `tools/.env` (see `tools/.env.example`):
 |----------|---------|---------|
 | `NETBOX_BIND` | Host address NetBox is published on | `127.0.0.1` |
 | `NETBOX_PORT` | Host port NetBox is published on | `8000` |
+| `NETBOX_URL` | Where `make netbox-seed` reaches NetBox from this host | `http://<NETBOX_BIND>:<NETBOX_PORT>`, with `localhost` for a wildcard or loopback `NETBOX_BIND` |
 | `NETBOX_EE_IMAGE` | The image `make netbox-ee` builds and loads | `localhost/ascender-ee-netbox:dev` |
