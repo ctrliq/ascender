@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "تجاهل التغييرات المحلية قبل المزامنة",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "قسّم العمل الذي يقوم به قالب المهمة هذا إلى العدد المحدد من شرائح المهام، حيث يقوم كل منها بتشغيل المهام نفسها على جزء من المخزون.",
   "Documentation.": "الوثائق.",
+  "Double-click to reset the size": "انقر نقرًا مزدوجًا لإعادة تعيين الحجم",
   "Download Bundle": "تنزيل الحزمة",
   "Download Output": "تنزيل المخرجات",
   "Download bundle": "تنزيل الحزمة",

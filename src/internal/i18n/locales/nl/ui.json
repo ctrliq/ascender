@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "Alle lokale wijzigingen vernietigen alvorens te synchroniseren",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "Verdeel het werk dat door dit taaksjabloon wordt uitgevoerd in het opgegeven aantal taaksegmenten, die elk dezelfde taken uitvoeren op een deel van de inventaris.",
   "Documentation.": "Documentatie.",
+  "Double-click to reset the size": "Dubbelklik om de grootte te herstellen",
   "Download Bundle": "Download Bundel",
   "Download Output": "Download output",
   "Download bundle": "Bundel downloaden",

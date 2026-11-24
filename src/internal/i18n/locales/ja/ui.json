@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "同期する前にローカル変更を破棄する",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "このジョブテンプレートで行われる作業を指定された数のジョブスライスに分割します。各スライスはインベントリーの一部に対して同じタスクを実行します。",
   "Documentation.": "ドキュメント。",
+  "Double-click to reset the size": "ダブルクリックでサイズをリセット",
   "Download Bundle": "バンドルのダウンロード",
   "Download Output": "出力のダウンロード",
   "Download bundle": "バンドルのダウンロード",

@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "在同步前丢弃本地更改",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "将此任务模板完成的工作划分为指定数量的任务切片，每个切片针对清单的一部分运行相同的任务。",
   "Documentation.": "文档。",
+  "Double-click to reset the size": "双击以重置大小",
   "Download Bundle": "下载捆绑包",
   "Download Output": "下载输出",
   "Download bundle": "下载捆绑包",

@@ -1506,11 +1506,17 @@
     function makeResizable(wrap, view, comp, base, key) {
       var resized = !!wrap.style.height;
       function set(on) { if (on === resized) return; resized = on; wrap.classList.toggle('ascender-code-editor__wrapper--resized', on); view.dispatch({ effects: comp.reconfigure(on ? FILL : base) }); }
+      function onHandle(e) { var box = wrap.getBoundingClientRect(); return resized && box.right - e.clientX <= HANDLE && box.bottom - e.clientY <= HANDLE; }
+      // The handle is the browser's and takes no title of its own, so the
+      // wrapper carries one only while the pointer is on a dragged handle.
+      var tip = t('Double-click to reset the size');
+      function hint(on) { if (on) { if (wrap.title !== tip) wrap.title = tip; } else if (wrap.hasAttribute('title')) wrap.removeAttribute('title'); }
       if (window.ResizeObserver) new ResizeObserver(function () { if (wrap.style.height) { set(true); saveHeight(key, wrap.style.height); } }).observe(wrap);
+      wrap.addEventListener('mousemove', function (e) { hint(onHandle(e)); });
+      wrap.addEventListener('mouseleave', function () { hint(false); });
       wrap.addEventListener('dblclick', function (e) {
-        var box = wrap.getBoundingClientRect();
-        if (!resized || box.right - e.clientX > HANDLE || box.bottom - e.clientY > HANDLE) return;
-        wrap.style.height = ''; saveHeight(key, null); set(false);
+        if (!onHandle(e)) return;
+        wrap.style.height = ''; saveHeight(key, null); set(false); hint(false);
       });
     }
     function yamlToJson(src) { if (!src || !src.trim()) return '{}'; var v = CM.jsyaml.load(src); if (!v) return '{}'; if (typeof v !== 'object') throw new Error('yaml is not in object format'); return JSON.stringify(v, null, 2); }

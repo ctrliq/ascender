@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "सिंक करने से पहले स्थानीय परिवर्तन त्यागें",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "इस जॉब टेम्पलेट द्वारा किए गए कार्य को निर्दिष्ट संख्या में जॉब स्लाइस में विभाजित करें, प्रत्येक इन्वेंटरी के एक हिस्से के विरुद्ध समान कार्य चलाता है।",
   "Documentation.": "दस्तावेज़ीकरण।",
+  "Double-click to reset the size": "आकार रीसेट करने के लिए डबल-क्लिक करें",
   "Download Bundle": "बंडल डाउनलोड करें",
   "Download Output": "आउटपुट डाउनलोड करें",
   "Download bundle": "बंडल डाउनलोड करें",

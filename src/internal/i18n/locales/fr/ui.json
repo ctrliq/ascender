@@ -444,6 +444,7 @@
   "Discard local changes before syncing": "Ignorez les modifications locales avant de synchroniser",
   "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory.": "Divisez le travail effectué par ce modèle de job en le nombre spécifié de tranches de job, chacune exécutant les mêmes tâches sur une partie de l'inventaire.",
   "Documentation.": "Documentation.",
+  "Double-click to reset the size": "Double-cliquez pour réinitialiser la taille",
   "Download Bundle": "Téléchargement du Bundle",
   "Download Output": "Télécharger la sortie",
   "Download bundle": "Téléchargement de l’ensemble (Bundle)",
