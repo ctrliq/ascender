@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -112,6 +112,11 @@ function Template({ setBreadcrumb }: TemplateProps) {
   useEffect(() => {
     loadTemplateAndRoles();
   }, [loadTemplateAndRoles]);
+
+  const jobListParams = useMemo(
+    () => (template?.id ? { job__job_template: template.id } : undefined),
+    [template]
+  );
 
   useEffect(() => {
     if (template) {
@@ -264,9 +269,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
             )}
             <Route
               path="jobs"
-              element={
-                <JobList defaultParams={{ job__job_template: template.id }} />
-              }
+              element={<JobList defaultParams={jobListParams} />}
             />
             <Route
               path="survey/*"

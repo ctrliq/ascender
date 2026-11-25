@@ -23,17 +23,21 @@ import sortJobs from './sortJobs';
 export default function useWsJobs(
   initialJobs: UnifiedJob[],
   fetchJobsById: (ids: (number | string)[]) => Promise<UnifiedJob[]>,
-  qsConfig: QSConfig
+  qsConfig: QSConfig,
+  enabled = true
 ) {
   const location = useLocation();
   const [jobs, setJobs] = useState<UnifiedJob[]>(initialJobs);
   const [jobsToFetch, setJobsToFetch] = useState<number[]>([]);
   const throttledJobsToFetch = useThrottle(jobsToFetch, 5000);
-  const lastMessage = useWebsocket({
-    jobs: ['status_changed'],
-    schedules: ['changed'],
-    control: ['limit_reached_1'],
-  });
+  const lastMessage = useWebsocket(
+    {
+      jobs: ['status_changed'],
+      schedules: ['changed'],
+      control: ['limit_reached_1'],
+    },
+    enabled
+  );
 
   useEffect(() => {
     setJobs(initialJobs);

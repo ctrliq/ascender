@@ -143,36 +143,40 @@ class HostSerializer(BaseSerializerWithVariables):
                 res['last_job'] = self.reverse('api:job_detail', kwargs={'pk': last_summary.job_id})
         return res
 
-    def get_summary_fields(self, obj):
+    def get_summary_fields(self, obj, requested=None):
         from ascender.api.serializers.base import DEFAULT_SUMMARY_FIELDS
 
-        d = super(HostSerializer, self).get_summary_fields(obj)
-        last_summary = obj.latest_summary
-        if last_summary:
-            d['last_job_host_summary'] = OrderedDict()
-            d['last_job_host_summary']['id'] = last_summary.id
-            d['last_job_host_summary']['failed'] = last_summary.failed
-            try:
-                last_job = last_summary.job
-                d['last_job'] = OrderedDict()
-                for field in DEFAULT_SUMMARY_FIELDS + ('finished', 'status', 'failed', 'canceled_on'):
-                    fval = getattr(last_job, field, None)
-                    if fval is not None:
-                        d['last_job'][field] = fval
-                if last_job.job_template:
-                    d['last_job']['job_template_id'] = last_job.job_template.id
-                    d['last_job']['job_template_name'] = last_job.job_template.name
-            except ObjectDoesNotExist:
-                pass
-        else:
-            d.pop('last_job', None)
-            d.pop('last_job_host_summary', None)
-        if has_model_field_prefetched(obj, 'groups'):
-            group_list = sorted([{'id': g.id, 'name': g.name} for g in obj.groups.all()], key=lambda x: x['id'])[:5]
-        else:
-            group_list = [{'id': g.id, 'name': g.name} for g in obj.groups.all().order_by('id')[:5]]
-        group_cnt = obj.groups.count()
-        d.setdefault('groups', {'count': group_cnt, 'results': group_list})
+        d = super(HostSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is None or 'last_job_host_summary' in requested or 'last_job' in requested:
+            last_summary = obj.latest_summary
+            if last_summary:
+                d['last_job_host_summary'] = OrderedDict()
+                d['last_job_host_summary']['id'] = last_summary.id
+                d['last_job_host_summary']['failed'] = last_summary.failed
+                try:
+                    last_job = last_summary.job
+                    d['last_job'] = OrderedDict()
+                    for field in DEFAULT_SUMMARY_FIELDS + ('finished', 'status', 'failed', 'canceled_on'):
+                        fval = getattr(last_job, field, None)
+                        if fval is not None:
+                            d['last_job'][field] = fval
+                    if last_job.job_template:
+                        d['last_job']['job_template_id'] = last_job.job_template.id
+                        d['last_job']['job_template_name'] = last_job.job_template.name
+                except ObjectDoesNotExist:
+                    pass
+            else:
+                d.pop('last_job', None)
+                d.pop('last_job_host_summary', None)
+        if requested is None or 'groups' in requested:
+            if has_model_field_prefetched(obj, 'groups'):
+                group_list = sorted([{'id': g.id, 'name': g.name} for g in obj.groups.all()], key=lambda x: x['id'])[:5]
+            else:
+                group_list = [{'id': g.id, 'name': g.name} for g in obj.groups.all().order_by('id')[:5]]
+            group_cnt = obj.groups.count()
+            d.setdefault('groups', {'count': group_cnt, 'results': group_list})
+        if requested is not None and 'recent_jobs' not in requested:
+            return d
         if hasattr(obj, '_recent_job_host_summaries'):
             # bulk-loaded for the whole page by HostListSerializer
             recent_summaries = obj._recent_job_host_summaries

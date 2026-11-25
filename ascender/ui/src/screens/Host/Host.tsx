@@ -1,5 +1,5 @@
 import type { DetailedError, SetBreadcrumb } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -49,6 +49,11 @@ function Host({ setBreadcrumb }: HostProps) {
   useEffect(() => {
     fetchHost();
   }, [fetchHost, location.pathname]);
+
+  const jobListParams = useMemo(
+    () => (host?.id ? { job__hosts: host.id } : undefined),
+    [host]
+  );
 
   const tabsArray = [
     {
@@ -135,7 +140,7 @@ function Host({ setBreadcrumb }: HostProps) {
           {host && (
             <Route
               path="jobs"
-              element={<JobList defaultParams={{ job__hosts: host.id }} />}
+              element={<JobList defaultParams={jobListParams} />}
             />
           )}
           <Route

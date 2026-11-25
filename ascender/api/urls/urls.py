@@ -23,6 +23,9 @@ from ascender.api.views.schedule import (
 )
 from ascender.api.views.job import (
     UnifiedJobList,
+    UnifiedJobStackCancel,
+    UnifiedJobStackSummary,
+    UnifiedJobStatusSummary,
     JobCredentialsList,
 )
 from ascender.api.views.host import (
@@ -156,6 +159,9 @@ v2_urls = [
     path('workflow_job_nodes/', include(workflow_job_node_urls)),
     path('unified_job_templates/', UnifiedJobTemplateList.as_view(), name='unified_job_template_list'),
     path('unified_jobs/', UnifiedJobList.as_view(), name='unified_job_list'),
+    path('unified_jobs/stacks/cancel/', UnifiedJobStackCancel.as_view(), name='unified_job_stack_cancel'),
+    path('unified_jobs/stacks/summary/', UnifiedJobStackSummary.as_view(), name='unified_job_stack_summary'),
+    path('unified_jobs/status_summary/', UnifiedJobStatusSummary.as_view(), name='unified_job_status_summary'),
     path('activity_stream/', include(activity_stream_urls)),
     path('workflow_approval_templates/', include(workflow_approval_template_urls)),
     path('workflow_approvals/', include(workflow_approval_urls)),

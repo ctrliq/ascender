@@ -199,11 +199,11 @@ class InstanceSerializer(BaseSerializer):
     def update(self, obj, validated_data):
         return self.create_or_update(validated_data, obj, create=False)
 
-    def get_summary_fields(self, obj):
-        summary = super().get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary = super().get_summary_fields(obj, requested=requested)
 
         # use this handle to distinguish between a listView and a detailView
-        if self.is_detail_view:
+        if self.is_detail_view and (requested is None or 'links' in requested):
             summary['links'] = InstanceLinkSerializer(InstanceLink.objects.select_related('target', 'source').filter(source=obj), many=True).data
 
         return summary

@@ -53,6 +53,11 @@ export interface DataListToolbarProps {
    * control at all.
    */
   additionalControls?: React.ReactNode[];
+  /**
+   * Controls that stay visible even when advanced search is open.  Unlike
+   * additionalControls these never move into the kebab menu.
+   */
+  persistentControls?: React.ReactNode[];
   qsConfig: QSConfig;
   pagination?: React.ReactNode;
   enableNegativeFiltering?: boolean;
@@ -82,6 +87,7 @@ function DataListToolbar({
   onCompact,
   onExpand,
   additionalControls = [],
+  persistentControls = [],
   qsConfig,
   pagination,
   enableNegativeFiltering = true,
@@ -190,6 +196,18 @@ function DataListToolbar({
             </ToolbarItem>
           )}
         </ToolbarToggleGroup>
+        {persistentControls.length > 0 && (
+          <ToolbarGroup>
+            {persistentControls.map((control) => (
+              <ToolbarItem
+                key={React.isValidElement(control) ? control.key : undefined}
+                style={{ alignSelf: 'center' }}
+              >
+                {control}
+              </ToolbarItem>
+            ))}
+          </ToolbarGroup>
+        )}
         {showExpandCollapse && (
           <ToolbarGroup>
             <ToolbarItem>

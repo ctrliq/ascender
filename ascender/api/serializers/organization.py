@@ -55,10 +55,10 @@ class OrganizationSerializer(BaseSerializer):
             res['default_environment'] = self.reverse('api:execution_environment_detail', kwargs={'pk': obj.default_environment_id})
         return res
 
-    def get_summary_fields(self, obj):
-        summary_dict = super(OrganizationSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_dict = super(OrganizationSerializer, self).get_summary_fields(obj, requested=requested)
         counts_dict = self.context.get('related_field_counts', None)
-        if counts_dict is not None and summary_dict is not None:
+        if (requested is None or 'related_field_counts' in requested) and counts_dict is not None and summary_dict is not None:
             if obj.id not in counts_dict:
                 summary_dict['related_field_counts'] = {'inventories': 0, 'teams': 0, 'users': 0, 'job_templates': 0, 'admins': 0, 'projects': 0}
             else:

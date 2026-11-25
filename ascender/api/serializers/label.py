@@ -26,9 +26,10 @@ class LabelsListMixin(object):
                 label_ct = obj.labels.count()
         return {'count': label_ct, 'results': label_list}
 
-    def get_summary_fields(self, obj):
-        res = super(LabelsListMixin, self).get_summary_fields(obj)
-        res['labels'] = self._summary_field_labels(obj)
+    def get_summary_fields(self, obj, requested=None):
+        res = super(LabelsListMixin, self).get_summary_fields(obj, requested=requested)
+        if requested is None or 'labels' in requested:
+            res['labels'] = self._summary_field_labels(obj)
         return res
 
 

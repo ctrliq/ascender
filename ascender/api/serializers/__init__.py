@@ -22,6 +22,7 @@ from ascender.api.serializers.base import (  # noqa: F401
     UnifiedJobListSerializer as UnifiedJobListSerializer,
     UnifiedJobSerializer as UnifiedJobSerializer,
     UnifiedJobStdoutSerializer as UnifiedJobStdoutSerializer,
+    UnifiedJobStackSummarySerializer as UnifiedJobStackSummarySerializer,
     UnifiedJobTemplateSerializer as UnifiedJobTemplateSerializer,
     logger as logger,
     reverse_gfk as reverse_gfk,

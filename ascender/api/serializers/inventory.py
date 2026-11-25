@@ -366,19 +366,34 @@ class InventorySourceOptionsSerializer(BaseSerializer):
         return ret
 
     # TODO: remove when old 'credential' fields are removed
-    def get_summary_fields(self, obj):
-        summary_fields = super(InventorySourceOptionsSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(InventorySourceOptionsSerializer, self).get_summary_fields(obj, requested=requested)
+        wants_credential = requested is None or 'credential' in requested
+        wants_credentials = requested is None or 'credentials' in requested
+        if not wants_credential and not wants_credentials:
+            return summary_fields
+
+        # The plural field must not depend on the deprecated singular one,
+        # because narrowing to ``summary_fields=credentials`` leaves
+        # ``credential`` out of the requested set before this runs.
         all_creds = []
-        if 'credential' in summary_fields:
-            cred = obj.get_cloud_credential()
-            if cred:
-                summarized_cred = {'id': cred.id, 'name': cred.name, 'description': cred.description, 'kind': cred.kind, 'cloud': True}
+        cred = obj.get_cloud_credential() if obj.pk else None
+        if cred:
+            summarized_cred = {
+                'id': cred.id,
+                'name': cred.name,
+                'description': cred.description,
+                'kind': cred.kind,
+                'cloud': True,
+                'credential_type_id': cred.credential_type_id,
+            }
+            all_creds.append(summarized_cred)
+            if wants_credential:
                 summary_fields['credential'] = summarized_cred
-                all_creds.append(summarized_cred)
-                summary_fields['credential']['credential_type_id'] = cred.credential_type_id
-            else:
-                summary_fields.pop('credential')
-        summary_fields['credentials'] = all_creds
+        else:
+            summary_fields.pop('credential', None)
+        if wants_credentials:
+            summary_fields['credentials'] = all_creds
         return summary_fields
 
 
@@ -612,12 +627,12 @@ class InventoryUpdateDetailSerializer(InventoryUpdateSerializer):
             res['source_project'] = self.reverse('api:project_detail', kwargs={'pk': source_project_id})
         return res
 
-    def get_summary_fields(self, obj):
+    def get_summary_fields(self, obj, requested=None):
         from ascender.api.serializers.base import SUMMARIZABLE_FK_FIELDS
 
-        summary_fields = super(InventoryUpdateDetailSerializer, self).get_summary_fields(obj)
+        summary_fields = super(InventoryUpdateDetailSerializer, self).get_summary_fields(obj, requested=requested)
 
-        source_project = self.get_source_project(obj)
+        source_project = self.get_source_project(obj) if requested is None or 'source_project' in requested else None
         if source_project:
             summary_fields['source_project'] = {}
             for field in SUMMARIZABLE_FK_FIELDS['project']:
@@ -625,15 +640,16 @@ class InventoryUpdateDetailSerializer(InventoryUpdateSerializer):
                 if value is not None:
                     summary_fields['source_project'][field] = value
 
-        cred = obj.credentials.first()
-        if cred:
-            summary_fields['credential'] = {
-                'id': cred.pk,
-                'name': cred.name,
-                'description': cred.description,
-                'kind': cred.kind,
-                'cloud': cred.credential_type.kind == 'cloud',
-            }
+        if requested is None or 'credential' in requested:
+            cred = obj.credentials.first()
+            if cred:
+                summary_fields['credential'] = {
+                    'id': cred.pk,
+                    'name': cred.name,
+                    'description': cred.description,
+                    'kind': cred.kind,
+                    'cloud': cred.credential_type.kind == 'cloud',
+                }
 
         return summary_fields
 

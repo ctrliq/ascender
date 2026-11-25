@@ -1367,6 +1367,7 @@ ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
     'format',
     'order',
     'order_by',
+    'group_by',
     'search',
     'type',
     'host_filter',

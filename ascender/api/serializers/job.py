@@ -150,11 +150,13 @@ class JobTemplateMixin(object):
             for x in optimized_qs[:10]
         ]
 
-    def get_summary_fields(self, obj):
-        d = super(JobTemplateMixin, self).get_summary_fields(obj)
-        if obj.survey_spec is not None and ('name' in obj.survey_spec and 'description' in obj.survey_spec):
-            d['survey'] = dict(title=obj.survey_spec['name'], description=obj.survey_spec['description'])
-        d['recent_jobs'] = self._recent_jobs(obj)
+    def get_summary_fields(self, obj, requested=None):
+        d = super(JobTemplateMixin, self).get_summary_fields(obj, requested=requested)
+        if requested is None or 'survey' in requested:
+            if obj.survey_spec is not None and ('name' in obj.survey_spec and 'description' in obj.survey_spec):
+                d['survey'] = dict(title=obj.survey_spec['name'], description=obj.survey_spec['description'])
+        if requested is None or 'recent_jobs' in requested:
+            d['recent_jobs'] = self._recent_jobs(obj)
         return d
 
     def validate(self, attrs):
@@ -279,8 +281,10 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
     def validate_extra_vars(self, value):
         return vars_validate_or_raise(value)
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(JobTemplateSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(JobTemplateSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is not None and 'credentials' not in requested:
+            return summary_fields
         all_creds = []
         # Organize credential data into multitude of deprecated fields
         if obj.pk:
@@ -371,8 +375,10 @@ class JobSerializer(UnifiedJobSerializer, JobOptionsSerializer):
             ret['extra_vars'] = obj.display_extra_vars()
         return ret
 
-    def get_summary_fields(self, obj):
-        summary_fields = super(JobSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        summary_fields = super(JobSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is not None and 'credentials' not in requested:
+            return summary_fields
         all_creds = []
         # Organize credential data into multitude of deprecated fields
         if obj.pk:
@@ -545,8 +551,10 @@ class JobHostSummarySerializer(BaseSerializer):
             res.update(dict(host=self.reverse('api:host_detail', kwargs={'pk': obj.host.pk})))
         return res
 
-    def get_summary_fields(self, obj):
-        d = super(JobHostSummarySerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        d = super(JobHostSummarySerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is not None and 'job' not in requested:
+            return d
         try:
             d['job']['job_template_id'] = obj.job.job_template.id
             d['job']['job_template_name'] = obj.job.job_template.name
@@ -595,8 +603,10 @@ class JobEventSerializer(BaseSerializer):
             res['host'] = self.reverse('api:host_detail', kwargs={'pk': obj.host_id})
         return res
 
-    def get_summary_fields(self, obj):
-        d = super(JobEventSerializer, self).get_summary_fields(obj)
+    def get_summary_fields(self, obj, requested=None):
+        d = super(JobEventSerializer, self).get_summary_fields(obj, requested=requested)
+        if requested is not None and 'job' not in requested:
+            return d
         try:
             d['job']['job_template_id'] = obj.job.job_template.id
             d['job']['job_template_name'] = obj.job.job_template.name
