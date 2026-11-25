@@ -255,10 +255,13 @@
                 mode: "0644"
               when: requirements_key.cacheable
 
+            # Never reuse requirements the post-run hook will treat as a refresh: it would publish
+            # this update's empty folders over the requirements cache.
             - name: Set requirements cache hit
               ansible.builtin.set_fact:
                 requirements_cache_hit: >-
                   {{ requirements_key.cacheable and not (requirements_cache_refresh | default(false) | bool)
+                     and requirements_key.mutable_reason is not defined
                      and (reqcache_stat.stat.exists | default(false)) }}
 
     - block:

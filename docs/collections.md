@@ -170,7 +170,11 @@ freshly installed content is published there after a successful update.
   project sync does not refresh other nodes, and nodes only refresh when the
   project is updated, so a project that is never updated keeps what each
   node installed last. Requirements from Galaxy and from the project itself
-  do not count.
+  (a path inside the checkout) do not count. A role counts as git only the
+  way ansible-galaxy reads it: with `scm:`, a `+` in its source or a
+  github.com web URL, so a Galaxy role whose name ends in `.git` is still a
+  Galaxy role. For a collection, an inline `source,ref` is used ahead of
+  `version:`, as ansible-galaxy does.
 - Up to 10 requirements caches are kept per project. The least recently used
   are evicted, except one that a kept revision still relies on. A revision
   whose requirements cache is gone is treated as uncached, so the next job

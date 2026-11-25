@@ -137,20 +137,40 @@ def mutable_entry_reason(entries, kind, project_path='.'):
             return f'{kind} requirements include {entry["include"]!r}, which is not inspected'
         source = str(entry.get('src') or entry.get('name') or entry.get('role') or '').strip()
         version = entry.get('version')
-        if version is None:  # the 'source,version' shorthand
-            source, _, version = source.partition(',')
-        from_scm = bool(entry.get('scm')) or entry.get('type') == 'git' or source.startswith('git+') or source.endswith('.git')
         if kind == 'collection':
             if _is_galaxy_collection(raw):
                 continue
-            if entry.get('type') in ('dir', 'subdirs', 'file') and not _looks_like_location(source):
-                continue  # inside the project, so part of its revision
-        elif _is_project_file(project_path, source) or not (from_scm or _looks_like_location(source)):
-            continue  # a project file or a Galaxy role
-        if from_scm and COMMIT_ID_RE.match(str(version).split(',')[0].strip()):
+            # ansible-galaxy's parse_scm takes an inline 'source,ref' ahead of version:
+            source, comma, ref = source.partition(',')
+            if comma:
+                version = ref
+            from_scm = entry.get('type') == 'git' or source.startswith('git+') or source.endswith('.git')
+            if not from_scm and _is_project_path(project_path, source):
+                continue  # a directory or archive inside the project, so part of its revision
+        else:
+            # a role from Galaxy changes only with a new release, which a refresh picks up; this also
+            # keeps the check in step with the cache key, which reuses every role it calls Galaxy's
+            if non_galaxy_reason([raw], kind, project_path) is None or _is_project_file(project_path, source):
+                continue
+            if isinstance(raw, str):  # the 'source,version,name' shorthand
+                source, _, version = source.partition(',')
+            # ansible-galaxy clones a role only for scm:, a '+' in the source or a github.com web URL;
+            # it ignores type: and a .git suffix
+            from_scm = bool(entry.get('scm')) or '+' in source or ('github.com/' in source and 'http' in source and not source.endswith('.tar.gz'))
+        if from_scm and COMMIT_ID_RE.match(str(version or '').split(',')[0].strip()):
             continue
         return f'{kind} requirement {source!r} is not pinned to a commit'
     return None
+
+
+def _is_project_path(project_path, value):
+    # ansible-galaxy runs in the project directory, so a relative path that exists there is part of the checkout
+    value = str(value).strip()
+    if not value or '://' in value:
+        return False
+    root = os.path.realpath(project_path)
+    path = os.path.realpath(os.path.join(root, os.path.expanduser(value)))
+    return os.path.exists(path) and (path == root or path.startswith(root + os.sep))
 
 
 def requirements_reason(data, project_path='.', check=non_galaxy_reason):

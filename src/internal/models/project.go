@@ -218,7 +218,10 @@ func InsertProject(ctx context.Context, tx pgx.Tx, p *Project, cts *ContentTypes
 	return nil
 }
 
-// UpdateProject writes the editable columns of both tables.
+// UpdateProject writes the editable columns of both tables. It leaves
+// requirements_generation alone: only a project update's post-run hook
+// raises it, and writing back the value loaded before the request would
+// undo a refresh that finished in between.
 func UpdateProject(ctx context.Context, tx pgx.Tx, p *Project, orgLookup func(orgID int64) *Organization, orgChanged bool) error {
 	if p.SCMType != "" && !strings.HasPrefix(p.LocalPath, "_") {
 		p.LocalPath = fmt.Sprintf("_%d__%s", p.ID, strings.ReplaceAll(Slugify(p.Name), "-", "_"))
@@ -233,11 +236,11 @@ func UpdateProject(ctx context.Context, tx pgx.Tx, p *Project, orgLookup func(or
 	_, err = tx.Exec(ctx, `UPDATE main_project SET local_path = $2, scm_type = $3, scm_url = $4, scm_branch = $5, scm_clean = $6, scm_delete_on_update = $7, scm_update_on_launch = $8,
 		scm_update_cache_timeout = $9, credential_id = $10, timeout = $11, scm_revision = $12, playbook_files = $13, inventory_files = $14, scm_refspec = $15, allow_override = $16,
 		default_environment_id = $17, scm_track_submodules = $18, signature_validation_credential_id = $19, webhook_key = $20, webhook_ref_filter = $21, webhook_service = $22,
-		requirements_generation = $23, reuse_requirements = $24 WHERE unifiedjobtemplate_ptr_id = $1`,
+		reuse_requirements = $23 WHERE unifiedjobtemplate_ptr_id = $1`,
 		p.ID, p.LocalPath, p.SCMType, p.SCMURL, p.SCMBranch, p.SCMClean, p.SCMDeleteOnUpdate, p.SCMUpdateOnLaunch,
 		p.SCMUpdateCacheTimeout, p.CredentialID, p.Timeout, p.SCMRevision, pb, inv, p.SCMRefspec, p.AllowOverride,
 		p.DefaultEnvironmentID, p.SCMTrackSubmodules, p.SignatureValidationCredentialID, p.WebhookKey, p.WebhookRefFilter, p.WebhookService,
-		p.RequirementsGeneration, p.ReuseRequirements)
+		p.ReuseRequirements)
 	if err != nil {
 		return err
 	}
