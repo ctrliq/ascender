@@ -1,6 +1,6 @@
 # Ascender
 
-[![ascender CI](https://img.shields.io/github/actions/workflow/status/ctrliq/ascender/ci.yml?label=ascender%20CI)](https://github.com/ctrliq/ascender/actions/workflows/ci.yml)
+[![ascender CI](https://img.shields.io/github/actions/workflow/status/ctrliq/ascender/ci.yml?branch=main&event=push&label=ascender%20CI)](https://github.com/ctrliq/ascender/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/)
 

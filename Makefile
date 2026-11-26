@@ -575,7 +575,7 @@ docker-clean:
 	-$(foreach image_id,$(shell docker images --filter=reference='*/*/*ascender_devel*' --filter=reference='*/*ascender_devel*' --filter=reference='*ascender_devel*' -aq),docker rmi --force $(image_id);)
 
 docker-clean-volumes: docker-compose-clean docker-compose-container-group-clean
-	docker volume rm -f tools_var_lib_awx tools_awx_db $(docker volume ls --filter name=tools_valkey_socket_ -q)
+	docker volume rm -f tools_var_lib_awx tools_awx_db_18 tools_awx_db_15 $(docker volume ls --filter name=tools_valkey_socket_ -q)
 
 docker-refresh: docker-clean docker-compose
 

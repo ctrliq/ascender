@@ -141,3 +141,13 @@
   );
   background-repeat: no-repeat;
 }
+
+/* the editor scrolls, not the host, and the grid row takes a dragged height */
+.ascender-code-editor__wrapper--resizable.ascender-code-editor__wrapper--resizable {
+  overflow: hidden;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.ascender-code-editor__wrapper--resized {
+  min-height: 56px;
+}

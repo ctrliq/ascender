@@ -1,4 +1,11 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  useState,
+  useLayoutEffect,
+} from 'react';
 
 import { EditorState, Compartment } from '@codemirror/state';
 import type { Extension } from '@codemirror/state';
@@ -46,6 +53,27 @@ import './CodeEditor.css';
 // rows is exactly those rows: the first line starts at the top edge and the
 // last ends at the bottom one, which is the only way the two ends match.
 const PADDING = PADDING_TOP;
+// a double click within this of the bottom-right corner resets the height
+const HANDLE_SIZE = 16;
+
+// storage can throw (private windows, blocked site data); then it is not kept
+const heightKey = (id: string) => `codeEditorHeight:${id}`;
+const savedHeight = (id?: string) => {
+  try {
+    return id ? localStorage.getItem(heightKey(id)) : null;
+  } catch {
+    return null;
+  }
+};
+const saveHeight = (id: string | undefined, height: string | null) => {
+  try {
+    if (!id) return;
+    if (height) localStorage.setItem(heightKey(id), height);
+    else localStorage.removeItem(heightKey(id));
+  } catch {
+    // not kept
+  }
+};
 
 /**
  * The languages the editor knows, named as the UI names them rather than as
@@ -118,6 +146,10 @@ export interface CodeEditorProps {
   rows?: number | 'auto';
   minRows?: number;
   maxRows?: number;
+  /** A drag handle on the height; on by default unless read only. */
+  resizable?: boolean;
+  /** Where a dragged height is remembered; defaults to the id. */
+  heightKey?: string;
   className?: string;
 }
 
@@ -175,6 +207,8 @@ function CodeEditor({
   rows = 6,
   minRows = 1,
   maxRows,
+  resizable = !readOnly,
+  heightKey = id,
   className = '',
 }: CodeEditorProps) {
   const { t } = useLingui();
@@ -213,10 +247,18 @@ function CodeEditor({
   // 'auto' sizes the box from the content, one line per row, never below
   // minRows and never above maxRows, so a short value still reads as an editor
   // and a long one shows all of itself. A number of rows is a fixed height.
+  // A dragged height overrides all of that.
+  const [resized, setResized] = useState(false);
   const isAuto = rows === 'auto';
   // A caller that named a cap gets it; everything else follows the setting.
   const cap = maxRows ?? maxEditorRows();
   const heightTheme = useMemo(() => {
+    if (resized) {
+      return EditorView.theme({
+        '&': { height: '100%', minHeight: 0 },
+        '.cm-scroller': { height: '100%', overflow: 'auto' },
+      });
+    }
     if (!isAuto) {
       return EditorView.theme({
         '.cm-scroller': {
@@ -235,7 +277,68 @@ function CodeEditor({
         overflow: 'auto',
       },
     });
-  }, [isAuto, rows, minRows, cap]);
+  }, [resized, isAuto, rows, minRows, cap]);
+
+  // Only a drag, or one remembered for this key, sets an inline height on the
+  // host.
+  // before paint, so a remembered height does not flash the default first
+  useLayoutEffect(() => {
+    const parent = host.current;
+    if (!parent) {
+      return undefined;
+    }
+    const saved = resizable ? savedHeight(heightKey) : null;
+    parent.style.height = saved ?? '';
+    setResized(!!saved);
+    if (!resizable || typeof ResizeObserver === 'undefined') {
+      return undefined;
+    }
+    const observer = new ResizeObserver(() => {
+      if (parent.style.height) {
+        setResized(true);
+        saveHeight(heightKey, parent.style.height);
+      }
+    });
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [resizable, heightKey]);
+
+  const resetHeight = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const parent = host.current;
+      if (!parent || !resized) {
+        return;
+      }
+      const box = parent.getBoundingClientRect();
+      if (
+        box.right - event.clientX > HANDLE_SIZE ||
+        box.bottom - event.clientY > HANDLE_SIZE
+      ) {
+        return;
+      }
+      parent.style.height = '';
+      saveHeight(heightKey, null);
+      setResized(false);
+    },
+    [resized, heightKey]
+  );
+
+  // Choosing a height in rows, by collapsing or through the height dialog,
+  // is a later and more deliberate choice than a drag, so it clears one. Only
+  // a change counts: the first render is the default, not a choice.
+  const previousRows = useRef(rows);
+  useLayoutEffect(() => {
+    if (previousRows.current === rows) {
+      return;
+    }
+    previousRows.current = rows;
+    const parent = host.current;
+    if (parent?.style.height) {
+      parent.style.height = '';
+      saveHeight(heightKey, null);
+      setResized(false);
+    }
+  }, [rows, heightKey]);
 
   useEffect(() => {
     const parent = host.current;
@@ -408,12 +511,16 @@ function CodeEditor({
             'ascender-code-editor__wrapper',
             hasErrors && 'ascender-code-editor__wrapper--has-errors',
             readOnly && 'ascender-code-editor__wrapper--read-only',
+            resizable && 'ascender-code-editor__wrapper--resizable',
+            resized && 'ascender-code-editor__wrapper--resized',
             'pf-v6-c-form-control',
+            resizable && 'pf-m-resize-vertical',
             className,
           ]
             .filter(Boolean)
             .join(' ')}
           onKeyDown={escape}
+          onDoubleClick={resetHeight}
         />
       </div>
       {!readOnly && (
