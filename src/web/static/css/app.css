@@ -39,8 +39,11 @@
 /* A card scrolls its overflow, which cut a typeahead's menu off at the
    bottom of a short form (CredentialForm showed two credential types). The
    old Select's popper was never clipped, so the card stops clipping while
-   one of these menus is open. */
-.pf-v6-c-card:has(.ascender-label-select__menu:not([hidden])) { overflow: visible; }
+   one of these menus is open. The schedule form's frequency and time
+   menus are clipped the same way. */
+.pf-v6-c-card:has(.ascender-label-select__menu:not([hidden])),
+.pf-v6-c-card:has(.ascender-frequency-select__menu:not([hidden])),
+.pf-v6-c-card:has(.ascender-time-picker__menu:not([hidden])) { overflow: visible; }
 /* CredentialForm's SelectList: 300px of options, then the list scrolls. */
 .ascender-label-select__menu.ascender-credential-form__styled-select { max-height: none; overflow: visible; }
 .ascender-credential-form__styled-select .pf-v6-c-menu__list { max-height: 300px; overflow-y: auto; }
