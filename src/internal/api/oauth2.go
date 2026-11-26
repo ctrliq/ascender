@@ -1008,8 +1008,30 @@ func (s *Server) tokenCreate(w http.ResponseWriter, r *http.Request, mode tokenM
 	}
 	now := time.Now()
 	t.Token = models.GenerateToken(30)
+	// Allow any user to override the token lifetime with an optional
+	// `expires_in` duration string; zero or unset falls back to the global
+	// OAUTH2_PROVIDER.ACCESS_TOKEN_EXPIRE_SECONDS setting.  Regular users
+	// may not extend past that global default; superusers can set any value
+	// up to the hard cap below.
+	base := s.accessTokenLifetime(ctx)
+	if val, ok := body.Get("expires_in"); ok {
+		secs, err := time.ParseDuration(val)
+		if err != nil {
+			return fmt.Errorf("tokenCreate: invalid 'expires_in' value %q: %w", val, err)
+		}
+		overrideSecs, _ := secs.Seconds()
+		if overrideSecs > 0 {
+			if !u.IsSuperuser && overrideSecs > base {
+				return fmt.Errorf("tokenCreate: non-superuser cannot set expires_in greater than the global default (%d seconds)", base)
+			}
+			base = overrideSecs
+		}
+	}
+	if base > 31536000000 {
+		base = 31536000000
+	}
 	// The default lifetime is a thousand years, past what time.Duration holds.
-	t.Expires = time.Unix(now.Unix()+s.accessTokenLifetime(ctx), int64(now.Nanosecond())).UTC()
+	t.Expires = time.Unix(now.Unix()+base, int64(now.Nanosecond())).UTC()
 	err = s.DB.Tx(ctx, func(tx pgx.Tx) error {
 		if err := models.InsertOAuth2AccessToken(ctx, tx, t); err != nil {
 			return err
