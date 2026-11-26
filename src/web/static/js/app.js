@@ -1807,6 +1807,42 @@
       if (a === 'first') c.scrollTop = 0; else if (a === 'last') c.scrollTop = c.scrollHeight; else if (a === 'prev') c.scrollTop -= pageH(); else c.scrollTop += pageH();
     });
   });
+  // The full screen toggle lays the output card over the whole page and asks
+  // the browser to go full screen on the document (not the card, so modals
+  // and tooltips, which are appended to the body, still show). Leaving the
+  // browser's full screen, with Escape or its own controls, leaves ours too.
+  var fs = document.querySelector('[data-output-fullscreen]');
+  var card = fs && fs.closest('.pf-v6-c-card');
+  if (fs && card) {
+    var setFull = function (on) {
+      card.classList.toggle('ascender-job-output--fullscreen', on);
+      document.documentElement.classList.toggle('ascender-job-output--fullscreen-open', on);
+      var label = fs.getAttribute(on ? 'data-label-on' : 'data-label-off');
+      fs.setAttribute('aria-label', label);
+      var tipUI = (window.ASCENDER || {}).ui || {};
+      if (tipUI.setTooltip) tipUI.setTooltip(fs, label); else fs.setAttribute('data-tooltip', label);
+      fs.querySelector('[data-fullscreen-icon="off"]').hidden = on;
+      fs.querySelector('[data-fullscreen-icon="on"]').hidden = !on;
+    };
+    var isFull = function () { return card.classList.contains('ascender-job-output--fullscreen'); };
+    fs.addEventListener('click', function () {
+      var on = !isFull();
+      setFull(on);
+      var de = document.documentElement;
+      if (on && de.requestFullscreen && !document.fullscreenElement) de.requestFullscreen().catch(function () {});
+      if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    });
+    document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && isFull()) setFull(false); });
+    // Browsers usually take Escape themselves to leave full screen; when the
+    // page sees it (full screen refused or unsupported), it leaves the
+    // overlay, unless a modal is open to take it. It listens in the capture
+    // phase to see the modal before the page's Escape handler closes it.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !isFull() || document.querySelector('.pf-v6-c-backdrop:not([hidden])')) return;
+      setFull(false);
+      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    }, true);
+  }
   var copy = document.querySelector('[data-copy-output]');
   if (copy) copy.addEventListener('click', function () {
     var text = allLines().map(function (l) { var t = l.querySelector('.ascender-job-event-line-text'); var clone = t.cloneNode(true); var tm = clone.querySelector('.time'); if (tm) tm.remove(); return clone.textContent; }).join('\n');

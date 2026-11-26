@@ -897,6 +897,35 @@ next to it stays visible */
   padding-block-start: 1rem;
 }
 
+/* The full screen toggle: the output card covers the page, above the
+   masthead and sidebar but below modals (the backdrop is z-index 400), and
+   its body takes the whole height instead of the page's leftover. */
+.pf-v6-c-card.ascender-job-output--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 350;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+
+.ascender-job-output--fullscreen .ascender-job-output__card-body {
+  flex: 1 1 0%;
+  height: auto;
+  min-height: 0;
+}
+
+html.ascender-job-output--fullscreen-open,
+html.ascender-job-output--fullscreen-open body {
+  overflow: hidden;
+}
+
+/* The page's main container is a grid item with z-index 100, below the
+   masthead (300) and sidebar (200), which caps the card inside it. */
+html.ascender-job-output--fullscreen-open .pf-v6-c-page__main-container {
+  z-index: 350;
+}
+
 .ascender-job-output__header-title {
   display: inline-flex;
   align-items: center;

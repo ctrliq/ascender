@@ -118,6 +118,14 @@
 						<button aria-label="{{t "Scroll last"}}" class="pf-v6-c-button pf-m-plain" type="button" data-output-scroll="last">
 							<span class="pf-v6-c-button__icon">{{icon "angle-double-down"}}</span>
 						</button>
+						<button aria-label="{{t "Full screen"}}" class="pf-v6-c-button pf-m-plain" type="button" data-tooltip="{{t "Full screen"}}" data-tooltip-pos="top" data-output-fullscreen data-label-on="{{t "Exit full screen"}}" data-label-off="{{t "Full screen"}}">
+							<span class="pf-v6-c-button__icon" data-fullscreen-icon="off">
+								{{icon "expand"}}
+							</span>
+							<span class="pf-v6-c-button__icon" data-fullscreen-icon="on" hidden>
+								{{icon "compress"}}
+							</span>
+						</button>
 					</div>
 				</div>
 				<div class="ascender-output-wrapper ascender-job-output__wrapper">

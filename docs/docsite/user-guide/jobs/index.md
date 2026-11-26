@@ -147,6 +147,8 @@ The standard output view displays all the events that occur on a particular job.
 
 Alternatively, you can display all the details of a specific play or task by clicking on the arrow icons next to them. Click an arrow from sideways to downward to expand the lines associated with that play or task. Click the arrow back to the sideways position to collapse and hide the lines.
 
+To give the output more room, click the **Full screen** icon to the right of the scroll arrows above the output. The output view then fills the whole screen; click the icon again, or press **Esc**, to return to the normal page.
+
 ![Expand and collapse arrows next to plays and tasks in the standard output](/assets/images/job-details-view-std-out-expand-collapse-icons.webp)
 
 Things to note when viewing details in the expand/collapse mode:
