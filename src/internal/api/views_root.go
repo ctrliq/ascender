@@ -58,9 +58,13 @@ var v2Resources = [][2]string{
 	{"workflow_job_nodes", "workflow_job_nodes"}, {"mesh_visualizer", "mesh_visualizer"}, {"bulk", "bulk"},
 }
 
+// apiV2Root lists the v2 resources with their keys in alphabetical order
+// (the old API listed them in URL registration order).
 func (s *Server) apiV2Root(w http.ResponseWriter, r *http.Request) error {
+	resources := append([][2]string(nil), v2Resources...)
+	sort.Slice(resources, func(i, j int) bool { return resources[i][0] < resources[j][0] })
 	o := NewOMap()
-	for _, res := range v2Resources {
+	for _, res := range resources {
 		o.Set(res[0], "/api/v2/"+res[1]+"/")
 	}
 	Allow(w, "GET", "HEAD", "OPTIONS")
