@@ -277,25 +277,28 @@ func formatBodyDictOrString(body any) any {
 // ---------------------------------------------------------------- job notifications
 
 type jobNotifyInfo struct {
-	ID          int64
-	Kind        string // job, project_update, inventory_update, workflow_job
-	TemplateID  *int64
-	Friendly    string
-	URLPath     string
-	APIPath     string
-	OrgID       *int64
-	ProjectID   *int64
-	JTID        *int64
-	HostCounts  json.RawMessage
-	HasChanges  bool
-	CreatedBy   *string
-	Name        string
-	Status      string
-	Started     *time.Time
-	Finished    *time.Time
-	Traceback   string
-	ExtraVars   string
-	Limit       string
+	ID         int64
+	Kind       string // job, project_update, inventory_update, workflow_job
+	TemplateID *int64
+	Friendly   string
+	URLPath    string
+	APIPath    string
+	OrgID      *int64
+	ProjectID  *int64
+	JTID       *int64
+	HostCounts json.RawMessage
+	HasChanges bool
+	CreatedBy  *string
+	Name       string
+	Status     string
+	Started    *time.Time
+	Finished   *time.Time
+	Traceback  string
+	ExtraVars  string
+	Limit      string
+	// LimitNull: a workflow job prompted for no limit, whose limit
+	// (char_prompts' "limit") is None.
+	LimitNull   bool
 	InventoryID *int64
 }
 
@@ -330,7 +333,10 @@ func (s *Server) loadJobNotifyInfo(ctx context.Context, id int64) (*jobNotifyInf
 		}
 	case s.CT.ID("main.workflowjob"):
 		j.Kind, j.Friendly, j.URLPath, j.APIPath = "workflow_job", "Workflow Job", "/#/jobs/workflow/", "workflow_jobs"
-		_ = db.Tolerant(s.Q()).QueryRow(ctx, `SELECT extra_vars, COALESCE("limit", ''), inventory_id FROM main_workflowjob WHERE unifiedjob_ptr_id = $1`, id).Scan(&j.ExtraVars, &j.Limit, &j.InventoryID)
+		// WorkflowJob.limit is a prompt pseudo-field: char_prompts' "limit".
+		var limit *string
+		_ = db.Tolerant(s.Q()).QueryRow(ctx, `SELECT extra_vars, char_prompts->>'limit', inventory_id FROM main_workflowjob WHERE unifiedjob_ptr_id = $1`, id).Scan(&j.ExtraVars, &limit, &j.InventoryID)
+		j.Limit, j.LimitNull = deref(limit), limit == nil
 		if j.TemplateID != nil {
 			_ = db.Tolerant(s.Q()).QueryRow(ctx, `SELECT organization_id FROM main_unifiedjobtemplate WHERE id = $1`, *j.TemplateID).Scan(&j.OrgID)
 		}
@@ -524,6 +530,9 @@ func (s *Server) notificationData(ctx context.Context, j *jobNotifyInfo) *OMap {
 			s.logRowsErr(ctx, "notificationData", rows)
 		}
 		var limit any = j.Limit
+		if j.LimitNull {
+			limit = nil
+		}
 		d.Set("body", strings.Join(lines, "\n")).Set("inventory", nameOf("main_inventory", j.InventoryID)).Set("limit", limit).Set("extra_vars", maskCiphertext(j.ExtraVars))
 	}
 	return d
