@@ -384,7 +384,14 @@
         // next message rather than closing under the pointer.
         if ($('[data-dropdown-menu]:not([hidden])', cur)) { again = true; return; }
         localizeDates(next);
-        if (next.innerHTML !== cur.innerHTML) cur.innerHTML = next.innerHTML;
+        // Compared with the render last swapped in, when there is one: a
+        // code editor rewrites its element once it is set up.
+        var html = next.innerHTML;
+        if (html !== (cur._liveHTML || cur.innerHTML)) {
+          cur.innerHTML = html;
+          if (window.ASCENDER.initEditor) $$('[data-code-editor]', cur).forEach(window.ASCENDER.initEditor);
+        }
+        cur._liveHTML = html;
         cur.setAttribute('data-live-on', next.getAttribute('data-live-on') || '');
         // A job row's cancel-selected eligibility follows its status.
         var row = cur.closest('[data-row]'), nrow = next.closest('[data-row]');
@@ -448,6 +455,18 @@
 
   // Event timestamps in job output are HH:MM:SS in the browser's zone.
   $$('[data-time]').forEach(function (s) { var d = new Date(s.getAttribute('data-time')); if (!isNaN(d)) { var p2 = function (n) { return n < 10 ? '0' + n : '' + n; }; s.textContent = p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds()); } });
+
+  // ---------------------------------------------------------------- chip groups
+  // "N more" on a chip group (a role's, a job's instance groups) shows the
+  // rest. Delegated: a live job detail re-renders its chips.
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-chip-overflow]');
+    var group = b && b.closest('[data-chip-group]'); if (!group) return;
+    var open = b.getAttribute('data-open') !== '1';
+    $$('[data-chip-overflowed]', group).forEach(function (li) { li.hidden = !open; });
+    b.setAttribute('data-open', open ? '1' : '0');
+    $('.pf-v6-c-label__text', b).textContent = open ? t('Show less') : b.getAttribute('data-more');
+  });
 
   // ---------------------------------------------------------------- copy to clipboard
   document.addEventListener('click', function (e) {
@@ -836,27 +855,27 @@
     });
   });
 
-  $$('[data-delete-one]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.hasAttribute('data-group-delete')) {
-        groupDeleteModal([{ id: b.getAttribute('data-id'), name: b.getAttribute('data-name') }], b.getAttribute('data-group-delete'), function () { location.href = b.getAttribute('data-redirect'); });
-        return;
-      }
-      // The title and error are the old screens' messages, composed from
-      // the kind ("Delete Host", "Failed to delete host."), unless the
-      // template gives its translated title (data-delete-title).
-      var kind = b.getAttribute('data-delete-kind');
-      confirmModal({ title: b.getAttribute('data-delete-title') || tOr('Delete ' + kind, 'Delete'), body: t('This action will delete the following:'), items: [b.getAttribute('data-name')], onConfirm: function (m) {
-        api('DELETE', b.getAttribute('data-api')).then(function (r) { closeModal(m); if (r.ok) location.href = b.getAttribute('data-redirect'); else errorModal(t('Error!'), t(['Failed to delete ', kind.toLowerCase(), '.'].join('')) + ' ' + errorText(r)); });
-      } });
-    });
+  // Delegated, as are the project sync buttons below: a live page
+  // re-renders its action buttons ("live cells").
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-delete-one]'); if (!b) return;
+    if (b.hasAttribute('data-group-delete')) {
+      groupDeleteModal([{ id: b.getAttribute('data-id'), name: b.getAttribute('data-name') }], b.getAttribute('data-group-delete'), function () { location.href = b.getAttribute('data-redirect'); });
+      return;
+    }
+    // The title and error are the old screens' messages, composed from
+    // the kind ("Delete Host", "Failed to delete host."), unless the
+    // template gives its translated title (data-delete-title).
+    var kind = b.getAttribute('data-delete-kind');
+    confirmModal({ title: b.getAttribute('data-delete-title') || tOr('Delete ' + kind, 'Delete'), body: t('This action will delete the following:'), items: [b.getAttribute('data-name')], onConfirm: function (m) {
+      api('DELETE', b.getAttribute('data-api')).then(function (r) { closeModal(m); if (r.ok) location.href = b.getAttribute('data-redirect'); else errorModal(t('Error!'), t(['Failed to delete ', kind.toLowerCase(), '.'].join('')) + ' ' + errorText(r)); });
+    } });
   });
-  $$('[data-project-sync]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      api('POST', '/api/v2/projects/' + b.getAttribute('data-project-sync') + '/update/').then(function (r) {
-        // ProjectSyncButton raised no alert; the status shows the update.
-        if (r.ok) location.reload(); else errorModal(t('Project Sync Error'), errorText(r));
-      });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-project-sync]'); if (!b) return;
+    api('POST', '/api/v2/projects/' + b.getAttribute('data-project-sync') + '/update/').then(function (r) {
+      // ProjectSyncButton raised no alert; the status shows the update.
+      if (r.ok) location.reload(); else errorModal(t('Project Sync Error'), errorText(r));
     });
   });
   // timeOfDay is the old UI's (util/dates.ts): luxon's

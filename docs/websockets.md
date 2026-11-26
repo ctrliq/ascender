@@ -311,13 +311,17 @@ client or operator may notice the following:
   `jobs-status_changed` and `jobs-summary`, and on the lists whose rows show
   job state: projects, templates (job and workflow job templates, on their
   own page and in other resources' tabs), jobs, inventories and an
-  inventory's sources. There it subscribes to `jobs-status_changed` and
+  inventory's sources, and on a job's Details tab, as the old UI's
+  `useWsJob` did. There it subscribes to `jobs-status_changed` and
   `inventories-status_changed`. A message about a row on the page (a
   project, template or inventory source by `unified_job_template_id`, a job
   by `unified_job_id`, an inventory by `inventory_id`) has the page fetched
   again, at most once a second and not while the browser tab is hidden. The
   row's status, activity, last-ran, revision, start and finish time and
-  action cells are then replaced with the new render's. On the first page of
+  action cells are then replaced with the new render's; on a job's Details
+  tab, a message about the job replaces its whole detail list (status,
+  explanation, times, nodes, revision, artifacts) and its action buttons. On
+  the first page of
   a jobs list, a message about a job not on the page has it fetched again
   too, and the rows take the new render's order: rows already shown are
   kept, with their selection and expansion, a newly listed job's row is

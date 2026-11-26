@@ -14,7 +14,7 @@
 				{{template "workflow_nav" .Data.wfNav}}
 			</div>
 			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
-				<dl class="ascender-detail-list">
+				<dl class="ascender-detail-list" data-live="job-detail" data-live-on="job:{{$id}}">
 					{{template "detail" (dict "label" (t "Job ID") "value" $id "cy" "job-id")}}
 					<div>
 						<dt class="ascender-detail-name{{if has $j.job_explanation}} ascender-detail-name--full-width{{end}}" data-cy="job-status-label" id="job-status">
@@ -173,7 +173,7 @@
 									</dt>
 									<dd class="ascender-detail-value" data-cy="job-launch-instance-groups-value">
 										<div>
-											<div class="pf-v6-c-label-group">
+											<div class="pf-v6-c-label-group" data-chip-group>
 												<div class="pf-v6-c-label-group__main">
 													<ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">
 														{{range $i, $g := .}}
@@ -334,7 +334,7 @@
 						{{template "variables_detail" (dict "cy" "job-detail-artifacts" "name" "artifacts" "label" (t "Artifacts") "value" (json $j.artifacts) "rows" 4)}}
 					{{end}}
 				</dl>
-				<div class="ascender-card-actions-row__wrapper">
+				<div class="ascender-card-actions-row__wrapper" data-live="job-actions" data-live-on="job:{{$id}}">
 					{{if dig $sf "user_capabilities" "start"}}
 						{{if eq $type "project_update"}}
 							<button class="pf-v6-c-button pf-m-primary" type="button" aria-label="{{t "Relaunch"}}" data-project-sync="{{str $j.project}}">

@@ -74,17 +74,6 @@
     });
   });
 
-  // "N more" on a role chip group shows the rest.
-  $$('[data-chip-overflow]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var group = b.closest('[data-chip-group]');
-      var open = b.getAttribute('data-open') !== '1';
-      $$('[data-chip-overflowed]', group).forEach(function (li) { li.hidden = !open; });
-      b.setAttribute('data-open', open ? '1' : '0');
-      $('.pf-v6-c-label__text', b).textContent = open ? t('Show less') : b.getAttribute('data-more');
-    });
-  });
-
   // ---------------------------------------------------------------- user teams
   // UserTeamList: Associate grants the member role of the chosen teams;
   // Disassociate removes all three team roles from the user.
