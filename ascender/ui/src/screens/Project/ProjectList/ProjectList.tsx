@@ -1,14 +1,11 @@
 import type { Project } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
 import useCachedRequest from 'hooks/useCachedRequest';
-import useRequest, {
-  useDeleteItems,
-  useDismissableError,
-} from 'hooks/useRequest';
+import { useDeleteItems, useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import DataListToolbar from 'components/DataListToolbar';
 import ErrorDetail from 'components/ErrorDetail';
@@ -17,7 +14,10 @@ import PaginatedTable, {
   HeaderCell,
   ToolbarAddButton,
   ToolbarDeleteButton,
+  ToolbarSyncButton,
   getSearchableKeys,
+  getSearchFilters,
+  readEveryPage,
 } from 'components/PaginatedTable';
 import useSelected from 'hooks/useSelected';
 import useExpanded from 'hooks/useExpanded';
@@ -34,32 +34,45 @@ const QS_CONFIG = getQSConfig('project', {
   order_by: 'name',
 });
 
+/* The projects that have somewhere to sync from: a manual project has no
+   source control, and its scm_type is empty. */
+const SYNCABLE = { not__scm_type: '' };
+
 function ProjectList() {
   const { t } = useLingui();
   const location = useLocation();
   const { addToast, Toast, toastProps } = useToast();
 
-  const {
-    request: fetchUpdatedProject,
-    error: fetchUpdatedProjectError,
-    result: updatedProject,
-  } = useRequest(
-    // The websocket names a project whose status changed, and the list swaps
-    // in the detail it reads back for it.
-    useCallback(async (projectId: number): Promise<Project | null> => {
+  const [fetchUpdatedProjectError, setFetchUpdatedProjectError] =
+    useState<unknown>(null);
+
+  /* The websocket names a project whose sync ended, and the list reads that
+     one project back. Every call is a request of its own rather than a shared
+     useRequest, which keeps only its latest answer: two syncs ending together
+     would otherwise lose the first project's read, and leave its row showing
+     Syncing. useWsProjects merges each answer into its row by id. */
+  const fetchUpdatedProject = useCallback(
+    async (projectId: number): Promise<Project | null> => {
       if (!projectId) {
         return null;
       }
-      const { data } = await ProjectsAPI.readDetail(projectId);
-      return data;
-    }, []),
-    null
+      try {
+        const { data } = await ProjectsAPI.readDetail(projectId);
+        return data;
+      } catch (error) {
+        setFetchUpdatedProjectError(error);
+        return null;
+      }
+    },
+    []
   );
 
   const {
     result: {
       results,
       itemCount,
+      sourcedCount,
+      syncableCount,
       actions,
       relatedSearchableKeys,
       searchableKeys,
@@ -67,18 +80,35 @@ function ProjectList() {
     error: contentError,
     isLoading,
     request: fetchProjects,
-    setValue: setProjects,
   } = useCachedRequest(
     ['project-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const [response, actionsResponse] = await Promise.all([
+      /* The counts are taken within the search, as Sync All reads within
+         it, so the button never offers what the list in front of the reader
+         has filtered out. */
+      const searchFilters = getSearchFilters(QS_CONFIG, location.search);
+      const [response, actionsResponse, sourced, syncable] = await Promise.all([
         ProjectsAPI.read(params),
         ProjectsAPI.readOptions(),
+        /* How many could be synced at all, which is what says whether the
+             sync button does anything: a manual project has nothing to pull
+             from, and a new installation has no projects. */
+        ProjectsAPI.read({ ...searchFilters, ...SYNCABLE, page_size: 1 }),
+        /* And how many of those this reader may start, which is the
+             project's update role, the same one the api checks on a sync. */
+        ProjectsAPI.read({
+          ...searchFilters,
+          ...SYNCABLE,
+          role_level: 'update_role',
+          page_size: 1,
+        }),
       ]);
       return {
         results: response.data.results,
         itemCount: response.data.count,
+        sourcedCount: sourced.data.count,
+        syncableCount: syncable.data.count,
         actions: actionsResponse.data.actions,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
@@ -89,13 +119,18 @@ function ProjectList() {
     {
       results: [],
       itemCount: 0,
+      sourcedCount: 0,
+      syncableCount: 0,
       actions: {},
       relatedSearchableKeys: [],
       searchableKeys: [],
     }
   );
 
-  const projects = useWsProjects(results);
+  const projects = useWsProjects(results, fetchUpdatedProject);
+
+  // The search in force, which Sync All and its counts read within.
+  const searchFilters = getSearchFilters(QS_CONFIG, location.search);
 
   const {
     selected,
@@ -149,22 +184,6 @@ function ProjectList() {
   const deleteDetailsRequests = relatedResourceDeleteRequests.project(
     selected[0]
   );
-
-  useEffect(() => {
-    if (updatedProject) {
-      const updatedProjects = projects.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project
-      );
-      setProjects({
-        results: updatedProjects,
-        itemCount,
-        actions,
-        relatedSearchableKeys,
-        searchableKeys,
-      });
-    }
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [updatedProject]);
 
   const { error: projectError, dismissError: dismissProjectError } =
     useDismissableError(fetchUpdatedProjectError);
@@ -239,6 +258,7 @@ function ProjectList() {
                         <ToolbarAddButton
                           key="add"
                           linkTo={`${location.pathname}/add`}
+                          tooltip={t`Add Project`}
                         />,
                       ]
                     : []),
@@ -256,6 +276,29 @@ function ProjectList() {
                       />
                     }
                   />,
+                  <ToolbarSyncButton
+                    key="sync"
+                    itemsToSync={selected}
+                    syncableCount={syncableCount}
+                    sourcedCount={sourcedCount}
+                    hasSource={(project) => Boolean(project.scm_type)}
+                    canSync={(project) =>
+                      Boolean(project.scm_type) &&
+                      Boolean(project.summary_fields?.user_capabilities?.start)
+                    }
+                    /* Every project the search matches that this reader may
+                       sync, every page of it, not only the first. */
+                    readSyncable={() =>
+                      readEveryPage((params) => ProjectsAPI.read(params), {
+                        ...searchFilters,
+                        ...SYNCABLE,
+                        role_level: 'update_role',
+                      })
+                    }
+                    isSearched={Object.keys(searchFilters).length > 0}
+                    sync={(project) => ProjectsAPI.sync(project.id)}
+                    pluralizedItemName={t`Projects`}
+                  />,
                 ]}
               />
             )}
@@ -271,17 +314,8 @@ function ProjectList() {
                 onSelect={() => handleSelect(project)}
                 onCopy={handleCopy}
                 rowIndex={index}
-                onRefreshRow={(projectId) => fetchUpdatedProject(projectId)}
               />
             )}
-            emptyStateControls={
-              canAdd ? (
-                <ToolbarAddButton
-                  key="add"
-                  linkTo={`${location.pathname}/add`}
-                />
-              ) : null
-            }
           />
         </Card>
       </PageSection>

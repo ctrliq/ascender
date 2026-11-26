@@ -16,7 +16,7 @@ import PaginatedTable, {
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import useSelected from 'hooks/useSelected';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import InventoryHostItem from './InventoryHostItem';
 
 const QS_CONFIG = getQSConfig('host', {
@@ -91,7 +91,13 @@ function InventoryHostList() {
       () => Promise.all(selected.map((host) => HostsAPI.destroy(host.id))),
       [selected]
     ),
-    { qsConfig: QS_CONFIG, fetchItems: fetchData }
+    {
+      qsConfig: QS_CONFIG,
+      // Deleting every host on a page past the first steps back a page
+      // rather than leaving an empty one behind.
+      allItemsSelected: isAllSelected,
+      fetchItems: fetchData,
+    }
   );
 
   const handleDeleteHosts = async () => {
@@ -149,21 +155,21 @@ function InventoryHostList() {
             onSelectAll={selectAll}
             qsConfig={QS_CONFIG}
             additionalControls={[
+              <RunSelectionMenu
+                key="run"
+                ouiaId="inventory-host-list-run-menu"
+                items={selected}
+                inventoryId={id}
+                moduleOptions={moduleOptions}
+                onLaunchLoading={setIsAdHocLaunchLoading}
+                canRunCommand={!isAdHocDisabled}
+              />,
               ...(canAdd
                 ? [
                     <ToolbarAddButton
+                      tooltip={t`Add Host`}
                       key="add"
                       linkTo={`/inventories/inventory/${id}/hosts/add`}
-                    />,
-                  ]
-                : []),
-              ...(!isAdHocDisabled
-                ? [
-                    <AdHocCommands
-                      moduleOptions={moduleOptions}
-                      adHocItems={selected}
-                      hasListItems={hostCount > 0}
-                      onLaunchLoading={setIsAdHocLaunchLoading}
                     />,
                   ]
                 : []),
@@ -187,14 +193,6 @@ function InventoryHostList() {
             rowIndex={index}
           />
         )}
-        emptyStateControls={
-          canAdd && (
-            <ToolbarAddButton
-              key="add"
-              linkTo={`/inventories/inventory/${id}/add`}
-            />
-          )
-        }
       />
       {Boolean(deletionError) && (
         <AlertModal

@@ -79,6 +79,27 @@ describe('<InventoryListItem />', () => {
     ).toBeInTheDocument();
   });
 
+  /* A sync under way is a run, and says so in the words the runs list uses. */
+  test('should say a sync is running while one is', () => {
+    renderItem({
+      ...baseInventory,
+      isSourceSyncRunning: true,
+    } as unknown as AnyInventory);
+
+    expect(screen.getByText('Running')).toBeInTheDocument();
+    expect(screen.queryByText('syncing')).not.toBeInTheDocument();
+  });
+
+  test("should link the sync status to only this inventory's syncs", () => {
+    renderItem(baseInventory);
+
+    // An AND on the type: an or__ clause would join the Runs tab's own OR
+    // group and leave the list exactly as it was.
+    expect(screen.getByText('Error').closest('a')?.getAttribute('href')).toBe(
+      '/inventories/inventory/1/runs?job.type=inventory_update'
+    );
+  });
+
   test('should render prompt list item data', () => {
     renderItem(baseInventory);
     const row = screen.getByRole('link', { name: 'Inventory' }).closest('tr');

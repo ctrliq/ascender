@@ -19,3 +19,63 @@
   border-radius: var(--pf-v6-global--BorderRadius--sm);
   overflow: hidden;
 }
+
+/* Each of these is an icon and nothing else, so the button is sized to the icon
+   rather than to a line of text. PatternFly gives a plain button 8px of
+   padding and a MinWidth of one line box plus that padding, which puts a 14px
+   arrow in a 37px square. The line box is what to drop, since no text is in it.
+   Five around a 14px icon, plus the edge, makes a 26px square, which is what
+   the popover and the YAML/JSON toggle beside them measure: the row reads as
+   one set of controls rather than two sizes. The same whether or not a theme
+   repaints the edge, so nothing shifts between an enabled and a disabled
+   arrow. */
+.ascender-variables-detail__action {
+  --pf-v6-c-button--PaddingBlockStart: 5px;
+  --pf-v6-c-button--PaddingBlockEnd: 5px;
+  /* A plain button reads its own inline padding token rather than the shared
+     one, so both have to be said. */
+  --pf-v6-c-button--PaddingInlineStart: 5px;
+  --pf-v6-c-button--PaddingInlineEnd: 5px;
+  --pf-v6-c-button--m-plain--PaddingInlineStart: 5px;
+  --pf-v6-c-button--m-plain--PaddingInlineEnd: 5px;
+  --pf-v6-c-button--MinWidth: auto;
+  line-height: 1;
+  /* Reserved rather than drawn: the themes paint over it where they give these
+     an edge, and where one does not, the box is still the size of the ones that
+     do, so nothing in the row moves as a button goes from enabled to disabled. */
+  border: 1px solid transparent;
+  /* PatternFly icons are an em square, so the icon grows with the font rather
+     than a width of its own. */
+  font-size: 14px;
+}
+
+/* The two sit in one Split item so the row's gutter does not land between them,
+   which means the gap is theirs to set. It goes on the item as a flex gap
+   rather than as a margin between siblings: the tooltip wraps its button in a
+   display: contents div, so the buttons are not siblings and an adjacent
+   selector never matches. A contents box does take part in this flex layout,
+   so the gap lands where the margin could not. */
+.ascender-variables-detail__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--pf-t--global--spacer--sm);
+}
+
+/* The tooltip trigger wraps a button that may be disabled, so it has to be a
+   box of its own to receive the hover, not a display: contents passthrough. */
+.ascender-variables-detail__action-trigger {
+  display: inline-flex;
+}
+
+/* PatternFly paints a secondary button's icon in the brand colour from a token
+   of its own, so on the green fill the themes give these the arrow came out
+   green on green. Said on the icon rather than through the token because the
+   token is set on .pf-v6-c-button.pf-m-secondary, which carries one class more
+   than this file can put on the button. The disabled state reads a second token
+   through a rule of its own, hence the second selector: it has to outweigh
+   .pf-v6-c-button:disabled .pf-v6-c-button__icon rather than tie with it. */
+.pf-v6-c-button.ascender-variables-detail__action .pf-v6-c-button__icon,
+.pf-v6-c-button.ascender-variables-detail__action:disabled
+  .pf-v6-c-button__icon {
+  color: inherit;
+}

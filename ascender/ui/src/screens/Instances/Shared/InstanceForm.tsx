@@ -119,7 +119,7 @@ function InstanceFormFields({ isEdit }: InstanceFormFieldsProps) {
         <CheckboxField
           id="peers_from_control_nodes"
           name="peers_from_control_nodes"
-          label={t`Peers from control nodes`}
+          label={t`Peers From Control Nodes`}
           tooltip={t`If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers.`}
         />
       </FormGroup>

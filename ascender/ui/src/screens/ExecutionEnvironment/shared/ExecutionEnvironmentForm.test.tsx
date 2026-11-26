@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment } from 'types/api';
+import type { ExecutionEnvironment, OptionsResponse } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -72,6 +72,7 @@ const renderForm = async (props = {}) => {
   const onSubmit = vi.fn();
   const result = renderWithContexts(
     <ExecutionEnvironmentForm
+      options={mockOptions.data as unknown as OptionsResponse}
       onCancel={onCancel}
       onSubmit={onSubmit}
       executionEnvironment={executionEnvironment}
@@ -93,8 +94,32 @@ describe('<ExecutionEnvironmentForm/>', () => {
     await renderForm();
     expect(screen.getByText('Image')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.getByText('Registry credential')).toBeInTheDocument();
+    expect(screen.getByText('Registry Credential')).toBeInTheDocument();
     expect(screen.getByText('Organization')).toBeInTheDocument();
+  });
+
+  test('names the blank pull choice as a prompt, not Django dashes', async () => {
+    const options = {
+      actions: {
+        POST: {
+          pull: {
+            choices: [
+              ['', '---------'],
+              ['always', 'Always pull container before running.'],
+            ],
+          },
+        },
+      },
+    };
+    await renderForm({
+      options: options as unknown as OptionsResponse,
+      executionEnvironment: { ...executionEnvironment, pull: '' },
+    });
+    const pull = document.querySelector<HTMLSelectElement>(
+      '#container-pull-options'
+    );
+    expect(pull?.selectedOptions[0]).toHaveTextContent('Choose a pull policy');
+    expect(screen.queryByText('---------')).not.toBeInTheDocument();
   });
 
   test('should call onSubmit when the form is submitted', async () => {

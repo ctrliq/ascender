@@ -9,7 +9,7 @@ describe('<SmartInventoryButton />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryButton onClick={onClick} />
     );
-    const button = screen.getByRole('button', { name: 'Smart Inventory' });
+    const button = screen.getByRole('button', { name: 'Add Smart Inventory' });
     expect(button).toBeInTheDocument();
     await user.click(button);
     expect(onClick).toHaveBeenCalled();

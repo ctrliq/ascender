@@ -9,7 +9,7 @@ import {
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
 import { settingOptions } from '../../../../../testUtils/settingOptions';
-import mockJobSettings from '../../shared/data.jobSettings.json';
+import mockTroubleshootingSettings from '../TroubleshootingEdit/data.defaultTroubleshootingSettings.json';
 import TroubleshootingDetail from './TroubleshootingDetail';
 
 vi.mock('../../../../api');
@@ -17,7 +17,7 @@ vi.mock('../../../../api');
 describe('<TroubleshootingDetail />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
-      data: mockJobSettings,
+      data: mockTroubleshootingSettings,
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
@@ -40,44 +40,21 @@ describe('<TroubleshootingDetail />', () => {
 
   test('initially renders without crashing', async () => {
     await renderDetail();
-    expect(screen.getByText('Job execution path')).toBeInTheDocument();
-  });
-
-  test('should render expected tabs', async () => {
-    await renderDetail();
     expect(
-      screen.getAllByRole('tab', { name: /Back to Settings/ }).length
-    ).toBeGreaterThan(0);
-    expect(
-      screen.getAllByRole('tab', { name: /Details/ }).length
-    ).toBeGreaterThan(0);
+      screen.getByText('Enable or Disable tmp dir cleanup')
+    ).toBeInTheDocument();
   });
 
   test('should render expected details', async () => {
     await renderDetail();
-    assertDetail('Job execution path', '/tmp');
-    assertDetail('Run Project Updates With Higher Verbosity', 'Off');
-    assertDetail('Enable Role Download', 'On');
-    assertDetail('Enable Collection(s) Download', 'On');
-    assertDetail('Follow symlinks', 'Off');
-    assertDetail('Ignore Ansible Galaxy SSL Certificate Verification', 'Off');
-    assertDetail('Maximum Scheduled Jobs', '10');
-    assertDetail('Default Job Timeout', '0 seconds');
-    assertDetail('Default Job Idle Timeout', '0 seconds');
-    assertDetail('Default Inventory Update Timeout', '0 seconds');
-    assertDetail('Default Project Update Timeout', '0 seconds');
-    assertDetail('Per-Host Ansible Fact Cache Timeout', '0 seconds');
-    assertDetail('Maximum number of forks per job', '200');
-    assertDetail('Expose host paths for Container Groups', 'Off');
-    // CodeEditor renders empty under jsdom; assert the labels are present.
-    expect(
-      screen.getByText('Ansible Modules Allowed for Ad Hoc Jobs')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Paths to expose to isolated jobs')
-    ).toBeInTheDocument();
-    expect(screen.getByText('Extra Environment Variables')).toBeInTheDocument();
-    expect(screen.getByText('Ansible Callback Plugins')).toBeInTheDocument();
+    assertDetail('Enable or Disable tmp dir cleanup', 'Off');
+    assertDetail('Debug Web Requests', 'Off');
+    assertDetail('Release Receptor Work', 'Off');
+  });
+
+  test('should leave out a tab bar that would hold a single tab', async () => {
+    await renderDetail();
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
   });
 
   test('should hide edit button from non-superusers', async () => {

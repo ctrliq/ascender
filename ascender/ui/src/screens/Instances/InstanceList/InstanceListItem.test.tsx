@@ -261,9 +261,7 @@ describe('<InstanceListItem/>', () => {
     expect(
       screen.queryByRole('switch', { name: 'Toggle instance' })
     ).not.toBeInTheDocument();
-    expect(
-      container.querySelector('[data-label="Instance group used capacity"]')
-    ).toBeNull();
+    expect(container.querySelector('[data-label="Used Capacity"]')).toBeNull();
     expect(
       container.querySelector('[data-label="Capacity Adjustment"]')
     ).toBeNull();

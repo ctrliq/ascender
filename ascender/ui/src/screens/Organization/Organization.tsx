@@ -15,6 +15,7 @@ import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
 import NotificationList from 'components/NotificationList/NotificationList';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import { OrganizationsAPI } from 'api';
@@ -35,25 +36,32 @@ function Organization({ setBreadcrumb, me }: OrganizationProps) {
   const initialUpdate = useRef(true);
 
   const {
-    result: { organization },
+    result: { organization, instanceGroups },
     isLoading: organizationLoading,
     error: organizationError,
     request: loadOrganization,
   } = useRequest(
     useCallback(async () => {
-      const [{ data }, credentialsRes] = await Promise.all([
+      const [{ data }, credentialsRes, instanceGroupsRes] = await Promise.all([
         OrganizationsAPI.readDetail(organizationId),
         OrganizationsAPI.readGalaxyCredentials(organizationId),
+        // Read here rather than in the edit form, so this screen's one loading
+        // state covers everything the page needs. Read inside the form, it
+        // arrived after the card was already on screen and put a second loading
+        // animation inside it.
+        OrganizationsAPI.readInstanceGroups(organizationId),
       ]);
       data.galaxy_credentials = credentialsRes.data.results;
       setBreadcrumb(data);
 
       return {
         organization: data,
+        instanceGroups: instanceGroupsRes.data.results,
       };
     }, [setBreadcrumb, organizationId]),
     {
       organization: null,
+      instanceGroups: [],
     }
   );
 
@@ -158,6 +166,18 @@ function Organization({ setBreadcrumb, me }: OrganizationProps) {
     showCardHeader = false;
   }
 
+  /*
+   * Without this the card renders empty until the organization lands, so the
+   * load runs blank card, then contents, with nothing to say it is working.
+   */
+  if (organizationLoading && !organization) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   if (!organizationLoading && organizationError) {
     return (
       <PageSection hasBodyWrapper={false}>
@@ -194,7 +214,12 @@ function Organization({ setBreadcrumb, me }: OrganizationProps) {
           {organization && (
             <Route
               path="edit"
-              element={<OrganizationEdit organization={organization} />}
+              element={
+                <OrganizationEdit
+                  organization={organization}
+                  instanceGroups={instanceGroups}
+                />
+              }
             />
           )}
           {organization && (
@@ -216,7 +241,16 @@ function Organization({ setBreadcrumb, me }: OrganizationProps) {
           )}
           <Route
             path="teams"
-            element={<OrganizationTeams id={Number(organizationId)} />}
+            element={
+              <OrganizationTeams
+                id={Number(organizationId)}
+                organization={
+                  organization
+                    ? { id: organization.id, name: organization.name }
+                    : null
+                }
+              />
+            }
           />
           {canSeeNotificationsTab && (
             <Route
@@ -224,6 +258,11 @@ function Organization({ setBreadcrumb, me }: OrganizationProps) {
               element={
                 <NotificationList
                   id={Number(organizationId)}
+                  addOrganization={
+                    organization
+                      ? { id: organization.id, name: organization.name }
+                      : null
+                  }
                   canToggleNotifications={canToggleNotifications}
                   apiModel={OrganizationsAPI}
                   showApprovalsToggle

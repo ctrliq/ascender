@@ -66,7 +66,7 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
     {
       name: (
         <>
-          <CaretLeftIcon aria-label={t`Back to Groups`} />
+          <CaretLeftIcon />
           {t`Back to Groups`}
         </>
       ),
@@ -160,7 +160,10 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
         )}
         {/* /* so the nested <InventoryRelatedGroups> route tree can match */}
         {inventoryGroup && (
-          <Route path="nested_groups/*" element={<InventoryRelatedGroups />} />
+          <Route
+            path="nested_groups/*"
+            element={<InventoryRelatedGroups inventoryGroup={inventoryGroup} />}
+          />
         )}
         <Route
           path="*"

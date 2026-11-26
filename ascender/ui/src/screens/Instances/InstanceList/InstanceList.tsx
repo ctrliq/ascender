@@ -15,7 +15,7 @@ import PaginatedTable, {
 } from 'components/PaginatedTable';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
-import { useConfig } from 'contexts/Config';
+import { useConfig, useUserProfile } from 'contexts/Config';
 import useRequest, {
   useDismissableError,
   useDeleteItems,
@@ -25,6 +25,8 @@ import { InstancesAPI, SettingsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import HealthCheckButton from 'components/HealthCheckButton';
 import HealthCheckAlert from 'components/HealthCheckAlert';
+import ResourceTabs from 'components/ResourceTabs';
+import { getInstanceTabs } from '../tabs';
 import InstanceListItem from './InstanceListItem';
 import RemoveInstanceButton from '../Shared/RemoveInstanceButton';
 
@@ -35,13 +37,13 @@ const QS_CONFIG = getQSConfig('instance', {
 });
 
 function InstanceList() {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  const userProfile = useUserProfile();
   const location = useLocation();
   const { me } = useConfig();
   const canReadSettings = me?.is_superuser || me?.is_system_auditor;
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
   const [pendingHealthCheck, setPendingHealthCheck] = useState(false);
-  const [canRunHealthCheck, setCanRunHealthCheck] = useState(true);
 
   const {
     result: { instances, count, relatedSearchableKeys, searchableKeys, isK8s },
@@ -91,8 +93,15 @@ function InstanceList() {
     fetchInstances();
   }, [fetchInstances]);
 
+  /*
+   * Every row can be ticked, so Select All ticks every row. A ticked row is
+   * not a promise that each action applies to it: Health Check goes out for
+   * the execution nodes among the selection, managed ones included, since the
+   * api runs one on any of them, and Delete refuses managed and non execution
+   * or hop nodes by name, which is the api's own refusal.
+   */
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Instance>(instances.filter((i) => i.node_type !== 'hop'));
+    useSelected<Instance>(instances);
 
   const {
     error: healthCheckError,
@@ -111,17 +120,11 @@ function InstanceList() {
     }, [selected])
   );
 
-  useEffect(() => {
-    if (selected) {
-      selected.forEach((i) => {
-        if (i.node_type === 'execution') {
-          setCanRunHealthCheck(true);
-        } else {
-          setCanRunHealthCheck(false);
-        }
-      });
-    }
-  }, [selected]);
+  // The request goes out for the execution nodes among the selection and
+  // skips the rest, so one execution node is enough to make it worth sending.
+  const canRunHealthCheck = selected.some(
+    ({ node_type }) => node_type === 'execution'
+  );
 
   const handleHealthCheck = async () => {
     await fetchHealthCheck();
@@ -143,6 +146,11 @@ function InstanceList() {
       Promise.all(
         selected.map(({ id }) => InstancesAPI.deprovisionInstance(id))
       ),
+    /*
+     * No allItemsSelected: removing an instance only marks it deprovisioning,
+     * and it stays in the list until the cluster lets it go, so a page whose
+     * every row was removed is still full and has nothing to step back from.
+     */
     { fetchItems: fetchInstances, qsConfig: QS_CONFIG }
   );
 
@@ -153,6 +161,17 @@ function InstanceList() {
       ) : null}
       <PageSection hasBodyWrapper={false}>
         <Card>
+          {/* The groups a job is sent to and the mesh drawn as a graph are
+              the same machinery seen another way, so they are tabs here
+              rather than items of their own in the rail. */}
+          <ResourceTabs
+            aria-label={t`Instance tabs`}
+            ouiaId="instance-tabs"
+            tabs={getInstanceTabs(userProfile).map(({ label, path }) => ({
+              label: i18n._(label),
+              path,
+            }))}
+          />
           <PaginatedTable
             contentError={contentError || removeError}
             hasContentLoading={
@@ -200,25 +219,31 @@ function InstanceList() {
                   ...(isK8s && me?.is_superuser
                     ? [
                         <ToolbarAddButton
+                          tooltip={t`Add Instance`}
                           ouiaId="instances-add-button"
                           key="add"
                           linkTo="/instances/add"
                         />,
                         <RemoveInstanceButton
                           itemsToRemove={selected}
-                          isK8s={isK8s}
                           key="remove"
                           onRemove={handleRemoveInstances}
                         />,
                       ]
                     : []),
-                  <HealthCheckButton
-                    onClick={handleHealthCheck}
-                    key="healthCheck"
-                    selectedItems={selected}
-                    healthCheckPending={pendingHealthCheck}
-                    isDisabled={!canRunHealthCheck}
-                  />,
+                  // Starting a health check is a superuser action in the api;
+                  // an auditor may read the results but not ask for one.
+                  ...(me?.is_superuser
+                    ? [
+                        <HealthCheckButton
+                          onClick={handleHealthCheck}
+                          key="healthCheck"
+                          selectedItems={selected}
+                          healthCheckPending={pendingHealthCheck}
+                          isDisabled={!canRunHealthCheck}
+                        />,
+                      ]
+                    : []),
                 ]}
               />
             )}
@@ -270,11 +295,11 @@ function InstanceList() {
         <AlertModal
           isOpen={removeError}
           variant="error"
-          aria-label={t`Removal Error`}
+          aria-label={t`Deletion Error`}
           title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {t`Failed to remove one or more instances.`}
+          {t`Failed to delete one or more instances.`}
           <ErrorDetail error={removeError} />
         </AlertModal>
       )}

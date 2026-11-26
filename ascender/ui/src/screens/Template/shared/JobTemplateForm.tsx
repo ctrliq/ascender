@@ -17,10 +17,8 @@ import {
   Title,
 } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { TagMultiSelect } from 'components/MultiSelect';
-import useRequest from 'hooks/useRequest';
 import useBrandName from 'hooks/useBrandName';
 import FormActionGroup from 'components/FormActionGroup';
 import FormField, {
@@ -44,8 +42,6 @@ import {
   ExecutionEnvironmentLookup,
 } from 'components/Lookup';
 import Popover from 'components/Popover';
-import { JobTemplatesAPI } from 'api';
-import useIsMounted from 'hooks/useIsMounted';
 import LabelSelect from 'components/LabelSelect';
 import { VerbositySelectField } from 'components/VerbositySelectField';
 import PlaybookSelect from './PlaybookSelect';
@@ -111,6 +107,13 @@ export interface SeedResource {
 
 export interface JobTemplateFormProps {
   template?: Partial<JobTemplate> & { isNew?: boolean };
+  /**
+   * The template's instance groups. The screen reads them alongside the
+   * template itself and hands them here: read in this form instead, they
+   * landed after the page had drawn and the form replaced itself with a second
+   * loading animation while they were on their way.
+   */
+  instanceGroups?: SummaryFieldRef[];
   handleCancel?: () => void;
   /**
    * The caller's own submit, which withFormik calls with the values. Inside
@@ -153,7 +156,6 @@ function JobTemplateForm({
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template?.webhook_service)
   );
-  const isMounted = useIsMounted();
   const brandName = useBrandName();
 
   const [askInventoryOnLaunchField] = useField('ask_inventory_on_launch');
@@ -163,6 +165,18 @@ function JobTemplateForm({
   });
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
+  const handleProjectValidation = (project: SummaryFieldRef | null) => {
+    if (!project) {
+      return t`This field must not be blank`;
+    }
+    if (project?.status === 'never updated') {
+      return t`This Project needs to be updated`;
+    }
+    return undefined;
+  };
+
+  // The lookup registers handleProjectValidation for the field; this bare
+  // read adds no validator of its own and leaves the lookup's in place.
   const [projectField, projectMeta, projectHelpers] = useField('project');
   const [scmField, , scmHelpers] = useField('scm_branch');
   const [playbookField, playbookMeta, playbookHelpers] = useField({
@@ -195,31 +209,6 @@ function JobTemplateForm({
     executionEnvironmentHelpers,
   ] = useField('execution_environment');
 
-  const {
-    request: loadRelatedInstanceGroups,
-    error: instanceGroupError,
-    isLoading: instanceGroupLoading,
-  } = useRequest(
-    useCallback(async () => {
-      if (!template?.id) {
-        return;
-      }
-      const { data } = await JobTemplatesAPI.readInstanceGroups(template.id);
-      if (isMounted.current) {
-        setFieldValue('initialInstanceGroups', data.results);
-        setFieldValue('instanceGroups', [...data.results]);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [setFieldValue, template]),
-    {
-      isLoading: true,
-    }
-  );
-
-  useEffect(() => {
-    loadRelatedInstanceGroups();
-  }, [loadRelatedInstanceGroups]);
-
   useEffect(() => {
     if (enableWebhooks) {
       webhookServiceHelpers.setValue(webhookServiceMeta.initialValue);
@@ -234,16 +223,6 @@ function JobTemplateForm({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableWebhooks]);
-
-  const handleProjectValidation = (project: SummaryFieldRef | null) => {
-    if (!project) {
-      return t`This field must not be blank`;
-    }
-    if (project?.status === 'never updated') {
-      return t`This Project needs to be updated`;
-    }
-    return undefined;
-  };
 
   const handleProjectUpdate = useCallback(
     (value: SummaryFieldRef | null) => {
@@ -311,12 +290,8 @@ function JobTemplateForm({
     callbackUrl = `${origin}${path}`;
   }
 
-  if (instanceGroupLoading) {
-    return <ContentLoading />;
-  }
-
-  if (contentError || instanceGroupError) {
-    return <ContentError error={contentError || instanceGroupError} />;
+  if (contentError) {
+    return <ContentError error={contentError} />;
   }
 
   return (
@@ -449,7 +424,10 @@ function JobTemplateForm({
             onBlur={() => playbookHelpers.setTouched(true)}
             onError={setContentError}
           />
-          {playbookMeta.error && (
+          {/* Formik has the playbook error from the start, since the field
+              is required and empty, so it waits for a touch or a submit the
+              way every other field's message does. */}
+          {playbookMeta.touched && playbookMeta.error && (
             <FormHelperText>
               <HelperText>
                 <HelperTextItem variant="error">
@@ -756,7 +734,9 @@ function JobTemplateForm({
                       {t`Webhook details`}
                     </Title>
                     <FormColumnLayout>
-                      <WebhookSubForm templateType={template.type ?? ''} />
+                      <WebhookSubForm
+                        templateType={template.type ?? 'job_template'}
+                      />
                     </FormColumnLayout>
                   </>
                 )}
@@ -780,6 +760,7 @@ const FormikApp = withForm<JobTemplateFormProps, JobTemplateFormValues>({
   mapPropsToValues({
     resourceValues = null,
     template = {},
+    instanceGroups = [],
   }: JobTemplateFormProps) {
     const summary_fields: SummaryFields = template.summary_fields ?? {
       labels: { results: [] },
@@ -814,8 +795,8 @@ const FormikApp = withForm<JobTemplateFormProps, JobTemplateFormValues>({
       extra_vars: template.extra_vars || '---\n',
       forks: template.forks || 0,
       host_config_key: template.host_config_key || '',
-      initialInstanceGroups: [],
-      instanceGroups: [],
+      initialInstanceGroups: instanceGroups,
+      instanceGroups: [...instanceGroups],
       inventory: summary_fields?.inventory || null,
       job_slice_count: template.job_slice_count || 1,
       job_slice_pinned_hosts: template.job_slice_pinned_hosts || '',

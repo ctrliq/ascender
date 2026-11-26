@@ -70,9 +70,18 @@ describe('<CredentialType />', () => {
   test('renders the expected tabs', async () => {
     renderAt('/credential_types/42/details');
     expect(
-      await screen.findByText('Back to credential types')
+      await screen.findByText('Back to Credential Types')
     ).toBeInTheDocument();
     expect(screen.getByText('Details')).toBeInTheDocument();
+  });
+
+  test('says not found at a path no tab names', async () => {
+    renderAt('/credential_types/42/nope');
+    const link = await screen.findByRole('link', {
+      name: 'View Credential Type Details',
+    });
+    expect(link).toHaveAttribute('href', '/credential_types/42/details');
+    expect(screen.queryByText('CredentialTypeDetails')).not.toBeInTheDocument();
   });
 
   test('renders the edit panel at /edit', async () => {

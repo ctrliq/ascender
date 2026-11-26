@@ -1,12 +1,6 @@
 import type { SummaryFields } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Alert,
-  Badge,
-  Button,
-  Tooltip,
-  DropdownItem,
-} from '@patternfly/react-core';
+import { Alert, Badge, Button, DropdownItem } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 import { KebabifiedContext } from 'contexts/Kebabified';
@@ -19,6 +13,7 @@ import AlertModal from '../AlertModal';
 
 import ErrorDetail from '../ErrorDetail';
 import './ToolbarDeleteButton.css';
+import Tooltip from '../Tooltip';
 
 /** An item a list's toolbar can delete, with what the button reads off it. */
 export interface DeletableItem {

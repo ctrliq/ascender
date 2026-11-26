@@ -13,7 +13,7 @@ function CredentialTypes() {
   const { t } = useLingui();
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/credential_types': t`Credential Types`,
-    '/credential_types/add': t`Create new credential type`,
+    '/credential_types/add': t`Create New Credential Type`,
   });
 
   const buildBreadcrumbConfig = useCallback(
@@ -23,10 +23,10 @@ function CredentialTypes() {
       }
       setBreadcrumbConfig({
         '/credential_types': t`Credential Types`,
-        '/credential_types/add': t`Create new credential Type`,
+        '/credential_types/add': t`Create New Credential Type`,
         [`/credential_types/${credentialTypes.id}`]: `${credentialTypes.name}`,
-        [`/credential_types/${credentialTypes.id}/edit`]: t`Edit details`,
-        [`/credential_types/${credentialTypes.id}/details`]: t`Details`,
+        [`/credential_types/${credentialTypes.id}/edit`]: t`Edit ${credentialTypes.name}`,
+        [`/credential_types/${credentialTypes.id}/details`]: `${credentialTypes.name}`,
       });
     },
     [t]

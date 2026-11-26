@@ -34,18 +34,16 @@ function PromptInventorySourceDetail({
     optionsList = (
       <Content component={ContentVariants.ul}>
         {overwrite && (
-          <Content component={ContentVariants.li}>
-            {t`Overwrite local groups and hosts from remote inventory source`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Overwrite`}</Content>
         )}
         {overwrite_vars && (
           <Content component={ContentVariants.li}>
-            {t`Overwrite local variables from remote inventory source`}
+            {t`Overwrite Variables`}
           </Content>
         )}
         {update_on_launch && (
           <Content component={ContentVariants.li}>
-            {t`Update on launch`}
+            {t`Update on Launch`}
           </Content>
         )}
       </Content>
@@ -113,13 +111,12 @@ function PromptInventorySourceDetail({
         isEmpty={summary_fields?.credentials?.length === 0}
       />
       {optionsList && (
-        <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
+        <Detail fullWidth label={t`Update Options`} value={optionsList} />
       )}
       {source_vars && (
         <VariablesDetail
           dataCy="prompt-inventory-source-detail-source-variables"
           label={t`Source Variables`}
-          rows={4}
           value={source_vars}
           name="source_vars"
         />

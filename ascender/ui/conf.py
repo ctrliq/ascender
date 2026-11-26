@@ -78,7 +78,7 @@ register(
     field_class=CustomThemeField,
     allow_blank=True,
     default='',
-    label=_('Custom Theme'),
+    label=_('Custom Theme CSS'),
     help_text=_(
         'The contents of a CSS file, offered in the theme list alongside the '
         'themes that ship with the product. Scope the rules to '
@@ -98,6 +98,68 @@ register(
     default='',
     label=_('Custom Theme Name'),
     help_text=_('Name shown for the custom theme in the theme list. Defaults to Custom when left blank.'),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+# The ids are the stylesheet filenames in ascender/ui/src/themes, and "custom"
+# for the one CUSTOM_THEME supplies. A choice list is what makes this a dropdown
+# rather than a free text box, so adding a theme means adding it here too.
+register(
+    'DEFAULT_UI_THEME',
+    field_class=fields.ChoiceField,
+    choices=[
+        ('default', _('Default')),
+        ('light', _('Light')),
+        ('dark', _('Dark')),
+        ('classic', _('Classic')),
+        ('custom', _('Custom')),
+    ],
+    default='default',
+    label=_('Default Theme'),
+    help_text=_(
+        'The theme a user sees before they choose one of their own. There is '
+        'no blank: a user can always pick a different theme, so an unset value '
+        'would only mean Default by another name.'
+    ),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
+    'DEFAULT_UI_LANGUAGE',
+    field_class=fields.ChoiceField,
+    choices=[
+        ('', _('Follow the browser')),
+        ('en', _('English')),
+        ('ar', _('Arabic')),
+        ('zh', _('Chinese')),
+        ('nl', _('Dutch')),
+        ('fr', _('French')),
+        ('hi', _('Hindi')),
+        ('ja', _('Japanese')),
+        ('ko', _('Korean')),
+        ('es', _('Spanish')),
+    ],
+    allow_blank=True,
+    default='',
+    label=_('Default Language'),
+    help_text=_('The language a user sees before they choose one of their own. Leave it blank to follow the language the browser asks for.'),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
+    'MAX_UI_EDITOR_ROWS',
+    field_class=fields.IntegerField,
+    min_value=1,
+    label=_('Max Editor Rows'),
+    help_text=_(
+        'How far a read-only variables editor grows to fit its value before the rest scrolls. '
+        'The editor renders a line of DOM per line of content, so this is what keeps a job with '
+        'thousands of facts from costing seconds to paint. A reader can still set the height of a '
+        'single editor past this; the setting governs the height it takes on its own.'
+    ),
     category=_('UI'),
     category_slug='ui',
 )

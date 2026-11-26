@@ -8,18 +8,25 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import { isWorkflowDeleted } from './WorkflowApprovalUtils';
 
 export interface WorkflowDenyButtonProps {
   isDetailView?: boolean;
   workflowApproval: WorkflowApproval;
   /** Raises the toast the screen shows once the vote has landed. */
   onHandleToast: (id: number, title: string) => void;
+  /**
+   * Holds the button back for a reason the approval itself does not show,
+   * such as the viewer not being allowed to vote on it.
+   */
+  isDisabled?: boolean;
 }
 
 function WorkflowDenyButton({
   isDetailView,
   workflowApproval,
   onHandleToast,
+  isDisabled = false,
 }: WorkflowDenyButtonProps) {
   const { t } = useLingui();
   const hasBeenActedOn =
@@ -27,6 +34,7 @@ function WorkflowDenyButton({
       .length > 0 ||
     workflowApproval.status === 'canceled' ||
     workflowApproval.user_has_voted === true;
+  const workflowIsDeleted = isWorkflowDeleted(workflowApproval);
 
   const { id } = workflowApproval;
   const { error: denyApprovalError, request: denyWorkflowApprovals } =
@@ -44,10 +52,13 @@ function WorkflowDenyButton({
     <>
       <Button
         aria-label={
-          hasBeenActedOn ? t`This workflow has already been acted on` : t`Deny`
+          hasBeenActedOn
+            ? t`This workflow has already been acted on`
+            : (workflowIsDeleted && t`This workflow has been deleted`) ||
+              t`Deny`
         }
         ouiaId="workflow-deny-button"
-        isDisabled={hasBeenActedOn}
+        isDisabled={hasBeenActedOn || workflowIsDeleted || isDisabled}
         variant={isDetailView ? 'secondary' : 'plain'}
         onClick={() => handleDeny()}
       >

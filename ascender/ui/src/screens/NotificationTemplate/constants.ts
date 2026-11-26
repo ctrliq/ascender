@@ -1,13 +1,10 @@
-/* eslint-disable-next-line import-x/prefer-default-export */
-export const NOTIFICATION_TYPES = {
-  email: 'Email',
-  grafana: 'Grafana',
-  irc: 'IRC',
-  matrix: 'Matrix',
-  mattermost: 'Mattermost',
-  pagerduty: 'Pagerduty',
-  rocketchat: 'Rocket.Chat',
-  slack: 'Slack',
-  twilio: 'Twilio',
-  webhook: 'Webhook',
-};
+/*
+ * The notification types live in util/notificationTypes, where the shared
+ * notifications tab reads them as well; they are named here too so that the
+ * screens of this folder keep importing them from beside themselves.
+ */
+export {
+  NOTIFICATION_TYPES,
+  getNotificationTypeLabel,
+  getNotificationTypeOptions,
+} from 'util/notificationTypes';

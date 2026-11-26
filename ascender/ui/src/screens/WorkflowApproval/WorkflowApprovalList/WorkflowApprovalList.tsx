@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -72,8 +72,28 @@ function WorkflowApprovalsList() {
     fetchWorkflowApprovals
   );
 
-  const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected(workflowApprovals);
+  const {
+    selected: selectedSnapshots,
+    isAllSelected,
+    handleSelect,
+    clearSelected,
+    selectAll,
+  } = useSelected(workflowApprovals);
+
+  // useSelected keeps a copy of each row as it was when it was ticked, while
+  // the websocket moves the rows in workflowApprovals on. Reading the
+  // selection back by id keeps Approve, Deny and Delete deciding on the status
+  // an approval has now, so one that timed out or was acted on elsewhere after
+  // being ticked is not still offered. A row that has since left the page
+  // keeps its last known copy.
+  const selected = useMemo(
+    () =>
+      selectedSnapshots.map(
+        (row) =>
+          workflowApprovals.find((approval) => approval.id === row.id) ?? row
+      ),
+    [selectedSnapshots, workflowApprovals]
+  );
 
   const {
     isLoading: isDeleteLoading,
@@ -200,8 +220,8 @@ function WorkflowApprovalsList() {
                     errorMessage={
                       <Plural
                         value={selected.length}
-                        one="This approval cannot be deleted due to insufficient permissions or a pending job status"
-                        other="These approvals cannot be deleted due to insufficient permissions or a pending job status"
+                        one="This workflow approval cannot be deleted due to insufficient permissions or a pending job status"
+                        other="These workflow approvals cannot be deleted due to insufficient permissions or a pending job status"
                       />
                     }
                   />,
@@ -211,7 +231,7 @@ function WorkflowApprovalsList() {
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell>{t`Workflow Job`}</HeaderCell>
+                <HeaderCell>{t`Workflow`}</HeaderCell>
                 <HeaderCell sortKey="started">{t`Started`}</HeaderCell>
                 <HeaderCell>{t`Status`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
@@ -239,9 +259,7 @@ function WorkflowApprovalsList() {
           title={t`Error!`}
           onClose={clearDeletionError}
         >
-          {typeof deletionError === 'string'
-            ? t`Failed to delete one or more workflow approval.`
-            : t`Failed to delete one or more workflow approval.`}
+          {t`Failed to delete one or more workflow approvals.`}
           <ErrorDetail
             error={
               deletionError instanceof Error
@@ -259,8 +277,8 @@ function WorkflowApprovalsList() {
           onClose={dismissActionError}
         >
           {approveApprovalError
-            ? t`Failed to approve one or more workflow approval.`
-            : t`Failed to deny one or more workflow approval.`}
+            ? t`Failed to approve one or more workflow approvals.`
+            : t`Failed to deny one or more workflow approvals.`}
           <ErrorDetail
             error={
               actionError instanceof Error

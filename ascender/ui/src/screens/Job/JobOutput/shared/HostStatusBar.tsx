@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Badge, Tooltip } from '@patternfly/react-core';
+import { Badge } from '@patternfly/react-core';
 import './HostStatusBar.css';
+import Tooltip from 'components/Tooltip';
 
 // A segment's colour and share of the bar are per host status, so they stay
 // on the element rather than becoming a class apiece.
@@ -13,10 +14,17 @@ const segmentStyle = (color: string | undefined, count: number) => ({
 export interface HostStatusBarProps {
   /** How many hosts ended in each state, as the job's summary reports. */
   counts?: Record<string, number>;
+  /**
+   * What the run itself came to, which is what the bar shows where the run
+   * has no hosts to report: a command, a sync and a cleanup job all end
+   * without a play, so the bar would otherwise be a grey line on every one
+   * of them whatever they came to.
+   */
+  jobStatus?: string;
   [key: string]: unknown;
 }
 
-const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
+const HostStatusBar = ({ counts = {}, jobStatus }: HostStatusBarProps) => {
   const { t } = useLingui();
   const noData = Object.keys(counts).length === 0;
   const hostStatus = {
@@ -67,14 +75,31 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
   });
 
   if (noData) {
+    /*
+     * A run with no hosts still came to something, and this is the only band
+     * of colour the output carries: it says the result, in the colours the
+     * segments above use for a host that ended the same way. A run still
+     * going says nothing, since there is nothing to say yet.
+     */
+    const outcomes: Record<string, { color: string; label: string }> = {
+      successful: { color: hostStatus.ok.color, label: t`Successful` },
+      failed: { color: hostStatus.failures.color, label: t`Failed` },
+      error: { color: hostStatus.failures.color, label: t`Error` },
+      canceled: { color: '#f0ab00', label: t`Canceled` },
+    };
+    const outcome = outcomes[jobStatus as keyof typeof outcomes];
     return (
       <div className="host-status-bar ascender-host-status-bar__wrapper">
         <Tooltip
-          content={t`Host status information for this job is unavailable.`}
+          content={
+            outcome
+              ? outcome.label
+              : t`Host status information for this job is unavailable.`
+          }
         >
           <div
             className="ascender-host-status-bar__segment"
-            style={segmentStyle(undefined, 1)}
+            style={segmentStyle(outcome?.color, 1)}
           />
         </Tooltip>
       </div>

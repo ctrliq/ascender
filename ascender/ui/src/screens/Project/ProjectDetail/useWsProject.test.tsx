@@ -148,4 +148,107 @@ describe('useWsProject', () => {
       })
     );
   });
+
+  /*
+   * The api sends no finished time for a run that ends in error, so the end
+   * of a sync has to be read from its status, or the project would keep that
+   * sync as current and never show what it left behind.
+   */
+  test('reads the project back when its sync ends in error', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const project = {
+      id: 1,
+      summary_fields: { last_job: { id: 1, status: 'successful' } },
+    };
+    renderWithContexts(<Test project={project} />);
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+
+    mockServer.send(
+      JSON.stringify({
+        group_name: 'jobs',
+        project_id: 1,
+        status: 'error',
+        type: 'project_update',
+        unified_job_id: 2,
+        unified_job_template_id: 1,
+      })
+    );
+
+    await waitFor(() => expect(ProjectsAPI.readDetail).toHaveBeenCalledWith(1));
+  });
+
+  test('ignores an update belonging to another project', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const project = {
+      id: 1,
+      summary_fields: {
+        last_job: { id: 1, status: 'successful' },
+      },
+    };
+    renderWithContexts(<Test project={project} />);
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+
+    // Another project's sync, running and then finished.
+    mockServer.send(
+      JSON.stringify({
+        group_name: 'jobs',
+        project_id: 2,
+        status: 'running',
+        type: 'project_update',
+        unified_job_id: 7,
+        unified_job_template_id: 2,
+      })
+    );
+    mockServer.send(
+      JSON.stringify({
+        group_name: 'jobs',
+        project_id: 2,
+        status: 'successful',
+        type: 'project_update',
+        unified_job_id: 7,
+        unified_job_template_id: 2,
+        finished: '2020-07-02T16:28:31.839071Z',
+      })
+    );
+    // Then one of this project's, so the test knows the others were seen.
+    mockServer.send(
+      JSON.stringify({
+        group_name: 'jobs',
+        project_id: 1,
+        status: 'pending',
+        type: 'project_update',
+        unified_job_id: 8,
+        unified_job_template_id: 1,
+      })
+    );
+
+    await waitFor(() =>
+      expect(getResult().summary_fields.current_job?.id).toEqual(8)
+    );
+    expect(ProjectsAPI.readDetail).not.toHaveBeenCalled();
+  });
 });

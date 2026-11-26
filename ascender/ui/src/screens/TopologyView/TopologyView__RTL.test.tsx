@@ -76,7 +76,7 @@ describe('<TopologyView />', () => {
     renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Topology View'
+      'Topology'
     );
     expect(screen.getByLabelText('mesh-svg')).toBeVisible();
   });
@@ -90,7 +90,7 @@ describe('<TopologyView />', () => {
     renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Topology View'
+      'Topology'
     );
     expect(screen.getByLabelText('mesh-svg')).toBeVisible();
   });
@@ -110,8 +110,14 @@ describe('<TopologyView />', () => {
     renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Topology View'
+      'Topology'
     );
     expect(screen.getByText(/something went wrong/i)).toBeVisible();
+    // The tab strip stays, so the other lists are still a click away.
+    expect(
+      screen.getByRole('tab', { name: 'Instance Groups' })
+    ).toBeInTheDocument();
+    // With no graph to wait for, Refresh is the way to try again.
+    expect(screen.getByRole('button', { name: 'Refresh' })).toBeEnabled();
   });
 });

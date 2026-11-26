@@ -38,16 +38,41 @@ export interface AccessRecord {
   [key: string]: unknown;
 }
 
+/**
+ * The roles a toolbar Disassociate takes off a row: the ones given to the user
+ * directly on this resource, which the api lets this viewer remove. A role held
+ * through a team is the team's, and taking it would take it from every member;
+ * one inherited from an organization or a parent is not removable here at all.
+ * Both stay, and the chips remain the way to handle a team's role one by one.
+ */
+export const removableRoles = (record: AccessRecord): AccessRole[] =>
+  (record.summary_fields?.direct_access ?? [])
+    .map(({ role }) => role)
+    .filter((role) => !role.team_id && role.user_capabilities?.unattach);
+
 export interface ResourceAccessListItemProps {
   accessRecord: AccessRecord;
+  /** Whether the row is ticked for the toolbar's Disassociate, and the tick. */
+  isSelected?: boolean;
+  onSelect?: () => void;
+  rowIndex?: number;
   /** Takes one role off this row, which the list confirms before it does. */
   onRoleDelete: (role: AccessRole, record: AccessRecord) => void;
+  /**
+   * The ids of the roles that belong to the resource itself, its object roles.
+   * Only a chip for one of these can be closed.
+   */
+  resourceRoleIds?: number[];
   [key: string]: unknown;
 }
 
 function ResourceAccessListItem({
   accessRecord,
   onRoleDelete,
+  resourceRoleIds = [],
+  isSelected = false,
+  onSelect,
+  rowIndex,
 }: ResourceAccessListItemProps) {
   const getRoleLists = () => {
     const teamRoles: AccessRole[] = [];
@@ -67,16 +92,37 @@ function ResourceAccessListItem({
     return [teamRoles, userRoles] as const;
   };
 
+  /*
+   * A chip can be closed only on a role of this resource itself, held directly
+   * or through a team, that the api lets this viewer take off. The api lists a
+   * team's inherited roles among the direct ones too, the organization's
+   * admin role on a team that administers the organization for one, so being
+   * in direct_access is not enough: the role has to be one of the resource's
+   * own. An inherited one lives on the organization or parent it comes from,
+   * and closing it here would take away far more than this resource's access.
+   */
+  const directRoles = new Set(
+    (accessRecord.summary_fields?.direct_access ?? []).map(({ role }) => role)
+  );
+  const ownRoleIds = new Set(resourceRoleIds);
+  const canDisassociate = (role: AccessRole) =>
+    directRoles.has(role) &&
+    ownRoleIds.has(role.id) &&
+    Boolean(role.user_capabilities?.unattach);
+
   const renderChip = (role: AccessRole) => (
     <Label
       variant="outline"
       key={role.id}
-      onClose={() => {
-        onRoleDelete(role, accessRecord);
-      }}
-
+      onClose={
+        canDisassociate(role)
+          ? () => {
+              onRoleDelete(role, accessRecord);
+            }
+          : undefined
+      }
       data-ouia-component-id={`${role.name}-${role.id}`}
-      closeBtnAriaLabel={t`Remove ${role.name} chip`}
+      closeBtnAriaLabel={t`Disassociate ${role.name}`}
     >
       {role.name}
     </Label>
@@ -89,7 +135,16 @@ function ResourceAccessListItem({
       id={`access-item-row-${accessRecord.id}`}
       ouiaId={`access-item-row-${accessRecord.id}`}
     >
-      <Td id={`access-record-${accessRecord.id}`} dataLabel={t`Name`}>
+      <Td
+        select={{
+          rowIndex: rowIndex ?? 0,
+          isSelected,
+          onSelect: () => onSelect?.(),
+          isDisabled: removableRoles(accessRecord).length === 0,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <Td id={`access-record-${accessRecord.id}`} dataLabel={t`Username`}>
         {accessRecord.id ? (
           <Link to={{ pathname: `/users/${accessRecord.id}/details` }}>
             <b>{accessRecord.username}</b>
@@ -98,8 +153,8 @@ function ResourceAccessListItem({
           <b>{accessRecord.username}</b>
         )}
       </Td>
-      <Td dataLabel={t`First name`}>{accessRecord.first_name}</Td>
-      <Td dataLabel={t`Last name`}>{accessRecord.last_name}</Td>
+      <Td dataLabel={t`First Name`}>{accessRecord.first_name}</Td>
+      <Td dataLabel={t`Last Name`}>{accessRecord.last_name}</Td>
       <Td dataLabel={t`Roles`}>
         <DetailList stacked>
           <Detail

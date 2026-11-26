@@ -86,4 +86,30 @@ describe('<HeaderRow />', () => {
 
     expect(screen.getAllByRole('columnheader')).toHaveLength(3);
   });
+
+  /*
+   * Every column reads from the left, the actions one included. It used to be
+   * singled out and pushed right, which put the heading over the far edge of
+   * the table rather than over the icons it names, and the test that it was the
+   * actions column was the English word: under any other language the heading
+   * quietly went back to the left while the icons stayed where they were.
+   */
+  test('gives the actions column no alignment of its own', async () => {
+    const { container } = renderWithContexts(
+      <table>
+        <HeaderRow qsConfig={qsConfig}>
+          <HeaderCell>Status</HeaderCell>
+          <HeaderCell>Actions</HeaderCell>
+        </HeaderRow>
+      </table>
+    );
+
+    const headers = [...container.querySelectorAll('th')];
+    const plain = headers.find((th) => th.textContent?.trim() === 'Status');
+    const actions = headers.find((th) => th.textContent?.trim() === 'Actions');
+
+    expect(actions?.className).not.toMatch(/align-right/);
+    // The same cell as any other, which is the whole of the point.
+    expect(actions?.className).toBe(plain?.className);
+  });
 });

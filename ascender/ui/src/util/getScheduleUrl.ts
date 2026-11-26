@@ -26,7 +26,7 @@ export default function getScheduleUrl(job: AnyJob): string | undefined {
       scheduleUrl = `/projects/${templateId}/schedules/${scheduleId}/details`;
       break;
     case 'system_job':
-      scheduleUrl = `/management_jobs/${templateId}/schedules/${scheduleId}/details`;
+      scheduleUrl = `/cleanup_jobs/${templateId}/schedules/${scheduleId}/details`;
       break;
     case 'workflow_job':
       scheduleUrl = `/templates/workflow_job_template/${templateId}/schedules/${scheduleId}/details`;

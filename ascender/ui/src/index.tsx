@@ -6,6 +6,9 @@ import { createRoot } from 'react-dom/client';
 import './setupCSP';
 import '@patternfly/react-core/dist/styles/base.css';
 import './border.css';
+import './switch.css';
+import './slider.css';
+import './nav.css';
 
 import App from './App';
 

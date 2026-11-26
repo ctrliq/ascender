@@ -1,24 +1,28 @@
-import type { ApiEntity } from 'types/api';
+import type { ApiEntity, Group } from 'types/api';
 import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
-import { DropdownItem } from '@patternfly/react-core';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import useCachedRequest from 'hooks/useCachedRequest';
 import { useDismissableError } from 'hooks/useRequest';
-import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import {
+  getQSConfig,
+  parseQueryString,
+  mergeParams,
+  updateQueryString,
+} from 'util/qs';
 import useSelected from 'hooks/useSelected';
 
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
   HeaderCell,
   HeaderRow,
+  ToolbarAddButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import AddDropDownButton from 'components/AddDropDownButton';
-import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
+import RunSelectionMenu from 'components/JobList/RunSelectionMenu';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import AssociateModal from 'components/AssociateModal';
@@ -32,7 +36,17 @@ const QS_CONFIG = getQSConfig('group', {
   page_size: 20,
   order_by: 'name',
 });
-function InventoryRelatedGroupList() {
+export interface InventoryRelatedGroupListProps {
+  /**
+   * The group this list sits under, which a run with nothing ticked is
+   * aimed at rather than at the whole inventory.
+   */
+  inventoryGroup?: Group;
+}
+
+function InventoryRelatedGroupList({
+  inventoryGroup,
+}: InventoryRelatedGroupListProps = {}) {
   const { t } = useLingui();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
@@ -120,7 +134,7 @@ function InventoryRelatedGroupList() {
     [groupId, fetchRelated]
   );
 
-  const { selected, isAllSelected, handleSelect, setSelected } =
+  const { selected, isAllSelected, handleSelect, setSelected, clearSelected } =
     useSelected(groups);
 
   const disassociateGroups = useCallback(async () => {
@@ -132,10 +146,35 @@ function InventoryRelatedGroupList() {
       );
     } catch (err) {
       setDisassociateError(err);
+      fetchRelated();
+      setSelected([]);
+      return;
+    }
+    setSelected([]);
+    /*
+     * Taking every group off a page past the first would leave it empty, so
+     * step back one instead, the way useDeleteItems does for the other lists.
+     * The new address fetches the list by itself.
+     */
+    const page = Number(parseQueryString(QS_CONFIG, location.search).page ?? 1);
+    if (page > 1 && isAllSelected) {
+      const qs = updateQueryString(QS_CONFIG, location.search, {
+        page: page - 1,
+      });
+      navigate(`${location.pathname}?${qs}`);
+      return;
     }
     fetchRelated();
-    setSelected([]);
-  }, [groupId, selected, setSelected, fetchRelated]);
+  }, [
+    groupId,
+    selected,
+    setSelected,
+    fetchRelated,
+    isAllSelected,
+    location.pathname,
+    location.search,
+    navigate,
+  ]);
 
   const fetchGroupsOptions = useCallback(
     () => InventoriesAPI.readGroupsOptions(inventoryId),
@@ -148,32 +187,25 @@ function InventoryRelatedGroupList() {
 
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_groups/add`;
 
-  const addExistingGroup = t`Add existing group`;
-  const addNewGroup = t`Add new group`;
-  const addButton = (
-    <AddDropDownButton
+  /*
+   * Two buttons rather than one menu, each saying what it does: Add makes a
+   * new group in this group, Associate puts an existing one in it.
+   */
+  const addButtons = [
+    <ToolbarAddButton
       key="add"
-      ouiaId="add-existing-group-button"
-      dropdownItems={[
-        <DropdownItem
-          key={addExistingGroup}
-          onClick={() => setIsModalOpen(true)}
-          aria-label={addExistingGroup}
-          ouiaId="add-existing-group-dropdown-item"
-        >
-          {addExistingGroup}
-        </DropdownItem>,
-        <DropdownItem
-          ouiaId="add-new-group-button"
-          onClick={() => navigate(addFormUrl)}
-          key={addNewGroup}
-          aria-label={addNewGroup}
-        >
-          {addNewGroup}
-        </DropdownItem>,
-      ]}
-    />
-  );
+      ouiaId="related-groups-add-button"
+      tooltip={t`Add Group`}
+      linkTo={addFormUrl}
+    />,
+    <ToolbarAddButton
+      key="associate"
+      ouiaId="related-groups-associate-button"
+      defaultLabel={t`Associate`}
+      tooltip={t`Associate Group`}
+      onClick={() => setIsModalOpen(true)}
+    />,
+  ];
   const isNotReadOnlyInventory = !isReadOnlyInventoryType(inventoryType);
   return (
     <>
@@ -184,6 +216,7 @@ function InventoryRelatedGroupList() {
         itemCount={itemCount}
         pluralizedItemName={t`Related Groups`}
         qsConfig={QS_CONFIG}
+        clearSelected={clearSelected}
         onRowClick={handleSelect}
         toolbarSearchColumns={[
           {
@@ -217,24 +250,30 @@ function InventoryRelatedGroupList() {
             }
             qsConfig={QS_CONFIG}
             additionalControls={[
-              ...(canAdd ? [addButton] : []),
-              ...(!isAdHocDisabled
-                ? [
-                    <AdHocCommands
-                      adHocItems={selected}
-                      hasListItems={itemCount > 0}
-                      onLaunchLoading={setIsAdHocLaunchLoading}
-                      moduleOptions={moduleOptions}
-                    />,
-                  ]
-                : []),
+              <RunSelectionMenu
+                key="run"
+                ouiaId="inventory-related-group-list-run-menu"
+                items={selected}
+                inventoryId={inventoryId}
+                moduleOptions={moduleOptions}
+                onLaunchLoading={setIsAdHocLaunchLoading}
+                canRunCommand={!isAdHocDisabled}
+                scope={
+                  inventoryGroup && {
+                    item: inventoryGroup,
+                    label: t`Run on Group`,
+                  }
+                }
+              />,
+              ...(canAdd ? addButtons : []),
+
               ...(isNotReadOnlyInventory
                 ? [
                     <DisassociateButton
                       key="disassociate"
                       onDisassociate={disassociateGroups}
                       itemsToDisassociate={selected}
-                      modalTitle={t`Disassociate related group(s)?`}
+                      modalTitle={t`Disassociate these related groups?`}
                     />,
                   ]
                 : []),
@@ -258,7 +297,6 @@ function InventoryRelatedGroupList() {
             onSelect={() => handleSelect(group)}
           />
         )}
-        emptyStateControls={canAdd && addButton}
       />
       {isModalOpen && (
         <AssociateModal
@@ -268,7 +306,7 @@ function InventoryRelatedGroupList() {
           isModalOpen={isModalOpen}
           onAssociate={associateGroup}
           onClose={() => setIsModalOpen(false)}
-          title={t`Select Groups`}
+          title={t`Associate Groups`}
         />
       )}
       {error && (
@@ -279,7 +317,7 @@ function InventoryRelatedGroupList() {
           variant="error"
         >
           {associateError
-            ? t`Failed to associate.`
+            ? t`Failed to associate one or more groups.`
             : t`Failed to disassociate one or more groups.`}
           <ErrorDetail error={error} />
         </AlertModal>

@@ -64,7 +64,18 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
 
   useEffect(() => {
     clearSessionTheme();
-    applyTheme('default', false);
+    // Nobody is signed in here, so there is no account theme to follow, but the
+    // installation's DEFAULT_UI_THEME still applies: the config context mirrors
+    // it to storage on every load, which is the only copy available before the
+    // api has been asked anything. Falling back to the bundled default covers a
+    // first ever visit, where nothing has been mirrored yet.
+    let installDefault: string | null = null;
+    try {
+      installDefault = localStorage.getItem('default_theme');
+    } catch {
+      // Storage refused: the bundled default stands.
+    }
+    applyTheme(installDefault || 'default', false);
     return () => {
       applyTheme(getSavedThemeId());
     };

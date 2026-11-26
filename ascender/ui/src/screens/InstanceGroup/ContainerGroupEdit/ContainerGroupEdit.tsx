@@ -19,7 +19,7 @@ export interface ContainerGroupEditProps {
 function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<unknown>(null);
-  const detailsIUrl = `/instance_groups/container_group/${instanceGroup.id}/details`;
+  const detailsIUrl = `/container_groups/${instanceGroup.id}/details`;
 
   const {
     error: fetchError,

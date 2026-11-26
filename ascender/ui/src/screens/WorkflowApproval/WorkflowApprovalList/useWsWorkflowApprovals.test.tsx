@@ -34,6 +34,45 @@ vi.mock('../../../hooks/useThrottle', () => ({
   default: vi.fn((val) => val),
 }));
 
+/*
+Every state setter in this file is wrapped so that a setter called while a
+functional updater is running is counted. An updater has to be pure: React may
+run it twice, or later during render, so asking for a reload from inside one
+fired at times nothing could predict. The wrapper is otherwise transparent, and
+its one extra hook is called on every render, so hook order is unchanged.
+*/
+const purity = vi.hoisted(() => ({ depth: 0, setsInsideUpdater: 0 }));
+vi.mock('react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react')>();
+  function useState<S>(initial: S | (() => S)) {
+    const [state, setState] = actual.useState(initial);
+    const wrapped = actual.useRef<React.Dispatch<
+      React.SetStateAction<S>
+    > | null>(null);
+    if (!wrapped.current) {
+      wrapped.current = (action) => {
+        if (purity.depth > 0) {
+          purity.setsInsideUpdater += 1;
+        }
+        if (typeof action !== 'function') {
+          setState(action);
+          return;
+        }
+        setState((previous) => {
+          purity.depth += 1;
+          try {
+            return (action as (prev: S) => S)(previous);
+          } finally {
+            purity.depth -= 1;
+          }
+        });
+      };
+    }
+    return [state, wrapped.current] as const;
+  }
+  return { ...actual, default: { ...actual, useState }, useState };
+});
+
 describe('useWsWorkflowApprovals hook', () => {
   let debug: typeof global.console.debug;
   beforeEach(() => {
@@ -168,5 +207,34 @@ describe('useWsWorkflowApprovals hook', () => {
     });
 
     expect(fetchWorkflowApprovals).toHaveBeenCalledTimes(0);
+  });
+
+  test('should ask for a reload without a side effect in a state updater', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+    const fetchWorkflowApprovals = vi.fn(() => []);
+    purity.setsInsideUpdater = 0;
+    await act(async () => {
+      renderWithContexts(
+        <Test
+          workflowApprovals={[{ id: 1, status: 'pending' }]}
+          fetchWorkflowApprovals={fetchWorkflowApprovals}
+        />
+      );
+    });
+
+    await mockServer.connected;
+    await act(async () => {
+      mockServer.send(
+        JSON.stringify({
+          unified_job_id: 1,
+          type: 'workflow_approval',
+          status: 'successful',
+        })
+      );
+    });
+
+    expect(fetchWorkflowApprovals).toHaveBeenCalledTimes(1);
+    expect(purity.setsInsideUpdater).toBe(0);
   });
 });

@@ -40,7 +40,7 @@ describe('<GitHubOrgEdit />', () => {
 
   async function setup() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/github/organization/edit'],
+      initialEntries: ['/authentication/github/organization/edit'],
     });
     const utils = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -73,17 +73,26 @@ describe('<GitHubOrgEdit />', () => {
 
   test('should successfully send default values to api on form revert all', async () => {
     const { user, container } = await setup();
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(0);
+    expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     expect(
       screen.queryByLabelText('Confirm revert all')
     ).not.toBeInTheDocument();
     await user.click(
-      container.querySelector('button[aria-label="Revert all to default"]')!
+      container.querySelector('button[aria-label="Revert All to Default"]')!
     );
     expect(screen.getByLabelText('Confirm revert all')).toBeInTheDocument();
     await user.click(screen.getByLabelText('Confirm revert all'));
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('github-org');
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Only the settings this page shows, each at its default: a DELETE on
+    // the category would reset what the page does not show as well.
+    expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
+      SOCIAL_AUTH_GITHUB_ORG_KEY: '',
+      SOCIAL_AUTH_GITHUB_ORG_SECRET: '',
+      SOCIAL_AUTH_GITHUB_ORG_NAME: '',
+      SOCIAL_AUTH_GITHUB_ORG_ORGANIZATION_MAP: null,
+      SOCIAL_AUTH_GITHUB_ORG_TEAM_MAP: null,
+    });
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -113,7 +122,7 @@ describe('<GitHubOrgEdit />', () => {
     await user.click(container.querySelector('button[aria-label="Save"]')!);
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
-        '/settings/github/organization/details'
+        '/authentication/github/organization/details'
       )
     );
   });
@@ -122,7 +131,7 @@ describe('<GitHubOrgEdit />', () => {
     const { user, container } = await setup();
     await user.click(container.querySelector('button[aria-label="Cancel"]')!);
     expect(history.location.pathname).toEqual(
-      '/settings/github/organization/details'
+      '/authentication/github/organization/details'
     );
   });
 

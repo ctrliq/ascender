@@ -27,11 +27,11 @@ function Hosts() {
         '/hosts': t`Hosts`,
         '/hosts/add': t`Create New Host`,
         [`/hosts/${host.id}`]: `${host.name}`,
-        [`/hosts/${host.id}/edit`]: t`Edit Details`,
-        [`/hosts/${host.id}/details`]: t`Details`,
-        [`/hosts/${host.id}/facts`]: t`Facts`,
-        [`/hosts/${host.id}/groups`]: t`Groups`,
-        [`/hosts/${host.id}/jobs`]: t`Jobs`,
+        [`/hosts/${host.id}/edit`]: t`Edit ${host.name}`,
+        [`/hosts/${host.id}/details`]: `${host.name}`,
+        [`/hosts/${host.id}/facts`]: `${host.name}`,
+        [`/hosts/${host.id}/groups`]: `${host.name}`,
+        [`/hosts/${host.id}/runs`]: `${host.name}`,
       });
     },
     [t]

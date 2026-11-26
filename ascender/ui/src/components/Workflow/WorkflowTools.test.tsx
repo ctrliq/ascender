@@ -1,4 +1,5 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowTools from './WorkflowTools';
 
@@ -47,5 +48,59 @@ describe('WorkflowTools', () => {
     expect(pan).toHaveBeenCalledWith('right');
     await user.click(byOuia('visualizer-pan-down-button')!);
     expect(pan).toHaveBeenCalledWith('down');
+  });
+
+  // Short Title Case names, as the zoom and pan buttons beside them have.
+  test.each([
+    ['visualizer-zoom-to-fit-button', 'Fit to Screen'],
+    ['visualizer-pan-middle-button', 'Reset Zoom'],
+  ])('names %s %s in its tooltip', async (ouiaId, tooltip) => {
+    const { container, user } = renderWithContexts(
+      <WorkflowTools
+        onClose={() => {}}
+        onFitGraph={() => {}}
+        onPan={() => {}}
+        onPanToMiddle={() => {}}
+        onZoomChange={() => {}}
+        zoomPercentage={100}
+      />
+    );
+    await user.hover(
+      container.querySelector(`[data-ouia-component-id="${ouiaId}"]`)!
+    );
+    expect(await screen.findByText(tooltip)).toBeInTheDocument();
+  });
+
+  /*
+   * The pan buttons are a cross, so a label above each would cover the one
+   * beside or above it: each opens away from the others instead, and the
+   * zoom row, with nothing above it, opens below.
+   */
+  test.each([
+    ['visualizer-zoom-to-fit-button', 'bottom'],
+    ['visualizer-zoom-out-button', 'bottom'],
+    ['visualizer-zoom-in-button', 'bottom'],
+    ['visualizer-pan-left-button', 'left'],
+    ['visualizer-pan-up-button', 'top'],
+    ['visualizer-pan-down-button', 'bottom'],
+    ['visualizer-pan-right-button', 'right'],
+  ])('opens the tooltip of %s to the %s', async (ouiaId, side) => {
+    const { container, user } = renderWithContexts(
+      <WorkflowTools
+        onClose={() => {}}
+        onFitGraph={() => {}}
+        onPan={() => {}}
+        onPanToMiddle={() => {}}
+        onZoomChange={() => {}}
+        zoomPercentage={100}
+      />
+    );
+    await user.hover(
+      container.querySelector(
+        `[data-ouia-component-id="${ouiaId}"]`
+      ) as HTMLElement
+    );
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveClass(`pf-m-${side}`);
   });
 });

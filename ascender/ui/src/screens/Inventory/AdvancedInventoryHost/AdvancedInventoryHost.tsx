@@ -7,9 +7,12 @@ import { CaretLeftIcon } from '@patternfly/react-icons';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import RoutedTabs from 'components/RoutedTabs';
+import JobList from 'components/JobList';
+import InventoryRunMenu from 'components/JobList/InventoryRunMenu';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
 import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
+import InventoryHostFacts from '../InventoryHostFacts';
 
 export interface AdvancedInventoryHostProps {
   inventory: AnyInventory;
@@ -27,6 +30,13 @@ function AdvancedInventoryHost({
     hostId: string;
   };
   const hostBaseUrl = `/inventories/${inventoryType}/${inventory.id}/hosts/${hostId}`;
+  /* This screen serves smart, constructed and federated inventories alike,
+     so the way back names the kind the host is actually in. */
+  const notFoundLink = {
+    smart_inventory: t`View Smart Inventory Host Details`,
+    constructed_inventory: t`View Constructed Inventory Host Details`,
+    federated_inventory: t`View Federated Inventory Host Details`,
+  };
 
   const {
     result: host,
@@ -74,6 +84,17 @@ function AdvancedInventoryHost({
       link: `${hostBaseUrl}/details`,
       id: 1,
     },
+    // The same tabs a regular inventory's host has, bar its groups.
+    {
+      name: t`Facts`,
+      link: `${hostBaseUrl}/facts`,
+      id: 2,
+    },
+    {
+      name: t`Runs`,
+      link: `${hostBaseUrl}/runs`,
+      id: 3,
+    },
   ];
 
   return (
@@ -92,14 +113,33 @@ function AdvancedInventoryHost({
             path="details"
             element={<AdvancedInventoryHostDetail host={host} />}
           />
+          <Route path="facts" element={<InventoryHostFacts host={host} />} />
+          {/* The tab's address before the rail called these runs. */}
+          <Route path="jobs" element={<Navigate to="../runs" replace />} />
+          <Route
+            path="runs"
+            element={
+              <JobList
+                defaultParams={{ job__hosts: host.id }}
+                /* The hosts list's Run menu, aimed at this one host in the
+                   inventory it is listed under. */
+                runControl={
+                  <InventoryRunMenu
+                    inventoryId={inventory.id}
+                    items={[{ id: host.id, name: host.name }]}
+                    tooltip={t`Run on Host`}
+                  />
+                }
+              />
+            }
+          />
           <Route
             path="*"
             element={
               <ContentError isNotFound>
                 <Link to={`${hostBaseUrl}/details`}>
-                  {inventoryType === 'smart_inventory'
-                    ? t`View smart inventory host details`
-                    : t`View constructed inventory host details`}
+                  {notFoundLink[inventoryType as keyof typeof notFoundLink] ??
+                    t`View Inventory Host Details`}
                 </Link>
               </ContentError>
             }

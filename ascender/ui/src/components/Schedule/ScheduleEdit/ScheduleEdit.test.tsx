@@ -663,4 +663,82 @@ describe('<ScheduleEdit />', () => {
         'DTSTART;TZID=America/New_York:20200325T100000 RRULE:INTERVAL=1;COUNT=1;FREQ=MINUTELY',
     });
   });
+
+  /*
+   * A schedule with a survey answer and a variable of its own, on a template
+   * that prompts for both. The form only holds survey_ and extra_vars values
+   * once the Prompt wizard has loaded them from the schedule.
+   */
+  const promptingProps = {
+    schedule: { ...mockSchedule, extra_data: { k: 'v2', qv: 'x' } },
+    launchConfig: {
+      ...launchConfig,
+      survey_enabled: true,
+      ask_variables_on_launch: true,
+    },
+    surveyConfig: {
+      spec: [
+        {
+          question_name: 'qv',
+          required: false,
+          type: 'text',
+          variable: 'qv',
+          default: 'd',
+        },
+      ],
+    },
+  };
+  const unchangedValues = {
+    description: '',
+    frequency: [],
+    frequencyOptions: {},
+    name: 'mock schedule',
+    startDate: '2020-04-02',
+    startTime: '2:45 PM',
+    timezone: 'America/New_York',
+  };
+
+  test('keeps extra_data as saved when the prompt wizard was not opened', async () => {
+    renderEdit(promptingProps);
+    await waitFor(() => expect(formProps).toBeDefined());
+
+    await submit(unchangedValues);
+
+    expect(SchedulesAPI.update).toHaveBeenCalledWith(
+      27,
+      expect.objectContaining({ extra_data: { k: 'v2', qv: 'x' } })
+    );
+  });
+
+  test('takes the answers and variables the prompt wizard loaded', async () => {
+    renderEdit(promptingProps);
+    await waitFor(() => expect(formProps).toBeDefined());
+
+    await submit({
+      ...unchangedValues,
+      extra_vars: 'k: v2\nqv: x\n',
+      survey_qv: 'y',
+    } as SubmittedValues);
+
+    expect(SchedulesAPI.update).toHaveBeenCalledWith(
+      27,
+      expect.objectContaining({ extra_data: { k: 'v2', qv: 'y' } })
+    );
+  });
+
+  test('drops a variable removed in the prompt wizard', async () => {
+    renderEdit(promptingProps);
+    await waitFor(() => expect(formProps).toBeDefined());
+
+    await submit({
+      ...unchangedValues,
+      extra_vars: '---',
+      survey_qv: 'x',
+    } as SubmittedValues);
+
+    expect(SchedulesAPI.update).toHaveBeenCalledWith(
+      27,
+      expect.objectContaining({ extra_data: { qv: 'x' } })
+    );
+  });
 });

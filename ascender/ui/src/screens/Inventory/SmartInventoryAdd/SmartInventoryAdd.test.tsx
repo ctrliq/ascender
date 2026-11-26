@@ -40,6 +40,16 @@ vi.mock('../shared/SmartInventoryForm', () => ({
 }));
 
 describe('<SmartInventoryAdd />', () => {
+  /*
+   * The page reads what the form draws with before it renders it, so that the
+   * whole page has one loading state rather than one inside the card.
+   */
+  beforeEach(() => {
+    vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: true } },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
+  });
+
   beforeEach(() => {
     vi.mocked(InventoriesAPI.create).mockResolvedValue({
       data: { id: 1 },
@@ -55,17 +65,28 @@ describe('<SmartInventoryAdd />', () => {
     vi.clearAllMocks();
   });
 
-  test('initially renders successfully', () => {
+  test('should show a content error when what the form draws with cannot be read', async () => {
+    vi.mocked(InventoriesAPI.readOptions).mockRejectedValue(new Error());
+    renderWithContexts(<SmartInventoryAdd />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+  });
+
+  test('initially renders successfully', async () => {
     renderWithContexts(<SmartInventoryAdd />);
     expect(
-      screen.getByRole('button', { name: 'mock-submit' })
+      await screen.findByRole('button', { name: 'mock-submit' })
     ).toBeInTheDocument();
   });
 
   test('should post to the api when submit is clicked', async () => {
     const { user } = renderWithContexts(<SmartInventoryAdd />);
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     const { instance_groups, ...formRequest } = formData;
     await waitFor(() => expect(InventoriesAPI.create).toHaveBeenCalledTimes(1));
@@ -87,7 +108,9 @@ describe('<SmartInventoryAdd />', () => {
       context: { router: { history } },
     });
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toBe(
@@ -104,7 +127,9 @@ describe('<SmartInventoryAdd />', () => {
       context: { router: { history } },
     });
 
-    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
 
     expect(history.location.pathname).toEqual('/inventories');
   });
@@ -113,7 +138,9 @@ describe('<SmartInventoryAdd />', () => {
     vi.mocked(InventoriesAPI.create).mockRejectedValueOnce(new Error('boom'));
     const { user } = renderWithContexts(<SmartInventoryAdd />);
 
-    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });

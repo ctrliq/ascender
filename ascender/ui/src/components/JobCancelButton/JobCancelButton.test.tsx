@@ -25,9 +25,9 @@ describe('<JobCancelButton/>', () => {
         title="Title"
       />
     );
-    // default (non-icon) button renders the "Cancel Job" text, no MinusCircleIcon
+    // the default (non-icon) button names the kind of run, no MinusCircleIcon
     expect(screen.getByRole('button', { name: 'Title' })).toBeInTheDocument();
-    expect(screen.getByText('Cancel Job')).toBeInTheDocument();
+    expect(screen.getByText('Cancel Project Sync')).toBeInTheDocument();
     expect(document.querySelector('.pf-v6-c-button svg')).toBeNull();
   });
 
@@ -58,7 +58,7 @@ describe('<JobCancelButton/>', () => {
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
     await waitFor(() =>
       expect(ProjectUpdatesAPI.cancel).toHaveBeenCalledWith(1)
@@ -89,15 +89,15 @@ describe('<JobCancelButton/>', () => {
     await user.click(screen.getByRole('button', { name: 'Title' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
 
     // error modal (errorTitle="Error", with ErrorDetail's "Details" expandable)
-    // replaces the confirm modal whose "Confirm cancel job" button is now gone
+    // replaces the confirm modal whose "Confirm Cancellation" button is now gone
     expect(await screen.findByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Details')).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: 'Confirm cancel job' })
+      screen.queryByRole('button', { name: 'Confirm Cancellation' })
     ).not.toBeInTheDocument();
   });
 
@@ -113,7 +113,7 @@ describe('<JobCancelButton/>', () => {
     await user.click(screen.getByRole('button', { name: 'Title' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
     await waitFor(() =>
       expect(AdHocCommandsAPI.cancel).toHaveBeenCalledWith(1)
@@ -132,7 +132,7 @@ describe('<JobCancelButton/>', () => {
     await user.click(screen.getByRole('button', { name: 'Title' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
     await waitFor(() => expect(SystemJobsAPI.cancel).toHaveBeenCalledWith(1));
   });
@@ -149,7 +149,7 @@ describe('<JobCancelButton/>', () => {
     await user.click(screen.getByRole('button', { name: 'Title' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
     await waitFor(() => expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(1));
   });
@@ -166,8 +166,58 @@ describe('<JobCancelButton/>', () => {
     await user.click(screen.getByRole('button', { name: 'Title' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'Confirm cancel job' })
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
     );
     await waitFor(() => expect(JobsAPI.cancel).toHaveBeenCalledWith(1));
+  });
+
+  /*
+   * Without wording of its own from the caller, the button, the question and
+   * the error all name the kind of run, the way Relaunch and Delete do.
+   */
+  test('names the kind of run it cancels', async () => {
+    vi.mocked(ProjectUpdatesAPI.cancel).mockRejectedValue(
+      Object.assign(new Error('An error occurred'), {
+        response: {
+          config: { method: 'post', url: '/api/v2/project_updates/1/cancel' },
+          data: 'An error occurred',
+          status: 403,
+        },
+      })
+    );
+    const { user } = renderWithContexts(
+      <JobCancelButton job={{ id: 1, type: 'project_update' }} title="Title" />
+    );
+    expect(screen.getByText('Cancel Project Sync')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Title' }));
+    expect(
+      await screen.findByText(
+        'Are you sure you want to cancel this project sync?'
+      )
+    ).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm Cancellation' })
+    );
+
+    expect(
+      await screen.findByText('Project Sync Cancel Error')
+    ).toBeInTheDocument();
+  });
+
+  test('keeps the wording a caller gives it', async () => {
+    const { user } = renderWithContexts(
+      <JobCancelButton
+        job={{ id: 1, type: 'workflow_job' }}
+        title="Title"
+        buttonText="Cancel Workflow"
+        cancelationMessage="This will cancel all subsequent nodes."
+      />
+    );
+    expect(screen.getByText('Cancel Workflow')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Title' }));
+    expect(
+      await screen.findByText('This will cancel all subsequent nodes.')
+    ).toBeInTheDocument();
   });
 });

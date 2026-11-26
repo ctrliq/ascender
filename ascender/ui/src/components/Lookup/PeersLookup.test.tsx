@@ -94,7 +94,7 @@ describe('PeersLookup', () => {
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
     expect(
-      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+      screen.queryByRole('checkbox', { name: 'Prompt on Launch' })
     ).not.toBeInTheDocument();
   });
 
@@ -111,7 +111,7 @@ describe('PeersLookup', () => {
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
     expect(
-      screen.queryByRole('checkbox', { name: 'Prompt on launch' })
+      screen.queryByRole('checkbox', { name: 'Prompt on Launch' })
     ).not.toBeInTheDocument();
   });
 });

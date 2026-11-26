@@ -14,7 +14,6 @@ import {
   ToolbarGroup,
   ToolbarItem,
   ToolbarToggleGroup,
-  Tooltip,
 } from '@patternfly/react-core';
 import {
   AngleDownIcon,
@@ -27,6 +26,7 @@ import ExpandCollapse from '../ExpandCollapse';
 import Search from '../Search';
 import Sort from '../Sort';
 import './DataListToolbar.css';
+import Tooltip from '../Tooltip';
 
 export interface DataListToolbarProps {
   isAllExpanded?: boolean;
@@ -44,6 +44,8 @@ export interface DataListToolbarProps {
   onSort?: (key?: string, order?: string) => void;
   onSearch?: (key: string, value: QSParamValue) => void;
   onReplaceSearch?: (key: string, value: QSParamValue) => void;
+  /** Set where the list filters as its search box is typed in. */
+  onLiveSearch?: (key: string, value: QSParamValue) => void;
   onRemove?: (key: string, value: QSParamValue) => void;
   onCompact?: () => void;
   onExpand?: () => void;
@@ -78,6 +80,7 @@ function DataListToolbar({
   onSort,
   onSearch,
   onReplaceSearch,
+  onLiveSearch,
   onRemove,
   onCompact,
   onExpand,
@@ -176,6 +179,7 @@ function DataListToolbar({
               relatedSearchableKeys={relatedSearchableKeys}
               onSearch={onSearch}
               onReplaceSearch={onReplaceSearch}
+              onLiveSearch={onLiveSearch}
               onShowAdvancedSearch={onShowAdvancedSearch}
               onRemove={onRemove}
               enableNegativeFiltering={enableNegativeFiltering}

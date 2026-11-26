@@ -59,7 +59,7 @@ function CredentialType({ setBreadcrumb }: CredentialTypeProps) {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to credential types`}
+          {t`Back to Credential Types`}
         </>
       ),
       link: '/credential_types',
@@ -82,7 +82,7 @@ function CredentialType({ setBreadcrumb }: CredentialTypeProps) {
               <span>
                 {t`Credential type not found.`}{' '}
                 <Link to="/credential_types">
-                  {t`View all credential types`}
+                  {t`View all Credential Types.`}
                 </Link>
               </span>
             )}
@@ -97,12 +97,25 @@ function CredentialType({ setBreadcrumb }: CredentialTypeProps) {
     cardHeader = null;
   }
 
+  /*
+   * One loading animation, in the place the content will be. Drawn inside the
+   * card it made the page arrive in pieces: a card and its tabs first, an
+   * animation inside them, then the content. Asked with the credentialType rather
+   * than on its own, so a later read does not throw away a page already drawn.
+   */
+  if (isLoading && !credentialType) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         {cardHeader}
-        {isLoading && <ContentLoading />}
-        {!isLoading && credentialType && (
+        {credentialType && (
           <Routes>
             <Route index element={<Navigate to="details" replace />} />
             <Route
@@ -113,6 +126,18 @@ function CredentialType({ setBreadcrumb }: CredentialTypeProps) {
               path="details"
               element={
                 <CredentialTypeDetails credentialType={credentialType} />
+              }
+            />
+            {/* A path under the credential type that none of the tabs
+                name, as on a credential, says so rather than a blank card. */}
+            <Route
+              path="*"
+              element={
+                <ContentError isNotFound>
+                  <Link to={`/credential_types/${id}/details`}>
+                    {t`View Credential Type Details`}
+                  </Link>
+                </ContentError>
               }
             />
           </Routes>

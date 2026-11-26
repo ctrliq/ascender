@@ -9,6 +9,9 @@ const workflowApproval = {
   name: 'Foo',
   can_approve_or_deny: true,
   url: '/api/v2/workflow_approvals/218/',
+  // The workflow that asked for the approval, which is what the api leaves out
+  // once that workflow has been deleted.
+  summary_fields: { source_workflow_job: { id: 2, name: 'Bar' } },
 } as unknown as WorkflowApproval;
 
 describe('<WorkflowApprovalListDenyButton />', () => {
@@ -36,6 +39,16 @@ describe('<WorkflowApprovalListDenyButton />', () => {
       <WorkflowApprovalListDenyButton
         onDeny={() => {}}
         selectedItems={[{ ...workflowApproval, can_approve_or_deny: false }]}
+      />
+    );
+    expect(screen.getByRole('button', { name: 'Deny' })).toBeDisabled();
+  });
+
+  test('should disable button once the workflow is deleted', () => {
+    renderWithContexts(
+      <WorkflowApprovalListDenyButton
+        onDeny={() => {}}
+        selectedItems={[{ ...workflowApproval, summary_fields: {} }]}
       />
     );
     expect(screen.getByRole('button', { name: 'Deny' })).toBeDisabled();

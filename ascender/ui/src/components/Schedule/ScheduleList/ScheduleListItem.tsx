@@ -4,17 +4,17 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Link } from 'react-router';
-import { Button, Tooltip } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import {
   PencilAltIcon,
   ExclamationTriangleIcon as PFExclamationTriangleIcon,
 } from '@patternfly/react-icons';
 import { formatDateString } from 'util/dates';
-import { DetailList, Detail } from '../../DetailList';
 import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
 import './ScheduleListItem.css';
+import Tooltip from '../../Tooltip';
 
 export interface ScheduleListItemProps {
   rowIndex: number;
@@ -38,12 +38,14 @@ function ScheduleListItem({
   const { t } = useLingui();
   const labelId = `check-action-${schedule.id}`;
 
-  const jobTypeLabels = {
-    inventory_update: t`Inventory Sync`,
-    job: t`Playbook Run`,
-    project_update: t`Source Control Update`,
-    system_job: t`Management Job`,
-    workflow_job: t`Workflow Job`,
+  // The column is the kind of thing the schedule runs, which is what the
+  // Related Resource beside it links to, rather than the kind of run it makes.
+  const resourceTypeLabels = {
+    inventory_update: t`Inventory Source`,
+    job: t`Job Template`,
+    project_update: t`Project`,
+    system_job: t`Cleanup Job`,
+    workflow_job: t`Workflow Template`,
   };
 
   let scheduleBaseUrl;
@@ -70,8 +72,8 @@ function ScheduleListItem({
       relatedResourceUrl = `/projects/${template.id}/details`;
       break;
     case 'system_job':
-      scheduleBaseUrl = `/management_jobs/${template.id}/schedules/${schedule.id}`;
-      relatedResourceUrl = `/management_jobs`;
+      scheduleBaseUrl = `/cleanup_jobs/${template.id}/schedules/${schedule.id}`;
+      relatedResourceUrl = `/cleanup_jobs/${template.id}/details`;
       break;
     case 'workflow_job':
       scheduleBaseUrl = `/templates/workflow_job_template/${template.id}/schedules/${schedule.id}`;
@@ -106,7 +108,6 @@ function ScheduleListItem({
               content={[isMissingInventory, isMissingSurvey].map((message) =>
                 message ? <div key={String(message)}>{message}</div> : null
               )}
-              position="right"
             >
               <PFExclamationTriangleIcon className="ascender-schedule-list-item__exclamation-triangle-icon" />
             </Tooltip>
@@ -115,24 +116,29 @@ function ScheduleListItem({
       </TdBreakWord>
       <TdBreakWord
         id={`related-resource-${schedule.id}`}
-        dataLabel={t`Related resource`}
+        dataLabel={t`Related Resource`}
       >
         <Link to={`${relatedResourceUrl}`}>
           <b>{template.name}</b>
         </Link>
       </TdBreakWord>
-      <Td dataLabel={t`Resource type`}>
-        {jobTypeLabels[template.unified_job_type as keyof typeof jobTypeLabels]}
+      <Td dataLabel={t`Resource Type`}>
+        {
+          resourceTypeLabels[
+            template.unified_job_type as keyof typeof resourceTypeLabels
+          ]
+        }
       </Td>
-      <Td dataLabel={t`Next Run`}>
-        {schedule.next_run && (
-          <DetailList stacked>
-            <Detail
-              label={t`Next Run`}
-              value={formatDateString(schedule.next_run, schedule.timezone)}
-            />
-          </DetailList>
-        )}
+      {/*
+       * The column heading already names the value, and on a narrow screen,
+       * where the table stacks, PatternFly prints the data label beside it, so
+       * the cell holds the date alone. It stays on one line so the AM or PM
+       * does not fall under the rest of the time.
+       */}
+      <Td dataLabel={t`Next Run`} modifier="nowrap">
+        {schedule.next_run
+          ? formatDateString(schedule.next_run, schedule.timezone)
+          : null}
       </Td>
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <ScheduleToggle schedule={schedule} isDisabled={isDisabled} />

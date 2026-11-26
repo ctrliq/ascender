@@ -1,25 +1,30 @@
 import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
-import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { DetailList } from 'components/DetailList';
-import RoutedTabs from 'components/RoutedTabs';
 import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import ResourceTabs from 'components/ResourceTabs';
 import { sortNestedDetails } from '../../shared/settingUtils';
 import { SettingDetail } from '../../shared';
+import { groupFromPath } from '../../shared/settingGroups';
+import { GROUPS } from '../groups';
 
 function JobsDetail() {
   const { me } = useConfig();
+  const { pathname } = useLocation();
+  // The address says which group is open, so a link into one lands on it and
+  // the back button walks the tabs as it walks every other tab bar.
+  const group = groupFromPath(GROUPS, pathname);
   const { GET: options = {} } = useSettings();
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
 
   const {
     isLoading,
@@ -50,43 +55,49 @@ function JobsDetail() {
     request();
   }, [request]);
 
-  const tabsArray = [
-    {
-      name: (
-        <>
-          <CaretLeftIcon />
-          {t`Back to Settings`}
-        </>
-      ),
-      link: `/settings`,
-      id: 99,
-    },
-    {
-      name: t`Details`,
-      link: `/settings/jobs/details`,
-      id: 0,
-    },
-  ];
-
   return (
     <>
-      <RoutedTabs tabsArray={tabsArray} />
+      <ResourceTabs
+        aria-label={t`Jobs tabs`}
+        ouiaId="jobs-tabs"
+        tabs={GROUPS.map(({ id, label }) => ({
+          label: i18n._(label),
+          path: `/job_settings/${id}`,
+        }))}
+      />
       <CardBody>
         {isLoading && <ContentLoading />}
         {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && jobs && (
           <DetailList>
-            {jobs.map(([key, detail]) => (
-              <SettingDetail
-                key={key}
-                id={key}
-                helpText={detail?.help_text}
-                label={detail?.label}
-                type={detail?.type}
-                unit={detail?.unit}
-                value={detail?.value}
-              />
-            ))}
+            {/* In the tab's own order rather than the sorted one the request
+                returns, so each group reads as the edit form asks for it. */}
+            {group.keys
+              .map(
+                (key) => [key, jobs.find(([id]) => id === key)?.[1]] as const
+              )
+              .filter(([, detail]) => Boolean(detail))
+              .map(([key, detail]) => (
+                <SettingDetail
+                  key={key}
+                  id={key}
+                  helpText={detail?.help_text}
+                  label={detail?.label}
+                  type={detail?.type}
+                  unit={detail?.unit}
+                  /* A choice reads as its label rather than the value stored,
+                     and Jinja's 'template' as the edit form words it. */
+                  choices={
+                    detail?.choices?.map(([value, label]) =>
+                      key === 'ALLOW_JINJA_IN_EXTRA_VARS' &&
+                      value === 'template'
+                        ? [value, t`Template`]
+                        : [value, label]
+                    ) as [string, string][] | undefined
+                  }
+                  value={detail?.value}
+                />
+              ))}
           </DetailList>
         )}
         {me?.is_superuser && (
@@ -95,7 +106,7 @@ function JobsDetail() {
               ouiaId="jobs-detail-edit-button"
               aria-label={t`Edit`}
               component={Link}
-              to="/settings/jobs/edit"
+              to={`/job_settings/edit/${group.id}`}
             >
               {t`Edit`}
             </Button>

@@ -64,6 +64,9 @@ describe('<ExecutionEnvironment />', () => {
     vi.mocked(ExecutionEnvironmentsAPI.readDetail).mockResolvedValue({
       data: executionEnvironment,
     } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readDetail>);
+    vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: { pull: { choices: [] } } } },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -117,5 +120,14 @@ describe('<ExecutionEnvironment />', () => {
     expect(
       screen.queryByText('ExecutionEnvironmentDetails')
     ).not.toBeInTheDocument();
+  });
+
+  test('shows a not-found error on an unknown tab', async () => {
+    renderAt('/execution_environments/42/nope');
+    expect(
+      await screen.findByRole('link', {
+        name: 'View Execution Environment Details',
+      })
+    ).toHaveAttribute('href', '/execution_environments/42/details');
   });
 });

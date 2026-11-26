@@ -9,7 +9,6 @@ import {
   ProgressSize,
   CodeBlock,
   CodeBlockCode,
-  Tooltip,
   Slider,
 } from '@patternfly/react-core';
 import { DownloadIcon, OutlinedClockIcon } from '@patternfly/react-icons';
@@ -33,6 +32,7 @@ import useRequest, {
 } from 'hooks/useRequest';
 import HealthCheckAlert from 'components/HealthCheckAlert';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
+import Tooltip from 'components/Tooltip';
 import RemoveInstanceButton from '../Shared/RemoveInstanceButton';
 import './InstanceDetail.css';
 
@@ -186,6 +186,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
   const isHopNode = instance.node_type === 'hop';
   const isExecutionNode = instance.node_type === 'execution';
   const isManaged = instance.managed;
+  // Instances are added, edited and removed only on a Kubernetes install, by
+  // a superuser, and never one the install manages itself.
+  const canEditInstance = Boolean(
+    config?.me?.is_superuser && isK8s && !isManaged
+  );
 
   return (
     <>
@@ -232,7 +237,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
           )}
           {(isExecutionNode || isHopNode) && (
             <Detail
-              label={t`Peers from control nodes`}
+              label={t`Peers From Control Nodes`}
               value={instance.peers_from_control_nodes ? t`On` : t`Off`}
             />
           )}
@@ -301,10 +306,10 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                         step={0.1}
                         value={Number(instance.capacity_adjustment)}
                         onChange={(_event, value) => handleChangeValue(value)}
+                        // As on the list rows: capacity is a superuser's
+                        // setting on any enabled node, managed or not.
                         isDisabled={
-                          !config?.me?.is_superuser ||
-                          !instance.enabled ||
-                          !isManaged
+                          !config?.me?.is_superuser || !instance.enabled
                         }
                         data-cy="slider"
                       />
@@ -321,13 +326,13 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                 value={
                   instance.enabled ? (
                     <Progress
-                      title={t`Used capacity`}
+                      title={t`Used Capacity`}
                       value={Math.round(
                         100 - Number(instance.percent_capacity_remaining)
                       )}
                       measureLocation={ProgressMeasureLocation.top}
                       size={ProgressSize.sm}
-                      aria-label={t`Used capacity`}
+                      aria-label={t`Used Capacity`}
                     />
                   ) : (
                     <span className="ascender-instance-detail__unavailable">{t`Unavailable`}</span>
@@ -350,41 +355,35 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
           )}
         </DetailList>
         <CardActionsRow>
-          {config?.me?.is_superuser && isK8s && !isManaged && (
-            <>
-              <Button
-                ouiaId="instance-detail-edit-button"
-                aria-label={t`edit`}
-                component={Link}
-                to={`/instances/${id}/edit`}
-              >
-                {t`Edit`}
-              </Button>
-              <RemoveInstanceButton
-                dataCy="remove-instance-button"
-                itemsToRemove={[instance]}
-                isK8s={isK8s}
-                onRemove={removeInstances}
-              />
-            </>
+          {/* Edit first and the destructive Delete last, with the everyday
+              actions between them, as on every other details screen. */}
+          {canEditInstance && (
+            <Button
+              ouiaId="instance-detail-edit-button"
+              aria-label={t`Edit`}
+              component={Link}
+              to={`/instances/${id}/edit`}
+            >
+              {t`Edit`}
+            </Button>
           )}
-          {isExecutionNode && (
-            <Tooltip content={t`Run a health check on the instance`}>
+          {/* The api runs a health check on any execution node for a
+              superuser, managed or not: managed only stops deletion. Anyone
+              else is not offered it at all, as on the lists, rather than
+              shown a button that can never be pressed. */}
+          {isExecutionNode && config?.me?.is_superuser && (
+            <Tooltip content={t`Run Health Check`}>
               <Button
-                isDisabled={
-                  !config?.me?.is_superuser ||
-                  Boolean(instance.health_check_pending) ||
-                  Boolean(instance.managed)
-                }
+                isDisabled={Boolean(instance.health_check_pending)}
                 variant="primary"
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
                 isLoading={Boolean(instance.health_check_pending)}
-                spinnerAriaLabel={t`Running health check`}
+                spinnerAriaLabel={t`Running Health Check`}
               >
                 {instance.health_check_pending
-                  ? t`Running health check`
-                  : t`Run health check`}
+                  ? t`Running Health Check`
+                  : t`Run Health Check`}
               </Button>
             </Tooltip>
           )}
@@ -393,6 +392,13 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
               fetchInstances={fetchDetails}
               instance={instance}
               dataCy="enable-instance"
+            />
+          )}
+          {canEditInstance && (
+            <RemoveInstanceButton
+              dataCy="remove-instance-button"
+              itemsToRemove={[instance]}
+              onRemove={removeInstances}
             />
           )}
         </CardActionsRow>
@@ -406,7 +412,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
           >
             {updateInstanceError
               ? t`Failed to update capacity adjustment.`
-              : t`Failed to disassociate one or more instances.`}
+              : t`Failed to run a health check.`}
             <ErrorDetail error={error} />
           </AlertModal>
         )}
@@ -415,11 +421,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
           <AlertModal
             isOpen={removeError}
             variant="error"
-            aria-label={t`Removal Error`}
+            aria-label={t`Deletion Error`}
             title={t`Error!`}
             onClose={clearDeletionError}
           >
-            {t`Failed to remove one or more instances.`}
+            {t`Failed to delete one or more instances.`}
             <ErrorDetail error={removeError} />
           </AlertModal>
         )}

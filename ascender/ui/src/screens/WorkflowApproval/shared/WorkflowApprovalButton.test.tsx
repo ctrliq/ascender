@@ -39,6 +39,29 @@ describe('<WorkflowApprovalButton/>', () => {
     ).toBeDisabled();
   });
 
+  /*
+   * Deleting a workflow job leaves its pending approvals behind: the api keeps
+   * saying they can be voted on, and a vote would move a record nobody reads.
+   */
+  test('should be disabled once the workflow is deleted', () => {
+    const orphaned = {
+      ...(mockApprovalList[0] as unknown as WorkflowApproval),
+      summary_fields: {
+        ...(mockApprovalList[0] as unknown as WorkflowApproval).summary_fields,
+        source_workflow_job: undefined,
+      },
+    };
+    renderWithContexts(
+      <WorkflowApprovalButton
+        workflowApproval={orphaned}
+        onHandleToast={vi.fn()}
+      />
+    );
+    expect(
+      screen.getByRole('button', { name: 'This workflow has been deleted' })
+    ).toBeDisabled();
+  });
+
   test('should handle approve', async () => {
     const { user } = renderWithContexts(
       <WorkflowApprovalButton

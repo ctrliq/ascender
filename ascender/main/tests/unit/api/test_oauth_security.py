@@ -113,7 +113,7 @@ class TestDrfAuthMiddlewareInactiveSessionUser:
         denier.assert_not_awaited()
 
     def test_inactive_session_user_is_denied(self):
-        # The LDAP, TACACS+ and social backends return inactive users from get_user().
+        # The LDAP and social backends return inactive users from get_user().
         inner, denier, token_auth, _ = self._connect(_user(is_active=False))
         token_auth.assert_awaited_once()
         inner.assert_not_awaited()

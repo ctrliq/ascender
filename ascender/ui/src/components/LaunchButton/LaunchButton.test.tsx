@@ -74,7 +74,7 @@ describe('LaunchButton', () => {
 
   test('should redirect to job after successful launch', async () => {
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
 
     vi.mocked(JobTemplatesAPI.launch).mockResolvedValue({
@@ -96,7 +96,7 @@ describe('LaunchButton', () => {
       expect(JobTemplatesAPI.launch).toHaveBeenCalledWith(1, {})
     );
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 
@@ -107,7 +107,7 @@ describe('LaunchButton', () => {
       },
     } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readLaunch>);
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
     vi.mocked(WorkflowJobTemplatesAPI.launch).mockResolvedValue({
       data: {
@@ -135,7 +135,7 @@ describe('LaunchButton', () => {
       expect(WorkflowJobTemplatesAPI.launch).toHaveBeenCalledWith(1, {})
     );
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 
@@ -146,7 +146,7 @@ describe('LaunchButton', () => {
       },
     } as unknown as ResponseOf<typeof JobsAPI.readRelaunch>);
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
     vi.mocked(JobsAPI.relaunch).mockResolvedValue({
       data: {
@@ -172,7 +172,7 @@ describe('LaunchButton', () => {
     expect(JobsAPI.readRelaunch).toHaveBeenCalledWith(1);
     await waitFor(() => expect(JobsAPI.relaunch).toHaveBeenCalledWith(1, {}));
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 
@@ -183,7 +183,7 @@ describe('LaunchButton', () => {
       },
     } as unknown as ResponseOf<typeof WorkflowJobsAPI.readRelaunch>);
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
     vi.mocked(WorkflowJobsAPI.relaunch).mockResolvedValue({
       data: {
@@ -211,7 +211,7 @@ describe('LaunchButton', () => {
       expect(WorkflowJobsAPI.relaunch).toHaveBeenCalledWith(1, {})
     );
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 
@@ -222,7 +222,7 @@ describe('LaunchButton', () => {
       },
     } as unknown as ResponseOf<typeof ProjectsAPI.readLaunchUpdate>);
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
     vi.mocked(ProjectsAPI.launchUpdate).mockResolvedValue({
       data: {
@@ -251,7 +251,7 @@ describe('LaunchButton', () => {
       expect(ProjectsAPI.launchUpdate).toHaveBeenCalledWith(5)
     );
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 
@@ -262,7 +262,7 @@ describe('LaunchButton', () => {
       },
     } as unknown as ResponseOf<typeof InventorySourcesAPI.readLaunchUpdate>);
     const history = createMemoryHistory({
-      initialEntries: ['/jobs/9000'],
+      initialEntries: ['/runs/9000'],
     });
     vi.mocked(InventorySourcesAPI.launchUpdate).mockResolvedValue({
       data: {
@@ -291,7 +291,7 @@ describe('LaunchButton', () => {
       expect(InventorySourcesAPI.launchUpdate).toHaveBeenCalledWith(5)
     );
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/jobs/9000/output')
+      expect(history.location.pathname).toEqual('/runs/9000/output')
     );
   });
 

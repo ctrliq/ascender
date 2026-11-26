@@ -1,5 +1,6 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI, JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
@@ -228,5 +229,221 @@ describe('<InventoryList />', () => {
     expect(
       screen.queryByRole('button', { name: 'Add' })
     ).not.toBeInTheDocument();
+  });
+
+  /*
+   * Syncing an inventory needs its update role, which no user_capability
+   * carries, so the list asks the api which inventories the reader holds it
+   * on and leaves the rest out of a sync.
+   */
+  describe('sync permission', () => {
+    const sourced = mockInventories.map((inventory) => ({
+      ...inventory,
+      has_inventory_sources: true,
+    }));
+
+    function mockRead(updatable: typeof sourced) {
+      vi.mocked(InventoriesAPI.read).mockImplementation(((
+        params: Record<string, unknown> = {}
+      ) => {
+        const results =
+          params.role_level === 'update_role' ? updatable : sourced;
+        return Promise.resolve({
+          data: { count: results.length, results },
+        });
+      }) as unknown as typeof InventoriesAPI.read);
+    }
+
+    test('asks the api by update role', async () => {
+      mockRead(sourced);
+      renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      expect(InventoriesAPI.read).toHaveBeenCalledWith(
+        expect.objectContaining({
+          has_inventory_sources: true,
+          role_level: 'update_role',
+        })
+      );
+    });
+
+    test('asks about the rows only once they are ticked, not with the list', async () => {
+      mockRead(sourced);
+      const { user } = renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      // The list draws without waiting on the question for its rows.
+      expect(InventoriesAPI.read).not.toHaveBeenCalledWith(
+        expect.objectContaining({ id__in: expect.anything() })
+      );
+
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+      await waitFor(() =>
+        expect(InventoriesAPI.read).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id__in: '1,2,3',
+            role_level: 'update_role',
+          })
+        )
+      );
+
+      // Ticked again, the rows already asked about are not asked about again.
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+      expect(
+        vi
+          .mocked(InventoriesAPI.read)
+          .mock.calls.filter(([params]) => params && 'id__in' in params)
+      ).toHaveLength(1);
+    });
+
+    test('does not ask about ticked rows that have no source', async () => {
+      const { user } = renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+
+      expect(InventoriesAPI.read).not.toHaveBeenCalledWith(
+        expect.objectContaining({ id__in: expect.anything() })
+      );
+    });
+
+    test('disables Sync All and says why where none may be synced', async () => {
+      mockRead([]);
+      const { user } = renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      const button = screen.getByRole('button', { name: 'Sync All' });
+      expect(button).toBeDisabled();
+      await user.hover(button);
+      expect(
+        await screen.findByText(
+          'You do not have permission to sync any of these.'
+        )
+      ).toBeInTheDocument();
+    });
+
+    /*
+     * Clicked before the answer about the ticked rows is in, Sync would call
+     * them refused. It waits for the answer instead.
+     */
+    test('holds Sync until it knows which ticked rows may be synced', async () => {
+      let answer: (value: unknown) => void = () => {};
+      vi.mocked(InventoriesAPI.read).mockImplementation(((
+        params: Record<string, unknown> = {}
+      ) => {
+        if (params.id__in) {
+          return new Promise((resolve) => {
+            answer = resolve;
+          });
+        }
+        const results =
+          params.role_level === 'update_role' ? sourced.slice(0, 1) : sourced;
+        return Promise.resolve({ data: { count: results.length, results } });
+      }) as unknown as typeof InventoriesAPI.read);
+      const { user } = renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Sync' })).toBeDisabled()
+      );
+
+      await act(async () => {
+        answer({ data: { count: 1, results: sourced.slice(0, 1) } });
+      });
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Sync' })).toBeEnabled()
+      );
+    });
+
+    test('syncs only the ticked inventories the reader may update', async () => {
+      mockRead(sourced.slice(0, 1));
+      vi.mocked(InventoriesAPI.syncAllSources).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof InventoriesAPI.syncAllSources>
+      );
+      const { user } = renderWithContexts(<InventoryList />);
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+      // Which of the ticked rows may be synced is asked once they are ticked.
+      await waitFor(() =>
+        expect(InventoriesAPI.read).toHaveBeenCalledWith(
+          expect.objectContaining({ id__in: '1,2,3' })
+        )
+      );
+      await user.click(screen.getByRole('button', { name: 'Sync' }));
+
+      await waitFor(() =>
+        expect(InventoriesAPI.syncAllSources).toHaveBeenCalledTimes(1)
+      );
+      expect(InventoriesAPI.syncAllSources).toHaveBeenCalledWith(1);
+      expect(
+        await screen.findByText(
+          'You do not have permission to sync 2 of those selected.'
+        )
+      ).toBeInTheDocument();
+    });
+
+    test('Sync All counts and syncs within the search, every page', async () => {
+      const [first, , third] = sourced;
+      vi.mocked(InventoriesAPI.read).mockImplementation(((
+        params: Record<string, unknown> = {}
+      ) => {
+        if (params.page_size === 200) {
+          return Promise.resolve({
+            data:
+              params.page === 1
+                ? { count: 2, results: [first], next: '/page=2' }
+                : { count: 2, results: [third], next: null },
+          });
+        }
+        return Promise.resolve({
+          data: { count: sourced.length, results: sourced },
+        });
+      }) as unknown as typeof InventoriesAPI.read);
+      vi.mocked(InventoriesAPI.syncAllSources).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof InventoriesAPI.syncAllSources>
+      );
+      const history = createMemoryHistory({
+        initialEntries: ['/inventories?inventory.name__icontains=inv'],
+      });
+      const { user } = renderWithContexts(<InventoryList />, {
+        context: { router: { history } },
+      });
+      await screen.findByRole('link', { name: 'Inv no hosts' });
+
+      // The counts that enable the button are taken within the search.
+      expect(InventoriesAPI.read).toHaveBeenCalledWith({
+        name__icontains: 'inv',
+        has_inventory_sources: true,
+        role_level: 'update_role',
+        page_size: 1,
+      });
+
+      const button = screen.getByRole('button', { name: 'Sync All' });
+      await user.hover(button);
+      expect(
+        await screen.findByText(
+          'Sync all Inventories matching the current search'
+        )
+      ).toBeInTheDocument();
+
+      await user.click(button);
+      await settleTooltips();
+      await waitFor(() =>
+        expect(InventoriesAPI.syncAllSources).toHaveBeenCalledTimes(2)
+      );
+      expect(InventoriesAPI.syncAllSources).toHaveBeenCalledWith(first!.id);
+      expect(InventoriesAPI.syncAllSources).toHaveBeenCalledWith(third!.id);
+      expect(InventoriesAPI.read).toHaveBeenCalledWith({
+        name__icontains: 'inv',
+        has_inventory_sources: true,
+        role_level: 'update_role',
+        page: 2,
+        page_size: 200,
+        order_by: 'name',
+      });
+    });
   });
 });

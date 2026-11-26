@@ -48,7 +48,7 @@ describe('<ApplicationListItem/>', () => {
     expect(nameCell).toHaveTextContent('Foo');
     expect(orgCell).toHaveTextContent('Organization');
     expect(
-      screen.getByRole('link', { name: 'Edit application' })
+      screen.getByRole('link', { name: 'Edit Application' })
     ).toBeInTheDocument();
   });
 });

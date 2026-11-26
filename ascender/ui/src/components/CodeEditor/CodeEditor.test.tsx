@@ -149,18 +149,20 @@ describe('CodeEditor', () => {
         document.querySelector('.cm-scroller') as HTMLElement
       );
 
+    // Heights below are rows x 24 and nothing else: the editor carries no
+    // padding at either end, so a box of n rows is exactly n lines tall.
     it('is a fixed number of rows by default', () => {
       renderWithContexts(<CodeEditor id="ed" mode="yaml" value="a: 1" />);
-      expect(scroller().height).toBe('152px');
+      expect(scroller().height).toBe('144px');
     });
 
     it('sizes the box to the content in auto mode, never below minRows', () => {
       renderWithContexts(
         <CodeEditor id="ed" mode="yaml" value="a: 1" rows="auto" minRows={4} />
       );
-      expect(scroller().minHeight).toBe('104px');
+      expect(scroller().minHeight).toBe('96px');
       // capped by default, so a long value cannot grow the editor without bound
-      expect(scroller().maxHeight).toBe('1208px');
+      expect(scroller().maxHeight).toBe('1200px');
     });
 
     it('caps the auto height at maxRows', () => {
@@ -174,7 +176,7 @@ describe('CodeEditor', () => {
           maxRows={12}
         />
       );
-      expect(scroller().maxHeight).toBe('296px');
+      expect(scroller().maxHeight).toBe('288px');
     });
   });
 
@@ -196,6 +198,19 @@ describe('CodeEditor', () => {
         <CodeEditor id="code" value="---" mode="yaml" readOnly resizable />
       );
       expect(host()).toHaveClass('pf-m-resize-vertical');
+    });
+
+    it('should drop a dragged height when the rows change', () => {
+      localStorage.setItem('codeEditorHeight:code', '300px');
+      const { rerender } = renderWithContexts(
+        <CodeEditor id="code" value="---" mode="yaml" rows={6} />
+      );
+      expect(host().style.height).toBe('300px');
+      rerender(<CodeEditor id="code" value="---" mode="yaml" rows={6} />);
+      expect(host().style.height).toBe('300px');
+      rerender(<CodeEditor id="code" value="---" mode="yaml" rows={4} />);
+      expect(host().style.height).toBe('');
+      expect(localStorage.getItem('codeEditorHeight:code')).toBeNull();
     });
   });
 });

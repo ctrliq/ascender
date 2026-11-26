@@ -7,12 +7,7 @@ import type { WorkflowJobTemplate } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-  Badge as PFBadge,
-  Button,
-  Title,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Badge as PFBadge, Button, Title } from '@patternfly/react-core';
 import {
   BookIcon,
   CompassIcon,
@@ -29,6 +24,7 @@ import {
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import './VisualizerToolbar.css';
+import Tooltip from 'components/Tooltip';
 
 export interface VisualizerToolbarProps {
   onClose: () => void;
@@ -60,6 +56,14 @@ function VisualizerToolbar({
       0
     ) - 1;
 
+  // A launch runs what is saved, so the tooltip says what stands in the way.
+  let launchTooltip = t`Launch Workflow`;
+  if (hasUnsavedChanges) {
+    launchTooltip = t`Save the Workflow to Launch It`;
+  } else if (totalNodes === 0) {
+    launchTooltip = t`Add a Node to Launch the Workflow`;
+  }
+
   return (
     <div id="visualizer-toolbar">
       <div className="ascender-visualizer-toolbar__display-align-items">
@@ -80,9 +84,9 @@ function VisualizerToolbar({
           >
             {totalNodes}
           </PFBadge>
-          <Tooltip content={t`Toggle legend`} position="bottom">
+          <Tooltip content={t`Toggle Legend`} position="bottom">
             <Button
-              aria-label={t`Toggle legend`}
+              aria-label={t`Toggle Legend`}
               id="visualizer-toggle-legend"
               className={`ascender-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showLegend ? 'pf-m-active' : undefined
@@ -94,9 +98,9 @@ function VisualizerToolbar({
               <CompassIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Toggle tools`} position="bottom">
+          <Tooltip content={t`Toggle Tools`} position="bottom">
             <Button
-              aria-label={t`Toggle tools`}
+              aria-label={t`Toggle Tools`}
               id="visualizer-toggle-tools"
               className={`ascender-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showTools ? 'pf-m-active' : undefined
@@ -108,10 +112,10 @@ function VisualizerToolbar({
               <WrenchIcon />
             </Button>
           </Tooltip>
-          <Tooltip content={t`Workflow documentation`} position="bottom">
+          <Tooltip content={t`Workflow Documentation`} position="bottom">
             <Button
               className="ascender-visualizer-toolbar__action-button"
-              aria-label={t`Workflow documentation`}
+              aria-label={t`Workflow Documentation`}
               id="visualizer-documentation"
               variant="plain"
               component="a"
@@ -125,14 +129,20 @@ function VisualizerToolbar({
             </Button>
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
-            <Tooltip content={t`Launch workflow`} position="bottom">
-              <LaunchButton resource={template} aria-label={t`Launch workflow`}>
+            <Tooltip content={launchTooltip} position="bottom">
+              <LaunchButton resource={template} aria-label={t`Launch Workflow`}>
                 {({ handleLaunch, isLaunching }) => (
+                  /*
+                   * Aria-disabled rather than disabled, so the pointer still
+                   * reaches the button and the tooltip can say why it cannot
+                   * be pressed.
+                   */
                   <Button
                     className="ascender-visualizer-toolbar__action-button"
                     id="visualizer-launch"
+                    aria-label={t`Launch Workflow`}
                     variant="plain"
-                    isDisabled={
+                    isAriaDisabled={
                       hasUnsavedChanges || totalNodes === 0 || isLaunching
                     }
                     onClick={handleLaunch}
@@ -145,11 +155,11 @@ function VisualizerToolbar({
           )}
           {!readOnly && (
             <>
-              <Tooltip content={t`Delete all nodes`} position="bottom">
+              <Tooltip content={t`Delete All Nodes`} position="bottom">
                 <Button
                   className="ascender-visualizer-toolbar__action-button"
                   id="visualizer-delete-all"
-                  aria-label={t`Delete all nodes`}
+                  aria-label={t`Delete All Nodes`}
                   isDisabled={totalNodes === 0}
                   onClick={() =>
                     dispatch({

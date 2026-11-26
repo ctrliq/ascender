@@ -87,7 +87,7 @@ function ApplicationDetails({
           dataCy="app-detail-organization"
         />
         <Detail
-          label={t`Authorization grant type`}
+          label={t`Authorization Grant Type`}
           value={getAuthorizationGrantType(
             application.authorization_grant_type
           )}
@@ -106,7 +106,7 @@ function ApplicationDetails({
           helpText={applicationHelpTextStrings.redirectURIS}
         />
         <Detail
-          label={t`Client type`}
+          label={t`Client Type`}
           value={getClientType(application.client_type)}
           dataCy="app-detail-client-type"
           helpText={applicationHelpTextStrings.clientType}
@@ -130,7 +130,7 @@ function ApplicationDetails({
           application.summary_fields.user_capabilities.delete && (
             <DeleteButton
               name={application.name}
-              modalTitle={t`Delete application`}
+              modalTitle={t`Delete Application`}
               onConfirm={deleteApplications}
               isDisabled={deleteLoading}
             >

@@ -5,8 +5,15 @@ import type {
   SummaryFieldRef,
   WorkflowJobTemplateNode,
 } from 'types/api';
-import React, { useEffect, useCallback, useRef } from 'react';
-import { Link, Routes, Route, Navigate, useParams } from 'react-router';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
+import {
+  Link,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useLocation,
+} from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card as PFCard, PageSection } from '@patternfly/react-core';
@@ -43,6 +50,7 @@ export interface JobProps {
 
 function Job({ setBreadcrumb }: JobProps) {
   const { t } = useLingui();
+  const { pathname } = useLocation();
   const { id, typeSegment } = useParams() as {
     id: string;
     typeSegment: string;
@@ -50,6 +58,20 @@ function Job({ setBreadcrumb }: JobProps) {
 
   const type =
     JOB_URL_SEGMENT_MAP[typeSegment as keyof typeof JOB_URL_SEGMENT_MAP];
+
+  /*
+   * Whether the routed content is on screen. Only the playbook output reads
+   * anything of its own before it can draw, so it is the only tab that reports:
+   * everything else is ready as soon as the job is.
+   *
+   * Held as the id of the job whose output said so rather than as a flag. The
+   * workflow navigator moves this same page to a sibling job by changing the
+   * id alone, and a flag would stay true from the job before, uncovering the
+   * next one's output before it had drawn anything.
+   */
+  const [readyOutputId, setReadyOutputId] = useState<string | null>(null);
+  const isOutputReady = readyOutputId === id;
+  const handleContentReady = useCallback(() => setReadyOutputId(id), [id]);
 
   const {
     isLoading,
@@ -128,27 +150,58 @@ function Job({ setBreadcrumb }: JobProps) {
   }, [fetchJob]);
 
   const job = useWsJob(jobDetail);
+
+  /*
+   * The playbook output is the one tab that reads more before it can draw, so
+   * it is the one the page waits on. Anything else is ready once the job is.
+   */
+  const waitsForOutput =
+    pathname.endsWith('/output') && job?.type !== 'workflow_job';
+  const isContentReady =
+    Boolean(jobDetail) && (!waitsForOutput || isOutputReady);
   const ref = useRef(null);
   const tabsArray: RoutedTab[] = [
     {
       name: (
         <>
           <CaretLeftIcon />
-          {t`Back to Jobs`}
+          {t`Back to Runs`}
         </>
       ),
-      link: `/jobs`,
+      link: `/runs`,
       persistentFilterKey: 'jobs',
       id: 99,
     },
     {
       name: t`Details`,
-      link: `/jobs/${typeSegment}/${id}/details`,
+      link: `/runs/${typeSegment}/${id}/details`,
       id: 0,
     },
-    { name: t`Output`, link: `/jobs/${typeSegment}/${id}/output`, id: 1 },
+    { name: t`Output`, link: `/runs/${typeSegment}/${id}/output`, id: 1 },
   ];
+  const sourceWorkflowJob = job?.summary_fields?.source_workflow_job;
   if (relatedJobs?.length > 0) {
+    /*
+     * A job launched by a workflow is read from inside that workflow's run, so
+     * it gets the way back the list gets: the same caret and wording as Back to
+     * Jobs, beside the selector that walks the run's other jobs rather than
+     * among the tabs, since it leaves the job rather than moving within it.
+     */
+    if (sourceWorkflowJob?.id) {
+      tabsArray.push({
+        name: (
+          <Link
+            className="ascender-job__back-to-workflow"
+            to={`/runs/workflow/${sourceWorkflowJob.id}/output`}
+          >
+            <CaretLeftIcon />
+            {t`Back to Workflow`}
+          </Link>
+        ),
+        link: undefined,
+        id: 98,
+      });
+    }
     tabsArray.push({
       name: (
         <WorkflowOutputNavigation parentRef={ref} relatedJobs={relatedJobs} />
@@ -161,9 +214,7 @@ function Job({ setBreadcrumb }: JobProps) {
   if (isLoading && !jobDetail) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <PFCard>
-          <ContentLoading />
-        </PFCard>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -176,7 +227,7 @@ function Job({ setBreadcrumb }: JobProps) {
             {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`The page you requested could not be found.`}{' '}
-                <Link to="/jobs">{t`View all Jobs.`}</Link>
+                <Link to="/runs">{t`View all Runs.`}</Link>
               </span>
             )}
           </ContentError>
@@ -185,16 +236,44 @@ function Job({ setBreadcrumb }: JobProps) {
     );
   }
 
+  /*
+   * Output fills the page, whether it is a playbook's or a workflow's graph:
+   * both are as tall as the window allows and scroll inside themselves, and
+   * both end at the same line. Details is a short list, and the same card there
+   * would leave empty space under its buttons.
+   *
+   * Asked as not-details rather than is-output so the index route, which
+   * redirects to output, is tall from the first paint instead of resizing once
+   * the redirect lands.
+   */
+  const isFilling = !pathname.endsWith('/details');
+
   return (
-    <PageSection hasBodyWrapper={false}>
-      <div ref={ref}>
-        <PFCard
-          className={
-            typeSegment === 'workflow'
-              ? 'ascender-job__workflow-card'
-              : undefined
-          }
-        >
+    <PageSection
+      hasBodyWrapper={false}
+      className={
+        [
+          isFilling ? 'ascender-job__fill-section' : null,
+          isContentReady ? null : 'ascender-job__awaiting-content',
+        ]
+          .filter(Boolean)
+          .join(' ') || undefined
+      }
+    >
+      {/*
+        One loading animation for the whole page. The card below is mounted the
+        whole time, because the output has to be on screen to read its own
+        height and fetch its first events, but it stays invisible until it says
+        it is ready: what the page shows until then is this, in the place the
+        page level loading animation had it, so the two read as one.
+      */}
+      {!isContentReady && (
+        <div className="ascender-job__loading-overlay">
+          <ContentLoading />
+        </div>
+      )}
+      <div ref={ref} className={isFilling ? 'ascender-job__fill' : undefined}>
+        <PFCard className={isFilling ? 'ascender-job__fill-card' : undefined}>
           <RoutedTabs
             isWorkflow={typeSegment === 'workflow'}
             tabsArray={tabsArray}
@@ -225,6 +304,7 @@ function Job({ setBreadcrumb }: JobProps) {
                       eventRelatedSearchableKeys={eventRelatedSearchableKeys}
                       eventSearchableKeys={eventSearchableKeys}
                       onJobRefresh={fetchJob}
+                      onContentReady={handleContentReady}
                     />
                   )
                 }
@@ -234,7 +314,7 @@ function Job({ setBreadcrumb }: JobProps) {
               path="*"
               element={
                 <ContentError isNotFound>
-                  <Link to={`/jobs/${typeSegment}/${id}/details`}>
+                  <Link to={`/runs/${typeSegment}/${id}/details`}>
                     {t`View Job Details`}
                   </Link>
                 </ContentError>

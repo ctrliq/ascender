@@ -41,14 +41,16 @@ function ContainerGroupAdd() {
           : null,
         is_container_group: true,
       });
-      navigate(`/instance_groups/container_group/${response.id}/details`);
+      navigate(`/container_groups/${response.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }
   };
 
+  // Back to the list it was added from: container groups have their own list,
+  // and the instance groups one no longer shows them.
   const handleCancel = () => {
-    navigate(`/instance_groups`);
+    navigate(`/container_groups`);
   };
 
   const {
@@ -88,11 +90,7 @@ function ContainerGroupAdd() {
   if (isLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <CardBody>
-            <ContentLoading />
-          </CardBody>
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }

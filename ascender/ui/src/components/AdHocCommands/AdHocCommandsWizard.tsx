@@ -3,7 +3,9 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { useFormContext, withForm } from 'components/Form';
+import toHostPattern from 'util/hostPattern';
 import Wizard from '../Wizard';
+import type { LegacyWizardStep } from '../Wizard/Wizard';
 import useAdHocLaunchSteps from './useAdHocLaunchSteps';
 import type { AdHocItem, AdHocValues } from './types';
 
@@ -20,6 +22,13 @@ export interface AdHocCommandsWizardProps {
    */
   // eslint-disable-next-line react/no-unused-prop-types
   adHocItems: AdHocItem[];
+  /**
+   * A step to put before the form's own, where the command was started
+   * somewhere that does not yet say what it runs on.
+   */
+  firstStep?: LegacyWizardStep;
+  /** What that step answered, which the preview opens with. */
+  runOn?: React.ReactNode;
   [key: string]: unknown;
 }
 
@@ -29,9 +38,19 @@ function AdHocCommandsWizard({
   onCloseWizard,
   credentialTypeId,
   organizationId,
+  firstStep,
+  runOn,
 }: AdHocCommandsWizardProps) {
   const { t } = useLingui();
   const { setFieldTouched, values } = useFormContext<AdHocValues>();
+
+  /*
+   * What the header says the command is aimed at, read from the field itself
+   * so an edit to it shows. A blank field is every host, which is the word
+   * the field opens on. Named rather than inline so it reads as one string
+   * with the run template wizard's, which says the same thing.
+   */
+  const shownLimit = values.limit || 'all';
 
   const { steps, validateStep, visitStep, visitAllSteps } = useAdHocLaunchSteps(
     moduleOptions,
@@ -39,9 +58,26 @@ function AdHocCommandsWizard({
     credentialTypeId
   );
 
+  /* The preview opens with what the run is aimed at, where a step asked. */
+  const withRunOn = runOn
+    ? steps.map((step) =>
+        step.id === 'preview'
+          ? {
+              ...step,
+              component: (
+                <>
+                  {runOn}
+                  {step.component}
+                </>
+              ),
+            }
+          : step
+      )
+    : steps;
+  const shownSteps = firstStep ? [firstStep, ...withRunOn] : withRunOn;
+
   return (
     <Wizard
-      style={{ overflow: 'scroll' }}
       isOpen
       onNext={(nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
@@ -63,8 +99,12 @@ function AdHocCommandsWizard({
           validateStep(nextStep.id as string);
         }
       }}
-      steps={steps}
-      title={t`Run command`}
+      steps={shownSteps}
+      title={t`Run Command`}
+      /* What the run is aimed at, wherever the wizard was opened from: the
+         template wizards beside this one say the same thing in the same
+         place. */
+      description={t`Limit: ${shownLimit}`}
       backButtonText={t`Back`}
       cancelButtonText={t`Cancel`}
       nextButtonText={t`Next`}
@@ -76,9 +116,12 @@ function AdHocCommandsWizard({
 // without them withFormik types the wrapped component as taking nothing.
 const FormikApp = withForm<AdHocCommandsWizardProps, AdHocValues>({
   mapPropsToValues({ adHocItems }) {
-    const adHocItemStrings = adHocItems
-      .map((item: AdHocItem) => item.name)
-      .join(', ');
+    // The same pattern the run template wizard beside this puts in the same
+    // field: commas between the names, which is what keeps an IPv6 address
+    // or a name holding a colon whole.
+    const adHocItemStrings = toHostPattern(
+      adHocItems.map((item: AdHocItem) => item.name)
+    );
     return {
       limit: adHocItemStrings || 'all',
       credentials: [],

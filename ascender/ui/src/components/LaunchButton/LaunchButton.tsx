@@ -23,6 +23,7 @@ import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import LaunchPrompt from '../LaunchPrompt';
+import readLaunchPrompts from '../LaunchPrompt/readLaunchPrompts';
 
 function canLaunchWithoutPrompt(launchData: LaunchConfig) {
   return (
@@ -117,49 +118,16 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
       return;
     }
     setIsLaunching(true);
-    const readLaunch =
-      resource.type === 'workflow_job_template'
-        ? WorkflowJobTemplatesAPI.readLaunch(resource.id)
-        : JobTemplatesAPI.readLaunch(resource.id);
-    const readSurvey =
-      resource.type === 'workflow_job_template'
-        ? WorkflowJobTemplatesAPI.readSurvey(resource.id)
-        : JobTemplatesAPI.readSurvey(resource.id);
-    const readLabels =
-      resource.type === 'workflow_job_template'
-        ? WorkflowJobTemplatesAPI.readAllLabels(resource.id)
-        : JobTemplatesAPI.readAllLabels(resource.id);
 
     try {
-      const { data: launch } = await readLaunch;
-      if (isMounted.current) setLaunchConfig(launch);
-
-      if (launch.survey_enabled) {
-        const { data } = await readSurvey;
-        if (isMounted.current) setSurveyConfig(data);
-      }
-
-      if (launch.ask_labels_on_launch) {
-        const {
-          data: { results },
-        } = await readLabels;
-
-        // The schema has a label's name nullable; the labels field takes a
-        // string, and a label the api sent always has one.
-        const allLabels = results.map((label) => ({
-          ...label,
-          name: label.name ?? '',
-          isReadOnly: true,
-        }));
-
-        if (isMounted.current) setLabels(allLabels);
-      }
-
-      if (launch.ask_credential_on_launch) {
-        const {
-          data: { results: templateCredentials },
-        } = await JobTemplatesAPI.readCredentials(resource.id);
-        if (isMounted.current) setResourceCredentials(templateCredentials);
+      // The same reads the run wizard makes, so the two build the same steps.
+      const prompts = await readLaunchPrompts(resource);
+      const launch = prompts.launchConfig as LaunchConfig;
+      if (isMounted.current) {
+        setLaunchConfig(launch);
+        setSurveyConfig(prompts.surveyConfig);
+        setLabels(prompts.labels);
+        setResourceCredentials(prompts.credentials);
       }
 
       if (canLaunchWithoutPrompt(launch)) {
@@ -211,7 +179,7 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
       if (isMounted.current) {
         const seg = JOB_TYPE_URL_SEGMENTS[job.type];
         navigate(
-          seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`
+          seg ? `/runs/${seg}/${job.id}/output` : `/runs/${job.id}/output`
         );
       }
     } catch (launchError) {
@@ -277,7 +245,7 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
         if (isMounted.current) {
           const seg = JOB_TYPE_URL_SEGMENTS[job.type];
           navigate(
-            seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`
+            seg ? `/runs/${seg}/${job.id}/output` : `/runs/${job.id}/output`
           );
         }
       } else if (isMounted.current) {

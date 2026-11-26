@@ -18,7 +18,6 @@ import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import JobList from 'components/JobList';
 import RoutedTabs from 'components/RoutedTabs';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import RelatedTemplateList from 'components/RelatedTemplateList';
@@ -29,6 +28,7 @@ import InventoryGroups from './InventoryGroups';
 import InventoryHosts from './InventoryHosts/InventoryHosts';
 import InventorySources from './InventorySources';
 import { getInventoryPath } from './shared/utils';
+import { inventoryRunsRoutes } from './shared/InventoryRuns';
 
 export interface InventoryProps {
   setBreadcrumb: SetBreadcrumb;
@@ -77,14 +77,15 @@ function Inventory({ setBreadcrumb }: InventoryProps) {
     { name: t`Groups`, link: `${inventoryBaseUrl}/groups`, id: 2 },
     { name: t`Hosts`, link: `${inventoryBaseUrl}/hosts`, id: 3 },
     { name: t`Sources`, link: `${inventoryBaseUrl}/sources`, id: 4 },
-    {
-      name: t`Jobs`,
-      link: `${inventoryBaseUrl}/jobs`,
-      id: 5,
-    },
+    // Runs last, after the inventory's own tabs, as on every screen.
     {
       name: t`Job Templates`,
       link: `${inventoryBaseUrl}/job_templates`,
+      id: 5,
+    },
+    {
+      name: t`Runs`,
+      link: `${inventoryBaseUrl}/runs`,
       id: 6,
     },
   ];
@@ -92,9 +93,7 @@ function Inventory({ setBreadcrumb }: InventoryProps) {
   if (hasContentLoading) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
-          <ContentLoading />
-        </Card>
+        <ContentLoading />
       </PageSection>
     );
   }
@@ -203,25 +202,7 @@ function Inventory({ setBreadcrumb }: InventoryProps) {
               }
             />
           )}
-          {inventory && (
-            <Route
-              path="jobs"
-              element={
-                <JobList
-                  defaultParams={{
-                    or__job__inventory: inventory.id,
-                    or__adhoccommand__inventory: inventory.id,
-                    or__inventoryupdate__inventory_source__inventory:
-                      inventory.id,
-                    or__workflowjob__inventory: inventory.id,
-                  }}
-                  additionalRelatedSearchableKeys={[
-                    'inventoryupdate__inventory_source__inventory',
-                  ]}
-                />
-              }
-            />
-          )}
+          {inventoryRunsRoutes(inventory, { searchBySource: true })}
           {inventory && (
             <Route
               path="job_templates"

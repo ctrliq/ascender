@@ -1,42 +1,29 @@
-import type { AnyInventory, SummaryFieldRef } from 'types/api';
+import type { AnyInventory, OptionsResponse, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import SmartInventoryForm from '../shared/SmartInventoryForm';
 import type { SmartInventoryFormValues } from '../shared/SmartInventoryForm';
 import parseHostFilter from '../shared/utils';
 
 export interface SmartInventoryEditProps {
+  /** What the form draws with, read by the screen above rather than here. */
+  formOptions: OptionsResponse;
+  /** The inventory's instance groups, read by the screen above. */
+  instanceGroups: SummaryFieldRef[];
   inventory: AnyInventory;
   [key: string]: unknown;
 }
 
-function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
+function SmartInventoryEdit({
+  inventory,
+  formOptions,
+  instanceGroups,
+}: SmartInventoryEditProps) {
   const navigate = useNavigate();
   const detailsUrl = `/inventories/smart_inventory/${inventory.id}/details`;
-
-  const {
-    error: contentError,
-    isLoading: hasContentLoading,
-    request: fetchInstanceGroups,
-    result: initialInstanceGroups,
-  } = useRequest(
-    useCallback(async () => {
-      const {
-        data: { results },
-      } = await InventoriesAPI.readInstanceGroups(inventory.id);
-      return results;
-    }, [inventory.id]),
-    []
-  );
-
-  useEffect(() => {
-    fetchInstanceGroups();
-  }, [fetchInstanceGroups]);
 
   const {
     error: submitError,
@@ -84,7 +71,7 @@ function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
         ...remainingForm,
       },
       instance_groups ?? [],
-      initialInstanceGroups
+      instanceGroups
     );
   };
 
@@ -95,19 +82,12 @@ function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
     });
   };
 
-  if (hasContentLoading) {
-    return <ContentLoading />;
-  }
-
-  if (contentError) {
-    return <ContentError error={contentError} />;
-  }
-
   return (
     <CardBody>
       <SmartInventoryForm
         inventory={inventory}
-        instanceGroups={initialInstanceGroups}
+        instanceGroups={instanceGroups}
+        options={formOptions}
         onCancel={handleCancel}
         onSubmit={handleSubmit}
         submitError={submitError}

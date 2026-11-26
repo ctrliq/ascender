@@ -28,7 +28,7 @@ vi.mock('./JobTypeRedirect', async () => {
   return {
     __esModule: true,
     // Mirror the real component's default of view='output' so the bare
-    // /jobs/:id route resolves to the output view in the test too.
+    // /runs/:id route resolves to the output view in the test too.
     default: ({ view = 'output' }) =>
       ReactLib.createElement('div', null, `JobTypeRedirect:${view}`),
   };
@@ -38,26 +38,26 @@ function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>
-      <Route path="/jobs/*" element={<Jobs />} />
+      <Route path="/runs/*" element={<Jobs />} />
     </Routes>,
     { context: { router: { history } } }
   );
 }
 
 describe('<Jobs />', () => {
-  test('renders the list at /jobs', async () => {
-    renderAt('/jobs');
+  test('renders the list at /runs', async () => {
+    renderAt('/runs');
     expect(await screen.findByText('JobList')).toBeInTheDocument();
   });
 
-  test('renders the typed detail subtree at /jobs/:typeSegment/:id', async () => {
-    renderAt('/jobs/playbook/5/output');
+  test('renders the typed detail subtree at /runs/:typeSegment/:id', async () => {
+    renderAt('/runs/playbook/5/output');
     expect(await screen.findByText('Job detail')).toBeInTheDocument();
     expect(screen.queryByText('JobList')).not.toBeInTheDocument();
   });
 
-  test('routes an untyped /jobs/:id to the type redirect defaulting to output', async () => {
-    renderAt('/jobs/5');
+  test('routes an untyped /runs/:id to the type redirect defaulting to output', async () => {
+    renderAt('/runs/5');
     // the bare route renders <JobTypeRedirect /> with no explicit view, which
     // defaults to 'output'
     expect(
@@ -66,25 +66,25 @@ describe('<Jobs />', () => {
     expect(screen.queryByText('JobList')).not.toBeInTheDocument();
   });
 
-  test('routes an untyped /jobs/:id/details to the details type redirect', async () => {
-    renderAt('/jobs/5/details');
+  test('routes an untyped /runs/:id/details to the details type redirect', async () => {
+    renderAt('/runs/5/details');
     expect(
       await screen.findByText('JobTypeRedirect:details')
     ).toBeInTheDocument();
   });
 
-  test('redirects legacy /jobs/system/:id to /jobs/management/:id', async () => {
-    const { history } = renderAt('/jobs/system/5');
+  test('redirects legacy /runs/system/:id to /runs/management/:id', async () => {
+    const { history } = renderAt('/runs/system/5');
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/management/5')
+      expect(history.location.pathname).toBe('/runs/management/5')
     );
     expect(await screen.findByText('Job detail')).toBeInTheDocument();
   });
 
-  test('preserves the trailing sub-path when redirecting /jobs/system/:id/*', async () => {
-    const { history } = renderAt('/jobs/system/5/output');
+  test('preserves the trailing sub-path when redirecting /runs/system/:id/*', async () => {
+    const { history } = renderAt('/runs/system/5/output');
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/jobs/management/5/output')
+      expect(history.location.pathname).toBe('/runs/management/5/output')
     );
     expect(await screen.findByText('Job detail')).toBeInTheDocument();
   });

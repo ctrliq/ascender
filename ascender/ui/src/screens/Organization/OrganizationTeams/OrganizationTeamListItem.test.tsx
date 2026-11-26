@@ -18,7 +18,13 @@ function renderItem(team: Team) {
   return renderWithContexts(
     <table>
       <tbody>
-        <OrganizationTeamListItem team={team} detailUrl="/teams/1" />
+        <OrganizationTeamListItem
+          team={team}
+          detailUrl="/teams/1"
+          isSelected={false}
+          onSelect={() => {}}
+          rowIndex={0}
+        />
       </tbody>
     </table>
   );

@@ -74,7 +74,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
   return (
     <CardBody>
       <HostToggle
-        className="ascender-inventory-host-detail__padding-bottom-40"
+        className="ascender-inventory-host-detail__toggle-row"
         host={host}
       />
       <DetailList gutter="sm">
@@ -103,7 +103,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
         {user_capabilities?.edit && (
           <Button
             ouiaId="inventory-host-detail-edit-button"
-            aria-label={t`edit`}
+            aria-label={t`Edit`}
             component={Link}
             to={`/inventories/inventory/${inventory?.id}/hosts/${id}/edit`}
           >

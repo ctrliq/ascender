@@ -28,7 +28,6 @@ export interface PaginatedTableProps<T = SelectableOption> {
   contentError?: unknown;
   hasContentLoading?: boolean;
   /** Rendered in the empty state, typically the add button. */
-  emptyStateControls?: React.ReactNode;
   items: T[];
   /** How many there are in total, which is what the pagination counts. */
   itemCount: number;
@@ -42,6 +41,11 @@ export interface PaginatedTableProps<T = SelectableOption> {
   pluralizedItemName?: string;
   showPageSizeOptions?: boolean;
   renderToolbar?: (props: DataListToolbarProps) => React.ReactNode;
+  /**
+   * Replaces the "No {pluralizedItemName} Found" title, for lists that show
+   * only part of what exists and would otherwise claim there is nothing.
+   */
+  emptyContentTitle?: React.ReactNode;
   emptyContentMessage?: React.ReactNode;
   clearSelected?: () => void;
   ouiaId?: string;
@@ -51,7 +55,6 @@ export interface PaginatedTableProps<T = SelectableOption> {
 function PaginatedTable<T = SelectableOption>({
   contentError,
   hasContentLoading = false,
-  emptyStateControls,
   items,
   itemCount,
   qsConfig,
@@ -65,6 +68,7 @@ function PaginatedTable<T = SelectableOption>({
   renderToolbar = (props: DataListToolbarProps) => (
     <DataListToolbar {...props} />
   ),
+  emptyContentTitle,
   emptyContentMessage,
   clearSelected = noop,
   ouiaId,
@@ -77,6 +81,13 @@ function PaginatedTable<T = SelectableOption>({
     pluralizedItemName = t`Items`;
   }
 
+  /*
+   * Any change to the query string clears the selection, the search box's
+   * included. That box writes its address in place of the last one as it is
+   * typed in, and a tick kept across it would stay on a row the new filter
+   * has hidden, where Delete and the other bulk actions would still reach it
+   * without the user being able to see what they are acting on.
+   */
   useEffect(() => {
     clearSelected();
   }, [location.search, clearSelected]);
@@ -122,7 +133,7 @@ function PaginatedTable<T = SelectableOption>({
     message: `${pluralizedItemName} List`,
     comment: 'Aria label for paginated table list',
   });
-  const emptyContentTitle = t({
+  const defaultEmptyContentTitle = t({
     message: `No ${pluralizedItemName} Found`,
     comment: 'Title when no items are found',
   });
@@ -135,7 +146,7 @@ function PaginatedTable<T = SelectableOption>({
   } else if (items.length <= 0) {
     Content = (
       <ContentEmpty
-        title={emptyContentTitle}
+        title={emptyContentTitle || defaultEmptyContentTitle}
         message={
           emptyContentMessage ||
           t({
@@ -187,7 +198,6 @@ function PaginatedTable<T = SelectableOption>({
   return (
     <>
       <ListHeader
-        emptyStateControls={emptyStateControls}
         itemCount={itemCount}
         pagination={ToolbarPagination}
         qsConfig={qsConfig}

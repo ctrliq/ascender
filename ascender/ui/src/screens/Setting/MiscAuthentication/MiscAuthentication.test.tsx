@@ -33,7 +33,7 @@ describe('<MiscAuthentication />', () => {
       <SettingsProvider value={settingOptions}>
         <Routes>
           <Route
-            path="/settings/miscellaneous_authentication/*"
+            path="/authentication/session/*"
             element={<MiscAuthentication />}
           />
         </Routes>
@@ -48,21 +48,21 @@ describe('<MiscAuthentication />', () => {
   }
 
   test('should render miscellaneous authentication details', async () => {
-    renderMiscAuthentication([
-      '/settings/miscellaneous_authentication/details',
-    ]);
-    expect(await screen.findByText('Details')).toBeInTheDocument();
+    renderMiscAuthentication(['/authentication/session/details']);
+    expect(
+      await screen.findByText('Disable the built-in authentication system')
+    ).toBeInTheDocument();
   });
 
   test('should render miscellaneous authentication edit', async () => {
-    renderMiscAuthentication(['/settings/miscellaneous_authentication/edit']);
+    renderMiscAuthentication(['/authentication/session/edit']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderMiscAuthentication(['/settings/miscellaneous_authentication/foo']);
+    renderMiscAuthentication(['/authentication/session/foo']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)
@@ -71,10 +71,12 @@ describe('<MiscAuthentication />', () => {
   });
 
   test('should redirect to details for users without system admin permissions', async () => {
-    renderMiscAuthentication(['/settings/miscellaneous_authentication/edit'], {
+    renderMiscAuthentication(['/authentication/session/edit'], {
       config: { me: { is_superuser: false } },
     });
-    expect(await screen.findByText('Details')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Disable the built-in authentication system')
+    ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Save' })
     ).not.toBeInTheDocument();

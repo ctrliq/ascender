@@ -12,7 +12,13 @@ export interface ApplicationTokenListItemProps {
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
-  detailUrl: string;
+  /** The token's details page, or null when the viewer cannot open it. */
+  detailUrl: string | null;
+  /**
+   * Where the details page's Back to Tokens returns to, handed over in the
+   * link's state since the page itself sits under the token's owner.
+   */
+  backTo?: string;
   rowIndex: number;
   [key: string]: unknown;
 }
@@ -22,6 +28,7 @@ function ApplicationTokenListItem({
   isSelected,
   onSelect,
   detailUrl,
+  backTo,
   rowIndex,
 }: ApplicationTokenListItemProps) {
   const { t } = useLingui();
@@ -35,13 +42,19 @@ function ApplicationTokenListItem({
         }}
         dataLabel={t`Selected`}
       />
-      <Td dataLabel={t`Name`}>
-        <Link to={detailUrl}>
+      <Td dataLabel={t`Username`}>
+        {detailUrl ? (
+          <Link to={detailUrl} state={backTo ? { backTo } : undefined}>
+            <b>{token.summary_fields.user?.username}</b>
+          </Link>
+        ) : (
           <b>{token.summary_fields.user?.username}</b>
-        </Link>
+        )}
       </Td>
       <Td dataLabel={t`Scope`}>{toTitleCase(token.scope)}</Td>
-      <Td dataLabel={t`Expires`}>{formatDateString(token.expires)}</Td>
+      <Td dataLabel={t`Expires`} modifier="nowrap">
+        {formatDateString(token.expires)}
+      </Td>
     </Tr>
   );
 }

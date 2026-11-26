@@ -45,15 +45,16 @@ describe('<Inventory />', () => {
       'Groups',
       'Hosts',
       'Sources',
-      'Jobs',
       'Job Templates',
+      'Runs',
     ];
     const tablist = await screen.findByRole('tablist');
-    const tabs = within(tablist).getAllByRole('tab');
-    expect(tabs).toHaveLength(expectedTabs.length);
-    expectedTabs.forEach((label) => {
-      expect(within(tablist).getByText(label)).toBeInTheDocument();
-    });
+    // In this order, Runs last as on every screen.
+    expect(
+      within(tablist)
+        .getAllByRole('tab')
+        .map((tab) => tab.textContent?.trim())
+    ).toEqual(expectedTabs);
   });
 
   test('should show content error when user attempts to navigate to erroneous route', async () => {

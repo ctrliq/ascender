@@ -162,11 +162,15 @@ describe('<ScheduleDetail />', () => {
 
     assertDetail('Name', 'Mock JT Schedule');
     assertDetail('Description', 'A good schedule');
-    expect(screen.getByText('First Run')).toBeInTheDocument();
+    expect(screen.getByText('Start Date/Time')).toBeInTheDocument();
     expect(screen.getByText('Next Run')).toBeInTheDocument();
-    expect(screen.getByText('Last Run')).toBeInTheDocument();
+    // dtend is when the rule stops, so it carries the form's end label.
+    expect(screen.getByText('End Date/Time')).toBeInTheDocument();
+    expect(screen.queryByText('Last Run')).not.toBeInTheDocument();
     assertDetail('Local Time Zone', 'America/New_York');
     expect(screen.getByText('Repeat Frequency')).toBeInTheDocument();
+    // No exception reads as none, not as a schedule that runs once.
+    assertDetail('Exception Frequency', 'None');
     expect(screen.getByText('Created')).toBeInTheDocument();
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
 
@@ -213,9 +217,9 @@ describe('<ScheduleDetail />', () => {
 
     assertDetail('Name', 'Mock JT Schedule');
     assertDetail('Description', 'A good schedule');
-    expect(screen.getByText('First Run')).toBeInTheDocument();
+    expect(screen.getByText('Start Date/Time')).toBeInTheDocument();
     expect(screen.getByText('Next Run')).toBeInTheDocument();
-    expect(screen.getByText('Last Run')).toBeInTheDocument();
+    expect(screen.getByText('End Date/Time')).toBeInTheDocument();
     assertDetail('Local Time Zone', 'America/New_York');
     expect(screen.getByText('Repeat Frequency')).toBeInTheDocument();
     expect(screen.getByText('Created')).toBeInTheDocument();
@@ -357,9 +361,38 @@ describe('<ScheduleDetail />', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('switch', { name: 'Toggle schedule' })
+        screen.getByRole('switch', { name: 'Toggle Schedule' })
       ).toBeDisabled()
     );
+  });
+
+  test('names each frequency only when the schedule carries more than one', async () => {
+    vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
+    vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
+    );
+
+    // One frequency: the block's own name would repeat Repeat Frequency above.
+    const { unmount } = renderDetail(schedule);
+    await screen.findByText('Mock JT Schedule');
+
+    expect(screen.getByText('Frequency Details')).toBeInTheDocument();
+    expect(screen.getByText('Repeat Frequency')).toBeInTheDocument();
+    expect(screen.queryByText('Frequency')).not.toBeInTheDocument();
+    unmount();
+
+    // Two of them: the blocks need saying which is which.
+    renderDetail({
+      ...schedule,
+      rrule:
+        'DTSTART;TZID=America/New_York:20200220T000000 RRULE:FREQ=DAILY;INTERVAL=1;COUNT=1 RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO',
+    } as Schedule);
+    await screen.findByText('Mock JT Schedule');
+
+    expect(screen.getAllByText('Frequency')).toHaveLength(2);
+    assertDetail('Repeat Frequency', 'Day, Week');
   });
 
   test('should display warning for unsupported recurrence rules', async () => {

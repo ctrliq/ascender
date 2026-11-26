@@ -46,7 +46,7 @@ function FieldWithPrompt({
           className="ascender-field-with-prompt__styled-checkbox-field"
           isDisabled={isDisabled}
           id={promptId}
-          label={t`Prompt on launch`}
+          label={t`Prompt on Launch`}
           name={promptName}
           ouiaId={`${promptId}-checkbox`}
         />

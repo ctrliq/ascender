@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { ProjectsAPI } from 'api';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import useRequest from 'hooks/useRequest';
 import ProjectForm from '../shared/ProjectForm';
 import type { ProjectFormValues } from '../shared/ProjectForm';
+import { readProjectFormOptions } from '../shared/projectFormOptions';
 
 function ProjectAdd() {
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
+
+  /*
+   * What the form draws with, read here rather than inside it: read there, the
+   * card was already on screen and a second loading animation ran inside it.
+   */
+  const {
+    request: fetchFormOptions,
+    result: formOptions,
+    isLoading,
+    error: contentError,
+  } = useRequest(
+    useCallback(() => readProjectFormOptions(), []),
+    null
+  );
+
+  useEffect(() => {
+    fetchFormOptions();
+  }, [fetchFormOptions]);
 
   const handleSubmit = async ({
     webhook_key,
@@ -49,11 +71,28 @@ function ProjectAdd() {
     navigate(`/projects`);
   };
 
+  if (contentError) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentError error={contentError} />
+      </PageSection>
+    );
+  }
+
+  if (isLoading || !formOptions) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <ContentLoading />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection hasBodyWrapper={false}>
       <Card>
         <CardBody>
           <ProjectForm
+            options={formOptions}
             handleCancel={handleCancel}
             handleSubmit={handleSubmit}
             submitError={formSubmitError}

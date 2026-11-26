@@ -187,7 +187,7 @@ async function renderDetail(approval: WorkflowApproval, props = {}) {
     />
   );
   // wait for the workflow job fetch to resolve and the card body to render
-  await screen.findByText('Workflow job details');
+  await screen.findByText('Workflow details');
   return utils;
 }
 
@@ -212,11 +212,11 @@ describe('<WorkflowApprovalDetail />', () => {
     assertDetail('Description', workflowApproval.description);
     assertDetail('Expires', 'Never');
     assertDetail(
-      'Workflow Job',
+      'Workflow',
       `${workflowApproval.summary_fields.workflow_job?.id} - ${workflowApproval.summary_fields.workflow_job!.name}`
     );
     assertDetail(
-      'Workflow Job Template',
+      'Workflow Template',
       workflowApproval.summary_fields.workflow_job_template?.name
     );
 
@@ -357,6 +357,30 @@ describe('<WorkflowApprovalDetail />', () => {
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Deny' })
+    ).not.toBeInTheDocument();
+  });
+
+  test('offers Cancel Workflow Job on its own capability, not the approver role', async () => {
+    const { unmount } = await renderDetail({
+      ...workflowApproval,
+      status: 'pending',
+      can_approve_or_deny: false,
+      can_cancel_workflow: true,
+    } as unknown as WorkflowApproval);
+    expect(
+      screen.getByRole('button', { name: 'Cancel Workflow Job' })
+    ).toBeInTheDocument();
+    unmount();
+
+    await renderDetail({
+      ...workflowApproval,
+      status: 'pending',
+      can_approve_or_deny: true,
+      can_cancel_workflow: false,
+    } as unknown as WorkflowApproval);
+    expect(screen.getByRole('button', { name: 'Approve' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancel Workflow Job' })
     ).not.toBeInTheDocument();
   });
 

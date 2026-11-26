@@ -30,7 +30,7 @@ describe('<UserDetail />', () => {
     assertDetail('Last Login', '11/4/2019, 11:12:36 PM');
     assertDetail('Created', '10/28/2019, 3:01:07 PM');
     assertDetail('Last Modified', '7/12/2021, 7:08:33 PM');
-    assertDetail('Type', 'SOCIAL');
+    assertDetail('Login Type', 'SOCIAL');
   });
 
   test('User Type Detail should render expected strings', () => {
@@ -65,7 +65,7 @@ describe('<UserDetail />', () => {
   test('should show edit button for users with edit permission', () => {
     renderWithContexts(<UserDetail user={mockDetails as unknown as User} />);
 
-    const editLink = screen.getByRole('link', { name: 'edit' });
+    const editLink = screen.getByRole('link', { name: 'Edit' });
     expect(editLink).toHaveAttribute('href', `/users/${mockDetails.id}/edit`);
   });
 
@@ -85,7 +85,7 @@ describe('<UserDetail />', () => {
       />
     );
     expect(
-      screen.queryByRole('link', { name: 'edit' })
+      screen.queryByRole('link', { name: 'Edit' })
     ).not.toBeInTheDocument();
   });
 
@@ -98,7 +98,7 @@ describe('<UserDetail />', () => {
       }
     );
 
-    await user.click(screen.getByRole('link', { name: 'edit' }));
+    await user.click(screen.getByRole('link', { name: 'Edit' }));
 
     expect(history.location.pathname).toEqual('/users/1/edit');
   });

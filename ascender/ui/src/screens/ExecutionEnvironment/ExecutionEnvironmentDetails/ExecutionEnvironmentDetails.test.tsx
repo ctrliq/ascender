@@ -66,11 +66,11 @@ describe('<ExecutionEnvironmentDetails/>', () => {
     assertDetail('Image', executionEnvironment.image);
     assertDetail('Description', 'Foo');
     assertDetail('Organization', 'Globally Available');
-    assertDetail('Registry credential', 'Container Registry');
+    assertDetail('Registry Credential', 'Container Registry');
     assertDetail('Managed', 'False');
     expect(screen.getByText('Created')).toBeInTheDocument();
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
-    expect(screen.getByLabelText('edit')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
@@ -91,7 +91,7 @@ describe('<ExecutionEnvironmentDetails/>', () => {
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
     assertDetail('Organization', 'Bar');
-    assertDetail('Registry credential', 'Container Registry');
+    assertDetail('Registry Credential', 'Container Registry');
   });
 
   test('expected api call is made for delete', async () => {
@@ -114,6 +114,26 @@ describe('<ExecutionEnvironmentDetails/>', () => {
     );
   });
 
+  test('names the environment in the confirmation and explains a failed delete', async () => {
+    vi.mocked(ExecutionEnvironmentsAPI.destroy).mockRejectedValue(
+      new Error('nope')
+    );
+    const { user } = renderWithContexts(
+      <ExecutionEnvironmentDetails
+        executionEnvironment={executionEnvironment}
+      />
+    );
+    await user.click(await screen.findByRole('button', { name: 'Delete' }));
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveTextContent('Default EE');
+    expect(dialog).not.toHaveTextContent('https://localhost:90/12345/ma');
+
+    fireEvent.click(await screen.findByLabelText('Confirm Delete'));
+    expect(
+      await screen.findByText('Failed to delete execution environment.')
+    ).toBeInTheDocument();
+  });
+
   test('should render action buttons for a managed ee', async () => {
     renderWithContexts(
       <ExecutionEnvironmentDetails
@@ -127,7 +147,7 @@ describe('<ExecutionEnvironmentDetails/>', () => {
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
     assertDetail('Managed', 'True');
-    expect(screen.getByLabelText('edit')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
@@ -143,7 +163,7 @@ describe('<ExecutionEnvironmentDetails/>', () => {
       />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
-    expect(screen.queryByLabelText('edit')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Edit')).not.toBeInTheDocument();
   });
 
   test('should hide the delete button without delete permission', async () => {

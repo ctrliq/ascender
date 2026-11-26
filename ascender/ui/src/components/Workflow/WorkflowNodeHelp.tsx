@@ -42,15 +42,15 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
         break;
       case 'workflow_job_template':
       case 'workflow_job':
-        nodeType = t`Workflow Job Template`;
+        nodeType = t`Workflow Template`;
         break;
       case 'project':
       case 'project_update':
-        nodeType = t`Project Update`;
+        nodeType = t`Project Sync`;
         break;
       case 'inventory_source':
       case 'inventory_update':
-        nodeType = t`Inventory Update`;
+        nodeType = t`Inventory Sync`;
         break;
       case 'workflow_approval_template':
       case 'workflow_approval':
@@ -58,7 +58,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
         break;
       case 'system_job_template':
       case 'system_job':
-        nodeType = t`Management Job`;
+        nodeType = t`Cleanup Job`;
         break;
       default:
         nodeType = '';

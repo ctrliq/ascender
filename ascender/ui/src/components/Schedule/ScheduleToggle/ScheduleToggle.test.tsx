@@ -39,7 +39,7 @@ describe('<ScheduleToggle>', () => {
     const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} onToggle={onToggle} />
     );
-    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle Schedule' });
     expect(toggle).toBeChecked();
 
     await user.click(toggle);
@@ -49,6 +49,13 @@ describe('<ScheduleToggle>', () => {
     });
     await waitFor(() => expect(toggle).not.toBeChecked());
     expect(onToggle).toHaveBeenCalledWith(false);
+    // The label and the tooltip follow the toggle, not the schedule it was
+    // handed on load.
+    expect(document.querySelector('.pf-v6-c-switch__label')).toHaveTextContent(
+      'Off'
+    );
+    await user.hover(toggle.closest('label')!);
+    expect(await screen.findByText('Schedule is inactive')).toBeInTheDocument();
   });
 
   test('should toggle on', async () => {
@@ -67,7 +74,7 @@ describe('<ScheduleToggle>', () => {
         onToggle={onToggle}
       />
     );
-    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle Schedule' });
     expect(toggle).not.toBeChecked();
 
     await user.click(toggle);
@@ -86,7 +93,7 @@ describe('<ScheduleToggle>', () => {
     const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} />
     );
-    const toggle = screen.getByRole('switch', { name: 'Toggle schedule' });
+    const toggle = screen.getByRole('switch', { name: 'Toggle Schedule' });
     expect(toggle).toBeChecked();
 
     await user.click(toggle);

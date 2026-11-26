@@ -31,26 +31,26 @@ function NodeDeleteModal() {
   return (
     <AlertModal
       variant="danger"
-      title={t`Remove Node ${nodeName}`}
+      title={t`Delete Node ${nodeName}`}
       isOpen={nodeToDelete}
       onClose={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
       actions={[
         <Button
           ouiaId="node-removal-confirm-button"
           id="confirm-node-removal"
-          key="remove"
+          key="delete"
           variant="danger"
-          aria-label={t`Confirm node removal`}
+          aria-label={t`Confirm Delete Node`}
           onClick={() => dispatch({ type: 'DELETE_NODE' })}
         >
-          {t`Remove`}
+          {t`Delete`}
         </Button>,
         <Button
           ouiaId="node-removal-cancel-button"
           id="cancel-node-removal"
           key="cancel"
           variant="link"
-          aria-label={t`Cancel node removal`}
+          aria-label={t`Cancel Delete Node`}
           onClick={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
         >
           {t`Cancel`}
@@ -59,7 +59,7 @@ function NodeDeleteModal() {
     >
       {nodeToDelete && unifiedJobTemplate ? (
         <>
-          <p>{t`Are you sure you want to remove the node below:`}</p>
+          <p>{t`Are you sure you want to delete the node below:`}</p>
           <br />
           {/*
             Bold rather than the danger colour. There used to be a
@@ -72,7 +72,7 @@ function NodeDeleteModal() {
           <strong>{unifiedJobTemplate.name}</strong>
         </>
       ) : (
-        <p>{t`Are you sure you want to remove this node?`}</p>
+        <p>{t`Are you sure you want to delete this node?`}</p>
       )}
     </AlertModal>
   );

@@ -108,11 +108,15 @@ describe('<InventoryHostGroupsList />', () => {
     expect(screen.getByRole('link', { name: 'baz' })).toBeInTheDocument();
   });
 
-  test('should render Run Commands button', async () => {
-    renderList();
+  test('should offer a run of each kind the list can start', async () => {
+    const { user } = renderList();
+    await screen.findByRole('link', { name: 'bar' });
+
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+
     expect(
-      await screen.findByRole('button', { name: 'Run Command' })
-    ).toBeInTheDocument();
+      screen.getAllByRole('menuitem').map((item) => item.textContent)
+    ).toEqual(['Job', 'Workflow', 'Command']);
   });
 
   test('should check and uncheck the row item', async () => {
@@ -181,7 +185,7 @@ describe('<InventoryHostGroupsList />', () => {
   test('should show add button according to permissions', async () => {
     renderList();
     expect(
-      await screen.findByRole('button', { name: 'Add' })
+      await screen.findByRole('button', { name: 'Associate' })
     ).toBeInTheDocument();
   });
 
@@ -196,7 +200,7 @@ describe('<InventoryHostGroupsList />', () => {
     renderList();
     await screen.findByRole('link', { name: 'foo' });
     expect(
-      screen.queryByRole('button', { name: 'Add' })
+      screen.queryByRole('button', { name: 'Associate' })
     ).not.toBeInTheDocument();
   });
 
@@ -214,7 +218,7 @@ describe('<InventoryHostGroupsList />', () => {
       },
     } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
-    await user.click(await screen.findByRole('button', { name: 'Add' }));
+    await user.click(await screen.findByRole('button', { name: 'Associate' }));
     const modal = await screen.findByRole('dialog');
     // wait for the modal's group list to finish loading before closing it so
     // the pending fetch doesn't resolve after unmount
@@ -241,11 +245,11 @@ describe('<InventoryHostGroupsList />', () => {
       },
     } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
-    await user.click(await screen.findByRole('button', { name: 'Add' }));
+    await user.click(await screen.findByRole('button', { name: 'Associate' }));
     const modal = await screen.findByRole('dialog');
     const groupRow = (await within(modal).findByText('foo')).closest('tr');
     await user.click(within(groupRow!).getByRole('checkbox'));
-    await user.click(within(modal).getByRole('button', { name: 'Save' }));
+    await user.click(within(modal).getByRole('button', { name: 'Associate' }));
 
     await settleTooltips();
     expect(HostsAPI.associateGroup).toHaveBeenCalledTimes(1);
@@ -264,10 +268,10 @@ describe('<InventoryHostGroupsList />', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     expect(
-      await screen.findByText('Disassociate group from host?')
+      await screen.findByText('Disassociate the host from these groups?')
     ).toBeInTheDocument();
     await user.click(
-      screen.getByRole('button', { name: 'confirm disassociate' })
+      screen.getByRole('button', { name: 'Confirm Disassociate' })
     );
 
     await waitFor(() =>
@@ -284,7 +288,7 @@ describe('<InventoryHostGroupsList />', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
     await user.click(screen.getByRole('button', { name: 'Disassociate' }));
     await user.click(
-      await screen.findByRole('button', { name: 'confirm disassociate' })
+      await screen.findByRole('button', { name: 'Confirm Disassociate' })
     );
 
     expect(await screen.findByText('Error!')).toBeInTheDocument();

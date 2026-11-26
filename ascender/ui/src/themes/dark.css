@@ -4,65 +4,73 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
-  src: url(../../static/css/assets/fonts/Inter/Inter-Bold.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-Bold.woff2) format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: italic;
   font-weight: 700;
-  src: url(../../static/css/assets/fonts/Inter/Inter-BoldItalic.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-BoldItalic.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: italic;
   font-weight: 400;
-  src: url(../../static/css/assets/fonts/Inter/Inter-Italic.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-Italic.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  src: url(../../static/css/assets/fonts/Inter/Inter-Medium.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-Medium.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: italic;
   font-weight: 500;
-  src: url(../../static/css/assets/fonts/Inter/Inter-MediumItalic.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-MediumItalic.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
-  src: url(../../static/css/assets/fonts/Inter/Inter-Regular.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-Regular.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
-  src: url(../../static/css/assets/fonts/Inter/Inter-SemiBold.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-SemiBold.woff2)
+    format('woff2');
   font-display: swap;
 }
 @font-face {
   font-family: Inter;
   font-style: italic;
   font-weight: 600;
-  src: url(../../static/css/assets/fonts/Inter/Inter-SemiBoldItalic.woff2) format("woff2");
+  src: url(../../static/css/assets/fonts/Inter/Inter-SemiBoldItalic.woff2)
+    format('woff2');
   font-display: swap;
 }
 
-html.pf-v6-theme-dark[data-theme="dark"] {
+html.pf-v6-theme-dark[data-theme='dark'] {
   /* === Ascender base variables === */
   --ascender-gutter-bg: #13161b;
   --ascender-output-bg: #000;
   --ascender-workflow-node-bg: #1a1e25;
   --ascender-workflow-graph-bg: #0d0f12;
+  --ascender-inset-bg: #26292e;
   --pf-v6-global--primary-color--100: #12a66f;
   --pf-v6-global--primary-color--200: #17c484;
   --pf-v6-global--danger-color--100: #f04438;
@@ -97,7 +105,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   --pf-v6-global--BorderRadius--lg: 0.625rem;
   --pf-v6-global--BorderRadius--xl: 0.75rem;
   --pf-t--global--border--radius--pill: var(--pf-v6-global--BorderRadius--sm);
-  --pf-t--global--border--radius--action--default: var(--pf-v6-global--BorderRadius--sm);
+  --pf-t--global--border--radius--action--default: var(
+    --pf-v6-global--BorderRadius--sm
+  );
 
   --pf-v6-global--FontWeight--normal: 400;
   --pf-v6-global--FontWeight--semi-bold: 600;
@@ -113,7 +123,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   --pf-v6-global--active-color--200: #17c484;
 
   --ascender-status-running-color: #53b1fd;
-  --ascender-status-canceled-color: var(--pf-t--global--color--nonstatus--orange--100);
+  --ascender-status-canceled-color: var(
+    --pf-t--global--color--nonstatus--orange--100
+  );
 
   /* Brand and link colors */
   --pf-t--global--color--brand--default: #12a66f;
@@ -147,16 +159,20 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   --pf-t--global--border--color--default: #373a41;
 
   --pf-v6-global--BorderColor--100: #373a41;
+  /* Form controls take the lighter border the default theme uses; the
+     BorderColor--100 above is also the tooltip, divider and switch colour,
+     so it cannot be lightened for the sake of inputs alone. */
+  --ascender-form-border-color: #444548;
   --pf-v6-global--BorderColor--200: #22262f;
   --pf-v6-global--BorderColor--300: #22262f;
   --pf-v6-global--BorderColor--disabled: #373a41;
 
   --pf-v6-global--focus-ring-color: #0b8759;
 
-  --pf-v6-global--BoxShadow--sm: hsla(0,0%,100%,0);
-  --pf-v6-global--BoxShadow--md: hsla(0,0%,100%,0);
-  --pf-v6-global--BoxShadow--lg: hsla(0,0%,100%,0);
-  --pf-v6-global--BoxShadow--xl: hsla(0,0%,100%,0);
+  --pf-v6-global--BoxShadow--sm: hsla(0, 0%, 100%, 0);
+  --pf-v6-global--BoxShadow--md: hsla(0, 0%, 100%, 0);
+  --pf-v6-global--BoxShadow--lg: hsla(0, 0%, 100%, 0);
+  --pf-v6-global--BoxShadow--xl: hsla(0, 0%, 100%, 0);
 
   --pf-t--global--color--status--success--default: #17b26a;
   --pf-t--global--color--status--danger--default: #f04438;
@@ -166,18 +182,41 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   --ansi-color-12: #8cb4ff;
 
   & body {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Segoe UI,
+      Helvetica,
+      Arial,
+      sans-serif;
     color: #cecfd2;
     background-color: #000;
-    --pf-v6-global--FontFamily--sans-serif: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-    --pf-v6-global--FontFamily--heading--sans-serif: Satoshi,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
-    --pf-v6-global--FontFamily--text: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+    --pf-v6-global--FontFamily--sans-serif:
+      Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+      sans-serif;
+    --pf-v6-global--FontFamily--heading--sans-serif:
+      Satoshi, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+      sans-serif;
+    --pf-v6-global--FontFamily--text:
+      Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+      sans-serif;
   }
 
   /* === Ascender shared component styles === */
 
   & .pf-v6-c-card__body {
     padding-block-start: 0.25rem !important;
+  }
+
+  /* A card body with no tab bar above it is the first thing in the card, which
+     is every settings edit screen. The rule above tightens the ones that sit
+     under a tab bar, and on these it put the first label against the card's
+     edge, so they keep the padding a first child would have. */
+  & .pf-v6-c-card__body:first-child {
+    padding-block-start: var(
+      --pf-v6-c-card--first-child--PaddingBlockStart
+    ) !important;
   }
 
   & .host-status-bar {
@@ -222,12 +261,15 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     border-right: 1px solid #22262f;
   }
 
+  /* Five rather than seven, so the rail holds two more of its eight groups
+     before it has to scroll. The important is PatternFly's own padding being
+     set through a variable this has to outweigh. */
   & #page-sidebar .pf-v6-c-nav__link {
-    padding-bottom: 7px !important;
-    padding-top: 7px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
   }
 
-  & input[type="checkbox"] {
+  & input[type='checkbox'] {
     accent-color: var(--pf-v6-global--primary-color--100);
   }
 
@@ -250,6 +292,18 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-menu__item--FontSize: var(--pf-v6-global--FontSize--md);
   }
 
+  /* A dropdown paints its edge on ::before at inset 0, the same as a form
+     control, and hover swaps the width and colour through the tokens below. It
+     answered the pointer with a hairline where the field beside it went to two
+     pixels of green, so a row of filters responded two different ways. Plain
+     toggles are left out: they carry no edge to thicken, and boxing a kebab on
+     hover would be a new thing rather than a matching one. */
+  & .pf-v6-c-menu-toggle:not(.pf-m-plain):hover {
+    --pf-v6-c-menu-toggle--hover--BorderWidth: 2px;
+    --pf-v6-c-menu-toggle--hover--BorderColor: var(
+      --pf-v6-global--focus-ring-color
+    );
+  }
 
   & .pf-v6-c-menu-toggle.pf-m-plain {
     --pf-v6-c-menu-toggle--PaddingTop: 0.375rem;
@@ -287,7 +341,10 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     color: #fff;
   }
 
-  & .pf-v6-c-masthead .pf-v6-c-menu-toggle {
+  /* The masthead's toggles are part of the bar rather than fields on it. The
+     :not below is what keeps this ahead of the field background further down,
+     which carries one of its own since it excludes the primary variant. */
+  & .pf-v6-c-masthead .pf-v6-c-menu-toggle:not(.pf-m-primary) {
     background-color: transparent;
     color: #fff;
   }
@@ -303,7 +360,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     background-color: transparent;
     border: 1px solid #12a66f;
     --pf-v6-c-button--Color: #12a66f;
-    --pf-v6-c-button--hover--Color: #fff;
+    /* The hover fills the button green, and a green fill carries the same
+       dark ink here whichever button it is on. */
+    --pf-v6-c-button--hover--Color: #13161b;
     --pf-v6-c-button--BorderColor: #12a66f;
     --pf-v6-c-button--BorderWidth: 1px;
     --pf-v6-c-button--hover--BorderColor: #0e8c5d;
@@ -317,24 +376,41 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     background-color: #0e8c5d;
     border-color: #0e8c5d;
     --pf-v6-c-button--BorderColor: #0e8c5d;
-    color: #fff;
+    color: #13161b;
   }
 
-  & .pf-v6-c-toolbar .pf-v6-c-button.pf-m-secondary:not(:disabled) {
+  /* The variables editor's copy and collapse buttons are the same secondary
+     button the jobs toolbar uses for Delete and Cancel, and take the same fill
+     here rather than a second set of colours that could drift from it. */
+  & .pf-v6-c-toolbar .pf-v6-c-button.pf-m-secondary:not(:disabled),
+  & .pf-v6-c-toolbar .pf-v6-c-menu-toggle.pf-m-secondary:not(:disabled),
+  & .pf-v6-c-button.ascender-variables-detail__action:not(:disabled) {
     background: #12a66f;
     border-color: #12a66f;
     color: #13161b;
   }
 
-  & .pf-v6-c-toolbar .pf-v6-c-button.pf-m-secondary:not(:disabled):hover {
-    background-color: #0e8c5d;
-    border-color: #0e8c5d;
-    color: #fff;
+  &
+    .pf-v6-c-toolbar
+    .pf-v6-c-menu-toggle.pf-m-secondary:not(:disabled)
+    .pf-v6-c-menu-toggle__toggle-icon {
+    color: inherit;
   }
 
-  /* Pagination enabled button green fill */
+  /* The fill darkens on hover and the label does not change colour with it:
+     a button reads the same whether or not the pointer is over it. */
+  & .pf-v6-c-toolbar .pf-v6-c-button.pf-m-secondary:not(:disabled):hover,
+  & .pf-v6-c-toolbar .pf-v6-c-menu-toggle.pf-m-secondary:not(:disabled):hover,
+  & .pf-v6-c-button.ascender-variables-detail__action:not(:disabled):hover {
+    background-color: #0e8c5d;
+    border-color: #0e8c5d;
+    color: #13161b;
+  }
+
+  /* Pagination enabled button green fill, with the dark ink every other green
+     fill in this theme carries. */
   & .pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled) {
-    --pf-v6-c-button--m-plain--Color: #fff;
+    --pf-v6-c-button--m-plain--Color: #13161b;
     background-color: #12a66f;
     border-radius: 0.5rem;
   }
@@ -344,7 +420,14 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   & .pf-v6-c-pagination__nav-control .pf-v6-c-button:not(:disabled) .pf-v6-svg {
-    color: #fff;
+    color: #13161b;
+  }
+
+  /* The page number is a field only while there is somewhere to page to. The
+     disabled one is a piece of the page rather than a control, so it takes the
+     face every other disabled control has instead of standing out white. */
+  & .pf-v6-c-pagination .pf-v6-c-form-control.pf-m-disabled {
+    background-color: #26292e;
   }
 
   & .pf-v6-c-pagination__nav-control .pf-v6-c-button:disabled {
@@ -411,9 +494,25 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   /* Nav layout */
+  /* The rail sits close to the edge, where the classic face has always had it:
+     PatternFly's own two dozen pixels left a band of empty sidebar down the
+     left of every page, with the words further from the edge than the logo
+     above them. */
+  & .pf-v6-c-page__sidebar .pf-v6-c-page__sidebar-body {
+    --pf-v6-c-page__sidebar-body--PaddingInlineStart: 0.75rem;
+    /* The same at the other end, so the rail sits in the middle of its own
+       column: nothing at the end put the block twelve pixels off centre, and
+       the scrollbar a long rail grows ate what was left of that side. */
+    --pf-v6-c-page__sidebar-body--PaddingInlineEnd: 0.75rem;
+  }
+
   & .pf-v6-c-nav {
-    --pf-v6-c-nav--PaddingBlockStart: 0.25rem;
-    --pf-v6-c-nav--PaddingBlockEnd: 0.25rem;
+    /* Nothing of its own at the top: the first row keeps the same room above
+       its text as every row keeps under the line above it. */
+    --pf-v6-c-nav--PaddingBlockStart: 0;
+    /* Room under the last group's line, so the rail ends with space rather
+       than with the divider against the foot of the sidebar. */
+    --pf-v6-c-nav--PaddingBlockEnd: 1rem;
     --pf-v6-c-nav__link--PaddingTop: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-nav__link--PaddingBottom: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-nav__link--PaddingRight: var(--pf-v6-global--spacer--md);
@@ -422,10 +521,15 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     margin-inline: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-nav--BackgroundColor: transparent;
     --pf-v6-c-nav__link--Color: var(--pf-v6-global--Color--200);
-    --pf-v6-c-nav__link--m-current--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-nav__link--m-current--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
     --pf-v6-c-nav__link--m-current--Color: var(--pf-v6-global--Color--100);
     --pf-v6-c-nav__link--hover--Color: #f7f7f7;
-    --pf-v6-c-nav__link--hover--BackgroundColor: #373a41;
+    /* Two steps under the selected item's own #373a41, so hovering a row reads as
+       reaching for it rather than as selecting it: the two used to be the same
+       colour, and the pointer made every row look current. */
+    --pf-v6-c-nav__link--hover--BackgroundColor: #262930;
     --pf-v6-c-nav__link--m-current--after--BorderColor: transparent;
   }
 
@@ -439,18 +543,99 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-nav__link.pf-m-current {
     border-left: 5px solid #12a66f;
-    border-radius: 0 var(--pf-v6-global--BorderRadius--sm) var(--pf-v6-global--BorderRadius--sm) 0;
+    border-radius: 0 var(--pf-v6-global--BorderRadius--sm)
+      var(--pf-v6-global--BorderRadius--sm) 0;
   }
 
   & .pf-v6-c-nav__link:active {
     background-color: transparent;
   }
 
-  & .pf-v6-c-nav__list > .pf-v6-c-nav__item:has(.pf-v6-c-nav__subnav) {
+  /* The list stands its rows eight pixels apart, and since a group's line is
+     drawn under its own row, all eight of them land above the next heading:
+     every title sat far from the line above it and close to the line below.
+     Those eight move inside the row, which spends nine above its text and
+     nine below, and the row itself keeps eight clear of each line, so the
+     title sits in the middle of its band and the block behind it never
+     touches a line. The important outweighs the one five pixels carries for
+     the rail's rows, which the items of a group keep. */
+  & .pf-v6-c-nav > .pf-v6-c-nav__list {
+    row-gap: 0;
+  }
+
+  &
+    #page-sidebar
+    .pf-v6-c-nav
+    > .pf-v6-c-nav__list
+    > .pf-v6-c-nav__item
+    > .pf-v6-c-nav__link {
+    padding-block: 9px !important;
+    /* And the row's own block stands off both lines by the same eight, so the
+       heading reads as sitting between them rather than filling the space. */
+    margin-block: 8px;
+  }
+
+  /* The lines run the width of the rail rather than the width of the rows: the
+     twenty pixels are the rail's own margin and the sidebar's padding, taken
+     off the row's box and given back as padding, so the line moves out to the
+     edges. Twelve come back on the far side, where the page keeps eight more
+     of its own before its card begins, and twenty on the near side, which has
+     only the edge of the window: twenty either side of a row. */
+  & #page-sidebar .pf-v6-c-nav > .pf-v6-c-nav__list > .pf-v6-c-nav__item {
+    margin-inline: -20px;
+    padding-inline: 20px 12px;
+  }
+
+  /* Open, the heading gives up the room it keeps under itself: the list is
+     what follows it, and its first item should sit as close under the heading
+     as the items sit under each other. Closed, the row keeps that room, which
+     is what holds the title off the line under it. */
+  &
+    #page-sidebar
+    .pf-v6-c-nav
+    > .pf-v6-c-nav__list
+    > .pf-v6-c-nav__item.pf-m-expanded
+    > .pf-v6-c-nav__link {
+    margin-block-end: 0;
+  }
+
+  /* The first row has no line above it, only the masthead: eight reads as a
+     gap between the two and four as a sliver of rail caught between them, so
+     it keeps six. */
+  &
+    #page-sidebar
+    .pf-v6-c-nav
+    > .pf-v6-c-nav__list
+    > .pf-v6-c-nav__item:first-child
+    > .pf-v6-c-nav__link {
+    margin-block-start: 6px;
+  }
+
+  /* The line under each group, and under the dashboard as well: it is pinned
+     above the groups rather than in one, so it is the only row with no subnav
+     and it was the only row with nothing under it to say where it ends. */
+  & .pf-v6-c-nav__list > .pf-v6-c-nav__item:has(.pf-v6-c-nav__subnav),
+  & .pf-v6-c-nav > .pf-v6-c-nav__list > .pf-v6-c-nav__item:first-child {
     border-bottom: 1px solid #393f44;
   }
 
+  /* The last group needs the same said on the group itself: its own list draws
+     the eight underneath, but the list is clipped to the group for the collapse
+     animation, and on the last one there is nothing after it to make room, so
+     its final item sat on the line where every other group's stands off it. */
+  &
+    .pf-v6-c-nav
+    > .pf-v6-c-nav__list
+    > .pf-v6-c-nav__item:last-child:has(> .pf-v6-c-nav__subnav:not([hidden])) {
+    padding-bottom: 8px;
+  }
+
   & .pf-v6-c-nav__subnav {
+    /* The first item of a group sits as close under its heading as the items
+       sit under each other: PatternFly stands the list off by eight where the
+       items are three apart, which read as a gap in the group rather than the
+       start of one. */
+    padding-block-start: 3px;
     --pf-v6-c-nav__link--PaddingTop: 0.25rem;
     --pf-v6-c-nav__link--PaddingBottom: 0.25rem;
     --pf-v6-c-nav__link--PaddingRight: inherit;
@@ -478,7 +663,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-nav__toggle-icon {
     color: var(--pf-v6-global--Color--300);
-    opacity: .6;
+    opacity: 0.6;
   }
 
   /* Links */
@@ -486,7 +671,12 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     text-decoration: none !important;
   }
 
-  & .pf-v6-c-table tbody a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*="StatusLabel"]):not(:has(.pf-v6-c-label)) {
+  &
+    .pf-v6-c-table
+    tbody
+    a:not(.pf-v6-c-button):not(.pf-v6-c-label):not([class*='StatusLabel']):not(
+      :has(.pf-v6-c-label)
+    ) {
     text-decoration: none !important;
   }
 
@@ -508,7 +698,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-tooltip_content--PaddingBottom: inherit;
     --pf-v6-c-tooltip_content--PaddingLeft: inherit;
     --pf-v6-c-tooltip_content--Color: #fff;
-    --pf-v6-c-tooltip__content--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-tooltip__content--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
     --pf-v6-c-tooltip__content--PaddingTop: var(--pf-v6-global--spacer--xs);
     --pf-v6-c-tooltip__content--PaddingRight: var(--pf-v6-global--spacer--md);
     --pf-v6-c-tooltip__content--PaddingBottom: var(--pf-v6-global--spacer--xs);
@@ -525,7 +717,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   /* Activity stream icon */
-  & [data-ouia-component-id="activity-stream-button"] .pf-v6-svg {
+  & [data-ouia-component-id='activity-stream-button'] .pf-v6-svg {
     font-size: 1.25rem;
   }
 
@@ -606,8 +798,20 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     margin-bottom: 1rem;
   }
 
+  /* A border colour on a dark background reads as almost nothing, and this is
+     text rather than a rule: the same grey the theme gives secondary text. */
   & .pf-v6-c-breadcrumb__item-divider {
-    color: var(--pf-v6-global--BorderColor--100);
+    color: var(--pf-v6-global--Color--300);
+  }
+
+  /* The topology legend and its details panel draw a node's type as a primary
+     button, and this theme paints a primary button's text dark to sit on the
+     primary fill. These two carry the page's own background instead, which
+     left the letter on them all but unreadable. */
+  & .ascender-legend__button.ascender-legend__button.ascender-legend__button,
+  &
+    .ascender-tooltip__button.ascender-tooltip__button.ascender-tooltip__button {
+    color: var(--pf-v6-global--Color--100);
   }
 
   /* Status labels */
@@ -629,8 +833,15 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-label__icon--Color: #13161b;
     font-weight: 600;
   }
-  & .ascender-status-label.pf-v6-c-label.pf-m-blue {
-    --pf-v6-c-label--BackgroundColor: #17b26a;
+  /* The blue statuses take the blue the workflow node's running frame uses,
+       rather than the brand green they were painted. running, pending, skipped
+       and installed all map to blue in StatusLabel, so they move together. */
+  &
+    .ascender-status-label.pf-v6-c-label.pf-m-blue:not(
+      [data-status='pending'],
+      [data-status='skipped']
+    ) {
+    --pf-v6-c-label--BackgroundColor: var(--ascender-status-running-color);
     --pf-v6-c-label--Color: #13161b;
     --pf-v6-c-label__icon--Color: #13161b;
     font-weight: 600;
@@ -641,9 +852,17 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-label__icon--Color: #13161b;
     font-weight: 600;
   }
+  /* Pending and skipped never ran: one is still queued, the other was passed
+     over. Both read grey with waiting rather than taking the blue that now
+     means running. They keep their pf-m-blue class from StatusLabel's colour
+     map, so they are excluded from the blue rules by data-status, not by class. */
   & .ascender-status-label.pf-v6-c-label.pf-m-grey,
-  & .ascender-status-label.pf-v6-c-label.pf-m-gray {
-    --pf-v6-c-label--BackgroundColor: var(--pf-t--global--border--color--nonstatus--gray--default);
+  & .ascender-status-label.pf-v6-c-label.pf-m-gray,
+  & .ascender-status-label.pf-v6-c-label[data-status='pending'],
+  & .ascender-status-label.pf-v6-c-label[data-status='skipped'] {
+    --pf-v6-c-label--BackgroundColor: var(
+      --pf-t--global--border--color--nonstatus--gray--default
+    );
     --pf-v6-c-label--Color: #13161b;
     --pf-v6-c-label__icon--Color: #13161b;
   }
@@ -658,8 +877,15 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-label--Color: #13161b;
     --pf-v6-c-label__icon--Color: #13161b;
   }
-  & .pf-v6-c-label.pf-m-blue {
-    --pf-v6-c-label--BackgroundColor: #17b26a;
+  /* The blue statuses take the blue the workflow node's running frame uses,
+       rather than the brand green they were painted. running, pending, skipped
+       and installed all map to blue in StatusLabel, so they move together. */
+  &
+    .pf-v6-c-label.pf-m-blue:not(
+      [data-status='pending'],
+      [data-status='skipped']
+    ) {
+    --pf-v6-c-label--BackgroundColor: var(--ascender-status-running-color);
     --pf-v6-c-label--Color: #13161b;
     --pf-v6-c-label__icon--Color: #13161b;
     font-weight: 600;
@@ -682,24 +908,48 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   & .pf-v6-c-form-control:has(> .cm-editor) {
-    border: 1px solid var(--pf-v6-global--BorderColor--100);
+    /* The same edge PatternFly paints on every other form control, so the
+       editor cannot drift away from the inputs beside it. */
+    border: 1px solid var(--pf-v6-c-form-control--before--BorderColor);
     border-radius: var(--pf-v6-global--BorderRadius--sm);
+  }
+
+  /* Hover changes the colour and nothing else. Changing the width moves the box
+     under the pointer, which is what it used to do. */
+  & .pf-v6-c-form-control:has(> .cm-editor):hover {
+    /* The same green the other form controls take on hover. The editor draws a
+       real border rather than the ::before every other control uses, so it has
+       to be said here as well. */
+    border-color: var(--pf-v6-global--focus-ring-color);
   }
 
   & .pf-v6-c-form-control {
     --pf-v6-c-form-control--BackgroundColor: #1b1d21;
-    --pf-v6-c-form-control--disabled--BackgroundColor: var(--pf-v6-global--BorderColor--200);
-    --pf-v6-c-form-control--BorderColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-form-control--disabled--BackgroundColor: var(
+      --pf-v6-global--BorderColor--200
+    );
+    --pf-v6-c-form-control--BorderColor: var(--ascender-form-border-color);
+    /* The visible edge of an input is drawn on ::before, not by the border
+       properties above, so it needs saying separately. */
+    --pf-v6-c-form-control--before--BorderColor: var(
+      --ascender-form-border-color
+    );
     --pf-v6-c-form-control--Color: var(--pf-v6-global--Color--100);
-    --pf-v6-c-form-control--m-placeholder--Color: var(--pf-v6-global--disabled-color--100);
-    --pf-v6-c-form-control--BorderTopColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-form-control--BorderRightColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-form-control--BorderLeftColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-form-control--m-placeholder--Color: var(
+      --pf-v6-global--disabled-color--100
+    );
+    --pf-v6-c-form-control--BorderTopColor: var(--ascender-form-border-color);
+    --pf-v6-c-form-control--BorderRightColor: var(--ascender-form-border-color);
+    --pf-v6-c-form-control--BorderBottomColor: var(
+      --ascender-form-border-color
+    );
+    --pf-v6-c-form-control--BorderLeftColor: var(--ascender-form-border-color);
     --pf-v6-c-form-control--PaddingTop: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-form-control--PaddingRight: var(--pf-v6-global--spacer--md);
     --pf-v6-c-form-control--PaddingBottom: var(--pf-v6-global--spacer--sm);
-    --pf-v6-c-form-control--focus--PaddingBottom: var(--pf-v6-global--spacer--sm);
+    --pf-v6-c-form-control--focus--PaddingBottom: var(
+      --pf-v6-global--spacer--sm
+    );
     --pf-v6-c-button--BorderRadius: var(--pf-v6-global--BorderRadius--sm);
     --pf-v6-c-form-control--focus--BorderBottomWidth: 1px;
     --pf-v6-c-form-control--PaddingLeft: var(--pf-v6-global--spacer--md);
@@ -709,17 +959,51 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   & .pf-v6-c-form-control:not(:has(> .cm-editor)) {
-    transition: all 0.15s ease-in-out;
+    /* Only the background. Not `all`, and deliberately not outline-color:
+       hovering a readonly control applies outline: none, so on the way out the
+       2px outline comes back at once while its colour animates down from the
+       inherited text colour, painting a grey ring for the length of the fade.
+       That was the flash on these fields. Unanimated, it is never drawn. */
+    transition: background-color 0.15s ease-in-out;
+  }
+
+  /* The edge is on ::before, so the transition has to be too. */
+  & .pf-v6-c-form-control::before {
+    transition: border-color 0.15s ease-in-out;
+  }
+
+  /* Hover was setting a bottom border to the colour it already was, so it did
+     nothing. It takes the same green focus uses, and only that. */
+  /* PatternFly paints its own hover indicator on ::after, in a colour of its
+     choosing: grey in some themes. It sits beside the edge below, so it takes
+     the same green rather than showing as a second, different line. */
+  & .pf-v6-c-form-control:hover {
+    --pf-v6-c-form-control--hover--after--BorderColor: var(
+      --pf-v6-global--focus-ring-color
+    );
+  }
+
+  & .pf-v6-c-form-control:hover::before {
+    border-color: var(--pf-v6-global--focus-ring-color);
+    /* Two pixels, to match the editor. Its border sits outside the padding box
+       while PatternFly's hover indicator on ::after sits inside, so the two are
+       side by side there. On a plain control both land at inset 0 and overlap,
+       so ::before has to be a pixel wider for its own to stay visible. */
+    border-width: 2px;
   }
 
   & .pf-v6-c-form-control:focus {
     --pf-v6-c-form-control--BorderColor: var(--pf-v6-global--focus-ring-color);
-    --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-form-control--BorderBottomColor: var(
+      --ascender-form-border-color
+    );
     outline: 2px solid var(--pf-v6-global--focus-ring-color);
   }
 
   & .pf-v6-c-form-control:hover {
-    --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-form-control--BorderBottomColor: var(
+      --ascender-form-border-color
+    );
   }
 
   /* Wizard active step */
@@ -746,8 +1030,19 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   /* Label group */
+  /* The "n more" chip at the end of a label group. PatternFly paints it in its
+     own brand text colour, which this theme never overrides, so it came out
+     pale blue beside labels that are green. The link colour is what the rest
+     of this theme uses for text that acts like a link, which is what this is:
+     clicking it shows the labels that did not fit. */
+  & .pf-v6-c-label.pf-m-overflow,
+  & .pf-v6-c-label.pf-m-overflow .pf-v6-c-label__content,
+  & .pf-v6-c-label.pf-m-overflow .pf-v6-c-label__text {
+    color: var(--pf-v6-global--link--Color);
+  }
+
   & .pf-v6-c-label-group__list {
-    --pf-v6-c-label-group__list--ColumnGap: .5rem;
+    --pf-v6-c-label-group__list--ColumnGap: 0.5rem;
   }
 
   & .pf-v6-c-label-group__list-item,
@@ -766,11 +1061,24 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-title {
     color: var(--pf-v6-global--Color--100);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif !important;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Segoe UI,
+      Helvetica,
+      Arial,
+      sans-serif !important;
     font-weight: 500 !important;
-    --pf-v6-c-title--m-2xl--FontWeight: var(--pf-v6-global--FontWeight--semi-bold);
-    --pf-v6-c-title--m-xl--FontWeight: var(--pf-v6-global--FontWeight--semi-bold);
-    --pf-v6-c-title--m-lg--FontWeight: var(--pf-v6-global--FontWeight--semi-bold);
+    --pf-v6-c-title--m-2xl--FontWeight: var(
+      --pf-v6-global--FontWeight--semi-bold
+    );
+    --pf-v6-c-title--m-xl--FontWeight: var(
+      --pf-v6-global--FontWeight--semi-bold
+    );
+    --pf-v6-c-title--m-lg--FontWeight: var(
+      --pf-v6-global--FontWeight--semi-bold
+    );
   }
 
   & .pf-v6-c-data-list__item {
@@ -782,10 +1090,20 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   & .cm-editor {
     --ascender-code--BackgroundColor: #13161b;
     --ascender-code--Color: #f8f8f8;
-    --ascender-code--gutter--BackgroundColor: var(--pf-v6-global--BackgroundColor--200);
+    --ascender-code--gutter--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--200
+    );
     --ascender-code--gutter--Color: var(--pf-v6-global--Color--300);
-    --ascender-code--gutter--active--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --ascender-code--activeLine--BackgroundColor: transparent;
+    --ascender-code--gutter--active--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    /* The line the cursor is on. It was transparent here, so this was the one
+       theme where the editor gave no sign of where you were typing. The same
+       surface the gutter uses, which is what the light and default faces do:
+       a step off the editor background rather than a colour of its own. */
+    --ascender-code--activeLine--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--200
+    );
     --ascender-code--string--Color: #8f9d6a;
     --ascender-code--number--Color: #cf6a4c;
     --ascender-code--keyword--Color: #cda869;
@@ -799,20 +1117,41 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-button--m-primary--hover--BackgroundColor: #0e8c5d;
     --pf-v6-c-button--m-primary--focus--Color: #fff;
     --pf-v6-c-button--m-link--Color: #12a66f;
-    --pf-v6-c-button--disabled--BackgroundColor: #13161b;
+    /* A step lighter than the surface, the same as the disabled control
+       buttons, so every disabled button in this theme is the one object. */
+    --pf-v6-c-button--disabled--BackgroundColor: #26292e;
     --pf-v6-c-button--disabled--Color: var(--pf-t--color--gray--30);
     font-weight: 600;
   }
 
-  & .pf-v6-c-button.pf-m-secondary:disabled {
-    border: 1px solid #707070;
+  /* A button that cannot be clicked says so the same way whatever it does
+     when it can: the muted label and hairline border below, rather than the
+     full strength label a primary or a danger would otherwise keep. */
+  & .pf-v6-c-button.pf-m-primary:disabled,
+  & .pf-v6-c-button.pf-m-secondary:disabled,
+  & .pf-v6-c-button.pf-m-tertiary:disabled,
+  & .pf-v6-c-button.pf-m-danger:disabled,
+  & .pf-v6-c-button.pf-m-warning:disabled {
+    border: 1px solid var(--ascender-form-border-color);
+    color: #6a6e73;
+  }
+
+  /* The row actions are one set of icons, so a disabled one reads the same
+     whether PatternFly took the icon as the button's own icon or as its only
+     child: the first lands in __icon, the second in __text. */
+  & .ascender-actions-td__cell .pf-v6-c-button:disabled .pf-v6-c-button__icon,
+  & .ascender-actions-td__cell .pf-v6-c-button:disabled .pf-v6-c-button__text {
     color: #707070;
   }
 
   & .pf-v6-c-button.pf-m-danger {
-    --pf-v6-c-button--m-danger--BackgroundColor: var(--pf-v6-global--danger-color--100);
+    --pf-v6-c-button--m-danger--BackgroundColor: var(
+      --pf-v6-global--danger-color--100
+    );
     --pf-v6-c-button--m-danger--Color: #fff;
-    --pf-v6-c-button--m-danger--hover--BackgroundColor: var(--pf-v6-global--danger-color--200);
+    --pf-v6-c-button--m-danger--hover--BackgroundColor: var(
+      --pf-v6-global--danger-color--200
+    );
   }
 
   & .pf-v6-c-button.pf-m-control:not(:disabled) {
@@ -828,7 +1167,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-button.pf-m-control:not(:disabled):hover {
     background-color: #0e8c5d;
-    color: #fff;
+    color: #13161b;
     border-color: #0e8c5d;
     --pf-v6-c-button--BorderColor: #0e8c5d;
   }
@@ -841,16 +1180,21 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     color: inherit;
   }
 
+  /* Light puts a disabled control a step darker than its white surface. The
+     equivalent here is a step lighter than the dark one: #13161b was the same
+     value as the surface behind it, so the button had no edges at all. */
   & .pf-v6-c-button.pf-m-control:disabled {
-    background: #13161b;
-    color: #707070;
-    border: 1px solid #707070;
-    --pf-v6-c-button--BorderColor: #707070;
+    background: #26292e;
+    color: #6a6e73;
+    /* The edge every other control in the toolbar draws, so a disabled button
+       sits in the same frame as the field and the toggle beside it. */
+    border: 1px solid var(--ascender-form-border-color);
+    --pf-v6-c-button--BorderColor: var(--ascender-form-border-color);
     cursor: not-allowed;
   }
 
   & .pf-v6-c-button.pf-m-control:disabled .pf-v6-svg {
-    color: #707070;
+    color: #6a6e73;
   }
 
   & .pf-v6-c-button.pf-m-control:disabled .pf-v6-c-button__icon {
@@ -859,8 +1203,17 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-button.pf-m-link {
     color: #12a66f;
-    border: 1px solid var(--pf-v6-global--BorderColor--100);
+    /* The border takes the brand colour the text already has, the way light and
+       default draw it; BorderColor--100 left it the same grey as an input. */
+    border: 1px solid var(--pf-v6-global--primary-color--100);
     margin-left: 0px;
+  }
+
+  /* The pf-m-link rule above zeroes margin-left, which inline link buttons in
+     tables need. In the settings action row it left Cancel half as far from its
+     neighbour as the other two are from each other, and the three are peers. */
+  & .ascender-settings-actions .pf-v6-c-button.pf-m-link {
+    margin-left: var(--pf-t--global--spacer--sm);
   }
 
   & .pf-v6-c-button.pf-m-link.pf-m-inline {
@@ -870,7 +1223,6 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     padding: 0px 4px 0px 4px;
     min-height: auto !important;
     height: auto !important;
-    border: none;
   }
 
   & .pf-v6-c-button.pf-m-link.pf-m-inline:hover {
@@ -883,6 +1235,16 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   /* Cards */
+  /* PatternFly draws a card's outline on a pseudo-element that sits under the
+     card's own content, so the cards that show a line are the ones whose
+     content stops short of the edges: a card filled by a table paints over it.
+     Lifting the line above the content puts the same edge around every card,
+     and it takes no clicks with it. */
+  & .pf-v6-c-card::before {
+    z-index: 1;
+    pointer-events: none;
+  }
+
   & .pf-v6-c-card.pf-v6-c-card:not(.pf-m-clickable) {
     background-color: #1a1e25 !important;
     border-radius: 16px !important;
@@ -893,11 +1255,15 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     background-color: #1a1e25;
     border-radius: 16px;
     box-shadow: none;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
   }
 
   & .pf-v6-c-card.pf-m-clickable:hover {
-    box-shadow: 0 4px 8px 0 rgba(200, 200, 200, 0.12), 0 0 4px 0 rgba(200, 200, 200, 0.08);
+    box-shadow:
+      0 4px 8px 0 rgba(200, 200, 200, 0.12),
+      0 0 4px 0 rgba(200, 200, 200, 0.08);
     transform: translateY(-1px);
   }
 
@@ -910,7 +1276,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   & .pf-v6-c-login {
-    --pf-v6-c-login__main--BackgroundColor: var(--pf-v6-global--BackgroundColor--200);
+    --pf-v6-c-login__main--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--200
+    );
   }
 
   & .pf-v6-c-page__sidebar {
@@ -929,13 +1297,42 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     border: 1px solid var(--pf-v6-global--BorderColor--100);
   }
 
-  /* Menu toggle */
-  & .pf-v6-c-menu-toggle {
+  /* Menu toggle. Not the primary one: that is a button rather than a field,
+     and a background here would sit over the fill its own variant defines. */
+  & .pf-v6-c-menu-toggle:not(.pf-m-primary) {
     background-color: #1b1d21;
+    /* The edge is drawn on ::before, as it is for a form control, and left to
+       PatternFly it came out far lighter than the field beside it. */
+    --pf-v6-c-menu-toggle--BorderColor: var(--ascender-form-border-color);
   }
 
+  /* The resting edge above is set on the element, so PatternFly's hover remap
+     of the same token never shows: the colour has to be said again here. */
+  & .pf-v6-c-menu-toggle:not(.pf-m-plain):hover {
+    --pf-v6-c-menu-toggle--BorderColor: var(--pf-v6-global--focus-ring-color);
+  }
+
+  /* The add button on a list is a menu toggle rather than a button when it
+     holds a menu, and it is the same button to a reader: the same fill, the
+     same ink, and the same darkening under the pointer. Set through the
+     variant's own variables, since a background on the element outlives the
+     hover that PatternFly applies by remapping them. */
   & .pf-v6-c-menu-toggle.pf-m-primary {
-    background-color: #17b26a;
+    --pf-v6-c-menu-toggle--m-primary--BackgroundColor: #12a66f;
+    --pf-v6-c-menu-toggle--m-primary--hover--BackgroundColor: #0e8c5d;
+    --pf-v6-c-menu-toggle--m-primary--expanded--BackgroundColor: #0e8c5d;
+    --pf-v6-c-menu-toggle--m-primary--Color: #13161b;
+    --pf-v6-c-menu-toggle--m-primary--hover--Color: #13161b;
+    --pf-v6-c-menu-toggle--m-primary--expanded--Color: #13161b;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* A toggle that opens a menu from a toolbar is one of that toolbar's
+     buttons, and reads as one: the run button on the runs list. */
+  & .pf-v6-c-menu-toggle.pf-m-secondary {
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   /* Tabs */
@@ -963,10 +1360,16 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   /* Data list */
   & .pf-v6-c-data-list {
     --pf-v6-global--link--Color: inherit;
-    --pf-v6-c-data-list__item--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
+    --pf-v6-c-data-list__item--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--100
+    );
     --pf-v6-c-data-list--BorderTopColor: var(--pf-v6-global--BorderColor--200);
-    --pf-v6-c-data-list__item--BorderBottomColor: var(--pf-v6-global--BorderColor--200);
-    --pf-v6-c-data-list__item--m-hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-data-list__item--BorderBottomColor: var(
+      --pf-v6-global--BorderColor--200
+    );
+    --pf-v6-c-data-list__item--m-hover--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
   }
 
   /* Dropdown */
@@ -974,12 +1377,20 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-dropdown__menu--BackgroundColor: #1a1e25;
     --pf-v6-c-dropdown__menu-item--Color: var(--pf-v6-global--Color--100);
     --pf-v6-c-dropdown__menu-item--FontSize: 0.875rem;
-    --pf-v6-c-dropdown__menu-item--hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-dropdown__menu-item--hover--Color: var(--pf-v6-global--Color--100);
-    --pf-v6-c-dropdown__menu-item--PaddingRight: var(--pf-v6-global--spacer--lg);
+    --pf-v6-c-dropdown__menu-item--hover--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-dropdown__menu-item--hover--Color: var(
+      --pf-v6-global--Color--100
+    );
+    --pf-v6-c-dropdown__menu-item--PaddingRight: var(
+      --pf-v6-global--spacer--lg
+    );
     --pf-v6-c-dropdown__menu-item--PaddingLeft: var(--pf-v6-global--spacer--lg);
     --pf-v6-c-dropdown__menu-item--PaddingTop: var(--pf-v6-global--spacer--sm);
-    --pf-v6-c-dropdown__menu-item--PaddingBottom: var(--pf-v6-global--spacer--sm);
+    --pf-v6-c-dropdown__menu-item--PaddingBottom: var(
+      --pf-v6-global--spacer--sm
+    );
   }
 
   & .pf-v6-c-dropdown__menu {
@@ -1005,7 +1416,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-dropdown__toggle-icon {
     color: var(--pf-v6-global--Color--300);
-    opacity: .6;
+    opacity: 0.6;
   }
 
   & .pf-v6-c-dropdown__toggle.pf-m-plain:not(.pf-m-text) {
@@ -1021,17 +1432,29 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   & .pf-v6-c-select {
     --pf-v6-c-select__toggle--PaddingTop: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-select__toggle--PaddingBottom: var(--pf-v6-global--spacer--sm);
-    --pf-v6-c-select__toggle--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
-    --pf-v6-c-select__toggle--BorderColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-select__toggle--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--100
+    );
+    --pf-v6-c-select__toggle--BorderColor: var(
+      --pf-v6-global--BorderColor--100
+    );
     --pf-v6-c-select__toggle--Color: var(--pf-v6-global--Color--100);
     --pf-v6-c-select__toggle--PaddingRight: var(--pf-v6-global--spacer--lg);
     --pf-v6-c-select__toggle--PaddingLeft: var(--pf-v6-global--spacer--lg);
     --pf-v6-c-select__toggle--FontSize: var(--pf-v6-global--FontSize--sm);
-    --pf-v6-c-select__toggle--disabled--BackgroundColor: var(--pf-v6-global--BorderColor--200);
+    --pf-v6-c-select__toggle--disabled--BackgroundColor: var(
+      --pf-v6-global--BorderColor--200
+    );
     --pf-v6-c-select__toggle-arrow--Color: var(--pf-v6-global--Color--300);
-    --pf-v6-c-select__menu--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
-    --pf-v6-c-select__menu-item--focus--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-select__menu-item--hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-select__menu--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--100
+    );
+    --pf-v6-c-select__menu-item--focus--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-select__menu-item--hover--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
     --pf-v6-c-select__menu-item--Color: var(--pf-v6-global--Color--100);
     --pf-v6-c-select__menu-item--PaddingTop: var(--pf-v6-global--spacer--sm);
     --pf-v6-c-select__menu-item--PaddingRight: var(--pf-v6-global--spacer--lg);
@@ -1043,10 +1466,18 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-select__toggle--before--BorderBottomWidth: 1px;
     --pf-v6-c-select__toggle--before--BorderLeftWidth: 1px;
     --pf-v6-c-select__toggle--before--BorderWidth: 1px;
-    --pf-v6-c-select__toggle--before--BorderTopColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-select__toggle--before--BorderRightColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-select__toggle--before--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-select__toggle--before--BorderLeftColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-select__toggle--before--BorderTopColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-select__toggle--before--BorderRightColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-select__toggle--before--BorderBottomColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-select__toggle--before--BorderLeftColor: var(
+      --pf-v6-global--BorderColor--100
+    );
   }
 
   & .pf-v6-c-select__toggle {
@@ -1055,7 +1486,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   }
 
   & .pf-v6-c-select__toggle:before {
-    --pf-v6-c-select__toggle--before--BorderBottomColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-select__toggle--before--BorderBottomColor: var(
+      --pf-v6-global--BorderColor--100
+    );
     --pf-v6-c-select__toggle--before--BorderBottomWidth: 1px;
     border-radius: var(--pf-v6-global--BorderRadius--sm);
   }
@@ -1074,14 +1507,30 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   /* Options menu */
   & .pf-v6-c-options-menu {
-    --pf-v6-c-options-menu__menu-item--PaddingLeft: var(--pf-v6-global--spacer--lg);
-    --pf-v6-c-options-menu__menu-item--PaddingRight: var(--pf-v6-global--spacer--lg);
-    --pf-v6-c-options-menu__menu-item--PaddingTop: var(--pf-v6-global--spacer--sm);
-    --pf-v6-c-options-menu__menu-item--PaddingBottom: var(--pf-v6-global--spacer--sm);
-    --pf-v6-c-options-menu__menu-item--FontSize: var(--pf-v6-global--FontSize--sm);
-    --pf-v6-c-options-menu__menu-item-icon--Color: var(--pf-v6-global--Color--300);
-    --pf-v6-c-options-menu__menu-item--hover--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-options-menu__menu--BackgroundColor: var(--pf-v6-global--BackgroundColor--100);
+    --pf-v6-c-options-menu__menu-item--PaddingLeft: var(
+      --pf-v6-global--spacer--lg
+    );
+    --pf-v6-c-options-menu__menu-item--PaddingRight: var(
+      --pf-v6-global--spacer--lg
+    );
+    --pf-v6-c-options-menu__menu-item--PaddingTop: var(
+      --pf-v6-global--spacer--sm
+    );
+    --pf-v6-c-options-menu__menu-item--PaddingBottom: var(
+      --pf-v6-global--spacer--sm
+    );
+    --pf-v6-c-options-menu__menu-item--FontSize: var(
+      --pf-v6-global--FontSize--sm
+    );
+    --pf-v6-c-options-menu__menu-item-icon--Color: var(
+      --pf-v6-global--Color--300
+    );
+    --pf-v6-c-options-menu__menu-item--hover--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-options-menu__menu--BackgroundColor: var(
+      --pf-v6-global--BackgroundColor--100
+    );
     --pf-v6-c-options-menu__toggle--Color: var(--pf-v6-global--Color--200);
   }
 
@@ -1092,15 +1541,20 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   /* Form */
   & .pf-v6-c-form {
-    --pf-v6-c-form--GridGap: var(--pf-v6-global--spacer--md);
-    --pf-v6-c-form__label-text--FontWeight: var(--pf-v6-global--FontWeight--normal);
+    --pf-v6-c-form__label-text--FontWeight: var(
+      --pf-v6-global--FontWeight--normal
+    );
     --pf-v6-c-form__group--m-action--MarginTop: var(--pf-v6-global--spacer--sm);
   }
 
   /* Popover */
   & .pf-v6-c-popover {
-    --pf-v6-c-popover__content--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-popover__arrow--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-popover__content--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
+    --pf-v6-c-popover__arrow--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
   }
 
   & .pf-v6-c-popover__content {
@@ -1139,7 +1593,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   /* Progress */
   & .pf-v6-c-progress {
-    --pf-v6-c-progress__bar--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-progress__bar--BackgroundColor: var(
+      --pf-v6-global--BorderColor--100
+    );
   }
 
   & .pf-v6-c-progress__bar,
@@ -1175,7 +1631,9 @@ html.pf-v6-theme-dark[data-theme="dark"] {
 
   & .pf-v6-c-modal-box__footer {
     --pf-v6-c-modal-box__footer--PaddingTop: var(--pf-v6-global--spacer--lg);
-    --pf-v6-c-modal-box__footer--PaddingBottom: var(--pf-v6-global--spacer--2xl);
+    --pf-v6-c-modal-box__footer--PaddingBottom: var(
+      --pf-v6-global--spacer--2xl
+    );
     --pf-v6-c-modal-box__footer--PaddingRight: var(--pf-v6-global--spacer--3xl);
     --pf-v6-c-modal-box__footer--PaddingLeft: var(--pf-v6-global--spacer--3xl);
   }
@@ -1224,28 +1682,32 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     --pf-v6-c-slider__thumb--Width: var(--pf-v6-global--spacer--md);
     --pf-v6-c-slider__steps--FontSize: var(--pf-v6-global--FontSize--xs);
     --pf-v6-c-slider__thumb--BoxShadow: none;
-    --pf-v6-c-slider__rail-track--before--fill--BackgroundColor: var(--pf-v6-global--primary-color--100);
+    --pf-v6-c-slider__rail-track--before--fill--BackgroundColor: var(
+      --pf-v6-global--primary-color--100
+    );
   }
 
   /* Switch */
+  /* Switch. Stated in full rather than left to each theme, so the control is
+     the same object everywhere: a pill track with a white knob on it. The knob
+     is white in both states, since a dark one on the brand green reads as a
+     hole punched in the track rather than something that slides. */
   & .pf-v6-c-switch {
-    --pf-v6-c-switch__toggle--before--BackgroundColor: var(--pf-v6-global--BorderColor--100);
-    --pf-v6-c-switch__toggle--before--Top: 1px;
-    --pf-v6-c-switch__toggle--before--Width: var(--pf-v6-global--spacer--lg);
-    --pf-v6-c-switch__toggle--before--Height: var(--pf-v6-global--spacer--lg);
     --pf-v6-c-switch__toggle--Width: 40px;
-    --pf-v6-c-switch__toggle--BorderRadius: 16px;
     --pf-v6-c-switch__toggle--Height: 18px;
-    --pf-v6-c-switch__input--focus__toggle--OutlineColor: none;
+    --pf-v6-c-switch__toggle--BorderRadius: 16px;
+    --pf-v6-c-switch__toggle--before--Width: 14px;
+    --pf-v6-c-switch__toggle--before--Height: 14px;
+    --pf-v6-c-switch__toggle--before--Top: 2px;
     --pf-v6-c-switch__toggle--before--Left: 3px;
-  }
-
-  & .pf-v6-c-switch__input:checked ~ .pf-v6-c-switch__toggle::before {
-    --pf-v6-c-switch__toggle--before--BackgroundColor: var(--pf-v6-global--BorderColor--100);
+    --pf-v6-c-switch__toggle--before--BackgroundColor: #fff;
+    /* Checked reads a token of its own, so saying it once is not enough. */
+    --pf-v6-c-switch__input--checked__toggle--before--BackgroundColor: #fff;
+    --pf-v6-c-switch__input--focus__toggle--OutlineColor: none;
   }
 
   /* Sub-form layout */
-  & [class*="FormLayout__SubFormLayout"] {
+  & [class*='FormLayout__SubFormLayout'] {
     background-color: #000;
   }
 
@@ -1275,11 +1737,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
     background-color: #1a1e25;
   }
 
-  & polygon {
-    --pf-t--global--background--color--200: rgba(0,0,0,0);
-  }
-
-  & [class*="WorkflowActionTooltip__TooltipActions"] {
+  & [class*='WorkflowActionTooltip__TooltipActions'] {
     background-color: #1a1e25;
   }
 }

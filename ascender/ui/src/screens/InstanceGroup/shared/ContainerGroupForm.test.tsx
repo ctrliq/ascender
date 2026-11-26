@@ -115,13 +115,13 @@ describe('<ContainerGroupForm/>', () => {
     const { container } = setup();
     // FormField labelIcon Popovers break getByLabelText; query inputs by id.
     expect(container.querySelector('#container-group-name')).toHaveValue('Bar');
-    // The "Customize pod specification" checkbox starts unchecked, so the
+    // The "Override Pod Spec" checkbox starts unchecked, so the
     // pod-spec CodeEditor section is not rendered.
     const overrideCheckbox = container.querySelector(
       '#container-groups-override-pod-specification'
     );
     expect(overrideCheckbox).not.toBeChecked();
-    expect(screen.queryByText('Custom pod spec')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pod Spec Override')).not.toBeInTheDocument();
     // The CredentialLookup pre-fills the credential name from summary_fields.
     // findBy awaits the lookup's async credential fetch settling.
     expect(
@@ -129,14 +129,14 @@ describe('<ContainerGroupForm/>', () => {
     ).toHaveValue('test');
   });
 
-  test('checking customize pod specification reveals the pod spec editor', async () => {
+  test('checking override pod spec reveals the pod spec editor', async () => {
     const { user, container } = setup();
     const overrideCheckbox = container.querySelector(
       '#container-groups-override-pod-specification'
     );
     await user.click(overrideCheckbox!);
     expect(overrideCheckbox).toBeChecked();
-    expect(await screen.findByText('Custom pod spec')).toBeInTheDocument();
+    expect(await screen.findByText('Pod Spec Override')).toBeInTheDocument();
   });
 
   test('should update form values', async () => {

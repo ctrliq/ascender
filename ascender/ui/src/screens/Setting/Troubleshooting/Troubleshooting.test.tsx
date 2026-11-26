@@ -6,7 +6,6 @@ import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockJobSettings from '../shared/data.jobSettings.json';
 import { settingOptions } from '../../../../testUtils/settingOptions';
 import mockTroubleshootingSettings from './TroubleshootingEdit/data.defaultTroubleshootingSettings.json';
 import Troubleshooting from './Troubleshooting';
@@ -16,7 +15,7 @@ vi.mock('../../../api');
 describe('<Troubleshooting />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
-      data: mockJobSettings,
+      data: mockTroubleshootingSettings,
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
@@ -29,10 +28,7 @@ describe('<Troubleshooting />', () => {
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <Routes>
-          <Route
-            path="/settings/troubleshooting/*"
-            element={<Troubleshooting />}
-          />
+          <Route path="/troubleshooting/*" element={<Troubleshooting />} />
         </Routes>
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -40,22 +36,28 @@ describe('<Troubleshooting />', () => {
   }
 
   test('should render troubleshooting details', async () => {
-    renderTroubleshooting(['/settings/troubleshooting/details']);
-    expect(await screen.findByText('Job execution path')).toBeInTheDocument();
+    renderTroubleshooting(['/troubleshooting/misc']);
+    expect(
+      await screen.findByText('Enable or Disable tmp dir cleanup')
+    ).toBeInTheDocument();
+  });
+
+  test('should land the old addresses on the first group', async () => {
+    renderTroubleshooting(['/troubleshooting/details']);
+    expect(
+      await screen.findByText('Enable or Disable tmp dir cleanup')
+    ).toBeInTheDocument();
   });
 
   test('should render troubleshooting edit', async () => {
-    vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
-      data: mockTroubleshootingSettings,
-    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
-    renderTroubleshooting(['/settings/troubleshooting/edit']);
+    renderTroubleshooting(['/troubleshooting/edit/misc']);
     expect(
       await screen.findByRole('button', { name: 'Save' })
     ).toBeInTheDocument();
   });
 
   test('should show content error when user navigates to erroneous route', async () => {
-    renderTroubleshooting(['/settings/troubleshooting/foo']);
+    renderTroubleshooting(['/troubleshooting/foo']);
     await waitFor(() =>
       expect(
         screen.getByText(/The page you requested could not be found/)

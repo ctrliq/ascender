@@ -20,7 +20,9 @@ function Users() {
   const addUserBreadcrumb = useCallback(
     (
       user?: BreadcrumbResource & { username?: string | null },
-      token?: BreadcrumbResource
+      token?: BreadcrumbResource & {
+        summary_fields?: { application?: { name?: string | null } | null };
+      }
     ) => {
       if (!user) {
         return;
@@ -30,14 +32,17 @@ function Users() {
         '/users': t`Users`,
         '/users/add': t`Create New User`,
         [`/users/${user.id}`]: `${user.username}`,
-        [`/users/${user.id}/edit`]: t`Edit Details`,
-        [`/users/${user.id}/details`]: t`Details`,
-        [`/users/${user.id}/roles`]: t`Roles`,
-        [`/users/${user.id}/teams`]: t`Teams`,
-        [`/users/${user.id}/organizations`]: t`Organizations`,
-        [`/users/${user.id}/tokens`]: t`Tokens`,
-        [`/users/${user.id}/tokens/add`]: t`Create user token`,
-        [`/users/${user.id}/tokens/${token && token.id}/details`]: t`Details`,
+        [`/users/${user.id}/edit`]: t`Edit ${user.username}`,
+        [`/users/${user.id}/details`]: `${user.username}`,
+        [`/users/${user.id}/roles`]: `${user.username}`,
+        [`/users/${user.id}/teams`]: `${user.username}`,
+        [`/users/${user.id}/organizations`]: `${user.username}`,
+        [`/users/${user.id}/tokens`]: `${user.username}`,
+        [`/users/${user.id}/tokens/add`]: t`Create User Token`,
+        /* A token has no name of its own: the list calls it by the
+           application it belongs to, or a personal access token. */
+        [`/users/${user.id}/tokens/${token && token.id}/details`]:
+          token?.summary_fields?.application?.name ?? t`Personal Access Token`,
       });
     },
     [t]

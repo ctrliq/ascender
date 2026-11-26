@@ -55,7 +55,7 @@ describe('<EntraIDEdit />', () => {
 
   async function renderEdit() {
     history = createMemoryHistory({
-      initialEntries: ['/settings/azure/entra/edit'],
+      initialEntries: ['/authentication/azure/entra/edit'],
     });
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
@@ -89,17 +89,26 @@ describe('<EntraIDEdit />', () => {
     });
   });
 
-  test('reverts the entra-id category', async () => {
+  test('reverts only the Entra ID settings it shows', async () => {
     const { user } = await renderEdit();
     await user.click(
-      screen.getByRole('button', { name: 'Revert all to default' })
+      screen.getByRole('button', { name: 'Revert All to Default' })
     );
     await user.click(
       await screen.findByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('entra-id')
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
+    // Each setting at its default rather than a DELETE on the category, which
+    // would reset what the page does not show as well.
+    const reverted = vi.mocked(SettingsAPI.updateAll).mock
+      .calls[0]?.[0] as Record<string, unknown>;
+    expect(Object.keys(reverted)).toEqual(
+      expect.arrayContaining([
+        'SOCIAL_AUTH_ENTRA_ID_KEY',
+        'SOCIAL_AUTH_ENTRA_ID_TENANT_ID',
+      ])
     );
+    expect(SettingsAPI.revertCategory).not.toHaveBeenCalled();
   });
 
   test('sends the settings and goes back to the details', async () => {
@@ -125,7 +134,9 @@ describe('<EntraIDEdit />', () => {
       },
     });
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/settings/azure/entra/details')
+      expect(history.location.pathname).toEqual(
+        '/authentication/azure/entra/details'
+      )
     );
   });
 });

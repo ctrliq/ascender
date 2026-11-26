@@ -3,7 +3,7 @@ import type {
   OptionsResponse,
   SummaryFieldRef,
 } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
   Form,
@@ -13,12 +13,8 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import { InventorySourcesAPI } from 'api';
-import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
 import AnsibleSelect from 'components/AnsibleSelect';
-import ContentError from 'components/ContentError';
-import ContentLoading from 'components/ContentLoading';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, SubFormLayout } from 'components/FormLayout';
@@ -321,6 +317,12 @@ export interface InventorySourceFormValues {
 }
 
 export interface InventorySourceFormProps {
+  /**
+   * What the form draws with, read by the screen that renders it: read here,
+   * it arrived after the card was on screen and the form replaced itself with
+   * a second loading animation while it was on its way.
+   */
+  sourceOptions: OptionsResponse;
   onCancel: () => void;
   onSubmit: (values: InventorySourceFormValues) => void;
   source?: Partial<InventorySource>;
@@ -333,6 +335,7 @@ const InventorySourceForm = ({
   onCancel,
   onSubmit,
   source,
+  sourceOptions,
   instanceGroups = [],
   submitError = null,
   organizationId,
@@ -363,31 +366,6 @@ const InventorySourceForm = ({
         ? getVmwarePlugin(source?.source_vars)
         : VMWARE_DEFAULT_PLUGIN,
   };
-
-  const {
-    isLoading: isSourceOptionsLoading,
-    error: sourceOptionsError,
-    request: fetchSourceOptions,
-    result: sourceOptions,
-  } = useRequest(
-    useCallback(async () => {
-      const { data } = await InventorySourcesAPI.readOptions();
-      return data;
-    }, []),
-    null
-  );
-
-  useEffect(() => {
-    fetchSourceOptions();
-  }, [fetchSourceOptions]);
-
-  if (sourceOptionsError) {
-    return <ContentError error={sourceOptionsError} />;
-  }
-
-  if (!sourceOptions || isSourceOptionsLoading) {
-    return <ContentLoading />;
-  }
 
   return (
     <FormRoot<InventorySourceFormValues>

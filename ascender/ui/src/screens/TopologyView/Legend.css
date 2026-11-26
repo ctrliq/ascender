@@ -3,7 +3,10 @@
 .ascender-legend__wrapper {
   position: absolute;
   left: 0;
-  padding: 0 10px;
+  /* The theme leaves a card body four pixels at the top, which sat this panel
+     against the tab bar above it. Twenty more make the twenty-four that every
+     other card body in the app carries. */
+  padding: 20px 10px 0;
   min-width: 150px;
   background-color: var(--pf-v6-global--BackgroundColor--100);
   overflow: auto;
@@ -33,6 +36,22 @@
   align-items: center;
 }
 
+/* The title leaves sixteen pixels above the divider, so the text under it
+   takes the same sixteen rather than the ten the rest of the panel uses. */
+.pf-v6-c-divider + .ascender-legend__text {
+  margin-block-start: 16px;
+}
+
 .ascender-legend__text {
   margin: 10px 0 5px;
+}
+
+/* The themes set every button's text in capitals, which turned the canvas's
+   Hy, Ex and h into HY, EX and H here. The letters are the ones drawn on the
+   nodes, so they keep their case. Five classes clear the themes' four and an
+   element. */
+.ascender-legend__wrapper
+  .ascender-legend__button.ascender-legend__button.ascender-legend__button
+  .pf-v6-c-button__text {
+  text-transform: none;
 }

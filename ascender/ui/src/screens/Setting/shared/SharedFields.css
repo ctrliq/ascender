@@ -4,16 +4,62 @@
   color: var(--pf-v6-global--danger-color--100);
 }
 
+/* The label row flows as text rather than as flex items. A flex item that
+   wraps is as wide as the row, so the help icon after a two line label sat at
+   the row's far end instead of after the last word. Inline, the icon follows
+   the label's last word. It takes no room on the line either, drawn into room
+   the row keeps clear at its end, so it never breaks away onto a line of its
+   own: the same arrangement a detail label's icon has. The button is twenty
+   six pixels wide, the last four of them padding that may overhang, so twenty
+   two is the room kept. Flow root holds the floated revert button inside the
+   row. */
 .ascender-shared-fields__form-group .pf-v6-c-form__group-label {
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
+  display: flow-root;
+  padding-inline-end: 22px;
 }
 
-.ascender-shared-fields__form-group .pf-v6-c-form__group-label-help {
-  display: inline-flex;
-  align-items: center;
-  flex: 1 1 auto;
+.ascender-shared-fields__form-group
+  .pf-v6-c-form__group-label
+  > .pf-v6-c-form__label {
+  display: inline;
+}
+
+/* The popover carries this class on its own icon button as well as on the
+   wrapper that holds it and the revert button; this is the wrapper. */
+.ascender-shared-fields__form-group
+  .pf-v6-c-form__group-label-help:not(.ascender-popover__button) {
+  display: inline;
+}
+
+.ascender-shared-fields__form-group
+  .pf-v6-c-form__group-label-help
+  > div
+  > .ascender-popover__button {
+  margin-inline-end: -26px;
+}
+
+/* The revert button keeps the row's far end, where it sat when the row was a
+   flex line, reaching into the room kept for the icon. */
+.ascender-shared-fields__form-group .ascender-revert-button__wrapper {
+  float: right;
+  margin-inline-end: -22px;
+}
+
+/* A switch is the one control narrower than its label row, so the far end left
+   its revert button with nothing between. The row shrinks to its label there,
+   which brings the far end in beside the help icon while the label fits on one
+   line; a label that wraps still has the column's width to wrap in. The start
+   margin clears the icon's width and leaves a gap so the two do not read as
+   one control. */
+.ascender-shared-fields__form-group:has(.pf-v6-c-switch)
+  .pf-v6-c-form__group-label {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.ascender-shared-fields__form-group:has(.pf-v6-c-switch)
+  .ascender-revert-button__wrapper {
+  margin-inline-start: calc(26px + var(--pf-t--global--spacer--md));
 }
 
 .ascender-shared-fields__selected {
