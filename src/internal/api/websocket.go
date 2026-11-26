@@ -748,11 +748,32 @@ func (s *Server) EmitJobStatus(ctx context.Context, id int64, status string) {
 	} else if (status == "successful" || status == "failed" || status == "canceled") && finished != nil {
 		o.Set("finished", finished.UTC().Format("2006-01-02T15:04:05.000000Z"))
 	}
-	o.Set("type", unifiedJobTypeNames[s.CT.Model(ct)])
+	model := s.CT.Model(ct)
+	o.Set("type", unifiedJobTypeNames[model])
 	spawned := launchType == "workflow"
 	if spawned {
 		_ = db.Tolerant(s.Q()).QueryRow(ctx, `SELECT id, workflow_job_id FROM main_workflowjobnode WHERE job_id = $1`, id).Scan(&nodeID, &wfJobID)
 		o.Set("workflow_job_id", wfJobID).Set("workflow_node_id", nodeID)
+	}
+	// The subclasses' websocket_emit_data: a project update names its
+	// project, an inventory update its source and the source's inventory.
+	switch model {
+	case "main.projectupdate":
+		var project *int64
+		if err := db.Tolerant(s.Q()).QueryRow(ctx, `SELECT project_id FROM main_projectupdate WHERE unifiedjob_ptr_id = $1`, id).Scan(&project); err == nil && project != nil {
+			o.Set("project_id", *project)
+		}
+	case "main.inventoryupdate":
+		var source, inventory *int64
+		if err := db.Tolerant(s.Q()).QueryRow(ctx, `SELECT iu.inventory_source_id, src.inventory_id FROM main_inventoryupdate iu
+			JOIN main_inventorysource src ON src.unifiedjobtemplate_ptr_id = iu.inventory_source_id WHERE iu.unifiedjob_ptr_id = $1`, id).Scan(&source, &inventory); err == nil {
+			if source != nil {
+				o.Set("inventory_source_id", *source)
+			}
+			if inventory != nil {
+				o.Set("inventory_id", *inventory)
+			}
+		}
 	}
 	o.Set("group_name", "jobs")
 	if ujt != nil {

@@ -44,7 +44,7 @@
 										<a href="{{$base}}/details"><b>{{$inv.name}}</b></a>
 									{{end}}
 								</td>
-								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td" data-live="status-{{$id}}" data-live-on="inventory:{{$id}}">
 									{{if eq (str $inv.kind) ""}}
 										{{if $inv.has_inventory_sources}}
 											<a href="{{$base}}/jobs?job.or__inventoryupdate__inventory_source__inventory__id={{$id}}" data-tooltip="{{$inv._sync_tooltip}}" data-tooltip-pos="top">

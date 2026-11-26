@@ -295,7 +295,7 @@
 											<b>{{$src.name}}</b>
 										</a>
 									</td>
-									<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+									<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td" data-live="source-status-{{$sid}}" data-live-on="ujt:{{$sid}}">
 										{{if $job}}
 											<div style="display: contents;">
 												<a href="/jobs/inventory/{{str $job.id}}" data-tooltip data-tooltip-pos="top">
@@ -319,7 +319,7 @@
 									<td tabindex="-1" data-label="{{t "Type"}}" class="pf-v6-c-table__td">
 										{{$src._type_label}}
 									</td>
-									<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+									<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;" data-live="source-actions-{{$sid}}" data-live-on="ujt:{{$sid}}">
 										<div class="ascender-actions-td__grid">
 											{{if dig $scaps "start"}}
 												{{$st := ""}}

@@ -247,8 +247,10 @@
       });
     } });
   }
-  $$('[data-cancel-job]').forEach(function (b) {
-    b.addEventListener('click', function () { cancelJobs([{ api: b.getAttribute('data-cancel-job'), name: b.getAttribute('data-name') }]); });
+  // Delegated: a live list re-renders its action cells (app.js, "live cells").
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-cancel-job]'); if (!b) return;
+    cancelJobs([{ api: b.getAttribute('data-cancel-job'), name: b.getAttribute('data-name') }]);
   });
   var cancelSel = $('[data-cancel-selected]');
   if (cancelSel) {
@@ -257,7 +259,7 @@
       var sel = $$('[data-select-row]', table).filter(function (r) { return r.checked; }).map(function (r) { return r.closest('[data-row]'); });
       cancelSel.disabled = sel.length === 0 || sel.some(function (r) { return !r.hasAttribute('data-cancelable'); });
     }
-    $$('[data-select-row], [data-select-all]').forEach(function (r) { r.addEventListener('change', function () { setTimeout(syncCancel, 0); }); });
+    document.addEventListener('change', function (e) { if (e.target.matches('[data-select-row], [data-select-all]')) setTimeout(syncCancel, 0); });
     cancelSel.addEventListener('click', function () {
       var sel = $$('[data-select-row]', table).filter(function (r) { return r.checked; }).map(function (r) { return r.closest('[data-row]'); });
       cancelJobs(sel.map(function (r) { return { api: r.getAttribute('data-api') + 'cancel/', name: r.getAttribute('data-name') }; }));
@@ -295,13 +297,12 @@
       if (needed.length) passwordsModal(t('Launch | {0}', { 0: t('Relaunch job') }), needed, go); else go(null);
     });
   }
-  $$('[data-relaunch]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var body = {};
-      if (b.hasAttribute('data-relaunch-hosts')) body.hosts = b.getAttribute('data-relaunch-hosts');
-      if (b.hasAttribute('data-relaunch-body')) { try { body = Object.assign(body, JSON.parse(b.getAttribute('data-relaunch-body'))); } catch (e) {} }
-      relaunch(b.getAttribute('data-relaunch'), body, b.getAttribute('data-relaunch-seg'));
-    });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-relaunch]'); if (!b) return;
+    var body = {};
+    if (b.hasAttribute('data-relaunch-hosts')) body.hosts = b.getAttribute('data-relaunch-hosts');
+    if (b.hasAttribute('data-relaunch-body')) { try { body = Object.assign(body, JSON.parse(b.getAttribute('data-relaunch-body'))); } catch (err) {} }
+    relaunch(b.getAttribute('data-relaunch'), body, b.getAttribute('data-relaunch-seg'));
   });
 
   // ---------------------------------------------------------------- launch wizard
@@ -553,7 +554,7 @@
     function renderCredentials(body) {
       var wrap = el('<div><div class="ascender-credentials-step__display-align-items"><div class="ascender-credentials-step__flex-margin-right"><div class="pf-v6-c-form__group"><div class="pf-v6-c-form__group-label"><label class="pf-v6-c-form__label"><span class="pf-v6-c-form__label-text">' + esc(t('Selected Category')) + '</span></label></div><div class="pf-v6-c-form__group-control"><span class="pf-v6-c-form-control"><select data-cred-type></select><span class="pf-v6-c-form-control__utilities"><span class="pf-v6-c-form-control__toggle-icon">' + ICON.caret + '</span></span></span></div></div></div><div class="ascender-credentials-step__flex-1-1-75" data-cred-list></div></div></div>');
       body.appendChild(wrap);
-      api('GET', '/api/v2/credential_types/?page_size=200&kind__in=ssh,vault,cloud,net,kubernetes&order_by=kind,name').then(function (r) {
+      api('GET', '/api/v2/credential_types/?page_size=200&kind__in=ssh,vault,cloud,net,kubernetes&order_by=name').then(function (r) {
         var types = (r.data && r.data.results) || [];
         types.forEach(function (t) { credTypes[t.id] = t; });
         var sel = $('[data-cred-type]', wrap);

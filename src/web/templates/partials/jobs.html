@@ -122,7 +122,7 @@
 			</a>
 		</span>
 	</td>
-	<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+	<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td" data-live="job-status-{{$id}}" data-live-on="job:{{$id}}">
 		{{if has $j.status}}{{template "status_label" (str $j.status)}}{{end}}
 	</td>
 	{{if .showType}}
@@ -130,13 +130,13 @@
 			{{t (jobTypeLabel $j)}}
 		</td>
 	{{end}}
-	<td tabindex="-1" data-label="{{t "Start Time"}}" class="pf-v6-c-table__td">
+	<td tabindex="-1" data-label="{{t "Start Time"}}" class="pf-v6-c-table__td" data-live="job-started-{{$id}}" data-live-on="job:{{$id}}">
 		{{if has $j.started}}{{dt $j.started}}{{end}}
 	</td>
-	<td tabindex="-1" data-label="{{t "Finish Time"}}" class="pf-v6-c-table__td">
+	<td tabindex="-1" data-label="{{t "Finish Time"}}" class="pf-v6-c-table__td" data-live="job-finished-{{$id}}" data-live-on="job:{{$id}}">
 		{{if has $j.finished}}{{dt $j.finished}}{{end}}
 	</td>
-	<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;">
+	<td tabindex="-1" data-label="{{t "Actions"}}" class="pf-v6-c-table__td ascender-actions-td__cell" style="--pf-v6-c-table--cell--Width: 80px;" data-live="job-actions-{{$id}}" data-live-on="job:{{$id}}">
 		<div class="ascender-actions-td__grid">
 			{{if $active}}
 				<div>
@@ -311,7 +311,7 @@
 				</th>
 			</tr>
 		</thead>
-		<tbody role="rowgroup" class="pf-v6-c-table__tbody">
+		<tbody role="rowgroup" class="pf-v6-c-table__tbody" data-live-rows>
 			{{range $i, $j := .page.Data.results}}
 				{{template "job_row" (dict "job" $j "i" $i "showType" $showType)}}
 			{{end}}

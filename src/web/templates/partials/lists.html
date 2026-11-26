@@ -85,10 +85,10 @@
 				</span>
 			{{end}}
 		</td>
-		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td">
+		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td" data-live="activity-{{$id}}" data-live-on="ujt:{{$id}}">
 			{{if $recent}}{{template "sparkline" $recent}}{{end}}
 		</td>
-		<td tabindex="-1" data-label="{{t "Last Ran"}}" class="pf-v6-c-table__td">
+		<td tabindex="-1" data-label="{{t "Last Ran"}}" class="pf-v6-c-table__td" data-live="last-ran-{{$id}}" data-live-on="ujt:{{$id}}">
 			{{if $recent}}
 				{{with index $recent 0}}
 					{{if has .finished}}{{dt .finished}}{{else}}{{t "Running"}}{{end}}

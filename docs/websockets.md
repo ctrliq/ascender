@@ -274,7 +274,9 @@ from.
 
 `instance_group_name` is present only for `running`, and `finished` only for
 `successful`, `failed` and `canceled`. A job spawned by a workflow adds
-`workflow_job_id` and `workflow_node_id`. On `workflow_events-<id>` the
+`workflow_job_id` and `workflow_node_id`. A project update adds
+`project_id`; an inventory update adds `inventory_source_id` and, when its
+source has an inventory, `inventory_id`. On `workflow_events-<id>` the
 `group_name` is `workflow_events` and `workflow_job_template_id` is the
 spawned job's own template.
 
@@ -304,7 +306,21 @@ client or operator may notice the following:
 - A session-authenticated connection from another origin gets no user.
 - A user can hold at most 64 sockets per web process.
 - The server pings idle connections and closes ones that stop answering.
-- The Ascender UI opens a websocket only on the output page of a running
-  job (not of a workflow job), where it subscribes to the job's events and
-  to `jobs-status_changed` and `jobs-summary`. No other page uses the
-  websocket.
+- The Ascender UI opens a websocket on the output page of a running job
+  (not of a workflow job), where it subscribes to the job's events and to
+  `jobs-status_changed` and `jobs-summary`, and on the lists whose rows show
+  job state: projects, templates (job and workflow job templates, on their
+  own page and in other resources' tabs), jobs, inventories and an
+  inventory's sources. There it subscribes to `jobs-status_changed` and
+  `inventories-status_changed`. A message about a row on the page (a
+  project, template or inventory source by `unified_job_template_id`, a job
+  by `unified_job_id`, an inventory by `inventory_id`) has the page fetched
+  again, at most once a second and not while the browser tab is hidden. The
+  row's status, activity, last-ran, revision, start and finish time and
+  action cells are then replaced with the new render's. On the first page of
+  a jobs list, a message about a job not on the page has it fetched again
+  too, and the rows take the new render's order: rows already shown are
+  kept, with their selection and expansion, a newly listed job's row is
+  inserted and rows pushed off the page are removed. A selected row is
+  never removed; the rows wait for a render that still lists it. The item
+  count in the pagination is not updated.

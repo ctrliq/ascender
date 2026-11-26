@@ -53,7 +53,7 @@
 										<a href="/projects/{{$id}}/details"><b>{{$p.name}}</b></a>
 									</span>
 								</td>
-								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td">
+								<td tabindex="-1" data-label="{{t "Status"}}" class="pf-v6-c-table__td" data-live="status-{{$id}}" data-live-on="ujt:{{$id}}">
 									{{if has $p.status}}
 										<div style="display: contents;">
 											{{with or (dig $p "summary_fields" "current_job") (dig $p "summary_fields" "last_job")}}
@@ -73,7 +73,7 @@
 										{{t "Manual"}}
 									{{end}}
 								</td>
-								<td tabindex="-1" data-label="{{t "Revision"}}" class="pf-v6-c-table__td">
+								<td tabindex="-1" data-label="{{t "Revision"}}" class="pf-v6-c-table__td" data-live="revision-{{$id}}" data-live-on="ujt:{{$id}}">
 									{{if has $p.scm_revision}}
 										<div class="pf-v6-c-clipboard-copy pf-m-inline" data-cy="project-copy-revision-{{$id}}">
 											<span class="pf-v6-c-clipboard-copy__text" id="text-input-{{$id}}">

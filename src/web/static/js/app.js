@@ -336,7 +336,116 @@
   })();
 
   // ---------------------------------------------------------------- dates
-  $$('.ascender-datetime').forEach(function (s) { var d = new Date(s.getAttribute('data-datetime')); if (!isNaN(d)) s.textContent = d.toLocaleString(); });
+  function localizeDates(root) {
+    $$('.ascender-datetime', root).forEach(function (s) { var d = new Date(s.getAttribute('data-datetime')); if (!isNaN(d)) s.textContent = d.toLocaleString(); });
+  }
+  localizeDates(document);
+
+  // ---------------------------------------------------------------- live cells
+  // The old lists' useWsProjects, useWsTemplates, useWsJobs,
+  // useWsInventories and useWsInventorySources: jobs-status_changed over
+  // the websocket updated a row's status, activity and actions in place.
+  // Here an element carries data-live (a key unique on the page) and
+  // data-live-on (the messages that change it: ujt:<template id>,
+  // job:<job id>, inventory:<inventory id>); a matching message has the
+  // page fetched again, at most once a second, and the contents of each
+  // data-live element swapped for the new render's. Handlers inside them
+  // are delegated, so nothing needs binding again.
+  (function () {
+    if (!$('[data-live]') || !window.WebSocket || !window.DOMParser) return;
+    var watched = {};
+    function collect() {
+      watched = {};
+      $$('[data-live]').forEach(function (e) { (e.getAttribute('data-live-on') || '').split(/\s+/).forEach(function (k) { if (k) watched[k] = true; }); });
+    }
+    collect();
+    var timer = null, inFlight = false, again = false, last = 0, hiddenDue = false;
+    function schedule() {
+      if (inFlight) { again = true; return; }
+      if (timer) return;
+      timer = setTimeout(function () { timer = null; refresh(); }, Math.max(250, last + 1000 - Date.now()));
+    }
+    function refresh() {
+      if (document.hidden) { hiddenDue = true; return; }
+      inFlight = true; last = Date.now();
+      fetch(location.href, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (r) { return r.ok ? r.text() : null; }).then(function (html) {
+        if (html) swap(new DOMParser().parseFromString(html, 'text/html'));
+      }).catch(function () {}).then(function () {
+        inFlight = false;
+        if (again) { again = false; schedule(); }
+      });
+    }
+    function swap(doc) {
+      $$('[data-live]').forEach(function (cur) {
+        var key = cur.getAttribute('data-live'), next = null;
+        $$('[data-live]', doc).some(function (n) { if (n.getAttribute('data-live') === key) { next = n; return true; } return false; });
+        if (!next) return;
+        // An open menu in the cell (a relaunch dropdown) waits for the
+        // next message rather than closing under the pointer.
+        if ($('[data-dropdown-menu]:not([hidden])', cur)) { again = true; return; }
+        localizeDates(next);
+        if (next.innerHTML !== cur.innerHTML) cur.innerHTML = next.innerHTML;
+        cur.setAttribute('data-live-on', next.getAttribute('data-live-on') || '');
+        // A job row's cancel-selected eligibility follows its status.
+        var row = cur.closest('[data-row]'), nrow = next.closest('[data-row]');
+        if (row && nrow) { if (nrow.hasAttribute('data-cancelable')) row.setAttribute('data-cancelable', ''); else row.removeAttribute('data-cancelable'); }
+      });
+      insertRows(doc);
+      collect();
+    }
+    // useWsJobs: a job not on the list is fetched and, when it matches the
+    // list, inserted. A data-live-rows tbody takes the new render's rows in
+    // its order; rows already shown are kept (their selection and
+    // expansion with them), new ones come from the render and ones pushed
+    // off the page go. A selected row is never dropped: the rows wait for a
+    // render that keeps it.
+    var liveRows = $('[data-live-rows]');
+    function firstPage() {
+      var first = true;
+      new URLSearchParams(location.search).forEach(function (v, k) { if ((k === 'page' || /\.page$/.test(k)) && parseInt(v, 10) > 1) first = false; });
+      return first;
+    }
+    function pairs(body) {
+      return $$(':scope > [data-row]', body).map(function (tr) {
+        var exp = tr.nextElementSibling;
+        return { id: tr.getAttribute('data-id'), row: tr, exp: exp && exp.hasAttribute('data-expanded-row') ? exp : null };
+      });
+    }
+    function insertRows(doc) {
+      var body = liveRows, nbody = $('[data-live-rows]', doc); if (!body || !nbody) return;
+      var have = {}, cur = pairs(body), next = pairs(nbody);
+      cur.forEach(function (p) { have[p.id] = p; });
+      if (cur.map(function (p) { return p.id; }).join() === next.map(function (p) { return p.id; }).join()) return;
+      var keep = {}; next.forEach(function (p) { keep[p.id] = true; });
+      if (cur.some(function (p) { var c = $('[data-select-row]', p.row); return !keep[p.id] && c && c.checked; })) return;
+      cur.forEach(function (p) { if (!keep[p.id]) { p.row.remove(); if (p.exp) p.exp.remove(); } });
+      next.forEach(function (p) {
+        var use = have[p.id];
+        if (!use) {
+          use = { row: document.importNode(p.row, true), exp: p.exp && document.importNode(p.exp, true) };
+          localizeDates(use.row); if (use.exp) localizeDates(use.exp);
+        }
+        body.appendChild(use.row); if (use.exp) body.appendChild(use.exp);
+      });
+      // The checkboxes are numbered by position, as the render numbers them.
+      $$(':scope > [data-row]', body).forEach(function (tr, i) {
+        var c = $('[data-select-row]', tr); if (c) { c.id = 'select-' + i; c.setAttribute('aria-label', 'Select row ' + i); }
+      });
+      // The toolbar's select-all, delete and cancel follow the rows.
+      var c = $('[data-select-row]', body); if (c) c.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden && hiddenDue) { hiddenDue = false; schedule(); } });
+    var ws;
+    try { ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/websocket/'); } catch (e) { return; }
+    ws.onmessage = function (e) {
+      var d; try { d = JSON.parse(e.data); } catch (err) { return; }
+      if (d.accept) { ws.send(JSON.stringify({ xrftoken: window.ASCENDER.csrf, groups: { jobs: ['status_changed'], inventories: ['status_changed'] } })); return; }
+      if (d.group_name !== 'jobs' && d.group_name !== 'inventories') return;
+      if (watched['job:' + d.unified_job_id] || watched['ujt:' + d.unified_job_template_id] || watched['inventory:' + d.inventory_id]) schedule();
+      else if (liveRows && d.group_name === 'jobs' && firstPage()) schedule();
+    };
+  })();
+
   // Event timestamps in job output are HH:MM:SS in the browser's zone.
   $$('[data-time]').forEach(function (s) { var d = new Date(s.getAttribute('data-time')); if (!isNaN(d)) { var p2 = function (n) { return n < 10 ? '0' + n : '' + n; }; s.textContent = p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds()); } });
 
@@ -544,11 +653,14 @@
 
   // ---------------------------------------------------------------- table rows
   $$('[data-list-table]').forEach(function (table) {
-    var rows = $$('[data-select-row]', table), all = $('[data-select-all]'), del = $('[data-delete-selected]');
+    // Rows are looked up when needed and their events delegated: a live
+    // jobs list inserts rows ("live cells").
+    function rows() { return $$('[data-select-row]', table); }
+    var all = $('[data-select-all]'), del = $('[data-delete-selected]');
     function sync() {
-      var sel = rows.filter(function (r) { return r.checked; });
+      var sel = rows().filter(function (r) { return r.checked; });
       // DataListToolbar's select-all is checked or not, never indeterminate.
-      if (all) all.checked = rows.length > 0 && sel.length === rows.length;
+      if (all) all.checked = rows().length > 0 && sel.length === rows().length;
       if (del) {
         var blocked = sel.filter(function (r) { return r.hasAttribute('data-no-delete'); });
         del.disabled = sel.length === 0 || blocked.length > 0;
@@ -564,10 +676,10 @@
         }
       }
     }
-    rows.forEach(function (r) { r.addEventListener('change', sync); });
-    if (all) all.addEventListener('change', function () { rows.forEach(function (r) { r.checked = all.checked; }); sync(); });
+    table.addEventListener('change', function (e) { if (e.target.matches('[data-select-row]')) sync(); });
+    if (all) all.addEventListener('change', function () { rows().forEach(function (r) { r.checked = all.checked; }); sync(); });
     if (del) del.addEventListener('click', function () {
-      var sel = rows.filter(function (r) { return r.checked; }).map(function (r) { return r.closest('[data-row]'); });
+      var sel = rows().filter(function (r) { return r.checked; }).map(function (r) { return r.closest('[data-row]'); });
       if (del.hasAttribute('data-group-delete')) {
         groupDeleteModal(sel.map(function (r) { return { id: r.getAttribute('data-id'), name: r.getAttribute('data-name') }; }), del.getAttribute('data-group-delete'), function (failure) {
           if (failure) groupDeleteFailed(failure, function () { location.reload(); }); else location.reload();
@@ -609,13 +721,12 @@
       });
     });
     sync();
-    $$('[data-expand-row]', table).forEach(function (b) {
-      b.addEventListener('click', function () {
-        var row = b.closest('[data-row]'), exp = row.nextElementSibling; var open = exp.hidden; exp.hidden = !open;
-        // Tr isExpanded marked the expandable row, which PatternFly hides
-        // without pf-m-expanded; the parent row kept its plain class.
-        b.setAttribute('aria-expanded', open ? 'true' : 'false'); b.closest('.pf-v6-c-table__toggle').classList.toggle('pf-m-expanded', open); exp.classList.toggle('pf-m-expanded', open);
-      });
+    table.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-expand-row]'); if (!b) return;
+      var row = b.closest('[data-row]'), exp = row.nextElementSibling; var open = exp.hidden; exp.hidden = !open;
+      // Tr isExpanded marked the expandable row, which PatternFly hides
+      // without pf-m-expanded; the parent row kept its plain class.
+      b.setAttribute('aria-expanded', open ? 'true' : 'false'); b.closest('.pf-v6-c-table__toggle').classList.toggle('pf-m-expanded', open); exp.classList.toggle('pf-m-expanded', open);
     });
     var expandAll = $('[data-expand-all]');
     if (expandAll) expandAll.addEventListener('click', function () {
@@ -1504,13 +1615,13 @@
       });
     });
   });
-  $$('[data-source-sync], [data-sync-all]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var url = b.getAttribute('data-source-sync') || b.getAttribute('data-sync-all');
-      api('POST', url).then(function (r) {
-        // InventorySourceSyncButton raised no alert either.
-        if (r.ok) location.reload(); else errorModal(t('Inventory Source Sync Error'), t('Failed to sync inventory source.') + ' ' + errorText(r));
-      });
+  // Delegated: a live list re-renders its action cells ("live cells").
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-source-sync], [data-sync-all]'); if (!b) return;
+    var url = b.getAttribute('data-source-sync') || b.getAttribute('data-sync-all');
+    api('POST', url).then(function (r) {
+      // InventorySourceSyncButton raised no alert either.
+      if (r.ok) location.reload(); else errorModal(t('Inventory Source Sync Error'), t('Failed to sync inventory source.') + ' ' + errorText(r));
     });
   });
 
