@@ -241,13 +241,13 @@
 		</td>
 	{{end}}
 	{{if .descriptionFirst}}
-		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td">
+		<td tabindex="-1" data-label="{{t "Activity"}}" class="pf-v6-c-table__td" data-live="host-activity-{{$id}}" data-live-on="job-finished">
 			{{with dig $h "summary_fields" "recent_jobs"}}
 				{{if .}}{{template "sparkline" .}}{{end}}
 			{{end}}
 		</td>
 	{{else}}
-		<td tabindex="-1" class="pf-v6-c-table__td">
+		<td tabindex="-1" class="pf-v6-c-table__td" data-live="host-activity-{{$id}}" data-live-on="job-finished">
 			{{with dig $h "summary_fields" "recent_jobs"}}
 				{{if .}}{{template "sparkline" .}}{{else}}{{t "No job data available"}}{{end}}
 			{{else}}

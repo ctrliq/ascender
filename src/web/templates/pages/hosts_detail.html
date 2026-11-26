@@ -15,7 +15,7 @@
 		{{if eq .Data.hostTab "details"}}
 			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
 				{{template "host_toggle" (dict "host" $h "class" (cond (has $inv) "ascender-inventory-host-detail__padding-bottom-40" "ascender-host-detail__padding-bottom-40"))}}
-				<dl class="ascender-detail-list" gutter="sm">
+				<dl class="ascender-detail-list" gutter="sm" data-live="host-detail" data-live-on="job-finished">
 					{{template "detail" (dict "label" (t "Name") "value" (str $h.name) "cy" "host-name")}}
 					{{with dig $h "summary_fields" "recent_jobs"}}
 						{{if .}}

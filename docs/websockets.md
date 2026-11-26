@@ -320,7 +320,14 @@ client or operator may notice the following:
   row's status, activity, last-ran, revision, start and finish time and
   action cells are then replaced with the new render's; on a job's Details
   tab, a message about the job replaces its whole detail list (status,
-  explanation, times, nodes, revision, artifacts) and its action buttons. On
+  explanation, times, nodes, revision, artifacts) and its action buttons.
+  Host lists (all hosts, an inventory's or a group's hosts, a constructed
+  inventory's) and a host's Details tab show the host's recent jobs, which
+  a playbook run adds when it ends; the message names no hosts, so on those
+  pages any playbook job's `successful`, `failed`, `error` or `canceled`
+  status has the page fetched again, and the activity cells (on the Details
+  tab, the detail list) are replaced. An element is replaced only when the
+  server's render of it has changed. On
   the first page of
   a jobs list, a message about a job not on the page has it fetched again
   too, and the rows take the new render's order: rows already shown are

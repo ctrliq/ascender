@@ -38,7 +38,7 @@
 								<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td">
 									<a href="{{$base}}/hosts/{{$id}}/details"><b>{{$h.name}}</b></a>
 								</td>
-								<td tabindex="-1" data-label="{{t "Recent jobs"}}" class="pf-v6-c-table__td">
+								<td tabindex="-1" data-label="{{t "Recent jobs"}}" class="pf-v6-c-table__td" data-live="host-activity-{{$id}}" data-live-on="job-finished">
 									{{template "sparkline" (dig $h "summary_fields" "recent_jobs")}}
 								</td>
 								<td tabindex="-1" data-label="{{t "Inventory"}}" class="pf-v6-c-table__td">

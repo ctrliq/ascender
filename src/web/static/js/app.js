@@ -353,6 +353,9 @@
   // are delegated, so nothing needs binding again.
   (function () {
     if (!$('[data-live]') || !window.WebSocket || !window.DOMParser) return;
+    // The render each element shows, taken before the code editors below
+    // rewrite theirs: a swap happens only when the server's render changes.
+    $$('[data-live]').forEach(function (e) { e._liveHTML = e.innerHTML; });
     var watched = {};
     function collect() {
       watched = {};
@@ -448,7 +451,10 @@
       var d; try { d = JSON.parse(e.data); } catch (err) { return; }
       if (d.accept) { ws.send(JSON.stringify({ xrftoken: window.ASCENDER.csrf, groups: { jobs: ['status_changed'], inventories: ['status_changed'] } })); return; }
       if (d.group_name !== 'jobs' && d.group_name !== 'inventories') return;
-      if (watched['job:' + d.unified_job_id] || watched['ujt:' + d.unified_job_template_id] || watched['inventory:' + d.inventory_id]) schedule();
+      // job-finished: a playbook run's end, when its host summaries (a
+      // host's recent jobs) are in place; the message names no hosts.
+      var finished = d.group_name === 'jobs' && d.type === 'job' && /^(successful|failed|error|canceled)$/.test(d.status);
+      if (watched['job:' + d.unified_job_id] || watched['ujt:' + d.unified_job_template_id] || watched['inventory:' + d.inventory_id] || (finished && watched['job-finished'])) schedule();
       else if (liveRows && d.group_name === 'jobs' && firstPage()) schedule();
     };
   })();

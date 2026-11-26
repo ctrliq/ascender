@@ -21,7 +21,7 @@
 		{{else if eq .Data.hostTab "details"}}
 			{{$hi := dig $h "summary_fields" "inventory"}}
 			<div class="pf-v6-c-card__body ascender-card-body__tabbed">
-				<dl class="ascender-detail-list" gutter="sm">
+				<dl class="ascender-detail-list" gutter="sm" data-live="host-detail" data-live-on="job-finished">
 					<div>
 						<dt class="ascender-detail-name">{{t "Name"}}</dt>
 						<dd class="ascender-detail-value">{{$h.name}}</dd>
