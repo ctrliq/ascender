@@ -35,7 +35,7 @@ func nodeFieldSet(job bool) *FieldSet {
 	if job {
 		fs.Model = "WorkflowJobNode"
 		fs.Fields["workflow_job"] = Field{SQL: "n.workflow_job_id", Kind: KindFK}
-		fs.Fields["job"] = Field{SQL: "n.job_id", Kind: KindFK}
+		fs.Fields["job"] = Field{SQL: "n.job_id", Kind: KindFK, Rel: &Relation{Alias: "nj", Join: "LEFT JOIN main_unifiedjob nj ON nj.id = n.job_id", Target: func() *FieldSet { return unifiedJobFieldsAlias("nj") }}}
 		fs.Fields["do_not_run"] = Field{SQL: "n.do_not_run", Kind: KindBool}
 		fs.Fields["prior_run_succeeded"] = Field{SQL: "n.prior_run_succeeded", Kind: KindBool}
 		fs.Fields["forced_success"] = Field{SQL: "n.forced_success", Kind: KindBool}
