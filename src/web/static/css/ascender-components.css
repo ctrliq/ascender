@@ -1283,6 +1283,11 @@ next to it stays visible */
 .ascender-credentials-step__flex-margin-right { flex: 0 0 25%; margin-right: 32px; }
 .ascender-credentials-step__flex-1-1-75 { flex: 1 1 75%; min-width: 0; }
 
+/* ---- components/Lookup/MultiCredentialsLookup ---- */
+.ascender-multi-credentials-lookup__category { display: flex; align-items: center; }
+.ascender-multi-credentials-lookup__category-label { flex: 0 0 25%; margin-right: 32px; }
+.ascender-multi-credentials-lookup__category-select { flex: 1 1 75%; }
+
 /* ---- screens/Template/Survey/SurveyListItem.css ---- */
 .ascender-survey-list-item__required { color: var(--pf-t--global--color--status--danger--default); margin-left: var(--pf-t--global--spacer--xs); }
 .ascender-survey-list-item__actions-td.ascender-survey-list-item__actions-td { padding-right: 35px; }

@@ -166,10 +166,12 @@ func (u *UI) baseFuncs() template.FuncMap {
 		"nodeSymbol": func(t string) string {
 			return map[string]string{"hop": "h", "execution": "Ex", "hybrid": "Hy", "control": "C"}[t]
 		},
-		"dig":      dig,
-		"str":      str,
-		"num":      num,
-		"has":      has,
+		"dig": dig,
+		"str": str,
+		"num": num,
+		"has": has,
+		// hasKey reports whether an API object carries a field at all, empty or not.
+		"hasKey":   func(m map[string]any, k string) bool { _, ok := m[k]; return ok },
 		"add":      func(a, b int) int { return a + b },
 		"sub":      func(a, b int) int { return a - b },
 		"userType": func(u any) string { m, _ := u.(map[string]any); return userType(m) },

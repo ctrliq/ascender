@@ -27,6 +27,8 @@ When a job relaunches, you are directed the Jobs Output screen as the job runs. 
 
 - The **Advanced** option is a refined search that allows you a combination of including or excluding criteria, searching by key, or by lookup type. For details about using Search, refer to the [Search](../user-interface#search) chapter.
 
+The **Details** tab of a job lists the same fields while the job runs as after it finishes. A field whose value is not known yet, such as **Finished**, **Execution Node**, **Controller Node**, **Instance Group** or **Revision**, appears with a blank value until the job sets it, so the layout does not shift as the job progresses.
+
 ## Inventory Sync Jobs
 
 When an inventory sync is executed, the full results automatically display in the Output tab. This shows the same information you would see if you ran it through the Ansible command line, and can be useful for debugging. The `ANSIBLE_DISPLAY_ARGS_TO_STDOUT` is set to `False` by default for all playbook runs. This matches Ansible's default behavior. This does not display task arguments in task headers in the Job Detail interface to avoid leaking certain sensitive module parameters to stdout. If you wish to restore the prior behavior (despite the security implications), you can set `ANSIBLE_DISPLAY_ARGS_TO_STDOUT` to `True` with the **Extra Environment Variables** (`ASCENDER_TASK_ENV`) setting in the Jobs settings. For more details, refer to the [ANSIBLE_DISPLAY_ARGS_TO_STDOUT](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#envvar-ANSIBLE_DISPLAY_ARGS_TO_STDOUT) reference.

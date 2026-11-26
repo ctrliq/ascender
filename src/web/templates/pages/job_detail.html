@@ -34,9 +34,7 @@
 					{{else}}
 						{{template "detail" (dict "label" (t "Started") "value" (t "Unknown Start Date") "cy" "job-started-date")}}
 					{{end}}
-					{{if has $j.finished}}
-						{{template "detail" (dict "label" (t "Finished") "value" (dt $j.finished) "cy" "job-finished-date")}}
-					{{end}}
+					{{template "detail" (dict "label" (t "Finished") "value" (dt $j.finished) "cy" "job-finished-date")}}
 					{{with dig $sf "job_template"}}
 						{{template "detail" (dict "label" (t "Job Template") "value" (safe (printf `<a href="/templates/job_template/%s">%s</a>` (str .id) (esc .name))) "cy" "job-template")}}
 					{{end}}
@@ -131,7 +129,7 @@
 					{{if has $j.scm_branch}}
 						{{template "detail" (dict "label" (t "Source Control Branch") "value" (str $j.scm_branch) "cy" "source-control-branch" "help" (t "Branch to use in job run. Project default used if blank."))}}
 					{{end}}
-					{{if has $j.scm_revision}}
+					{{if hasKey $j "scm_revision"}}
 						{{template "detail" (dict "label" (t "Revision") "value" (str $j.scm_revision) "cy" "job-scm-revision")}}
 					{{end}}
 					{{if has $j.playbook}}
@@ -148,10 +146,10 @@
 							{{template "detail" (dict "label" (t "Execution Environment") "value" (safe (printf `<a href="/execution_environments/%s/details">%s</a>` (str .id) (esc .name))) "cy" "job-execution-environment" "help" (t "The execution environment used for this job."))}}
 						{{end}}
 					{{end}}
-					{{if has $j.execution_node}}
+					{{if and (ne $type "workflow_job") (hasKey $j "execution_node")}}
 						{{template "detail" (dict "label" (t "Execution Node") "value" (str $j.execution_node) "cy" "job-execution-node")}}
 					{{end}}
-					{{if has $j.controller_node}}
+					{{if and (ne $type "workflow_job") (hasKey $j "controller_node")}}
 						{{template "detail" (dict "label" (t "Controller Node") "value" (str $j.controller_node) "cy" "job-controller-node")}}
 					{{end}}
 					{{with dig $sf "instance_group"}}
@@ -159,6 +157,10 @@
 							{{template "detail" (dict "label" (t "Container Group") "value" (safe (printf `<a href="/instance_groups/container_group/%s">%s</a>` (str .id) (esc .name))) "cy" "job-container-group")}}
 						{{else}}
 							{{template "detail" (dict "label" (t "Instance Group") "value" (safe (printf `<a href="/instance_groups/%s">%s</a>` (str .id) (esc .name))) "cy" "job-instance-group" "help" (t "The instance group the job ran on."))}}
+						{{end}}
+					{{else}}
+						{{if and (ne $type "workflow_job") (hasKey $j "instance_group")}}
+							{{template "detail" (dict "label" (t "Instance Group") "value" "" "cy" "job-instance-group" "help" (t "The instance group the job ran on."))}}
 						{{end}}
 					{{end}}
 					{{if eq $type "ad_hoc_command"}}

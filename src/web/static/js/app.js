@@ -840,6 +840,7 @@
   // ---------------------------------------------------------------- lookups
   function lookupModal(group, opts) {
     opts = opts || {};
+    if (!opts.resource && group.hasAttribute('data-credentials-lookup')) { credentialsLookupModal(group); return; }
     var resource = opts.resource || group.getAttribute('data-resource'), title = opts.title || group.getAttribute('data-title') || t('Select'), filter = opts.filter || group.getAttribute('data-filter') || '';
     var multi = Boolean(opts.multi) || group.hasAttribute('data-multi');
     // displayKey and columns: lookups of objects named by another field
@@ -908,6 +909,68 @@
       closeModal(m);
     });
     load();
+  }
+  // MultiCredentialsLookup: a Selected Category select of the credential
+  // types a job template takes (opening on Machine), and an OptionsList of
+  // that type's credentials. One credential of each type, except vaults:
+  // one for each vault id. The chips carry the type ("SSH: name").
+  function credentialsLookupModal(group) {
+    var IC = Object.assign({}, ICON, A.icons || {});
+    var title = group.getAttribute('data-title') || t('Select {0}', { 0: t('Credentials') });
+    var selected = [], types = [], type = null;
+    $$('[data-lookup-values] input[data-ref-id]', group).forEach(function (i) { selected.push({ id: i.value, name: i.getAttribute('data-ref-name') || '', kindLabel: i.getAttribute('data-ref-kind-label') || '' }); });
+    var root = $('#ascender-modal-root');
+    var m = el('<div class="pf-v6-c-backdrop" data-modal><div class="pf-v6-l-bullseye"><div class="pf-v6-c-modal-box pf-m-lg" role="dialog" aria-modal="true" aria-labelledby="lookup-title"><div class="pf-v6-c-modal-box__close"><button class="pf-v6-c-button pf-m-plain" type="button" aria-label="Close" data-close-modal><span class="pf-v6-c-button__icon">' + ICON.close + '</span></button></div><header class="pf-v6-c-modal-box__header"><h1 class="pf-v6-c-modal-box__title" id="lookup-title"><span class="pf-v6-c-modal-box__title-text">' + esc(title) + '</span></h1></header><div class="pf-v6-c-modal-box__body"><div class="pf-v6-c-toolbar__item ascender-multi-credentials-lookup__category" data-cred-category hidden><div class="ascender-multi-credentials-lookup__category-label">' + esc(t('Selected Category')) + '</div><span class="pf-v6-c-form-control ascender-multi-credentials-lookup__category-select"><select id="multiCredentialsLookUp-select" aria-label="' + esc(t('Selected Category')) + '" data-cred-type></select><span class="pf-v6-c-form-control__utilities"><span class="pf-v6-c-form-control__toggle-icon">' + IC.caret + '</span></span></span></div><div data-cred-list></div></div><footer class="pf-v6-c-modal-box__footer"><button class="pf-v6-c-button pf-m-primary" type="button" data-lookup-select><span class="pf-v6-c-button__text">' + esc(t('Select')) + '</span></button><button class="pf-v6-c-button pf-m-link" type="button" data-close-modal><span class="pf-v6-c-button__text">' + esc(t('Cancel')) + '</span></button></footer></div></div></div>');
+    root.innerHTML = ''; root.appendChild(m); openModal(m);
+    var sel = $('[data-cred-type]', m), holder = $('[data-cred-list]', m);
+    function isVault() { return type && type.kind === 'vault'; }
+    function vaultID(c) { return c && c.inputs ? c.inputs.vault_id : undefined; }
+    function pick(item) {
+      return { id: String(item.id), name: item.name, kindLabel: credKindLabel(item), credential_type: item.credential_type, vault_id: vaultID(item),
+        label: isVault() && vaultID(item) ? item.name + ' | ' + vaultID(item) : item.name };
+    }
+    function chip(s) { return (s.kindLabel ? '<strong>' + esc(s.kindLabel) + ': </strong>' : '') + esc(s.name); }
+    function showList() {
+      type = types.filter(function (x) { return String(x.id) === sel.value; })[0] || null;
+      holder.innerHTML = '';
+      if (!type) return;
+      holder.appendChild(optionsList({ resource: 'credentials', ns: 'credentials', header: t('Credentials'), name: 'credentials', multi: isVault(), displayKey: isVault() ? 'label' : 'name',
+        params: { credential_type: type.id, role_level: 'use_role' },
+        searchColumns: [{ name: t('Name'), key: 'name__icontains', isDefault: true }, { name: t('Created By (Username)'), key: 'created_by__username__icontains' }, { name: t('Modified By (Username)'), key: 'modified_by__username__icontains' }],
+        chipHTML: chip,
+        value: function () { return selected; },
+        // A pick replaces the one of its type, or for a vault the one with
+        // its vault id.
+        select: function (item) {
+          var p = pick(item), vault = isVault();
+          selected = selected.filter(function (s) {
+            if (String(s.id) === p.id) return false;
+            return vault ? !(p.vault_id !== undefined && s.vault_id === p.vault_id && s.credential_type === p.credential_type) : s.credential_type !== p.credential_type;
+          });
+          selected.push(p);
+        },
+        deselect: function (item) { selected = selected.filter(function (s) { return String(s.id) !== String(item.id); }); } }));
+    }
+    // The picks already made: their types and vault ids decide what a new
+    // pick replaces.
+    var ids = selected.map(function (s) { return s.id; }).filter(Boolean);
+    var known = ids.length ? api('GET', '/api/v2/credentials/?page_size=200&id__in=' + ids.join(',')).then(function (r) {
+      var by = {};
+      ((r.ok && r.data.results) || []).forEach(function (c) { by[String(c.id)] = c; });
+      selected = selected.map(function (s) { var c = by[String(s.id)]; return c ? { id: s.id, name: c.name, kindLabel: credKindLabel(c), credential_type: c.credential_type, vault_id: vaultID(c), label: vaultID(c) ? c.name + ' | ' + vaultID(c) : c.name } : s; });
+    }) : Promise.resolve();
+    Promise.all([known, api('GET', '/api/v2/credential_types/?page_size=200&kind__in=ssh,vault,cloud,net,kubernetes&order_by=name')]).then(function (res) {
+      var r = res[1];
+      types = (r.ok && r.data.results) || [];
+      if (!types.length) { holder.textContent = r.ok ? '' : errorText(r); return; }
+      sel.innerHTML = types.map(function (x) { return '<option value="' + esc(x.id) + '">' + esc(x.name) + '</option>'; }).join('');
+      var machine = types.filter(function (x) { return x.kind === 'ssh'; })[0];
+      if (machine) sel.value = String(machine.id);
+      $('[data-cred-category]', m).hidden = false;
+      sel.addEventListener('change', showList);
+      showList();
+    });
+    $('[data-lookup-select]', m).addEventListener('click', function () { writeMulti(group, selected); closeModal(m); });
   }
   // ---------------------------------------------------------------- alert modal
   // AlertModal with its header badge (error: times-circle, danger:
@@ -1131,7 +1194,8 @@
   // string namespace: toolbar and sort header ids), header (plural name),
   // name (the radio cells' name), multi, draggable, searchColumns,
   // sortColumns, params (fixed filters), value() (selected objects),
-  // select(item), deselect(item), onChange().
+  // select(item), deselect(item), onChange(), chipHTML(item) (a chip's
+  // label, escaped by the caller; the display key's value by default).
   function optionsList(o) {
     var IC = Object.assign({}, ICON, A.icons || {});
     var size = o.pageSize || 5, displayKey = o.displayKey || 'name';
@@ -1146,7 +1210,7 @@
       if (!sel.length) return '';
       // DraggableSelectedList, placed by render().
       if (o.draggable) return '<div data-drag-slot></div>';
-      var chips = sel.map(function (s, i) { return '<li class="pf-v6-c-label-group__list-item"' + (i >= 5 ? ' hidden data-chip-overflowed' : '') + '><span class="pf-v6-c-label pf-m-outline"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text">' + esc(s[displayKey]) + '</span></span><span class="pf-v6-c-label__actions"><button aria-label="Close ' + esc(s[displayKey]) + '" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-opt-remove="' + i + '"><span class="pf-v6-c-button__icon">' + (IC.pfClose || ICON.close) + '</span></button></span></span></li>'; }).join('');
+      var chips = sel.map(function (s, i) { return '<li class="pf-v6-c-label-group__list-item"' + (i >= 5 ? ' hidden data-chip-overflowed' : '') + '><span class="pf-v6-c-label pf-m-outline"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text">' + (o.chipHTML ? o.chipHTML(s) : esc(s[displayKey])) + '</span></span><span class="pf-v6-c-label__actions"><button aria-label="Close ' + esc(s[displayKey]) + '" class="pf-v6-c-button pf-m-plain pf-m-no-padding" type="button" data-opt-remove="' + i + '"><span class="pf-v6-c-button__icon">' + (IC.pfClose || ICON.close) + '</span></button></span></span></li>'; }).join('');
       if (sel.length > 5) chips += '<li class="pf-v6-c-label-group__list-item"><button class="pf-v6-c-label pf-m-overflow" type="button" data-chip-overflow data-more="' + esc(t('{0} more', { 0: sel.length - 5 })) + '"><span class="pf-v6-c-label__content"><span class="pf-v6-c-label__text">' + esc(t('{0} more', { 0: sel.length - 5 })) + '</span></span></button></li>';
       return '<div class="pf-v6-l-split ascender-selected-list__split"><div class="pf-v6-l-split__item ascender-selected-list__split-label-item">' + esc(t('Selected')) + '</div><div class="pf-v6-l-split__item"><div><div class="pf-v6-c-label-group"><div class="pf-v6-c-label-group__main"><ul class="pf-v6-c-label-group__list" aria-label="Label group category" role="list">' + chips + '</ul></div></div></div></div></div>';
     }
