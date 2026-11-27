@@ -118,7 +118,7 @@
 	<td tabindex="-1" data-label="{{t "Name"}}" class="pf-v6-c-table__td ascender-td-break-word__td" id="check-action-{{$id}}">
 		<span>
 			<a href="/jobs/{{$seg}}/{{$id}}">
-				<b>{{if has $j.name}}{{$j.name}}{{else}}{{$id}}{{end}}</b>
+				<b>{{if has $j.name}}{{jobName $j}}{{else}}{{$id}}{{end}}</b>
 			</a>
 		</span>
 	</td>

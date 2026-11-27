@@ -52,6 +52,21 @@ var jobSearchKeys = []map[string]string{
 var jobFilterLabels = searchLabels(jobSearchKeys, "status__in", "Status", "type__in", "Job Type", "limit", "Limit")
 
 // jobTypeLabel is the type column of the jobs list.
+// jobDisplayName is the job's name as lists and headers show it: a job a
+// schedule launched carries the schedule's name in parentheses.
+func jobDisplayName(j map[string]any) string {
+	name := str(j["name"])
+	if str(j["launch_type"]) != "scheduled" {
+		return name
+	}
+	sf, _ := j["summary_fields"].(map[string]any)
+	sc, _ := sf["schedule"].(map[string]any)
+	if sc == nil || str(sc["name"]) == "" {
+		return name
+	}
+	return name + " (" + str(sc["name"]) + ")"
+}
+
 func jobTypeLabel(j map[string]any) string {
 	if str(j["type"]) == "job" {
 		if str(j["job_type"]) == "check" {

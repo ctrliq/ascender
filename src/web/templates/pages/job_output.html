@@ -2,7 +2,7 @@
 {{$j := .Data.job}}
 {{$id := str $j.id}}
 {{$seg := .Data.typeSeg}}
-{{template "screen_header" (dict "title" (t "Output") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (str $j.name)))))}}
+{{template "screen_header" (dict "title" (t "Output") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (jobName $j)))))}}
 <section class="pf-v6-c-page__main-section">
 	<div>
 		<div class="pf-v6-c-card"{{if .Data.running}} data-job-live="/jobs/{{$seg}}/{{$id}}/output/live" data-counter="{{.Data.maxCounter}}" data-started="{{str $j.started}}"{{end}}>
@@ -158,7 +158,7 @@
 {{define "job_output_title"}}
 {{$j := .Data.job}}
 <div class="ascender-job-output__header-title">
-	<h1>{{$j.name}}</h1>
+	<h1>{{jobName $j}}</h1>
 	{{template "status_label" (str $j.status)}}
 </div>
 {{end}}

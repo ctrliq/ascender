@@ -257,6 +257,7 @@ func (u *UI) baseFuncs() template.FuncMap {
 			return "unified_jobs"
 		},
 		"jobTypeLabel":  jobTypeLabel,
+		"jobName":       jobDisplayName,
 		"credKindLabel": credKindLabel,
 		// credKindIsMessage: the credKindLabel results CredentialChip
 		// translated ("Cloud", "GPG Public Key"); the rest are not.

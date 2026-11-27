@@ -5,7 +5,7 @@
 {{$sf := $j.summary_fields}}
 {{$type := str $j.type}}
 {{$coll := .Data.coll}}
-{{template "screen_header" (dict "title" (t "Details") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (str $j.name)))))}}
+{{template "screen_header" (dict "title" (t "Details") "stream" "job" "crumbs" (list (dict "href" "/jobs" "title" (t "Jobs")) (dict "href" (printf "/jobs/%s/%s" $seg $id) "title" (printf "%s - %s" $id (jobName $j)))))}}
 <section class="pf-v6-c-page__main-section">
 	<div>
 		<div class="pf-v6-c-card">
