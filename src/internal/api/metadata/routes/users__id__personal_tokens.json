@@ -109,6 +109,13 @@
                 "help_text": "Allowed scopes, further restricts user's permissions. Must be a simple space-separated string with allowed scopes ['read', 'write'].",
                 "filterable": true,
                 "default": "write"
+            },
+            "expires_in": {
+                "type": "string",
+                "required": false,
+                "label": "Expires In",
+                "help_text": "Optional RFC 3339 duration string (e.g. \"30d\", \"2h\"). Zero or omitted falls back to the global OAUTH2_PROVIDER.ACCESS_TOKEN_EXPIRE_SECONDS setting.",
+                "filterable": true
             }
         }
     },
